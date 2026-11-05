@@ -186,14 +186,14 @@
 - 08:00 - 08:40: Nhóm xem lại các vấn đề quan sát được trong các ngày trước, đề ra 1 số vấn đề và câu hỏi dành cho dược sĩ kho nội trú
 - 08:50-10:30: Nhóm xuống kho nội trú B1 để trao đổi với dược sĩ như đã hẹn, xem tiếp file kiểm soát tồn kho tầng 6. Trao đổi để làm rõ hơn các vấn đề, như:
    - Dự trù thường làm cho bao nhiêu ngày (5-10 ngày dự trù), có những thuốc phải xuất lên ngay
-   - Các loại mã hàng có trong hệ thống (aa, ay, cả aa-ay, bộ mã của daycare; mỗi bảo hiểm y tế có loại mã khác nhau)
+   - Các loại mã hàng có trong hệ thống (AA, AY, cả AA-ay, bộ mã của daycare; mỗi bảo hiểm y tế có loại mã khác nhau)
    - Quy tắc đối soát mã phức tạp:
       - Trường hợp "Có (AA/AY)": mã `AA` đã chứa thông tin tổng hợp của cả `AA` và `AY` $\rightarrow$ sử dụng dòng mã `AA` này để đối chiếu, bỏ qua dòng mã `AY`
       - Trường hợp "Có - PM" (Phòng mổ): tồn tại cả 2 mã nhưng theo quy định chỉ dùng dòng mã `AY` để đối chiếu
       - Trường hợp chỉ có 1 mã duy nhất (`AA`, `AC`, `AD`, `AE`): xử lý trực tiếp theo công thức
    - Cách tính dự trù, giải thích 1 số trường trong file dữ liệu (file kiểm soát tồn kho gồm: ngày trụ thực tế của tổng lượng thuốc, số lượng xuất dự kiến = cơ số max thuốc của kho - tổng tồn, quy cách, tỉ lệ tồn/xuất; số lượng chuyển thực tế được làm tròn theo quy cách, ví dụ dự kiến 17, quy cách 4 thì chuyển 16) 
    - Phải xác thực có cần xuất thuốc lên các tầng thật không hay chỉ cần cân mã, cân mã nào; có ghi chú thuốc có 2 mã không?
-   - Thuốc có 2 mã (ví dụ thuốc phòng mổ) thì nội trú chỉ dùng mã ay dù khi lọc tồn ở tầng vẫn có aa; thuốc chỉ có 1 mã thì chỉ quan tâm tồn/xuất có dưới 5 ngày hay không
+   - Thuốc có 2 mã (ví dụ thuốc phòng mổ) thì nội trú chỉ dùng mã AY dù khi lọc tồn ở tầng vẫn có AA; thuốc chỉ có 1 mã thì chỉ quan tâm tồn/xuất có dưới 5 ngày hay không
    - Quy trình kiểm kê thuốc
    - Làm rõ lại pain point mà dược sĩ kho đang vướng phải: mất thời gian nhất ở khâu cân mã, cân đối mã để xuất thuốc lên; cân mã hiện chủ yếu theo cảm tính, đã có công thức nhưng vẫn cần kinh nghiệm (Ví dụ: có ngày toàn bệnh nhân nội trú nên mã bảo hiểm hết và dư mã dịch vụ). 
    - Cân mã phải phù hợp với tần suất dùng gần đây để đảm bảo bác sĩ có đủ thuốc
@@ -212,7 +212,7 @@
 **Hành vi phi ngôn ngữ & thao tác vật lý:** 
 - Dữ liệu kho rải rác nhiều file, mặc dù tính toán đã có công thức, nhưng việc nhập xuất dữ liệu rất lâu, khó làm quen với người mới
 - Dữ liệu bảng excel gây nhầm lẫn. Cùng 1 thuốc, mã AA = tổng mã AA + AY, mã AY chỉ có AY. Chưa kể còn có 2 cột AA, AY. Gây khó khăn cho người đọc và người mới học
-- Phần mềm cũ (eHost, năm 2012) chỉ có ô tick bảo hiểm hoặc không, tồn quản lý chung; hiện nay nhiều mã hơn và OH tính tồn riêng cho từng mã (aa, ay) dù là cùng 1 loại thuốc, nên dễ nhầm và gây âm ảo (xem BN09 ở Phần 4)
+- Phần mềm cũ (eHos, năm 2012) chỉ có ô tick bảo hiểm hoặc không, tồn quản lý chung; hiện nay nhiều mã hơn và OH tính tồn riêng cho từng mã (AA, AY) dù là cùng 1 loại thuốc, nên dễ nhầm và gây âm ảo (xem BN09 ở Phần 4)
 - Điều dưỡng và bác sĩ chuyển đổi giữa màn hình phần mềm và sổ tay tra cứu giấy/công cụ tính toán ngoại vi
 - Quá trình tra cứu thuốc của bác sĩ gần tương tự như bên dược lâm sàng, nhưng với tần suất ít hơn 
 
@@ -262,16 +262,16 @@
 - Đỗ Trương Thành Ân
 - Vũ Gia Khải
 
-**Mô tả bối cảnh:** Ngày thứ 6, nhóm theo dõi bên nghiệp vụ dược (mã aa/ay, kiểm tra tồn kho, báo cáo lỗi), quan sát hoạt động dược lâm sàng ngoại trú vào đầu giờ chiều, tìm hiểu quy trình làm báo cáo tổng kết hàng tháng của dược lâm sàng, và ghi lại 1 số vấn đề ở nhà thuốc (chia thuốc, kiểm kê)
+**Mô tả bối cảnh:** Ngày thứ 6, nhóm theo dõi bên nghiệp vụ dược (mã AA/ay, kiểm tra tồn kho, báo cáo lỗi), quan sát hoạt động dược lâm sàng ngoại trú vào đầu giờ chiều, tìm hiểu quy trình làm báo cáo tổng kết hàng tháng của dược lâm sàng, và ghi lại 1 số vấn đề ở nhà thuốc (chia thuốc, kiểm kê)
 
 **Dòng thời gian hoạt động (Timeline log):**
 - [08:00 - 10:00]: Nhóm liệt kê ra những vướng mắc, tổng hợp lại và đề ra các câu hỏi, khúc mắc trước khi đi quan sát, trao đổi các phòng
 - [10:00 - 11:30]: Nhóm theo dõi bên nghiệp vụ dược:
-   - Mã aa, ay: kho nội trú phải nói lại với bên nghiệp vụ để biết đó là mã gì, nghiệp vụ không biết được số lượng thuốc chứa các mã; nội trú 1 mặt hàng có mã thường và mã bảo hiểm, cần làm rõ dựa vào dự trù kho như thế nào
+   - Mã AA, AY: kho nội trú phải nói lại với bên nghiệp vụ để biết đó là mã gì, nghiệp vụ không biết được số lượng thuốc chứa các mã; nội trú 1 mặt hàng có mã thường và mã bảo hiểm, cần làm rõ dựa vào dự trù kho như thế nào
    - Kiểm tra tồn kho: phân công theo từng nơi (ví dụ khoảng 80 tủ, mỗi người phụ trách khoảng chục tủ); ở cơ sở khác có khoảng mười mấy khoa, rất khó để 1 người duyệt hết
    - Có phần mềm riêng để điền theo dõi tồn, nhiều cơ sở dùng chung 1 form, mỗi quý có nhiều đợt; xong thì convert sang excel (phần mềm thuộc microsoft, chưa biết chính xác)
    - Các lỗi tìm được phải tự nhập hoặc chụp ảnh, sau đó làm báo cáo (khoa phòng bị lỗi, chi tiết lỗi, tổng số lỗi, mức độ lỗi, số lỗi nghiêm trọng theo quý, lỗi lặp lại)
-   - Mã daycare mới có từ khi đổi phần mềm; OH mang tính hệ thống hơn eHost, quản lý trên toàn hệ thống thay vì từng bệnh viện; OH không hiểu mã aa, ay nên phải chia mã riêng và các phần tồn khác nhau
+   - Mã daycare mới có từ khi đổi phần mềm; OH mang tính hệ thống hơn eHos, quản lý trên toàn hệ thống thay vì từng bệnh viện; OH không hiểu mã AA, AY nên phải chia mã riêng và các phần tồn khác nhau
 - [14:00 - 14:30]: Trao đổi dược lâm sàng ngoại trú: dùng OH (kê đơn, thanh toán) và ERM (hồ sơ bệnh án). Hiện không giám sát trực tiếp bệnh nhân ngoại trú. Ghi nhận:
    - Không giám sát trực tiếp bệnh nhân
    - Đơn thuốc cần dược sĩ duyệt xong mới mua thuốc; thuốc mua ngoài thì không tính đến kho
@@ -299,43 +299,142 @@
 - Dược sĩ ngoại trú duyệt đơn lần lượt, thứ tự phụ thuộc người bệnh đến quầy
 - Nhà thuốc: chia thuốc lẻ thường quy làm thủ công từng viên; riêng việc chia thuốc theo ngày cho đơn dài hạn (estimate 30 ngày trở lên) thì hiếm khi có; kiểm kê phải nhập lại nhiều lần
 
-## PHẦN 2: GHI CHÉP PHỎNG VẤN (3–5 NGƯỜI, ≥ 2 VAI TRÒ)
+## PHẦN 2: GHI CHÉP PHỎNG VẤN (9 ĐỐI TƯỢNG, ĐA VAI TRÒ)
 
 (Áp dụng nguyên tắc The Mom Test: Chỉ hỏi về các sự việc, hành vi cụ thể đã xảy ra trong quá khứ, không hỏi ý kiến hay gợi ý giải pháp tương lai.)
 
 ### Người được phỏng vấn 1
-
-**Vai trò chuyên môn:** [Ví dụ: Bác sĩ điều trị / Bác sĩ nội trú]  
-**Thời lượng trao đổi:** [Ví dụ: 20 phút]
+**Vai trò chuyên môn:** Bác sĩ lâm sàng (Khoa Miễn dịch - Dị ứng)  
+**Thời lượng trao đổi:** 20 phút  
 
 **Các câu hỏi & phản hồi thực tế:**
 
-1. **Câu hỏi (về công việc tốn thời gian nhất):** [Ghi câu hỏi nhóm đã hỏi]  
-   **Phản hồi:** [Tóm tắt câu trả lời của nhân viên y tế]
-2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** [Ghi câu hỏi]  
-   **Phản hồi:** [Tóm tắt câu trả lời]
-3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** [Ghi câu hỏi]  
-   **Phản hồi:** [Tóm tắt câu trả lời]
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Trong quá trình kê đơn cho người bệnh, khâu nào khiến bác sĩ mất nhiều thời gian cân nhắc nhất?  
+   **Phản hồi:** Tốn thời gian nhất ở các ca bệnh có nhiều bệnh nền mắc kèm; bác sĩ phải tra cứu và đối chiếu danh sách các thuốc người bệnh đang dùng từ trước trên hồ sơ EMR để tránh tương tác bất lợi với thuốc mới dự kiến kê.
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Sự cố hoặc rào cản kỹ thuật cụ thể nào trên phần mềm kê đơn mà bác sĩ gặp phải gần đây?  
+   **Phản hồi:** Khi một bệnh nhân được khám đồng thời bởi 2 chuyên khoa, nếu 2 bác sĩ cùng truy cập vào phần mềm OH để kê đơn cho bệnh nhân đó tại cùng một thời điểm thì hệ thống bị xung đột/khóa lại, hoàn toàn không thể tiếp tục kê đơn được.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Bác sĩ xử lý tình huống xung đột trên như thế nào?  
+   **Phản hồi:** Bác sĩ phải liên hệ trực tiếp với bác sĩ của chuyên khoa kia để thống nhất một người thoát khỏi phần mềm trước, người còn lại mới có thể thao tác kê đơn tiếp.
 
-**Trích dẫn nguyên văn ấn tượng:** “[Trích dẫn câu nói bộc lộ nỗi đau/điểm nghẽn lớn nhất của họ]”
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Điểm nghẽn lớn nhất trong thao tác của bác sĩ là giới hạn kỹ thuật của phần mềm kê đơn OH: hệ thống không hỗ trợ cơ chế đa người dùng thao tác đồng thời cho cùng một mã bệnh nhân, khiến quy trình kê đơn bị đình trệ khi có sự phối hợp liên chuyên khoa.
 
 ### Người được phỏng vấn 2
+**Vai trò chuyên môn:** Điều dưỡng (Khoa Miễn dịch - Dị ứng)  
+**Thời lượng trao đổi:** 20 phút  
 
-**Vai trò chuyên môn:** [Ví dụ: Điều dưỡng trưởng / Điều dưỡng viên]  
-**Thời lượng trao đổi:** [...]
+**Các câu hỏi & phản hồi thực tế:**
 
-**Các câu hỏi & phản hồi thực tế:** [...]
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Khi tiếp nhận y lệnh thuốc từ hệ thống chuyển xuống buồng bệnh, khâu nào đòi hỏi điều dưỡng mất nhiều thao tác kiểm tra đối chiếu nhất?  
+   **Phản hồi:** Mất thời gian nhất ở khâu kiểm tra đối chiếu (check) tính hợp lý về liều lượng, cách pha, đường dùng và tính toán tốc độ truyền đối với các y lệnh thuốc mới hoặc các mặt hàng ít khi dùng tại khoa.
+2. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Điều dưỡng đang sử dụng công cụ gì để tính toán và đối soát nhanh ngay tại buồng bệnh?  
+   **Phản hồi:** Điều dưỡng cài đặt và sử dụng ứng dụng di động Calculate trên điện thoại cá nhân để tính toán liều và tốc độ tiêm truyền trực tiếp tại buồng bệnh (do trang web MDCalc trên máy tính bàn trực không thuận tiện để mang đi lại); kết hợp với việc tra cứu Sổ tay thuốc in giấy nội bộ tại khoa và đọc các phiếu cảnh báo tương tác của kho dược gửi kèm.
 
-**Trích dẫn nguyên văn ấn tượng:** “[...]”
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Điều dưỡng phải tự linh hoạt dùng ứng dụng điện thoại cá nhân (Calculate) và sổ tay in giấy để tính toán, kiểm tra y lệnh ngay tại buồng bệnh do các công cụ quản lý trên máy tính cố định không đáp ứng được tính cơ động trong công việc chăm sóc thực tế.
 
 ### Người được phỏng vấn 3
+**Vai trò chuyên môn:** Dược sĩ quản lý Kho Nội trú (Kho B1 & Tầng 6)  
+**Thời lượng trao đổi:** 35 phút  
 
-**Vai trò chuyên môn:** [Ví dụ: Kỹ thuật viên / Dược sĩ / Bác sĩ khác]  
-**Thời lượng trao đổi:** [...]
+**Các câu hỏi & phản hồi thực tế:**
 
-**Các câu hỏi & phản hồi thực tế:** [...]
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Trong công tác vận hành kho hàng ngày, khâu nào chiếm nhiều thời gian và thao tác lặp lại nhiều nhất?  
+   **Phản hồi:** Mất nhiều thời gian nhất ở việc cân đối mã AA - AY để xuất thuốc lên các tầng, cùng với việc xuất dữ liệu thô từ OH rồi copy-paste thủ công vào các bảng tính Excel để tính toán số lượng dự trù bổ sung cho các kho vệ tinh.
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Hiện tượng âm tồn kho (xuất âm) trên phần mềm OH thường phát sinh từ những nguyên nhân cụ thể nào?  
+   **Phản hồi:** Hiện tượng xuất âm xảy ra chủ yếu do 2 lý do: (1) Tầng trên phát sinh nhu cầu cấp thiết nên kho phải xuất thuốc vật lý lên ngay theo mã thực tế dùng (AA hoặc AY), trong khi trên hệ thống phần mềm chưa kịp thực hiện thao tác cân mã để chuyển đổi số lượng; (2) Hàng từ nhà cung cấp vừa giao về kho B1 nhưng xuất hiện yêu cầu cấp bách phải xuất ngay lên các tầng, trong khi bộ phận Nghiệp vụ Dược chưa kịp nhập hóa đơn/chứng từ lên hệ thống $\rightarrow$ dẫn đến việc số lượng tồn kho trên hệ thống dưới B1 bị ghi nhận âm (lưu ý: việc nhập hóa đơn lên hệ thống thuộc trách nhiệm của phòng Nghiệp vụ Dược, không phải của nhân sự kho).
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Kho đang quản lý và xử lý việc này như thế nào?  
+   **Phản hồi:** Hàng ngày duy trì các bảng tính Excel có sẵn công thức tính toán để theo dõi; dựa vào kinh nghiệm thực tế để tự cân đối mã số lượng trước khi xuất; đồng thời giục bên nghiệp vụ nhập sớm hóa đơn khi có hàng gấp.
 
-**Trích dẫn nguyên văn ấn tượng:** “[...]”
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Ngoài gánh nặng xử lý dữ liệu và cân mã thủ công trên bảng tính, nhân sự kho luôn phải duy trì sự tập trung cao độ để quan sát, theo dõi thủ công từng mặt hàng trên giá kệ nhằm không bỏ sót các trường hợp hàng xuất nhanh đột xuất hoặc các lô thuốc chạm ngưỡng an toàn.
+
+### Người được phỏng vấn 4
+**Vai trò chuyên môn:** Dược sĩ quản lý Nhà thuốc bệnh viện  
+**Thời lượng trao đổi:** 30 phút  
+
+**Các câu hỏi & phản hồi thực tế:**
+
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Hoạt động quản trị nào tại nhà thuốc khiến nhân sự mất nhiều thời gian kiểm tra và dễ xảy ra sai lệch nhất?  
+   **Phản hồi:** Khâu kiểm kê kho định kỳ và tính toán dự trù đặt hàng (cả thường quy lẫn đột xuất). Việc kiểm kê hàng ngàn mặt hàng thuốc trong điều kiện quầy mở cửa bán liên tục 24/7 đòi hỏi nhân sự phải đối soát rất căng thẳng.
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Trục trặc cụ thể nhất trong đợt kiểm kê kho gần đây bằng phần mềm là gì?  
+   **Phản hồi:** Phần mềm kiểm kê sau khi tạo đợt kiểm sẽ chốt cứng ảnh chụp tồn kho tại thời điểm xuất file. Trong khi nhân viên đi đếm thuốc thực tế thì quầy vẫn xuất bán liên tục, dẫn đến số đếm thực tế bị lệch so với dữ liệu hệ thống chốt ban đầu; khi phát hiện thừa/thiếu phải mất 1–2 ngày truy tìm nguyên nhân và tự bù trừ.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Nhà thuốc đang thực hiện quy trình dự trù và kiểm kê hiện nay ra sao?  
+   **Phản hồi:** Tính dự trù bằng các công thức Excel cố định theo chu kỳ ngày mùng 1 và 15 hàng tháng; về kiểm kê, đang thí điểm dùng app quét mã QR mặt hàng để đếm tồn thực tế nhưng vẫn phải xuất file và đối soát thủ công lại khi có biến động.
+
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Quầy thuốc hoạt động phục vụ liên tục 24/7 với lưu lượng lớn nhưng hệ thống kiểm kê lại bị đóng băng số liệu tĩnh, khiến việc đối soát số liệu tồn kho thực tế và sổ sách luôn có độ trễ và rủi ro sai lệch.
+
+### Người được phỏng vấn 5
+**Vai trò chuyên môn:** Dược sĩ lâm sàng (Phụ trách Tổng hợp Báo cáo Chỉ số & Đào tạo)  
+**Thời lượng trao đổi:** 30 phút  
+
+**Các câu hỏi & phản hồi thực tế:**
+
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Định kỳ hàng tháng, báo cáo chuyên môn nào chiếm nhiều thời gian tổng hợp nhất của bộ phận Dược lâm sàng?  
+   **Phản hồi:** Báo cáo tổng kết theo Bộ 17 chỉ số Dược lâm sàng toàn viện; tổng thời gian để hoàn thành báo cáo này mất khoảng 2 ngày làm việc (được thực hiện song song cùng các công việc chuyên môn thường quy khác).
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Khó khăn hoặc điểm nghẽn lớn nhất trong việc thu thập số liệu cho 17 chỉ số này là gì?  
+   **Phản hồi:** Dữ liệu nằm phân tán ở nhiều nguồn (OH, EMR, Info Vinmec, bảng tính của các khoa). Ví dụ khi cần xác nhận chỉ số về hội chẩn kháng sinh hạn chế, dược sĩ phải lấy mã bệnh nhân từ danh sách xuất trên OH rồi mở từng hồ sơ tương ứng trên EMR để kiểm tra xem có biên bản hội chẩn đạt chuẩn hay không do hai hệ thống chưa tự động liên kết dữ liệu chỉ số.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Quy trình phối hợp tổng hợp số liệu báo cáo hiện nay đang diễn ra như thế nào?  
+   **Phản hồi:** Dược sĩ phụ trách từng khoa lâm sàng sử dụng các công cụ lọc Excel tự xây dựng để xử lý số liệu khoa mình, sau đó gửi file qua email; người phụ trách tổng hợp mở từng file của các khoa, kiểm tra lại và gộp số liệu vào bản báo cáo chung trước khi báo cáo lãnh đạo.
+
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Việc tổng hợp bộ 17 chỉ số kéo dài trong 2 ngày (làm song song cùng các nhiệm vụ chuyên môn khác); nguyên nhân cốt lõi là do thiếu sự liên kết dữ liệu tự động giữa phần mềm kê đơn OH và bệnh án điện tử EMR, buộc dược sĩ phải thực hiện nhiều thao tác đối soát và nhập liệu thủ công giữa các bảng tính rời rạc.
+
+### Người được phỏng vấn 6
+**Vai trò chuyên môn:** Dược sĩ lâm sàng (Phụ trách nội trú 1 khoa chuyên khoa)  
+**Thời lượng trao đổi:** 35 phút  
+
+**Các câu hỏi & phản hồi thực tế:**
+
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Trong quy trình duyệt y lệnh thuốc nội trú hàng ngày, bước nào đòi hỏi dược sĩ phải mất nhiều thời gian tra cứu và đọc tài liệu nhất?  
+   **Phản hồi:** Đọc và đối chiếu chi tiết hồ sơ bệnh án EMR (chẩn đoán, diễn tiến bệnh, kết quả xét nghiệm gan thận, tiền sử dùng thuốc) với y lệnh trên phần mềm OH để thẩm định tính phù hợp của chỉ định và liều dùng.
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Tình huống tra cứu thông tin chuyên môn nào gần đây gây khó khăn và tốn nhiều thời gian nhất cho dược sĩ?  
+   **Phản hồi:** Tình huống tra cứu thông tin cho các mặt hàng ngoài danh mục chính thức, cụ thể là thực phẩm chức năng (ví dụ sữa dinh dưỡng dạng bột kê trong phiếu tư vấn): việc tra cứu gặp trở ngại lớn do chưa có cơ sở dữ liệu lâm sàng chính thống đầy đủ; nếu tra cứu trên mạng Internet thông thường thì thông tin không đảm bảo độ tin cậy y khoa, khiến dược sĩ phải mất rất nhiều thời gian rà soát, tìm kiếm tài liệu từ các nguồn chính thống mới có thể đưa ra tư vấn.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Khi gặp các ca bệnh phức tạp hoặc y lệnh cần làm rõ, dược sĩ đang xử lý ra sao?  
+   **Phản hồi:** Mở song song nhiều nguồn tra cứu tin cậy (UpToDate, thông tư, tài liệu chuyên ngành); nếu phát hiện điểm chưa phù hợp hoặc thiếu thông tin chẩn đoán, dược sĩ sẽ tạm giữ (hold) y lệnh và liên hệ trực tiếp với bác sĩ điều trị để trao đổi, thống nhất điều chỉnh.
+
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Dược sĩ lâm sàng mất rất nhiều thời gian khi gặp các mặt hàng ngoài danh mục chính thức như thực phẩm chức năng do thiếu cơ sở dữ liệu chuẩn hóa, trong khi vẫn phải đảm bảo tính an toàn và bằng chứng khoa học chặt chẽ trước khi xác nhận y lệnh.
+
+### Người được phỏng vấn 7
+**Vai trò chuyên môn:** Dược sĩ lâm sàng (Phụ trách duyệt đơn Ngoại trú từ xa)  
+**Thời lượng trao đổi:** 25 phút  
+
+**Các câu hỏi & phản hồi thực tế:**
+
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Trong quy trình thẩm định đơn thuốc ngoại trú, khâu nào tạo áp lực thời gian lớn nhất cho dược sĩ?  
+   **Phản hồi:** Rà soát và thẩm định đơn thuốc từ xa trên hệ thống vào các khung giờ cao điểm có lưu lượng đơn lớn; dược sĩ phải nhanh chóng kiểm tra liều lượng, tương tác thuốc và điều kiện thanh toán BHYT trước khi phê duyệt để đơn được đẩy vào billing.
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Sự bất cập nào về mặt dữ liệu trên hệ thống gây cản trở cho công tác duyệt đơn từ xa?  
+   **Phản hồi:** Dữ liệu về tình trạng dị ứng của người bệnh ngoại trú chưa được liên kết đồng bộ giữa phần mềm kê đơn OH và hồ sơ bệnh án EMR (EMR thiếu thông tin dị ứng), khiến dược sĩ thiếu dữ liệu đối soát an toàn đầy đủ trên màn hình duyệt.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Dược sĩ làm việc từ xa sắp xếp thứ tự duyệt đơn như thế nào khi danh sách đơn chờ bị dồn ứ?  
+   **Phản hồi:** Dược sĩ lâm sàng thực hiện duyệt đơn từ xa trên hệ thống (không ngồi trực tiếp tại quầy nhà thuốc). Thứ tự ưu tiên duyệt trước phụ thuộc chủ yếu vào việc nhân viên Nhà thuốc gọi điện thông báo yêu cầu duyệt ngay cho những bệnh nhân đang đứng chờ tại quầy, hoặc dược sĩ tự lọc ưu tiên các đơn đã nằm chờ quá lâu trên hàng đợi.
+
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Dược sĩ lâm sàng ngoại trú thực hiện thẩm định từ xa trên phần mềm, việc điều phối thứ tự duyệt mang tính bị động do phụ thuộc vào các cuộc gọi thúc giục từ Nhà thuốc khi có người bệnh chờ tại chỗ, trong khi dữ liệu an toàn như thông tin dị ứng lại chưa được liên kết đầy đủ.
+
+### Người được phỏng vấn 8
+**Vai trò chuyên môn:** Dược sĩ nghiệp vụ Dược (Phụ trách Quản lý Hóa đơn & Nhập liệu)  
+**Thời lượng trao đổi:** 25 phút  
+
+**Các câu hỏi & phản hồi thực tế:**
+
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Trong các đầu việc nghiệp vụ hàng ngày, công việc nào đòi hỏi nhiều thời gian và thao tác chi tiết nhất?  
+   **Phản hồi:** Tiếp nhận hóa đơn, chứng từ giao hàng từ các nhà cung cấp để nhập liệu chi tiết (mã thuốc, số lô, hạn dùng, giá) lên hệ thống SAP/HIS; đồng thời phải mở và đối chiếu với bảng dự trù từ kho nội trú gửi sang để xác định chính xác số lượng cần phân bổ nhập vào mã AA (dịch vụ) và mã AY (bảo hiểm y tế).
+2. **Câu hỏi (về sự cố/trục trặc cụ thể đã xảy ra gần nhất):** Khó khăn hoặc nguy cơ sai sót lớn nhất trong khâu nhập liệu đối soát này là gì?  
+   **Phản hồi:** Vào các đợt cao điểm giao hàng hoặc cuối kỳ thanh toán, lượng hóa đơn dồn về nhiều; việc vừa gõ các thông số chi tiết của hóa đơn, vừa phải đối chiếu thủ công với file dự trù của kho để chia số lượng cho từng mã AA/AY rất dễ xảy ra nhầm lẫn hoặc chậm trễ, ảnh hưởng đến việc cập nhật tồn kho kịp thời cho kho xuất hàng.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Hiện tại bộ phận nghiệp vụ đang thực hiện quy trình này như thế nào?  
+   **Phản hồi:** Vẫn thực hiện hoàn toàn thủ công: đối chiếu từng file dự trù của kho với hóa đơn giấy của nhà cung cấp, sau đó nhập tay từng dòng lên hệ thống phần mềm bệnh viện.
+
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Áp lực lớn nhất của bộ phận nghiệp vụ là phải xử lý thủ công hai bước lồng nhau: vừa nhập liệu chi tiết từng thông số hóa đơn giấy, vừa phải tra cứu đối chiếu với file dự trù từ kho nội trú để phân bổ chính xác số lượng cho từng mã thanh toán (AA/AY).
+
+### Người được phỏng vấn 9
+**Vai trò chuyên môn:** Dược sĩ nghiệp vụ Dược (Phụ trách Quản lý Tuân thủ/Compliance Tủ trực các khoa phòng)  
+**Thời lượng trao đổi:** 25 phút  
+
+**Các câu hỏi & phản hồi thực tế:**
+
+1. **Câu hỏi (về công việc tốn thời gian nhất):** Quy trình kiểm tra thực tế việc quản lý tủ trực tại các khoa phòng lâm sàng diễn ra như thế nào?  
+   **Phản hồi:** Định kỳ hàng quý, dược sĩ nghiệp vụ phải đi kiểm tra thực tế mạng lưới khoảng 20 đến 80 tủ thuốc trực tại các khoa phòng; áp dụng bảng checklist chi tiết để rà soát hạn dùng, điều kiện nhiệt độ/độ ẩm bảo quản, niêm phong và cơ số thuốc cấp cứu.
+2. **Câu hỏi (về tìm hiểu thực tế & nắm bắt vấn đề):** Qua các đợt kiểm tra thực tế, những vấn đề bất cập hoặc lỗi tuân thủ nào thường xuyên được ghi nhận tại các tủ trực lâm sàng?  
+   **Phản hồi:** Buổi khảo sát bước đầu nhằm nắm bắt các lỗi tuân thủ phổ biến, gồm: điều dưỡng quên ghi chép sổ theo dõi nhiệt độ/độ ẩm hàng ngày; lấy thuốc gây nghiện/hướng thần dùng trong ca trực đêm nhưng chưa kịp ghi sổ sách đối soát; hoặc thuốc cận date chưa được dán nhãn nhận diện cảnh báo theo đúng quy chuẩn.
+3. **Câu hỏi (về cách họ đang tự khắc phục hiện tại):** Dược sĩ đang ghi nhận và tổng hợp các biên bản kiểm tra lỗi này bằng phương pháp nào?  
+   **Phản hồi:** Sử dụng biểu mẫu khảo sát trên ứng dụng của Microsoft để ghi nhận số liệu tại chỗ khi đi kiểm tra, sau đó xuất dữ liệu ra file Excel để tự lọc, phân loại các nhóm lỗi và tổng hợp thành slide báo cáo định kỳ cho Giám đốc Dược.
+
+**Ý ấn tượng nhất bộc lộ painpoint / điểm nghẽn:** Trách nhiệm kiểm soát tuân thủ bao phủ trên diện rộng với hàng chục tủ thuốc lâm sàng theo các tiêu chuẩn nghiêm ngặt của Bộ Y tế, nhưng công tác ghi nhận biên bản và tổng hợp phân tích lỗi vẫn dựa vào các công cụ bảng tính thủ công rời rạc.
 
 ## PHẦN 3: BẢN ĐỒ QUY TRÌNH (CLINICAL PROCESS MAP)
 
@@ -381,6 +480,8 @@ flowchart TD
 
 #### 3.1.2. Quy trình thẩm định y lệnh và cấp phát thuốc (nội trú, ngoại trú)
 
+> **Mối liên hệ giữa các sơ đồ quy trình:** Khâu **"DSLS thẩm định"** trong cả hai sơ đồ nội trú và ngoại trú dưới đây tương đương và được thực hiện chi tiết theo đúng 4 bước của **Flowchart 3.1.1** (tiếp nhận y lệnh, đối chiếu hồ sơ bệnh án EMR, tra cứu tài liệu chuyên sâu, đánh giá và đề xuất can thiệp).
+
 **Ranh giới quy trình:**  
 **Điểm bắt đầu (nội trú):** Thuốc cần thẩm định  
 **Điểm kết thúc (nội trú):** Cấp phát và thực hiện thuốc  
@@ -396,16 +497,16 @@ flowchart TD
     A["Thuốc cần thẩm định"] --> B{"Thuốc được kê đơn<br/>trong giờ hành chính?"}
 
     B -- "Có" --> C{"Nguồn thuốc"}
-    C -- "Thuốc được cấp từ kho dược" --> D["DSLS thẩm định"]
+    C -- "Thuốc được cấp từ kho dược" --> D["DSLS thẩm định<br/>(Chi tiết theo Flowchart 3.1.1)"]
     C -- "Thuốc tủ trực" --> E["DSLS / điều dưỡng được đào tạo thẩm định"]
 
-    B -- "Không" --> F["bsi / điều dưỡng dc phân công thẩm định"]
+    B -- "Không" --> F["Bác sĩ / điều dưỡng dc phân công thẩm định"]
 
     D --> G{"Cần trao đổi?"}
     E --> G
     F --> G
-    G -- "Nếu cần" --> H["Trao đổi và thống nhất vs bs kê đơn"]
-    G -- "Không cần" --> I(["End: cấp phát và thực hiện thuốc"])
+    G -- "Nếu cần" --> H["Trao đổi và thống nhất với Bác sĩ kê đơn"]
+    G -- "Không cần" --> I(["End: Cấp phát và thực hiện thuốc"])
     H --> I
 ```
 
@@ -413,10 +514,14 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["Đơn thuốc ngoại trú"] --> B["dsls / ds thẩm định"]
-    B --> C["Trao đổi vs bsi kê đơn và thống nhất"]
-    C --> D["bs sửa đơn"]
-    D --> E(["Bán và cấp thuốc"])
+    A["Đơn thuốc ngoại trú từ Bác sĩ"] --> B["DSLS thẩm định từ xa trên hệ thống<br/>(Chi tiết theo Flowchart 3.1.1)"]
+    B --> C{"Cần điều chỉnh<br/>đơn thuốc?"}
+    C -- "Có" --> D["Trao đổi với Bác sĩ kê đơn & thống nhất"]
+    D --> E["Bác sĩ sửa đơn trên hệ thống"]
+    E --> F["DSLS duyệt đơn"]
+    C -- "Không" --> F
+    F --> G["Hệ thống đẩy vào Billing & trừ tồn kho"]
+    G --> H(["Nhà thuốc bán và cấp phát thuốc"])
 ```
 
 **Phân rã các bước chính:**
@@ -425,21 +530,328 @@ flowchart TD
 
 1. **Bước 1 – Xác định thuốc cần thẩm định, và thời điểm kê:** Xét thuốc có thuộc nhóm cần thẩm định không, và thuốc được kê trong giờ hành chính hay không.
 2. **Bước 2 – Thẩm định:**
-   - Trong giờ hành chính: thuốc được cấp từ kho dược thì dược sĩ lâm sàng (DSLS) thẩm định; thuốc tủ trực thì DSLS hoặc điều dưỡng được đào tạo thẩm định.
+   - Trong giờ hành chính: thuốc được cấp từ kho dược thì dược sĩ lâm sàng (DSLS) thẩm định (chi tiết theo Flowchart 3.1.1); thuốc tủ trực thì DSLS hoặc điều dưỡng được đào tạo thẩm định.
    - Ngoài giờ hành chính: bác sĩ hoặc điều dưỡng được phân công thẩm định.
 3. **Bước 3 – Trao đổi và thống nhất:** Nếu cần, trao đổi và thống nhất với bác sĩ kê đơn.
 4. **Bước 4 – Kết thúc:** Cấp phát và thực hiện thuốc.
 
 *Ngoại trú*
 
-1. **Bước 1:** Dược sĩ lâm sàng/dược sĩ thẩm định đơn thuốc ngoại trú (người bệnh cầm đơn xuống nhà thuốc).
-2. **Bước 2:** Trao đổi với bác sĩ kê đơn và thống nhất.
+1. **Bước 1:** Dược sĩ lâm sàng thẩm định đơn thuốc ngoại trú từ xa trên phần mềm (chi tiết theo Flowchart 3.1.1).
+2. **Bước 2:** Trao đổi với bác sĩ kê đơn và thống nhất nếu phát hiện điểm chưa phù hợp.
 3. **Bước 3:** Bác sĩ sửa đơn.
-4. **Bước 4:** Bán và cấp thuốc.
+4. **Bước 4:** DSLS duyệt đơn $\rightarrow$ hệ thống fill vào billing và trừ tồn kho $\rightarrow$ Nhà thuốc bán và cấp thuốc.
 
 **Thời gian chu kỳ (Cycle Time):** Duyệt đơn ngoại trú trung bình khoảng 5 phút/đơn, nhưng không theo thứ tự: người đến trước được duyệt trước, có đơn bị delay khoảng 1 tiếng do người bệnh chưa đến; y lệnh bác sĩ theo thứ tự hoặc ưu tiên các đơn đã chờ lâu. Thời gian chờ khoảng 30 phút có thể do ra viện, bảo hiểm,... Nội trú: [chưa có số liệu].
 
-*(Các mục 3.2 trở đi cho kho nội trú, nghiệp vụ, nhà thuốc, quản lý dược: bổ sung sau)*
+---
+
+#### 3.1.3. Quy trình làm báo cáo dược lâm sàng (Báo cáo Bộ 17 chỉ số)
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Ngày cuối cùng của tháng làm việc  
+**Điểm kết thúc:** Báo cáo Bộ 17 chỉ số Dược lâm sàng được Trưởng khoa Dược duyệt và ban hành chính thức
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Cuối tháng: Bắt đầu kỳ báo cáo"]) --> B["Bước 1: Trích xuất dữ liệu thô<br/>- Danh sách y lệnh thuốc đã kê từ OH<br/>- Dữ liệu sự cố thuốc & ADR từ Info Vinmec"]
+    B --> C["Bước 2: Phân bổ dữ liệu cho DSLS phụ trách từng khoa"]
+    C --> D["Bước 3: Từng DSLS dùng Excel lọc & tính chỉ số chuyên môn khoa mình"]
+    D --> E["Bước 4: Đối chiếu thủ công hồ sơ bệnh án EMR<br/>(Lấy mã bệnh nhân PID tra cứu biên bản hội chẩn KS, phiếu tư vấn)"]
+    E --> F["Bước 5: Gửi file Excel chỉ số khoa về đầu mối tổng hợp"]
+    F --> G["Bước 6: Dược sĩ tổng hợp mở từng file, gộp số liệu vào bản chính"]
+    G --> H{"Trưởng khoa Dược<br/>phê duyệt?"}
+    H -- "Cần chỉnh sửa" --> G
+    H -- "Đạt yêu cầu" --> I(["Ban hành Báo cáo Bộ 17 chỉ số gửi Ban Giám đốc"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Trích xuất dữ liệu thô:** Cuối tháng, xuất danh mục toàn bộ thuốc đã kê từ phần mềm OH và dữ liệu sự cố thuốc, báo cáo phản ứng có hại (ADR) từ hệ thống Info Vinmec.
+2. **Bước 2 – Phân bổ dữ liệu theo khoa:** Chuyển dữ liệu y lệnh cho các dược sĩ lâm sàng phụ trách từng chuyên khoa (tim mạch, ung bướu, hồi sức, ngoại khoa...).
+3. **Bước 3 – Xử lý số liệu khoa:** Từng dược sĩ sử dụng công cụ lọc Excel tự dựng để tính toán các chỉ số chuyên môn của khoa mình.
+4. **Bước 4 – Đối chiếu chéo bệnh án EMR:** Với các chỉ số cần minh chứng (ví dụ: tỷ lệ hội chẩn kháng sinh hạn chế), dược sĩ lấy mã bệnh nhân (PID) trên file OH mở từng bệnh án trên EMR để kiểm tra biên bản hội chẩn hợp lệ.
+5. **Bước 5 – Gửi số liệu về đầu mối:** Từng dược sĩ gửi file Excel số liệu khoa mình qua email cho dược sĩ phụ trách tổng hợp.
+6. **Bước 6 – Gộp số liệu toàn viện:** Dược sĩ tổng hợp mở từng file, chuẩn hóa và copy gộp vào bảng tính tổng hợp toàn khoa, thiết kế slide báo cáo.
+7. **Bước 7 – Phê duyệt:** Trình Trưởng khoa Dược duyệt trước khi gửi giao ban hoặc báo cáo Ban Giám đốc.
+
+**Thời gian chu kỳ (Cycle Time):** Tổng thời gian thực hiện khoảng **2 ngày** làm việc vào cuối tháng (thực hiện song song cùng các công việc chuyên môn thường quy).
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Trong 17 chỉ số, hiện có bao nhiêu chỉ số có thể tính toán tự động 100% từ dữ liệu OH mà không cần mở EMR đọc tay từng bệnh án?
+> 2. File Excel số liệu mà dược sĩ từng khoa gửi về hiện đã có template chuẩn cố định hay mỗi người làm một form khác nhau?
+> 3. Bộ chỉ số này có áp dụng đồng nhất 100% giữa tất cả các bệnh viện trong hệ thống Vinmec không, hay mỗi cơ sở có những chỉ số đặc thù riêng?
+
+---
+
+#### 3.1.4. Quy trình làm báo cáo DDD (Báo cáo tiêu thụ kháng sinh theo chuẩn WHO)
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Định kỳ 6 tháng/lần (2 lần/năm) toàn bệnh viện  
+**Điểm kết thúc:** Báo cáo DDD hoàn tất, được Hội đồng Thuốc và Điều trị (D&T) thông qua
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Định kỳ 6 tháng: Bắt đầu kỳ báo cáo DDD"]) --> B["Bước 1: Trích xuất dữ liệu<br/>- Y lệnh dùng kháng sinh từ OH<br/>- Tổng số ngày bệnh nhân (Patient-days) từ EMR"]
+    B --> C["Bước 2: Chuẩn hóa đơn vị đo lường<br/>(Quy đổi mg, g, UI về gam/ngày)"]
+    C --> D["Bước 3: Tính khối lượng hoạt chất tiêu thụ<br/>(Số liều x Hàm lượng hoạt chất mỗi liều)"]
+    D --> E["Bước 4: Tra cứu định mức 1 DDD chuẩn WHO theo bảng ATC/DDD"]
+    E --> F["Bước 5: Tính chỉ số chuẩn hóa<br/>(DDD / 1.000 ngày bệnh nhân theo công thức)"]
+    F --> G["Bước 6: Phân tích đa chiều<br/>(Theo thuốc, hoạt chất, chuyên khoa, tháng)"]
+    G --> H["Bước 7: Lập báo cáo xu hướng & khuyến cáo sử dụng kháng sinh"]
+    H --> I(["Hội đồng Thuốc & Điều trị thông qua báo cáo"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Trích xuất dữ liệu:** Xuất danh sách toàn bộ y lệnh sử dụng kháng sinh trong kỳ 6 tháng từ OH và tổng ngày điều trị nội trú (Patient-days) từ EMR.
+2. **Bước 2 – Chuẩn hóa đơn vị đo lường:** Quy đổi các đơn vị hàm lượng khác nhau (mg, g, UI) về đơn vị gam/ngày chuẩn.
+3. **Bước 3 – Tính khối lượng hoạt chất:** Trên từng y lệnh, tính: $\text{Khối lượng hoạt chất} = \text{Số liều sử dụng} \times \text{Hàm lượng hoạt chất mỗi liều}$.
+4. **Bước 4 – Tra cứu chuẩn WHO:** Tra cứu định mức 1 DDD chuẩn của hoạt chất theo danh mục ATC/DDD của Tổ chức Y tế Thế giới.
+5. **Bước 5 – Tính chỉ số chuẩn hóa:** Áp dụng công thức:
+   $$\text{Số liều DDD / 1.000 ngày bệnh nhân} = \frac{\sum \text{Khối lượng hoạt chất} / \text{1 DDD chuẩn WHO}}{\text{Tổng số ngày bệnh nhân}} \times 1.000$$
+6. **Bước 6 – Phân tích đa chiều:** Phân tích số liệu tiêu thụ theo từng mặt hàng biệt dược, từng hoạt chất, theo khoa phòng và theo từng tháng.
+7. **Bước 7 – Báo cáo và đề xuất:** Tổng hợp báo cáo xu hướng sử dụng kháng sinh, phát hiện các nhóm tăng vọt bất thường và đề xuất khuyến cáo cho Hội đồng Thuốc & Điều trị.
+
+**Thời gian chu kỳ (Cycle Time):** Thực hiện **2 lần/năm** (mỗi 6 tháng/lần); thời gian tính toán thủ công mất nhiều ngày làm việc.
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Dược sĩ phụ trách hiện mất bao nhiêu ngày công để hoàn thành một kỳ báo cáo DDD 6 tháng bằng phương pháp thủ công?
+> 2. Dữ liệu ngày bệnh nhân (Patient-days) lấy trực tiếp từ hệ thống EMR của viện hay do phòng Kế hoạch tổng hợp cung cấp?
+> 3. Bệnh viện đã có bảng ánh xạ sẵn (mapping table) giữa danh mục thuốc viện và mã ATC/DDD của WHO chưa, hay dược sĩ phải tự tra cứu thủ công từng hoạt chất?
+
+---
+
+### 3.2. Quản lý kho nội trú & Cung ứng
+
+#### 3.2.1. Quy trình làm dự trù thường quy
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Đến chu kỳ lập dự trù định kỳ (ngày 01 & 15 hàng tháng đối với Nhà thuốc; hàng tháng đối với Kho B1; 3–4 ngày/lần đối với Kho T6)  
+**Điểm kết thúc:** Đơn hàng dự trù được Trưởng phòng Quản lý Dược duyệt và phát hành đơn đặt hàng gửi Nhà cung cấp (hoặc xuất điều chuyển kho)
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Đến kỳ dự trù thường quy<br/>(Mùng 1 & 15 tại Nhà thuốc; Hàng tháng tại Kho B1)"]) --> B["Bước 1: Trích xuất số liệu từ phần mềm OH<br/>(Tồn kho onHand, Sales 30 ngày, Pending In/Out)"]
+    B --> C["Bước 2: Copy-paste số liệu vào file Excel dự trù nội bộ"]
+    C --> D["Bước 3: Tính toán theo công thức dự trù thường quy chuẩn<br/>(Nhà thuốc: Sales 30d x 1.3 - Tồn - Chờ về...<br/>Kho B1: Xuất x (1+LeadTime) - Tồn...)"]
+    D --> E["Bước 4: Làm tròn theo bội số quy cách đóng gói (nguyên hộp/lọ)"]
+    E --> F["Bước 5: Rà soát & điều chỉnh số lượng theo kinh nghiệm<br/>(Hạn dùng xa/gần, hàng dùng đều/không đều, mùa vụ)"]
+    F --> G["Bước 6: Đối chiếu phân bổ mã AA (dịch vụ) và AY (BHYT)"]
+    G --> H["Bước 7: Trình ký duyệt dự trù<br/>- Nhà thuốc: Quản lý Nhà thuốc -> Trưởng phòng Quản lý Dược<br/>- Kho B1: Dược sĩ kho -> Trưởng phòng Quản lý Dược"]
+    H --> J{"Phê duyệt<br/>đạt yêu cầu?"}
+    J -- "Cần điều chỉnh/Cắt giảm" --> F
+    J -- "Đồng ý" --> K(["Phát hành đơn đặt hàng gửi Nhà cung cấp"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Trích xuất dữ liệu:** Dược sĩ kho/nhà thuốc trích xuất báo cáo Xuất - Nhập - Tồn thời gian thực và lịch sử tiêu thụ 30 ngày từ phần mềm OH.
+2. **Bước 2 – Nhập liệu bảng tính:** Sao chép dữ liệu vào file Excel dự trù nội bộ cài sẵn công thức tính.
+3. **Bước 3 – Tính dự trù dự kiến:** Bảng tính tự động tính toán nhu cầu bổ sung:
+   - Nhà thuốc: $\text{Dự trù} = (\text{Sales 30 ngày} \times 1{,}3) - \text{Tồn kho} - \text{Đã đặt chưa về} - \text{Đã về chưa lên hệ thống}$.
+   - Kho B1: $\text{Dự trù} = [\text{Xuất tháng trước} \times (1 + \text{Lead Time})] - \text{Tồn kho} - \text{Hàng về chưa nhập HĐ} - \text{Hàng đã đặt chưa về}$.
+   - Kho vệ tinh T6: $\text{Dự trù T6} = \text{Max T6} - \text{Tồn T6}$.
+4. **Bước 4 – Làm tròn quy cách:** Làm tròn số lượng theo bội số quy cách nhỏ nhất (nguyên hộp/vỉ/lọ).
+5. **Bước 5 – Điều chỉnh theo kinh nghiệm:** Nhân viên kho điều chỉnh số lượng dự trù thực tế dựa trên hạn dùng (date xa ưu tiên nhập đủ, date gần nhập tối thiểu), mặt hàng dùng không đều và xu hướng mùa vụ.
+6. **Bước 6 – Phân bổ mã hàng:** Rà soát phân bổ số lượng vào mã `AA` (viện phí/dịch vụ) và `AY` (BHYT) theo kế hoạch điều trị.
+7. **Bước 7 – Phê duyệt nhiều cấp:**
+   - Nhà thuốc: Quản lý Nhà thuốc duyệt sơ bộ $\rightarrow$ Trưởng phòng Quản lý Dược duyệt chính thức.
+   - Kho B1: Dược sĩ kho lập $\rightarrow$ Trưởng phòng Quản lý Dược duyệt chính thức.
+8. **Bước 8 – Đặt hàng:** Sau khi duyệt, đơn hàng được gửi cho Nhà cung cấp triển khai giao hàng.
+
+**Thời gian chu kỳ (Cycle Time):** Kho B1 làm **1 tháng/lần**; Nhà thuốc làm **2 lần/tháng** (ngày 01 và 15); Kho T6 làm **3–4 ngày/lần**.
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Việc ký duyệt file dự trù giữa Kho Dược / Nhà thuốc và Phòng Quản lý Dược hiện thực hiện ký điện tử trên phần mềm (OH/SAP) hay gửi file Excel qua email / ký bản in giấy?
+> 2. Thời gian trung bình từ lúc kho/nhà thuốc nộp file dự trù đến khi Quản lý Dược duyệt xong là bao lâu?
+> 3. Khi Quản lý Dược cắt giảm số lượng hoặc điều chỉnh ngân sách, kho/nhà thuốc có phải chạy lại công thức để tính lại phân bổ mã AA/AY không?
+
+---
+
+#### 3.2.2. Quy trình làm dự trù đột xuất
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Phát hiện tồn kho thực tế chạm ngưỡng tối thiểu (Min) hoặc phát sinh tiêu thụ tăng đột biến / dịch bệnh / ca bệnh đặc biệt  
+**Điểm kết thúc:** Đơn hàng đột xuất được phê duyệt và Nhà cung cấp xác nhận giao hàng khẩn cấp (hoặc điều chuyển nội bộ hoàn tất)
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Phát hiện hàng chạm ngưỡng tồn an toàn (Min)<br/>hoặc phát sinh ca bệnh/dịch bệnh đột xuất"]) --> B["Bước 1: Rà soát tồn kho thực tế & Lead Time giao hàng"]
+    B --> C["Bước 2: Trích xuất số liệu xuất/tiêu thụ 10 ngày gần nhất từ OH"]
+    C --> D["Bước 3: Tính toán số lượng dự trù đột xuất theo công thức<br/>(Hệ số 30-i hoặc 40-i, thời gian dự trù tối đa 10 ngày)"]
+    D --> E["Bước 4: Lập tờ trình giải trình lý do phát sinh nhu cầu cấp bách"]
+    E --> F["Bước 5: Trình duyệt khẩn cấp<br/>(Trưởng khoa Dược / Trưởng phòng Quản lý Dược)"]
+    F --> G{"Duyệt khẩn?"}
+    G -- "Từ chối/Điều chuyển nội bộ" --> H["Điều chuyển tạm từ cơ sở khác trong hệ thống"]
+    G -- "Đồng ý" --> I["Đặt hàng hỏa tốc với Nhà cung cấp & đôn đốc giao gấp"]
+    H --> J(["Hàng về kho đáp ứng điều trị"])
+    I --> J
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Phát hiện nhu cầu đột xuất:** Qua các lần kiểm soát tồn dày (3–4 ngày/lần), phát hiện mặt hàng có lượng tồn giảm nhanh bất thường so với thời gian Lead Time giao hàng, hoặc nhận yêu cầu thuốc đột xuất từ khoa phòng.
+2. **Bước 2 – Trích xuất dữ liệu ngắn hạn:** Trích xuất dữ liệu tiêu thụ 10 ngày gần nhất trên OH.
+3. **Bước 3 – Tính số lượng đột xuất:**
+   - Áp dụng công thức dự trù đột xuất: $\text{Dự trù} = [\frac{\text{Sales 10 ngày}}{10} \times (40 - i)] - \text{Tồn} - \text{Đã đặt chưa về} - \text{Hàng chưa lên hệ thống}$ ($i$ là ngày làm dự trù; hệ số là $30 - i$ trước ngày 15, từ ngày 15 dùng $40 - i$; thời gian dự trù tối đa 10 ngày).
+4. **Bước 4 – Lập tờ trình giải trình:** Lập file dự trù đột xuất kèm bản giải trình lý do phát sinh nhu cầu khẩn cấp.
+5. **Bước 5 – Phê duyệt hỏa tốc:** Trình Trưởng khoa Dược / Trưởng phòng Quản lý Dược xem xét duyệt khẩn.
+6. **Bước 6 – Đặt hàng và đôn đốc:** Gửi đơn đặt hàng khẩn cho Nhà cung cấp và liên tục theo dõi ("giục hàng về gấp"); trường hợp NCC không có sẵn hàng thì kích hoạt điều chuyển khẩn cấp từ các bệnh viện Vinmec khác.
+
+**Thời gian chu kỳ (Cycle Time):** Phát sinh không cố định; xử lý trong vòng vài giờ đến 1 ngày.
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Ngưỡng cảnh báo hàng xuất nhanh đột xuất hiện tại hoàn toàn do dược sĩ tự nhớ và rà soát bằng mắt, hay hệ thống OH đã có chức năng gửi thông báo tự động (notification)?
+> 2. Thời gian phê duyệt dự trù đột xuất thường mất bao lâu để hàng kịp về (trong ngày hay mất nhiều ngày)?
+> 3. Nếu nhà cung cấp không có sẵn hàng, quy trình điều chuyển khẩn cấp giữa các bệnh viện trong hệ thống Vinmec (ví dụ huyết thanh kháng nọc rắn) mất bao lâu và cần những cấp nào phê duyệt?
+
+---
+
+#### 3.2.3. Quy trình nhận hàng từ nhà cung cấp
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Nhà cung cấp giao hàng vật lý và bàn giao chứng từ/hóa đơn tại cửa kho B1  
+**Điểm kết thúc:** Thuốc được xếp vào vị trí kệ kho B1 và dữ liệu tồn kho hiển thị khả dụng trên phần mềm OH
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Nhà cung cấp giao hàng & hóa đơn tại cửa kho B1"]) --> B["Bước 1: Tiếp nhận hàng vật lý & kiểm tra cảm quan<br/>(Niêm phong, bao bì, nhiệt độ xe/thùng bảo quản lạnh)"]
+    B --> C["Bước 2: Kiểm đếm thực tế số lượng, số lô, hạn dùng (date)"]
+    C --> D{"Đạt tiêu chuẩn<br/>chất lượng & date?"}
+    D -- "Không đạt (cận date/hỏng)" --> E["Lập biên bản từ chối nhận hàng & yêu cầu đổi trả"]
+    D -- "Đạt" --> F["Bước 3: Ký nhận biên bản giao nhận với NCC & chuyển chứng từ cho Nghiệp vụ Dược"]
+    F --> G["Bước 4: Phòng Nghiệp vụ Dược đối chiếu file dự trù kho<br/>(Xác định tỷ lệ số lượng phân bổ vào mã AA và AY)"]
+    G --> H["Bước 5: Nghiệp vụ Dược nhập chi tiết hóa đơn lên SAP và OH"]
+    H --> I["Bước 6: Kho B1 xếp thuốc vào vị trí kệ (Bin location)"]
+    I --> K(["Tồn kho khả dụng trên hệ thống OH (onHand) phục vụ xuất kho"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Tiếp nhận & Kiểm tra cảm quan:** Dược sĩ kho B1 tiếp nhận hàng và hóa đơn; kiểm tra niêm phong, bao bì nguyên vẹn, kiểm tra nhiệt độ đối với hàng dây chuyền lạnh (2–8°C).
+2. **Bước 2 – Kiểm đếm số lượng, số lô, hạn dùng:** Đếm số lượng thực tế; kiểm tra hạn dùng (áp dụng ngưỡng an toàn: từ chối nhận nếu hạn dùng còn lại quá ngắn, ví dụ < 3 tháng); kiểm tra quy cách và nguồn gốc xuất xứ.
+3. **Bước 3 – Ký nhận bàn giao:** Ký xác nhận vào biên bản giao nhận hàng với bên vận chuyển/NCC; bàn giao hóa đơn giấy cho Phòng Nghiệp vụ Dược.
+4. **Bước 4 – Nghiệp vụ Dược đối chiếu dự trù:** Chuyên viên nghiệp vụ mở file dự trù của kho để xác định cơ cấu phân bổ số lượng vào mã `AA` (dịch vụ) và `AY` (BHYT).
+5. **Bước 5 – Nhập liệu hệ thống:** Nghiệp vụ Dược nhập chi tiết hóa đơn (mã thuốc, lô, date, giá, số lượng phân bổ AA/AY) lên hệ thống SAP và phần mềm OH của bệnh viện.
+6. **Bước 6 – Xếp kho & Kích hoạt tồn:** Dược sĩ kho xếp thuốc vào đúng vị trí thùng/kệ (`Bin location`); số lượng thuốc chính thức chuyển sang trạng thái khả dụng (`onHand`) trên hệ thống OH để phục vụ xuất kho lên các tầng.
+
+**Thời gian chu kỳ (Cycle Time):** Diễn ra hàng ngày theo từng chuyến giao hàng của nhà cung cấp.
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Thời gian trung bình từ lúc hàng về đến kho B1 cho đến khi phòng Nghiệp vụ Dược nhập xong hóa đơn lên hệ thống OH là bao lâu (vài giờ hay sang ngày hôm sau)?
+> 2. Trong tình huống cấp bách cần xuất thuốc lên khoa ngay khi hàng vừa về kho, viện có quy trình "phiếu xuất tạm" bằng giấy hay bắt buộc phải xuất trên hệ thống dẫn đến hiện tượng xuất âm?
+> 3. Khi hàng giao bị sai số lô, cận date hoặc không đúng xuất xứ, biên bản từ chối nhận hàng do Kho B1 hay phòng Nghiệp vụ Dược lập và xử lý với NCC?
+
+---
+
+### 3.3. Vận hành Nhà thuốc & Kiểm kê kho
+
+#### 3.3.1. Quy trình kiểm kê kho (Nhà thuốc & Kho nội trú)
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Đến lịch kiểm kê định kỳ (tháng/quý) hoặc kiểm kê đột xuất theo quyết định của bệnh viện  
+**Điểm kết thúc:** Biên bản kiểm kê được ký duyệt đầy đủ và số dư tồn kho trên hệ thống được cập nhật chuẩn xác khớp với thực tế
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Đến kỳ kiểm kê kho<br/>(Định kỳ tháng/quý hoặc đột xuất)"]) --> B["Bước 1: Thành lập tổ kiểm kê & tạo đợt kiểm kê trên phần mềm"]
+    B --> C["Bước 2: Hệ thống xuất ảnh chụp tồn kho sổ sách (Snapshot)<br/>tại thời điểm bắt đầu"]
+    C --> D["Bước 3: Đếm thực tế toàn bộ thuốc trên giá kệ<br/>(Quét mã QR qua app hoặc ghi bảng kiểm kê giấy)"]
+    D --> E["Bước 4: Đối chiếu số lượng thực tế với số liệu Snapshot hệ thống"]
+    E --> F{"Số liệu khớp?"}
+    F -- "Khớp 100%" --> G["Lập và ký biên bản kiểm kê hoàn tất"]
+    F -- "Có chênh lệch (thừa/thiếu)" --> H["Bước 5: Truy tìm nguyên nhân sai lệch<br/>(Lệch số lô, nhầm mã AA/AY, sai lệch do xuất bán liên tục 24/7)"]
+    H --> I["Bước 6: Lập biên bản giải trình & đề xuất phương án xử lý chênh lệch"]
+    I --> J["Bước 7: Lãnh đạo duyệt điều chỉnh tồn kho sổ sách"]
+    J --> G
+    G --> K(["Cập nhật số dư kho chính xác trên hệ thống OH"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Khởi tạo đợt kiểm kê:** Thành lập tổ kiểm kê theo lịch định kỳ; tạo đợt kiểm kê trên phần mềm quản lý kho.
+2. **Bước 2 – Chốt số liệu sổ sách:** Hệ thống xuất ảnh chụp tồn kho thời gian thực (Snapshot) tại thời điểm bắt đầu kiểm kê; số liệu sổ sách được chốt cứng.
+3. **Bước 3 – Kiểm đếm thực tế:**
+   - Tại Nhà thuốc: Nhân viên dùng ứng dụng thí điểm quét mã QR mặt hàng và nhập số lượng tồn thực tế đếm được trên giá kệ.
+   - Tại Kho nội trú: Đếm thực tế từng lô, hạn dùng và ghi nhận vào bảng kiểm kê.
+4. **Bước 4 – Đối soát số liệu:** Ứng dụng/bảng tính tự động tính toán độ chênh lệch giữa số thực đếm và số tồn Snapshot trên hệ thống.
+5. **Bước 5 – Truy tìm nguyên nhân sai lệch:** Nếu phát hiện thừa/thiếu, nhân sự rà soát lại các khâu: lệch số lô do áp lực cấp phát nhanh, nhầm lẫn giữa mã AA và AY, hoặc biến động xuất bán lẻ liên tục tại quầy trong lúc đang kiểm kê.
+6. **Bước 6 – Xử lý chênh lệch:** Lập biên bản giải trình nguyên nhân chênh lệch; đề xuất phương án xử lý (thu hồi thuốc giao thừa, bù thuốc phát thiếu, lập biên bản hủy thuốc hư hỏng).
+7. **Bước 7 – Phê duyệt & Chuẩn hóa:** Trình lãnh đạo phê duyệt biên bản kiểm kê và điều chỉnh số liệu trên hệ thống OH để số dư sổ sách khớp 100% với thực tế.
+
+**Thời gian chu kỳ (Cycle Time):** Diễn ra định kỳ theo tháng/quý; quá trình đếm và xử lý chênh lệch kéo dài từ **1 đến 2 ngày**.
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Tại Nhà thuốc hoạt động 24/7, khi đang thực hiện đếm thuốc mà có khách mua phát sinh thì nhân viên xử lý đơn thuốc đó ra sao để không làm lệch số liệu Snapshot của đợt kiểm kê?
+> 2. Ứng dụng quét mã QR kiểm kê thí điểm đã hỗ trợ cập nhật số liệu thời gian thực (real-time) và cho phép sửa số liệu hậu kiểm tra chưa?
+> 3. Thời gian tối đa quy định để tìm nguyên nhân và đóng một đợt kiểm kê kho là bao lâu?
+
+---
+
+### 3.4. Nghiệp vụ Dược & Quản lý Tuân thủ
+
+#### 3.4.1. Quy trình kiểm tra tủ trực quản lý thuốc tại các khoa phòng
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Đến lịch kiểm tra định kỳ hàng quý theo kế hoạch kiểm soát chất lượng Dược bệnh viện  
+**Điểm kết thúc:** Báo cáo kiểm tra chất lượng tủ trực được hoàn thành, gửi báo cáo Giám đốc Dược và đôn đốc các khoa phòng khắc phục lỗi
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Định kỳ hàng quý: Bắt đầu đợt kiểm tra tủ trực"]) --> B["Bước 1: Lên danh sách & lịch kiểm tra 20-80 tủ trực tại các khoa"]
+    B --> C["Bước 2: Dược sĩ nghiệp vụ đến từng tủ trực cùng Điều dưỡng phụ trách"]
+    C --> D["Bước 3: Kiểm tra thực tế theo Checklist tiêu chuẩn:<br/>- Hạn dùng & nhãn nhận diện thuốc cận date<br/>- Điều kiện nhiệt độ/độ ẩm & sổ ghi chép hàng ngày<br/>- Cơ số thuốc thực tế so với quy định (thiếu/thừa)<br/>- Sổ theo dõi thuốc gây nghiện/hướng thần & vỏ thuốc ca đêm<br/>- Niêm phong tủ thuốc cấp cứu"]
+    D --> E["Bước 4: Ghi nhận kết quả vào biểu mẫu Microsoft Forms & chụp ảnh lỗi tại chỗ"]
+    E --> F["Bước 5: Ký biên bản ghi nhận hiện trường với Điều dưỡng phụ trách"]
+    F --> G["Bước 6: Xuất dữ liệu Excel từ Form, thống kê và phân loại mức độ lỗi"]
+    G --> H["Bước 7: Lập báo cáo tổng kết quý (AAR) trình Giám đốc Dược"]
+    H --> I(["Gửi thông báo vi phạm & đôn đốc các khoa khắc phục (CAPA)"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Lập kế hoạch kiểm tra:** Lên danh sách và phân công lịch kiểm tra định kỳ hàng quý cho mạng lưới 20–80 tủ thuốc trực tại các khoa lâm sàng toàn viện.
+2. **Bước 2 – Kiểm tra hiện trường:** Dược sĩ nghiệp vụ trực tiếp đến từng khoa phòng, cùng Điều dưỡng phụ trách mở tủ thuốc trực.
+3. **Bước 3 – Rà soát theo Checklist chuẩn:**
+   - Hạn dùng: Kiểm tra hạn sử dụng của từng mặt hàng, kiểm tra việc dán nhãn cảnh báo đối với thuốc cận date.
+   - Điều kiện bảo quản: Đo nhiệt độ, độ ẩm tủ thuốc; đối chiếu sổ nhật ký theo dõi nhiệt độ/độ ẩm hàng ngày của điều dưỡng.
+   - Cơ số thuốc: Đếm số lượng thực tế so với bảng cơ số thuốc cấp cứu đã phê duyệt; ghi nhận số lượng thiếu để kho bù hoặc thừa để hoàn trả kho.
+   - Thuốc kiểm soát đặc biệt: Kiểm tra sổ theo dõi xuất - dùng thuốc gây nghiện, hướng thần; đối chiếu chữ ký y lệnh rút thuốc trong ca trực đêm; thu hồi vỏ ống/lọ thuốc đã dùng để nộp về kho tiêu hủy theo quy định.
+   - Niêm phong: Kiểm tra tình trạng niêm phong tủ thuốc cấp cứu.
+4. **Bước 4 – Ghi nhận dữ liệu & Minh chứng:** Điền kết quả kiểm tra vào biểu mẫu trên ứng dụng Microsoft Forms; chụp ảnh hiện trường các lỗi vi phạm.
+5. **Bước 5 – Ký biên bản:** Điều dưỡng phụ trách tủ trực và Dược sĩ nghiệp vụ cùng ký xác nhận biên bản kiểm tra tại chỗ.
+6. **Bước 6 – Xử lý & Phân loại dữ liệu:** Xuất dữ liệu từ Form sang bảng tính Excel; thống kê số lỗi theo khoa phòng, phân loại mức độ lỗi (lỗi lặp lại, lỗi nghiêm trọng).
+7. **Bước 7 – Báo cáo & Cải tiến chất lượng:** Lập báo cáo tổng hợp chất lượng tủ trực định kỳ (AAR - After Action Review) trình Giám đốc Dược; gửi thông báo lỗi đến các khoa phòng để đôn đốc thực hiện hành động khắc phục và phòng ngừa (CAPA).
+
+**Thời gian chu kỳ (Cycle Time):** Diễn ra định kỳ **hàng quý** (mỗi quý gồm nhiều đợt kiểm tra cuốn chiếu).
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. Mỗi đợt kiểm tra mạng lưới 20–80 tủ trực toàn viện thường diễn ra trong bao nhiêu ngày?
+> 2. Khi phát hiện thuốc trong tủ trực bị cận date hoặc hỏng, quy trình đổi trả / bù cơ số thuốc giữa tủ trực khoa phòng và Kho B1 diễn ra cụ thể qua những bước nào?
+> 3. Báo cáo vi phạm và đôn đốc khắc phục sau kiểm tra có gửi trực tiếp cho Trưởng khoa lâm sàng và Điều dưỡng trưởng không?
+
 
 ## PHẦN 4: DANH SÁCH ĐIỂM NGHẼN (BOTTLENECK MATRIX)
 
@@ -455,7 +867,7 @@ flowchart TD
 | BN06 | Dược lâm sàng – báo cáo tổng kết hằng tháng (bộ chỉ số) | Cuối tháng phải thu thập dữ liệu từ nhiều nguồn, nhiều link: file excel xuất từ OH (thuốc đã kê trong tháng), hồ sơ ERM tra thủ công qua mã bệnh nhân để đối chiếu (ví dụ phiếu hội chẩn kháng sinh), Info Vinmec (sự cố thuốc, tác dụng phụ), thông tin truyền miệng. Chỉ số của từng khoa do dược sĩ khác nhau phụ trách: dược sĩ phụ trách khoa nào (ví dụ khoa tim) thì gửi file excel chỉ số thống kê của khoa đó cho người tổng hợp, người tổng hợp phải mở từng file và gộp vào bản chính `[mới khảo sát gần đây]`. Không có hệ thống chung nên dữ liệu rời rạc; mỗi cơ sở làm bộ chỉ số khác nhau | Hằng tháng; mất trung bình khoảng 2 ngày/lần làm báo cáo | Cao (tốn nhiều công sức, nhập và xử lý tay) | Dược sĩ tự xây các công cụ lọc bằng excel; từng dược sĩ phụ trách khoa xử lý chỉ số khoa mình rồi người phụ trách tổng hợp ra số cuối, gửi cấp trên check |
 | BN07 | Toàn khoa dược – khối lượng tài liệu, quy trình lớn và rải rác | Tài liệu, quy trình được ghi nhận là quá nhiều và rải rác. Tình trạng này có ở tất cả các phòng chứ không riêng phòng nào, và mỗi phòng lại có các loại tài liệu rời rạc khác nhau (ví dụ dược lâm sàng: phiếu điều trị, hồ sơ bệnh án, thông tư, quy định, tài liệu tra cứu thuốc; kho nội trú: nhiều file excel kiểm soát tồn kho, dự trù; nghiệp vụ: hóa đơn, báo cáo, hồ sơ bảo hiểm). Phòng quản lý dược: `[chưa xác nhận]` | Hằng ngày ở các phòng (chưa đo) | Trung bình đến Cao (chưa đo) | Mỗi người tự tra cứu và tự lưu tài liệu theo cách riêng; chưa có công cụ tích hợp |
 | BN08 | Kho nội trú – kiểm soát tồn kho và dự trù thường quy | Dữ liệu tồn/xuất được xuất từ OH ra nhiều file excel rời (file kiểm soát tồn kho, dự trù thường quy, thống kê tầng B1 và tầng 6). Người kiểm kho copy tay dữ liệu vào file checklist/excel rồi mới tính toán, công thức hard code; việc nhập xuất dữ liệu rất lâu, khó làm quen với người mới. Mỗi ngày phải lặp lại: làm theo checklist, upload, parse dữ liệu, gắn công thức, check lại; còn phải đáp ứng nhu cầu đột xuất (ví dụ tầng yêu cầu thêm thuốc) | Hằng ngày (dự trù khoảng 5–10 ngày cho mỗi lần) | Cao (tốn công sức và thời gian, lặp lại nhiều) | Làm theo checklist bằng excel, copy tay dữ liệu, dựa vào kinh nghiệm của dược sĩ kho |
-| BN09 | Kho nội trú – cân mã AA - AY để xuất thuốc lên tầng | **Mã thuốc:** 1 thuốc có thể có nhiều mã: aa (thanh toán dịch vụ), ay (thanh toán bảo hiểm), có thể có mã aa-ay và bộ mã riêng của daycare (mỗi bảo hiểm y tế có loại mã khác nhau). Thực tế đây vẫn là cùng 1 loại thuốc dùng chung 1 kho vật lý. **Nguyên nhân âm ảo:** OH tính tồn riêng cho từng mã, không gộp tồn của aa và ay lại (phần mềm cũ eHost chỉ cần tick bảo hiểm hoặc không, tồn quản lý chung). Ví dụ: nhập vào 100 hộp ở mã aa; tầng 6 lại cần 30 hộp theo mã ay và 70 hộp theo mã aa. Nếu không cân mã (chuyển 30 hộp từ mã aa sang mã ay) thì OH trừ 30 hộp ở mã ay vốn không có tồn, nên mã ay bị âm 30 trong khi thuốc thật vẫn đủ: gọi là "âm ảo". **Cách đọc excel:** mã aa hiển thị bằng tổng aa + ay, mã ay chỉ hiện ay, mỗi mã còn có thêm 2 cột aa, ay nên rất dễ nhầm, nhất là với người mới. Có ngày toàn bệnh nhân nội trú nên mã bảo hiểm hết và dư mã dịch vụ. Cân mã là khâu mất thời gian nhất, hiện chủ yếu theo cảm tính (đã có công thức nhưng vẫn cần kinh nghiệm) | Hằng ngày mỗi lần xuất thuốc lên tầng (chưa đo thời gian) | Cao (khâu mất thời gian nhất của kho; dễ sai lệch số liệu) | Cân tay bằng excel, dựa vào kinh nghiệm; nói lại với bên nghiệp vụ để biết mã là mã gì |
+| BN09 | Kho nội trú – cân mã AA - AY để xuất thuốc lên tầng | **Mã thuốc:** 1 thuốc có thể có nhiều mã: AA (thanh toán dịch vụ), AY (thanh toán bảo hiểm), có thể có mã AA-ay và bộ mã riêng của daycare (mỗi bảo hiểm y tế có loại mã khác nhau). Thực tế đây vẫn là cùng 1 loại thuốc dùng chung 1 kho vật lý. **Nguyên nhân âm ảo:** OH tính tồn riêng cho từng mã, không gộp tồn của AA và AY lại (phần mềm cũ eHos chỉ cần tick bảo hiểm hoặc không, tồn quản lý chung). Ví dụ: nhập vào 100 hộp ở mã AA; tầng 6 lại cần 30 hộp theo mã AY và 70 hộp theo mã AA. Nếu không cân mã (chuyển 30 hộp từ mã AA sang mã AY) thì OH trừ 30 hộp ở mã AY vốn không có tồn, nên mã AY bị âm 30 trong khi thuốc thật vẫn đủ: gọi là "âm ảo". **Cách đọc excel:** mã AA hiển thị bằng tổng AA + AY, mã AY chỉ hiện AY, mỗi mã còn có thêm 2 cột AA, AY nên rất dễ nhầm, nhất là với người mới. Có ngày toàn bệnh nhân nội trú nên mã bảo hiểm hết và dư mã dịch vụ. Cân mã là khâu mất thời gian nhất, hiện chủ yếu theo cảm tính (đã có công thức nhưng vẫn cần kinh nghiệm) | Hằng ngày mỗi lần xuất thuốc lên tầng (chưa đo thời gian) | Cao (khâu mất thời gian nhất của kho; dễ sai lệch số liệu) | Cân tay bằng excel, dựa vào kinh nghiệm; nói lại với bên nghiệp vụ để biết mã là mã gì |
 | BN10 | Bác sĩ – kê đơn trên OH | Bác sĩ có thể kê kháng sinh hơi quá tay hoặc phiếu chưa rõ, cần dược sĩ phản hồi. Khi bệnh nhân khám 2 khoa, 2 bác sĩ cùng vào kê đơn cùng lúc trên OH thì không kê được (xung đột kê đơn). Tra cứu thuốc, liều, tương tác trước khi kê gần giống bên dược lâm sàng nhưng tần suất ít hơn | Chưa đo (chưa có tần suất cụ thể) | Cần xác định | Bác sĩ tự tra cứu; trao đổi với dược sĩ khi cần |
 | BN11 | Nghiệp vụ – báo cáo kiểm tra công tác dược (tồn tủ thuốc các khoa) | Phân công kiểm tra theo từng nơi (ví dụ khoảng 80 tủ, mỗi người phụ trách khoảng chục tủ; cơ sở khác có mười mấy khoa). Kết quả theo dõi tồn điền trên phần mềm riêng, convert ra excel, các lỗi phải tự nhập hoặc chụp ảnh, rồi từ bảng theo dõi phải làm tay sang bảng báo cáo (khoa phòng lỗi, chi tiết lỗi, tổng số lỗi, mức độ lỗi). Báo cáo thay đổi theo từng đợt nên khó, phải nhập tay | Mỗi quý, mỗi quý nhiều đợt | Trung bình | Làm thủ công từ bảng theo dõi excel sang báo cáo |
 | BN12 | Nghiệp vụ – hóa đơn, báo cáo thống kê, bảo hiểm, thuốc gây nghiện | Nhiều việc đang làm tay bằng excel hoặc nhập tay lên hệ thống: nhập hóa đơn và thanh toán lên hệ thống bệnh viện (SAP); báo cáo tổng kết khoa là file slide khoảng 100 chỉ số, lắp số liệu vào bằng tay; đưa thuốc bảo hiểm lên trang riêng (nhập tay, xây danh mục khi trúng thầu); báo cáo thuốc gây nghiện, hướng thần cho Sở Y tế làm bằng excel; y lệnh pha chế dùng excel để ra nhãn, phiếu | Hằng ngày đến hằng tháng; báo cáo Sở Y tế 1 năm 2 lần | Trung bình | Excel và nhập tay |
@@ -497,7 +909,7 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 **Định dạng dữ liệu:**
 - Dạng bảng có cấu trúc: danh sách y lệnh và các trường quản lý trên OH, dữ liệu tồn kho (item code, on hand, min, max...), file excel xuất từ OH.
 - Văn bản tự do không cấu trúc: theo dõi diễn biến trong phiếu điều trị, tình trạng bệnh và ghi chú trong hồ sơ bệnh án, nội dung phiếu/biên bản hội chẩn.
-- Dạng bảng nhưng cách trình bày dễ nhầm: file excel kho (mã aa hiển thị tổng aa + ay, thêm 2 cột aa, ay).
+- Dạng bảng nhưng cách trình bày dễ nhầm: file excel kho (mã AA hiển thị tổng AA + AY, thêm 2 cột AA, AY).
 - Chưa thấy ảnh quét hay chữ viết tay trong phần dược lâm sàng; sổ sách ghi chép thuốc gây nghiện ở kho/khoa là dạng giấy `[cần xác nhận]`.
 
 ### MỤC B: Bảng từ điển dữ liệu (Data Dictionary)
@@ -575,7 +987,7 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 
 | Tên trường dữ liệu | Kiểu dữ liệu | Đơn vị đo | Ý nghĩa lâm sàng | Khả năng trích xuất (Dễ / Khó) | Ghi chú bảo mật / Ẩn danh (PII) |
 | --- | --- | --- | --- | --- | --- |
-| Item_code | Chuỗi (String) | N/A | Mã thuốc, kèm hậu tố aa, ay (thanh toán dịch vụ / bảo hiểm), có thể có mã daycare | Dễ (xuất từ OH ra excel) | Không chứa PII |
+| Item_code | Chuỗi (String) | N/A | Mã thuốc, kèm hậu tố AA, AY (thanh toán dịch vụ / bảo hiểm), có thể có mã daycare | Dễ (xuất từ OH ra excel) | Không chứa PII |
 | Item_name | Chuỗi (String) | N/A | Tên thuốc | Dễ | Không chứa PII |
 | Stock_uom | Chuỗi (String) | bottle, tablet, vial... | Đơn vị tính tồn | Dễ | Không chứa PII |
 | Bin_location | Chuỗi (String) | N/A | Vị trí lưu (vật tư, độc, n1, o.a, tủ lạnh...) `[danh sách vị trí chưa xem hết]` | Dễ | Không chứa PII |
@@ -586,8 +998,8 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 | Tong_ton, Tong_xuat | Số | Theo Stock_uom | File kiểm soát tồn kho: tổng tồn và tổng xuất trong khoảng 5 đến 10 ngày (khoảng thời gian theo dõi) | Dễ (trong file excel) | Không chứa PII |
 | SL_xuat_du_kien | Số | Theo Stock_uom | Số lượng xuất dự kiến = cơ số max của kho - tổng tồn; thực tế làm tròn theo quy cách | Dễ (trong file excel) | Không chứa PII |
 | Ti_le_ton_xuat | Số thực | N/A | Tỉ lệ tồn/xuất theo ngày, dưới 1 trong bảng 5 ngày nghĩa là thuốc chỉ xuất đủ dưới 5 ngày nên cần xuất lên | Dễ (trong file excel) | Không chứa PII |
-| Cot_AA, Cot_AY | Số | Theo Stock_uom | Các cột tồn theo mã aa, ay; mã aa hiển thị bằng tổng aa + ay nên dễ nhầm (xem BN09) | Dễ nhưng khó đọc | Không chứa PII |
-| Ghi_chu_thuoc_2_ma | Chuỗi / cờ | N/A | Ghi chú thuốc có 2 mã không, nếu có thì phải xuất lên; thuốc phòng mổ có 2 mã nhưng nội trú chỉ dùng mã ay | Dễ (trong file excel) `[cần xác nhận tên cột]` | Không chứa PII |
+| Cot_AA, Cot_AY | Số | Theo Stock_uom | Các cột tồn theo mã AA, AY; mã AA hiển thị bằng tổng AA + AY nên dễ nhầm (xem BN09) | Dễ nhưng khó đọc | Không chứa PII |
+| Ghi_chu_thuoc_2_ma | Chuỗi / cờ | N/A | Ghi chú thuốc có 2 mã không, nếu có thì phải xuất lên; thuốc phòng mổ có 2 mã nhưng nội trú chỉ dùng mã AY | Dễ (trong file excel) `[cần xác nhận tên cột]` | Không chứa PII |
 
 *Ghi chú B6: các trường từ Item_code đến Target là các trường nhóm đã thấy trên OH (danh sách chưa xem hết). Trong ghi chép gốc, file kiểm soát tồn kho chỉ được ghi lại các trường đầu (item code, item name, stock uom); các trường từ Ngay_tru_thuc_te trở đi lấy từ phần giải thích của dược sĩ nên cần đối chiếu lại tên cột trong file thật. Còn file dự trù thường quy chưa ghi lại được danh sách trường `[chưa xem hết trường]`.*
 
