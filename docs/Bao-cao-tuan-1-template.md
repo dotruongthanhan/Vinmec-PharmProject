@@ -7,13 +7,13 @@
 
 **Danh sách thành viên:**
 
-- Đỗ Trương Thành Ân - MSHV - Vai trò trong nhóm
+- Đỗ Trương Thành Ân - 2A202602899 - Vai trò trong nhóm
 - Vũ Gia Khải - 2A202602786 - Vai trò trong nhóm
 
 
 **Mentor phụ trách:** Ths.DS Nguyễn Lê Trang (Trưởng khoa/Dược sĩ trưởng)
 
-**Lead cơ sở phụ trách:** [Điền tên Lead]
+**Lead cơ sở phụ trách:** Nguyễn Xuân Tài
 
 ## Hướng dẫn quan trọng cho các nhóm
 
@@ -298,6 +298,34 @@
 - Mở OH và ERM cùng lúc, tra cứu thủ công từng bệnh nhân (ví dụ phiếu hội chẩn, dị ứng) để đối chiếu
 - Dược sĩ ngoại trú duyệt đơn lần lượt, thứ tự phụ thuộc người bệnh đến quầy
 - Nhà thuốc: chia thuốc lẻ thường quy làm thủ công từng viên; riêng việc chia thuốc theo ngày cho đơn dài hạn (estimate 30 ngày trở lên) thì hiếm khi có; kiểm kê phải nhập lại nhiều lần
+
+### Buổi quan sát 7 | ngày 5-11
+
+**Thời gian:** [Từ 8 giờ đến 12 giờ 10 phút, ngày 05/11/2026]  
+**Địa điểm / Phòng chức năng:**:
+- Phòng nghiệp vụ dược
+
+**Người thực hiện quan sát:** 
+- Đỗ Trương Thành Ân
+
+**Mô tả bối cảnh:** Ngày thứ 7, dược sĩ nghiệp vụ dược đang lên format mẫu bảo hiểm y tế cho năm tới, đa nguồn thông tin đối chiếu, mặc dù làm cho form nguyên 1 năm nhưng làm khá lâu.
+
+**Dòng thời gian hoạt động (Timeline log):**
+- [08:00 - 12:00]: Nhóm xin phép quan sát phòng nghiệp vụ dược để tìm hiểu về các thao tác, quá trình mà nghiệp vụ dược cần làm. Trong lúc quan sát, nhóm nhận thấy:
+   - Việc tạo template điền thông tin bảo hiểm y tế cho 1 năm hiện tại khá lâu, thông tin tra cứu để tạo template phụ thuộc nhiều yếu tố (nhà thầu, nhà thuốc). Template này chứa rất nhiều mặt hàng, khoảng 700-1200 mặt hàng thuốc.
+   - Hiện tại phòng nghiệp vụ dược đang dùng VIS Vinmec để tra cứu số lượng đã gửi của BHYT.
+   - Nắm được quy trình tạo form điền BHYT:
+      - Nhận file thông tin hàng hóa từ nhà thầu.
+      - File excel đã có đủ thông tin từ nhà cung cấp (NCC), gồm: nhà thầu, mã HIS; mã BHYT (nếu có, là mã chuẩn của Bộ đã được public); tên thuốc, đơn vị tính, hoạt chất (lấy từ dữ liệu nội bộ); mã đường dùng, tên đường dùng (cũng là mã chuẩn); tỷ lệ hưởng bảo hiểm y tế (Thông tư 20 - cũng là thông tin chuẩn, tức là public: dữ liệu của Bộ đã được public); thông tin khác (lấy từ file nhà thầu nội bộ).
+      - Tra cứu hoạt chất trên Thông tư 20: nếu không có thì bỏ qua; nếu có thì ghi lại tỷ lệ % được BHYT chi trả.
+      - Tra cứu mã BHYT trong danh sách của Bộ.
+      - Ghi lại các thông tin: mã BHYT, tỷ lệ hưởng BHYT, mã + tên đường dùng.
+- [12:00 - 12:10]: Nhóm trao đổi ngắn với Dược sĩ nghiệp vụ để làm rõ các điểm vướng mắc trong khâu đối chiếu chéo dữ liệu giữa VIS Vinmec và danh mục thầu.
+
+**Hành vi phi ngôn ngữ & thao tác vật lý:** 
+- Mở nhiều file và cửa sổ song song: file nhà thầu, văn bản Thông tư 20, danh sách mã BHYT chuẩn của Bộ, phần mềm VIS Vinmec.
+- Tra cứu và đối chiếu thủ công từng dòng cho 700-1200 sản phẩm; copy/paste hoặc gõ tay mã BHYT, tỷ lệ thanh toán và đường dùng.
+- Dễ mỏi mắt và tiềm ẩn nhầm lẫn do khối lượng dòng lớn trên bảng tính.
 
 ## PHẦN 2: GHI CHÉP PHỎNG VẤN (9 ĐỐI TƯỢNG, ĐA VAI TRÒ)
 
@@ -852,6 +880,45 @@ flowchart TD
 > 2. Khi phát hiện thuốc trong tủ trực bị cận date hoặc hỏng, quy trình đổi trả / bù cơ số thuốc giữa tủ trực khoa phòng và Kho B1 diễn ra cụ thể qua những bước nào?
 > 3. Báo cáo vi phạm và đôn đốc khắc phục sau kiểm tra có gửi trực tiếp cho Trưởng khoa lâm sàng và Điều dưỡng trưởng không?
 
+---
+
+#### 3.4.2. Quy trình lập template danh mục thuốc BHYT năm tới (Nghiệp vụ Dược)
+
+**Ranh giới quy trình:**  
+**Điểm bắt đầu:** Nhận file thông tin hàng hóa trúng thầu / danh mục cung ứng từ các Nhà cung cấp (Nhà thầu) cho năm kế hoạch mới  
+**Điểm kết thúc:** Bản template danh mục thuốc BHYT hoàn chỉnh (700–1.200 mặt hàng) được hoàn tất, đối chiếu khớp với VIS Vinmec và phê duyệt ban hành
+
+**Sơ đồ quy trình (Flowchart):**
+
+```mermaid
+flowchart TD
+    A(["Bắt đầu: Nhận file thông tin hàng hóa từ Nhà thầu / NCC"]) --> B["Bước 1: Trích xuất thông tin cơ sở từ file NCC:<br/>- Nhà thầu, mã HIS nội bộ<br/>- Tên thuốc, ĐVT, hoạt chất<br/>- Mã BHYT sơ bộ (nếu có)"]
+    B --> C{"Bước 2: Tra cứu hoạt chất<br/>trên Thông tư 20?"}
+    C -- "Có trong danh mục TT20" --> D["Ghi nhận Tỷ lệ %<br/>BHYT chi trả theo hoạt chất"]
+    C -- "Không có trong TT20" --> E["Ghi nhận không thuộc BHYT chi trả"]
+    D --> F["Bước 3: Tra cứu Danh mục mã BHYT chuẩn<br/>do Bộ Y tế ban hành công khai"]
+    E --> F
+    F --> G["Bước 4: Chuẩn hóa & Ghi nhận:<br/>- Mã BHYT chuẩn của Bộ<br/>- Mã đường dùng & Tên đường dùng chuẩn<br/>- Tỷ lệ hưởng BHYT"]
+    G --> H["Bước 5: Đối chiếu số lượng BHYT đã gửi<br/>trên hệ thống VIS Vinmec"]
+    H --> I(["Hoàn thiện Template danh mục BHYT năm tới<br/>(Quy mô 700 - 1.200 mặt hàng thuốc)"])
+```
+
+**Phân rã các bước chính:**
+
+1. **Bước 1 – Tiếp nhận & trích xuất dữ liệu nhà thầu:** Nhận file Excel thông tin hàng hóa từ các nhà cung ứng trúng thầu; rà soát các trường dữ liệu cơ sở gồm: Tên nhà thầu, mã HIS, tên thương mại của thuốc, đơn vị tính, hoạt chất chính và mã BHYT (nếu nhà thầu đã điền sẵn).
+2. **Bước 2 – Đối chiếu Thông tư 20:** Tra cứu từng hoạt chất trong danh mục ban hành kèm Thông tư 20 của Bộ Y tế. Xác định hoạt chất có nằm trong phạm vi chi trả của Quỹ BHYT hay không; nếu có, ghi nhận mức/tỷ lệ phần trăm được thanh toán theo quy định chuyên môn.
+3. **Bước 3 – Rà soát mã danh mục Bộ Y tế:** Tra cứu danh mục mã thuốc BHYT chuẩn quốc gia do Bộ Y tế công bố công khai để chuẩn hóa mã số duy nhất của thuốc.
+4. **Bước 4 – Chuẩn hóa đường dùng & tỷ lệ thanh toán:** Ghi nhận đồng bộ mã đường dùng chuẩn, tên đường dùng chuẩn và tỷ lệ hưởng BHYT tương ứng vào bảng biểu mẫu chung.
+5. **Bước 5 – Đối chiếu hệ thống VIS Vinmec & nghiệm thu:** Mở hệ thống VIS Vinmec để tra cứu và đối chiếu lịch sử số lượng thuốc đã gửi cổng giám định BHYT của kỳ trước; rà soát sai lệch và chốt template danh mục BHYT phục vụ vận hành cho toàn bộ năm tới (quy mô khoảng 700–1.200 mặt hàng).
+
+**Thời gian chu kỳ (Cycle Time):** Diễn ra **định kỳ hàng năm** (hoặc theo mỗi kỳ công bố kết quả thầu thuốc mới), kéo dài nhiều ngày làm việc do phải rà soát thủ công từng dòng dữ liệu lớn.
+
+> [!NOTE]
+> **Các câu hỏi cần làm rõ để hoàn thiện quy trình:**
+> 1. File dữ liệu gửi từ các nhà thầu có theo một format chuẩn thống nhất hay mỗi nhà thầu gửi một cấu trúc cột khác nhau?
+> 2. Quá trình tra cứu hoạt chất trên Thông tư 20 và mã chuẩn Bộ Y tế hiện tại đang dùng file Excel tra tay hay có công cụ/tool đối chiếu bán tự động?
+> 3. Hệ thống VIS Vinmec có chức năng import trực tiếp template này vào cơ sở dữ liệu hay nhân viên phải nhập liệu/đăng tải thủ công?
+
 
 ## PHẦN 4: DANH SÁCH ĐIỂM NGHẼN (BOTTLENECK MATRIX)
 
@@ -873,8 +940,8 @@ flowchart TD
 | BN12 | Nghiệp vụ – hóa đơn, báo cáo thống kê, bảo hiểm, thuốc gây nghiện | Nhiều việc đang làm tay bằng excel hoặc nhập tay lên hệ thống: nhập hóa đơn và thanh toán lên hệ thống bệnh viện (SAP); báo cáo tổng kết khoa là file slide khoảng 100 chỉ số, lắp số liệu vào bằng tay; đưa thuốc bảo hiểm lên trang riêng (nhập tay, xây danh mục khi trúng thầu); báo cáo thuốc gây nghiện, hướng thần cho Sở Y tế làm bằng excel; y lệnh pha chế dùng excel để ra nhãn, phiếu | Hằng ngày đến hằng tháng; báo cáo Sở Y tế 1 năm 2 lần | Trung bình | Excel và nhập tay |
 | BN13 | Nhà thuốc – kiểm kê | Mỗi lần kiểm kê tạo 1 bảng, sau đó hệ thống chốt kho; nếu số lượng thay đổi phải nhập lại từ đầu; phát hiện thừa thiếu không kiểm tra ngay được, có khi mất 1–2 ngày; khi lệch phải tự đi kiểm (phát thiếu, phát sai cho khách; giao thừa thì lấy lại thuốc, giao thiếu thì phải bù). Ngoài ra bảng thống kê cứng, chưa theo dõi được số liệu theo thời gian | Mỗi lần kiểm kê (chưa đo) | Trung bình đến Cao (ảnh hưởng tồn kho và bệnh nhân) | Đang thí điểm app kiểm kê: xuất file tồn hệ thống, quét mã QR, điền tồn thực tế, tính chênh lệch rồi xử lý |
 | BN14 | Nhà thuốc – chia thuốc lẻ và chia thuốc dài hạn | Chia thuốc lẻ thường quy làm thủ công từng viên (~100 lượt/ngày) tốn thời gian, đơn >20 viên dễ sai sót số lượng. Ngược lại, việc **chia thuốc theo ngày cho các đơn thuốc dài hạn (estimate 30 ngày trở lên)** thì **hiếm khi có** đơn chia (giá dịch vụ ~300.000 đồng/tháng cho 90 gói và thời gian chia thủ công mất 2–3 tiếng làm ảnh hưởng trải nghiệm, hoặc bệnh nhân tự bóc thuốc dùng thuận tiện hơn). Ngoài ra giờ cao điểm phát thuốc (10-12h sáng, 15h-17h30 chiều) có thể bị quá tải `[chưa xác nhận]` | Chia lẻ: hằng ngày (~100 lượt/ngày); chia đơn dài hạn: hiếm khi có | Trung bình (chia lẻ dễ sai số lượng) / Thấp (chia dài hạn) | Dược sĩ chia và đếm thuốc thủ công khi có đơn; bệnh nhân tự bóc thuốc khi dùng |
-| BN15 | Nhà thuốc – liên thông hệ thống và kiểm soát tồn kho `[chưa xác nhận đủ kỹ]` | Hệ thống bán thuốc quốc gia hiện chưa ổn định nên viện chưa liên thông; OH (phần mềm bán thuốc của bệnh viện) chưa liên thông lên hệ thống quốc gia, vẫn cần 1 bên thứ 3 để mở liên thông. Kiểm soát tồn kho của nhà thuốc được nói là phức tạp. Cần xác nhận lại mức độ ảnh hưởng thực tế trước khi coi đây là điểm nghẽn chính thức | Chưa xác định | Cần xác định | Chưa rõ (chờ bên thứ 3 mở liên thông; kiểm soát tồn kho bằng hệ thống hiện tại) `[chưa xác nhận]` |
-| BN16 | Quản lý dược – theo dõi dự trù và cung ứng | Thông tin để điều phối mua nằm ở nhiều nguồn khác nhau: ngân sách, xuất nhập tồn, mùa vụ, dịch bệnh, thời gian giao hàng của từng nhà cung cấp (khác nhau theo vùng), hàng chậm luân chuyển. Việc theo dõi lead time giao hàng và các yếu tố ảnh hưởng chủ yếu do người làm tự theo dõi | 1–2 lần dự trù thường quy/tháng (chưa đo thêm) | Trung bình | Quản lý dược can thiệp chủ động: chia nhỏ từng đợt dự trù, cắt bớt ngân sách, kiểm soát các lần dự trù sau |
+| BN15 | Quản lý dược – theo dõi dự trù và cung ứng | Thông tin để điều phối mua nằm ở nhiều nguồn khác nhau: ngân sách, xuất nhập tồn, mùa vụ, dịch bệnh, thời gian giao hàng của từng nhà cung cấp (khác nhau theo vùng), hàng chậm luân chuyển. Việc theo dõi lead time giao hàng và các yếu tố ảnh hưởng chủ yếu do người làm tự theo dõi | 1–2 lần dự trù thường quy/tháng (chưa đo thêm) | Trung bình | Quản lý dược can thiệp chủ động: chia nhỏ từng đợt dự trù, cắt bớt ngân sách, kiểm soát các lần dự trù sau |
+| BN16 | Nghiệp vụ – Lập template danh mục thuốc BHYT năm tới | Dược sĩ nghiệp vụ phải đối chiếu thủ công giữa nhiều nguồn tài liệu rời rạc (file Excel nhà thầu, văn bản Thông tư 20, danh mục mã chuẩn của Bộ Y tế, phần mềm VIS Vinmec) để tổng hợp thông tin cho 700–1.200 mặt hàng thuốc. Việc tra cứu từng hoạt chất và mã đường dùng bằng tay mất nhiều ngày làm việc, dễ nhầm lẫn tỷ lệ thanh toán BHYT hoặc mã số chuẩn | Hằng năm (mỗi đợt chuẩn bị thầu / danh mục BHYT mới) | Cao (tốn công sức tra cứu thủ công, ảnh hưởng tính hợp lệ thanh toán BHYT cả năm) | Tra cứu thủ công từng dòng trên Excel, tra cứu thông tư giấy/file PDF và đối chiếu số lượng qua VIS Vinmec |
 
 **Lựa chọn trọng tâm:** Nhóm đề xuất chọn **BN01 (dược lâm sàng – tổng hợp thông tin khi duyệt y lệnh)** kèm **BN02 (sàng lọc, rà soát y lệnh và hồ sơ bệnh án)** làm bài toán chính cho 5 tuần tiếp theo `[nhóm xác nhận lại]`. Lý do: (1) đây là công việc lặp lại với mỗi y lệnh, hằng ngày, nên tần suất cao nhất trong các điểm nghẽn quan sát được; (2) được ghi nhận ở nhiều buổi (buổi 1, 2, 5, 6) từ nhiều dược sĩ và cả bên bác sĩ; (3) liên quan trực tiếp đến an toàn dùng thuốc (thiếu liều, tương tác, dị ứng) và thời gian chờ của bệnh nhân; (4) dữ liệu nguồn nằm trên OH, ERM và các nguồn tra cứu nên có thể tìm hiểu ở Phần 5. BN08 và BN09 (kho nội trú, cân mã và excel dữ liệu rời) là điểm nghẽn cũng rất nặng và là lựa chọn dự phòng.
 
@@ -898,13 +965,13 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 | --- | --- | --- |
 | Phần mềm OH (kê đơn, quản lý thuốc, quản lý kho) | Y lệnh/đơn thuốc bác sĩ kê, danh sách y lệnh cần duyệt, mã bệnh nhân (HN), trạng thái duyệt; tồn kho, mã thuốc | Dược sĩ lấy mã bệnh nhân từ OH. Cuối tháng xuất file excel thuốc đã kê (dược lâm sàng), xuất file tồn/xuất (kho). OH tự chạy 5 bước kiểm tra y lệnh (dùng cơ sở dữ liệu MIMS) |
 | Phần mềm hồ sơ bệnh án ERM (còn gọi EMR) | Hồ sơ bệnh án: khoa điều trị, tình trạng bệnh, xét nghiệm, tab thuốc đang dùng, phiếu hội chẩn | Tra từng bệnh nhân qua mã lấy từ OH. Thiếu thông tin dị ứng, chưa liên kết với OH |
-| Hệ thống nội bộ Vinmec (kế hoạch sử dụng thuốc) | Kế hoạch dùng thuốc của từng bệnh nhân: thuốc, thành phần, liều, cách dùng, lịch sử dùng thuốc | Dược sĩ truy cập để kiểm tra `[cần xác nhận tên hệ thống và quan hệ với OH/ERM]` |
-| Phiếu điều trị | Ngày, theo dõi diễn biến, người kê đơn, người duyệt ký | `[cần xác nhận phiếu điều trị nằm trên OH, ERM hay hệ thống khác, và có bản giấy không]` |
+| Hệ thống nội bộ Vinmec (kế hoạch sử dụng thuốc) | Kế hoạch dùng thuốc của từng bệnh nhân: thuốc, thành phần, liều, cách dùng, lịch sử dùng thuốc | Dược sĩ truy cập trên hệ thống nội bộ bệnh viện để kiểm tra thông tin thuốc, liều và lịch sử dùng thuốc |
+| Phiếu điều trị (trên EMR) | Ngày, theo dõi diễn biến, người kê đơn, người duyệt ký | Đã xác nhận nằm trên phần mềm EMR (bản điện tử tích hợp theo dõi diễn biến bệnh án và y lệnh hàng ngày) |
 | Info Vinmec | Quản lý sự cố thuốc, tác dụng phụ thuốc (phục vụ báo cáo dược lâm sàng) | |
 | Nguồn tra cứu bên ngoài: MIMS, UpToDate, thông tư/quy định Bộ Y tế, Cục quản lý dược | Thông tin thuốc, tương tác, liều, quy định | UpToDate cần tài khoản bệnh viện, truy cập trên thiết bị bệnh viện; đây là dữ liệu tham khảo chung, không chứa thông tin bệnh nhân |
 | File excel làm việc của dược sĩ | File xuất từ OH (kiểm soát tồn kho, dự trù thường quy, thuốc đã kê trong tháng), file chỉ số thống kê từng khoa do dược sĩ phụ trách gửi, bảng theo dõi kiểm tra tủ thuốc | Lưu rải rác trên máy từng dược sĩ, nhiều file rời, công thức hard code, dữ liệu phải copy tay |
 
-**Khả năng xuất (export) ra file:** OH xuất được file excel (đã thấy dược sĩ dùng hằng ngày/hằng tháng). ERM hiện dược sĩ chỉ tra từng bệnh nhân bằng tay, chưa xác nhận có xuất được hàng loạt hay không `[cần xác nhận với khoa dược/CNTT]`. Hệ thống nội bộ Vinmec và phiếu điều trị: chưa xác nhận.
+**Khả năng xuất (export) ra file:** OH xuất được file excel (đã thấy dược sĩ dùng hằng ngày/hằng tháng). EMR (chứa hồ sơ bệnh án và phiếu điều trị) hiện dược sĩ tra cứu trực tiếp theo từng bệnh nhân, chưa xác nhận có chức năng xuất hàng loạt hay không `[cần xác nhận với khoa dược/CNTT]`. Hệ thống nội bộ Vinmec: chưa xác nhận.
 
 **Định dạng dữ liệu:**
 - Dạng bảng có cấu trúc: danh sách y lệnh và các trường quản lý trên OH, dữ liệu tồn kho (item code, on hand, min, max...), file excel xuất từ OH.
@@ -929,7 +996,7 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 | Nguon_thuoc | Chuỗi (String) | N/A | Thuốc cấp từ kho dược hay thuốc tủ trực (quyết định ai thẩm định) | Dễ | Không chứa PII |
 | Tang_luu_tru | Chuỗi (String) | N/A | Tầng/kho lưu thuốc | Dễ | Không chứa PII |
 | Ca_truc | Chuỗi (String) | N/A | Y lệnh chia theo hai ca trực | Dễ | Không chứa PII |
-| Nguyen_nhan_ke_thuoc | Văn bản tự do (Text) | N/A | Lý do bệnh nhân được dùng thuốc; **y lệnh chưa thể hiện trực tiếp**, có thể nằm ở phần theo dõi hằng ngày hoặc ứng dụng khác `[chưa xác định vị trí]` | Khó (chưa rõ nằm ở đâu) | Có thể chứa thông tin cá nhân trong văn bản tự do, cần lọc |
+| Nguyen_nhan_ke_thuoc | Văn bản tự do (Text) | N/A | Lý do bệnh nhân được dùng thuốc; **y lệnh trên OH chưa thể hiện trực tiếp**, được ghi nhận trong phần chẩn đoán và theo dõi diễn biến bệnh hàng ngày trên phiếu điều trị / hồ sơ bệnh án EMR | Khó (dạng văn bản tự do trên EMR, cần đối chiếu thủ công qua mã BN) | Có thể chứa thông tin cá nhân trong văn bản tự do, cần lọc |
 | Nguoi_ke_don | Chuỗi (String) | N/A | Bác sĩ kê đơn, cần để trao đổi/thống nhất khi thẩm định | Dễ | Tên nhân viên: cần mã hóa |
 
 **B2. Phiếu điều trị**
@@ -1014,6 +1081,24 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 
 *Ghi chú B7: bộ chỉ số có khoảng 17 chỉ số (theo ghi chú thành viên khác) nhưng nhóm chưa xem hết danh sách và công thức của từng chỉ số; cách làm cũng khác nhau giữa các cơ sở.*
 
+**B8. Form điền BHYT (nghiệp vụ, quan sát ngày 05/11)**
+
+*Ghi chú: các tên trường dưới đây do nhóm đặt từ các trường quan sát được trong file thông tin hàng hóa; chưa xác nhận đầy đủ với bên nghiệp vụ.*
+
+| Tên trường dữ liệu | Kiểu dữ liệu | Đơn vị đo | Ý nghĩa | Khả năng trích xuất (Dễ / Khó) | Ghi chú bảo mật / Ẩn danh (PII) |
+| --- | --- | --- | --- | --- | --- |
+| Nha_thau | Chuỗi (String) | N/A | Nhà thầu cung cấp hàng hóa | Dễ (có trong file NCC) | Không chứa PII |
+| Ma_HIS | Chuỗi (String) | N/A | Mã hàng trong HIS | Dễ (có trong file NCC) | Không chứa PII |
+| Ma_BHYT | Chuỗi (String) | N/A | Mã chuẩn của Bộ đã được public (nếu có) | Dễ (tra danh sách của Bộ) | Không chứa PII |
+| Ten_thuoc | Chuỗi (String) | N/A | Tên thuốc (lấy từ dữ liệu nội bộ) | Dễ | Không chứa PII |
+| Don_vi_tinh | Chuỗi (String) | N/A | Đơn vị tính (lấy từ dữ liệu nội bộ) | Dễ | Không chứa PII |
+| Hoat_chat | Chuỗi (String) | N/A | Hoạt chất (lấy từ dữ liệu nội bộ) | Dễ | Không chứa PII |
+| Ma_duong_dung | Chuỗi (String) | N/A | Mã chuẩn đường dùng | Dễ (mã chuẩn) | Không chứa PII |
+| Ten_duong_dung | Chuỗi (String) | N/A | Tên đường dùng (đi kèm mã chuẩn) | Dễ (mã chuẩn) | Không chứa PII |
+| Ty_le_huong_BHYT | Số thực (Float) | % | Tỷ lệ hưởng bảo hiểm y tế (theo thông tư 20) | Dễ (có trong file NCC) | Không chứa PII |
+| Ty_le_BHYT_chi_tra_hoat_chat | Số thực (Float) | % | Tỷ lệ % được BHYT chi trả theo hoạt chất trên Thông tư 20; nếu không có thì bỏ qua | Khó (phải tra từng hoạt chất) | Không chứa PII |
+| Thong_tin_khac | Chuỗi / văn bản | N/A | Thông tin khác lấy từ file nhà thầu nội bộ | Chưa xác nhận | Cần kiểm tra khi xem file thật |
+
 ### MỤC C: Kế hoạch tiếp cận & xử lý bảo mật
 
 *(Nội dung dưới đây là phương án nhóm dự kiến để lấy dữ liệu mẫu hợp lệ, cần mentor và khoa dược xác nhận trước khi thực hiện.)*
@@ -1030,7 +1115,7 @@ Mục này nhằm đánh giá tính khả thi về mặt kỹ thuật trước k
 5. Dữ liệu mẫu chỉ được xem và xử lý trong thiết bị/hệ thống của bệnh viện hoặc môi trường do bệnh viện cho phép, không tải lên dịch vụ bên ngoài, không đưa vào báo cáo tuần.
 6. Dược sĩ kiểm tra lại tập mẫu đã ẩn danh trước khi nhóm sử dụng.
 
-`[Các điểm cần xác nhận thêm: ERM có xuất được hàng loạt không; vị trí lưu thật của phiếu điều trị; ai là đầu mối cấp quyền dữ liệu]`
+`[Các điểm cần xác nhận thêm: EMR có xuất được hàng loạt không; ai là đầu mối cấp quyền dữ liệu]`
 
 ## PHẦN 6: BÁO CÁO KAIZEN TUẦN
 
@@ -1074,15 +1159,18 @@ Kỹ thuật 5 Whys do Taiichi Ohno phổ biến: khi sự cố xảy ra, lặp 
 
 | Việc làm được [dự kiến → thực tế] | Vấn đề gặp phải | Nguyên nhân [hỏi “vì sao” đến khi chạm quy trình] | Giải pháp tuần sau [việc nhỏ, ai làm, khi nào] |
 | --- | --- | --- | --- |
-| [...] | [...] | [...] | [...] |
-| [...] | [...] | [...] | [...] |
+| **1. Khảo sát và lập Ma trận điểm nghẽn toàn khoa**<br/>- *Dự kiến:* Đo lường chính xác thời gian thao tác (bấm giờ) và tần suất lỗi tại các khâu trọng yếu.<br/>- *Thực tế:* Xác định được 16 điểm nghẽn định tính (BN01–BN16), nhưng hầu hết các ô thời gian/tần suất phải để trạng thái `[chưa đo]` hoặc `[cần xác định]`. | Thiếu số liệu định lượng (baseline KPIs) để đo lường mức độ tác động và tính toán hiệu quả cải tiến của giải pháp. | **1.** *Vì sao chưa đo được?* $\rightarrow$ Khi quan sát chỉ ghi chép lời kể và mô tả thao tác, chưa bấm giờ.<br/>**2.** *Vì sao chưa bấm giờ?* $\rightarrow$ Chưa chuẩn bị sẵn biểu mẫu bấm giờ (Time-motion study sheet) và ngại làm nhân viên y tế áp lực.<br/>**3.** *Vì sao chưa chuẩn bị biểu mẫu?* $\rightarrow$ Quy trình chuẩn bị trước buổi quan sát chưa có bước thống nhất chỉ số đo lường cụ thể, nhóm bị cuốn vào việc tìm hiểu các thuật ngữ mới (AA/AY, OH, ERM). | Thiết kế 1 bảng biểu mẫu bấm giờ tinh gọn (Google Sheets/bản in) chuyên biệt cho 1 khâu trọng tâm: **quy trình duyệt y lệnh của DSLS** (đo thời gian ca thường quy vs ca phức tạp, thời gian tra cứu UpToDate/MIMS, thời gian hold đơn gọi bác sĩ). Bấm giờ 10–15 ca liên tiếp vào khung giờ cao điểm sáng Thứ Hai.<br/>- *Người làm:* Thành Ân + Khải.<br/>- *Thời hạn:* Hoàn thành trước 12:00 Thứ Hai (Tuần 2).<br/>- *Tiêu chí thành công:* Điền đủ số phút/ca thật vào BN01 & BN02. |
+| **2. Thu thập và phân tích dữ liệu cho Data Schema**<br/>- *Dự kiến:* Trích xuất và phân tích trực tiếp tập dữ liệu mẫu y lệnh, bệnh án và kho.<br/>- *Thực tế:* Chỉ xây dựng được bảng từ điển dữ liệu giả định (Mục B1–B8) từ quan sát mắt thường và lời kể; chưa có file dữ liệu mẫu để kiểm chứng kiểu dữ liệu và trường null/missing. | Nguy cơ thiết kế giải pháp và cấu trúc dữ liệu không khớp với dữ liệu thực tế trên hệ thống HIS/EMR của bệnh viện. | **1.** *Vì sao chưa có dữ liệu mẫu?* $\rightarrow$ Vì dữ liệu y tế chứa thông tin định danh cá nhân nhạy cảm (PII: tên bệnh nhân, mã HN, bệnh án), cấm đưa ra ngoài hệ thống viện.<br/>**2.** *Vì sao chưa có dữ liệu ẩn danh?* $\rightarrow$ Nhóm chưa gửi đề xuất chính thức về quy trình ẩn danh hóa (De-identification) cho Lãnh đạo Khoa Dược.<br/>**3.** *Vì sao chưa gửi đề xuất?* $\rightarrow$ Nhóm tập trung quan sát khảo sát bề rộng, đến cuối tuần mới hoàn thành bản kế hoạch xử lý bảo mật (Mục C Phần 5). | Hoàn thiện tờ trình Kế hoạch tiếp cận & bảo mật dữ liệu (theo Mục C), trình Mentor Ths.DS Nguyễn Lê Trang phê duyệt quy trình che PII; chuẩn bị 1 file mẫu giả lập (dummy data) gồm 20 bản ghi y lệnh mẫu không chứa PII để đối chiếu với IT/Dược sĩ.<br/>- *Người làm:* Lead cơ sở Tài + Ân.<br/>- *Thời hạn:* 16:00 Thứ Ba (Tuần 2).<br/>- *Tiêu chí thành công:* Mentor phê duyệt phương án ẩn danh hoặc cấp 20 y lệnh mẫu test hợp lệ. |
+| **3. Khảo sát và phân định ranh giới các bộ phận**<br/>- *Dự kiến:* Nắm bắt độc lập và chuẩn xác chức năng của từng phòng ban ngay từ các ngày đầu.<br/>- *Thực tế:* Xảy ra nhầm lẫn và phải chỉnh sửa nhiều lần (nhầm nội dung nhà thuốc ngày 29 và 30; nhầm trách nhiệm nhập hóa đơn của Nghiệp vụ vs kho B1; phân biệt Quản lý Dược vs Nghiệp vụ; nhầm chia thuốc lẻ vs chia túi zip dài hạn $\ge$ 30 ngày). | Tốn thời gian phỏng vấn chéo, ghi chép ban đầu bị lệch luồng và phải đối chiếu rà soát lại nhật ký nhiều đợt. | **1.** *Vì sao nhầm lẫn chức năng?* $\rightarrow$ Vì cơ cấu Khoa Dược Vinmec phân hóa rất sâu (Nghiệp vụ, Quản lý, Kho B1/T6, DSLS, Nhà thuốc), nhiều việc có tên tương tự (dự trù, kiểm kho, hóa đơn) nhưng do các bên khác nhau làm.<br/>**2.** *Vì sao nhóm chưa nắm rõ cơ cấu trước?* $\rightarrow$ Trước khi đi hiện trường, nhóm chưa có buổi briefing về sơ đồ tổ chức (Org Chart) và ma trận phân công trách nhiệm (RACI) của Khoa Dược.<br/>**3.** *Vì sao chưa có RACI?* $\rightarrow$ Nhóm mới tiếp cận tuần đầu, tài liệu ban đầu chỉ là văn bản chung chung, thiếu sơ đồ trực quan hóa ranh giới công việc. | Trước mỗi buổi làm việc sâu với từng bộ phận, nhóm dành 15 phút đầu giờ rà soát lại mục tiêu và vẽ sơ đồ RACI nội bộ cho nhóm đối tượng đó; cuối mỗi ngày họp nhanh 20 phút để đối chiếu chéo thông tin ghi nhận giữa các thành viên để phát hiện và chỉnh sửa sai lệch ngay trong ngày.<br/>- *Người làm:* Cả nhóm.<br/>- *Thời hạn:* Hàng ngày từ Thứ Hai đến Thứ Năm (Tuần 2).<br/>- *Tiêu chí thành công:* Không còn tình trạng ghi nhầm chức năng hoặc phải dời nội dung giữa các ngày. |
+| **4. Xác định bài toán trọng tâm cho dự án PoC**<br/>- *Dự kiến:* Xác định được ngay 1 bài toán lõi khả thi để thiết kế giải pháp cho 5 tuần tiếp theo.<br/>- *Thực tế:* Ghi nhận 16 điểm nghẽn trải rộng trên 5 phòng ban, điểm nghẽn nào cũng quan trọng và nhân viên y tế đều mong muốn AI/công nghệ hỗ trợ. | Nguy cơ phân tán nguồn lực của nhóm, ôm đồm quá nhiều bài toán dẫn đến không thể hoàn thiện sản phẩm PoC chất lượng trong 5 tuần còn lại. | **1.** *Vì sao có quá nhiều bài toán?* $\rightarrow$ Do tuần 1 khảo sát diện rộng, phòng ban nào cũng có nỗi đau lớn.<br/>**2.** *Vì sao chưa chốt được 1 bài toán duy nhất?* $\rightarrow$ Nhóm chưa tổ chức buổi chấm điểm ưu tiên (Scoring Matrix) theo các tiêu chí khả thi kỹ thuật và dữ liệu.<br/>**3.** *Vì sao chưa chấm điểm?* $\rightarrow$ Nhóm chờ hoàn tất việc tổng hợp đầy đủ báo cáo tuần 1 và xin ý kiến định hướng từ Mentor. | Tổ chức họp nhóm sáng Thứ Hai tuần 2, sử dụng ma trận Impact - Feasibility để chấm điểm 16 điểm nghẽn; đề xuất Mentor chốt **01 bài toán chính (BN01/BN02 - CDSS hỗ trợ DSLS duyệt thuốc)** và **01 bài toán dự phòng (BN08/BN09 - Kho B1 hoặc Báo cáo DDD)**.<br/>- *Người làm:* Cả nhóm.<br/>- *Thời hạn:* 17:00 Thứ Hai (Tuần 2).<br/>- *Tiêu chí thành công:* Mentor và nhóm thống nhất bằng văn bản phạm vi bài toán PoC cho Tuần 2–6. |
 
 ### Phần B: Điều làm tốt, có thể chia sẻ với mọi người
 
 | Nội dung Kaizen | Chi tiết |
 | --- | --- |
-| [...] | [...] |
-| [...] | [...] |
+| **1. Áp dụng triệt để phương pháp Shadowing (Quan sát hiện trường) kết hợp The Mom Test** | Thay vì chỉ ngồi nghe giới thiệu lý thuyết hoặc gửi biểu mẫu khảo sát ý kiến chủ quan, nhóm đã ngồi trực tiếp bên cạnh nhân viên y tế tại bàn làm việc (shadowing), theo dõi từng cú click chuột, tra cứu trên 4–5 màn hình/hệ thống, và phỏng vấn về những sự việc/trục trặc cụ thể đã diễn ra trong quá khứ cùng cách họ tự xoay xở (workaround). Nhờ đó nhóm phát hiện được các "nỗi đau ngầm" cực kỳ giá trị: hiện tượng "âm ảo" khi cân mã AA-AY trên OH, 2 bác sĩ cùng kê đơn làm nghẽn app, dược sĩ dùng app Calculate trên điện thoại thay vì MDCalc web, việc nhập hóa đơn phải chờ dự trù kho để cân mã AA/AY. |
+| **2. Nhanh chóng giải mã và mô hình hóa toán học các bài toán nghiệp vụ phức tạp** | Nhóm không dừng lại ở mô tả văn xuôi định tính mà đi sâu vào bản chất tính toán: giải mã công thức dự trù kho T6 và kho B1 ($SL_{\text{xuất}}$, hệ số nhóm hàng, Lead Time), cơ chế cân mã AA/AY, và công thức tính chỉ số tiêu thụ kháng sinh chuẩn quốc tế ($DDD / 1.000$ ngày bệnh nhân theo WHO). Điều này tạo tiền đề vững chắc cho việc lập trình thuật toán và cấu hình logic trong các tuần phát triển giải pháp tiếp theo. |
+| **3. Chuẩn hóa hệ thống tài liệu đa tầng (Multi-layer Documentation) và phản xạ Kaizen liên tục** | Nhóm duy trì một cấu trúc tài liệu khoa học, đồng bộ từ ghi chép hiện trường thô (raw observation logs 7 buổi), ma trận 16 điểm nghẽn, từ điển dữ liệu 8 bảng (B1–B8) đến 11 sơ đồ quy trình Mermaid phân rã chi tiết. Nhóm cũng có tinh thần lắng nghe, tiếp thu nhanh các góp ý để chuẩn hóa ngay thuật ngữ (Vinmec, VIS Vinmec, cơ chế túi zip $\ge$ 30 ngày) và cập nhật dữ liệu kịp thời theo chuẩn "Single Source of Truth". |
 
 ---
 
