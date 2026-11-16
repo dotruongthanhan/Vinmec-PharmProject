@@ -1,0 +1,69 @@
+app:
+  case_dir: "data/mock/demo"
+  profile: "dev"                    # dev | test | demo
+
+chunking:
+  target_chars: 1200
+  max_chars: 2000
+  min_chars: 200
+  overlap_sentences: 1              # chỉ khi chia một mục dài
+  parent_max_chars: 6000
+
+retrieval:
+  nhan_thuoc:
+    k_query: 20
+    k_rerank: 5
+  van_ban_byt:
+    k_query: 10
+    k_rerank: 3
+  rrf_k: 60
+  rerank_min_score: 0.2             # chốt lại bằng 09_eval
+  expand_parent: true
+  query_languages: ["vi", "en"]
+
+evidence:
+  max_chars: 12000
+
+case_context:
+  max_chars: 16000
+  notes_latest_n: 3
+
+generation:
+  temperature: 0.0                  # việc trích xuất và đối chiếu cần ổn định, không cần sáng tạo
+  max_tokens: 4096
+  top_p: 1.0
+  stream: false                     # đầu ra là JSON theo lược đồ, phải kiểm chứng xong mới hiển thị
+
+agent:
+  max_turns: 5                      # số lượt gọi công cụ ở ô hỏi thêm
+  max_attempts: 3                   # thử lại khi nhà cung cấp lỗi
+  max_synthesis_attempts: 2         # số lần tổng hợp lại khi kiểm chứng trượt
+
+llm:
+  provider: "deepseek"
+  model: "deepseek-flash"           # mã còn lại trên tài khoản: deepseek-v4-pro
+  max_tokens: 16000
+  max_tokens_retry: 32000
+  reasoning:
+    reasoning_effort: "low"
+
+embedding:
+  provider: "openrouter"
+  active: "nvidia/llama-nemotron-embed-vl-1b-v2:free"
+  dimensions: 2048
+  batch_size: 16
+  cache_path: "data/cache/embeddings.sqlite"
+
+rerank:
+  provider: "openrouter"
+  active: "nvidia/llama-nemotron-rerank-vl-1b-v2:free"
+
+database:
+  url_env: "DATABASE_URL"           # chuỗi kết nối nằm trong .env
+
+vector_store:
+  provider: "pgvector"             # pgvector | memory
+
+prompts:
+  tong_hop: "config/prompts/tong_hop.v1.md"
+  hoi_them: "config/prompts/hoi_them.v1.md"

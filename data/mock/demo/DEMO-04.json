@@ -1,0 +1,171 @@
+{
+  "ca_id": "DEMO-04",
+  "mo_ta_ngan": "Nữ 68 tuổi, gãy cổ xương đùi, dùng ceftriaxon có căn cứ từ kết quả vi sinh nước tiểu",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-DEMO-04",
+    "tuoi": 68,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-08T14:30:00+07:00"
+  },
+  "di_ung": [],
+  "dot_dieu_tri": {
+    "dot_dieu_tri_id": "DT-DEMO-04",
+    "khoa_dieu_tri": "Chấn thương chỉnh hình",
+    "loai_dieu_tri": "noi_tru",
+    "thoi_diem_bat_dau": "2026-11-08T14:00:00+07:00"
+  },
+  "chan_doan": [
+    {
+      "chan_doan_id": "CD-DEMO04-01",
+      "ma_icd10": "S72.0",
+      "noi_dung": "Gãy cổ xương đùi",
+      "loai": "chinh"
+    }
+  ],
+  "co_dia": [],
+  "sinh_hieu": [
+    {
+      "sinh_hieu_id": "SH-DEMO04-01",
+      "loai": "can_nang",
+      "gia_tri": 55.0,
+      "don_vi": "kg",
+      "thoi_diem_do": "2026-11-08T14:15:00+07:00"
+    },
+    {
+      "sinh_hieu_id": "SH-DEMO04-02",
+      "loai": "chieu_cao",
+      "gia_tri": 158.0,
+      "don_vi": "cm",
+      "thoi_diem_do": "2026-11-08T14:15:00+07:00"
+    },
+    {
+      "sinh_hieu_id": "SH-DEMO04-03",
+      "loai": "nhiet_do",
+      "gia_tri": 38.5,
+      "don_vi": "°C",
+      "thoi_diem_do": "2026-11-10T07:00:00+07:00"
+    }
+  ],
+  "xet_nghiem": [
+    {
+      "xet_nghiem_id": "XN-DEMO04-01",
+      "ma_xet_nghiem": "creatinin",
+      "ten_xet_nghiem": "Creatinin máu",
+      "gia_tri_so": 70.0,
+      "gia_tri_text": null,
+      "don_vi": "umol/L",
+      "nguong_duoi": 44,
+      "nguong_tren": 80,
+      "thoi_diem_ket_qua": "2026-11-10T06:30:00+07:00"
+    },
+    {
+      "xet_nghiem_id": "XN-DEMO04-02",
+      "ma_xet_nghiem": "wbc",
+      "ten_xet_nghiem": "Bạch cầu (WBC)",
+      "gia_tri_so": 14.5,
+      "gia_tri_text": null,
+      "don_vi": "G/L",
+      "nguong_duoi": 4.0,
+      "nguong_tren": 10.0,
+      "thoi_diem_ket_qua": "2026-11-10T06:30:00+07:00"
+    },
+    {
+      "xet_nghiem_id": "XN-DEMO04-03",
+      "ma_xet_nghiem": "crp",
+      "ten_xet_nghiem": "CRP",
+      "gia_tri_so": 86.0,
+      "gia_tri_text": null,
+      "don_vi": "mg/L",
+      "nguong_duoi": null,
+      "nguong_tren": 5.0,
+      "thoi_diem_ket_qua": "2026-11-10T06:30:00+07:00"
+    }
+  ],
+  "vi_sinh": [
+    {
+      "vi_sinh_id": "VS-DEMO04-01",
+      "benh_pham": "nước tiểu",
+      "vi_khuan": "Escherichia coli",
+      "thoi_diem_lay_mau": "2026-11-09T09:00:00+07:00",
+      "khang_sinh_do": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXON",
+          "ket_qua": "S",
+          "mic": null
+        }
+      ]
+    }
+  ],
+  "dien_bien": [
+    {
+      "dien_bien_id": "DB-DEMO04-01",
+      "loai_ho_so": "Phiếu điều trị",
+      "noi_dung": "Người bệnh sốt 38,5 °C, tiểu buốt; cấy nước tiểu phân lập Escherichia coli nhạy ceftriaxon.",
+      "thoi_diem_ghi": "2026-11-10T07:30:00+07:00"
+    }
+  ],
+  "thuoc_dang_dung": [],
+  "y_lenh_cho_duyet": {
+    "y_lenh_id": "YL-DEMO-04",
+    "khoa_ke_don": "Chấn thương chỉnh hình",
+    "luong_duyet": "truc_tiep",
+    "muc_uu_tien": null,
+    "thoi_diem_ke": "2026-11-10T08:00:00+07:00",
+    "chi_tiet": [
+      {
+        "chi_tiet_y_lenh_id": "CT-DEMO04-01",
+        "thuoc_id": "T-CEFTRIAXON-2G",
+        "ten_tu_do": null,
+        "loai_san_pham": "thuoc",
+        "lieu_moi_lan": 2.0,
+        "don_vi_lieu": "g",
+        "tan_suat": "1 lần/ngày",
+        "so_lan_moi_ngay": 1,
+        "khoang_cach_gio": 24.0,
+        "duong_dung": "truyền tĩnh mạch",
+        "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+        "bat_dau": "2026-11-10T09:00:00+07:00",
+        "ket_thuc": null,
+        "nguon_thuoc": "Kho nội trú",
+        "trang_thai_dong": "active",
+        "lich_dung": [
+          {
+            "thoi_diem_du_kien": "2026-11-10T09:00:00+07:00",
+            "lieu": 2.0,
+            "don_vi": "g"
+          }
+        ]
+      }
+    ]
+  },
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFTRIAXON-2G",
+      "ten_thuoc": "Ceftriaxon 2 g",
+      "ham_luong": "2 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXON",
+          "ham_luong_thanh_phan": 2.0,
+          "don_vi": "g"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFTRIAXON",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin_the_he_3"
+    }
+  ]
+}

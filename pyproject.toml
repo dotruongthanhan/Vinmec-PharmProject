@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vinmec-pharm-cdss"
+version = "0.1.0"
+description = "He thong ho tro duoc si lam sang tham dinh y lenh"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2",
+    "streamlit",
+    "pyyaml",
+    "python-dotenv",
+    "numpy",
+    "fastapi>=0.163.1",
+    "uvicorn[standard]>=0.54.0",
+    "httpx>=0.28.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+    "ipykernel",
+    "nbformat",
+    "nbstripout",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["plan", "docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

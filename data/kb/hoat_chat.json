@@ -1,0 +1,652 @@
+{
+  "hoat_chat": [
+    {
+      "hoat_chat_id": "acetaminophen",
+      "ten_inn": "paracetamol",
+      "ten_viet": "paracetamol",
+      "dong_nghia": [
+        "acetaminophen",
+        "apap",
+        "n-acetyl-p-aminophenol"
+      ],
+      "thanh_phan": null,
+      "nhom": "giam_dau_ha_sot"
+    },
+    {
+      "hoat_chat_id": "acyclovir",
+      "ten_inn": "aciclovir",
+      "ten_viet": "aciclovir",
+      "dong_nghia": [
+        "acyclovir",
+        "acyclovir sodium",
+        "aciclovir natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_virus"
+    },
+    {
+      "hoat_chat_id": "allopurinol",
+      "ten_inn": "allopurinol",
+      "ten_viet": "allopurinol",
+      "dong_nghia": [
+        "allopurinol sodium"
+      ],
+      "thanh_phan": null,
+      "nhom": "tri_gout"
+    },
+    {
+      "hoat_chat_id": "amikacin",
+      "ten_inn": "amikacin",
+      "ten_viet": "amikacin",
+      "dong_nghia": [
+        "amikacin sulfate",
+        "amikacin sulfat"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_aminoglycoside"
+    },
+    {
+      "hoat_chat_id": "amiodarone",
+      "ten_inn": "amiodarone",
+      "ten_viet": "amiodaron",
+      "dong_nghia": [
+        "amiodarone hydrochloride",
+        "amiodaron hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "chong_loan_nhip"
+    },
+    {
+      "hoat_chat_id": "amlodipine",
+      "ten_inn": "amlodipine",
+      "ten_viet": "amlodipin",
+      "dong_nghia": [
+        "amlodipine besylate",
+        "amlodipine besilate",
+        "amlodipin besilat"
+      ],
+      "thanh_phan": null,
+      "nhom": "chen_kenh_canxi"
+    },
+    {
+      "hoat_chat_id": "amoxicillin",
+      "ten_inn": "amoxicillin",
+      "ten_viet": "amoxicilin",
+      "dong_nghia": [
+        "amoxicilin",
+        "amoxicillin trihydrate",
+        "amoxicillin sodium",
+        "amoxicilin trihydrat"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_penicillin"
+    },
+    {
+      "hoat_chat_id": "apixaban",
+      "ten_inn": "apixaban",
+      "ten_viet": "apixaban",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_dong"
+    },
+    {
+      "hoat_chat_id": "atorvastatin",
+      "ten_inn": "atorvastatin",
+      "ten_viet": "atorvastatin",
+      "dong_nghia": [
+        "atorvastatin calcium",
+        "atorvastatin canxi"
+      ],
+      "thanh_phan": null,
+      "nhom": "statin"
+    },
+    {
+      "hoat_chat_id": "cefepime",
+      "ten_inn": "cefepime",
+      "ten_viet": "cefepim",
+      "dong_nghia": [
+        "cefepime hydrochloride",
+        "cefepim hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_cephalosporin"
+    },
+    {
+      "hoat_chat_id": "ceftriaxone",
+      "ten_inn": "ceftriaxone",
+      "ten_viet": "ceftriaxon",
+      "dong_nghia": [
+        "ceftriaxone sodium",
+        "ceftriaxon natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_cephalosporin"
+    },
+    {
+      "hoat_chat_id": "cilastatin",
+      "ten_inn": "cilastatin",
+      "ten_viet": "cilastatin",
+      "dong_nghia": [
+        "cilastatin sodium",
+        "cilastatin natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "uc_che_dehydropeptidase"
+    },
+    {
+      "hoat_chat_id": "ciprofloxacin",
+      "ten_inn": "ciprofloxacin",
+      "ten_viet": "ciprofloxacin",
+      "dong_nghia": [
+        "ciprofloxacin hydrochloride",
+        "ciprofloxacin lactate",
+        "ciprofloxacin hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_fluoroquinolone"
+    },
+    {
+      "hoat_chat_id": "clarithromycin",
+      "ten_inn": "clarithromycin",
+      "ten_viet": "clarithromycin",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_macrolide"
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "ten_inn": "clavulanic acid",
+      "ten_viet": "acid clavulanic",
+      "dong_nghia": [
+        "clavulanate",
+        "clavulanate potassium",
+        "potassium clavulanate",
+        "axit clavulanic",
+        "kali clavulanat"
+      ],
+      "thanh_phan": null,
+      "nhom": "uc_che_beta_lactamase"
+    },
+    {
+      "hoat_chat_id": "clopidogrel",
+      "ten_inn": "clopidogrel",
+      "ten_viet": "clopidogrel",
+      "dong_nghia": [
+        "clopidogrel bisulfate",
+        "clopidogrel hydrogen sulfate",
+        "clopidogrel bisulfat"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_ket_tap_tieu_cau"
+    },
+    {
+      "hoat_chat_id": "colistimethate",
+      "ten_inn": "colistimethate sodium",
+      "ten_viet": "colistimethat natri",
+      "dong_nghia": [
+        "colistimethate",
+        "colistin",
+        "colistin methanesulfonate",
+        "polymyxin e"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_polymyxin",
+      "can_duyet": true
+    },
+    {
+      "hoat_chat_id": "cotrimoxazole",
+      "ten_inn": "sulfamethoxazole + trimethoprim",
+      "ten_viet": "cotrimoxazol",
+      "dong_nghia": [
+        "co-trimoxazole",
+        "cotrimoxazol",
+        "co-trimoxazol",
+        "tmp-smx",
+        "smx-tmp",
+        "trimethoprim-sulfamethoxazole"
+      ],
+      "thanh_phan": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "nhom": "khang_sinh_sulfonamide"
+    },
+    {
+      "hoat_chat_id": "dabigatran",
+      "ten_inn": "dabigatran etexilate",
+      "ten_viet": "dabigatran etexilat",
+      "dong_nghia": [
+        "dabigatran",
+        "dabigatran etexilate mesylate"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_dong",
+      "can_duyet": true
+    },
+    {
+      "hoat_chat_id": "digoxin",
+      "ten_inn": "digoxin",
+      "ten_viet": "digoxin",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "glycosid_tim"
+    },
+    {
+      "hoat_chat_id": "enalapril",
+      "ten_inn": "enalapril",
+      "ten_viet": "enalapril",
+      "dong_nghia": [
+        "enalapril maleate",
+        "enalaprilat",
+        "enalapril maleat"
+      ],
+      "thanh_phan": null,
+      "nhom": "uc_che_men_chuyen"
+    },
+    {
+      "hoat_chat_id": "enoxaparin",
+      "ten_inn": "enoxaparin sodium",
+      "ten_viet": "enoxaparin natri",
+      "dong_nghia": [
+        "enoxaparin",
+        "enoxaparin natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_dong_lmwh",
+      "can_duyet": true
+    },
+    {
+      "hoat_chat_id": "esomeprazole",
+      "ten_inn": "esomeprazole",
+      "ten_viet": "esomeprazol",
+      "dong_nghia": [
+        "esomeprazole magnesium",
+        "esomeprazole sodium",
+        "esomeprazol magnesi"
+      ],
+      "thanh_phan": null,
+      "nhom": "uc_che_bom_proton"
+    },
+    {
+      "hoat_chat_id": "fentanyl",
+      "ten_inn": "fentanyl",
+      "ten_viet": "fentanyl",
+      "dong_nghia": [
+        "fentanyl citrate",
+        "fentanyl citrat"
+      ],
+      "thanh_phan": null,
+      "nhom": "giam_dau_opioid"
+    },
+    {
+      "hoat_chat_id": "fluconazole",
+      "ten_inn": "fluconazole",
+      "ten_viet": "fluconazol",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_nam_azole"
+    },
+    {
+      "hoat_chat_id": "furosemide",
+      "ten_inn": "furosemide",
+      "ten_viet": "furosemid",
+      "dong_nghia": [
+        "frusemide",
+        "furosemide sodium"
+      ],
+      "thanh_phan": null,
+      "nhom": "loi_tieu_quai"
+    },
+    {
+      "hoat_chat_id": "gentamicin",
+      "ten_inn": "gentamicin",
+      "ten_viet": "gentamicin",
+      "dong_nghia": [
+        "gentamicin sulfate",
+        "gentamycin",
+        "gentamicin sulfat"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_aminoglycoside"
+    },
+    {
+      "hoat_chat_id": "heparin",
+      "ten_inn": "heparin",
+      "ten_viet": "heparin",
+      "dong_nghia": [
+        "heparin sodium",
+        "unfractionated heparin",
+        "ufh",
+        "heparin natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_dong"
+    },
+    {
+      "hoat_chat_id": "ibuprofen",
+      "ten_inn": "ibuprofen",
+      "ten_viet": "ibuprofen",
+      "dong_nghia": [
+        "ibuprofen lysine",
+        "ibuprofen sodium"
+      ],
+      "thanh_phan": null,
+      "nhom": "nsaid"
+    },
+    {
+      "hoat_chat_id": "imipenem",
+      "ten_inn": "imipenem",
+      "ten_viet": "imipenem",
+      "dong_nghia": [
+        "imipenem monohydrate"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_carbapenem"
+    },
+    {
+      "hoat_chat_id": "insulin_glargine",
+      "ten_inn": "insulin glargine",
+      "ten_viet": "insulin glargine",
+      "dong_nghia": [
+        "insulin glargin"
+      ],
+      "thanh_phan": null,
+      "nhom": "ha_duong_huyet_insulin",
+      "can_duyet": true
+    },
+    {
+      "hoat_chat_id": "ketorolac",
+      "ten_inn": "ketorolac",
+      "ten_viet": "ketorolac",
+      "dong_nghia": [
+        "ketorolac tromethamine",
+        "ketorolac trometamol"
+      ],
+      "thanh_phan": null,
+      "nhom": "nsaid"
+    },
+    {
+      "hoat_chat_id": "levetiracetam",
+      "ten_inn": "levetiracetam",
+      "ten_viet": "levetiracetam",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "chong_dong_kinh"
+    },
+    {
+      "hoat_chat_id": "levofloxacin",
+      "ten_inn": "levofloxacin",
+      "ten_viet": "levofloxacin",
+      "dong_nghia": [
+        "levofloxacin hemihydrate"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_fluoroquinolone"
+    },
+    {
+      "hoat_chat_id": "linezolid",
+      "ten_inn": "linezolid",
+      "ten_viet": "linezolid",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_oxazolidinone"
+    },
+    {
+      "hoat_chat_id": "losartan",
+      "ten_inn": "losartan",
+      "ten_viet": "losartan",
+      "dong_nghia": [
+        "losartan potassium",
+        "losartan kali"
+      ],
+      "thanh_phan": null,
+      "nhom": "chen_thu_the_angiotensin"
+    },
+    {
+      "hoat_chat_id": "meropenem",
+      "ten_inn": "meropenem",
+      "ten_viet": "meropenem",
+      "dong_nghia": [
+        "meropenem trihydrate"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_carbapenem"
+    },
+    {
+      "hoat_chat_id": "metformin",
+      "ten_inn": "metformin",
+      "ten_viet": "metformin",
+      "dong_nghia": [
+        "metformin hydrochloride",
+        "metformin hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "ha_duong_huyet_biguanide"
+    },
+    {
+      "hoat_chat_id": "methotrexate",
+      "ten_inn": "methotrexate",
+      "ten_viet": "methotrexat",
+      "dong_nghia": [
+        "methotrexate sodium",
+        "mtx",
+        "methotrexat natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_chuyen_hoa_uc_che_mien_dich"
+    },
+    {
+      "hoat_chat_id": "metoprolol",
+      "ten_inn": "metoprolol",
+      "ten_viet": "metoprolol",
+      "dong_nghia": [
+        "metoprolol succinate",
+        "metoprolol tartrate",
+        "metoprolol succinat",
+        "metoprolol tartrat"
+      ],
+      "thanh_phan": null,
+      "nhom": "chen_beta"
+    },
+    {
+      "hoat_chat_id": "morphine",
+      "ten_inn": "morphine",
+      "ten_viet": "morphin",
+      "dong_nghia": [
+        "morphine sulfate",
+        "morphine hydrochloride",
+        "morphin sulfat",
+        "morphin hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "giam_dau_opioid"
+    },
+    {
+      "hoat_chat_id": "omeprazole",
+      "ten_inn": "omeprazole",
+      "ten_viet": "omeprazol",
+      "dong_nghia": [
+        "omeprazole magnesium",
+        "omeprazole sodium",
+        "omeprazol magnesi"
+      ],
+      "thanh_phan": null,
+      "nhom": "uc_che_bom_proton"
+    },
+    {
+      "hoat_chat_id": "phenytoin",
+      "ten_inn": "phenytoin",
+      "ten_viet": "phenytoin",
+      "dong_nghia": [
+        "phenytoin sodium",
+        "phenytoin natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "chong_dong_kinh"
+    },
+    {
+      "hoat_chat_id": "piperacillin",
+      "ten_inn": "piperacillin",
+      "ten_viet": "piperacillin",
+      "dong_nghia": [
+        "piperacillin sodium",
+        "piperacilin",
+        "piperacillin natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_penicillin",
+      "can_duyet": true
+    },
+    {
+      "hoat_chat_id": "rivaroxaban",
+      "ten_inn": "rivaroxaban",
+      "ten_viet": "rivaroxaban",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_dong"
+    },
+    {
+      "hoat_chat_id": "simvastatin",
+      "ten_inn": "simvastatin",
+      "ten_viet": "simvastatin",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "statin"
+    },
+    {
+      "hoat_chat_id": "spironolactone",
+      "ten_inn": "spironolactone",
+      "ten_viet": "spironolacton",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "loi_tieu_giu_kali"
+    },
+    {
+      "hoat_chat_id": "sulfamethoxazole",
+      "ten_inn": "sulfamethoxazole",
+      "ten_viet": "sulfamethoxazol",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_sulfonamide"
+    },
+    {
+      "hoat_chat_id": "tazobactam",
+      "ten_inn": "tazobactam",
+      "ten_viet": "tazobactam",
+      "dong_nghia": [
+        "tazobactam sodium",
+        "tazobactam natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "uc_che_beta_lactamase"
+    },
+    {
+      "hoat_chat_id": "tramadol",
+      "ten_inn": "tramadol",
+      "ten_viet": "tramadol",
+      "dong_nghia": [
+        "tramadol hydrochloride",
+        "tramadol hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "giam_dau_opioid"
+    },
+    {
+      "hoat_chat_id": "trimethoprim",
+      "ten_inn": "trimethoprim",
+      "ten_viet": "trimethoprim",
+      "dong_nghia": [],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_folate"
+    },
+    {
+      "hoat_chat_id": "valproic_acid",
+      "ten_inn": "valproic acid",
+      "ten_viet": "acid valproic",
+      "dong_nghia": [
+        "valproate",
+        "valproate sodium",
+        "sodium valproate",
+        "divalproex",
+        "divalproex sodium",
+        "axit valproic"
+      ],
+      "thanh_phan": null,
+      "nhom": "chong_dong_kinh"
+    },
+    {
+      "hoat_chat_id": "vancomycin",
+      "ten_inn": "vancomycin",
+      "ten_viet": "vancomycin",
+      "dong_nghia": [
+        "vancomycin hydrochloride",
+        "vancomycin hydroclorid"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_sinh_glycopeptide"
+    },
+    {
+      "hoat_chat_id": "warfarin",
+      "ten_inn": "warfarin",
+      "ten_viet": "warfarin",
+      "dong_nghia": [
+        "warfarin sodium",
+        "warfarin natri"
+      ],
+      "thanh_phan": null,
+      "nhom": "khang_dong_khang_vitamin_k"
+    }
+  ],
+  "nhan": {
+    "acetaminophen": ["acetaminophen"],
+    "acyclovir": ["acyclovir"],
+    "allopurinol": ["allopurinol"],
+    "amikacin": ["amikacin"],
+    "amiodarone": ["amiodarone"],
+    "amlodipine": ["amlodipine"],
+    "amoxicillin_and_clavulanate_potassium": ["amoxicillin", "clavulanic_acid"],
+    "apixaban": ["apixaban"],
+    "atorvastatin": ["atorvastatin"],
+    "cefepime": ["cefepime"],
+    "ceftriaxone": ["ceftriaxone"],
+    "ciprofloxacin": ["ciprofloxacin"],
+    "clarithromycin": ["clarithromycin"],
+    "clopidogrel": ["clopidogrel"],
+    "colistimethate": ["colistimethate"],
+    "dabigatran": ["dabigatran"],
+    "digoxin": ["digoxin"],
+    "enalapril": ["enalapril"],
+    "enoxaparin": ["enoxaparin"],
+    "esomeprazole": ["esomeprazole"],
+    "fentanyl": ["fentanyl"],
+    "fluconazole": ["fluconazole"],
+    "furosemide": ["furosemide"],
+    "gentamicin": ["gentamicin"],
+    "heparin": ["heparin"],
+    "ibuprofen": ["ibuprofen"],
+    "imipenem_and_cilastatin": ["imipenem", "cilastatin"],
+    "insulin_glargine": ["insulin_glargine"],
+    "ketorolac": ["ketorolac"],
+    "levetiracetam": ["levetiracetam"],
+    "levofloxacin": ["levofloxacin"],
+    "linezolid": ["linezolid"],
+    "losartan": ["losartan"],
+    "meropenem": ["meropenem"],
+    "metformin": ["metformin"],
+    "methotrexate": ["methotrexate"],
+    "metoprolol_succinate": ["metoprolol"],
+    "metoprolol_tartrate": ["metoprolol"],
+    "morphine": ["morphine"],
+    "omeprazole": ["omeprazole"],
+    "phenytoin": ["phenytoin"],
+    "piperacillin_and_tazobactam": ["piperacillin", "tazobactam"],
+    "rivaroxaban": ["rivaroxaban"],
+    "simvastatin": ["simvastatin"],
+    "spironolactone": ["spironolactone"],
+    "sulfamethoxazole_and_trimethoprim": ["sulfamethoxazole", "trimethoprim"],
+    "tramadol": ["tramadol"],
+    "valproate": ["valproic_acid"],
+    "vancomycin": ["vancomycin"],
+    "warfarin": ["warfarin"]
+  }
+}

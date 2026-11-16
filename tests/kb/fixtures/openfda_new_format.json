@@ -1,0 +1,56 @@
+{
+  "results": [
+    {
+      "set_id": "11111111-2222-3333-4444-555555555555",
+      "effective_time": "20250610",
+      "openfda": {
+        "brand_name": ["SYNTHOPENEM"],
+        "generic_name": ["MEROPENEM"],
+        "spl_set_id": ["11111111-2222-3333-4444-555555555555"]
+      },
+      "spl_product_data_elements": ["Meropenem Water Mannitol"],
+      "how_supplied": ["17 HOW SUPPLIED Vials are supplied in cartons of 10."],
+      "references": ["15 REFERENCES Clinical guidelines 2024."],
+      "description": ["11 DESCRIPTION Synthetic beta-lactam antibacterial."],
+      "recent_major_changes": ["None"],
+      "indications_and_usage": [
+        "HIGHLIGHTS INDICATIONS: Treats skin infections ( 1.1 ) and intra-abdominal infections ( 1.2 ). 1 INDICATIONS AND USAGE 1.1 Complicated Skin and Skin Structure Infections Synthopenem is indicated for the treatment of complicated skin and skin structure infections caused by susceptible isolates in adult and pediatric patients aged 3 months and older. 1.2 Complicated Intra-abdominal Infections Synthopenem is indicated for the treatment of complicated appendicitis and peritonitis caused by viridans group streptococci and Escherichia coli in adult and pediatric patients."
+      ],
+      "dosage_and_administration": [
+        "----------DOSAGE AND ADMINISTRATION---------- Recommended adult dose is 500 mg every 8 hours ( 2.1 ). Adjust dose in renal impairment ( 2.2 ): CrCl Recommended 26-50 Every 12h. 2 DOSAGE AND ADMINISTRATION 2.1 Adult Patients The recommended dosage of Synthopenem is 500 mg given by intravenous infusion every 8 hours for complicated skin infections and 1 gram every 8 hours for intra-abdominal infections. Administer infusions over 15 to 30 minutes, e.g. as a slow intravenous infusion. 2.2 Use in Patients with Renal Impairment Dosage adjustment is necessary in adult patients with creatinine clearance 50 mL/min or less, vs. patients with normal renal function. CrCl 26-50 mL/min: administer recommended dose every 12 hours. Table 2. Recommended Synthopenem Dosage Schedule in Renal Impairment CrCl mL/min Dose Dosing Interval >50 100% Every 8 hours 26-50 100% Every 12 hours"
+      ],
+      "dosage_and_administration_table": [
+        "<table><thead><tr><th>CrCl</th><th>Recommended</th></tr></thead><tbody><tr><td>26-50</td><td>Every 12h</td></tr></tbody></table>",
+        "<table><caption>Table 2. Recommended Synthopenem Dosage Schedule in Renal Impairment</caption><tfoot><tr><td colspan=\"3\">Footnote: Based on adult renal clearance studies.</td></tr></tfoot><thead><tr><th>CrCl mL/min</th><th>Dose</th><th>Dosing Interval</th></tr></thead><tbody><tr><td>&gt;50</td><td>100%</td><td>Every 8 hours</td></tr><tr><td>26-50</td><td>100%</td><td>Every 12 hours</td></tr></tbody></table>",
+        "<table><caption>Table 3. Pediatric Mixed Header</caption><tbody><tr><th colspan=\"2\">Age Group &amp; Regimen</th></tr><tr><td>Under 50 kg</td><td>20 mg/kg every 8 hours</td></tr><tr><td>Over 50 kg</td><td>500 mg every 8 hours</td></tr></tbody></table>"
+      ],
+      "contraindications": [
+        "4 CONTRAINDICATIONS Synthopenem is contraindicated in patients with known hypersensitivity to any component of this product or to other drugs in the same class."
+      ],
+      "warnings_and_cautions": [
+        "HIGHLIGHTS WARNINGS: Hypersensitivity reactions ( 5.1 ) and seizures ( 5.2 ). 5 WARNINGS AND PRECAUTIONS 5.1 Hypersensitivity Reactions Serious and occasionally fatal hypersensitivity reactions have been reported in patients receiving therapy with beta-lactams. Before initiating therapy, careful inquiry should be made concerning previous hypersensitivity reactions to penicillins, cephalosporins, or other beta-lactams. 5.2 Seizure Potential Seizures and other adverse central nervous system experiences have been reported during treatment, particularly in patients with central nervous system disorders or impaired renal function."
+      ],
+      "drug_interactions": [
+        "7 DRUG INTERACTIONS Co-administration of probenecid with Synthopenem inhibits renal excretion of the drug and increases systemic plasma concentrations, which is not recommended. Concomitant valproic acid may result in subtherapeutic valproic acid serum concentrations and loss of seizure control."
+      ],
+      "use_in_specific_populations": [
+        "8 USE IN SPECIFIC POPULATIONS 8.1 Pregnancy Available data from published cohort studies have not identified a drug-associated risk of major birth defects or adverse fetal outcomes when administered during pregnancy. 8.4 Pediatric Use The safety and effectiveness of Synthopenem have been established for pediatric patients aged 3 months and older based on clinical pharmacokinetic trials. 8.5 Geriatric Use No overall differences in safety or effectiveness were observed between geriatric subjects and younger adult subjects in clinical trials."
+      ],
+      "pregnancy": [
+        "8.1 Pregnancy Available data from published cohort studies have not identified a drug-associated risk of major birth defects or adverse fetal outcomes when administered during pregnancy."
+      ],
+      "adverse_reactions": [
+        "6 ADVERSE REACTIONS The most common adverse reactions occurring in clinical trials included headache, nausea, constipation, diarrhea, anemia, vomiting, and rash at infusion sites."
+      ],
+      "overdosage": [
+        "10 OVERDOSAGE In case of overdosage, discontinue the medication immediately, treat symptomatically, and administer general supportive measures. Both parent drug and metabolite are removable by hemodialysis."
+      ],
+      "clinical_pharmacology": [
+        "12 CLINICAL PHARMACOLOGY 12.1 Mechanism of Action Synthopenem exhibits bactericidal activity by inhibiting bacterial cell wall synthesis via binding to penicillin-binding proteins. 12.3 Pharmacokinetics Plasma protein binding is approximately 2%. Tissue penetration ranges 0.5-12.6 Interstitial fluid and 6.4-12.1 Myocardium relative to concurrent serum levels. Elimination half-life is approximately 1.5 hours in adults with normal renal function."
+      ],
+      "custom_unmapped_section": [
+        "Custom pharmacology note for testing unknown field warning tracking in openFDA labels."
+      ]
+    }
+  ]
+}
