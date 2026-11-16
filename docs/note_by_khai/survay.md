@@ -44,6 +44,17 @@ Gồm các phần con như:
         - Có các trường: item code, item name, stock uom,
     - Dự trù thường chú
 
+--bổ sung-- (ngày 11/11) | ghi chú ngày 09/11
+
+- Kho nội trú B1 (KSTK): dược sĩ kho dùng file Excel Kiểm soát tồn kho, đổ dữ liệu tồn vào, chạy công thức Excel để tính Số lượng nhập dự kiến.
+- Công thức hiện tại chưa sát nhu cầu thực tế: dược sĩ phải rà soát và duyệt lại thủ công từng dòng; đa phần con số quyết định cuối cùng khác mức dự kiến lớn. Làm file KSTK rất vất vả, tốn nhiều công suy xét.
+- Ghi chú điều chỉnh thực tế trên từng mặt hàng:
+  - `"Cần theo dõi thêm"`: chưa đặt nhập dù công thức báo thiếu, vì tồn hiện tại còn trụ được.
+  - `"Nhập thêm"`: số lượng quyết định biến thiên mạnh theo kinh nghiệm; có mặt hàng nhập đúng bằng dự kiến, nhưng nhiều mặt hàng nhập ít hơn rất nhiều.
+  - `"Ko, có hàng tt"`: không nhập thêm vì có "hàng tt" `[tt là gì???: hàng thay thế / hàng trúng thầu mới / hàng tồn trực, tồn tầng?]`.
+- Thiếu góc nhìn cân đối tồn chung giữa Kho nội trú và Nhà thuốc: hai bên phải chủ động liên lạc để tự cân đối, điều chuyển qua lại; chưa có màn hình chung tổng hợp tồn của cả hai bên.
+
+
 ##### 1.1.3. Hệ số nhóm hàng trong dự trù thường quy
 
 --bổ sung-- (Ghi chép ngày 31/10)
@@ -212,6 +223,30 @@ Hiện tại, nhận hóa đơn và thanh toán chiếm nhiều khối lượng 
 
 Chủ yếu là nhập tay lên hệ thống của bệnh viện. Quản lý chung của cả Vingroup là SAP. từ đó kết nối về trang quản lý của bệnh viện.
 
+--bổ sung-- (ngày 11/11) | ghi chú ngày 09/11
+
+- Quy trình nhập hóa đơn lên SAP và OH (Phòng Nghiệp vụ Dược):
+  - Hóa đơn gửi về gồm 2 nhóm:
+    1. Nhà cung cấp lớn: có file hóa đơn điện tử định dạng `.xml`, gửi qua email.
+    2. Nhà cung cấp nhỏ lẻ: ít mặt hàng trên mỗi hóa đơn, chưa xử lý tự động qua luồng `.xml`.
+  - Nhập hóa đơn dựa trên danh sách PO đã được Phòng Quản lý Dược duyệt và gửi cho nhà cung cấp, gồm 6 bước:
+    1. Tải danh sách PO đã duyệt từ SAP.
+    2. Nhập hóa đơn XML của nhà cung cấp lớn vào template Excel đã có sẵn (tải file XML xuống, cho vào template).
+    3. Đối chiếu tự động qua sheet mapping: đối chiếu tên mặt hàng trên hóa đơn với tên chuẩn trên OH; hệ thống tự gộp và khớp đa phần mặt hàng (thuộc PO nào, mã hóa đơn nào), tự điền số lượng, đối chiếu đơn giá, tính thành tiền. Mỗi mã đơn hàng có 1 bảng mapping đến SAP. Template có cột ghi nguồn dữ liệu từ trang nào đến trang nào của hóa đơn điện tử; script automation `[???]` tự động nhập dữ liệu.
+    4. Xử lý ngoại lệ:
+       - Tên không khớp trong bảng mapping (tên trên OH khác tên vendor ghi) → dược sĩ nghiệp vụ sửa tên trong sheet mapping.
+       - Lệch đơn giá → tạm giữ (put on hold), Quản lý Dược phê duyệt lại và điều chỉnh giá.
+       - Không tìm thấy PO tương ứng → tạm giữ, vì khi chưa duyệt PO thì hệ thống không cho tải hóa đơn lên.
+       - Hết bước 4: hoàn tất các hóa đơn có thể nhập bán tự động.
+    5. Nhập tay các hóa đơn nhỏ lẻ còn lại: khoảng hơn 20 hóa đơn, mỗi hóa đơn 1–2 mặt hàng. Các trường nhập tay: số hóa đơn, số lô, hạn dùng, ngày hóa đơn, tổng tiền; phần có bảo hiểm được tích 1 ô trong cột để đánh giá. Khuyến mãi nhập tay. Một số hóa đơn phải nhập tay từ file PDF gửi qua mail vào excel.
+    6. Đẩy lên SAP và đồng bộ sang OH: nhập kho và kéo công nợ trên SAP; sau khi SAP thành công, tồn kho tự nhảy sang OH, sẵn sàng cho bác sĩ kê đơn hoặc xuất nội trú.
+  - Script nhập thi thoảng bị lỗi, phải tự mò lại để mapping; có thể do tên ở hóa đơn và bảng map khác nhau, giá sai, số `[san rohaamr???]` về không đủ PO, hoặc kho `[note???]` sót mã BHYT, thừa số lượng.
+  - Mỗi nhà cung cấp có form khác nhau; kể cả nhà cung cấp `XNL [???]` cũng không tự nhập được. Nhập tay vào hệ thống khá ít, khoảng 1 tập từ 1 đến 2.5 chục tờ. Một số hóa đơn không có lô hạn, nhiều tờ ghim cùng ở giấy.
+  - Khác với mô tả trên ("chủ yếu là nhập tay"): ghi chú 09/11 cho thấy phần lớn đã tự động hóa qua XML + mapping, nhập tay chỉ là phần còn lại `[cần xác nhận lại]`.
+- Sự cố ngày 09/11: các PO trên hệ thống mới được duyệt đến hết ngày 06/11, PO phát sinh sau đó chưa duyệt → chưa đẩy được hóa đơn lên SAP → OH cho các lô hàng sau 06/11. Hàng về từ 06/11 đến 09/11 (3 ngày) vẫn chưa lên tồn trên OH, nên bác sĩ chưa kê được. Dược sĩ kho chưa rõ lý do; khi đối chiếu với quan sát nghiệp vụ cùng ngày thì khớp với việc PO chưa duyệt.
+- Nút thắt là chờ duyệt PO / lệch giá / lệch tên mapping, không phải do gõ tay hóa đơn.
+
+
 #### 2.1.2. Báo cáo thống kê
 
 Báo cáo thống kê có rất nhiều loại, và chủ yếu là làm tay, nặng nhất là báo cáo tổng kết khoa
@@ -286,6 +321,18 @@ Sắp tới, bên VFS cũng có làm phần mềm riêng, gồm:
 Cần xem lại, vì:
 - Không biết AI có giúp được gì không, cần liên hệ VFS để xem thêm được AI giúp được phần gì, mục nào
 - Khi app on live, workflow có khả năng cx thay đổi (chưa làm rõ là thay đổi như nào, theo bệnh viện hay là theo app)
+
+--bổ sung-- (ngày 11/11) | ghi chú ngày 07/11
+
+- Trong bản đặc tả của VFS, chưa thấy kết nối đến thông tin thuốc của thuốc quốc gia. Ý tưởng của nhà thuốc là kết nối đến hệ thống quốc gia để tra cứu thuốc; phần tổng hợp cần xem lại.
+- Checklist: chỉ cần có mã đơn thuốc của bệnh nhân để tra cứu đơn bác sĩ kê cho bệnh nhân; không phải tra cứu thông tin thuốc.
+- Mã đơn thuốc gồm 14 ký tự: 5 ký tự đầu là mã bệnh viện; 7 ký tự sau là mã đơn thuốc do hệ thống sinh; 1 ký tự là mã loại thuốc (thường, hướng thần, gây nghiện,…); và 1 cái nữa `[???]`.
+- Theo dõi đặc tả VFS. Mục tiêu phạm vi:
+  - M1: chuẩn hóa quy trình xử lý thuốc tại khoa dược.
+  - M2: `[chưa rõ]`.
+  - M3: đồng bộ dữ liệu khoa dược và các phân hệ liên quan, hạn chế việc nhập lại dữ liệu nhiều lần, sai lệch thông tin, tồn tại nhiều nơi không thống nhất.
+  - M4: liên quan cảnh báo dược, đảm bảo 100% th `[???]` chưa đủ điều kiện cấp phát dị ứng, thuốc nguy cơ cao và thuốc kiểm soát đặc biệt được chặn hoặc cảnh báo đúng theo yêu cầu.
+
 
 ## 2.9. Tạo form điền BHYT (ghi chép ngày 05/11)
 
@@ -366,6 +413,12 @@ Theo quan sát hiện tại, phần y lệnh đang tra cứu chưa thể hiện 
     - ???
 - Sau khi lấy mã bệnh nhân từ OH, tra cứu qua ERM
 
+--bổ sung-- (ngày 11/11) | ghi chú ngày 10/11
+
+- Quy trình duyệt y lệnh: nhập thông tin tích vào chi tiết bệnh án, tiền sử dị ứng. Check đầy đủ các bước, làm rõ dị ứng thuốc hay không; nếu không có, cần xét dị ứng chéo ra thuốc khác.
+- Dược sĩ trả lời về ERM: "Hiện là copy thông tin bệnh án" để thẩm định bằng công cụ (xem mục 3.2.1).
+
+
 ## 3.1. Quy trình dược lâm sàn
 
 Quy trình trực tiếp khi có bệnh nhân mới vào sẽ phải:
@@ -411,6 +464,41 @@ Quy tình gián tiếp:
 - Đối chiếu y lệnh với tình trạng bệnh nhân, kết quả xét nghiệm và kế hoạch sử dụng thuốc.
 - Kiểm tra tính phù hợp của thuốc, liều lượng, cách dùng và tương tác thuốc.
 - Xem xét điều chỉnh liều lượng thuốc khi cần thiết.
+
+--bổ sung-- (ngày 11/11) | ghi chú ngày 07/11 và 10/11
+
+- Đo thời gian duyệt y lệnh (quan sát 07/11; chưa chuẩn giờ vì chị vừa vào phòng, đang làm dở):
+  - Tra cứu thuốc, đối chiếu vào OH: chị ngồi khá lâu, khoảng hơn 10 phút.
+  - Tính toán trên MDCalc `[???]` rồi mở ERM tra cứu lại thông tin trước khi nhập: khoảng 1 phút (ca bệnh nhân 66 tuổi).
+  - Ca khó: sau khi tính vẫn phải xem lại ERM hồ sơ bệnh án. Chị không biết thuốc, phải tra Google. Ca chưa chắc, phải phỏng vấn lại (tiền sử tăng huyết áp, có thuốc đặt mạch vành? — chưa nghe rõ).
+  - Case 1: mở y lệnh, xem, xem ERM khoảng 1 phút 30 giây; gọi điện bác sĩ xác nhận thêm; tra UpToDate hoặc thuốc khác, thông tin thuốc, quay về ERM xem thông tin bệnh nhân, kết quả xét nghiệm khoảng 7 phút 40 giây; tra thông tin web của Bộ rồi quay lại OH. Một ca khó tổng khoảng 20 phút.
+  - Việc chị hay `[???]` rời quá, không đo nổi.
+- Luồng duyệt (ghi nhận 10/11):
+  - Cần xác nhận: bệnh nhân xuống nhà thuốc rồi dược sĩ mới bắt đầu duyệt, hay duyệt từ khi bác sĩ có y lệnh?
+  - Thứ tự duyệt: ưu tiên người ra đơn trước, nhưng khách có thể đi khám khoa khác, chưa xuống nhà thuốc, hoặc khách xuống trước nhưng cần làm bảo hiểm `[không chắc: fill]` trước. Hôm nay dược sĩ có hỏi ưu tiên một số đơn đầu; cần xác nhận lại một số đơn không xuống nhà thuốc nên được duyệt sau.
+  - Dồn ứ: ở nhà thuốc có nhiều dược sĩ cùng duyệt; dược lâm sàng làm một số ca phức tạp `[không chắc: nhà trong phạm vi họ được phép]`; chị Hân (DSLS ngoại trú) phụ trách chính; mật độ cao thì phân cho mọi người duyệt cùng.
+  - Ca nhẹ và TB: chưa rõ "ca nhẹ và TB là nguồn nào"; có nên chuyển ca nhẹ cho nhà thuốc duyệt không `[???]`. Nhẹ/không nhẹ: nhẹ có hiện lên màn hình của DSLS không? (cần làm rõ).
+- Sơ đồ vẽ tay ngày 10/11 (vẽ lại; chữ giữ nguyên, sửa chính tả):
+
+```mermaid
+flowchart TD
+    A["Bác sĩ"] --> B["Y lệnh cho dược sĩ"]
+    A --> C["Đơn thuốc cho bệnh nhân"]
+    B --> D["Dược sĩ duyệt"]
+    D -- "Nếu không ổn" --> A
+    D --> E["Nhà thuốc cấp phát"]
+    C --> F["Bệnh nhân xuống nhà thuốc"]
+    F --> E
+```
+
+  - Luồng bệnh nhân (ghi nhận 10/11):
+    1. Luồng duyệt: nhiều use case: khám một `[thể???]` → lấy 1 lần; khám 1 lần → lấy 1 lần → lặp lại; BHYT: xuống fill BHYT ở quầy thu ngân.
+    2. Không bị dồn ứ: phân phát cho cả phòng theo tình trạng.
+    3. Chia theo mức độ nghiêm trọng: ca nhẹ — DS nhà thuốc duyệt được; TB trở lên — DSLS phải duyệt.
+    4. Thời gian duyệt (fluctuate): ngoại trú không đảm bảo, ưu tiên tốc độ (chỉ đảm bảo không có tương tác gây hại với thuốc/sinh hoạt); nội trú duyệt cẩn thận: nhanh 5–10 phút, trung bình 20 phút, lâu 40–60 phút.
+  - Duyệt y lệnh có thể lâu hơn 20 phút khi có chỉ định ngoài nhãn phê duyệt `[không chắc: bấp bênh]`: cân bằng giữa A và B, phải đọc nhiều hướng dẫn nên lâu hơn; chủ yếu ở nội trú, ngoại trú không đảm bảo `[không chắc: tối]`.
+  - Chỉ định thuốc là khó nhất: dựa trên bằng chứng y khoa? hướng dẫn điều trị? hay cảm nhận cá nhân? (cần xác nhận).
+
 
 ##### 3.1.1.2. Ghi chú riêng – Hoạt động của điều dưỡng và nhà thuốc
 
@@ -514,6 +602,13 @@ Khoa Dược lâm sàng: Bệnh nhân ngoại trú:
 + Sử dụng BHYT thanh toán: Hoàn thành trước thủ tục (Thu ngân, điều dưỡng), đến nhà thuốc chỉ lấy.
 + Các nguyên nhân có thể gây delay: Chờ duyệt, BHYT chưa xong, số lượng đơn chờ duyệt lớn.
 
+--bổ sung-- (ngày 11/11) | ghi chú ngày 10/11
+
+- Dược sĩ duyệt đơn ngoại trú: chị Hân (DSLS ngoại trú) phụ trách chính; khi mật độ cao, phân cho mọi người duyệt cùng.
+- Thứ tự duyệt: ưu tiên người ra đơn trước; có khách đi khám khoa khác, chưa xuống nhà thuốc, hoặc khách xuống trước nhưng cần làm bảo hiểm `[không chắc: fill]` trước. Dược sĩ có hỏi ưu tiên một số đơn đầu; cần xác nhận lại một số đơn không xuống nhà thuốc nên được duyệt sau.
+- Ca nhẹ/TB: câu hỏi chưa rõ có nên chuyển ca nhẹ cho nhà thuốc duyệt không `[???]` (xem mục 3.1.1.1).
+
+
 #### 3.1.6. Báo cáo dược lâm sàng (bộ chỉ số)
 
 --bổ sung-- (Quan sát ngày 03/11)
@@ -591,6 +686,19 @@ Khoa Dược lâm sàng: Báo cáo DLS:
 - Thực phẩm chức năng chưa có dữ liệu lâm sàng, k có tương tác, tác dụng vs bệnh nhân, k có bằng chứng khẳng định có tác dụng. Tra cứu phải lên mạng tra. Chỉ tin cậy ở các nguồn đủ tin cậy, lo lắng về thông tin k tin cậy về thuốc, hoặc là lấy từ kho. Né các phần thông tin thuốc đang copy, tự soạn. Nguồn khá nhiễu loạn, nên cần xác nhận nguồn uy tín
 - Thực phẩm chức năng k trong đơn thuốc, chỉ có trong phiếu tư vấn
 - UpToDate tra thuốc, cả phác đồ điều trị, nhưng thiếu nhi[ều???] 1 chút trang thuốc có FDA,
+
+--bổ sung-- (ngày 11/11) | ghi chú ngày 07/11 và 10/11
+
+- Case 0 (07/11): chị dùng ChatGPT với plugin DSLS. Yêu cầu: liệt kê danh sách hoạt chất tương ứng các biệt dược `[biệt dược???]`; tra cứu thông tin sản phẩm về thiếu máu và tan máu; tạo bảng danh sách; liệt kê tần suất và sắp xếp theo mức độ ưu tiên từ cao đến thấp và nguy cơ gây tan máu của loại thuốc này.
+- Dùng skill Claude Opus để thẩm định (10/11): copy thông tin bệnh án, không dùng PII bệnh nhân. Không lấy được chức năng gan, thận và xét nghiệm dùng thuốc, nên phải copy cả kết quả xét nghiệm vào; công cụ báo cảnh báo nhưng thông tin còn thiếu. Kết quả là bảng nhận định, 3 cột × số loại thuốc; chưa rõ cột 2 (có tên title) và nội dung cột 3 (nhận xét); chưa rõ đó có phải quy tắc của skill Claude không.
+- Tương tác thuốc đang link sang DB của MIMS, nên tương tác không đảm bảo chính xác, trùng lặp hoạt chất. Tương tác thuốc, dị ứng, chống chỉ định suy gan thận không có dữ liệu thì vẫn ghi pass; dược sĩ phải tự kiểm tra đặc điểm sinh lý của bệnh nhân (diện tích da, cho con bú, có thai và các chỉ định khác).
+- MIMS: tài liệu chỉ ở mức cơ bản; các thuốc và liều lượng outdated.
+- Công cụ tính liều (Calculate): chỉ khoảng 80%; một số bệnh nhân không tính được vào công thức, một bộ phận bệnh nhân không phù hợp nên phải có nhận định phù hợp để thêm vào.
+- Thông tin đưa cho bệnh nhân khi thuốc có nhiều thông tin: đây là việc của dược sĩ.
+- Sắp xếp theo màu (10/11): xanh lá: sớm; vàng: trễ hơn; xanh da trời; đỏ. Dự đoán ưu tiên: đỏ → vàng → xanh. Xanh da trời chỉ để kiểm tra lại quy tắc sắp xếp? Có hiệu quả không? (cần làm rõ).
+- Kiểm tra 6 tick (10/11): tương tác thuốc, dị ứng, chống chỉ định,… (dùng MIMS, liều outdated). Workaround: Calculate, tin hầu hết trường hợp; nhưng không đủ dữ liệu để tính → cần thêm nhận định/dữ liệu khác, "đào bới" trong hồ sơ bệnh án, tra cứu web/hệ thống ngoài (không phải UpToDate).
+- Câu hỏi nhóm đặt ra cho dược sĩ (10/11): chị có cần một công cụ hỗ trợ dự đoán lâm sàng trước, sàng lọc y lệnh trước không, tức phát hiện bất thường từ y lệnh và có giải thích? (chưa có trả lời).
+
 
 #### 3.2.2. Đề xuất AI
 
@@ -695,6 +803,28 @@ Cấp phát thuốc không theo đơn tương tự như cấp phát theo đơn, 
 | **3. Cập nhật mua hàng** | | | |
 | Số ngày dự trù | <=15 ngày | <=10 ngày | Do chia nhỏ 2 lần TQ vào mùng 1 và 15 hàng tháng |
 
+--bổ sung-- (ngày 11/11) | ghi chú ngày 10/11
+
+- Quy trình dự trù (Excel):
+  - Xuất file tồn trên OH, đưa vào sheet. Công thức Excel tra quy cách, mã hàng, tên hàng, hoạt chất,… bằng VLOOKUP trên các sheet/file Excel khác, rồi tính số lượng nhập dự kiến.
+  - Các trường dữ liệu: xuất 10 ngày, xuất 1 tháng, tồn, đặt chưa về, về chưa lên (kéo từ các file Excel khác).
+  - Điều kiện: tồn còn dưới 10 ngày → nguy cơ hết hàng → kiểm tra:
+    - Về chưa lên: push nội bộ để hàng lên hệ thống.
+    - Đặt chưa về: quản lý Dược push vendor (có thể hết hàng / tắc vận chuyển / sót đơn nhập) → yêu cầu ETA, tự tìm phương án.
+    - Trường hợp khác: dự trù đột xuất.
+  - Điều kiện Excel không tính được:
+    - Giá trị đơn hàng tối thiểu của vendor → theo quy ước từ Quản lý Dược / theo kinh nghiệm.
+    - Thuốc ít dùng → bác sĩ kê mới đặt, không dùng công thức sẵn.
+  - Quy trình duyệt: kho lên dự trù → Giám đốc duyệt, tạo Purchase Requests → Quản lý Dược duyệt Purchase Orders.
+  - Cân đối chi phí: từ năm nay không cần; năm nay vốn nhiều hơn, đổ theo quý.
+- Các yếu tố ảnh hưởng đến mức dự trù:
+  - Xuất 10 ngày / 1 tháng (Excel giải quyết).
+  - Tồn hệ thống (Excel giải quyết).
+  - Yêu cầu tối thiểu đơn từ vendor (NCC): Excel lưu trữ nhưng không tự xét được.
+  - (Nội trú dùng nhiều hơn) Mua theo nhu cầu khi có bệnh nhân mới nhập (không dùng công thức chung nữa).
+  - (Nội trú dùng nhiều hơn) Bác sĩ yêu cầu mức tồn tối thiểu.
+
+
 ## 4.4. Phòng bán thuốc
 
 --bổ sung-- (Khảo sát ngày 04/11)
@@ -714,6 +844,16 @@ Cấp phát thuốc không theo đơn tương tự như cấp phát theo đơn, 
 - Muốn hệ thống tương tự siêu thị. Khi kiểm kê có 1 chip. Muốn tạo kho kiểm kê, sau khi nhập số vào có thể tra cứu được luôn, như danh sách kiểm kê lần 1 thiếu như nào, sau khi kiểm lần 2 thiếu như nào, có thể theo dõi quá trình và cập nhật.
 - Hiện tại nếu lệch trên hệ thống phải tự đi kiểm, như phát thiếu, phát sai cho khách hàng. Lấy thiếu,.... nếu giao thừa khách phải lấy lại thuốc, giao thiếu phải bù để uống đủ liều
 - Hiện tại mỗi lần kiểm kê tạo 1 bảng, sau 1 lần kiểm kê, tool chốt lại kho và phải nhập lại từ đầu. Phát thừa thiếu k kiểm tra ngay được, có khi đến 1 2 ngày. Tự s [???] phải theo dõi
+
+--bổ sung-- (ngày 11/11) | ghi chú ngày 10/11
+
+- Kiểm kê hiện không có app, dùng Excel; OH có vẻ không hỗ trợ kiểm kê.
+- OH xuất Excel (danh mục, tồn kho, quy cách), kiểm từng hàng, điền tồn theo đơn vị tính lớn.
+- Ở nhà thuốc khó kiểm hơn: kho dưới tự kiểm được; nhà thuốc phải đi gọi "vọng" vào trong khu lấy thuốc `[vọng???]`.
+- Vấn đề kiểm soát số lô:
+  - Nguyên nhân: xuất âm — khi bác sĩ cần gấp mà PO chưa được duyệt, kế toán chưa nhập → đơn xuất không hiện số lô, ngày sản xuất → chênh lệch tồn theo lô thực tế.
+  - OH khi xuất không theo đúng quy tắc FEFO (First Expire First Out). Nghi do lỗi số lô phía trên. FEFO là quy tắc đơn giản, bắt buộc phải có trong Inventory Management.
+
 
 ## 4.6. Nhà thuốc (bản của thành viên khác)
 
@@ -799,3 +939,13 @@ Nhà thuốc: Có 2 bài toán:
 
 - [Tool hiện nay gặp chị Mến ???] (cuối ghi chép kiểm kê nhà thuốc ngày 04/11, mục 4.5)
 - [Quản lý tồn thuốc gồm ??? / Ghi chú ngày phải làm tay (khó can thiệp)] (đã đặt tạm ở mục 1.9, ghi chép 02/11; câu "Quản lý tồn thuốc gồm" bị bỏ trống)
+
+
+# 8. Tổng kết ngày 09/11 (ghi chú nội bộ của nhóm, không đưa vào báo cáo)
+
+--bổ sung-- (ngày 11/11) | ghi chú ngày 09/11
+
+- Quan sát 2 quy trình cốt lõi: nhập liệu hóa đơn nhà cung cấp lên SAP/OH tại Phòng Nghiệp vụ Dược (hạch toán công nợ và kích hoạt tồn khả dụng qua 6 bước: đối chiếu PO, ghép file XML bằng sheet mapping đến nhập tay hóa đơn lẻ) và Kiểm soát tồn kho & lập dự trù B1 tại Kho Nội trú (xác định số lượng thuốc cần nhập bổ sung). Nhóm tập trung quan sát bước đối chiếu XML/PO (Bước 3–5) và bước rà soát hiệu chỉnh số lượng dự trù từng dòng của dược sĩ kho B1.
+- Kết quả: quy trình nhập hóa đơn đã tự động hóa phần lớn nhờ file `.xml` (chỉ còn khoảng 20 hóa đơn lẻ phải nhập tay); công thức Excel dự trù lệch xa thực tế nên dược sĩ phải duyệt sửa tay từng dòng; hàng về từ 06/11 đến 09/11 chưa lên OH do vướng PO chưa duyệt hết.
+- Đã xác nhận với dược sĩ nghiệp vụ và dược sĩ kho B1: việc trễ tồn 06/11–09/11 do PO chưa được Quản lý Dược duyệt hết và lỗi lệch tên/đơn giá trên sheet mapping (không phải do gõ tay hóa đơn). Ký hiệu "hàng tt" (hàng thay thế / trúng thầu?) cần hỏi xác nhận lại.
+- Đề xuất của nhóm (nội bộ, cần thảo luận): công thức dự trù tĩnh không sát thực tế; kho nội trú và nhà thuốc phải tự liên lạc cân đối tồn rời rạc. Nhóm đề xuất xem xét lại dự án Invoice OCR (viện đã dùng file `.xml`) và tập trung vào công cụ kiểm soát và dự báo tồn kho có góc nhìn chung (kho B1 + nhà thuốc), trạng thái PO/hóa đơn chờ duyệt và học từ quy tắc hiệu chỉnh của dược sĩ. `[đề xuất giải pháp: không đưa vào báo cáo tuần 1]`
