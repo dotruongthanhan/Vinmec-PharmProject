@@ -18,7 +18,7 @@ Qua quá trình khảo sát thực địa và quan sát trực tiếp quy trình
   2. **Phác đồ điều trị theo chẩn đoán:** Đối chiếu mục đích kê thuốc với phác đồ điều trị chuẩn của từng chuyên khoa khi phần mềm `OH` chưa thể hiện trực tiếp lý do kê đơn.
   3. **Chỉ định thuốc & Chống chỉ định thuốc:** Đánh giá tính phù hợp của chỉ định và rà soát chống chỉ định theo tình trạng sinh lý, cơ địa đặc biệt, bệnh lý nền của người bệnh.
   4. **Tương tác thuốc (`Interactions`):** Kiểm tra toàn diện tương tác giữa **danh sách các thuốc người bệnh đang sử dụng** (bao gồm cả các đơn `active` / `pending` qua nhiều lượt khám) và **các thuốc trong y lệnh đang chờ duyệt**.
-  5. **Điều kiện liều lượng phù hợp & Các phép tính liên quan:** Rà soát liều dùng tối ưu theo chức năng gan, thận, tuổi, cân nặng (trong khi dữ liệu liều Auto-test trên `OH` đã cũ, hệ thống có trường hợp tự gộp đơn sáng – tối gây thiếu liều, và ứng dụng `Calculate` thiếu dữ liệu đầu vào với các ca bệnh phức tạp nên dược sĩ phải tra thêm nguồn ngoài hoặc tính tay trên `Excel`).
+  5. **Điều kiện liều lượng phù hợp & Các phép tính liên quan:** Rà soát liều dùng tối ưu theo chức năng gan, thận, tuổi, cân nặng (trong khi dữ liệu liều Auto-test trên `OH` đã cũ, và ứng dụng `Calculate` thiếu dữ liệu đầu vào với các ca bệnh phức tạp nên dược sĩ phải tra thêm nguồn ngoài hoặc tính tay trên `Excel`).
 
 ---
 
@@ -63,7 +63,7 @@ Nhu cầu triển khai dự án được xác thực trực tiếp qua các số
   * Thời gian duyệt trung bình: **`5.0 phút/ca`** (Lâu nhất: **`20 phút`** – 1 ca Ngoại trú phức tạp; Tỷ lệ ca đạt mức tiêu chuẩn: **`60.0%`** [`6/10 ca`]; Tổng số công thức tra cứu: **`2 công thức`**).
   * **Phân rã trung bình theo công đoạn:** Đọc bệnh án **`2.7 phút`** *(ghi nhận ca Tim mạch mất `6 phút` để tìm thông tin cũ, ca Thần kinh mất thời gian dò tìm mốc `"Vào viện lúc nào?"`)*; Tra cứu thông tin thuốc **`0.5 phút`** *(có ca Nội trú Ung bướu mất `2 phút` tra cứu tương tác qua `MicroMedexSolutions`)*; Tra công thức tính toán **`0.5 phút`**; Thời gian thao tác khác **`7.2 phút`** *(gọi điện xác nhận, kiểm tra tồn kho, soạn phiếu tư vấn bằng AI rồi chỉnh sửa định dạng/logo mất `7–12 phút` ở các ca Ngoại trú)*.
 * **Ghi nhận thực tế về quy trình audit đơn ngoại trú:**
-  * Để rà soát một đơn ngoại trú, DSLS phải mở đối chiếu chéo toàn bộ đơn `active`/`pending` trên `OH` (vốn chỉ lưu lịch sử thuốc) với các phiếu khám đúng chuyên khoa, đúng ngày, các *visit* trước và các chuyên khoa khác (kể cả những phiếu khám không ghi nội dung vẫn buộc phải mở ra mới biết, đồng thời khó nhận biết thuốc đã bị bác sĩ khác cho `discontinue`).
+  * Để rà soát một đơn ngoại trú, DSLS phải mở đối chiếu chéo toàn bộ đơn `active`/`pending` trên `OH` (vốn chỉ lưu lịch sử thuốc) với các phiếu khám đúng chuyên khoa, đúng ngày, các *visit* trước và các chuyên khoa khác (nhiều phiếu khám có nội dung nhưng không có thông tin liên quan đến y lệnh cần duyệt vẫn buộc phải mở đọc mới biết — tốn nhiều thời gian nhưng không mang lại kết quả, lâu dần dễ tạo thói quen ngại đọc kỹ hết; đồng thời khó nhận biết thuốc đã bị bác sĩ khác cho `discontinue`).
   * Do khối lượng đơn ngoại trú và nội trú ban ngày quá lớn, **họ phải dành thêm thời gian ngoài giờ để audit đơn ngoại trú**.
 
 ---
@@ -75,7 +75,7 @@ Từ các điểm nghẽn và bằng chứng đo đạc xác thực nêu trên, 
 > **Tên dự án:** **Hệ thống AI Agent hỗ trợ phân tích hồ sơ bệnh án và quyết định duyệt y lệnh**
 
 ### Phạm vi & Nguyên tắc Cam kết khi Triển khai
-1. **Nguyên tắc *Human-in-the-loop* (DSLS giữ toàn quyền quyết định):** Hệ thống AI Agent đóng vai trò tự động tổng hợp bối cảnh từ hồ sơ bệnh án & y lệnh, thực hiện các phép tính lâm sàng (`CrCl`/`eGFR`, `BSA`...), sàng lọc chỉ định – chống chỉ định – liều lượng – tương tác đa thuốc và hiển thị **chuỗi suy luận logic tường minh kèm trích dẫn nguồn tài liệu**. Dược sĩ lâm sàng luôn là người kiểm chứng và ra quyết định duyệt cuối cùng (`Approved` / `Hold` / `Cancelled`).
+1. **Nguyên tắc *Human-in-the-loop* (DSLS giữ toàn quyền quyết định & Không tự ý sửa liều):** Hệ thống AI Agent đóng vai trò tự động tổng hợp bối cảnh từ hồ sơ bệnh án & y lệnh, thực hiện các phép tính lâm sàng (`CrCl`/`eGFR`, `BSA`...), sàng lọc chỉ định – chống chỉ định – liều lượng – tương tác đa thuốc (bao gồm kiểm soát tổng lượng hoạt chất đưa vào cơ thể không vượt ngưỡng cho phép) và hiển thị **chuỗi suy luận logic tường minh kèm trích dẫn nguồn tài liệu**. Dược sĩ lâm sàng luôn là người kiểm chứng và ra quyết định duyệt cuối cùng (`Approved` / `Hold` / `Cancelled`). **Ứng dụng tuyệt đối không có quyền tự động chỉnh sửa trực tiếp liều lượng trên đơn thuốc** (tránh gây khó chịu cho bác sĩ như cơ chế tự động giảm liều/gộp đơn sáng – tối để giới hạn ngưỡng hoạt chất); mọi cảnh báo hoặc đề xuất điều chỉnh liều đều phải qua bước Dược sĩ nắm thông tin, duyệt và lưu lại.
 2. **Bảo mật thông tin y tế (PII) & An toàn hệ thống:**
    * Giai đoạn Tuần 3 (so sánh phương án và xây dựng bản thử nghiệm đầu tiên) sử dụng **100% dữ liệu giả lập ẩn danh hoàn toàn (`Mock/Synthetic Data`)** kết hợp tri thức y khoa/dược thư công khai — **không sử dụng dữ liệu thật của người bệnh**.
    * Ở các giai đoạn đánh giá sâu hơn (nếu được Khoa và bộ phận liên quan cấp phép), dữ liệu chỉ được xử lý tuân thủ quy chuẩn bảo mật nội bộ của Vinmec, không truyền tải thông tin định danh người bệnh ra môi trường bên ngoài.
