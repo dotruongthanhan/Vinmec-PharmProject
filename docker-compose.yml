@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: .
+      args:
+        # Chỉ lấy khoá anon (công khai) đưa vào web. Khoá service_role tuyệt đối không đi vào bước build.
+        VITE_SUPABASE_URL: ${SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+    image: vinmec-pharm-api:latest
+    # Bí mật (DEEPSEEK_API_KEY, OPENROUTER_API_KEY, DATABASE_URL...) nằm ở file .env trên máy chủ, không nằm trong image.
+    env_file: .env
+    volumes:
+      # Phản hồi và nhật ký chat nằm ngoài container để không mất khi build lại.
+      - ./data/runtime:/srv/data/runtime
+    restart: unless-stopped
+    expose:
+      - "8000"
+
+  caddy:
+    image: caddy:2
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # Đặt tên miền để Caddy tự xin HTTPS (ví dụ demo.example.com). Mặc định ":80" = chỉ HTTP, dùng để thử.
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

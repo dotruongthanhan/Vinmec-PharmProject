@@ -1,5 +1,12 @@
 export type MucDoMa = 'nghiem_trong' | 'can_luu_y' | null
 
+export interface MeResponse {
+  id: string
+  email: string | null
+  vai_tro: string
+  phien_id: string | null
+}
+
 export type KetLuanMa = 'dat' | 'can_xem' | 'khong_du_du_lieu' | 'ngoai_hdsd'
 
 export type DiUngMa = 'co_di_ung' | 'khong_di_ung_da_hoi' | 'chua_co_thong_tin'

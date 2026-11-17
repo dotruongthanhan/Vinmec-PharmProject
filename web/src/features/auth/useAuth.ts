@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { AuthSession } from './authClient'
+import type { AuthRole, AuthSession } from './authClient'
 
 export interface AuthContextValue {
   session: AuthSession | null
@@ -8,6 +8,13 @@ export interface AuthContextValue {
   isConfigured: boolean
   isLoading: boolean
   userEmail: string | null
+  vaiTro: AuthRole | null
+  phienId: string | null
+  isForbidden: boolean
+  verificationError: string | null
+  getAccessToken: () => Promise<string | null>
+  refreshSession: () => Promise<AuthSession | null>
+  verifyRole: () => Promise<void>
   signIn: (email: string, password: string) => Promise<string | null>
   enterDemoMode: () => void
   signOut: () => Promise<void>

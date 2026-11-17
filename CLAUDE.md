@@ -11,6 +11,8 @@ Hệ thống AI agent hỗ trợ dược sĩ lâm sàng (DSLS) thẩm định y 
 - **Plan 1.2 – giao diện và trải nghiệm cho dược sĩ** (bố cục, thẻ nhận định, khung hỏi thêm, trạng thái, tổ chức code giao diện): `plan/plan-1.2-giao-dien-ui-ux.md`.
 - **Plan 1.4 – hệ thống thiết kế cho bản web** (công nghệ giao diện, bảng màu theo nghĩa, thang chữ, đặc tả từng thành phần, danh sách kiểm): `plan/plan-1.4-he-thong-thiet-ke.md`. Mọi brief giao diện phải bám bản này; nó thay câu "CSS thuần, không thêm thư viện giao diện" của plan 1.2.
 - **Plan 1.3 – dữ liệu** (sơ đồ nguồn, 4 tầng xử lý, chuẩn hoá tên thuốc, gộp nguồn và xử lý trùng theo tầng tin cậy, cổng chất lượng): `plan/plan-1.3-du-lieu-thu-thap-tong-hop-tien-xu-ly.md`.
+- **Plan 1.5 – bảo mật** (xác thực JWT Supabase, refresh token, vai trò `duoc_si_ls` / `admin`, sở hữu hội thoại và phản hồi, kiểm thử, giới hạn tốc độ đang hoãn, bảng theo dõi): `plan/plan-1.5-bao-mat-xac-thuc-phan-quyen.md`; hợp đồng `plan/api-hop-dong-v1.3-xac-thuc.md`.
+- **Plan 1.6 – dữ liệu lên Supabase và chuyển từ tệp mock sang SQL** (bản đồ dữ liệu, quy trình nạp, các đợt M0–M5, cổng dữ liệu thật, bảng theo dõi D1–D14): `plan/plan-1.6-du-lieu-tong-hop-len-supabase-va-chuyen-doi.md`. Đến hết demo 20/11 ứng dụng vẫn đọc tệp `data/mock/demo`.
 - Tệp nguồn tri thức đã tải (50 nhãn openFDA, DDInter) và tình trạng từng nguồn: `data/kb_sources/README.md`.
 - **Hợp đồng API** giữa backend FastAPI (`app/api/`) và bản web React (`web/`): `plan/api-hop-dong-v1.md` và phần bổ sung `plan/api-hop-dong-v1.1-bo-sung.md` (bước AI chạy nền, mở đoạn nguồn). Muốn đổi tên trường thì sửa file này trước.
 - Theo dõi tiến độ: `plan/TRACKING.md`

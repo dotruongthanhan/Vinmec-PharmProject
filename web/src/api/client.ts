@@ -7,6 +7,7 @@ import type {
   GuiPhanHoi,
   HealthResponse,
   KetQuaAI,
+  MeResponse,
   PhanHoiDaGhi,
   TraLoi,
 } from './types.ts'
@@ -33,6 +34,7 @@ export interface SavedConversationTurn {
 }
 
 export interface ReviewApiClient {
+  getMe(): Promise<MeResponse>
   getHealth(): Promise<HealthResponse>
   getCases(): Promise<DanhSachCa>
   getCase(caId: string): Promise<ChiTietCa>
@@ -47,6 +49,13 @@ export interface ReviewApiClient {
 }
 
 export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+
+export interface AuthHooks {
+  getAccessToken(): Promise<string | null>
+  refreshSession(): Promise<unknown | null>
+  onUnauthorized(): void | Promise<void>
+  onForbidden?(): void
+}
 
 function isRecordObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -72,17 +81,52 @@ function extractApiError(parsed: unknown): { ma: string; thong_bao: string } | n
 export class ApiClient implements ReviewApiClient {
   private readonly baseUrl: string
   private readonly fetchImpl?: FetchLike
+  private readonly auth?: AuthHooks
+  private refreshPromise: Promise<string | null> | null = null
+  private refreshRevision = 0
 
-  constructor(baseUrl = '/api', fetchImpl?: FetchLike) {
+  constructor(baseUrl = '/api', fetchImpl?: FetchLike, auth?: AuthHooks) {
     this.baseUrl = baseUrl.replace(/\/+$/, '')
     this.fetchImpl = fetchImpl
+    this.auth = auth
+  }
+
+  private async refreshToken(revision: number): Promise<string | null> {
+    if (!this.auth) return null
+    if (this.refreshPromise) return this.refreshPromise
+    // Một phản hồi 401 đến muộn dùng lại kết quả gia hạn vừa hoàn tất.
+    if (revision !== this.refreshRevision) return this.auth.getAccessToken()
+    this.refreshPromise = (async () => {
+      try {
+        if (!await this.auth!.refreshSession()) return null
+        return await this.auth!.getAccessToken()
+      } catch {
+        return null
+      } finally {
+        this.refreshRevision += 1
+      }
+    })().finally(() => { this.refreshPromise = null })
+    return this.refreshPromise
   }
 
   private async request<T>(path: string, init?: RequestInit): Promise<T> {
+    const revision = this.refreshRevision
+    const token = await this.auth?.getAccessToken() ?? null
+    return this.send<T>(path, init, token, revision, false, token ? [token] : [])
+  }
+
+  private async send<T>(path: string, init: RequestInit | undefined, token: string | null,
+    revision: number, retried: boolean, secrets: string[]): Promise<T> {
+    init?.signal?.throwIfAborted()
     const fetchFn: FetchLike = this.fetchImpl ?? globalThis.fetch
+    const headers = new Headers(init?.headers)
+    if (token) headers.set('Authorization', `Bearer ${token}`)
+    const redact = (message: string): string => secrets.reduce(
+      (safe, secret) => safe.split(secret).join('[ẩn]'), message,
+    )
     let response: Response
     try {
-      response = await fetchFn(`${this.baseUrl}${path}`, init)
+      response = await fetchFn(`${this.baseUrl}${path}`, { ...init, headers })
     } catch (err) {
       if (
         (err instanceof DOMException && err.name === 'AbortError') ||
@@ -91,13 +135,24 @@ export class ApiClient implements ReviewApiClient {
         throw err
       }
       if (err instanceof ApiError) {
-        throw err
+        throw new ApiError(redact(err.ma), redact(err.thong_bao), err.status)
       }
       const message =
         err instanceof Error && err.message
           ? `Không thể kết nối máy chủ: ${err.message}`
           : 'Không thể kết nối máy chủ.'
-      throw new ApiError('loi_he_thong', message, 0)
+      throw new ApiError('loi_he_thong', redact(message), 0)
+    }
+
+    if (response.status === 401 && this.auth && !retried) {
+      const nextToken = await this.refreshToken(revision)
+      init?.signal?.throwIfAborted()
+      if (nextToken) {
+        return this.send<T>(path, init, nextToken, this.refreshRevision, true, [...secrets, nextToken])
+      }
+    }
+    if (response.status === 401 && this.auth) {
+      await this.auth.onUnauthorized()
     }
 
     let rawText = ''
@@ -122,11 +177,13 @@ export class ApiClient implements ReviewApiClient {
       if (jsonValid) {
         const structured = extractApiError(parsed)
         if (structured !== null) {
-          throw new ApiError(structured.ma, structured.thong_bao, response.status)
+          if (response.status === 403 && structured.ma === 'khong_co_quyen') this.auth?.onForbidden?.()
+          throw new ApiError(redact(structured.ma), redact(structured.thong_bao), response.status)
         }
       }
       const fallbackMsg = rawText.trim() || `Yêu cầu thất bại (HTTP ${response.status})`
-      throw new ApiError('loi_he_thong', fallbackMsg, response.status)
+      const fallbackCode = response.status === 401 ? 'chua_dang_nhap' : 'loi_he_thong'
+      throw new ApiError(fallbackCode, redact(fallbackMsg), response.status)
     }
 
     if (!jsonValid) {
@@ -142,6 +199,10 @@ export class ApiClient implements ReviewApiClient {
 
   getHealth(): Promise<HealthResponse> {
     return this.request<HealthResponse>('/health')
+  }
+
+  getMe(): Promise<MeResponse> {
+    return this.request<MeResponse>('/me')
   }
 
   getCases(): Promise<DanhSachCa> {

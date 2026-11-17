@@ -68,6 +68,14 @@ export function useChat(
   >({})
   const nextIdRef = useRef<number>(1)
 
+  useEffect(() => () => {
+    for (const controller of Object.values(controllersRef.current)) controller?.abort()
+    controllersRef.current = {}
+    messagesRef.current = {}
+    sendingRef.current = {}
+    lastQueryByCaseRef.current = {}
+  }, [])
+
   useEffect(() => {
     if (!client.getConversations) {
       return
