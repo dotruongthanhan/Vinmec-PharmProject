@@ -6,10 +6,12 @@ import type { NhanDinh, PhanHoiDaGhi } from '@/api/types'
 import { AppShell } from '@/app/AppShell'
 import { AssistantPanel } from '@/features/assistant/AssistantPanel'
 import type { FocusedFindingContext } from '@/features/assistant/AssistantPanel'
+import type { AssistantHistoryEntry } from '@/features/assistant/HistoryDialog'
 import { useAuth } from '@/features/auth/useAuth'
 import { EvidenceDialog } from '@/features/findings/EvidenceDialog'
 import { OrderDetailView } from '@/features/order-detail/OrderDetailView'
 import { OrdersTable } from '@/features/orders/OrdersTable'
+import { SettingsDialog } from '@/features/settings/SettingsDialog'
 import { SidebarNav } from '@/features/sidebar/SidebarNav'
 import { DetailSkeleton, ErrorState } from '@/features/states/StateViews'
 import { mergeFindingsFeedback, selectFindingsSource } from '@/lib/aiReview'
@@ -37,7 +39,8 @@ import type { EvidenceTarget } from '@/lib/uiTypes'
 import { useAiReview } from '@/state/useAiReview'
 import { useCaseDetail } from '@/state/useCaseDetail'
 import { useCases } from '@/state/useCases'
-import { useChat } from '@/state/useChat'
+import { formatHistoryTime } from '@/lib/historyTime'
+import { GLOBAL_CHAT_ID, useChat } from '@/state/useChat'
 import { useFeedback } from '@/state/useFeedback'
 
 interface DialogState {
@@ -65,6 +68,7 @@ export function WorkspacePage() {
   )
   const [drawerSidebarOpen, setDrawerSidebarOpen] = useState<boolean>(false)
   const [drawerAssistantOpen, setDrawerAssistantOpen] = useState<boolean>(false)
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
 
   const [activeFilter, setActiveFilter] = useState<OrderSelectionFilter>({
     type: 'group',
@@ -140,8 +144,9 @@ export function WorkspacePage() {
     [applyFeedbackToCase, markAllResponded, detail, ai.trangThai, ai.ketQua, sessionFeedback],
   )
 
+  const currentChatId = activeCaseId ?? GLOBAL_CHAT_ID
   const feedback = useFeedback(apiClient, handleFeedbackSuccess)
-  const chat = useChat(apiClient, activeCaseId)
+  const chat = useChat(apiClient, currentChatId)
 
   const allCases = useMemo(() => casesData?.cases ?? [], [casesData])
   const counts = useMemo(() => countOrderGroups(allCases), [allCases])
@@ -162,6 +167,36 @@ export function WorkspacePage() {
       .filter((item): item is NonNullable<typeof item> => item !== undefined)
   }, [allCases, chat.askedCaseIds])
 
+  const assistantHistory = useMemo<AssistantHistoryEntry[]>(() => {
+    const byId = new Map(allCases.map((c) => [c.ca_id, c]))
+    return chat.askedCaseIds.map((id) => {
+      const row = byId.get(id)
+      const isGlobal = id === GLOBAL_CHAT_ID
+      return {
+        chatId: id,
+        title: isGlobal ? 'Hỏi đáp chung' : (row?.ma_y_lenh ?? id),
+        patient: isGlobal ? '' : (row?.nguoi_benh_tom_tat ?? ''),
+        khoa: row?.khoa ?? '',
+        moTa: row?.mo_ta ?? '',
+        thuoc: row?.thuoc ?? [],
+        thoiDiemKe: row?.thoi_diem_ke ? formatHistoryTime(row.thoi_diem_ke) : '',
+        lastAt: chat.getLastActivity(id),
+        messages: chat.getMessages(id),
+      }
+    })
+  }, [allCases, chat])
+
+  const handleOpenHistory = useCallback(
+    (chatId: string) => {
+      if (chatId === GLOBAL_CHAT_ID) {
+        navigate('/app')
+      } else {
+        navigate(`/app/y-lenh/${encodeURIComponent(chatId)}`)
+      }
+    },
+    [navigate],
+  )
+
   const displayedFindings = useMemo(() => {
     if (!detail) {
       return null
@@ -181,19 +216,6 @@ export function WorkspacePage() {
     [displayedFindings],
   )
 
-  const navigationOrderList = useMemo(() => {
-    if (sortedOrders.some((c) => c.ca_id === activeCaseId)) {
-      return sortedOrders
-    }
-    return allCases
-  }, [sortedOrders, allCases, activeCaseId])
-
-  const currentIdx = activeCaseId
-    ? navigationOrderList.findIndex((c) => c.ca_id === activeCaseId)
-    : -1
-  const canPrev = currentIdx > 0
-  const canNext = currentIdx !== -1 && currentIdx < navigationOrderList.length - 1
-
   const handleFocusSearch = useCallback(() => {
     setDrawerSidebarOpen(false)
     if (!isListRoute) {
@@ -210,6 +232,9 @@ export function WorkspacePage() {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
         handleFocusSearch()
+      } else if ((event.ctrlKey || event.metaKey) && event.key === ',') {
+        event.preventDefault()
+        setSettingsOpen((prev) => !prev)
       }
     }
     window.addEventListener('keydown', onKeyDown)
@@ -268,6 +293,14 @@ export function WorkspacePage() {
     [sortField],
   )
 
+  const handleSelectSort = useCallback(
+    (field: OrderSortField, direction: OrderSortDirection) => {
+      setSortField(field)
+      setSortDirection(direction)
+    },
+    [],
+  )
+
   const handleResetFilters = useCallback(() => {
     setActiveFilter({ type: 'group', group: 'tat_ca' })
     setSearchQuery('')
@@ -298,6 +331,18 @@ export function WorkspacePage() {
     }
   }, [])
 
+  const handleOpenSettings = useCallback(() => {
+    setDrawerSidebarOpen(false)
+    setSettingsOpen(true)
+  }, [])
+
+  const handleSignIn = useCallback(() => {
+    setDrawerSidebarOpen(false)
+    void signOut().then(() => {
+      navigate('/dang-nhap')
+    })
+  }, [signOut, navigate])
+
   const handleSignOut = useCallback(() => {
     void signOut().then(() => {
       navigate('/dang-nhap', { replace: true })
@@ -324,6 +369,8 @@ export function WorkspacePage() {
     onOpenCase: handleOpenCase,
     onFocusSearch: handleFocusSearch,
     onToggleCollapse: handleToggleSidebar,
+    onOpenSettings: handleOpenSettings,
+    onSignIn: handleSignIn,
     onSignOut: handleSignOut,
   }
 
@@ -359,10 +406,13 @@ export function WorkspacePage() {
           <AssistantPanel
             client={apiClient}
             detail={detail && detail.ca_id === activeCaseId ? detail : null}
+            globalHoiThemEnabled={Boolean(casesData?.che_do.hoi_them ?? true)}
+            history={assistantHistory}
+            onOpenHistory={handleOpenHistory}
             attentionFindings={attentionFindings}
-            messages={activeCaseId ? chat.getMessages(activeCaseId) : []}
-            sending={activeCaseId ? chat.isSending(activeCaseId) : false}
-            lastStatus={activeCaseId ? chat.getLastStatus(activeCaseId) : null}
+            messages={chat.getMessages(currentChatId)}
+            sending={chat.isSending(currentChatId)}
+            lastStatus={chat.getLastStatus(currentChatId)}
             focusedFinding={focusedFinding}
             onClearFocusedFinding={() => setFocusedFinding(null)}
             onSend={chat.sendQuestion}
@@ -381,7 +431,7 @@ export function WorkspacePage() {
         }
       >
         {isListRoute ? (
-          <div className="mx-auto w-full max-w-[1040px] px-2 py-5 sm:px-4 flex flex-col gap-3">
+          <div className="mx-auto w-full max-w-[1200px] px-3 py-5 sm:px-6 flex flex-col gap-3">
             {/* Ô tìm kiếm cho màn hình hẹp (< 640px) khi ô trên thanh công cụ ẩn */}
             <div className="list-search relative flex items-center">
               <Search
@@ -419,7 +469,9 @@ export function WorkspacePage() {
               searchQuery={searchQuery}
               sortField={sortField}
               sortDirection={sortDirection}
+              departments={counts.departments.map((d) => d.khoa)}
               onToggleSort={handleToggleSort}
+              onSelectSort={handleSelectSort}
               onOpenOrder={handleOpenCase}
               onResetFilters={handleResetFilters}
               onRetry={reloadCases}
@@ -433,19 +485,6 @@ export function WorkspacePage() {
             aiThoiGianMs={ai.thoiGianMs}
             aiCanhBao={ai.canhBao}
             sessionFeedbackForCase={sessionFeedback[detail.ca_id] ?? {}}
-            canPrev={canPrev}
-            canNext={canNext}
-            onBackToList={() => navigate('/app')}
-            onPrevOrder={() => {
-              if (canPrev) {
-                handleOpenCase(navigationOrderList[currentIdx - 1].ca_id)
-              }
-            }}
-            onNextOrder={() => {
-              if (canNext) {
-                handleOpenCase(navigationOrderList[currentIdx + 1].ca_id)
-              }
-            }}
             onRerunAi={ai.chayLai}
             isFeedbackSubmitting={feedback.isSubmitting}
             getFeedbackError={feedback.getError}
@@ -474,6 +513,20 @@ export function WorkspacePage() {
         client={apiClient}
         returnFocusEl={dialogState.triggerEl}
         onClose={handleCloseEvidence}
+      />
+
+      <SettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        userEmail={userEmail}
+        isDemoMode={isDemoMode}
+        cheDo={activeMode}
+        sidebarCollapsed={sidebarCollapsed}
+        assistantCollapsed={assistantCollapsed}
+        onToggleSidebarCollapse={handleToggleSidebar}
+        onToggleAssistantCollapse={handleToggleAssistant}
+        onSignIn={handleSignIn}
+        onSignOut={handleSignOut}
       />
     </>
   )

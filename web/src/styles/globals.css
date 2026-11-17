@@ -6,50 +6,66 @@
 .workspace-center, .orders-panel { container-type: inline-size; }
 .toolbar-search, .toolbar-mode { display: none; }
 .order-nav-label { display: none; }
-.orders-table th, .orders-table td { padding: 2px 4px; overflow-wrap: anywhere; }
-.orders-table th { text-transform: none; letter-spacing: normal; }
-.orders-table .order-dot { width: 16px; }
-.orders-table .order-time { width: 64px; }
-.orders-table .order-code { width: 88px; }
-.orders-table .order-patient { width: 60px; }
-.orders-table .order-dept { width: 52px; }
-.orders-table .order-result { width: 112px; }
-.orders-table .order-feedback { width: 24px; }
+
+/* Vùng neo thanh 7 thẻ dính ở mép trên: tắt scroll-anchoring ở phần tử cha để tránh rung giật khi dính */
+.detail-sticky-host { overflow-anchor: none; }
+.detail-sticky-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  container-type: scroll-state;
+  container-name: detail-tabs-bar;
+}
+.detail-sticky-inner {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-line);
+  transition: box-shadow 150ms ease, background-color 150ms ease;
+}
+@container detail-tabs-bar scroll-state(stuck: top) {
+  .detail-sticky-inner {
+    box-shadow: var(--shadow-xs);
+  }
+}
+
+/* Hàng thẻ nằm trên một dòng duy nhất, cuộn ngang mượt khi hẹp mà không hiện thanh cuộn thô */
+.tabs-scroller {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: none;
+}
+.tabs-scroller::-webkit-scrollbar {
+  display: none;
+}
+.tabs-scroller > [role='tab'] {
+  flex: none;
+  scroll-snap-align: start;
+}
+.orders-table th, .orders-table td { padding: 6px 6px; vertical-align: middle; }
+.orders-table th { text-transform: none; letter-spacing: normal; white-space: nowrap; }
+.orders-table .order-priority { width: 12%; white-space: nowrap; }
+.orders-table .order-time { width: 12%; }
+.orders-table .order-code { width: 12%; }
+.orders-table .order-patient-id { width: 11%; }
+.orders-table .order-patient { width: 13%; }
+.orders-table .order-dept { width: 15%; }
+.orders-table .order-status { width: 13%; }
+.orders-table .order-ai-warn { width: 12%; }
 .factor-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; align-items: stretch; }
 @container (min-width: 500px) {
-  .factor-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .factor-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @container (min-width: 700px) {
   .toolbar-search { display: flex; }
   .list-search { display: none; }
   .order-nav-label { display: inline; }
-  .factor-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .orders-table .order-time { width: 80px; }
-  .orders-table .order-code { width: 96px; }
-  .orders-table .order-patient { width: 80px; }
-  .orders-table .order-dept { width: 88px; }
+}
+@container (min-width: 880px) {
+  .factor-strip { grid-template-columns: repeat(7, minmax(0, 1fr)); }
 }
 @container (min-width: 1000px) {
   .toolbar-mode { display: inline-flex; }
-}
-@container (max-width: 539px) {
-  .orders-table .order-time { width: 52px; }
-  .orders-table .order-code { width: 80px; }
-  .orders-table .order-patient { width: 54px; }
-  .orders-table .order-dept { width: 44px; }
-  .orders-table .order-result { width: 100px; }
-  .orders-table td:nth-child(7) > span { white-space: normal; font-size: var(--text-2xs); }
-  .orders-table .order-feedback { width: 20px; }
-}
-@container (max-width: 399px) {
-  .orders-table .order-dot { width: 12px; }
-  .orders-table .order-time { width: 42px; }
-  .orders-table .order-code { width: 66px; }
-  .orders-table .order-patient { width: 48px; }
-  .orders-table .order-dept { width: 36px; }
-  .orders-table .order-result { width: 88px; }
-  .orders-table th, .orders-table td { padding-inline: 2px; }
-  .orders-table td:nth-child(3) { font-size: var(--text-2xs); }
 }
 
 @layer base {
@@ -163,3 +179,111 @@
     background-image: none;
   }
 }
+
+/* ---------- Trang chủ ---------- */
+.landing-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.landing-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 70% at 60% 30%, black 20%, transparent 75%);
+}
+.landing-hero::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -30%;
+  right: -10%;
+  width: 760px;
+  height: 760px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-primary) 22%, transparent),
+    transparent
+  );
+  pointer-events: none;
+}
+.landing-display {
+  font-size: clamp(36px, 5.4vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+.landing-h2 {
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+.landing-frame {
+  border-radius: 16px;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 6px color-mix(in oklab, var(--color-primary) 8%, transparent);
+}
+.landing-ink {
+  background: var(--color-ink);
+  color: var(--color-ink-fg);
+}
+
+/* ---------- Ảnh banner trang chủ ---------- */
+.landing-photo img {
+  box-shadow:
+    0 30px 60px -20px color-mix(in oklab, var(--color-ink) 55%, transparent),
+    0 0 0 1px var(--color-line-strong);
+}
+.landing-photo-shade {
+  background:
+    linear-gradient(to top, color-mix(in oklab, var(--color-ink) 55%, transparent), transparent 55%),
+    linear-gradient(to bottom right, color-mix(in oklab, var(--color-primary) 14%, transparent), transparent 60%);
+}
+.landing-chip {
+  box-shadow: 0 10px 30px -8px color-mix(in oklab, var(--color-ink) 45%, transparent);
+}
+/* Chữ nhấn của tiêu đề: dải màu và quầng sáng nhẹ để nổi bật */
+.landing-accent {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-primary),
+    color-mix(in oklab, var(--color-primary) 55%, var(--color-success-solid))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 18px color-mix(in oklab, var(--color-primary) 40%, transparent));
+}
+.landing-display,
+.landing-h2 {
+  text-shadow: 0 2px 24px color-mix(in oklab, var(--color-ink) 18%, transparent);
+}
+
+/* Lớp tối phủ ảnh banner: đậm bên trái nơi đặt chữ, nhạt dần sang phải để vẫn thấy ảnh */
+.hero-shade {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-ink) 94%, transparent) 0%,
+      color-mix(in oklab, var(--color-ink) 78%, transparent) 42%,
+      color-mix(in oklab, var(--color-ink) 42%, transparent) 100%
+    ),
+    linear-gradient(to top, color-mix(in oklab, var(--color-ink) 70%, transparent), transparent 40%);
+}
+
+/* Logo Vinmec: hai bản cho nền sáng và nền tối, chỉ hiện một bản theo chủ đề */
+.logo-on-dark { display: none; }
+:root[data-theme="dark"] .logo-on-light { display: none; }
+:root[data-theme="dark"] .logo-on-dark { display: block; }

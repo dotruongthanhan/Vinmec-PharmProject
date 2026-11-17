@@ -100,6 +100,16 @@ Trạng thái: `chờ giao` · `đang giao` · `chờ review` · `cần sửa` �
 
 - **16/11 (phiên 3)** – Người dùng chê bản web xấu, hỏi về Next.js. Claude viết **plan 1.4** (`plan-1.4-he-thong-thiet-ke.md`): giữ Vite + React, thêm Tailwind v4 + Radix kiểu shadcn + lucide + Inter; bảng màu theo nghĩa, thang chữ, khoảng cách, đặc tả từng thành phần, danh sách kiểm. Đề xuất chưa chuyển Next (lý do ở mục 1.1 của plan 1.4). Viết brief T22.
 
+- **17/11 (phiên 6 – rà soát Backend/UI, Chatbot & Supabase):**
+  - **OpenRouter & Truy xuất:** Đã cập nhật `OPENROUTER_API_KEY` mới vào `.env`, chuyển `embedding.active` sang `nvidia/nemotron-3.5-embed-1b:free` (2048 chiều, `HTTP 200 OK`) và `rerank.active` sang `cohere/rerank-v3.5` (`HTTP 200 OK`); sửa `index_corpus` lập chỉ mục `Bm25Index` trước và bắt `ProviderError` để không bao giờ sập truy xuất từ khoá.
+  - **Chatbot (`Trợ lý AI`):** Mở khoá hỏi đáp chung ngay trên màn hình danh sách `/app` (`__global__` / `POST /api/ask`) song song với hỏi đáp theo từng ca (`/api/cases/{ca_id}/ask`); lưu trữ lịch sử hội thoại bền vững tại `data/runtime/hoi_thoai.jsonl` (`GET /api/conversations`, `POST /api/conversations/{ca_id}/clear`); nới cổng kiểm chứng trong `ask.py` & `hoi_them.v1.md` để AI trả lời tự nhiên, mạch lạc kể cả khi thiếu nguồn tài liệu thay vì chặn cứng bằng câu rule-based.
+  - **Supabase (`T14`):** Chạy nạp thật lược đồ (`vector`, `nghiep_vu`, `tri_thuc`) và dữ liệu (`cases`, `kb`, `ddinter`, `embeddings`) qua `python -m app.db all`.
+  - **Các hạng mục chủ động để lại sau (theo quyết định của người dùng ngày 17/11):**
+    1. **Đăng nhập / Xác thực (Supabase Auth & JWT Backend):** Tạm thời chưa nối thật, giữ chế độ Demo không xác thực để tập trung luồng chính trước.
+    2. **Bộ luật ngầm định (`app/rules/` & `quy_tac_lieu_than.json`):** Tạm giữ 5 luật hiện có; người dùng sẽ tự custom thêm luật và bảng liều sau.
+    3. **Luồng điều phối Agent (`LangGraph` / multi-turn tool calling):** Tạm giữ luồng điều phối hiện tại đang chạy ổn định; người dùng sẽ tự tổ chức và kiểm tra lại flow sau.
+    4. **Các trường suy diễn trên bảng danh sách y lệnh (`Mã BN`, `Ưu tiên`, `Trạng thái` Đã duyệt / Đang chờ / Đã hủy) và API duyệt đơn:** Sẽ thực hiện ở đợt tiếp theo sau khi chốt xong phần hiện tại.
+
 ## 5. Việc chờ người dùng
 
 0. Xoá thư mục `tests/architecture/.tmp` bằng quyền quản trị. Cấu hình xong Supabase (bật phần mở rộng `vector`) và đặt `DATABASE_URL` vào `.env` (cho T14). Xin Khoa Dược bản chính thức QĐ 5948/QĐ-BYT và quyền dùng Dược thư.

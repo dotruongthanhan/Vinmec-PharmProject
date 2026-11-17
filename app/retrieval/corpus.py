@@ -4,7 +4,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from app.core.errors import RetrievalError
+from app.core.errors import ProviderError, RetrievalError
 from app.core.interfaces import Embedder, KeywordIndex, VectorStore
 from app.core.types import Chunk
 
@@ -32,7 +32,10 @@ def load_corpus(path: Path) -> list[Chunk]:
 def index_corpus(
     chunks: list[Chunk], embedder: Embedder, vector_store: VectorStore, keyword_index: KeywordIndex
 ) -> None:
-    """Nhúng nội dung nguồn rồi nạp kho véc-tơ và chỉ mục từ khoá."""
-    vectors = embedder.embed_documents([chunk.noi_dung_nhung for chunk in chunks])
-    vector_store.upsert(chunks, vectors)
+    """Lập chỉ mục từ khoá trước, sau đó nhúng nội dung nguồn nạp kho véc-tơ."""
     keyword_index.build(chunks)
+    try:
+        vectors = embedder.embed_documents([chunk.noi_dung_nhung for chunk in chunks])
+    except ProviderError:
+        return
+    vector_store.upsert(chunks, vectors)

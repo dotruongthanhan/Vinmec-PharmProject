@@ -26,6 +26,12 @@ export class ApiError extends Error {
   }
 }
 
+export interface SavedConversationTurn {
+  cau_hoi: string
+  tra_loi: TraLoi
+  thoi_diem?: string
+}
+
 export interface ReviewApiClient {
   getHealth(): Promise<HealthResponse>
   getCases(): Promise<DanhSachCa>
@@ -36,6 +42,8 @@ export interface ReviewApiClient {
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI>
   getAi(caId: string): Promise<KetQuaAI | null>
   getSource(caId: string, doanTrichId: string): Promise<DoanNguon>
+  getConversations?(): Promise<Record<string, SavedConversationTurn[]>>
+  clearConversation?(caId: string): Promise<void>
 }
 
 export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
@@ -196,5 +204,15 @@ export class ApiClient implements ReviewApiClient {
     return this.request<DoanNguon>(
       `/cases/${encodeURIComponent(caId)}/sources/${encodeURIComponent(doanTrichId)}`,
     )
+  }
+
+  getConversations(): Promise<Record<string, SavedConversationTurn[]>> {
+    return this.request<Record<string, SavedConversationTurn[]>>('/conversations')
+  }
+
+  async clearConversation(caId: string): Promise<void> {
+    await this.request<{ ok: boolean }>(`/conversations/${encodeURIComponent(caId)}/clear`, {
+      method: 'POST',
+    })
   }
 }

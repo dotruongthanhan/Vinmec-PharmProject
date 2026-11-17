@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { MOCK_CASE_DETAILS } from '../api/mockData.ts'
 import {
   computeSixFactorsStatus,
+  filterTreatmentSheetNotes,
+  isTreatmentSheetNote,
   stripPendingSourceNote,
 } from '../lib/orderDetail.ts'
 
@@ -15,6 +17,7 @@ describe('trạng thái sáu yếu tố thẩm định', () => {
       [4, 'chua_co_luat'],
       [5, 'chua_co_luat'],
       [6, 'co_van_de'],
+      [7, 'dat'],
     ])
 
     const emptyFactors = computeSixFactorsStatus({
@@ -37,5 +40,14 @@ describe('trạng thái sáu yếu tố thẩm định', () => {
     const note = 'Nguyên văn đoạn nguồn sẽ có khi nối kho tri thức. (Dòng luật chưa được dược sĩ duyệt)'
     expect(stripPendingSourceNote(note, true)).toBe('(Dòng luật chưa được dược sĩ duyệt)')
     expect(stripPendingSourceNote(note, false)).toBe(note)
+  })
+
+  it('lọc đúng phiếu điều trị từ danh sách diễn biến mà không tự tạo bản ghi giả', () => {
+    const demo02Notes = MOCK_CASE_DETAILS['DEMO-02'].chi_tiet.dien_bien
+    const demo06Notes = MOCK_CASE_DETAILS['DEMO-06'].chi_tiet.dien_bien
+    expect(filterTreatmentSheetNotes(demo02Notes)).toHaveLength(1)
+    expect(filterTreatmentSheetNotes(demo06Notes)).toHaveLength(0)
+    expect(isTreatmentSheetNote({ loai_nhan: 'Phiếu điều trị' })).toBe(true)
+    expect(isTreatmentSheetNote({ loai_nhan: 'Phiếu khám' })).toBe(false)
   })
 })

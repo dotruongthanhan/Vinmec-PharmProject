@@ -45,6 +45,25 @@ def feedback(ca_id: str, body: s.GuiPhanHoi, request: Request) -> s.PhanHoiDaGhi
     return _service(request).feedback(ca_id, body)
 
 
+@router.get("/conversations")
+def list_conversations(request: Request) -> dict[str, list[dict[str, object]]]:
+    """Đọc lịch sử hội thoại đã lưu theo từng phạm vi (chung và từng ca)."""
+    return _service(request).list_conversations()
+
+
+@router.post("/conversations/{ca_id}/clear")
+def clear_conversation(ca_id: str, request: Request) -> dict[str, bool]:
+    """Xoá lịch sử hội thoại của một phạm vi."""
+    _service(request).clear_conversation(ca_id)
+    return {"ok": True}
+
+
+@router.post("/ask", response_model=s.TraLoi)
+def ask_global(body: s.GuiCauHoi, request: Request) -> s.TraLoi:
+    """Trả lời câu hỏi chung trên toàn bộ danh sách y lệnh và kho tài liệu."""
+    return _service(request).ask("__global__", body)
+
+
 @router.post("/cases/{ca_id}/ask", response_model=s.TraLoi)
 def ask(ca_id: str, body: s.GuiCauHoi, request: Request) -> s.TraLoi:
     """Trả lời câu hỏi theo ca bệnh đang mở dựa trên hồ sơ và tài liệu."""

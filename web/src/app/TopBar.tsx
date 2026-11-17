@@ -1,4 +1,5 @@
 import {
+  ArrowLeft,
   ChevronRight,
   Menu,
   PanelRightClose,
@@ -13,6 +14,7 @@ import type { CheDo } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
 import { IconButton } from '@/components/ui/icon-button'
 import { Kbd } from '@/components/ui/kbd'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 export interface TopBarProps {
   cheDo: CheDo | null
@@ -48,7 +50,7 @@ export function TopBar({
 
   return (
     <header
-      className="workspace-toolbar flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-line bg-surface px-3 py-1.5"
+      className="workspace-toolbar flex min-h-11 shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-line bg-canvas px-4 py-1.5"
       aria-label="Thanh công cụ bàn làm việc"
     >
       <div className="flex shrink-0 items-center gap-2">
@@ -61,13 +63,28 @@ export function TopBar({
           />
         ) : null}
 
+        {activeOrderCode ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/app"
+                aria-label="Quay lại danh sách y lệnh"
+                className="inline-flex size-7 items-center justify-center rounded-sm text-fg-muted transition-colors duration-120 hover:bg-surface-hover hover:text-fg"
+              >
+                <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden="true" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Quay lại danh sách</TooltipContent>
+          </Tooltip>
+        ) : null}
+
         <nav aria-label="Đường dẫn" className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-sm">
           <Link
             to="/app"
             className={
               activeOrderCode
                 ? 'text-fg-muted hover:text-fg transition-colors duration-120'
-                : 'font-semibold text-fg'
+                : 'font-medium text-fg'
             }
           >
             Y lệnh
@@ -99,13 +116,13 @@ export function TopBar({
             type="search"
             value={searchQuery}
             aria-label="Tìm kiếm y lệnh"
-            placeholder="Tìm y lệnh, thuốc, khoa…"
+            placeholder="Tìm ca, thuốc…"
             onFocus={onSearchFocusOrSubmit}
             onChange={(e) => {
               onSearchChange(e.target.value)
               onSearchFocusOrSubmit()
             }}
-            className="h-8 w-44 rounded-sm border border-line-strong bg-surface pl-8 pr-14 text-xs text-fg placeholder:text-fg-subtle focus:border-primary"
+            className="h-7 w-52 lg:w-60 rounded-sm border border-line bg-surface pl-8 pr-14 text-xs text-fg placeholder:text-fg-subtle focus:border-primary"
           />
           {searchQuery ? (
             <button
@@ -121,21 +138,21 @@ export function TopBar({
           )}
         </div>
 
-        <Badge tone="warning" variant="soft" className="toolbar-mode">
+        <Badge tone="neutral" variant="soft" className="toolbar-mode border-transparent text-fg-subtle">
           Dữ liệu giả lập
         </Badge>
 
         <Badge
           tone={isAiEnabled ? 'ai' : 'neutral'}
           variant="soft"
-          className="toolbar-mode"
+          className="toolbar-mode border-transparent"
           icon={!isAiEnabled ? <Scale className="size-3.5" strokeWidth={1.75} /> : undefined}
         >
           {isAiEnabled ? 'AI bật' : 'Chỉ bộ luật'}
         </Badge>
 
         {isDemoMode ? (
-          <Badge tone="neutral" variant="outline">
+          <Badge tone="neutral" variant="soft" className="border-transparent text-fg-subtle">
             Demo · không xác thực
           </Badge>
         ) : null}

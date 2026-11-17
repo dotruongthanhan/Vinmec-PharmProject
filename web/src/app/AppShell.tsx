@@ -202,11 +202,11 @@ export function AppShell({
 
         <main
           aria-label="Vùng làm việc chính"
-          className="flex flex-1 min-h-0 min-w-0 flex-col overflow-y-auto overscroll-contain scroll-pt-24"
+          className="flex flex-1 min-h-0 min-w-0 flex-col overflow-y-auto overscroll-contain scroll-pt-14"
         >
           <div className="flex-1">{children}</div>
 
-          <footer className="mt-auto border-t border-line bg-canvas px-5 py-3 text-xs text-fg-subtle">
+          <footer className="mt-auto border-t border-line/70 bg-canvas px-5 py-2.5 text-xs text-fg-subtle">
             Kết quả tham khảo. Dược sĩ kiểm chứng và quyết định.
           </footer>
         </main>

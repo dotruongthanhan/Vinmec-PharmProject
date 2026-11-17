@@ -1,31 +1,31 @@
 @theme {
-  /* Màu nền, chữ, viền trung tính */
-  --color-canvas: #F6F7F9;
+  /* Màu nền, chữ, viền trung tính — tinh gọn theo phong cách biên tập phẳng */
+  --color-canvas: #F8F8F7;
   --color-paper: #FAF8F4;
-  --color-ink: #0E1A1C;
-  --color-ink-soft: #16272A;
-  --color-ink-line: #23383C;
-  --color-ink-fg: #F4F7F6;
-  --color-ink-muted: #9DB0B2;
+  --color-ink: #171716;
+  --color-ink-soft: #242422;
+  --color-ink-line: #30302D;
+  --color-ink-fg: #ECECE8;
+  --color-ink-muted: #A3A29B;
   --color-surface: #FFFFFF;
   --color-surface-raised: #FFFFFF;
-  --color-surface-muted: #F2F4F7;
-  --color-surface-hover: #F9FAFB;
-  --color-line: #E4E7EC;
-  --color-line-strong: #D0D5DD;
-  --color-fg: #101828;
-  --color-fg-muted: #475467;
-  --color-fg-subtle: #667085;
-  --color-fg-disabled: #98A2B3;
+  --color-surface-muted: #F1F1EE;
+  --color-surface-hover: #F5F5F2;
+  --color-line: #E6E6E1;
+  --color-line-strong: #CECEC7;
+  --color-fg: #181817;
+  --color-fg-muted: #52514C;
+  --color-fg-subtle: #676660;
+  --color-fg-disabled: #9B9A93;
 
   /* Màu nhấn hành động chính */
   --color-primary: #0D7983;
   --color-primary-hover: #0B646C;
-  --color-primary-soft: #E9F6F7;
-  --color-primary-line: #9BD5DA;
+  --color-primary-soft: #E9F5F6;
+  --color-primary-line: #8BD0D6;
   --color-on-primary: #FFFFFF;
-  --color-focus: #0E7C86;
-  --color-overlay: #101828;
+  --color-focus: #0F848F;
+  --color-overlay: #141413;
   --color-tooltip-fg: #FFFFFF;
 
   /* Màu mang nghĩa: danger */
@@ -65,16 +65,16 @@
   --color-ai-solid: #6172F3;
 
   /* Màu mang nghĩa: neutral */
-  --color-neutral-fg: #344054;
-  --color-neutral-bg: #F2F4F7;
-  --color-neutral-line: #D0D5DD;
-  --color-neutral-solid: #667085;
+  --color-neutral-fg: #3B3B36;
+  --color-neutral-bg: #F1F1EE;
+  --color-neutral-line: #D4D4CD;
+  --color-neutral-solid: #6C6B64;
 
-  /* Phông chữ */
-  --font-sans: 'Inter Variable', system-ui, 'Segoe UI', sans-serif;
+  /* Phông chữ Google Fonts (đồng bộ toàn hệ thống sang Plus Jakarta Sans + JetBrains Mono) */
+  --font-sans: 'Plus Jakarta Sans', 'Inter Variable', system-ui, 'Segoe UI', sans-serif;
   --font-sans--font-feature-settings: 'cv11', 'ss01';
-  --font-serif: Cambria, 'Noto Serif', 'Times New Roman', serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --font-serif: 'Plus Jakarta Sans', 'Inter Variable', system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'JetBrains Mono Variable', ui-monospace, monospace;
 
   /* Cỡ chữ và chiều cao dòng */
   --text-2xs: 11px;
@@ -110,60 +110,60 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-canvas: #142225;
-  --color-paper: #142225;
-  --color-ink: #0C1719;
-  --color-ink-soft: #182B2E;
-  --color-ink-line: #30464A;
-  --color-ink-fg: #E4ECEB;
-  --color-ink-muted: #B0C2C3;
-  --color-surface: #1B2C30;
-  --color-surface-raised: #263C40;
-  --color-surface-muted: #22363A;
-  --color-surface-hover: #2B4146;
-  --color-line: #354C51;
-  --color-line-strong: #547076;
-  --color-fg: #E4ECEB;
-  --color-fg-muted: #BACBCB;
-  --color-fg-subtle: #A6BDBF;
-  --color-fg-disabled: #789195;
-  --color-primary: #63D1D5;
-  --color-primary-hover: #8FE3E4;
-  --color-primary-soft: #1C3D42;
-  --color-primary-line: #5C9DA4;
-  --color-on-primary: #0E1A1C;
-  --color-focus: #63D1D5;
-  --color-overlay: #0C1719;
-  --color-tooltip-fg: #142225;
+  --color-canvas: #191918;
+  --color-paper: #191918;
+  --color-ink: #131312;
+  --color-ink-soft: #1E1E1C;
+  --color-ink-line: #2C2C29;
+  --color-ink-fg: #ECECE8;
+  --color-ink-muted: #A3A29B;
+  --color-surface: #20201E;
+  --color-surface-raised: #282825;
+  --color-surface-muted: #242422;
+  --color-surface-hover: #2E2E2A;
+  --color-line: #2F2F2B;
+  --color-line-strong: #464640;
+  --color-fg: #ECECE8;
+  --color-fg-muted: #C2C1BA;
+  --color-fg-subtle: #A8A79F;
+  --color-fg-disabled: #75746E;
+  --color-primary: #5BC6CB;
+  --color-primary-hover: #83DADC;
+  --color-primary-soft: #1A3234;
+  --color-primary-line: #5CA4A9;
+  --color-on-primary: #101516;
+  --color-focus: #5BC6CB;
+  --color-overlay: #0C0C0B;
+  --color-tooltip-fg: #181817;
   --color-danger-fg: #FFB4AB;
-  --color-danger-bg: #3B2224;
+  --color-danger-bg: #361E1F;
   --color-danger-line: #854A46;
   --color-danger-solid: #F37C71;
   --color-warning-fg: #FFD29B;
-  --color-warning-bg: #382B1A;
+  --color-warning-bg: #342819;
   --color-warning-line: #82643D;
   --color-warning-solid: #F5B35E;
   --color-missing-fg: #A9CEFF;
-  --color-missing-bg: #1B2D45;
+  --color-missing-bg: #1B2A3E;
   --color-missing-line: #456B97;
   --color-missing-solid: #79B4FF;
   --color-offlabel-fg: #D3BCFF;
-  --color-offlabel-bg: #302640;
+  --color-offlabel-bg: #2C233B;
   --color-offlabel-line: #756092;
   --color-offlabel-solid: #B594F2;
   --color-success-fg: #94E3BA;
-  --color-success-bg: #18362C;
+  --color-success-bg: #182F25;
   --color-success-line: #3D7D64;
   --color-success-solid: #60CC98;
   --color-ai-fg: #C3C8FF;
-  --color-ai-bg: #292D48;
+  --color-ai-bg: #24273E;
   --color-ai-line: #636C9F;
   --color-ai-solid: #A1ACF7;
-  --color-neutral-fg: #C6D5D6;
-  --color-neutral-bg: #293C40;
-  --color-neutral-line: #536C72;
-  --color-neutral-solid: #A6BDBF;
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.08);
+  --color-neutral-fg: #C9C8C1;
+  --color-neutral-bg: #272724;
+  --color-neutral-line: #464640;
+  --color-neutral-solid: #96958E;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.14);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.24);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.36);
 }

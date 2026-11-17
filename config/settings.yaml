@@ -49,14 +49,14 @@ llm:
 
 embedding:
   provider: "openrouter"
-  active: "nvidia/llama-nemotron-embed-vl-1b-v2:free"
+  active: "nvidia/nemotron-3.5-embed-1b:free"
   dimensions: 2048
   batch_size: 16
   cache_path: "data/cache/embeddings.sqlite"
 
 rerank:
   provider: "openrouter"
-  active: "nvidia/llama-nemotron-rerank-vl-1b-v2:free"
+  active: "cohere/rerank-v3.5"
 
 database:
   url_env: "DATABASE_URL"           # chuỗi kết nối nằm trong .env

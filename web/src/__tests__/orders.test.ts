@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { MOCK_CASES } from '../api/mockData.ts'
 import type { DongHangDoi } from '../api/types.ts'
 import {
+  applyOrderColumnFilters,
   countOrderGroups,
+  extractOrderDateYmd,
   filterOrders,
+  getOrderPriorityLevel,
+  getOrderWorkflowStatus,
   sortOrders,
 } from '../lib/orders.ts'
 import type { OrderRowInput } from '../lib/orders.ts'
@@ -137,5 +141,26 @@ describe('tìm kiếm y lệnh phía trình duyệt', () => {
       'MEROPENEM',
     )
     expect(byDrug.map((c) => c.ca_id)).toEqual(['DEMO-02'])
+  })
+
+  it('lọc và sắp xếp theo từng cột (ưu tiên, khoa, trạng thái, ngày lịch và giờ nhập tay)', () => {
+    expect(extractOrderDateYmd('2026-11-10T05:50:00+07:00')).toBe('2026-11-10')
+    expect(getOrderPriorityLevel(MOCK_CASES.cases[0])).toBe('cao')
+    expect(getOrderWorkflowStatus(MOCK_CASES.cases[0])).toBe('chua_duyet')
+    expect(getOrderWorkflowStatus(MOCK_CASES.cases[3])).toBe('dang_cho')
+
+    const byDateAndTime = applyOrderColumnFilters(MOCK_CASES.cases, {
+      dateExact: '2026-11-10',
+      timeText: '05:50',
+    })
+    expect(byDateAndTime.map((c) => c.ca_id)).toEqual(['DEMO-02'])
+
+    const byStatusOnHold = applyOrderColumnFilters(MOCK_CASES.cases, {
+      status: 'dang_cho',
+    })
+    expect(byStatusOnHold.map((c) => c.ca_id)).toEqual(['DEMO-03'])
+
+    const sortedByDeptAsc = sortOrders(MOCK_CASES.cases, 'khoa', 'asc')
+    expect(sortedByDeptAsc[0].khoa).toBe('Chấn thương chỉnh hình')
   })
 })

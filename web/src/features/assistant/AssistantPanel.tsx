@@ -1,8 +1,10 @@
-import {
+﻿import {
   CornerDownRight,
   ExternalLink,
+  History,
   LoaderCircle,
   MessageSquareText,
+  MessagesSquare,
   PanelRightClose,
   RotateCw,
   SendHorizontal,
@@ -28,6 +30,7 @@ import { InlineAlert } from '@/components/ui/inline-alert'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { cn } from '@/lib/cn'
 import { getSafeHttpsUrl, splitHighlightSegments } from '@/lib/aiReview'
 import {
   MAX_ASSISTANT_QUESTION_LENGTH,
@@ -37,7 +40,17 @@ import {
 import { extractOrderCode, formatClinicalText } from '@/lib/displayFormat'
 import { inferMetricFromCitation, parseCitationsInText } from '@/lib/presentation'
 import type { EvidenceTarget } from '@/lib/uiTypes'
+import { formatHistoryTime } from '@/lib/historyTime'
+import { HistoryDialog } from './HistoryDialog'
+import type { AssistantHistoryEntry } from './HistoryDialog'
+import { GLOBAL_CHAT_ID } from '@/state/useChat'
 import type { ChatMessage } from '@/state/useChat'
+
+const GLOBAL_SUGGESTED_QUESTIONS: readonly string[] = [
+  'Tóm tắt các y lệnh có cảnh báo nghiêm trọng cần ưu tiên',
+  'Những ca nào trong danh sách cần chú ý chức năng thận hoặc dị ứng?',
+  'Tra cứu liều Meropenem theo mức CrCl trong suy thận',
+]
 
 export interface FocusedFindingContext {
   nhanDinhId: string
@@ -47,6 +60,9 @@ export interface FocusedFindingContext {
 export interface AssistantPanelProps {
   client: ReviewApiClient
   detail: ChiTietCa | null
+  globalHoiThemEnabled?: boolean
+  history: readonly AssistantHistoryEntry[]
+  onOpenHistory: (chatId: string) => void
   attentionFindings: readonly NhanDinh[]
   messages: readonly ChatMessage[]
   sending: boolean
@@ -61,7 +77,7 @@ export interface AssistantPanelProps {
   onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
 }
 
-type AssistantTab = 'hoi_dap' | 'nguon'
+type AssistantTab = 'hoi_dap' | 'lich_su' | 'nguon'
 
 interface SourceSelection {
   caId: string
@@ -79,6 +95,9 @@ type SourceLoadState =
 export function AssistantPanel({
   client,
   detail,
+  globalHoiThemEnabled = true,
+  history,
+  onOpenHistory,
   attentionFindings,
   messages,
   sending,
@@ -93,17 +112,18 @@ export function AssistantPanel({
   onOpenEvidence,
 }: AssistantPanelProps) {
   const [activeTab, setActiveTab] = useState<AssistantTab>('hoi_dap')
+  const [historyOpenId, setHistoryOpenId] = useState<string | null>(null)
   const [draft, setDraft] = useState<string>('')
   const [sourceSelection, setSourceSelection] = useState<SourceSelection | null>(null)
   const [sourceState, setSourceState] = useState<SourceLoadState | null>(null)
   const [sourceReloadTick, setSourceReloadTick] = useState<number>(0)
 
-  const [prevCaId, setPrevCaId] = useState<string | null>(detail?.ca_id ?? null)
+  const activeChatId = detail?.ca_id ?? GLOBAL_CHAT_ID
+  const [prevCaId, setPrevCaId] = useState<string>(activeChatId)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
-  const currentCaId = detail?.ca_id ?? null
-  if (prevCaId !== currentCaId) {
-    setPrevCaId(currentCaId)
+  if (prevCaId !== activeChatId) {
+    setPrevCaId(activeChatId)
     setDraft('')
     setSourceSelection(null)
     setSourceState(null)
@@ -152,9 +172,9 @@ export function AssistantPanel({
     }
   }, [client, sourceSelection, sourceFetchKey])
 
-  const hoiThemEnabled = Boolean(detail?.che_do.hoi_them)
+  const hoiThemEnabled = detail ? Boolean(detail.che_do.hoi_them) : Boolean(globalHoiThemEnabled)
   const inputState = getAssistantInputState({
-    hasCase: detail !== null,
+    hasCase: true,
     hoiThemEnabled,
     lastStatus,
     sending,
@@ -162,7 +182,7 @@ export function AssistantPanel({
   })
 
   const suggestedQuestions = useMemo(
-    () => (detail ? buildSuggestedQuestions(detail, attentionFindings) : []),
+    () => (detail ? buildSuggestedQuestions(detail, attentionFindings) : GLOBAL_SUGGESTED_QUESTIONS),
     [detail, attentionFindings],
   )
 
@@ -171,17 +191,17 @@ export function AssistantPanel({
     : null
 
   const handleOpenCitation = (td: TrichDanTraLoi, trigger: HTMLButtonElement) => {
-    if (!detail) {
-      return
-    }
     if (td.loai_ma === 'tai_lieu' && td.doan_trich_id) {
       setSourceSelection({
-        caId: detail.ca_id,
+        caId: activeChatId,
         doanTrichId: td.doan_trich_id,
         nhan: td.nhan,
         trichNguyenVan: td.trich_nguyen_van ?? '',
       })
       setActiveTab('nguon')
+      return
+    }
+    if (!detail) {
       return
     }
     if (td.loai_ma === 'du_lieu' && td.ban_ghi_id) {
@@ -224,14 +244,14 @@ export function AssistantPanel({
   }
 
   const handleSubmit = () => {
-    if (!detail || !inputState.canSend) {
+    if (!inputState.canSend) {
       return
     }
     const clean = draft.trim()
-    const targetFindingId = focusedFinding?.nhanDinhId ?? null
+    const targetFindingId = detail ? (focusedFinding?.nhanDinhId ?? null) : null
     setDraft('')
     onClearFocusedFinding()
-    void onSend(detail.ca_id, clean, targetFindingId)
+    void onSend(activeChatId, clean, targetFindingId)
   }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -278,6 +298,9 @@ export function AssistantPanel({
               <TabsTrigger value="hoi_dap" className="py-3 text-xs">
                 Hỏi đáp
               </TabsTrigger>
+              <TabsTrigger value="lich_su" className="py-3 text-xs">
+                Lịch sử
+              </TabsTrigger>
               <TabsTrigger value="nguon" className="py-3 text-xs">
                 Nguồn
               </TabsTrigger>
@@ -285,12 +308,12 @@ export function AssistantPanel({
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
-            {detail && messages.length > 0 ? (
+            {activeTab === 'hoi_dap' && messages.length > 0 ? (
               <Button
                 variant="ghost"
                 size="sm"
                 disabled={sending}
-                onClick={() => onClear(detail.ca_id)}
+                onClick={() => onClear(activeChatId)}
               >
                 Xoá
               </Button>
@@ -310,49 +333,47 @@ export function AssistantPanel({
         >
           <ScrollArea className="flex-1 min-h-0" viewportClassName="p-4">
             <div className="flex flex-col gap-3">
-              {detail === null ? (
-                <EmptyState
-                  icon={MessageSquareText}
-                  title="Chưa mở y lệnh"
-                  description="Mở một y lệnh để hỏi về ca đó."
-                  className="px-2 py-8"
-                />
-              ) : (
-                <>
-                  {inputState.lockMessage ? (
-                    <InlineAlert tone="neutral" role="status">
-                      {inputState.lockMessage}
-                    </InlineAlert>
-                  ) : null}
+              <>
+                {inputState.lockMessage ? (
+                  <InlineAlert tone="neutral" role="status">
+                    {inputState.lockMessage}
+                  </InlineAlert>
+                ) : null}
 
-                  {!inputState.lockMessage && messages.length === 0 && !sending ? (
-                    <div className="flex flex-col gap-3">
+                {!inputState.lockMessage && messages.length === 0 && !sending ? (
+                  <div className="flex flex-col gap-3">
+                    {detail ? (
                       <p className="text-sm text-fg-muted leading-relaxed">
                         Đặt câu hỏi về dữ liệu ca, liều dùng hoặc nguồn thuốc của{' '}
                         <span className="font-mono font-medium text-fg">{orderCode}</span>.
                       </p>
+                    ) : (
+                      <p className="text-sm text-fg-muted leading-relaxed">
+                        Hỏi đáp chung về danh sách y lệnh đang chờ hoặc tra cứu thông tin thuốc trong kho.
+                      </p>
+                    )}
 
-                      {suggestedQuestions.length > 0 ? (
-                        <div className="flex flex-col gap-1.5">
-                          <span className="text-xs font-medium text-fg-subtle">
-                            Gợi ý câu hỏi
-                          </span>
-                          {suggestedQuestions.map((q) => (
-                            <Button
-                              key={q}
-                              variant="secondary"
-                              size="sm"
-                              iconLeft={<CornerDownRight className="size-3.5" strokeWidth={1.75} />}
-                              className="h-auto min-h-8 justify-start whitespace-normal py-1.5 text-left font-normal"
-                              onClick={() => handlePickSuggestion(q)}
-                            >
-                              {q}
-                            </Button>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  ) : null}
+                    {suggestedQuestions.length > 0 ? (
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-xs font-medium text-fg-subtle">
+                          Gợi ý câu hỏi
+                        </span>
+                        {suggestedQuestions.map((q) => (
+                          <Button
+                            key={q}
+                            variant="secondary"
+                            size="sm"
+                            iconLeft={<CornerDownRight className="size-3.5" strokeWidth={1.75} />}
+                            className="h-auto min-h-8 justify-start whitespace-normal py-1.5 text-left font-normal"
+                            onClick={() => handlePickSuggestion(q)}
+                          >
+                            {q}
+                          </Button>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
 
                   {messages.length > 0 ? (
                     <div className="flex flex-col gap-4">
@@ -431,7 +452,7 @@ export function AssistantPanel({
                                   size="sm"
                                   iconLeft={<RotateCw className="size-3.5" strokeWidth={1.75} />}
                                   onClick={() => {
-                                    void onRetryLast(detail.ca_id)
+                                    void onRetryLast(activeChatId)
                                   }}
                                 >
                                   Gửi lại
@@ -499,20 +520,19 @@ export function AssistantPanel({
                         strokeWidth={1.75}
                         aria-hidden="true"
                       />
-                      <span>Đang tra cứu dữ liệu ca và nguồn…</span>
+                      <span>Đang tra cứu dữ liệu và nguồn…</span>
                     </div>
                   ) : null}
-                </>
-              )}
+              </>
             </div>
           </ScrollArea>
 
-          {/* Vùng nhập câu hỏi */}
+          {/* Vùng nhập câu hỏi — phong cách khung nhập liền khối như Claude Code */}
           <div className="shrink-0 border-t border-line bg-surface px-4 py-3 flex flex-col gap-2">
             {detail ? (
               <div className="flex flex-wrap items-center gap-1.5 text-xs">
                 <span className="text-fg-subtle">
-                  Đang hỏi về:{' '}
+                  Ca đang mở:{' '}
                   <span className="font-mono font-medium text-fg">{orderCode}</span>
                 </span>
                 {focusedFinding ? (
@@ -529,62 +549,128 @@ export function AssistantPanel({
                   </span>
                 ) : null}
               </div>
-            ) : null}
+            ) : (
+              <div className="flex items-center gap-1.5 text-xs text-fg-subtle">
+                <span>Chế độ: Hỏi đáp chung (toàn bộ danh sách y lệnh)</span>
+              </div>
+            )}
 
-            <div className="flex items-end gap-2">
+            <div className="flex flex-col gap-1.5 rounded-md border border-line-strong bg-surface-muted/40 p-2 focus-within:border-primary focus-within:bg-surface transition-colors duration-120">
               <textarea
                 ref={textareaRef}
                 rows={1}
                 maxLength={MAX_ASSISTANT_QUESTION_LENGTH}
                 aria-label="Nhập câu hỏi về ca đang mở"
                 placeholder={
-                  detail === null
-                    ? 'Mở một y lệnh để hỏi về ca đó.'
-                    : inputState.lockMessage
-                      ? inputState.lockMessage
-                      : 'Nhập câu hỏi… (Enter gửi, Shift+Enter xuống dòng)'
+                  inputState.lockMessage
+                    ? inputState.lockMessage
+                    : 'Nhập câu hỏi… (Enter gửi, Shift+Enter xuống dòng)'
                 }
                 value={draft}
                 disabled={inputState.inputLocked}
                 onChange={(e) => setDraft(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 min-h-[38px] max-h-[132px] resize-none overflow-y-auto rounded-sm border border-line-strong bg-surface px-2.5 py-2 text-sm text-fg placeholder:text-fg-subtle disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-fg-disabled"
+                className="w-full min-h-[28px] max-h-[132px] resize-none overflow-y-auto border-0 bg-transparent px-1 py-0.5 text-sm text-fg placeholder:text-fg-subtle focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-disabled"
               />
 
-              {inputState.showStop && detail ? (
-                <Button
-                  variant="secondary"
-                  size="md"
-                  iconLeft={<Square className="size-3.5" strokeWidth={1.75} />}
-                  onClick={() => onStop(detail.ca_id)}
-                  className="shrink-0 h-[38px]"
-                >
-                  Dừng
-                </Button>
-              ) : (
-                <IconButton
-                  variant="primary"
-                  size="md"
-                  icon={<SendHorizontal className="size-4" strokeWidth={1.75} />}
-                  aria-label="Gửi câu hỏi"
-                  disabled={!inputState.canSend}
-                  onClick={handleSubmit}
-                  className="shrink-0 h-[38px] w-[38px]"
-                />
-              )}
-            </div>
-
-            <div className="flex items-center justify-between gap-2 text-2xs text-fg-subtle">
-              <span>Trả lời để tham khảo. Dược sĩ kiểm chứng và quyết định.</span>
-              {inputState.showCharCounter ? (
-                <span className="font-mono tabular-nums shrink-0">
-                  Còn {inputState.remainingChars}
+              <div className="flex items-center justify-between gap-2 pt-0.5">
+                <span className="text-2xs text-fg-subtle">
+                  {inputState.showCharCounter ? (
+                    <span className="font-mono tabular-nums">
+                      Còn {inputState.remainingChars}
+                    </span>
+                  ) : (
+                    'Dược sĩ kiểm chứng và quyết định'
+                  )}
                 </span>
-              ) : null}
+
+                {inputState.showStop ? (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    iconLeft={<Square className="size-3" strokeWidth={1.75} />}
+                    onClick={() => onStop(activeChatId)}
+                    className="h-7 shrink-0"
+                  >
+                    Dừng
+                  </Button>
+                ) : (
+                  <IconButton
+                    variant="primary"
+                    size="sm"
+                    icon={<SendHorizontal className="size-3.5" strokeWidth={1.75} />}
+                    aria-label="Gửi câu hỏi"
+                    disabled={!inputState.canSend}
+                    onClick={handleSubmit}
+                    className="h-7 w-7 shrink-0 rounded-sm"
+                  />
+                )}
+              </div>
             </div>
           </div>
         </TabsContent>
 
+        {/* Thẻ Lịch sử: dòng gọn nhận diện y lệnh và người bệnh, bấm để mở hộp thoại chi tiết */}
+        <TabsContent
+          value="lich_su"
+          className="hidden data-[state=active]:flex flex-1 min-h-0 flex-col"
+        >
+          <ScrollArea className="flex-1 min-h-0" viewportClassName="p-2">
+            {history.length === 0 ? (
+              <EmptyState
+                icon={History}
+                title="Chưa có hội thoại"
+                description="Các y lệnh bạn đã hỏi trợ lý sẽ hiện ở đây để mở lại nhanh."
+                className="px-2 py-8"
+              />
+            ) : (
+              <ul className="flex flex-col" aria-label="Hội thoại gần đây">
+                {history.map((entry) => {
+                  const isGlobalEntry = entry.chatId === GLOBAL_CHAT_ID
+                  const timeText = formatHistoryTime(entry.lastAt)
+                  return (
+                    <li key={entry.chatId}>
+                      <button
+                        type="button"
+                        onClick={() => setHistoryOpenId(entry.chatId)}
+                        className="flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-left transition-colors duration-120 hover:bg-surface-hover"
+                      >
+                        {isGlobalEntry ? (
+                          <MessagesSquare className="size-3.5 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                        ) : (
+                          <MessageSquareText className="size-3.5 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                        )}
+                        <span className="min-w-0 flex-1">
+                          <span className={cn('block truncate text-xs font-semibold text-fg', !isGlobalEntry && 'font-mono')}>
+                            {entry.title}
+                          </span>
+                          {entry.patient ? (
+                            <span className="block truncate text-2xs text-fg-muted">{entry.patient}</span>
+                          ) : null}
+                        </span>
+                        {timeText ? (
+                          <span className="shrink-0 text-2xs text-fg-subtle tabular-nums">{timeText}</span>
+                        ) : null}
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </ScrollArea>
+          <HistoryDialog
+            entry={history.find((entry) => entry.chatId === historyOpenId) ?? null}
+            onOpenChange={(open) => {
+              if (!open) {
+                setHistoryOpenId(null)
+              }
+            }}
+            onGoTo={(chatId) => {
+              setActiveTab('hoi_dap')
+              onOpenHistory(chatId)
+            }}
+          />
+        </TabsContent>
         {/* Thẻ Nguồn */}
         <TabsContent
           value="nguon"

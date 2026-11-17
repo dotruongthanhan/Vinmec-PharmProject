@@ -275,6 +275,21 @@ def _collect_case_numbers(
 ) -> list[float]:
     """Gom toàn bộ con số hợp lệ từ hồ sơ, chỉ số, phát hiện luật và nhận định AI."""
     numbers = list(base_numbers)
+    numbers.extend(float(i) for i in range(0, 13))
+    numbers.extend((24.0, 48.0, 72.0))
+    numbers.extend(
+        float(n)
+        for n in (
+            len(ca.y_lenh_cho_duyet.chi_tiet),
+            len(ca.xet_nghiem),
+            len(ca.chan_doan),
+            len(ca.di_ung),
+            len(ca.vi_sinh),
+            len(ca.dien_bien),
+            len(ca.thuoc_dang_dung),
+            len(ket_qua.phat_hien),
+        )
+    )
     days = vm.length_of_stay_days(ca, now=ca.y_lenh_cho_duyet.thoi_diem_ke)
     if days is not None:
         numbers.append(float(days))
@@ -670,19 +685,28 @@ class CaseAsker:
                 doan=[],
             )
 
+        reply_text = output.tra_loi.strip()
+
         if output.pham_vi == "ngoai":
             clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
             _log_rejection(
                 "scope", f"llm_pham_vi=ngoai; clinical_question={clinical}", len(chunk_by_id)
             )
+            if (
+                reply_text
+                and not _output_attempts_override(reply_text, ket_qua)
+                and not unverified_numbers([reply_text], list(allowed_numbers))
+            ):
+                natural_msg = restore_text(reply_text, anh_xa)
+            else:
+                natural_msg = NO_SOURCE_MESSAGE if clinical else OUT_OF_SCOPE_MESSAGE
             return AskResult(
                 trang_thai="khong_co_nguon" if clinical else "ngoai_pham_vi",
-                noi_dung=NO_SOURCE_MESSAGE if clinical else OUT_OF_SCOPE_MESSAGE,
+                noi_dung=natural_msg,
                 cong_cu_da_goi=tools_called,
                 thoi_gian_ms=_elapsed(),
             )
 
-        reply_text = output.tra_loi.strip()
         if _output_attempts_override(reply_text, ket_qua):
             _log_rejection("scope", "output_attempts_override", len(chunk_by_id))
             return AskResult(
@@ -694,11 +718,29 @@ class CaseAsker:
                 doan=[],
             )
 
-        if not reply_text or not output.trich_dan:
+        if not reply_text:
             _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
             return AskResult(
                 trang_thai="khong_co_nguon",
                 noi_dung=NO_SOURCE_MESSAGE,
+                trich_dan=[],
+                cong_cu_da_goi=tools_called,
+                thoi_gian_ms=_elapsed(),
+                doan=[],
+            )
+
+        if not output.trich_dan:
+            _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
+            number_errors = unverified_numbers([reply_text], list(allowed_numbers))
+            if number_errors:
+                safe_reason = _log_rejection(
+                    "verification", "; ".join(number_errors), len(chunk_by_id)
+                )
+                raise _AskVerificationError(safe_reason)
+            clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
+            return AskResult(
+                trang_thai="khong_co_nguon" if clinical else "ok",
+                noi_dung=restore_text(reply_text, anh_xa),
                 trich_dan=[],
                 cong_cu_da_goi=tools_called,
                 thoi_gian_ms=_elapsed(),
@@ -998,4 +1040,216 @@ class CaseAsker:
                 cong_cu_da_goi=tools_called,
                 thoi_gian_ms=_elapsed(),
                 doan=[],
+            )
+
+    def _extract_question_drugs(
+        self,
+        question: str,
+    ) -> list[str]:
+        """Tìm hoạt chất được nhắc trực tiếp trong câu hỏi chung."""
+        words = re.findall(r"[a-zA-ZÀ-ỹ0-9_-]+", question.lower())
+        matched_kb: list[str] = []
+        for size in (3, 2, 1):
+            for idx in range(len(words) - size + 1):
+                phrase = " ".join(words[idx : idx + size])
+                for kb_id in _normalize_resolved(self._resolve_name(phrase)):
+                    if kb_id not in matched_kb:
+                        matched_kb.append(kb_id)
+        return matched_kb
+
+    def ask_global(
+        self,
+        cases: Sequence[CaBenh],
+        results: dict[str, KetQuaThamDinh],
+        cau_hoi: str,
+        lich_su: list[tuple[str, str]] | None = None,
+    ) -> AskResult:
+        """Hỏi đáp chung trên danh sách y lệnh và tra cứu kho tri thức khi chưa mở riêng một ca."""
+        perf_start = time.perf_counter()
+        deadline = time.monotonic() + self._timeout_seconds
+
+        def _elapsed() -> int:
+            return int((time.perf_counter() - perf_start) * 1000.0)
+
+        cleaned_question = cau_hoi.strip()
+        if not 1 <= len(cleaned_question) <= 1000:
+            raise ValueError("cau_hoi phải dài từ 1 đến 1000 ký tự sau khi cắt khoảng trắng")
+
+        if self._llm is None:
+            return AskResult(
+                trang_thai="chua_san_sang",
+                noi_dung=NOT_READY_MESSAGE,
+                thoi_gian_ms=_elapsed(),
+            )
+
+        if _has_injection_directive(cleaned_question):
+            return AskResult(
+                trang_thai="ngoai_pham_vi",
+                noi_dung=OUT_OF_SCOPE_MESSAGE,
+                thoi_gian_ms=_elapsed(),
+            )
+
+        try:
+            scrubbed_question, scrubbed_history, anh_xa = _scrub_history_and_question(
+                cleaned_question,
+                lich_su or [],
+            )
+        except DeidError:
+            return AskResult(
+                trang_thai="loi",
+                noi_dung=ERROR_MESSAGE,
+                thoi_gian_ms=_elapsed(),
+            )
+
+        tools_called = ["danh_sach_y_lenh", "bo_luat"]
+        summary_lines = [
+            f"TỔNG QUAN HÀNG ĐỢI Y LỆNH ({len(cases)} ca bệnh đang có trên hệ thống):"
+        ]
+        for ca in cases:
+            kq = results.get(ca.ca_id) or run_case(ca, self._get_renal_rules())
+            gioi = "Nam" if ca.nguoi_benh.gioi_tinh == "nam" else "Nữ"
+            cd_chinh = next(
+                (cd.noi_dung for cd in ca.chan_doan if cd.loai == "chinh"),
+                "Chưa rõ",
+            )
+            drugs_str = ", ".join(
+                f"{line.ten_tu_do or line.thuoc_id} {line.lieu_moi_lan:g} "
+                f"{line.don_vi_lieu} ({line.tan_suat}, {line.duong_dung})"
+                for line in ca.y_lenh_cho_duyet.chi_tiet
+            )
+            metrics_str = ", ".join(
+                f"{cs.cong_thuc}={cs.ket_qua:.1f} {cs.don_vi}"
+                for cs in kq.chi_so
+                if cs.ket_qua is not None
+            )
+            attention = [ph for ph in kq.phat_hien if ph.ket_luan != "dat"]
+            if attention:
+                findings_str = "; ".join(
+                    f"[{ph.muc_do}/{ph.ket_luan}] {ph.mo_ta}" for ph in attention
+                )
+            else:
+                findings_str = "Đạt (không có cảnh báo cần xem)"
+            summary_lines.append(
+                f"- Ca {ca.ca_id} (Mã y lệnh {ca.y_lenh_cho_duyet.y_lenh_id}): "
+                f"{gioi} {ca.nguoi_benh.tuoi} tuổi, Khoa {ca.y_lenh_cho_duyet.khoa_ke_don}, "
+                f"Chẩn đoán: {cd_chinh} | Thuốc kê: {drugs_str} | "
+                f"Chỉ số: {metrics_str or 'chưa đủ'} | Kết quả bộ luật: {findings_str}"
+            )
+        van_ban_ca = _sanitize_markers("\n".join(summary_lines))
+
+        selected_chunks: list[Chunk] = []
+        kb_ids = self._extract_question_drugs(scrubbed_question)
+        if self._retriever is not None and kb_ids:
+            base_q = _DEID_TOKEN_RE.sub(" ", scrubbed_question).strip()
+            retrieval_query = RetrievalQuery(
+                van_ban=[base_q or " ".join(kb_ids)],
+                bo_loc=SearchFilter(hoat_chat_ids=kb_ids),
+                k_query=max(self._query_builder.settings.nhan_thuoc.k_query, MAX_ASK_CHUNKS),
+                k_rerank=MAX_ASK_CHUNKS,
+            )
+
+            def _exec_global() -> list[ScoredChunk]:
+                assert self._retriever is not None
+                if isinstance(self._retriever, LazyRetrieverFactory):
+                    active_ret = self._retriever.for_ingredients(set(kb_ids))
+                else:
+                    active_ret = self._retriever
+                return active_ret.retrieve(retrieval_query)
+
+            try:
+                scored = self._run_with_deadline(_exec_global, deadline)
+                assert isinstance(scored, list)
+                ranked = sorted(scored, key=lambda item: item.diem, reverse=True)
+                seen_cids: set[str] = set()
+                cand: list[Chunk] = []
+                for item in ranked:
+                    cid = item.chunk.doan_trich_id
+                    if cid not in seen_cids:
+                        seen_cids.add(cid)
+                        cand.append(item.chunk)
+                        if len(cand) >= MAX_ASK_CHUNKS:
+                            break
+                selected_chunks, doan_nguon_text = _select_evidence_chunks(
+                    cand,
+                    self._evidence_max_chars,
+                )
+                if selected_chunks:
+                    tools_called.append("truy_xuat")
+            except Exception:
+                doan_nguon_text = "(không có đoạn nguồn)"
+        else:
+            doan_nguon_text = "(không có đoạn nguồn)"
+
+        chunk_by_id = {c.doan_trich_id: c for c in selected_chunks}
+        try:
+            _, template = load_prompt(self._prompt_path)
+            lich_su_text = (
+                "\n".join(
+                    f"- {_ROLE_LABELS.get(role, role)}: {content}"
+                    for role, content in scrubbed_history
+                )
+                if scrubbed_history
+                else "(không có)"
+            )
+            schema = AskLLMOutput.model_json_schema()
+            messages = _build_messages(
+                template,
+                van_ban_ca=van_ban_ca,
+                doan_nguon=doan_nguon_text,
+                lich_su=lich_su_text,
+                cau_hoi=scrubbed_question,
+                loi_lan_truoc="Không có.",
+            )
+            raw = self._run_with_deadline(
+                lambda msgs=messages: self._llm.complete_json(msgs, schema),  # type: ignore[union-attr]
+                deadline,
+            )
+            parsed = AskLLMOutput.model_validate(raw)
+            reply_text = parsed.tra_loi.strip()
+            if not reply_text:
+                return AskResult(
+                    trang_thai="khong_co_nguon",
+                    noi_dung=NO_SOURCE_MESSAGE,
+                    cong_cu_da_goi=tools_called,
+                    thoi_gian_ms=_elapsed(),
+                )
+            citations: list[AskCitation] = []
+            cited_chunks: list[Chunk] = []
+            seen_so: set[int] = set()
+            for item in parsed.trich_dan:
+                if item.so <= 0 or item.so in seen_so:
+                    continue
+                if item.loai == "tai_lieu" and item.ma in chunk_by_id:
+                    ch = chunk_by_id[item.ma]
+                    seen_so.add(item.so)
+                    if ch not in cited_chunks:
+                        cited_chunks.append(ch)
+                    citations.append(
+                        AskCitation(
+                            so=item.so,
+                            loai_ma="tai_lieu",
+                            nhan=f"{_source_label(ch.nguon)} · {ch.duong_dan_muc}",
+                            ban_ghi_id=None,
+                            doan_trich_id=ch.doan_trich_id,
+                            trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
+                        )
+                    )
+            restored = restore_text(reply_text, anh_xa)
+            status: Literal["ok", "ngoai_pham_vi"] = (
+                "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
+            )
+            return AskResult(
+                trang_thai=status,
+                noi_dung=restored,
+                trich_dan=citations,
+                cong_cu_da_goi=tools_called,
+                thoi_gian_ms=_elapsed(),
+                doan=cited_chunks,
+            )
+        except Exception:
+            return AskResult(
+                trang_thai="loi",
+                noi_dung=ERROR_MESSAGE,
+                cong_cu_da_goi=tools_called,
+                thoi_gian_ms=_elapsed(),
             )

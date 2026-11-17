@@ -1,9 +1,9 @@
-import type { ChiTietCa, NhanDinh } from '../api/types.ts'
+import type { ChiTietCa, DienBienTomTat, NhanDinh } from '../api/types.ts'
 
 export type SixFactorStatus = 'co_van_de' | 'dat' | 'thieu_du_lieu' | 'chua_co_luat'
 
 export interface SixFactorItem {
-  index: 1 | 2 | 3 | 4 | 5 | 6
+  index: 1 | 2 | 3 | 4 | 5 | 6 | 7
   title: string
   status: SixFactorStatus
   statusLabel: string
@@ -11,13 +11,18 @@ export interface SixFactorItem {
   inPassedOnly: boolean
 }
 
-export const SIX_FACTOR_DEFINITIONS: readonly { index: 1 | 2 | 3 | 4 | 5 | 6; title: string }[] = [
+/** Bảy yếu tố thẩm định theo đúng đánh số của backend (tên biến giữ "six" để không đổi chỗ gọi). */
+export const SIX_FACTOR_DEFINITIONS: readonly {
+  index: 1 | 2 | 3 | 4 | 5 | 6 | 7
+  title: string
+}[] = [
   { index: 1, title: 'Dị ứng, quá mẫn' },
   { index: 2, title: 'Trùng lặp thuốc' },
   { index: 3, title: 'Chỉ định, liều, đường dùng' },
   { index: 4, title: 'Tương tác thuốc' },
   { index: 5, title: 'Độc tính' },
   { index: 6, title: 'Cơ địa và xét nghiệm' },
+  { index: 7, title: 'Lịch dùng và yếu tố khác' },
 ]
 
 export const SIX_FACTOR_STATUS_LABELS: Record<SixFactorStatus, string> = {
@@ -122,4 +127,22 @@ export function stripPendingSourceNote(
 export function extractShortDrugName(thuoc: string): string {
   const firstSegment = thuoc.split('–')[0]?.split('·')[0]?.trim() ?? ''
   return firstSegment || thuoc.trim()
+}
+
+/** Chuẩn hoá chuỗi nhãn hồ sơ để nhận diện phiếu điều trị một cách nhất quán. */
+export function isTreatmentSheetNote(note: Pick<DienBienTomTat, 'loai_nhan'>): boolean {
+  const normalized = note.loai_nhan
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/gi, 'd')
+    .trim()
+    .toLowerCase()
+  return normalized.includes('phieu dieu tri')
+}
+
+/** Lọc riêng các bản ghi phiếu điều trị từ danh sách diễn biến của ca bệnh. */
+export function filterTreatmentSheetNotes(
+  notes: readonly DienBienTomTat[],
+): DienBienTomTat[] {
+  return notes.filter((note) => isTreatmentSheetNote(note))
 }

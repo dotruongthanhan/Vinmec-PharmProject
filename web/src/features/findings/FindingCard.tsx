@@ -96,7 +96,7 @@ export function FindingCard({
       )}
     >
       <span
-        className={cn('absolute inset-y-0 left-0 w-1 rounded-l-md', STRIP_BG_CLASS[tone])}
+        className={cn('absolute inset-y-0 left-0 w-[3px] rounded-l-md', STRIP_BG_CLASS[tone])}
         aria-hidden="true"
       />
 
@@ -168,7 +168,7 @@ export function FindingCard({
         />
       </div>
 
-      <div className="rounded-b-md border-t border-line bg-surface-muted/70 px-4 py-2.5 pl-5">
+      <div className="rounded-b-md border-t border-line bg-surface-muted/40 px-4 py-2.5 pl-5">
         <FeedbackBar
           key={`fb-${caId}-${finding.nhan_dinh_id}`}
           caId={caId}

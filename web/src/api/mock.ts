@@ -219,6 +219,21 @@ export class MockClient implements ReviewApiClient {
     payload: GuiCauHoi,
     options?: { signal?: AbortSignal },
   ): Promise<TraLoi> {
+    if (caId === '__global__') {
+      if (!payload.cau_hoi.trim()) {
+        await this.waitDelay()
+        throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi không được để trống.', 422)
+      }
+      await this.waitAskDelay(options?.signal)
+      return {
+        trang_thai: 'ok',
+        noi_dung:
+          'Hiện tại danh sách có 6 y lệnh chờ thẩm định, trong đó DEMO-02 (Meropenem 1 g trên bệnh nhân CrCl 16,0 mL/phút) và DEMO-06 (Amoxicillin trên bệnh nhân có tiền sử dị ứng nhóm beta-lactam) ở mức nghiêm trọng cần ưu tiên xem trước.',
+        trich_dan: [],
+        cong_cu_da_goi: ['danh_sach_y_lenh', 'bo_luat'],
+        thoi_gian_ms: 800,
+      }
+    }
     const detail = this.detailsData[caId]
     if (!detail) {
       await this.waitDelay()

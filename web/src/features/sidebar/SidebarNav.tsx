@@ -1,25 +1,19 @@
-import {
-  Building2,
-  CheckCheck,
-  CircleAlert,
-  CircleCheck,
+﻿import {
+  ChevronsUpDown,
   CircleHelp,
-  ClipboardList,
+  LogIn,
   LogOut,
-  MessageSquareText,
   PanelLeftClose,
   PanelLeftOpen,
-  Search,
+  Settings,
 } from 'lucide-react'
-import type { ReactNode } from 'react'
-import type { DongHangDoi } from '@/api/types'
-import { Kbd } from '@/components/ui/kbd'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { useState } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { ThemeControl } from '@/features/theme/ThemeControl'
+import { VinmecLogo } from '@/components/VinmecLogo'
 import { cn } from '@/lib/cn'
 import type {
-  OrderFilterGroup,
   OrderGroupCounts,
   OrderSelectionFilter,
 } from '@/lib/orders'
@@ -27,141 +21,60 @@ import type {
 export interface SidebarNavProps {
   counts: OrderGroupCounts
   activeFilter: OrderSelectionFilter
-  isListRoute: boolean
-  activeCaseId: string | null
-  recentCases: readonly DongHangDoi[]
   collapsed: boolean
   inDrawer?: boolean
   userEmail: string | null
   isDemoMode: boolean
   onSelectFilter: (filter: OrderSelectionFilter) => void
-  onOpenCase: (caId: string) => void
-  onFocusSearch: () => void
   onToggleCollapse: () => void
+  onOpenSettings: () => void
+  onSignIn: () => void
   onSignOut: () => void
 }
 
-interface GroupNavSpec {
-  group: OrderFilterGroup
-  label: string
-  count: number
-  icon: ReactNode
-}
-
-function SidebarActionButton({
-  active = false,
-  collapsed,
-  icon,
-  label,
-  trailing,
-  tooltipLabel,
-  onClick,
-}: {
-  active?: boolean
-  collapsed: boolean
-  icon: ReactNode
-  label: string
-  trailing?: ReactNode
-  tooltipLabel?: string
-  onClick: () => void
-}) {
-  const button = (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-current={active ? 'page' : undefined}
-      aria-label={collapsed ? (tooltipLabel ?? label) : undefined}
-      className={cn(
-        'relative flex w-full cursor-pointer items-center rounded-sm text-left text-sm transition-colors duration-120',
-        collapsed ? 'h-9 justify-center px-0' : 'h-8 gap-2.5 px-2.5',
-        active
-          ? 'bg-ink-soft font-medium text-ink-fg'
-          : 'text-ink-muted hover:bg-ink-soft/70 hover:text-ink-fg',
-      )}
-    >
-      {active ? (
-        <span
-          aria-hidden="true"
-          className="absolute inset-y-1 left-0 w-0.5 rounded-r-full bg-primary"
-        />
-      ) : null}
-      <span className="inline-flex size-4 shrink-0 items-center justify-center" aria-hidden="true">
-        {icon}
-      </span>
-      {!collapsed ? (
-        <>
-          <span className="min-w-0 flex-1 truncate">{label}</span>
-          {trailing}
-        </>
-      ) : null}
-    </button>
-  )
-
-  if (!collapsed) {
-    return button
-  }
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent side="right">{tooltipLabel ?? label}</TooltipContent>
-    </Tooltip>
-  )
-}
-
-/** Thanh bên điều hướng tính năng nền tối (248 px, thu gọn còn 56 px). */
+/** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px); phần lọc giữa để trống vì đã lọc theo cột. */
 export function SidebarNav({
-  counts,
-  activeFilter,
-  isListRoute,
-  activeCaseId,
-  recentCases,
   collapsed,
   inDrawer = false,
   userEmail,
   isDemoMode,
-  onSelectFilter,
-  onOpenCase,
-  onFocusSearch,
   onToggleCollapse,
+  onOpenSettings,
+  onSignIn,
   onSignOut,
 }: SidebarNavProps) {
   const effectiveCollapsed = collapsed && !inDrawer
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
 
-  const groupItems: GroupNavSpec[] = [
-    {
-      group: 'tat_ca',
-      label: 'Tất cả',
-      count: counts.tat_ca,
-      icon: <ClipboardList className="size-4" strokeWidth={1.75} />,
-    },
-    {
-      group: 'can_xem',
-      label: 'Cần xem',
-      count: counts.can_xem,
-      icon: <CircleAlert className="size-4" strokeWidth={1.75} />,
-    },
-    {
-      group: 'thieu_du_lieu',
-      label: 'Thiếu dữ liệu',
-      count: counts.thieu_du_lieu,
-      icon: <CircleHelp className="size-4" strokeWidth={1.75} />,
-    },
-    {
-      group: 'dat',
-      label: 'Đạt',
-      count: counts.dat,
-      icon: <CircleCheck className="size-4" strokeWidth={1.75} />,
-    },
-    {
-      group: 'da_phan_hoi',
-      label: 'Đã phản hồi',
-      count: counts.da_phan_hoi,
-      icon: <CheckCheck className="size-4" strokeWidth={1.75} />,
-    },
-  ]
+  const accountLabel = isDemoMode ? 'Chế độ demo · chưa đăng nhập' : (userEmail ?? 'Tài khoản dược sĩ')
+  const shortAccountName = isDemoMode
+    ? 'demo'
+    : (userEmail?.split('@')[0]?.trim() || 'dược sĩ')
+  const accountInitial = shortAccountName.slice(0, 1).toUpperCase() || 'D'
+  const accountTierLabel = isDemoMode ? 'Demo' : 'Dược sĩ'
 
-  const accountLabel = isDemoMode ? 'Chế độ demo' : (userEmail ?? 'Dược sĩ')
+  const handleAccountMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const items = Array.from(
+      event.currentTarget.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]'),
+    )
+    if (items.length === 0) {
+      return
+    }
+    const currentIndex = items.indexOf(document.activeElement as HTMLButtonElement)
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      items[(currentIndex + 1 + items.length) % items.length]?.focus()
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      items[(currentIndex - 1 + items.length) % items.length]?.focus()
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      items[0]?.focus()
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      items[items.length - 1]?.focus()
+    }
+  }
 
   return (
     <nav
@@ -171,14 +84,17 @@ export function SidebarNav({
       {/* 1. Tên sản phẩm và nút thu gọn */}
       <div
         className={cn(
-          'flex h-12 shrink-0 items-center border-b border-ink-line',
+          'flex h-11 shrink-0 items-center border-b border-ink-line',
           effectiveCollapsed ? 'justify-center px-2' : 'justify-between gap-2 px-3',
           inDrawer && 'pr-11',
         )}
       >
         {!effectiveCollapsed ? (
-          <span className="truncate text-sm font-semibold tracking-tight text-ink-fg">
-            Thẩm định y lệnh
+          <span className="flex min-w-0 items-center gap-2">
+            <VinmecLogo alwaysOnDark imageClassName="h-9" />
+            <span className="truncate text-sm font-semibold tracking-tight text-ink-fg">
+              Thẩm định y lệnh
+            </span>
           </span>
         ) : null}
 
@@ -205,137 +121,162 @@ export function SidebarNav({
         ) : null}
       </div>
 
-      {/* 2. Tìm kiếm (Ctrl K) */}
-      <div className="border-b border-ink-line px-2.5 py-2.5 shrink-0">
-        <SidebarActionButton
-          collapsed={effectiveCollapsed}
-          icon={<Search className="size-4" strokeWidth={1.75} />}
-          label="Tìm kiếm"
-          tooltipLabel="Tìm kiếm (Ctrl K)"
-          trailing={
-            <Kbd className="border-ink-line bg-ink-soft text-ink-muted">Ctrl K</Kbd>
-          }
-          onClick={onFocusSearch}
-        />
-      </div>
+      {/* 2. Vùng giữa tạm để trống (bộ lọc đã nằm trong cột bảng; hội thoại gần đây chuyển sang thẻ Lịch sử của Trợ lý) */}
+      <div className="flex-1 min-h-0" aria-hidden="true" />
 
-      {/* 3-5. Nhóm Y lệnh, Theo khoa, Hội thoại gần đây */}
-      <ScrollArea className="flex-1 min-h-0" viewportClassName="px-2.5 py-3">
-        <div className="flex flex-col gap-5">
-          {/* 3. Nhóm Y lệnh */}
-          <div className="flex flex-col gap-1">
-            {!effectiveCollapsed ? (
-              <div className="px-2.5 pb-1 text-2xs font-medium uppercase tracking-[0.04em] text-ink-muted">
-                Y lệnh
-              </div>
-            ) : null}
-            {groupItems.map((item) => {
-              const isSelected =
-                isListRoute &&
-                activeFilter.type === 'group' &&
-                activeFilter.group === item.group
-
-              return (
-                <SidebarActionButton
-                  key={item.group}
-                  active={isSelected}
-                  collapsed={effectiveCollapsed}
-                  icon={item.icon}
-                  label={item.label}
-                  tooltipLabel={`${item.label} (${item.count})`}
-                  trailing={
-                    <span className="font-mono text-xs text-ink-muted tabular-nums">
-                      {item.count}
-                    </span>
-                  }
-                  onClick={() => onSelectFilter({ type: 'group', group: item.group })}
-                />
-              )
-            })}
-          </div>
-
-          {/* 4. Nhóm Theo khoa */}
-          {counts.departments.length > 0 ? (
-            <div className="flex flex-col gap-1">
+      {/* 4. Đáy: thanh hồ sơ gọn và nút Cài đặt kiểu Claude Desktop */}
+      <div
+        className={cn(
+          'border-t border-ink-line px-2 py-2 shrink-0 flex items-center gap-1',
+          effectiveCollapsed ? 'flex-col justify-center' : 'justify-between',
+        )}
+      >
+        <Popover open={accountMenuOpen} onOpenChange={setAccountMenuOpen}>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              aria-label={effectiveCollapsed ? `${accountLabel} · Tuỳ chọn tài khoản` : 'Mở menu tài khoản và cài đặt'}
+              aria-haspopup="menu"
+              aria-expanded={accountMenuOpen}
+              className={cn(
+                'flex min-w-0 cursor-pointer items-center rounded-sm text-left transition-colors duration-120 hover:bg-ink-soft',
+                effectiveCollapsed
+                  ? 'size-9 justify-center'
+                  : 'h-9 flex-1 gap-2 px-2',
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-on-primary"
+              >
+                {accountInitial}
+              </span>
               {!effectiveCollapsed ? (
-                <div className="px-2.5 pb-1 text-2xs font-medium uppercase tracking-[0.04em] text-ink-muted">
-                  Theo khoa
-                </div>
-              ) : null}
-              {counts.departments.map((dept) => {
-                const isSelected =
-                  isListRoute &&
-                  activeFilter.type === 'khoa' &&
-                  activeFilter.khoa === dept.khoa
-
-                return (
-                  <SidebarActionButton
-                    key={dept.khoa}
-                    active={isSelected}
-                    collapsed={effectiveCollapsed}
-                    icon={<Building2 className="size-4" strokeWidth={1.75} />}
-                    label={dept.khoa}
-                    tooltipLabel={`${dept.khoa} (${dept.count})`}
-                    trailing={
-                      <span className="font-mono text-xs text-ink-muted tabular-nums">
-                        {dept.count}
-                      </span>
-                    }
-                    onClick={() => onSelectFilter({ type: 'khoa', khoa: dept.khoa })}
+                <>
+                  <span className="min-w-0 flex-1 truncate text-sm text-ink-fg">
+                    <span className="font-medium">{shortAccountName}</span>
+                    <span className="text-ink-muted"> · {accountTierLabel}</span>
+                  </span>
+                  <ChevronsUpDown
+                    className="size-3.5 shrink-0 text-ink-muted"
+                    strokeWidth={1.75}
+                    aria-hidden="true"
                   />
-                )
-              })}
-            </div>
-          ) : null}
-
-          {/* 5. Nhóm Hội thoại gần đây (ẩn hoàn toàn nếu chưa có ca nào được hỏi) */}
-          {recentCases.length > 0 ? (
-            <div className="flex flex-col gap-1">
-              {!effectiveCollapsed ? (
-                <div className="px-2.5 pb-1 text-2xs font-medium uppercase tracking-[0.04em] text-ink-muted">
-                  Hội thoại gần đây
-                </div>
+                </>
               ) : null}
-              {recentCases.map((c) => {
-                const isSelected = !isListRoute && activeCaseId === c.ca_id
-                return (
-                  <SidebarActionButton
-                    key={c.ca_id}
-                    active={isSelected}
-                    collapsed={effectiveCollapsed}
-                    icon={<MessageSquareText className="size-4" strokeWidth={1.75} />}
-                    label={c.ca_id}
-                    tooltipLabel={`${c.ca_id} · ${c.khoa}`}
-                    trailing={
-                      <span className="truncate max-w-24 text-2xs text-ink-muted">{c.khoa}</span>
-                    }
-                    onClick={() => onOpenCase(c.ca_id)}
-                  />
-                )
-              })}
-            </div>
-          ) : null}
-        </div>
-      </ScrollArea>
+            </button>
+          </PopoverTrigger>
 
-      {/* 6. Đáy: tài khoản và nút Đăng xuất */}
-      <div className="border-t border-ink-line px-2.5 py-2.5 shrink-0 flex flex-col gap-1">
-        <ThemeControl collapsed={effectiveCollapsed} inSidebar />
-        {!effectiveCollapsed ? (
-          <div
-            className="truncate px-2.5 py-1 text-xs text-ink-muted"
-            title={accountLabel}
+          <PopoverContent
+            side={effectiveCollapsed ? 'right' : 'top'}
+            align="start"
+            sideOffset={8}
+            className="w-64 p-1.5 border-line-strong bg-surface-raised shadow-xl"
           >
-            {accountLabel}
-          </div>
-        ) : null}
-        <SidebarActionButton
-          collapsed={effectiveCollapsed}
-          icon={<LogOut className="size-4" strokeWidth={1.75} />}
-          label="Đăng xuất"
-          tooltipLabel={`${accountLabel} · Đăng xuất`}
-          onClick={onSignOut}
-        />
+            <div
+              role="menu"
+              aria-label="Menu tài khoản và cài đặt"
+              onKeyDown={handleAccountMenuKeyDown}
+              className="flex flex-col"
+            >
+              <div
+                className="truncate px-2.5 py-2 text-xs text-fg-muted"
+                title={accountLabel}
+              >
+                {accountLabel}
+              </div>
+
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setAccountMenuOpen(false)
+                  onOpenSettings()
+                }}
+                className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+              >
+                <Settings className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                <span className="flex-1">Cài đặt</span>
+                <span className="font-mono text-xs text-fg-subtle" aria-hidden="true">
+                  Ctrl+,
+                </span>
+              </button>
+
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setAccountMenuOpen(false)
+                  onOpenSettings()
+                }}
+                className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+              >
+                <CircleHelp className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                <span className="flex-1">Trợ giúp & Phím tắt</span>
+              </button>
+
+              <hr className="my-1 border-line" />
+
+              {isDemoMode ? (
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountMenuOpen(false)
+                      onSignIn()
+                    }}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                  >
+                    <LogIn className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="flex-1">Đăng nhập tài khoản</span>
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountMenuOpen(false)
+                      onSignOut()
+                    }}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                  >
+                    <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="flex-1">Thoát chế độ demo</span>
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setAccountMenuOpen(false)
+                    onSignOut()
+                  }}
+                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                >
+                  <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                  <span className="flex-1">Đăng xuất</span>
+                </button>
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              aria-label="Cài đặt (Ctrl+,)"
+              onClick={onOpenSettings}
+              className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-sm text-ink-muted transition-colors duration-120 hover:bg-ink-soft hover:text-ink-fg"
+            >
+              <Settings className="size-4" strokeWidth={1.75} aria-hidden="true" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side={effectiveCollapsed ? 'right' : 'top'}>
+            Cài đặt (Ctrl+,)
+          </TooltipContent>
+        </Tooltip>
       </div>
     </nav>
   )

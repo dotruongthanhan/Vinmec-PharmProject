@@ -98,7 +98,7 @@ export function DataTableHead({
       ref={ref}
       scope={scope ?? 'col'}
       className={cn(
-        'sticky top-0 z-10 border-b border-line bg-surface-muted px-3 py-2 text-left text-2xs font-medium uppercase tracking-[0.04em] text-fg-subtle whitespace-nowrap',
+        'sticky top-0 z-10 border-b border-line bg-surface-muted px-3 py-2.5 text-left text-xs font-semibold text-fg-muted whitespace-nowrap',
         align === 'right' && 'text-right',
         className,
       )}
@@ -122,7 +122,7 @@ export function DataTableCell({
     <td
       ref={ref}
       className={cn(
-        'px-3 py-2 align-top text-fg',
+        'px-3 py-2.5 align-top text-fg',
         align === 'right' ? 'text-right tabular-nums' : 'text-left',
         className,
       )}

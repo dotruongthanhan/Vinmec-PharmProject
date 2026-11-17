@@ -4,6 +4,7 @@ import type { FormEvent } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
+import { VinmecLogo } from '@/components/VinmecLogo'
 import { resolveLoginRedirect } from '@/lib/routeGuard'
 import { ThemeControl } from '@/features/theme/ThemeControl'
 import { useAuth } from './useAuth'
@@ -90,14 +91,15 @@ export function LoginPage() {
         <div>
           <Link
             to="/"
-            className="text-sm font-semibold tracking-tight text-ink-fg hover:text-primary-line transition-colors duration-120"
+            className="inline-flex items-center gap-3 text-sm font-semibold tracking-tight text-ink-fg hover:text-primary-line transition-colors duration-120"
           >
-            Hỗ trợ thẩm định y lệnh
+            <VinmecLogo alwaysOnDark imageClassName="h-12" />
+            <span>Hỗ trợ thẩm định y lệnh</span>
           </Link>
         </div>
 
         <div className="max-w-md space-y-4">
-          <h1 className="font-serif text-[34px] leading-[42px] font-normal tracking-tight text-ink-fg">
+          <h1 className="text-[30px] leading-[38px] font-semibold tracking-tight text-ink-fg">
             Mỗi nhận định đi kèm căn cứ để dược sĩ đối chiếu và quyết định.
           </h1>
           <p className="text-sm text-ink-muted leading-relaxed">
@@ -126,7 +128,7 @@ export function LoginPage() {
         <div className="mx-auto w-full max-w-[380px] py-10">
           <div className="mb-6 space-y-1.5">
             <p className="text-xs font-medium text-fg-subtle lg:hidden">Hỗ trợ thẩm định y lệnh</p>
-            <h2 className="font-serif text-[28px] leading-[36px] font-normal text-fg">
+            <h2 className="text-[24px] leading-[32px] font-semibold tracking-tight text-fg">
               Đăng nhập bàn làm việc
             </h2>
             <p className="text-sm text-fg-muted">

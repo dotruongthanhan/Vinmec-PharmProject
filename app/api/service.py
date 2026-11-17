@@ -1,5 +1,6 @@
 """Dịch vụ ca bệnh giữ bộ đệm thẩm định, điều phối AI nền và ghi phản hồi JSONL."""
 
+import json
 import logging
 from datetime import UTC, datetime
 from pathlib import Path
@@ -321,10 +322,13 @@ class CaseService:
     def get_source(self, case_id: str, chunk_id: str) -> s.DoanNguon:
         """Tra đoạn nguồn đã cấp cho ca bệnh trong phân tích AI hoặc hỏi đáp."""
         with self._lock:
-            self._get_case(case_id)
+            if case_id != "__global__":
+                self._get_case(case_id)
             chunk: Chunk | None = None
-            state = self._jobs.get(case_id)
-            if state is not None and state.trang_thai == "xong" and state.ket_qua is not None:
+            state = self._jobs.get(case_id) if case_id != "__global__" else None
+            if state is not None and state.trang_thai == "xong" and state.ket_qua is None:
+                chunk = None
+            elif state is not None and state.trang_thai == "xong" and state.ket_qua is not None:
                 chunk = next(
                     (item for item in state.ket_qua.doan if item.doan_trich_id == chunk_id),
                     None,
@@ -406,44 +410,143 @@ class CaseService:
             save_feedback(item, self._feedback_path)
             return present_feedback(item)
 
-    def ask(self, case_id: str, request: s.GuiCauHoi) -> s.TraLoi:
-        """Gọi CaseAsker khi có LLM; khi chưa có LLM trả chua_san_sang."""
+    def _save_chat_log(self, case_id: str, cau_hoi: str, response: s.TraLoi) -> None:
+        """Ghi nhận lượt hỏi đáp vào tệp JSONL cục bộ để lưu vết hội thoại."""
+        try:
+            chat_path = self._feedback_path.parent / "hoi_thoai.jsonl"
+            chat_path.parent.mkdir(parents=True, exist_ok=True)
+            entry = {
+                "thoi_diem": datetime.now(UTC).isoformat(),
+                "ca_id": case_id,
+                "cau_hoi": cau_hoi,
+                "tra_loi": response.model_dump(mode="json"),
+            }
+            with chat_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        except OSError:
+            pass
+
+    def list_conversations(self) -> dict[str, list[dict[str, object]]]:
+        """Đọc lịch sử hội thoại đã lưu theo từng phạm vi, phạm vi hoạt động gần nhất đứng đầu."""
         with self._lock:
-            case = self._get_case(case_id)
-            if not self._ai_enabled or self._asker_impl is None:
-                _LOGGER.info("ask rejected step=configuration reason=missing_llm_or_asker chunks=0")
-                reply = self._ask.ask(
-                    case,
-                    request.cau_hoi,
-                    [(item.vai, item.noi_dung) for item in request.lich_su],
+            chat_path = self._feedback_path.parent / "hoi_thoai.jsonl"
+            if not chat_path.is_file():
+                return {}
+            grouped: dict[str, list[dict[str, object]]] = {}
+            last_seen: dict[str, str] = {}
+            try:
+                for raw_line in chat_path.read_text(encoding="utf-8").splitlines():
+                    line = raw_line.strip()
+                    if not line:
+                        continue
+                    item = json.loads(line)
+                    ca_id = str(item.get("ca_id") or "")
+                    cau_hoi = str(item.get("cau_hoi") or "")
+                    tra_loi = item.get("tra_loi")
+                    thoi_diem = str(item.get("thoi_diem") or "")
+                    if ca_id and cau_hoi and isinstance(tra_loi, dict):
+                        grouped.setdefault(ca_id, []).append(
+                            {"cau_hoi": cau_hoi, "tra_loi": tra_loi, "thoi_diem": thoi_diem}
+                        )
+                        last_seen[ca_id] = max(last_seen.get(ca_id, ""), thoi_diem)
+            except (OSError, ValueError):
+                return {}
+            ordered = sorted(grouped, key=lambda key: last_seen.get(key, ""), reverse=True)
+            return {key: grouped[key] for key in ordered}
+
+    def clear_conversation(self, case_id: str) -> None:
+        """Xoá các lượt hội thoại của một phạm vi khỏi tệp JSONL."""
+        with self._lock:
+            chat_path = self._feedback_path.parent / "hoi_thoai.jsonl"
+            if not chat_path.is_file():
+                return
+            try:
+                kept: list[str] = []
+                for raw_line in chat_path.read_text(encoding="utf-8").splitlines():
+                    line = raw_line.strip()
+                    if not line:
+                        continue
+                    try:
+                        item = json.loads(line)
+                    except ValueError:
+                        continue
+                    if str(item.get("ca_id") or "") != case_id:
+                        kept.append(line)
+                content = ("\n".join(kept) + "\n") if kept else ""
+                chat_path.write_text(content, encoding="utf-8")
+            except OSError:
+                pass
+
+    def ask(self, case_id: str, request: s.GuiCauHoi) -> s.TraLoi:
+        """Gọi CaseAsker khi có LLM; hỗ trợ cả hỏi đáp chung (__global__) và theo từng ca."""
+        history_pairs = [(item.vai, item.noi_dung) for item in request.lich_su]
+        if case_id == "__global__":
+            with self._lock:
+                if self._cases is None:
+                    cases_list, errors = self._loader.list_cases()
+                    self._cases = {c.ca_id: c for c in cases_list}
+                    self._load_errors = [s.LoadError(tep=p, loi=e) for p, e in errors]
+                all_cases = list(self._cases.values())
+                all_results = {c.ca_id: self._review(c) for c in all_cases}
+                asker = self._asker_impl
+                enabled = self._ai_enabled and asker is not None
+            if not enabled or asker is None or not hasattr(asker, "ask_global"):
+                fallback_case = all_cases[0] if all_cases else None
+                msg = (
+                    self._ask.ask(fallback_case, request.cau_hoi, history_pairs).noi_dung
+                    if fallback_case is not None
+                    else "Chức năng hỏi thêm chưa được nối với hệ thống."
                 )
                 return s.TraLoi(
-                    trang_thai=reply.trang_thai,
-                    noi_dung=reply.noi_dung,
+                    trang_thai="chua_san_sang",
+                    noi_dung=msg,
                     trich_dan=[],
                     cong_cu_da_goi=[],
                     thoi_gian_ms=0,
                 )
-            rule_result = self._review(case)
-            state = self._jobs.get(case_id)
-            ai_result = state.ket_qua if state is not None and state.trang_thai == "xong" else None
-            asker = self._asker_impl
+            result = asker.ask_global(all_cases, all_results, request.cau_hoi, history_pairs)
+        else:
+            with self._lock:
+                case = self._get_case(case_id)
+                if not self._ai_enabled or self._asker_impl is None:
+                    _LOGGER.info(
+                        "ask rejected step=configuration reason=missing_llm_or_asker chunks=0"
+                    )
+                    reply = self._ask.ask(
+                        case,
+                        request.cau_hoi,
+                        history_pairs,
+                    )
+                    return s.TraLoi(
+                        trang_thai=reply.trang_thai,
+                        noi_dung=reply.noi_dung,
+                        trich_dan=[],
+                        cong_cu_da_goi=[],
+                        thoi_gian_ms=0,
+                    )
+                rule_result = self._review(case)
+                state = self._jobs.get(case_id)
+                ai_result = (
+                    state.ket_qua if state is not None and state.trang_thai == "xong" else None
+                )
+                asker = self._asker_impl
 
-        result = asker.ask(
-            case,
-            request.cau_hoi,
-            [(item.vai, item.noi_dung) for item in request.lich_su],
-            ket_qua=rule_result,
-            ai_result=ai_result,
-            nhan_dinh_id=request.nhan_dinh_id,
-        )
+            result = asker.ask(
+                case,
+                request.cau_hoi,
+                history_pairs,
+                ket_qua=rule_result,
+                ai_result=ai_result,
+                nhan_dinh_id=request.nhan_dinh_id,
+            )
+
         if result.trang_thai == "ok" and result.doan:
             with self._lock:
                 case_sources = self._ask_sources.setdefault(case_id, {})
                 for chunk in result.doan:
                     case_sources[chunk.doan_trich_id] = chunk
 
-        return s.TraLoi(
+        response = s.TraLoi(
             trang_thai=result.trang_thai,
             noi_dung=result.noi_dung,
             trich_dan=[
@@ -460,3 +563,6 @@ class CaseService:
             cong_cu_da_goi=list(result.cong_cu_da_goi),
             thoi_gian_ms=result.thoi_gian_ms,
         )
+        with self._lock:
+            self._save_chat_log(case_id, request.cau_hoi, response)
+        return response

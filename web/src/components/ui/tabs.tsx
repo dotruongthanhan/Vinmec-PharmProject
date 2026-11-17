@@ -14,13 +14,13 @@ export function TabsList({
 }: ComponentPropsWithRef<typeof TabsPrimitive.List>) {
   return (
     <TabsPrimitive.List
-      className={cn('flex items-center gap-6 border-b border-line px-4', className)}
+      className={cn('tabs-scroller items-center gap-5 border-b border-line px-4', className)}
       {...props}
     />
   )
 }
 
-/** Nút chọn một thẻ nội dung với gạch chân nhấn màu primary khi đang chọn. */
+/** Nút chọn một thẻ nội dung với gạch chân nét liền theo aria-selected khi đang chọn. */
 export function TabsTrigger({
   className,
   ...props
@@ -28,7 +28,7 @@ export function TabsTrigger({
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "relative cursor-pointer whitespace-nowrap py-2.5 text-sm font-medium text-fg-muted transition-colors duration-120 hover:text-fg disabled:pointer-events-none disabled:opacity-50 data-[state=active]:font-semibold data-[state=active]:text-primary after:content-[''] after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent data-[state=active]:after:bg-primary",
+        "relative shrink-0 cursor-pointer whitespace-nowrap py-2.5 text-sm font-medium text-fg-muted transition-colors duration-120 hover:text-fg disabled:pointer-events-none disabled:opacity-50 aria-[selected=true]:text-fg data-[state=active]:text-fg after:content-[''] after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:border-b-2 after:border-transparent aria-[selected=true]:after:border-primary data-[state=active]:after:border-primary",
         className,
       )}
       {...props}
