@@ -18,6 +18,7 @@ import type { ReviewApiClient } from '@/api/client'
 import type { ChiTietCa, DoanNguon, NhanDinh, TrangThaiTraLoi, TrichDanTraLoi } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { ClinicalMarkdown } from '@/components/ui/ClinicalMarkdown'
 import {
   Collapsible,
   CollapsibleChevron,
@@ -37,8 +38,8 @@ import {
   buildSuggestedQuestions,
   getAssistantInputState,
 } from '@/lib/assistant'
-import { extractOrderCode, formatClinicalText } from '@/lib/displayFormat'
-import { inferMetricFromCitation, parseCitationsInText } from '@/lib/presentation'
+import { extractOrderCode } from '@/lib/displayFormat'
+import { inferMetricFromCitation } from '@/lib/presentation'
 import type { EvidenceTarget } from '@/lib/uiTypes'
 import { formatHistoryTime } from '@/lib/historyTime'
 import { HistoryDialog } from './HistoryDialog'
@@ -202,6 +203,24 @@ export function AssistantPanel({
       return
     }
     if (!detail) {
+      if (td.trich_nguyen_van || td.doan_trich_id) {
+        setSourceSelection({
+          caId: activeChatId,
+          doanTrichId: td.doan_trich_id ?? td.ban_ghi_id ?? `ref-${td.so}`,
+          nhan: td.nhan,
+          trichNguyenVan: td.trich_nguyen_van ?? '',
+        })
+        setActiveTab('nguon')
+      } else {
+        onOpenEvidence(
+          {
+            kind: 'document',
+            moTa: td.nhan,
+            ghiChu: `Căn cứ tham chiếu [${td.so}]: ${td.nhan}`,
+          },
+          trigger,
+        )
+      }
       return
     }
     if (td.loai_ma === 'du_lieu' && td.ban_ghi_id) {
@@ -390,10 +409,6 @@ export function AssistantPanel({
                         }
 
                         const status = msg.tra_loi.trang_thai
-                        const segments = parseCitationsInText(
-                          msg.tra_loi.noi_dung,
-                          msg.tra_loi.trich_dan,
-                        )
 
                         return (
                           <div
@@ -426,24 +441,11 @@ export function AssistantPanel({
                               </div>
                             ) : null}
 
-                            <div className="whitespace-pre-wrap break-words leading-relaxed text-fg">
-                              {segments.map((seg, idx) =>
-                                seg.kind === 'text' ? (
-                                  <span key={`${msg.id}-t-${idx}`}>{formatClinicalText(seg.value)}</span>
-                                ) : (
-                                  <button
-                                    key={`${msg.id}-c-${idx}`}
-                                    type="button"
-                                    onClick={(e) => handleOpenCitation(seg.citation, e.currentTarget)}
-                                    title={seg.citation.nhan}
-                                    aria-label={`Mở trích dẫn ${seg.label}: ${seg.citation.nhan}`}
-                                    className="mx-0.5 inline-flex cursor-pointer items-center rounded-sm border border-primary-line bg-primary-soft px-1.5 py-0.5 font-mono text-2xs font-semibold text-primary tabular-nums hover:bg-primary hover:text-on-primary transition-colors duration-120"
-                                  >
-                                    {seg.label}
-                                  </button>
-                                ),
-                              )}
-                            </div>
+                            <ClinicalMarkdown
+                              text={msg.tra_loi.noi_dung}
+                              citations={msg.tra_loi.trich_dan}
+                              onCitationClick={handleOpenCitation}
+                            />
 
                             {status === 'loi' ? (
                               <div>

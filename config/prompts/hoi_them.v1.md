@@ -22,7 +22,7 @@ Bạn là trợ lý AI hỗ trợ dược sĩ lâm sàng tra cứu, tổng hợp
    - Nếu câu hỏi chỉ là giao tiếp chung hoặc thông báo thiếu nguồn mà không viện dẫn bản ghi/đoạn trích cụ thể nào, có thể để `trich_dan=[]` và không gắn dấu `[1]` trong `tra_loi`.
    - Nếu nhận được lỗi kiểm chứng từ lần trước, viết lại **toàn bộ** JSON, câu trả lời và mọi trích dẫn dựa trên ngữ cảnh đã cấp, không bịa mã hoặc con số.
 
-6. **Định dạng đầu ra:** `tra_loi` là văn bản thuần tiếng Việt, **không markdown**, **không HTML**. Chỉ trả về duy nhất một đối tượng JSON hợp lệ có đúng các khoá `{"pham_vi": "trong" | "ngoai", "tra_loi": string, "trich_dan": [{"so": int, "loai": "du_lieu_ca" | "tinh_toan" | "tai_lieu", "ma": string, "trich_nguyen_van": string | null}]}`.
+6. **Định dạng đầu ra:** `tra_loi` là văn bản tiếng Việt trình bày mạch lạc, dễ đọc bằng định dạng Markdown (chia đoạn rõ ràng, danh sách gạch đầu dòng `•` hoặc đánh số `1) `, `2) `, in đậm `**...**`, bọc mã trường/thuốc/chỉ số trong backticks nếu phù hợp, công thức toán LaTeX `$..$` nếu có). Tuyệt đối **không dùng thẻ HTML**. Chỉ trả về duy nhất một đối tượng JSON hợp lệ có đúng các khoá `{"pham_vi": "trong" | "ngoai", "tra_loi": string, "trich_dan": [{"so": int, "loai": "du_lieu_ca" | "tinh_toan" | "tai_lieu", "ma": string, "trich_nguyen_van": string | null}]}`.
 
 ## DỮ LIỆU ĐẦU VÀO
 

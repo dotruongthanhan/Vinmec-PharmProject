@@ -1234,6 +1234,30 @@ class CaseAsker:
                             trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
                         )
                     )
+                elif item.loai == "du_lieu_ca":
+                    seen_so.add(item.so)
+                    citations.append(
+                        AskCitation(
+                            so=item.so,
+                            loai_ma="du_lieu",
+                            nhan=f"Bản ghi ca ({item.ma})",
+                            ban_ghi_id=item.ma,
+                            doan_trich_id=None,
+                            trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
+                        )
+                    )
+                elif item.loai == "tinh_toan":
+                    seen_so.add(item.so)
+                    citations.append(
+                        AskCitation(
+                            so=item.so,
+                            loai_ma="tinh_toan",
+                            nhan=f"Chỉ số {item.ma}",
+                            ban_ghi_id=item.ma,
+                            doan_trich_id=None,
+                            trich_nguyen_van=None,
+                        )
+                    )
             restored = restore_text(reply_text, anh_xa)
             status: Literal["ok", "ngoai_pham_vi"] = (
                 "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
