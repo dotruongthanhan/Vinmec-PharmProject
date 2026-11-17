@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
 import { VinmecLogo } from '@/components/VinmecLogo'
 import { resolveLoginRedirect } from '@/lib/routeGuard'
+import { isDemoEnabled } from '@/lib/demoSession'
 import { ThemeControl } from '@/features/theme/ThemeControl'
 import { useAuth } from './useAuth'
 
 /** Trang đăng nhập hai nửa: giới thiệu nền ink, biểu mẫu nền paper. */
 export function LoginPage() {
-  const { isAuthenticated, isDemoMode, isConfigured, signIn, enterDemoMode } = useAuth()
+  const { isAuthenticated, isDemoMode, isConfigured, isLoading, signIn, enterDemoMode } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -30,7 +31,7 @@ export function LoginPage() {
 
   const returnTo = resolveLoginRedirect(location.state)
 
-  if (isAuthenticated || isDemoMode) {
+  if ((isAuthenticated && !isLoading) || isDemoMode) {
     return <Navigate to={returnTo} replace />
   }
 
@@ -78,6 +79,7 @@ export function LoginPage() {
   }
 
   const handleEnterDemo = () => {
+    if (!isDemoEnabled()) return
     enterDemoMode()
     navigate(returnTo, { replace: true })
   }
@@ -139,12 +141,18 @@ export function LoginPage() {
           {!isConfigured ? (
             <div className="mb-6 flex flex-col gap-3">
               <InlineAlert tone="warning" role="status">
-                Chưa cấu hình xác thực. Đang ở chế độ demo, không kiểm tra tài khoản.
+                {isDemoEnabled() ? 'Chưa cấu hình xác thực. Đang ở chế độ demo, không kiểm tra tài khoản.' : 'Chưa thể đăng nhập. Vui lòng liên hệ quản trị.'}
               </InlineAlert>
-              <Button variant="primary" size="lg" className="w-full" onClick={handleEnterDemo}>
+              {isDemoEnabled() ? <Button variant="primary" size="lg" className="w-full" onClick={handleEnterDemo}>
                 Vào bản demo
-              </Button>
+              </Button> : null}
             </div>
+          ) : null}
+
+          {isConfigured && isDemoEnabled() ? (
+            <Button variant="secondary" className="mb-4 w-full" onClick={handleEnterDemo}>
+              Vào bản demo
+            </Button>
           ) : null}
 
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="flex flex-col gap-4">

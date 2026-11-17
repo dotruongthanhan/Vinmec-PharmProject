@@ -19,6 +19,8 @@ class PhanHoi(BaseModel):
     phan_hoi: Literal["dong_y", "bac_bo", "can_sua"]
     nhom_ly_do: str | None = None
     ly_do: str | None = None
+    nguoi_dung_id: str | None = None
+    phien_id: str | None = None
 
 
 def save_feedback(item: PhanHoi, path: Path = DEFAULT_FEEDBACK_PATH) -> None:

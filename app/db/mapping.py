@@ -281,7 +281,8 @@ TABLE_LIST = (
     Table(
         name="nghiep_vu.phan_hoi",
         primary_key=("ca_id", "ma_luat", "thoi_diem"),
-        columns=model_columns(PhanHoi),
+        # nguoi_dung_id, phien_id chỉ có ở tệp JSONL tới khi bảng phan_hoi mở rộng (plan 1.6, T33).
+        columns=model_columns(PhanHoi, "nguoi_dung_id", "phien_id"),
         foreign_keys=(fk("ca_id", "nghiep_vu.dot_dieu_tri"),),
         json_columns=("chi_tiet_y_lenh_id",),
     ),

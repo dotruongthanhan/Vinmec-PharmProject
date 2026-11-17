@@ -3,7 +3,7 @@
 import os
 from copy import deepcopy
 from pathlib import Path
-from typing import Self
+from typing import Literal, Self
 
 import yaml
 from dotenv import load_dotenv
@@ -12,6 +12,37 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_valida
 from app.core.errors import ConfigError
 
 _ROOT = Path(__file__).resolve().parents[2]
+
+
+class AuthSettings(BaseModel):
+    """Đọc cấu hình xác thực từ môi trường, không tự nạp .env."""
+
+    model_config = ConfigDict(frozen=True)
+
+    auth_mode: Literal["required", "off"] = "required"
+    supabase_url: str = ""
+    supabase_anon_key: str = Field(default="", repr=False)
+    supabase_jwt_secret: str = Field(default="", repr=False)
+    cors_origins: tuple[str, ...] = ("http://localhost:5173", "http://127.0.0.1:5173")
+
+
+def load_auth_settings() -> AuthSettings:
+    """Giá trị chế độ lạ luôn yêu cầu xác thực."""
+    origins = os.getenv("CORS_ORIGINS")
+    values = (
+        {}
+        if origins is None
+        else {
+            "cors_origins": tuple(origin.strip() for origin in origins.split(",") if origin.strip())
+        }
+    )
+    return AuthSettings(
+        auth_mode="off" if os.getenv("AUTH_MODE") == "off" else "required",
+        supabase_url=os.getenv("SUPABASE_URL", "").strip().rstrip("/"),
+        supabase_anon_key=os.getenv("SUPABASE_ANON_KEY", ""),
+        supabase_jwt_secret=os.getenv("SUPABASE_JWT_SECRET", ""),
+        **values,
+    )
 
 
 class ChunkingSettings(BaseModel):

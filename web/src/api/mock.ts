@@ -17,6 +17,7 @@ import type {
   GuiPhanHoi,
   HealthResponse,
   KetQuaAI,
+  MeResponse,
   NhanDinh,
   PhanHoiDaGhi,
   PhanHoiMa,
@@ -113,6 +114,10 @@ export class MockClient implements ReviewApiClient {
       ok: true,
       che_do: cloneData(this.casesData.che_do),
     }
+  }
+
+  async getMe(): Promise<MeResponse> {
+    return { id: 'demo', email: null, vai_tro: 'duoc_si_ls', phien_id: null }
   }
 
   async getCases(): Promise<DanhSachCa> {

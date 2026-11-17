@@ -23,6 +23,8 @@ from app.api.presenter import (
     present_source,
     present_warnings,
 )
+from app.auth.principal import Principal
+from app.auth.roles import ADMIN
 from app.config.settings import get_secret
 from app.core.errors import ConfigError
 from app.core.types import Chunk
@@ -367,7 +369,7 @@ class CaseService:
                     )
         return None
 
-    def feedback(self, case_id: str, request: s.GuiPhanHoi) -> s.PhanHoiDaGhi:
+    def feedback(self, case_id: str, request: s.GuiPhanHoi, principal: Principal) -> s.PhanHoiDaGhi:
         """Kiểm tra nhận định và lý do trước khi ghi phản hồi."""
         with self._lock:
             case = self._get_case(case_id)
@@ -406,11 +408,15 @@ class CaseService:
                 phan_hoi=request.phan_hoi,
                 nhom_ly_do=reasons.get(request.nhom_ly_do),
                 ly_do=request.ly_do,
+                nguoi_dung_id=principal.nguoi_dung_id,
+                phien_id=principal.phien_id,
             )
             save_feedback(item, self._feedback_path)
             return present_feedback(item)
 
-    def _save_chat_log(self, case_id: str, cau_hoi: str, response: s.TraLoi) -> None:
+    def _save_chat_log(
+        self, case_id: str, cau_hoi: str, response: s.TraLoi, principal: Principal
+    ) -> None:
         """Ghi nhận lượt hỏi đáp vào tệp JSONL cục bộ để lưu vết hội thoại."""
         try:
             chat_path = self._feedback_path.parent / "hoi_thoai.jsonl"
@@ -420,13 +426,21 @@ class CaseService:
                 "ca_id": case_id,
                 "cau_hoi": cau_hoi,
                 "tra_loi": response.model_dump(mode="json"),
+                "nguoi_dung_id": principal.nguoi_dung_id,
+                "phien_id": principal.phien_id,
             }
             with chat_path.open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(entry, ensure_ascii=False) + "\n")
         except OSError:
             pass
 
-    def list_conversations(self) -> dict[str, list[dict[str, object]]]:
+    @staticmethod
+    def _owns_conversation(item: dict[str, Any], principal: Principal) -> bool:
+        """Admin chỉ được thêm quyền với dòng cũ không có chủ."""
+        owner = item.get("nguoi_dung_id")
+        return owner == principal.nguoi_dung_id or (owner is None and principal.vai_tro == ADMIN)
+
+    def list_conversations(self, principal: Principal) -> dict[str, list[dict[str, object]]]:
         """Đọc lịch sử hội thoại đã lưu theo từng phạm vi, phạm vi hoạt động gần nhất đứng đầu."""
         with self._lock:
             chat_path = self._feedback_path.parent / "hoi_thoai.jsonl"
@@ -440,6 +454,8 @@ class CaseService:
                     if not line:
                         continue
                     item = json.loads(line)
+                    if not isinstance(item, dict) or not self._owns_conversation(item, principal):
+                        continue
                     ca_id = str(item.get("ca_id") or "")
                     cau_hoi = str(item.get("cau_hoi") or "")
                     tra_loi = item.get("tra_loi")
@@ -454,7 +470,7 @@ class CaseService:
             ordered = sorted(grouped, key=lambda key: last_seen.get(key, ""), reverse=True)
             return {key: grouped[key] for key in ordered}
 
-    def clear_conversation(self, case_id: str) -> None:
+    def clear_conversation(self, case_id: str, principal: Principal) -> None:
         """Xoá các lượt hội thoại của một phạm vi khỏi tệp JSONL."""
         with self._lock:
             chat_path = self._feedback_path.parent / "hoi_thoai.jsonl"
@@ -469,15 +485,20 @@ class CaseService:
                     try:
                         item = json.loads(line)
                     except ValueError:
+                        kept.append(line)
                         continue
-                    if str(item.get("ca_id") or "") != case_id:
+                    if (
+                        not isinstance(item, dict)
+                        or str(item.get("ca_id") or "") != case_id
+                        or not self._owns_conversation(item, principal)
+                    ):
                         kept.append(line)
                 content = ("\n".join(kept) + "\n") if kept else ""
                 chat_path.write_text(content, encoding="utf-8")
             except OSError:
                 pass
 
-    def ask(self, case_id: str, request: s.GuiCauHoi) -> s.TraLoi:
+    def ask(self, case_id: str, request: s.GuiCauHoi, principal: Principal) -> s.TraLoi:
         """Gọi CaseAsker khi có LLM; hỗ trợ cả hỏi đáp chung (__global__) và theo từng ca."""
         history_pairs = [(item.vai, item.noi_dung) for item in request.lich_su]
         if case_id == "__global__":
@@ -497,13 +518,16 @@ class CaseService:
                     if fallback_case is not None
                     else "Chức năng hỏi thêm chưa được nối với hệ thống."
                 )
-                return s.TraLoi(
+                response = s.TraLoi(
                     trang_thai="chua_san_sang",
                     noi_dung=msg,
                     trich_dan=[],
                     cong_cu_da_goi=[],
                     thoi_gian_ms=0,
                 )
+                with self._lock:
+                    self._save_chat_log(case_id, request.cau_hoi, response, principal)
+                return response
             result = asker.ask_global(all_cases, all_results, request.cau_hoi, history_pairs)
         else:
             with self._lock:
@@ -517,13 +541,15 @@ class CaseService:
                         request.cau_hoi,
                         history_pairs,
                     )
-                    return s.TraLoi(
+                    response = s.TraLoi(
                         trang_thai=reply.trang_thai,
                         noi_dung=reply.noi_dung,
                         trich_dan=[],
                         cong_cu_da_goi=[],
                         thoi_gian_ms=0,
                     )
+                    self._save_chat_log(case_id, request.cau_hoi, response, principal)
+                    return response
                 rule_result = self._review(case)
                 state = self._jobs.get(case_id)
                 ai_result = (
@@ -564,5 +590,5 @@ class CaseService:
             thoi_gian_ms=result.thoi_gian_ms,
         )
         with self._lock:
-            self._save_chat_log(case_id, request.cau_hoi, response)
+            self._save_chat_log(case_id, request.cau_hoi, response, principal)
         return response

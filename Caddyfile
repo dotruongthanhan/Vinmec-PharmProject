@@ -1,0 +1,5 @@
+# Caddy nhận HTTPS (tự xin chứng chỉ khi SITE_ADDRESS là tên miền) và chuyển mọi yêu cầu sang FastAPI.
+{$SITE_ADDRESS} {
+	encode gzip
+	reverse_proxy api:8000
+}

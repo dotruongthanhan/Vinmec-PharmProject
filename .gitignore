@@ -229,3 +229,10 @@ tests/**/.tmp/
 data/runtime/
 data/cache/*.sqlite
 web/qa/artifacts/
+
+# Khoa SSH va chung chi may chu (khong duoc commit)
+*.pem
+*.ppk
+
+# File khoa AWS va tai lieu nhay cam tai may (khong duoc commit)
+important/
