@@ -1,5 +1,35 @@
 # Caddy nhận HTTPS (tự xin chứng chỉ khi SITE_ADDRESS là tên miền) và chuyển mọi yêu cầu sang FastAPI.
 {$SITE_ADDRESS} {
 	encode gzip
+
+	# Tiêu đề bảo mật chung cho mọi phản hồi.
+	header {
+		Strict-Transport-Security "max-age=15552000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	# CSP chặt và không lưu bộ nhớ đệm chỉ dành cho API.
+	header /api/* {
+		Content-Security-Policy "default-src 'none'; frame-ancestors 'none'"
+		Cache-Control "no-store"
+	}
+
+	# Nhật ký JSON ra stdout, loại bỏ bí mật và phần query của URI.
+	log {
+		output stdout
+		format filter {
+			wrap json
+			fields {
+				request>headers>Authorization delete
+				request>headers>Cookie delete
+				request>uri regexp "\\?.*$" ""
+			}
+		}
+	}
+
 	reverse_proxy api:8000
 }

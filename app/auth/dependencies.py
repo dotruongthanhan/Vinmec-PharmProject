@@ -22,11 +22,15 @@ def _bearer(request: Request) -> str:
 def current_principal(request: Request) -> Principal:
     """Lấy danh tính hoặc danh tính phát triển khi đã tắt xác thực rõ ràng."""
     if request.app.state.auth_settings.auth_mode == "off":
-        return Principal(nguoi_dung_id="dev-local", vai_tro=ADMIN)
+        principal = Principal(nguoi_dung_id="dev-local", vai_tro=ADMIN)
+        request.state.principal = principal
+        return principal
     if not request.app.state.auth_settings.supabase_url:
         raise AuthError("xac_thuc_khong_san_sang")
     try:
-        return request.app.state.auth.verify(_bearer(request))
+        principal = request.app.state.auth.verify(_bearer(request))
+        request.state.principal = principal
+        return principal
     except AuthError:
         raise
     except Exception:

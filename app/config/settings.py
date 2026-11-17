@@ -14,6 +14,11 @@ from app.core.errors import ConfigError
 _ROOT = Path(__file__).resolve().parents[2]
 
 
+def load_access_log_enabled() -> bool:
+    """Nhật ký mặc định bật, chỉ tắt khi ACCESS_LOG=off."""
+    return os.getenv("ACCESS_LOG", "on") != "off"
+
+
 class AuthSettings(BaseModel):
     """Đọc cấu hình xác thực từ môi trường, không tự nạp .env."""
 
