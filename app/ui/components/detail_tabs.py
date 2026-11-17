@@ -54,7 +54,7 @@ def render_detail_tabs(ca: CaBenh, result: KetQuaThamDinh) -> None:
         line_ids = _attention_line_ids(ca, result)
         st.dataframe(
             order_table_rows(ca, yl.chi_tiet, finding_line_ids=line_ids),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -67,7 +67,7 @@ def render_detail_tabs(ca: CaBenh, result: KetQuaThamDinh) -> None:
                     include_status=True,
                     finding_line_ids=line_ids,
                 ),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
 
@@ -102,7 +102,7 @@ def render_detail_tabs(ca: CaBenh, result: KetQuaThamDinh) -> None:
                         "Bất thường": "Ngoài ngưỡng" if row["ngoai_nguong"] else "",
                     },
                 )
-            st.dataframe(display_rows, use_container_width=True, hide_index=True)
+            st.dataframe(display_rows, width="stretch", hide_index=True)
         else:
             st.text("Chưa có kết quả xét nghiệm.")
 
@@ -134,7 +134,7 @@ def render_detail_tabs(ca: CaBenh, result: KetQuaThamDinh) -> None:
                                 "Đơn hiện tại": in_order,
                             },
                         )
-                    st.dataframe(ksd_rows, use_container_width=True, hide_index=True)
+                    st.dataframe(ksd_rows, width="stretch", hide_index=True)
         else:
             st.text("Chưa có kết quả vi sinh.")
 

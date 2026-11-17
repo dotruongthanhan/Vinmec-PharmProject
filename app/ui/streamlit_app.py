@@ -102,7 +102,7 @@ def main() -> None:
         render_no_llm_banner()
     with toggle_col:
         btn_label = "Ẩn hỏi thêm" if chat_open else "Mở hỏi thêm"
-        if st.button(btn_label, key="toggle_chat_panel", use_container_width=True):
+        if st.button(btn_label, key="toggle_chat_panel", width="stretch"):
             set_chat_visible(st.session_state, not chat_open)
             st.rerun()
 

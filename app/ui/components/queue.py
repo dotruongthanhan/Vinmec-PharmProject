@@ -109,7 +109,7 @@ def render_queue(
             if st.button(
                 button_label,
                 key=f"select_case_{ca_id}",
-                use_container_width=True,
+                width="stretch",
                 type="primary" if is_selected else "secondary",
             ):
                 select_case(state, ca_id)

@@ -109,7 +109,7 @@ def render_finding_feedback(
 
     b1, b2, b3 = st.columns(3)
     with b1:
-        if st.button("Đồng ý", key=f"dong_y__{widget_key}", use_container_width=True):
+        if st.button("Đồng ý", key=f"dong_y__{widget_key}", width="stretch"):
             try:
                 _record_feedback(ca_id, row, "dong_y", None, None, save_fn)
             except Exception as exc:
@@ -121,12 +121,12 @@ def render_finding_feedback(
                 st.toast("Đã ghi phản hồi")
                 st.rerun()
     with b2:
-        if st.button("Bác bỏ", key=f"bac_bo__{widget_key}", use_container_width=True):
+        if st.button("Bác bỏ", key=f"bac_bo__{widget_key}", width="stretch"):
             _set_state_entry(state, _PENDING_KEY, widget_key, "bac_bo")
             _set_state_entry(state, _ERROR_KEY, widget_key, None)
             st.rerun()
     with b3:
-        if st.button("Cần sửa", key=f"can_sua__{widget_key}", use_container_width=True):
+        if st.button("Cần sửa", key=f"can_sua__{widget_key}", width="stretch"):
             _set_state_entry(state, _PENDING_KEY, widget_key, "can_sua")
             _set_state_entry(state, _ERROR_KEY, widget_key, None)
             st.rerun()
@@ -144,7 +144,7 @@ def render_finding_feedback(
         note = st.text_input("Ghi chú (tuỳ chọn)", key=f"fb_note__{widget_key}")
         c_confirm, c_cancel = st.columns(2)
         with c_confirm:
-            if st.button("Xác nhận ghi", key=f"fb_save__{widget_key}", use_container_width=True):
+            if st.button("Xác nhận ghi", key=f"fb_save__{widget_key}", width="stretch"):
                 if not chosen_group:
                     st.warning("Vui lòng chọn một nhóm lý do trước khi ghi.")
                 else:
@@ -170,7 +170,7 @@ def render_finding_feedback(
                         st.toast("Đã ghi phản hồi")
                         st.rerun()
         with c_cancel:
-            if st.button("Huỷ", key=f"fb_cancel__{widget_key}", use_container_width=True):
+            if st.button("Huỷ", key=f"fb_cancel__{widget_key}", width="stretch"):
                 _set_state_entry(state, _PENDING_KEY, widget_key, None)
                 _set_state_entry(state, _EDITING_KEY, widget_key, None)
                 _set_state_entry(state, _ERROR_KEY, widget_key, None)

@@ -124,6 +124,6 @@ def render_findings(
                 }
                 for r in passed_rows
             ]
-            st.dataframe(compact, use_container_width=True, hide_index=True)
+            st.dataframe(compact, width="stretch", hide_index=True)
         else:
             st.text("Không có mục đạt.")

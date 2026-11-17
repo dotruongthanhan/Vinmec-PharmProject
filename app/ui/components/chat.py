@@ -69,7 +69,7 @@ def render_chat(
     with col_title:
         st.subheader("Hỏi thêm về ca này")
     with col_clear:
-        if st.button("Xoá hội thoại", key=f"clear_chat__{ca.ca_id}", use_container_width=True):
+        if st.button("Xoá hội thoại", key=f"clear_chat__{ca.ca_id}", width="stretch"):
             clear_chat(state, ca.ca_id)
             st.rerun()
 
@@ -80,7 +80,7 @@ def render_chat(
             if st.button(
                 plain_label(question),
                 key=f"suggest_q__{ca.ca_id}__{idx}",
-                use_container_width=True,
+                width="stretch",
             ):
                 _submit_question(ca, question, history, ask_service, state)
                 st.rerun()
