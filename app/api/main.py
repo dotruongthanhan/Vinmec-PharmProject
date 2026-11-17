@@ -17,6 +17,7 @@ from starlette.types import Scope
 from app.api.access_log import AccessLogger, AccessLogMiddleware, utc_now
 from app.api.routes import router
 from app.api.service import CaseService
+from app.auth.revocation import RevocationList
 from app.auth.verifier import Authenticator, JwtVerifier
 from app.config.settings import load_access_log_enabled, load_auth_settings, load_settings
 
@@ -72,6 +73,7 @@ def create_app(
     auth_settings = load_auth_settings()
     application.state.auth_settings = auth_settings
     application.state.auth = auth if auth is not None else JwtVerifier(auth_settings)
+    application.state.revocations = RevocationList()
     if service is None:
         settings = load_settings()
         service = CaseService(

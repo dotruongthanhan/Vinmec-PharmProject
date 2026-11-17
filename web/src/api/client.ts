@@ -34,6 +34,8 @@ export interface SavedConversationTurn {
 }
 
 export interface ReviewApiClient {
+  abortAll?(): void
+  signOut?(token: string): Promise<void>
   getMe(): Promise<MeResponse>
   getHealth(): Promise<HealthResponse>
   getCases(): Promise<DanhSachCa>
@@ -84,6 +86,7 @@ export class ApiClient implements ReviewApiClient {
   private readonly auth?: AuthHooks
   private refreshPromise: Promise<string | null> | null = null
   private refreshRevision = 0
+  private controller = new AbortController()
 
   constructor(baseUrl = '/api', fetchImpl?: FetchLike, auth?: AuthHooks) {
     this.baseUrl = baseUrl.replace(/\/+$/, '')
@@ -110,9 +113,49 @@ export class ApiClient implements ReviewApiClient {
   }
 
   private async request<T>(path: string, init?: RequestInit): Promise<T> {
-    const revision = this.refreshRevision
-    const token = await this.auth?.getAccessToken() ?? null
-    return this.send<T>(path, init, token, revision, false, token ? [token] : [])
+    const controller = new AbortController()
+    const signals = [this.controller.signal, init?.signal].filter((signal): signal is AbortSignal => !!signal)
+    const abort = () => controller.abort()
+    for (const signal of signals) {
+      if (signal.aborted) abort()
+      else signal.addEventListener('abort', abort, { once: true })
+    }
+    try {
+      const revision = this.refreshRevision
+      const token = await this.auth?.getAccessToken() ?? null
+      controller.signal.throwIfAborted()
+      return await this.send<T>(path, { ...init, signal: controller.signal }, token, revision, false, token ? [token] : [])
+    } finally {
+      for (const signal of signals) signal.removeEventListener('abort', abort)
+    }
+  }
+
+  /** Huỷ mọi yêu cầu của phiên hiện tại, kể cả khi đang chờ token. */
+  abortAll(): void {
+    this.controller.abort()
+    this.controller = new AbortController()
+  }
+
+  /** Báo thu hồi một lần; lỗi hoặc quá ba giây không cản đăng xuất. */
+  async signOut(token: string): Promise<void> {
+    const controller = new AbortController()
+    let timer: ReturnType<typeof setTimeout> | undefined
+    try {
+      await Promise.race([
+        (this.fetchImpl ?? globalThis.fetch)(`${this.baseUrl}/dang-xuat`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        }),
+        new Promise<void>((resolve) => {
+          timer = setTimeout(() => { controller.abort(); resolve() }, 3000)
+        }),
+      ])
+    } catch {
+      // Không đưa token hoặc chi tiết lỗi ra giao diện và nhật ký.
+    } finally {
+      if (timer !== undefined) clearTimeout(timer)
+    }
   }
 
   private async send<T>(path: string, init: RequestInit | undefined, token: string | null,
@@ -127,6 +170,7 @@ export class ApiClient implements ReviewApiClient {
     let response: Response
     try {
       response = await fetchFn(`${this.baseUrl}${path}`, { ...init, headers })
+      init?.signal?.throwIfAborted()
     } catch (err) {
       if (
         (err instanceof DOMException && err.name === 'AbortError') ||
@@ -151,16 +195,14 @@ export class ApiClient implements ReviewApiClient {
         return this.send<T>(path, init, nextToken, this.refreshRevision, true, [...secrets, nextToken])
       }
     }
-    if (response.status === 401 && this.auth) {
-      await this.auth.onUnauthorized()
-    }
-
     let rawText = ''
     try {
       rawText = await response.text()
     } catch {
+      init?.signal?.throwIfAborted()
       throw new ApiError('loi_he_thong', 'Không đọc được phản hồi từ máy chủ.', response.status)
     }
+    init?.signal?.throwIfAborted()
 
     let parsed: unknown = null
     let jsonValid = false
@@ -171,6 +213,10 @@ export class ApiClient implements ReviewApiClient {
       } catch {
         jsonValid = false
       }
+    }
+
+    if (response.status === 401 && this.auth) {
+      await this.auth.onUnauthorized()
     }
 
     if (!response.ok) {

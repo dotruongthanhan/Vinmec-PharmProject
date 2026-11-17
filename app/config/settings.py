@@ -7,7 +7,7 @@ from typing import Literal, Self
 
 import yaml
 from dotenv import load_dotenv
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from app.core.errors import ConfigError
 
@@ -25,10 +25,21 @@ class AuthSettings(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     auth_mode: Literal["required", "off"] = "required"
+    auth_online_ttl: int = 60
     supabase_url: str = ""
     supabase_anon_key: str = Field(default="", repr=False)
     supabase_jwt_secret: str = Field(default="", repr=False)
     cors_origins: tuple[str, ...] = ("http://localhost:5173", "http://127.0.0.1:5173")
+
+    @field_validator("auth_online_ttl", mode="before")
+    @classmethod
+    def clamp_online_ttl(cls, value: object) -> int:
+        """Giữ bộ đệm trong 10–300 giây, cấu hình lỗi dùng 60 giây."""
+        try:
+            parsed = int(str(value))
+        except (TypeError, ValueError):
+            parsed = 60
+        return max(10, min(300, parsed))
 
 
 def load_auth_settings() -> AuthSettings:
@@ -43,6 +54,7 @@ def load_auth_settings() -> AuthSettings:
     )
     return AuthSettings(
         auth_mode="off" if os.getenv("AUTH_MODE") == "off" else "required",
+        auth_online_ttl=os.getenv("AUTH_ONLINE_TTL", "60"),
         supabase_url=os.getenv("SUPABASE_URL", "").strip().rstrip("/"),
         supabase_anon_key=os.getenv("SUPABASE_ANON_KEY", ""),
         supabase_jwt_secret=os.getenv("SUPABASE_JWT_SECRET", ""),

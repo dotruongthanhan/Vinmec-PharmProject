@@ -7,13 +7,15 @@ from fastapi import APIRouter, Body, Depends, Request
 from app.api import schemas as s
 from app.api.auth_schemas import NguoiDung
 from app.api.service import CaseService
-from app.auth.dependencies import require_online_check, require_role
+from app.auth.dependencies import require_role, revoke_current_session
 from app.auth.principal import Principal
 from app.auth.roles import ADMIN, CLINICAL_PHARMACIST
 
 router = APIRouter(prefix="/api")
 _allowed = require_role(CLINICAL_PHARMACIST, ADMIN)
 Caller = Annotated[Principal, Depends(_allowed)]
+Writer = Annotated[Principal, Depends(require_role(CLINICAL_PHARMACIST, ADMIN, strict=True))]
+LogoutCaller = Annotated[Principal, Depends(require_role(CLINICAL_PHARMACIST, ADMIN, online=False))]
 
 
 def _service(request: Request) -> CaseService:
@@ -42,6 +44,13 @@ def me(principal: Caller) -> NguoiDung:
     )
 
 
+@router.post("/dang-xuat")
+def sign_out(request: Request, principal: LogoutCaller) -> dict[str, bool]:
+    """Thu hồi phiên hiện tại trước khi phía web đăng xuất Supabase."""
+    revoke_current_session(request, principal)
+    return {"ok": True}
+
+
 @router.get("/cases", response_model=s.DanhSachCa)
 def list_cases(request: Request, principal: Caller) -> s.DanhSachCa:
     """Trả hàng đợi thẩm định."""
@@ -63,9 +72,8 @@ def get_record(ca_id: str, ban_ghi_id: str, request: Request, principal: Caller)
 @router.post(
     "/cases/{ca_id}/feedback",
     response_model=s.PhanHoiDaGhi,
-    dependencies=[Depends(require_online_check)],
 )
-def feedback(ca_id: str, body: s.GuiPhanHoi, request: Request, principal: Caller) -> s.PhanHoiDaGhi:
+def feedback(ca_id: str, body: s.GuiPhanHoi, request: Request, principal: Writer) -> s.PhanHoiDaGhi:
     """Ghi phản hồi của dược sĩ, là điểm ghi duy nhất."""
     return _service(request).feedback(ca_id, body, principal)
 
@@ -77,20 +85,20 @@ def list_conversations(request: Request, principal: Caller) -> dict[str, list[di
 
 
 @router.post("/conversations/{ca_id}/clear")
-def clear_conversation(ca_id: str, request: Request, principal: Caller) -> dict[str, bool]:
+def clear_conversation(ca_id: str, request: Request, principal: Writer) -> dict[str, bool]:
     """Xoá lịch sử hội thoại của một phạm vi."""
     _service(request).clear_conversation(ca_id, principal)
     return {"ok": True}
 
 
 @router.post("/ask", response_model=s.TraLoi)
-def ask_global(body: s.GuiCauHoi, request: Request, principal: Caller) -> s.TraLoi:
+def ask_global(body: s.GuiCauHoi, request: Request, principal: Writer) -> s.TraLoi:
     """Trả lời câu hỏi chung trên toàn bộ danh sách y lệnh và kho tài liệu."""
     return _service(request).ask("__global__", body, principal)
 
 
 @router.post("/cases/{ca_id}/ask", response_model=s.TraLoi)
-def ask(ca_id: str, body: s.GuiCauHoi, request: Request, principal: Caller) -> s.TraLoi:
+def ask(ca_id: str, body: s.GuiCauHoi, request: Request, principal: Writer) -> s.TraLoi:
     """Trả lời câu hỏi theo ca bệnh đang mở dựa trên hồ sơ và tài liệu."""
     return _service(request).ask(ca_id, body, principal)
 
@@ -99,7 +107,7 @@ def ask(ca_id: str, body: s.GuiCauHoi, request: Request, principal: Caller) -> s
 def start_ai(
     ca_id: str,
     request: Request,
-    principal: Caller,
+    principal: Writer,
     body: Annotated[s.ChayAI | None, Body()] = None,
 ) -> s.KetQuaAI:
     """Khởi động phân tích AI nền cho một ca hoặc trả trạng thái hiện có."""

@@ -48,7 +48,8 @@ def test_01_valid_pharmacist(harness: AuthHarness, algorithm: str) -> None:
     }
     harness.client.get("/api/me", headers=harness.headers(algorithm=algorithm))
     assert harness.jwks_calls == 1
-    assert harness.online_calls == 0
+    # Từ T39 mọi điểm cuối đều kiểm trực tuyến (có đệm theo băm token).
+    assert 1 <= harness.online_calls <= 2
 
 
 def test_02_valid_admin(harness: AuthHarness) -> None:

@@ -1,6 +1,13 @@
 import { createContext, useContext } from 'react'
 import type { AuthRole, AuthSession } from './authClient'
 
+export type SignOutReason = 'nguoi_dung' | 'khong_hoat_dong' | 'het_han_phien' | '401' | 'da_dang_xuat_noi_khac'
+
+export interface SignOutOptions {
+  scope?: 'local' | 'global'
+  reason?: SignOutReason
+}
+
 export interface AuthContextValue {
   session: AuthSession | null
   isAuthenticated: boolean
@@ -17,7 +24,8 @@ export interface AuthContextValue {
   verifyRole: () => Promise<void>
   signIn: (email: string, password: string) => Promise<string | null>
   enterDemoMode: () => void
-  signOut: () => Promise<void>
+  signOutReason?: SignOutReason | null
+  signOut: (options?: SignOutOptions) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)

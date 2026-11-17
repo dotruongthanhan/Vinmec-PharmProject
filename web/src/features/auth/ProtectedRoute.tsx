@@ -6,7 +6,7 @@ import { ForbiddenPage } from './ForbiddenPage'
 
 /** Bảo vệ các tuyến /app/*: chuyển hướng sang /dang-nhap và giữ đường dẫn quay lại khi chưa đăng nhập. */
 export function ProtectedRoute() {
-  const { session, vaiTro, isForbidden, isAuthenticated, isDemoMode, isLoading } = useAuth()
+  const { session, vaiTro, isForbidden, isAuthenticated, isDemoMode, isLoading, signOutReason } = useAuth()
   const location = useLocation()
 
   const currentPath = `${location.pathname}${location.search}`
@@ -38,7 +38,7 @@ export function ProtectedRoute() {
       <Navigate
         to={decision.to}
         replace
-        state={decision.returnTo ? { from: decision.returnTo } : undefined}
+        state={{ ...(decision.returnTo ? { from: decision.returnTo } : {}), ...(signOutReason ? { reason: signOutReason } : {}) }}
       />
     )
   }

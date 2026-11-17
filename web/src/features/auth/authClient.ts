@@ -18,7 +18,7 @@ export interface SignInResult {
   error: string | null
 }
 
-export type AuthStateListener = (session: AuthSession | null) => void
+export type AuthStateListener = (session: AuthSession | null, event?: string) => void
 
 export interface AuthClient {
   readonly isConfigured: boolean
@@ -27,7 +27,7 @@ export interface AuthClient {
   refreshSession(): Promise<AuthSession | null>
   onAuthStateChange(listener: AuthStateListener): () => void
   signInWithPassword(email: string, password: string): Promise<SignInResult>
-  signOut(): Promise<void>
+  signOut(options?: { scope?: 'local' | 'global' }): Promise<void>
 }
 
 export function parseAuthRole(role: unknown): AuthRole | null {
@@ -184,7 +184,7 @@ export function createSupabaseAuthClient(
             signedOut = true
             revision += 1
           }
-          listener(signedOut ? null : mapSupabaseSession(session))
+          listener(signedOut ? null : mapSupabaseSession(session), event)
         })
         cleanup = () => {
           data.subscription.unsubscribe()
@@ -218,11 +218,11 @@ export function createSupabaseAuthClient(
         }
       }
     },
-    async signOut() {
+    async signOut({ scope = 'local' } = {}) {
       signedOut = true
       revision += 1
       const client = await getClient()
-      await client.auth.signOut()
+      await client.auth.signOut({ scope })
     },
   }
 }

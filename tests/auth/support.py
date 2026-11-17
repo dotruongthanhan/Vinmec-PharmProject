@@ -74,7 +74,14 @@ class AuthHarness:
         self.online_calls += 1
         if self.network_error:
             raise httpx.ConnectError("Lỗi mạng giả lập")
-        return httpx.Response(self.online_status, json={"id": "simulated-user-a"})
+        claims = jwt.decode(
+            request.headers["authorization"].split()[1],
+            options={"verify_signature": False},
+        )
+        return httpx.Response(
+            self.online_status,
+            json={"id": claims["sub"], "app_metadata": claims.get("app_metadata")},
+        )
 
     def claims(self, **changes: Any) -> dict[str, Any]:
         """Tạo dữ liệu token giả có đủ trường bắt buộc."""
@@ -102,7 +109,7 @@ class AuthHarness:
         return {"Authorization": "Bearer " + self.token(**changes)}
 
     def feedback_body(self) -> dict[str, str]:
-        detail = self.client.get("/api/cases/DEMO-02", headers=self.headers()).json()
+        detail = self.service.get_case("DEMO-02").model_dump()
         return {
             "nhan_dinh_id": detail["nhan_dinh"]["can_chu_y"][0]["nhan_dinh_id"],
             "phan_hoi": "dong_y",

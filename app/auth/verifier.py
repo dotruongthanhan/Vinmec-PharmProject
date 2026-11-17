@@ -20,7 +20,7 @@ class Authenticator(Protocol):
 
     def verify(self, token: str) -> Principal: ...
 
-    def online_check(self, token: str) -> None: ...
+    def online_check(self, token: str) -> str: ...
 
 
 class JwtVerifier:
@@ -135,6 +135,7 @@ class JwtVerifier:
                 email=claims.get("email"),
                 vai_tro=role,
                 phien_id=claims.get("session_id"),
+                het_han_luc=float(claims["exp"]),
             )
         except jwt.ExpiredSignatureError:
             raise AuthError("phien_het_han") from None
@@ -143,6 +144,6 @@ class JwtVerifier:
         except Exception:
             raise AuthError() from None
 
-    def online_check(self, token: str) -> None:
-        """Chỉ gọi cho điểm cuối cần kiểm thu hồi."""
-        self._online.check(token)
+    def online_check(self, token: str) -> str:
+        """Trả vai trò sống đã kiểm tra từ Supabase."""
+        return self._online.check(token)

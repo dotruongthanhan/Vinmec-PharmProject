@@ -1,4 +1,5 @@
 const DEMO_SESSION_KEY = 'pharm_review_demo'
+const SESSION_POLICY_KEY = 'pharm_review_session_policy'
 let activeDemoMode = false
 
 export interface DemoEnvironment {
@@ -49,3 +50,24 @@ export function saveDemoMode(enabled: boolean): void {
     // Vẫn cho dùng demo khi trình duyệt chặn bộ nhớ.
   }
 }
+
+export type SessionTimestampStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
+
+/** Bộ nhớ phiên chỉ chứa mốc thời gian, không chứa token. */
+export function getSessionTimestampStorage(): SessionTimestampStorage | undefined {
+  try {
+    return window.sessionStorage
+  } catch {
+    return undefined
+  }
+}
+
+export function clearSessionTimestamps(): void {
+  try {
+    getSessionTimestampStorage()?.removeItem(SESSION_POLICY_KEY)
+  } catch {
+    // Phiên vẫn được xoá khi trình duyệt chặn bộ nhớ.
+  }
+}
+
+export { SESSION_POLICY_KEY }
