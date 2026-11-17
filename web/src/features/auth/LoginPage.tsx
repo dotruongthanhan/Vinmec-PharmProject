@@ -10,6 +10,12 @@ import { isDemoEnabled } from '@/lib/demoSession'
 import { ThemeControl } from '@/features/theme/ThemeControl'
 import { useAuth } from './useAuth'
 
+const signOutMessages: Record<string, string> = {
+  het_han_phien: 'Phiên đã hết hạn. Vui lòng đăng nhập lại.',
+  khong_hoat_dong: 'Bạn đã bị đăng xuất vì không hoạt động.',
+  da_dang_xuat_noi_khac: 'Bạn đã đăng xuất ở một thẻ hoặc thiết bị khác.',
+}
+
 /** Trang đăng nhập hai nửa: giới thiệu nền ink, biểu mẫu nền paper. */
 export function LoginPage() {
   const { isAuthenticated, isDemoMode, isConfigured, isLoading, signIn, enterDemoMode } = useAuth()
@@ -30,6 +36,10 @@ export function LoginPage() {
   const passwordErrorId = useId()
 
   const returnTo = resolveLoginRedirect(location.state)
+  const routeState: unknown = location.state
+  const reason = routeState && typeof routeState === 'object' && 'reason' in routeState && typeof routeState.reason === 'string'
+    ? routeState.reason : null
+  const signOutMessage = reason && Object.hasOwn(signOutMessages, reason) ? signOutMessages[reason] : null
 
   if ((isAuthenticated && !isLoading) || isDemoMode) {
     return <Navigate to={returnTo} replace />
@@ -137,6 +147,8 @@ export function LoginPage() {
               Dùng tài khoản được cấp để mở danh sách y lệnh cần thẩm định.
             </p>
           </div>
+
+          {signOutMessage ? <InlineAlert tone="warning" role="status" className="mb-4">{signOutMessage}</InlineAlert> : null}
 
           {!isConfigured ? (
             <div className="mb-6 flex flex-col gap-3">

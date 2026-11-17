@@ -8,6 +8,7 @@ import { AssistantPanel } from '@/features/assistant/AssistantPanel'
 import type { FocusedFindingContext } from '@/features/assistant/AssistantPanel'
 import type { AssistantHistoryEntry } from '@/features/assistant/HistoryDialog'
 import { useAuth } from '@/features/auth/useAuth'
+import type { SignOutOptions } from '@/features/auth/useAuth'
 import { EvidenceDialog } from '@/features/findings/EvidenceDialog'
 import { OrderDetailView } from '@/features/order-detail/OrderDetailView'
 import { OrdersTable } from '@/features/orders/OrdersTable'
@@ -52,7 +53,7 @@ interface DialogState {
 export function WorkspacePage() {
   const { caId: routeCaId } = useParams<{ caId?: string }>()
   const navigate = useNavigate()
-  const { userEmail, isDemoMode, signOut } = useAuth()
+  const { userEmail, isDemoMode, vaiTro, signOut } = useAuth()
 
   const activeCaseId = routeCaId ?? null
   const isListRoute = activeCaseId === null
@@ -338,16 +339,12 @@ export function WorkspacePage() {
 
   const handleSignIn = useCallback(() => {
     setDrawerSidebarOpen(false)
-    void signOut().then(() => {
-      navigate('/dang-nhap')
-    })
-  }, [signOut, navigate])
+    void signOut()
+  }, [signOut])
 
-  const handleSignOut = useCallback(() => {
-    void signOut().then(() => {
-      navigate('/dang-nhap', { replace: true })
-    })
-  }, [signOut, navigate])
+  const handleSignOut = useCallback((options?: SignOutOptions) => {
+    void signOut(options)
+  }, [signOut])
 
   const activeOrderCode = activeCaseId
     ? detail && detail.ca_id === activeCaseId
@@ -365,6 +362,7 @@ export function WorkspacePage() {
     recentCases,
     userEmail,
     isDemoMode,
+    vaiTro,
     onSelectFilter: handleSelectFilter,
     onOpenCase: handleOpenCase,
     onFocusSearch: handleFocusSearch,

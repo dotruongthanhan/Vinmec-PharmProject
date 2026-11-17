@@ -12,6 +12,7 @@ import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { VinmecLogo } from '@/components/VinmecLogo'
+import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
 import type {
   OrderGroupCounts,
@@ -24,12 +25,13 @@ export interface SidebarNavProps {
   collapsed: boolean
   inDrawer?: boolean
   userEmail: string | null
+  vaiTro?: AuthRole | null
   isDemoMode: boolean
   onSelectFilter: (filter: OrderSelectionFilter) => void
   onToggleCollapse: () => void
   onOpenSettings: () => void
   onSignIn: () => void
-  onSignOut: () => void
+  onSignOut: (options?: { scope?: 'local' | 'global' }) => void
 }
 
 /** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px); phần lọc giữa để trống vì đã lọc theo cột. */
@@ -37,6 +39,7 @@ export function SidebarNav({
   collapsed,
   inDrawer = false,
   userEmail,
+  vaiTro,
   isDemoMode,
   onToggleCollapse,
   onOpenSettings,
@@ -46,12 +49,18 @@ export function SidebarNav({
   const effectiveCollapsed = collapsed && !inDrawer
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
 
-  const accountLabel = isDemoMode ? 'Chế độ demo · chưa đăng nhập' : (userEmail ?? 'Tài khoản dược sĩ')
+  const accountLabel = isDemoMode ? 'Chế độ demo · chưa đăng nhập' : (userEmail ?? 'Tài khoản')
   const shortAccountName = isDemoMode
     ? 'demo'
-    : (userEmail?.split('@')[0]?.trim() || 'dược sĩ')
+    : (userEmail?.split('@')[0]?.trim() || 'Tài khoản')
   const accountInitial = shortAccountName.slice(0, 1).toUpperCase() || 'D'
-  const accountTierLabel = isDemoMode ? 'Demo' : 'Dược sĩ'
+  const accountTierLabel = isDemoMode
+    ? 'Demo'
+    : vaiTro === 'admin'
+      ? 'Quản trị'
+      : vaiTro === 'duoc_si_ls'
+        ? 'Dược sĩ lâm sàng'
+        : 'Chưa cấp quyền'
 
   const handleAccountMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     const items = Array.from(
@@ -245,18 +254,32 @@ export function SidebarNav({
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    setAccountMenuOpen(false)
-                    onSignOut()
-                  }}
-                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
-                >
-                  <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
-                  <span className="flex-1">Đăng xuất</span>
-                </button>
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountMenuOpen(false)
+                      onSignOut({ scope: 'local' })
+                    }}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                  >
+                    <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="flex-1">Đăng xuất</span>
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountMenuOpen(false)
+                      onSignOut({ scope: 'global' })
+                    }}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                  >
+                    <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="flex-1">Đăng xuất mọi thiết bị</span>
+                  </button>
+                </>
               )}
             </div>
           </PopoverContent>

@@ -258,3 +258,48 @@ Trạng thái: `chờ giao` · `đang giao` · `chờ review` · `cần sửa` �
 | B-2b | Tiêu đề bảo mật Caddy; nhật ký truy cập | 2 | Claude viết brief | chờ | |
 | B-2c | Kiểm thử đầu cuối mục 7.4 | 2 | Claude + chủ kho | chờ | |
 | B-3 | Giới hạn tốc độ, trần chi tiêu | 3 | — | hoãn | Mục 8 |
+| T38 | Tiêu đề bảo mật Caddy + nhật ký truy cập | 2 | Codex (hết hạn mức), Claude hoàn tất | xong | 18/11: 784 test qua; đã triển khai EC2, `caddy validate` đạt, tiêu đề có thật; nhật ký ghi `nguoi_dung_id`, `phien_id`, `vai_tro` thật của tài khoản admin |
+| B-2a' | Triển khai T28, T29, T38 lên EC2 và Vercel | 2 | Claude | xong | 18/11: `/api/cases` không token → 401 (cả qua Vercel); trang đăng nhập không còn nút demo; chủ kho đăng nhập admin, danh sách và chat chạy, nhật ký thấy `vai_tro: admin` |
+| T39 | Đăng xuất, thu hồi, hết hạn phiên (mục 11): `POST /api/dang-xuat`, danh sách chặn phiên đã đăng xuất, kiểm trực tuyến mọi điểm cuối, vai trò sống, đăng xuất khi không hoạt động, đa tab, sửa nhãn vai trò | 1b | Codex `gpt-6.1-sol` high | xong ở mức test | 18/11: Python 809 qua, web 231 qua. Brief `briefs/T39-dang-xuat-thu-hoi-het-han-phien.md` |
+
+## 11. Đăng xuất, thu hồi quyền và hết hạn phiên (bổ sung 18/11/2026)
+
+### 11.1 Kiểm hiện trạng
+
+Kiểm bằng đọc mã (`authClient.ts`, `AuthProvider.tsx`, `app/auth/online.py`) và nhật ký truy cập thật trên EC2:
+
+| Câu hỏi | Hiện trạng | Đánh giá |
+| :--- | :--- | :-: |
+| Bấm "Đăng xuất" thì web làm gì | Xoá trạng thái giao diện ngay, rồi gọi `supabase.auth.signOut()` (mặc định phạm vi `global`: đăng xuất **mọi** thiết bị và thu hồi mọi refresh token) | Chạy, nhưng chưa có lựa chọn và chưa báo backend |
+| Sau đăng xuất, access token cũ còn dùng được không | **Còn, tới khi hết hạn (tới 1 giờ)** cho mọi điểm cuối đọc. Chỉ `POST .../feedback` có kiểm trực tuyến (đệm 60 giây, nên vẫn còn tới 60 giây) | **Thiếu** |
+| Đổi vai trò hoặc khoá tài khoản thì sao | Token cũ mang vai trò cũ tới khi hết hạn; kiểm trực tuyến chỉ xem token còn hợp lệ, **không** đối chiếu vai trò hiện tại | **Thiếu** |
+| Tự đăng xuất khi không hoạt động | Không có | **Thiếu** (gói Supabase miễn phí không có *inactivity timeout*) |
+| Đăng xuất ở tab này, tab kia thế nào | `onAuthStateChange` nhận `SIGNED_OUT`; chưa có test cho trường hợp nhiều tab | Cần kiểm thử |
+| Nhãn vai trò ở thanh bên | **Lỗi:** `SidebarNav.tsx` gắn cứng `'Dược sĩ'`, không đọc vai trò. Nhật ký xác nhận `vai_tro: admin` ở backend nên chỉ là lỗi hiển thị | Lỗi |
+| Lý do bị đăng xuất | Không báo người dùng | Thiếu |
+
+### 11.2 Quyết định
+
+| Mã | Quyết định | Lý do |
+| :-: | :--- | :--- |
+| Q-L1 | Nút "Đăng xuất" mặc định đăng xuất **thiết bị này** (`scope: 'local'`: thu hồi refresh token của phiên hiện tại). Thêm lựa chọn "Đăng xuất mọi thiết bị" (`scope: 'global'`) | Không bất ngờ đẩy người dùng khỏi thiết bị khác; vẫn có đường thoát khi nghi lộ |
+| Q-L2 | Thêm `POST /api/dang-xuat`: backend đưa phiên (`session_id`, hoặc băm token nếu thiếu) vào **danh sách chặn trong bộ nhớ** tới khi token hết hạn; mọi yêu cầu sau đó dùng token này bị `401`. Web gọi nó **trước** khi gọi Supabase, nhưng chỉ khi tự đăng xuất (không gọi khi đăng xuất vì `401`) | JWT là không trạng thái nên không thu hồi được; danh sách chặn làm đăng xuất có hiệu lực ngay |
+| Q-L3 | Kiểm trực tuyến (gọi Supabase `/auth/v1/user`, đệm 60 giây theo băm token) áp cho **mọi điểm cuối** (trừ `/api/health`). Khi Supabase báo `401`, `403` hoặc `404` (đã đăng xuất, bị khoá, đã xoá) → `401`. Khi Supabase lỗi mạng hoặc `5xx`: **thao tác ghi và gọi LLM** (`feedback`, `ask`, `ai`) từ chối `503`; **điểm cuối chỉ đọc** tạm tin chữ ký JWT và ghi cảnh báo vào nhật ký | Thu hồi có hiệu lực trong tối đa 60 giây mà không để Supabase gián đoạn làm sập việc xem |
+| Q-L4 | **Vai trò sống:** vai trò dùng để kiểm quyền lấy từ `app_metadata.role` trong **phản hồi kiểm trực tuyến**, không chỉ từ token. Hai giá trị khác nhau thì dùng giá trị sống; giá trị sống không hợp lệ → `403` | Hạ quyền hay thu quyền có hiệu lực trong ≤ 60 giây, không phải chờ token hết hạn |
+| Q-L5 | Rút **hạn access token** (JWT expiry trong Supabase) từ 3600 xuống **900 giây** (15 phút). Việc này làm trong bảng điều khiển, không đổi mã | Thu hẹp cửa sổ lộ token; gia hạn tự động nên không ảnh hưởng người dùng |
+| Q-L6 | **Tự đăng xuất khi không hoạt động 30 phút** và **tối đa 12 giờ kể từ lúc đăng nhập**, ở phía web (hạn mức Supabase miễn phí không có tính năng này). Hằng số nằm một chỗ, dễ đổi. Báo lý do ở trang đăng nhập | Máy dùng chung ở khoa; giảm rủi ro bỏ quên phiên |
+| Q-L7 | Đăng xuất ở một tab thì mọi tab cùng trình duyệt cũng thoát | Hành vi người dùng mong đợi |
+| Q-L8 | Chưa làm: quản trị viên thu hồi phiên của người khác từ giao diện (cần khoá `service_role` ở phía máy chủ); tạm làm trong bảng điều khiển Supabase (Users → xoá hoặc khoá tài khoản; người dùng bị khoá mất quyền tối đa sau 60 giây nhờ Q-L3) | Để sau demo, cùng giao diện quản trị |
+
+### 11.3 Kiểm thử
+
+Backend: đăng xuất rồi dùng lại token → `401` ngay (cùng tiến trình); danh sách chặn tự dọn khi token hết hạn và có trần kích thước; kiểm trực tuyến trả `401` / `403` / `404` → `401`; Supabase `5xx` → đọc vẫn qua, ghi `503`; đổi vai trò sống từ `admin` xuống `duoc_si_ls` → quyền admin bị bỏ ở yêu cầu kế (sau hết đệm); vai trò sống không hợp lệ → `403`; đệm 60 giây; không ghi token vào nhật ký.
+
+Web: nhãn vai trò theo `vaiTro` (`admin` → "Quản trị", `duoc_si_ls` → "Dược sĩ lâm sàng", demo → "Demo"); đăng xuất gọi `POST /api/dang-xuat` đúng một lần rồi Supabase `signOut` với `scope` đúng; không gọi `POST /api/dang-xuat` khi đăng xuất do `401`; hủy yêu cầu đang chạy; xoá bộ nhớ chat; hết 30 phút không hoạt động thì tự đăng xuất (đồng hồ giả); vượt 12 giờ thì tự đăng xuất; `SIGNED_OUT` từ tab khác dọn phiên; trang đăng nhập hiện đúng lý do.
+
+### 11.4 Kiểm thử đầu cuối sau triển khai
+
+1. Đăng xuất rồi gọi lại API bằng token cũ (Claude chạy bằng `curl` với token do chủ kho dán tạm vào, hoặc kiểm qua nhật ký) → `401`.
+2. Trong bảng điều khiển Supabase đổi vai trò của một tài khoản thử, chờ 60 giây, thao tác → bị chặn.
+3. Để tab nhàn rỗi 30 phút (hoặc hạ hằng số khi thử) → tự đăng xuất, trang đăng nhập có thông báo.
+4. Hai tab cùng đăng nhập, đăng xuất ở một tab → tab kia thoát.

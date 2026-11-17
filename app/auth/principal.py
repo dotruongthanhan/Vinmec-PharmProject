@@ -12,3 +12,4 @@ class Principal(BaseModel):
     email: str | None = None
     vai_tro: str
     phien_id: str | None = None
+    het_han_luc: float | None = None
