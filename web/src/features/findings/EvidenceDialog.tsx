@@ -26,6 +26,7 @@ import { InlineAlert } from '@/components/ui/inline-alert'
 import { RecordId } from '@/components/ui/record-id'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getSafeHttpsUrl, splitHighlightSegments } from '@/lib/aiReview'
+import { formatClinicalText } from '@/lib/displayFormat'
 import type { EvidenceTarget } from '@/lib/uiTypes'
 
 export interface EvidenceDialogProps {
@@ -222,7 +223,7 @@ export function EvidenceDialog({
                             {label}
                           </DataTableCell>
                           <DataTableCell className="whitespace-pre-wrap tabular-nums">
-                            {value}
+                            {formatClinicalText(value)}
                           </DataTableCell>
                         </DataTableRow>
                       ))}
@@ -382,11 +383,13 @@ export function EvidenceDialog({
                             {inp.nhan}
                           </DataTableCell>
                           <DataTableCell align="right" className="font-medium">
-                            {inp.gia_tri_text} {inp.don_vi}
+                            {formatClinicalText(`${inp.gia_tri_text} ${inp.don_vi}`.trim())}
                           </DataTableCell>
                           <DataTableCell className="text-xs text-fg-subtle tabular-nums">
                             <div className="flex flex-wrap items-center gap-1.5">
-                              {inp.thoi_diem_text ? <span>{inp.thoi_diem_text}</span> : null}
+                              {inp.thoi_diem_text ? (
+                                <span>{formatClinicalText(inp.thoi_diem_text)}</span>
+                              ) : null}
                               {inp.ban_ghi_id ? <RecordId id={inp.ban_ghi_id} /> : null}
                               {!inp.thoi_diem_text && !inp.ban_ghi_id ? <span>—</span> : null}
                             </div>
@@ -406,7 +409,7 @@ export function EvidenceDialog({
                   <ul className="flex list-disc flex-col gap-1 pl-4 text-sm text-fg">
                     {target.metric.ghi_chu.map((note, idx) => (
                       <li key={`dlg-note-${idx}`} className="whitespace-pre-wrap">
-                        {note}
+                        {formatClinicalText(note)}
                       </li>
                     ))}
                   </ul>

@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "disclaimer": "Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalidated. We may limit or otherwise restrict your access to the API in line with our Terms of Service.",
+    "terms": "https://open.fda.gov/terms/",
+    "license": "https://open.fda.gov/license/",
+    "last_updated": "2026-11-16",
+    "results": {
+      "skip": 0,
+      "limit": 1,
+      "total": 177347
+    }
+  },
+  "results": [
+    {
+      "substance_name": "(((2-CHLOROETHYL)SULFONYL)METHYL)BENZENE",
+      "unii": "VH2M64G864"
+    }
+  ]
+}

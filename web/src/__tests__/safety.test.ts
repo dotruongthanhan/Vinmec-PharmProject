@@ -11,7 +11,6 @@ const FORBIDDEN_PATTERNS: readonly { label: string; token: string }[] = [
   { label: 'innerHTML', token: ['inner', 'HTML'].join('') },
   { label: 'eval(', token: ['ev', 'al('].join('') },
   { label: 'new Function', token: ['new ', 'Function'].join('') },
-  { label: 'sessionStorage', token: ['session', 'Storage'].join('') },
 ]
 
 const LOCAL_STORAGE_TOKEN = ['local', 'Storage'].join('')
@@ -36,6 +35,12 @@ describe('kiểm tra tĩnh an toàn hiển thị và lưu trữ', () => {
 
     expect(filesUsingLocalStorage).toHaveLength(1)
     expect(filesUsingLocalStorage[0]).toMatch(/lib[/\\]prefs\.ts$/)
+  })
+
+  it('chỉ lib/demoSession.ts được dùng bộ nhớ phiên cho cờ demo', () => {
+    const token = ['session', 'Storage'].join('')
+    const files = Object.entries(sourceFiles).filter(([, source]) => source.includes(token))
+    expect(files.map(([path]) => path)).toEqual(['../lib/demoSession.ts'])
   })
 
   it('không tệp nào chứa liên kết mạng ngoài http/https', () => {

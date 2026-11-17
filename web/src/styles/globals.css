@@ -3,6 +3,55 @@
 @import "@fontsource-variable/inter/index.css";
 @import "@fontsource-variable/jetbrains-mono/index.css";
 
+.workspace-center, .orders-panel { container-type: inline-size; }
+.toolbar-search, .toolbar-mode { display: none; }
+.order-nav-label { display: none; }
+.orders-table th, .orders-table td { padding: 2px 4px; overflow-wrap: anywhere; }
+.orders-table th { text-transform: none; letter-spacing: normal; }
+.orders-table .order-dot { width: 16px; }
+.orders-table .order-time { width: 64px; }
+.orders-table .order-code { width: 88px; }
+.orders-table .order-patient { width: 60px; }
+.orders-table .order-dept { width: 52px; }
+.orders-table .order-result { width: 112px; }
+.orders-table .order-feedback { width: 24px; }
+.factor-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; align-items: stretch; }
+@container (min-width: 500px) {
+  .factor-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@container (min-width: 700px) {
+  .toolbar-search { display: flex; }
+  .list-search { display: none; }
+  .order-nav-label { display: inline; }
+  .factor-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .orders-table .order-time { width: 80px; }
+  .orders-table .order-code { width: 96px; }
+  .orders-table .order-patient { width: 80px; }
+  .orders-table .order-dept { width: 88px; }
+}
+@container (min-width: 1000px) {
+  .toolbar-mode { display: inline-flex; }
+}
+@container (max-width: 539px) {
+  .orders-table .order-time { width: 52px; }
+  .orders-table .order-code { width: 80px; }
+  .orders-table .order-patient { width: 54px; }
+  .orders-table .order-dept { width: 44px; }
+  .orders-table .order-result { width: 100px; }
+  .orders-table td:nth-child(7) > span { white-space: normal; font-size: var(--text-2xs); }
+  .orders-table .order-feedback { width: 20px; }
+}
+@container (max-width: 399px) {
+  .orders-table .order-dot { width: 12px; }
+  .orders-table .order-time { width: 42px; }
+  .orders-table .order-code { width: 66px; }
+  .orders-table .order-patient { width: 48px; }
+  .orders-table .order-dept { width: 36px; }
+  .orders-table .order-result { width: 88px; }
+  .orders-table th, .orders-table td { padding-inline: 2px; }
+  .orders-table td:nth-child(3) { font-size: var(--text-2xs); }
+}
+
 @layer base {
   html,
   body,
@@ -34,7 +83,7 @@
   [role='tab']:focus-visible,
   [role='option']:focus-visible,
   [tabindex]:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
 

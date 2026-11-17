@@ -8,23 +8,25 @@ import {
 } from 'lucide-react'
 import { Toaster as SonnerToaster, toast as sonnerToast } from 'sonner'
 import type { ToasterProps } from 'sonner'
+import { useTheme } from '@/features/theme/useTheme'
 
-/** Khung thông báo nổi góc dưới phải, dùng hệ thống biến màu thiết kế sáng. */
+/** Khung thông báo nổi góc dưới phải, theo chế độ màu hiện tại. */
 export function Toaster({
   position = 'bottom-right',
   duration = 4000,
-  theme = 'light',
+  theme,
   closeButton = true,
   offset = { bottom: 88, right: 16 },
   toastOptions,
   icons,
   ...props
 }: ToasterProps) {
+  const { theme: resolvedTheme } = useTheme()
   return (
     <SonnerToaster
       position={position}
       duration={duration}
-      theme={theme}
+      theme={theme ?? resolvedTheme}
       closeButton={closeButton}
       offset={offset}
       icons={{
@@ -66,7 +68,7 @@ export function Toaster({
           title: 'text-sm font-medium leading-snug',
           description: 'text-xs text-fg-muted leading-normal',
           actionButton:
-            'inline-flex h-7 shrink-0 cursor-pointer items-center justify-center rounded-sm bg-primary px-2.5 text-xs font-medium text-surface transition-colors duration-120 hover:bg-primary-hover',
+            'inline-flex h-7 shrink-0 cursor-pointer items-center justify-center rounded-sm bg-primary px-2.5 text-xs font-medium text-on-primary transition-colors duration-120 hover:bg-primary-hover',
           cancelButton:
             'inline-flex h-7 shrink-0 cursor-pointer items-center justify-center rounded-sm border border-line-strong bg-surface px-2.5 text-xs font-medium text-fg transition-colors duration-120 hover:bg-surface-hover',
           closeButton:

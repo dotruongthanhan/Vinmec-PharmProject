@@ -6,7 +6,7 @@ import type { ComponentPropsWithRef } from 'react'
 import { cn } from '@/lib/cn'
 
 const dialogContentVariants = cva(
-  'fixed z-50 flex flex-col bg-surface shadow-xl focus:outline-none transition-[opacity,transform] duration-180 ease-out opacity-100',
+  'fixed z-50 flex flex-col bg-surface-raised shadow-xl focus:outline-none transition-[opacity,transform] duration-180 ease-out opacity-100',
   {
     variants: {
       variant: {
@@ -58,7 +58,7 @@ export function DialogOverlay({
   return (
     <DialogPrimitive.Overlay
       className={cn(
-        'fixed inset-0 z-50 bg-fg/45 transition-opacity duration-180 ease-out opacity-100 starting:opacity-0',
+        'fixed inset-0 z-50 bg-overlay/55 transition-opacity duration-180 ease-out opacity-100 starting:opacity-0',
         className,
       )}
       {...props}

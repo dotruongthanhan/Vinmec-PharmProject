@@ -1,0 +1,18 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Valproate Sodium",
+      "ten_chung": "VALPROATE SODIUM",
+      "ham_luong": [
+        {
+          "hoat_chat": "VALPROATE SODIUM",
+          "ham_luong": "100 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

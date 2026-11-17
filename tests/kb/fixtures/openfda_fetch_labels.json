@@ -1,0 +1,30 @@
+{
+  "meta": {"results": {"skip": 0, "limit": 25, "total": 5}},
+  "results": [
+    {
+      "set_id": "combo", "effective_time": "20261117",
+      "openfda": {"generic_name": ["MEROPENEM"], "substance_name": ["MEROPENEM", "VABORBACTAM"], "route": ["INTRAVENOUS"], "product_type": ["HUMAN PRESCRIPTION DRUG"]},
+      "indications_and_usage": ["Combination indication"], "dosage_and_administration": ["Combination dosage"], "contraindications": ["Combination contraindications"], "warnings_and_cautions": ["Combination warnings"], "drug_interactions": ["Combination interactions"], "use_in_specific_populations": ["Combination populations"]
+    },
+    {
+      "set_id": "sparse", "effective_time": "20261117",
+      "openfda": {"generic_name": ["MEROPENEM"], "substance_name": ["MEROPENEM"], "route": ["INTRAVENOUS"], "product_type": ["HUMAN PRESCRIPTION DRUG"]},
+      "indications_and_usage": ["Indication"]
+    },
+    {
+      "set_id": "older", "effective_time": "20240101",
+      "openfda": {"generic_name": ["MEROPENEM"], "substance_name": ["MEROPENEM"], "route": ["INTRAVENOUS"], "product_type": ["HUMAN PRESCRIPTION DRUG"]},
+      "indications_and_usage": ["Indication"], "dosage_and_administration": ["Dosage"], "contraindications": ["Contraindications"]
+    },
+    {
+      "set_id": "b", "effective_time": "20250101",
+      "openfda": {"generic_name": ["MEROPENEM"], "substance_name": ["MEROPENEM"], "route": ["INTRAVENOUS"], "product_type": ["HUMAN PRESCRIPTION DRUG"]},
+      "indications_and_usage": ["Indication"], "dosage_and_administration": ["Dosage"], "contraindications": ["Contraindications"]
+    },
+    {
+      "set_id": "a", "effective_time": "20250101",
+      "openfda": {"generic_name": ["MEROPENEM"], "substance_name": ["MEROPENEM"], "route": ["INTRAVENOUS"], "product_type": ["HUMAN PRESCRIPTION DRUG"]},
+      "indications_and_usage": ["Indication"], "dosage_and_administration": ["Dosage"], "contraindications": ["Contraindications"]
+    }
+  ]
+}

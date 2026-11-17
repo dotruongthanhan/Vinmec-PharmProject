@@ -32,7 +32,7 @@ export interface ReviewApiClient {
   getCase(caId: string): Promise<ChiTietCa>
   getRecord(caId: string, banGhiId: string): Promise<BanGhi>
   sendFeedback(caId: string, payload: GuiPhanHoi): Promise<PhanHoiDaGhi>
-  ask(caId: string, payload: GuiCauHoi): Promise<TraLoi>
+  ask(caId: string, payload: GuiCauHoi, options?: { signal?: AbortSignal }): Promise<TraLoi>
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI>
   getAi(caId: string): Promise<KetQuaAI | null>
   getSource(caId: string, doanTrichId: string): Promise<DoanNguon>
@@ -76,6 +76,12 @@ export class ApiClient implements ReviewApiClient {
     try {
       response = await fetchFn(`${this.baseUrl}${path}`, init)
     } catch (err) {
+      if (
+        (err instanceof DOMException && err.name === 'AbortError') ||
+        (err instanceof Error && err.name === 'AbortError')
+      ) {
+        throw err
+      }
       if (err instanceof ApiError) {
         throw err
       }
@@ -154,13 +160,14 @@ export class ApiClient implements ReviewApiClient {
     })
   }
 
-  ask(caId: string, payload: GuiCauHoi): Promise<TraLoi> {
+  ask(caId: string, payload: GuiCauHoi, options?: { signal?: AbortSignal }): Promise<TraLoi> {
     return this.request<TraLoi>(`/cases/${encodeURIComponent(caId)}/ask`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
+      signal: options?.signal,
     })
   }
 

@@ -1,9 +1,11 @@
+import { MessageSquareText } from 'lucide-react'
 import { createElement } from 'react'
 import type { ChiSo, GuiPhanHoi, NhanDinh } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
 import { cn } from '@/lib/cn'
-import { parseLeadingSymbolLabel } from '@/lib/displayFormat'
+import { formatClinicalText, parseLeadingSymbolLabel } from '@/lib/displayFormat'
 import {
   ICON_OF_TONE,
   iconOfOrigin,
@@ -26,6 +28,7 @@ export interface FindingCardProps {
   onSubmitFeedback: (caId: string, payload: GuiPhanHoi) => Promise<boolean>
   onClearFeedbackError: (caId: string, nhanDinhId: string) => void
   onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
+  onAskAboutFinding?: (finding: NhanDinh) => void
 }
 
 const STRIP_BG_CLASS: Record<SemanticTone, string> = {
@@ -49,6 +52,7 @@ export function FindingCard({
   onSubmitFeedback,
   onClearFeedbackError,
   onOpenEvidence,
+  onAskAboutFinding,
 }: FindingCardProps) {
   const tone = toneOfFinding({
     ket_luan_ma: finding.ket_luan_ma,
@@ -80,13 +84,14 @@ export function FindingCard({
         ? 'AI · chưa kiểm chứng'
         : 'Luật')
 
-  const drugLabel = finding.thuoc || 'Toàn đơn'
+  const drugLabel = finding.thuoc ? formatClinicalText(finding.thuoc) : 'Toàn đơn'
 
   return (
     <article
+      id={`finding-${finding.nhan_dinh_id}`}
       aria-label={`Nhận định: ${drugLabel} — ${badgeLabel}`}
       className={cn(
-        'relative rounded-md border bg-surface shadow-xs',
+        'relative rounded-md border bg-surface',
         isAiAdded ? 'border-dashed border-ai-line' : 'border-line',
       )}
     >
@@ -119,6 +124,16 @@ export function FindingCard({
           >
             {originLabel}
           </Badge>
+          {onAskAboutFinding ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              iconLeft={<MessageSquareText className="size-3.5" strokeWidth={1.75} />}
+              onClick={() => onAskAboutFinding(finding)}
+            >
+              Hỏi về mục này
+            </Button>
+          ) : null}
         </div>
       </div>
 
@@ -126,7 +141,7 @@ export function FindingCard({
         <div className="text-sm font-medium text-fg-muted">{drugLabel}</div>
 
         <p className="text-base font-medium leading-relaxed text-fg whitespace-pre-wrap">
-          {finding.nhan_xet}
+          {formatClinicalText(finding.nhan_xet)}
         </p>
 
         {finding.thong_tin_con_thieu.length > 0 ? (
@@ -136,7 +151,10 @@ export function FindingCard({
         ) : null}
 
         {finding.nguon_goc_ma === 'luat' ? (
-          <AiNote dienGiaiAi={finding.dien_giai_ai} deXuatAi={finding.de_xuat_ai} />
+          <AiNote
+            dienGiaiAi={finding.dien_giai_ai ? formatClinicalText(finding.dien_giai_ai) : null}
+            deXuatAi={finding.de_xuat_ai ? formatClinicalText(finding.de_xuat_ai) : null}
+          />
         ) : null}
 
         <EvidenceList

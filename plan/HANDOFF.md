@@ -1,5 +1,88 @@
 # HANDOFF – bàn giao giữa các phiên Claude
 
+## CẬP NHẬT PHIÊN 5 (17/11/2026, khoảng 10:35) – ĐỌC PHẦN NÀY TRƯỚC
+
+Khối "PHIÊN 4" bên dưới vẫn đúng về quyết định của người dùng, bẫy đã gặp và danh sách việc kế; riêng mục 2 và 3 của nó (bốn việc chạy nền) **đã xử lý xong**:
+
+- T14: code đạt. Người dùng đã đặt `DATABASE_URL` Supabase (session pooler); `python -m app.db check` kết nối được, cơ sở dữ liệu còn trống. **Chưa chạy lần nạp thật**, đang chờ người dùng cho phép (`uv run python -m app.db all`). Bộ đệm nhúng mới có ít đoạn; kho vừa dựng lại (3.730 đoạn) nên phải nhúng lại trước khi nạp véc-tơ đầy đủ.
+- T24-fix-1: đạt khi gọi thật (câu hỏi demo `ok` 6/6).
+- T25-fix-1 + T25-fix-3: đạt; đã tải lại openFDA thật (50/50 nhãn, NDC 50/50). T25-fix-2 bị dừng và thay bằng fix-3.
+- T23-fix-1: đạt theo lệnh và theo DOM; **chưa ai xem bằng mắt** (chụp màn hình hết giờ). Nhờ người dùng xem qua hoặc thử chụp lại.
+- Toàn kho: 723 test qua, 0 trượt; web 141 test qua. Commit mới nhất là `d042d0c`; mọi thay đổi của phiên 4 và 5 chưa commit.
+- Người dùng chốt phiên 5: code chính giao **Codex `gpt-6.1-sol` xhigh trước**, agy `gemini-4-hydrogen-xhigh` dự phòng.
+- Cổng 8000 đang bị một tiến trình `uvicorn` cũ giữ (code cũ); khi kiểm dùng cổng khác hoặc nhờ người dùng tắt.
+
+Việc kế: mục 5 của khối phiên 4, bắt đầu từ bước 2 (chạy trọn kịch bản demo) và các brief chưa viết ở bước 3.
+
+---
+
+## CẬP NHẬT PHIÊN 4 (17/11/2026, khoảng 10:30) – ĐỌC PHẦN NÀY TRƯỚC
+
+Các khối "CẬP NHẬT PHIÊN 2/3" bên dưới đã cũ; chỉ dùng để tra lệnh. Vai trò của Claude không đổi: **không viết, không sửa code**; chỉ viết brief, giao agent, review bằng lệnh, ghi `plan/TRACKING.md`.
+
+### 1. Người dùng đã chốt trong phiên này
+
+- Giao diện: **không chuyển Next.js**, giữ Vite + React + Tailwind v4 + Radix, thêm `react-router-dom`, `motion`, `@supabase/supabase-js` (4 gói đã cài trong `web/`).
+- Bố cục: trang chủ → đăng nhập → bàn làm việc ba cột (thanh bên tính năng nền tối · danh sách y lệnh mỗi dòng một y lệnh · trợ lý AI gõ câu hỏi). Phải "fancy", tránh dấu hiệu giao diện do AI sinh (danh sách cấm ở `briefs/T23-…md` mục 3.2). Có **chế độ sáng / tối**.
+- Supabase đã kết nối; cần lệnh nạp chạy lại được từ đầu khi sửa trường.
+- openFDA: dùng API của họ; kết quả khảo sát ở `data/kb_sources/openfda_api.md`.
+- Được giao song song Codex `gpt-6.1-sol` **xhigh** và agy `gemini-4-hydrogen-xhigh`, cái nào làm chính cũng được. Được chạy `npm install` trong `web/`.
+
+### 2. Việc đang chạy nền lúc bàn giao (phiên mới không nhận được thông báo hoàn tất, phải tự kiểm)
+
+| Task | Agent | Brief | Tệp báo cáo | Cách biết đã xong |
+| :--- | :--- | :--- | :--- | :--- |
+| T14 nạp Supabase | Codex xhigh | `briefs/T14-nap-du-lieu-supabase.md` | `plan/reports/T14.md` | Tệp báo cáo có nội dung; có `db/schema.sql`, `app/db/` |
+| T23-fix-1 sửa giao diện + sáng/tối | Codex xhigh | `briefs/T23-fix-1.md` (+ `T23-bo-sung-1-che-do-sang-toi.md`) | `plan/reports/T23-fix-1.md` | Tệp báo cáo có nội dung |
+| T24-fix-1 chatbot | Codex xhigh | `briefs/T24-fix-1.md` | `plan/reports/T24-fix-1.md` | Tệp báo cáo có nội dung |
+| T25-fix-1 truy vấn openFDA | agy xhigh | `briefs/T25-fix-1.md` | `plan/reports/T25-fix-1.md` | Tệp kết thúc bằng mẫu báo cáo `TRẠNG THÁI…` |
+
+Tệp báo cáo rỗng hoặc tệp `.log` kết thúc bằng `Selected model is at capacity` nghĩa là phiên agent đã chết: kiểm `git status` xem đã ghi gì, rồi giao lại đúng brief đó (Codex quá tải thì chuyển agy, thêm câu "không gọi công cụ shell" và tự chạy phần nghiệm thu).
+
+### 3. Review từng việc khi về
+
+Chạy đúng mục "Nghiệm thu" của brief, cộng các kiểm độc lập sau:
+
+- **T24-fix-1:** `uv run uvicorn app.api.main:app --port 8010`, rồi gọi `POST /api/cases/DEMO-02/ask` bằng Python `httpx` (gọi bằng `curl` từ Git Bash làm hỏng tiếng Việt, ra 400). Câu `Vì sao cần xem lại liều meropenem ở ca này?` phải ra `ok` có trích dẫn (trước khi sửa ra `khong_co_nguon`); câu chèn lệnh phải ra `ngoai_pham_vi`. Mở một `doan_trich_id` trong câu trả lời qua `/sources/…`. `GET /api/cases` phải có `ma_y_lenh`, `thoi_diem_ke`, `nguoi_benh_tom_tat`, `thuoc`. Đọc diff `app/verify/` để chắc bước kiểm con số không bị nới.
+- **T23-fix-1:** trong `web/`: `npm run build`, `npm run lint` (0 cảnh báo), `npx vitest run`. Mở trình duyệt (`.claude/launch.json` có `cdss-web` cổng 5173, backend cổng 8000 phải **khởi động lại** để nạp code mới): trang chủ `/`, `/dang-nhap` → nút `Vào bản demo`, `/app`, `/app/y-lenh/DEMO-02`. Soát: dấu tiếng Việt ở tiêu đề chữ có chân (trước đó vỡ: "Tấ t cả y lệnh"), F5 không bị đá về đăng nhập, bảng không tràn ngang, đủ cột y lệnh, chuyển sáng / tối ở cả năm màn, gõ một câu hỏi vào trợ lý với backend thật.
+- **T14:** `uv run pytest -q tests/db`, `uv run python -m app.db all --dry-run`, `uv run python -m app.db check`. Lúc phiên này kết thúc còn 1 test trượt (`tests/db/test_cli.py::test_sql_schema_only_targets_allowed_namespaces`) do agent đang làm dở. Đọc `db/schema.sql`: chỉ đụng lược đồ `nghiep_vu`, `tri_thuc`; `embedding halfvec(2048)`. **Không chạy lệnh ghi vào cơ sở dữ liệu thật**; hướng dẫn người dùng tự chạy `uv run python -m app.db all` lần đầu.
+- **T25-fix-1:** agy không chạy lệnh, Claude tự chạy: `PYTHONIOENCODING=utf-8 uv run python -m app.kb.fetch openfda`, `… ndc`, `… report`, `uv run python -m app.kb.build`. Đích: 8 hoạt chất có nhãn đúng đường dùng (kiểm `openfda.route` của `levofloxacin`, `ciprofloxacin`), NDC đủ 50 hoặc có lý do, dòng dựng kho còn `over_max=0 under_50=0 empty_act=0`. Sau khi kho đổi, bộ đệm nhúng phải nhúng lại các đoạn mới.
+
+### 4. Hiện trạng đã kiểm trong phiên này
+
+- T22 (giao diện theo plan 1.4) đã xong và đã commit `ee0912d`. Mọi thứ sau đó **chưa commit**.
+- T23 (Hydrogen): dựng được cả năm màn, chạy với backend thật; 10 lỗi A1–A10 ở `briefs/T23-fix-1.md`.
+- T24 (Hydrogen): toàn kho 656 test qua; phần an toàn đúng; câu hỏi chính của demo ra `khong_co_nguon`.
+- T25 (Codex): code xong; Codex không tải được vì hộp cát chặn mạng; Claude chạy tải thật: NDC 46/50, 8 nhãn đường tiêm báo "không tìm thấy" sai.
+- Bước AI nền (T12) chạy thật trên DEMO-02: xong sau 30,3 giây, 4 nhận định có diễn giải. Lỗi treo nhúng OpenRouter hôm 16/11 không còn tái hiện.
+- Hợp đồng API mới: `plan/api-hop-dong-v1.2-hoi-dap.md` (hỏi đáp, và mục 4 thêm 4 trường cho danh sách).
+
+### 5. Việc kế tiếp theo thứ tự ưu tiên (demo 20/11, đóng băng trưa 19/11)
+
+1. Review bốn việc ở mục 2, giao sửa tiếp nếu chưa đạt.
+2. Chạy trọn kịch bản demo trên bản đóng gói: `npm run build` trong `web/` rồi `uv run uvicorn app.api.main:app --port 8000`, mở `http://localhost:8000/`.
+3. Brief chưa viết: backend kiểm mã phiên Supabase (API đang mở, đăng nhập chỉ chặn ở trình duyệt); T03-fix-1 (câu căn cứ của luật còn thô); câu cảnh báo `ai_ha_muc_bi_loai` thành tiếng Việt; T09 (12–15 ca tấn công, thêm ca giả lập); bảng nhóm dược lý từ `drug/ndc` cho luật dị ứng cùng nhóm; chuyển ứng dụng sang đọc ca từ Supabase (sau T14).
+4. T10: sửa `docs/erd.md` (Claude tự làm, là tài liệu).
+
+### 6. Việc chờ người dùng
+
+- Xoá bằng quyền quản trị: `tests/architecture/.tmp`, `tests/kb/.tmp` (Codex để lại, bị khoá quyền; làm 24 test `tests/kb` báo lỗi dọn dẹp; khi chạy lệnh phải thêm `--exclude` / `--ignore` hai thư mục này).
+- Tạo `web/.env.local` với `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` và một tài khoản thử trong Supabase Auth; chưa có thì web chạy "chế độ demo".
+- Chạy lần nạp Supabase thật sau khi T14 đạt.
+- Xin khoá openFDA miễn phí (`OPENFDA_API_KEY` trong `.env`) nếu mở rộng danh mục hoạt chất; chốt danh mục ở `config/kb/hoat_chat_can_lay.yaml`.
+- Các câu Q10, Q3, Q4; xung đột hợp nhất `docs/bao-cao-tuan-1.md`.
+
+### 7. Bẫy đã gặp
+
+- agy gọi công cụ shell thì cả phiên ra rỗng: prompt luôn có câu cấm; Claude tự chạy lệnh nghiệm thu.
+- Codex với `-s workspace-write` **không ra được mạng**: việc cần mạng (tải openFDA, gọi LLM thật) Claude tự chạy khi review.
+- Codex chạy 3 phiên cùng lúc từng báo `model is at capacity` sau khi đọc xong ngữ cảnh.
+- Máy chủ `uvicorn` / Vite chạy từ trước không nạp code mới; cổng 8000 có thể đang bị một tiến trình cũ giữ.
+- Windows: đặt `PYTHONIOENCODING=utf-8` khi lệnh in tiếng Việt.
+- Không đọc, không in giá trị trong `.env`.
+
+---
+
 > **CẬP NHẬT PHIÊN 3 (16/11, khoảng 14:30):** đã review 5 task của phiên 2: T19, T20 đạt; T04b đạt ở mức test; T04a, T05 cần sửa. **Đang chạy nền 4 task:** T12 (agy xhigh, nối AI vào API theo `plan/api-hop-dong-v1.1-bo-sung.md`), T21 (agy xhigh, web hiển thị kết quả AI), T05-fix-1 và T04a-fix-1 (Codex xhigh). Nếu phiên này chết trước khi chúng về: kiểm `app/orchestration/`, `web/src/state/useAiReview.ts`, `config/settings.yaml` (mục `llm` phải có `max_tokens: 16000`), `uv run pytest -q tests/kb`; thiếu thì giao lại bằng đúng brief. Cách review từng task nằm ở mục "Nghiệm thu" của brief. Kiểm thật bước AI: script đo ở mục 1 của `briefs/T05-fix-1.md` (DEMO-02 phải có phần AI cả 3 lần). Quy định mới của người dùng: Codex luôn `model_reasoning_effort=xhigh`; ưu tiên agy xhigh. Backend và web chạy một tiến trình: `npm run build` trong `web/` rồi `uv run uvicorn app.api.main:app --port 8000`, mở `http://localhost:8000/`.
 
 > **CẬP NHẬT PHIÊN 2, LẦN 3 (16/11):** T11 và T13 (kèm T13-fix-1) đã xong, 430 test qua. Người dùng chốt thêm: cơ sở dữ liệu trên **Supabase** (tự cấu hình), giao diện chính là **bản web React** ở `web/` gọi API FastAPI (`plan/api-hop-dong-v1.md`), Streamlit chỉ để tham khảo. **Đang giao song song 5 task:** T19, T20, T04a, T04b, T05 (gộp T06); xem `TRACKING.md` để biết task nào đã review. Khi review: agy không chạy được lệnh nên Claude phải tự chạy `uv run pytest`, `ruff`, và trong `web/` chạy `npm run build`, `npm run lint`, `npx vitest run`; `ruff` thêm `--exclude tests/architecture/.tmp`; máy chủ Streamlit / uvicorn phải khởi động lại mới nạp code mới. Sau đợt này: T12 (đồ thị + nối các phần), T03-fix-1, T14, T16. Còn 3 plan con: 1.1 kiến trúc, 1.2 giao diện, 1.3 dữ liệu.

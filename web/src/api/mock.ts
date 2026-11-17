@@ -26,6 +26,7 @@ import type {
 export interface MockClientOptions {
   delayMs?: number
   aiDelayMs?: number
+  askDelayMs?: number
   cases?: DanhSachCa
   details?: Record<string, ChiTietCa>
   records?: Record<string, Record<string, BanGhi>>
@@ -56,6 +57,7 @@ function formatNowTime(): string {
 export class MockClient implements ReviewApiClient {
   private readonly delayMs: number
   private readonly aiDelayMs: number
+  private readonly askDelayMs: number
   private readonly casesData: DanhSachCa
   private readonly detailsData: Record<string, ChiTietCa>
   private readonly recordsData: Record<string, Record<string, BanGhi>>
@@ -66,6 +68,7 @@ export class MockClient implements ReviewApiClient {
   constructor(options: MockClientOptions = {}) {
     this.delayMs = options.delayMs ?? 90
     this.aiDelayMs = options.aiDelayMs ?? 3000
+    this.askDelayMs = options.askDelayMs ?? 1500
     this.casesData = cloneData(options.cases ?? MOCK_CASES)
     this.detailsData = cloneData(options.details ?? MOCK_CASE_DETAILS)
     this.recordsData = cloneData(options.records ?? MOCK_RECORDS)
@@ -78,6 +81,29 @@ export class MockClient implements ReviewApiClient {
     }
     await new Promise<void>((resolve) => {
       setTimeout(resolve, this.delayMs)
+    })
+  }
+
+  private async waitAskDelay(signal?: AbortSignal): Promise<void> {
+    if (signal?.aborted) {
+      throw new DOMException('Đã huỷ yêu cầu.', 'AbortError')
+    }
+    if (this.askDelayMs <= 0) {
+      return
+    }
+    await new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        signal?.removeEventListener('abort', onAbort)
+        resolve()
+      }, this.askDelayMs)
+
+      const onAbort = () => {
+        clearTimeout(timer)
+        signal?.removeEventListener('abort', onAbort)
+        reject(new DOMException('Đã huỷ yêu cầu.', 'AbortError'))
+      }
+
+      signal?.addEventListener('abort', onAbort, { once: true })
     })
   }
 
@@ -188,20 +214,74 @@ export class MockClient implements ReviewApiClient {
     return cloneData(recorded)
   }
 
-  async ask(caId: string, payload: GuiCauHoi): Promise<TraLoi> {
-    await this.waitDelay()
-    if (!this.detailsData[caId]) {
+  async ask(
+    caId: string,
+    payload: GuiCauHoi,
+    options?: { signal?: AbortSignal },
+  ): Promise<TraLoi> {
+    const detail = this.detailsData[caId]
+    if (!detail) {
+      await this.waitDelay()
       throw new ApiError('khong_tim_thay', `Không tìm thấy ca ${caId}.`, 404)
     }
     if (!payload.cau_hoi.trim()) {
+      await this.waitDelay()
       throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi không được để trống.', 422)
     }
+    if (payload.cau_hoi.trim().length > 1000) {
+      await this.waitDelay()
+      throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi vượt quá 1000 ký tự.', 422)
+    }
+    if (!detail.che_do.hoi_them) {
+      await this.waitDelay()
+      return {
+        trang_thai: 'chua_san_sang',
+        noi_dung: 'Máy chủ chưa bật trợ lý.',
+        trich_dan: [],
+        cong_cu_da_goi: [],
+        thoi_gian_ms: 0,
+      }
+    }
+
+    await this.waitAskDelay(options?.signal)
+
+    if (caId === 'DEMO-02') {
+      const focusNote = payload.nhan_dinh_id
+        ? ' Đối với nhận định đang chọn về hiệu chỉnh liều theo chức năng thận,'
+        : ''
+      return {
+        trang_thai: 'ok',
+        noi_dung: `${focusNote ? `${focusNote.trim()} ` : ''}Hồ sơ xét nghiệm ghi nhận creatinin máu tăng lên 212,0 µmol/L lúc 05:30 · 10/11/2026 [1], tương ứng CrCl ước tính theo Cockcroft-Gault là 16,0 mL/phút. Theo nhãn thuốc FDA MERREM IV, người bệnh suy giảm chức năng thận cần được xem xét hiệu chỉnh liều dùng [2].`,
+        trich_dan: [
+          {
+            so: 1,
+            loai_ma: 'du_lieu',
+            nhan: 'Creatinin máu (XN-DEMO02-01)',
+            ban_ghi_id: 'XN-DEMO02-01',
+            doan_trich_id: null,
+            trich_nguyen_van: null,
+          },
+          {
+            so: 2,
+            loai_ma: 'tai_lieu',
+            nhan: 'Nhãn FDA MERREM IV · Liều dùng ở người bệnh suy thận',
+            ban_ghi_id: null,
+            doan_trich_id: 'fda_merrem_iv|renal_01',
+            trich_nguyen_van:
+              'Dosage adjustment is recommended for adult patients with impaired renal function.',
+          },
+        ],
+        cong_cu_da_goi: ['du_lieu_ca', 'bo_luat', 'truy_xuat'],
+        thoi_gian_ms: 1500,
+      }
+    }
+
     return {
-      trang_thai: 'chua_san_sang',
-      noi_dung:
-        'Chức năng hỏi thêm chưa được nối với hệ thống. Bảng nhận định bên trái vẫn dùng được.',
+      trang_thai: 'khong_co_nguon',
+      noi_dung: 'Không tìm thấy căn cứ trong kho nguồn hiện có cho câu hỏi này trên ca đang mở.',
       trich_dan: [],
-      cong_cu_da_goi: [],
+      cong_cu_da_goi: ['du_lieu_ca', 'truy_xuat'],
+      thoi_gian_ms: 1500,
     }
   }
 

@@ -54,6 +54,10 @@ class BuildReport(BaseModel):
     vi_pham_q2: list[str] = Field(default_factory=list)
     vi_pham_q4: list[str] = Field(default_factory=list)
     dat_chat_luong: bool
+    so_nhan_truoc: int = 0
+    so_doan_truoc: int = 0
+    so_ma_doan_bi_doi: int = 0
+    so_ma_doan_khong_doi_noi_dung_bi_doi: int = 0
 
 
 def load_chunks(path: Path) -> list[Chunk]:
@@ -190,15 +194,22 @@ def build_kb(
     for entry in selected_entries:
         doc = load_label(sources_dir / str(entry["duong_dan"]), entry, names)
         docs.append(doc)
+    # Cùng nhãn đáp ứng nhiều đường dùng: lấy bản mới nhất, chỉ cắt một lần.
+    latest_labels: dict[str, LabelDocument] = {}
+    for doc in docs:
+        previous_doc = latest_labels.get(doc.tai_lieu_id)
+        if previous_doc is None or doc.phien_ban_nguon > previous_doc.phien_ban_nguon:
+            latest_labels[doc.tai_lieu_id] = doc
+    for doc in latest_labels.values():
         chunks.extend(chunker.split(doc))
 
     chunks_path = out_dir / "chunks.jsonl"
+    previous_chunks = load_chunks(chunks_path) if chunks_path.is_file() else []
+    previous_ids = {
+        (c.tai_lieu_id, c.duong_dan_muc, c.noi_dung_goc): c.doan_trich_id for c in previous_chunks
+    }
     if chunks_path.is_file():
         # Giu ma cu khi noi dung va duong dan khong doi, du thu tu bang thay doi.
-        previous_ids = {
-            (c.tai_lieu_id, c.duong_dan_muc, c.noi_dung_goc): c.doan_trich_id
-            for c in load_chunks(chunks_path)
-        }
         chunks = [
             c.model_copy(
                 update={
@@ -288,6 +299,16 @@ def build_kb(
         vi_pham_q2=vi_pham_q2,
         vi_pham_q4=vi_pham_q4,
         dat_chat_luong=passed,
+        so_nhan_truoc=len({c.tai_lieu_id for c in previous_chunks}),
+        so_doan_truoc=len(previous_chunks),
+        so_ma_doan_bi_doi=len(
+            {c.doan_trich_id for c in previous_chunks} - {c.doan_trich_id for c in chunks}
+        ),
+        so_ma_doan_khong_doi_noi_dung_bi_doi=sum(
+            previous_ids[key] != c.doan_trich_id
+            for c in chunks
+            if (key := (c.tai_lieu_id, c.duong_dan_muc, c.noi_dung_goc)) in previous_ids
+        ),
     )
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -367,7 +388,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[openfda] ERROR: {exc}")
         return 1
 
-    print(
+    summary = (
         f"[openfda] status={'OK' if exit_code == 0 else 'FAIL'} "
         f"labels={report.so_nhan_da_xu_ly}/{report.tong_nhan_manifest} "
         f"chunks={report.tong_doan} text={report.so_doan_van_ban} "
@@ -375,6 +396,11 @@ def main(argv: list[str] | None = None) -> int:
         f"under_50={report.so_doan_duoi_50_ky_tu} empty_act={report.so_doan_hoat_chat_rong} "
         f"q3_warn={len(report.canh_bao_q3)} missing_set_id={report.so_nhan_thieu_set_id}"
     )
+    print(summary)
+    # T25: gắn kết quả dựng kho vào báo cáo độ phủ đã được sinh ngoại tuyến.
+    from app.kb.fetch.report import record_build
+
+    record_build(args.reports, report.model_dump(mode="json"), summary)
     return exit_code
 
 

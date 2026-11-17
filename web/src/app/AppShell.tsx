@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
-import { useState, useSyncExternalStore } from 'react'
-import type { ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import type { KeyboardEvent, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from 'react'
 import type { CheDo } from '@/api/types'
 import {
   Dialog,
@@ -10,25 +10,32 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { IconButton } from '@/components/ui/icon-button'
-import { Toaster } from '@/components/ui/toaster'
-import { TooltipProvider } from '@/components/ui/tooltip'
 import { cn } from '@/lib/cn'
+import { ASSISTANT_MAX_WIDTH, ASSISTANT_MIN_WIDTH, clampAssistantWidth } from '@/lib/prefs'
 import { TopBar } from './TopBar'
 
 export interface AppShellProps {
   cheDo: CheDo | null
-  queueCollapsed: boolean
-  onToggleQueue: () => void
-  chatCollapsed: boolean
-  onToggleChat: () => void
-  hasCase: boolean
-  thoiGianMs?: number | null
-  queueSlot: ReactNode
-  queueDrawerSlot?: ReactNode
-  headerSlot: ReactNode | null
+  activeOrderCode: string | null
+  searchQuery: string
+  searchInputRef: RefObject<HTMLInputElement | null>
+  isDemoMode: boolean
+  sidebarCollapsed: boolean
+  assistantCollapsed: boolean
+  assistantWidth: number
+  drawerSidebarOpen: boolean
+  drawerAssistantOpen: boolean
+  onDrawerSidebarChange: (open: boolean) => void
+  onDrawerAssistantChange: (open: boolean) => void
+  onToggleSidebar: () => void
+  onToggleAssistant: () => void
+  onAssistantWidthChange: (width: number) => void
+  onSearchChange: (value: string) => void
+  onSearchFocusOrSubmit: () => void
+  sidebarSlot: ReactNode
+  sidebarDrawerSlot: ReactNode
+  assistantSlot: ReactNode
   children: ReactNode
-  chatSlot?: ReactNode | null
-  renderChat?: (onClose: () => void) => ReactNode
 }
 
 function getMediaMatch(query: string): boolean {
@@ -58,198 +65,229 @@ function useMediaQuery(query: string): boolean {
   )
 }
 
-/** Khung bố cục 3 cột co giãn theo bề rộng màn hình, bọc TooltipProvider và Toaster. */
+/** Khung bố cục 3 cột mới: thanh bên nền tối (248/56), vùng giữa co giãn, trợ lý kéo đổi rộng (320–560). */
 export function AppShell({
   cheDo,
-  queueCollapsed,
-  onToggleQueue,
-  chatCollapsed,
-  onToggleChat,
-  hasCase,
-  thoiGianMs,
-  queueSlot,
-  queueDrawerSlot,
-  headerSlot,
+  activeOrderCode,
+  searchQuery,
+  searchInputRef,
+  isDemoMode,
+  sidebarCollapsed,
+  assistantCollapsed,
+  assistantWidth,
+  drawerSidebarOpen,
+  drawerAssistantOpen,
+  onDrawerSidebarChange,
+  onDrawerAssistantChange,
+  onToggleSidebar,
+  onToggleAssistant,
+  onAssistantWidthChange,
+  onSearchChange,
+  onSearchFocusOrSubmit,
+  sidebarSlot,
+  sidebarDrawerSlot,
+  assistantSlot,
   children,
-  chatSlot,
-  renderChat,
 }: AppShellProps) {
-  const isCompactChat = useMediaQuery('(max-width: 1279px)')
-  const isCompactQueue = useMediaQuery('(max-width: 1023px)')
+  const isCompactAssistant = useMediaQuery('(max-width: 1179px)')
+  const isCompactSidebar = useMediaQuery('(max-width: 899px)')
 
-  const [drawerQueueOpen, setDrawerQueueOpen] = useState<boolean>(false)
-  const [drawerChatOpen, setDrawerChatOpen] = useState<boolean>(false)
+  const [liveDragWidth, setLiveDragWidth] = useState<number | null>(null)
+  const dragWidthRef = useRef<number>(assistantWidth)
 
-  const [prevCompactQueue, setPrevCompactQueue] = useState<boolean>(isCompactQueue)
-  const [prevCompactChat, setPrevCompactChat] = useState<boolean>(isCompactChat)
-  const [prevChatCollapsed, setPrevChatCollapsed] = useState<boolean>(chatCollapsed)
-
-  if (prevCompactQueue !== isCompactQueue) {
-    setPrevCompactQueue(isCompactQueue)
-    if (drawerQueueOpen) {
-      setDrawerQueueOpen(false)
+  useEffect(() => {
+    if (!isCompactSidebar && drawerSidebarOpen) {
+      onDrawerSidebarChange(false)
     }
-  }
+  }, [isCompactSidebar, drawerSidebarOpen, onDrawerSidebarChange])
 
-  if (prevCompactChat !== isCompactChat) {
-    setPrevCompactChat(isCompactChat)
-    if (drawerChatOpen) {
-      setDrawerChatOpen(false)
+  useEffect(() => {
+    if (!isCompactAssistant && drawerAssistantOpen) {
+      onDrawerAssistantChange(false)
     }
-  }
+  }, [isCompactAssistant, drawerAssistantOpen, onDrawerAssistantChange])
 
-  if (prevChatCollapsed !== chatCollapsed) {
-    setPrevChatCollapsed(chatCollapsed)
-    if (isCompactChat && drawerChatOpen) {
-      setDrawerChatOpen(false)
-    }
-  }
+  const sidebarOpen = isCompactSidebar ? drawerSidebarOpen : !sidebarCollapsed
+  const assistantOpen = isCompactAssistant ? drawerAssistantOpen : !assistantCollapsed
 
-  const resolvedChat = renderChat
-    ? hasCase
-      ? renderChat(isCompactChat ? () => setDrawerChatOpen(false) : onToggleChat)
-      : null
-    : (chatSlot ?? null)
-  const canShowChat = hasCase && resolvedChat !== null
-  const queueOpen = isCompactQueue ? drawerQueueOpen : !queueCollapsed
-  const chatOpen = isCompactChat ? drawerChatOpen && canShowChat : !chatCollapsed
-
-  const handleToggleQueue = () => {
-    if (isCompactQueue) {
-      setDrawerQueueOpen((prev) => !prev)
+  const handleToggleSidebar = useCallback(() => {
+    if (isCompactSidebar) {
+      onDrawerSidebarChange(!drawerSidebarOpen)
       return
     }
-    onToggleQueue()
-  }
+    onToggleSidebar()
+  }, [isCompactSidebar, drawerSidebarOpen, onDrawerSidebarChange, onToggleSidebar])
 
-  const handleToggleChat = () => {
-    if (isCompactChat) {
-      if (!canShowChat) {
-        return
-      }
-      setDrawerChatOpen((prev) => !prev)
+  const handleToggleAssistant = useCallback(() => {
+    if (isCompactAssistant) {
+      onDrawerAssistantChange(!drawerAssistantOpen)
       return
     }
-    onToggleChat()
+    onToggleAssistant()
+  }, [isCompactAssistant, drawerAssistantOpen, onDrawerAssistantChange, onToggleAssistant])
+
+  const isDragging = liveDragWidth !== null
+
+  useEffect(() => {
+    if (!isDragging) {
+      return
+    }
+    const handleMove = (event: PointerEvent) => {
+      const next = clampAssistantWidth(window.innerWidth - event.clientX)
+      dragWidthRef.current = next
+      setLiveDragWidth(next)
+    }
+    const handleUp = () => {
+      onAssistantWidthChange(dragWidthRef.current)
+      setLiveDragWidth(null)
+    }
+    window.addEventListener('pointermove', handleMove)
+    window.addEventListener('pointerup', handleUp, { once: true })
+    return () => {
+      window.removeEventListener('pointermove', handleMove)
+      window.removeEventListener('pointerup', handleUp)
+    }
+  }, [isDragging, onAssistantWidthChange])
+
+  const handleStartResize = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    const current = clampAssistantWidth(assistantWidth)
+    dragWidthRef.current = current
+    setLiveDragWidth(current)
   }
+
+  const handleResizeKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault()
+      onAssistantWidthChange(clampAssistantWidth(assistantWidth + 16))
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault()
+      onAssistantWidthChange(clampAssistantWidth(assistantWidth - 16))
+    }
+  }
+
+  const effectiveAssistantWidth = liveDragWidth ?? assistantWidth
 
   return (
-    <TooltipProvider>
-      <div className="h-screen w-full flex flex-col overflow-hidden bg-canvas text-fg">
+    <div className="flex h-screen w-full overflow-hidden bg-canvas text-fg">
+      {/* Cột 1: Thanh bên điều hướng nền tối */}
+      {!isCompactSidebar ? (
+        <aside
+          aria-label="Thanh bên điều hướng"
+          className={cn(
+            'shrink-0 overflow-hidden border-r border-ink-line bg-ink transition-[width] duration-180 ease-out',
+            sidebarCollapsed ? 'w-[56px]' : 'w-[248px]',
+          )}
+        >
+          {sidebarSlot}
+        </aside>
+      ) : null}
+
+      {/* Cột 2: Vùng giữa (thanh trên 48px + nội dung tự cuộn + chân trang) */}
+      <div className="workspace-center flex flex-1 min-w-0 flex-col overflow-hidden">
         <TopBar
           cheDo={cheDo}
-          queueOpen={queueOpen}
-          onToggleQueue={handleToggleQueue}
-          chatOpen={chatOpen}
-          onToggleChat={handleToggleChat}
-          chatAvailable={canShowChat}
+          activeOrderCode={activeOrderCode}
+          searchQuery={searchQuery}
+          searchInputRef={searchInputRef}
+          isDemoMode={isDemoMode}
+          showSidebarTrigger={isCompactSidebar}
+          sidebarOpen={sidebarOpen}
+          assistantOpen={assistantOpen}
+          onToggleSidebar={handleToggleSidebar}
+          onToggleAssistant={handleToggleAssistant}
+          onSearchChange={onSearchChange}
+          onSearchFocusOrSubmit={onSearchFocusOrSubmit}
         />
 
-        <div className="flex flex-1 min-h-0 overflow-hidden">
-          {!isCompactQueue ? (
-            <aside
-              aria-label="Hàng đợi y lệnh"
-              className={cn(
-                'bg-surface border-r border-line shrink-0 overflow-hidden transition-[width] duration-180 ease-out',
-                queueCollapsed ? 'w-[56px]' : 'w-[304px]',
-              )}
-            >
-              {queueSlot}
-            </aside>
-          ) : null}
-
-          <main
-            aria-label="Nội dung thẩm định ca"
-            className="flex-1 min-w-0 overflow-y-auto flex flex-col scroll-pt-20 overscroll-contain"
-          >
-            {headerSlot}
-
-            <div className="w-full max-w-[920px] mx-auto px-5 py-3 flex-1 flex flex-col gap-3">
-              {children}
-
-              <footer className="mt-auto pt-4 border-t border-line flex items-center justify-between gap-4 flex-wrap text-xs text-fg-subtle">
-                <span>Kết quả tham khảo. Dược sĩ kiểm chứng và quyết định.</span>
-                {thoiGianMs != null ? (
-                  <span className="tabular-nums">
-                    Thời gian chạy: {thoiGianMs.toFixed(2).replace('.', ',')} ms
-                  </span>
-                ) : null}
-              </footer>
-            </div>
-          </main>
-
-          {!isCompactChat && !chatCollapsed && canShowChat ? (
-            <aside
-              aria-label="Hỏi thêm về ca này"
-              className="w-[384px] bg-surface border-l border-line shrink-0 overflow-hidden flex flex-col"
-            >
-              {resolvedChat}
-            </aside>
-          ) : null}
-        </div>
-
-        <Dialog open={isCompactQueue && drawerQueueOpen} onOpenChange={setDrawerQueueOpen}>
-          <DialogContent
-            variant="drawer-left"
-            tabIndex={-1}
-            className="p-0"
-            onOpenAutoFocus={(e) => {
-              e.preventDefault()
-              if (e.currentTarget instanceof HTMLElement) {
-                e.currentTarget.focus()
-              }
-            }}
-          >
-            <DialogTitle className="sr-only">Hàng đợi y lệnh</DialogTitle>
-            <DialogDescription className="sr-only">
-              Danh sách các y lệnh chờ thẩm định
-            </DialogDescription>
-            <div
-              className="relative flex h-full min-h-0 flex-col"
-              onClick={(event) => {
-                const target = event.target as HTMLElement | null
-                if (target?.closest('[role="option"]')) {
-                  setDrawerQueueOpen(false)
-                }
-              }}
-            >
-              <DialogClose asChild>
-                <IconButton
-                  icon={<X className="size-4" strokeWidth={1.75} />}
-                  aria-label="Đóng hàng đợi"
-                  className="absolute right-3 top-2.5 z-10"
-                />
-              </DialogClose>
-              {queueDrawerSlot ?? queueSlot}
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          open={isCompactChat && drawerChatOpen && canShowChat}
-          onOpenChange={setDrawerChatOpen}
+        <main
+          aria-label="Vùng làm việc chính"
+          className="flex flex-1 min-h-0 min-w-0 flex-col overflow-y-auto overscroll-contain scroll-pt-24"
         >
-          <DialogContent
-            variant="drawer-right"
-            tabIndex={-1}
-            className="p-0"
-            onOpenAutoFocus={(e) => {
-              e.preventDefault()
-              if (e.currentTarget instanceof HTMLElement) {
-                e.currentTarget.focus()
-              }
-            }}
-          >
-            <DialogTitle className="sr-only">Hỏi thêm về ca này</DialogTitle>
-            <DialogDescription className="sr-only">
-              Khung hỏi thêm có trích dẫn từ hồ sơ ca và nguồn thuốc
-            </DialogDescription>
-            <div className="flex h-full min-h-0 flex-col">{resolvedChat}</div>
-          </DialogContent>
-        </Dialog>
+          <div className="flex-1">{children}</div>
 
-        <Toaster />
+          <footer className="mt-auto border-t border-line bg-canvas px-5 py-3 text-xs text-fg-subtle">
+            Kết quả tham khảo. Dược sĩ kiểm chứng và quyết định.
+          </footer>
+        </main>
       </div>
-    </TooltipProvider>
+
+      {/* Cột 3: Trợ lý AI kéo đổi chiều rộng */}
+      {!isCompactAssistant && !assistantCollapsed ? (
+        <aside
+          aria-label="Khung trợ lý AI"
+          style={{ width: `${effectiveAssistantWidth}px` }}
+          className={cn('relative flex shrink-0 border-l border-line bg-surface', sidebarCollapsed ? 'max-w-[calc(100vw-616px)]' : 'max-w-[calc(100vw-808px)]')}
+        >
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Kéo để đổi chiều rộng khung trợ lý"
+            aria-valuemin={ASSISTANT_MIN_WIDTH}
+            aria-valuemax={ASSISTANT_MAX_WIDTH}
+            aria-valuenow={effectiveAssistantWidth}
+            tabIndex={0}
+            onPointerDown={handleStartResize}
+            onKeyDown={handleResizeKeyDown}
+            className="absolute inset-y-0 -left-1 z-20 w-2 cursor-col-resize hover:bg-primary/25 focus-visible:bg-primary/40"
+          />
+          <div className="flex h-full w-full min-w-0 flex-col">{assistantSlot}</div>
+        </aside>
+      ) : null}
+
+      {/* Ngăn trượt trái cho thanh bên (< 900px) */}
+      <Dialog open={isCompactSidebar && drawerSidebarOpen} onOpenChange={onDrawerSidebarChange}>
+        <DialogContent
+          variant="drawer-left"
+          tabIndex={-1}
+          className="w-[248px] border-ink-line bg-ink p-0"
+          onOpenAutoFocus={(e) => {
+            e.preventDefault()
+            if (e.currentTarget instanceof HTMLElement) {
+              e.currentTarget.focus()
+            }
+          }}
+        >
+          <DialogTitle className="sr-only">Điều hướng bàn làm việc</DialogTitle>
+          <DialogDescription className="sr-only">
+            Các bộ lọc y lệnh, khoa và hội thoại gần đây
+          </DialogDescription>
+          <div className="relative flex h-full min-h-0 flex-col">
+            <DialogClose asChild>
+              <IconButton
+                icon={<X className="size-4 text-ink-muted" strokeWidth={1.75} />}
+                aria-label="Đóng thanh điều hướng"
+                className="absolute right-2.5 top-2.5 z-10 hover:bg-ink-soft hover:text-ink-fg"
+              />
+            </DialogClose>
+            {sidebarDrawerSlot}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ngăn trượt phải cho trợ lý (< 1180px) */}
+      <Dialog
+        open={isCompactAssistant && drawerAssistantOpen}
+        onOpenChange={onDrawerAssistantChange}
+      >
+        <DialogContent
+          variant="drawer-right"
+          tabIndex={-1}
+          className="w-[400px] p-0"
+          onOpenAutoFocus={(e) => {
+            e.preventDefault()
+            if (e.currentTarget instanceof HTMLElement) {
+              e.currentTarget.focus()
+            }
+          }}
+        >
+          <DialogTitle className="sr-only">Trợ lý AI</DialogTitle>
+          <DialogDescription className="sr-only">
+            Khung hỏi đáp về ca bệnh đang mở và tra cứu đoạn nguồn
+          </DialogDescription>
+          <div className="flex h-full min-h-0 flex-col">{assistantSlot}</div>
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 }

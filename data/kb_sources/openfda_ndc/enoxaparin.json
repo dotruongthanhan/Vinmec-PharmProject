@@ -1,0 +1,440 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "300 mg/3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "300 mg/3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "100 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "100 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "100 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "100 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "120 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "120 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "120 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "120 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "150 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "150 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "150 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "150 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "30 mg/.3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "30 mg/.3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "30 mg/.3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "30 mg/.3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "300 mg/3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "40 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "40 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "40 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "40 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "60 mg/.6mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "60 mg/.6mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "60 mg/.6mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "60 mg/.6mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin Sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "80 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "80 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Lovenox",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "80 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "enoxaparin sodium",
+      "ten_chung": "enoxaparin sodium",
+      "ham_luong": [
+        {
+          "hoat_chat": "ENOXAPARIN SODIUM",
+          "ham_luong": "80 mg/.8mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    }
+  ]
+}

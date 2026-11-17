@@ -33,8 +33,8 @@ def test_health_and_queue(client: TestClient) -> None:
     )
     assert body_health["ok"] is True
     assert body_health["che_do"]["truy_xuat"] == expected_retrieval
-    assert body_health["che_do"]["hoi_them"] is False
     assert isinstance(body_health["che_do"]["co_llm"], bool)
+    assert body_health["che_do"]["hoi_them"] is body_health["che_do"]["co_llm"]
     if body_health["che_do"]["co_llm"]:
         assert (
             "Đang chạy không có bước AI: bảng nhận định do bộ luật sinh ra"
@@ -52,6 +52,28 @@ def test_health_and_queue(client: TestClient) -> None:
     assert len(ids) == 6
     assert ids[:2] == ["DEMO-02", "DEMO-06"]
     assert ids.index("DEMO-05") < ids.index("DEMO-03")
+
+
+def test_queue_order_fields_for_six_demo_cases(client: TestClient) -> None:
+    expected = {
+        "DEMO-01": ("Nam, 45 tuổi", "Amlodipin 5 mg"),
+        "DEMO-02": ("Nữ, 75 tuổi", "Meropenem 1 g"),
+        "DEMO-03": ("Nam, 60 tuổi", "Amoxicillin + acid clavulanic 875 mg/125 mg"),
+        "DEMO-04": ("Nữ, 68 tuổi", "Ceftriaxon 2 g"),
+        "DEMO-05": ("Nam, 55 tuổi", "Metoprolol tartrat 50 mg"),
+        "DEMO-06": ("Nữ, 40 tuổi", "Amoxicillin 500 mg"),
+    }
+    from app.domain.loader import load_case
+
+    rows = client.get("/api/cases").json()["cases"]
+    assert {row["ca_id"] for row in rows} == expected.keys()
+    for row in rows:
+        case = load_case(ROOT / f"data/mock/demo/{row['ca_id']}.json")
+        summary, drug = expected[row["ca_id"]]
+        assert row["ma_y_lenh"] == f"YL-{row['ca_id']}"
+        assert row["thoi_diem_ke"] == case.y_lenh_cho_duyet.thoi_diem_ke.isoformat()
+        assert row["nguoi_benh_tom_tat"] == summary
+        assert row["thuoc"] == [drug]
 
 
 def test_demo02_detail(client: TestClient) -> None:
@@ -189,12 +211,25 @@ def test_feedback_validation(
     assert not (tmp_path / "phan_hoi.jsonl").exists()
 
 
-def test_ask_and_default_validation(client: TestClient) -> None:
-    response = client.post("/api/cases/DEMO-02/ask", json={"cau_hoi": "Vì sao?", "lich_su": []})
-    assert response.status_code == 200
-    assert response.json()["trang_thai"] == "chua_san_sang"
-    assert response.json()["trich_dan"] == []
-    assert response.json()["cong_cu_da_goi"] == []
+def test_ask_and_default_validation(client: TestClient, tmp_path: Path) -> None:
+    from app.api.main import create_app
+    from app.api.service import CaseService
+
+    disabled = CaseService(
+        ROOT / "data/mock/demo",
+        ROOT / "data/kb/quy_tac_lieu_than.json",
+        tmp_path / "phan_hoi_ask.jsonl",
+        ai_runner=None,
+    )
+    with TestClient(create_app(disabled), raise_server_exceptions=False) as disabled_client:
+        response = disabled_client.post(
+            "/api/cases/DEMO-02/ask", json={"cau_hoi": "Vì sao?", "lich_su": []}
+        )
+        assert response.status_code == 200
+        assert response.json()["trang_thai"] == "chua_san_sang"
+        assert response.json()["trich_dan"] == []
+        assert response.json()["cong_cu_da_goi"] == []
+
     response = client.post("/api/cases/DEMO-02/ask", json={})
     assert response.status_code == 422
     assert response.json()["loi"]["ma"] == "du_lieu_khong_hop_le"

@@ -1,0 +1,278 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "AMOXICILLIN AND CLAVULANATE POTASSIUM",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "42.9 mg/5mL"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "600 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "AUGMENTIN ES-600",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "42.9 mg/5mL"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "600 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "200 mg/5mL"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "28.5 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "250 mg/5mL"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "62.5 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Amoxicillin and Clavulanate Potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "400 mg/5mL"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "57 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "400 mg/5mL"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "57 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "42.9 mg/5mL"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "600 mg/5mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "125 mg/1"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "125 mg/1"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "875 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "200 mg/1"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "28.5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, CHEWABLE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "amoxicillin and clavulanate potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "400 mg/1"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "57 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, CHEWABLE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "AMOXICILLIN AND CLAVULANATE POTASSIUM",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "125 mg/1"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "875 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Amoxicillin and Clavulanate Potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "125 mg/1"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Amoxicillin and Clavulanate Potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "125 mg/1"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "875 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Amoxicillin and Clavulanate Potassium",
+      "ten_chung": "amoxicillin and clavulanate potassium",
+      "ham_luong": [
+        {
+          "hoat_chat": "AMOXICILLIN SODIUM",
+          "ham_luong": "437.5 mg/1"
+        },
+        {
+          "hoat_chat": "AMOXICILLIN",
+          "ham_luong": "562.5 mg/1"
+        },
+        {
+          "hoat_chat": "CLAVULANATE POTASSIUM",
+          "ham_luong": "62.5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED, EXTENDED RELEASE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

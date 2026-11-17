@@ -1,12 +1,14 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReviewApiClient } from '../api/client.ts'
-import type { LichSuHoiDapItem, TraLoi } from '../api/types.ts'
+import type { LichSuHoiDapItem, TraLoi, TrangThaiTraLoi } from '../api/types.ts'
+import { shouldAcceptAssistantReply } from '../lib/assistant.ts'
 
 export type ChatMessage =
   | {
       id: string
       vai: 'nguoi_dung'
       noi_dung: string
+      nhan_dinh_id?: string | null
     }
   | {
       id: string
@@ -17,7 +19,11 @@ export type ChatMessage =
 export interface UseChatResult {
   getMessages: (caId: string) => ChatMessage[]
   isSending: (caId: string) => boolean
-  sendQuestion: (caId: string, question: string) => Promise<void>
+  getLastStatus: (caId: string) => TrangThaiTraLoi | null
+  askedCaseIds: string[]
+  sendQuestion: (caId: string, question: string, nhanDinhId?: string | null) => Promise<void>
+  stopQuestion: (caId: string) => void
+  retryLastQuestion: (caId: string) => Promise<void>
   clearChat: (caId: string) => void
 }
 
@@ -29,13 +35,36 @@ function toHistory(messages: readonly ChatMessage[]): LichSuHoiDapItem[] {
   )
 }
 
-/** Quản lý hội thoại hỏi thêm tách biệt theo từng ca bệnh. */
-export function useChat(client: ReviewApiClient): UseChatResult {
+function isAbortError(err: unknown): boolean {
+  return (
+    (err instanceof DOMException && err.name === 'AbortError') ||
+    (err instanceof Error && err.name === 'AbortError')
+  )
+}
+
+/** Quản lý hội thoại hỏi đáp tách biệt theo từng ca bệnh, hỗ trợ huỷ yêu cầu và chống ghi nhầm khi đổi ca. */
+export function useChat(
+  client: ReviewApiClient,
+  activeCaseId?: string | null,
+): UseChatResult {
   const [messagesByCase, setMessagesByCase] = useState<Record<string, ChatMessage[]>>({})
   const [sendingByCase, setSendingByCase] = useState<Record<string, boolean>>({})
+  const [askedCaseIds, setAskedCaseIds] = useState<string[]>([])
+
   const messagesRef = useRef<Record<string, ChatMessage[]>>({})
   const sendingRef = useRef<Record<string, boolean>>({})
+  const hasExplicitActiveCase = activeCaseId !== undefined
+  const activeCaseRef = useRef<string | null>(activeCaseId ?? null)
+  const seqByCaseRef = useRef<Record<string, number>>({})
+  const controllersRef = useRef<Record<string, AbortController | undefined>>({})
+  const lastQueryByCaseRef = useRef<
+    Record<string, { question: string; nhanDinhId: string | null } | undefined>
+  >({})
   const nextIdRef = useRef<number>(1)
+
+  useEffect(() => {
+    activeCaseRef.current = activeCaseId ?? null
+  }, [activeCaseId])
 
   const createId = useCallback((prefix: string): string => {
     const id = `${prefix}-${nextIdRef.current}`
@@ -53,34 +82,81 @@ export function useChat(client: ReviewApiClient): UseChatResult {
     [sendingByCase],
   )
 
-  const sendQuestion = useCallback(
-    async (caId: string, rawQuestion: string): Promise<void> => {
-      const question = rawQuestion.trim()
+  const getLastStatus = useCallback(
+    (caId: string): TrangThaiTraLoi | null => {
+      const list = messagesByCase[caId]
+      if (!list || list.length === 0) {
+        return null
+      }
+      for (let i = list.length - 1; i >= 0; i -= 1) {
+        const msg = list[i]
+        if (msg.vai === 'he_thong') {
+          return msg.tra_loi.trang_thai
+        }
+      }
+      return null
+    },
+    [messagesByCase],
+  )
+
+  const executeAsk = useCallback(
+    async (
+      caId: string,
+      question: string,
+      nhanDinhId: string | null,
+      appendUserMessage: boolean,
+    ): Promise<void> => {
       if (!question || sendingRef.current[caId]) {
         return
       }
 
-      sendingRef.current = { ...sendingRef.current, [caId]: true }
       const prevHistory = messagesRef.current[caId] ?? []
       const apiHistory = toHistory(prevHistory)
-      const userMsg: ChatMessage = {
-        id: createId('user'),
-        vai: 'nguoi_dung',
-        noi_dung: question,
+
+      if (appendUserMessage) {
+        const userMsg: ChatMessage = {
+          id: createId('user'),
+          vai: 'nguoi_dung',
+          noi_dung: question,
+          nhan_dinh_id: nhanDinhId,
+        }
+        const withUser = [...prevHistory, userMsg]
+        messagesRef.current = { ...messagesRef.current, [caId]: withUser }
+        setMessagesByCase((prev) => ({ ...prev, [caId]: [...(prev[caId] ?? []), userMsg] }))
       }
 
-      const withUser = [...prevHistory, userMsg]
-      messagesRef.current = { ...messagesRef.current, [caId]: withUser }
-      setMessagesByCase((prev) => ({ ...prev, [caId]: [...(prev[caId] ?? []), userMsg] }))
+      lastQueryByCaseRef.current[caId] = { question, nhanDinhId }
+      setAskedCaseIds((prev) => [caId, ...prev.filter((id) => id !== caId)])
+
+      const requestSeq = (seqByCaseRef.current[caId] ?? 0) + 1
+      seqByCaseRef.current[caId] = requestSeq
+
+      controllersRef.current[caId]?.abort()
+      const controller = new AbortController()
+      controllersRef.current[caId] = controller
+
+      sendingRef.current = { ...sendingRef.current, [caId]: true }
       setSendingByCase((prev) => ({ ...prev, [caId]: true }))
 
-      let reply: TraLoi
+      let reply: TraLoi | null = null
       try {
-        reply = await client.ask(caId, {
-          cau_hoi: question,
-          lich_su: apiHistory,
-        })
+        reply = await client.ask(
+          caId,
+          {
+            cau_hoi: question,
+            lich_su: apiHistory,
+            nhan_dinh_id: nhanDinhId,
+          },
+          { signal: controller.signal },
+        )
       } catch (err: unknown) {
+        if (isAbortError(err) || controller.signal.aborted) {
+          if (seqByCaseRef.current[caId] === requestSeq) {
+            sendingRef.current = { ...sendingRef.current, [caId]: false }
+            setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+          }
+          return
+        }
         const message =
           err instanceof Error && err.message
             ? err.message
@@ -91,6 +167,27 @@ export function useChat(client: ReviewApiClient): UseChatResult {
           trich_dan: [],
           cong_cu_da_goi: [],
         }
+      } finally {
+        if (controllersRef.current[caId] === controller) {
+          controllersRef.current[caId] = undefined
+        }
+      }
+
+      const accepted = shouldAcceptAssistantReply({
+        requestCaseId: caId,
+        activeCaseId: hasExplicitActiveCase ? activeCaseRef.current : caId,
+        requestSeq,
+        latestSeqForCase: seqByCaseRef.current[caId] ?? 0,
+        aborted: controller.signal.aborted,
+      })
+
+      if (seqByCaseRef.current[caId] === requestSeq) {
+        sendingRef.current = { ...sendingRef.current, [caId]: false }
+        setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+      }
+
+      if (!accepted || reply === null) {
+        return
       }
 
       const assistantMsg: ChatMessage = {
@@ -101,25 +198,78 @@ export function useChat(client: ReviewApiClient): UseChatResult {
       const latestForCase = messagesRef.current[caId] ?? []
       const withReply = [...latestForCase, assistantMsg]
       messagesRef.current = { ...messagesRef.current, [caId]: withReply }
-      sendingRef.current = { ...sendingRef.current, [caId]: false }
       setMessagesByCase((prev) => ({
         ...prev,
         [caId]: [...(prev[caId] ?? []), assistantMsg],
       }))
-      setSendingByCase((prev) => ({ ...prev, [caId]: false }))
     },
-    [client, createId],
+    [client, createId, hasExplicitActiveCase],
+  )
+
+  const sendQuestion = useCallback(
+    async (
+      caId: string,
+      rawQuestion: string,
+      nhanDinhId: string | null = null,
+    ): Promise<void> => {
+      const question = rawQuestion.trim()
+      if (!question) {
+        return
+      }
+      await executeAsk(caId, question, nhanDinhId, true)
+    },
+    [executeAsk],
+  )
+
+  const stopQuestion = useCallback((caId: string) => {
+    seqByCaseRef.current[caId] = (seqByCaseRef.current[caId] ?? 0) + 1
+    controllersRef.current[caId]?.abort()
+    controllersRef.current[caId] = undefined
+    sendingRef.current = { ...sendingRef.current, [caId]: false }
+    setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+  }, [])
+
+  const retryLastQuestion = useCallback(
+    async (caId: string): Promise<void> => {
+      if (sendingRef.current[caId]) {
+        return
+      }
+      const lastQuery = lastQueryByCaseRef.current[caId]
+      if (!lastQuery) {
+        return
+      }
+      const current = messagesRef.current[caId] ?? []
+      const last = current[current.length - 1]
+      const cleaned =
+        last && last.vai === 'he_thong' && last.tra_loi.trang_thai === 'loi'
+          ? current.slice(0, -1)
+          : current
+      messagesRef.current = { ...messagesRef.current, [caId]: cleaned }
+      setMessagesByCase((prev) => ({ ...prev, [caId]: cleaned }))
+      await executeAsk(caId, lastQuery.question, lastQuery.nhanDinhId, false)
+    },
+    [executeAsk],
   )
 
   const clearChat = useCallback((caId: string) => {
+    seqByCaseRef.current[caId] = (seqByCaseRef.current[caId] ?? 0) + 1
+    controllersRef.current[caId]?.abort()
+    controllersRef.current[caId] = undefined
+    sendingRef.current = { ...sendingRef.current, [caId]: false }
     messagesRef.current = { ...messagesRef.current, [caId]: [] }
+    setSendingByCase((prev) => ({ ...prev, [caId]: false }))
     setMessagesByCase((prev) => ({ ...prev, [caId]: [] }))
+    setAskedCaseIds((prev) => prev.filter((id) => id !== caId))
   }, [])
 
   return {
     getMessages,
     isSending,
+    getLastStatus,
+    askedCaseIds,
     sendQuestion,
+    stopQuestion,
+    retryLastQuestion,
     clearChat,
   }
 }

@@ -1,0 +1,275 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "METHOTREXATE",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "25 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRATHECAL",
+        "INTRAVENOUS",
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "METHOTREXATE",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "25 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS",
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "10 mg/.2mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "10 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "12.5 mg/.25mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "12.5 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "15 mg/.3mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "15 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "17.5 mg/.35mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "17.5 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "20 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "20 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "22.5 mg/.45mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "22.5 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Otrexup",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE",
+          "ham_luong": "25 mg/.4mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "25 mg/.5mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "30 mg/.6mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Rasuvo",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "7.5 mg/.15mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Methotrexate",
+      "ten_chung": "methotrexate",
+      "ham_luong": [
+        {
+          "hoat_chat": "METHOTREXATE SODIUM",
+          "ham_luong": "2.5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

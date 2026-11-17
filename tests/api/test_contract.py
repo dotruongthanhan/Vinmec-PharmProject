@@ -43,7 +43,14 @@ INLINE_FIELDS: dict[str, set[str]] = {
     "Culture": {"benh_pham", "lay_mau_text", "vi_khuan", "khang_sinh_do"},
     "CaseDetails": {"y_lenh", "xet_nghiem", "vi_sinh", "dien_bien"},
     "ChatMessage": {"vai", "noi_dung"},
-    "Citation": {"so", "loai_ma", "nhan", "ban_ghi_id"},
+    "Citation": {
+        "so",
+        "loai_ma",
+        "nhan",
+        "ban_ghi_id",
+        "doan_trich_id",
+        "trich_nguyen_van",
+    },
     "AiFindings": {"can_chu_y", "dat"},
     "ChayAI": {"chay_lai"},
 }
@@ -82,6 +89,16 @@ def test_interface_field_sets_match_contract() -> None:
     for name, fields in v11_fields.items():
         contract_fields.setdefault(name, set()).update(fields)
     assert len(contract_fields) == 18
+
+    v12_doc = (ROOT / "plan/api-hop-dong-v1.2-hoi-dap.md").read_text(encoding="utf-8")
+    for field in ("nhan_dinh_id", "thoi_gian_ms", "doan_trich_id", "trich_nguyen_van"):
+        assert f"`{field}`" in v12_doc
+    contract_fields["GuiCauHoi"].add("nhan_dinh_id")
+    contract_fields["TraLoi"].add("thoi_gian_ms")
+    queue_fields = {"ma_y_lenh", "thoi_diem_ke", "nguoi_benh_tom_tat", "thuoc"}
+    for field in queue_fields:
+        assert f"`{field}`" in v12_doc
+    contract_fields["DongHangDoi"].update(queue_fields)
 
     for name, fields in contract_fields.items():
         model = getattr(schemas, name)

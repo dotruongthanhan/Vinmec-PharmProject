@@ -1,0 +1,175 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "LASIX ONYU",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "30 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FUROSCIX",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "80 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION",
+      "duong_dung": [
+        "SUBCUTANEOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FUROSEMIDE",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "10 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Furosemide",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "10 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FUROSEMIDE",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "20 mg/2mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FUROSEMIDE",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "10 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Furosemide",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "10 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FUROSEMIDE",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "20 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Furosemide",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "20 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FUROSEMIDE",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "40 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Furosemide",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "40 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Furosemide",
+      "ten_chung": "furosemide",
+      "ham_luong": [
+        {
+          "hoat_chat": "FUROSEMIDE",
+          "ham_luong": "80 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

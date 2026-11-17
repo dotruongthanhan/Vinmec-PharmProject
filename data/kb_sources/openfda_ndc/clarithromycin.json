@@ -1,0 +1,18 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "clarithromycin",
+      "ten_chung": "clarithromycin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLARITHROMYCIN",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED, EXTENDED RELEASE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

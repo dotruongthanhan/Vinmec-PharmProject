@@ -1,5 +1,6 @@
 """Dịch vụ ca bệnh giữ bộ đệm thẩm định, điều phối AI nền và ghi phản hồi JSONL."""
 
+import logging
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import RLock
@@ -23,12 +24,14 @@ from app.api.presenter import (
 )
 from app.config.settings import get_secret
 from app.core.errors import ConfigError
+from app.core.types import Chunk
 from app.domain.models import CaBenh
 from app.feedback import PhanHoi, load_feedback, save_feedback
 from app.kb.names import DrugNameIndex
 from app.llm import setup as llm_setup
 from app.llm.synthesizer import Synthesizer
 from app.orchestration.ai_review import AiReviewer, AiRunResult
+from app.orchestration.ask import AskResult, CaseAsker
 from app.orchestration.evidence import EvidenceCollector, LazyRetrieverFactory
 from app.orchestration.jobs import AiJobManager, AiJobState
 from app.pipeline import KetQuaThamDinh, run_case
@@ -39,12 +42,28 @@ from app.ui.services import NotReadyAskService, PipelineReviewService
 
 _AUTO = object()
 _ROOT = Path(__file__).resolve().parents[2]
+_LOGGER = logging.getLogger(__name__)
 
 
 class AiRunner(Protocol):
     """Giao diện tối thiểu của bộ chạy AI để tiêm bản giả khi kiểm thử."""
 
     def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult: ...
+
+
+class AskRunner(Protocol):
+    """Giao diện tối thiểu của bộ hỏi đáp để tiêm bản giả khi kiểm thử."""
+
+    def ask(
+        self,
+        ca: CaBenh,
+        cau_hoi: str,
+        lich_su: list[tuple[str, str]] | None = None,
+        *,
+        ket_qua: KetQuaThamDinh | None = None,
+        ai_result: AiRunResult | None = None,
+        nhan_dinh_id: str | None = None,
+    ) -> AskResult: ...
 
 
 def _is_ai_disabled() -> bool:
@@ -66,6 +85,7 @@ class CaseService:
         *,
         ai_runner: Any = _AUTO,
         corpus_path: Path | None = None,
+        asker: Any = _AUTO,
     ) -> None:
         self._loader = PipelineReviewService(case_dir, renal_rules_path)
         self._renal_rules_path = Path(renal_rules_path)
@@ -80,13 +100,20 @@ class CaseService:
         self._ask = NotReadyAskService()
         self._lock = RLock()
         self._jobs = AiJobManager()
+        self._ask_sources: dict[str, dict[str, Chunk]] = {}
+        self._container: container_mod.Container | None = None
         self._synthesizer: Synthesizer | None = None
         self._retriever_factory: LazyRetrieverFactory | None = None
+        self._asker_impl: AskRunner | None = None
         if ai_runner is _AUTO:
             self._ai_runner: AiRunner | None = self._build_default_ai_runner()
         else:
             self._ai_runner = ai_runner
         self._ai_enabled = self._ai_runner is not None
+        if asker is not _AUTO:
+            self._asker_impl = asker
+        elif self._ai_enabled and self._container is not None:
+            self._asker_impl = self._build_default_asker(self._container)
 
     def _build_default_ai_runner(self) -> AiRunner | None:
         """Xác định bật/tắt AI một lần lúc khởi tạo dịch vụ."""
@@ -100,6 +127,7 @@ class CaseService:
         if synthesizer.llm is None:
             return None
 
+        self._container = container
         self._synthesizer = synthesizer
         if self._corpus_path.is_file():
             self._retriever_factory = LazyRetrieverFactory(container, self._corpus_path)
@@ -114,11 +142,34 @@ class CaseService:
         )
         return AiReviewer(collector, synthesizer)
 
+    def _build_default_asker(self, container: container_mod.Container) -> AskRunner | None:
+        """Dựng CaseAsker qua container hoặc theo corpus_path tuỳ chỉnh khi kiểm thử."""
+        default_corpus = _ROOT / "data/kb_curated/chunks.jsonl"
+        if self._corpus_path == default_corpus:
+            return container.case_asker
+        if self._synthesizer is None or self._synthesizer.llm is None:
+            return None
+        names = DrugNameIndex.load(_ROOT / "data/kb/hoat_chat.json")
+        raw_prompt = Path(container.settings.prompts.hoi_them)
+        prompt_path = raw_prompt if raw_prompt.is_absolute() else _ROOT / raw_prompt
+        return CaseAsker(
+            llm=self._synthesizer.llm,
+            retriever=self._retriever_factory,
+            query_builder=QueryBuilder(container.settings.retrieval),
+            resolve_name=names.resolve,
+            prompt_path=prompt_path,
+            case_settings=container.settings.case_context,
+            evidence_max_chars=container.settings.evidence.max_chars,
+            model_name=self._synthesizer.model_name,
+            renal_rules=container.renal_rules,
+        )
+
     def mode(self) -> s.CheDo:
         """Trả chế độ vận hành hiện tại của dịch vụ."""
         return current_mode(
             co_llm=self._ai_enabled,
             has_corpus=self._corpus_path.is_file(),
+            hoi_them=self._ai_enabled and self._asker_impl is not None,
         )
 
     def shutdown(self) -> None:
@@ -131,6 +182,10 @@ class CaseService:
             close_fn = getattr(client, "close", None)
             if callable(close_fn):
                 close_fn()
+        if self._asker_impl is not None:
+            close_asker = getattr(self._asker_impl, "close", None)
+            if callable(close_asker):
+                close_asker()
 
     def _get_case(self, case_id: str) -> CaBenh:
         """Tra mã trong danh sách đã nạp, không tạo đường dẫn từ mã."""
@@ -264,16 +319,18 @@ class CaseService:
         return self._present_job_state(case, rule_result, state, feedbacks)
 
     def get_source(self, case_id: str, chunk_id: str) -> s.DoanNguon:
-        """Tra đoạn nguồn đã cấp cho ca bệnh trong lần phân tích gần nhất."""
+        """Tra đoạn nguồn đã cấp cho ca bệnh trong phân tích AI hoặc hỏi đáp."""
         with self._lock:
             self._get_case(case_id)
+            chunk: Chunk | None = None
             state = self._jobs.get(case_id)
-            if state is None or state.trang_thai != "xong" or state.ket_qua is None:
-                raise HTTPException(404, "Không tìm thấy đoạn nguồn trong ca bệnh.")
-            chunk = next(
-                (item for item in state.ket_qua.doan if item.doan_trich_id == chunk_id),
-                None,
-            )
+            if state is not None and state.trang_thai == "xong" and state.ket_qua is not None:
+                chunk = next(
+                    (item for item in state.ket_qua.doan if item.doan_trich_id == chunk_id),
+                    None,
+                )
+            if chunk is None:
+                chunk = self._ask_sources.get(case_id, {}).get(chunk_id)
             if chunk is None:
                 raise HTTPException(404, "Không tìm thấy đoạn nguồn trong ca bệnh.")
             return present_source(chunk)
@@ -292,8 +349,7 @@ class CaseService:
         if presented.trang_thai != "xong" or presented.nhan_dinh is None:
             return None
         valid_ids = {
-            row.nhan_dinh_id
-            for row in (*presented.nhan_dinh.can_chu_y, *presented.nhan_dinh.dat)
+            row.nhan_dinh_id for row in (*presented.nhan_dinh.can_chu_y, *presented.nhan_dinh.dat)
         }
         if target_id not in valid_ids:
             return None
@@ -351,24 +407,56 @@ class CaseService:
             return present_feedback(item)
 
     def ask(self, case_id: str, request: s.GuiCauHoi) -> s.TraLoi:
-        """Dùng dịch vụ hỏi thêm chưa sẵn sàng, không gọi mạng hay LLM."""
+        """Gọi CaseAsker khi có LLM; khi chưa có LLM trả chua_san_sang."""
         with self._lock:
-            reply = self._ask.ask(
-                self._get_case(case_id),
-                request.cau_hoi,
-                [(item.vai, item.noi_dung) for item in request.lich_su],
-            )
-            return s.TraLoi(
-                trang_thai=reply.trang_thai,
-                noi_dung=reply.noi_dung,
-                trich_dan=[
-                    s.Citation(
-                        so=item.so,
-                        loai_ma=item.loai,
-                        nhan=item.nhan,
-                        ban_ghi_id=item.ban_ghi_id,
-                    )
-                    for item in reply.trich_dan
-                ],
-                cong_cu_da_goi=reply.cong_cu_da_goi,
-            )
+            case = self._get_case(case_id)
+            if not self._ai_enabled or self._asker_impl is None:
+                _LOGGER.info("ask rejected step=configuration reason=missing_llm_or_asker chunks=0")
+                reply = self._ask.ask(
+                    case,
+                    request.cau_hoi,
+                    [(item.vai, item.noi_dung) for item in request.lich_su],
+                )
+                return s.TraLoi(
+                    trang_thai=reply.trang_thai,
+                    noi_dung=reply.noi_dung,
+                    trich_dan=[],
+                    cong_cu_da_goi=[],
+                    thoi_gian_ms=0,
+                )
+            rule_result = self._review(case)
+            state = self._jobs.get(case_id)
+            ai_result = state.ket_qua if state is not None and state.trang_thai == "xong" else None
+            asker = self._asker_impl
+
+        result = asker.ask(
+            case,
+            request.cau_hoi,
+            [(item.vai, item.noi_dung) for item in request.lich_su],
+            ket_qua=rule_result,
+            ai_result=ai_result,
+            nhan_dinh_id=request.nhan_dinh_id,
+        )
+        if result.trang_thai == "ok" and result.doan:
+            with self._lock:
+                case_sources = self._ask_sources.setdefault(case_id, {})
+                for chunk in result.doan:
+                    case_sources[chunk.doan_trich_id] = chunk
+
+        return s.TraLoi(
+            trang_thai=result.trang_thai,
+            noi_dung=result.noi_dung,
+            trich_dan=[
+                s.Citation(
+                    so=item.so,
+                    loai_ma=item.loai_ma,
+                    nhan=item.nhan,
+                    ban_ghi_id=item.ban_ghi_id,
+                    doan_trich_id=item.doan_trich_id,
+                    trich_nguyen_van=item.trich_nguyen_van,
+                )
+                for item in result.trich_dan
+            ],
+            cong_cu_da_goi=list(result.cong_cu_da_goi),
+            thoi_gian_ms=result.thoi_gian_ms,
+        )

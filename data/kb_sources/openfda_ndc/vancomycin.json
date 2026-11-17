@@ -1,0 +1,329 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Vancocin",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "125 mg/1"
+        }
+      ],
+      "dang_bao_che": "CAPSULE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "vancomycin hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "125 mg/1"
+        }
+      ],
+      "dang_bao_che": "CAPSULE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancocin",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "250 mg/1"
+        }
+      ],
+      "dang_bao_che": "CAPSULE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "vancomycin hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "250 mg/1"
+        }
+      ],
+      "dang_bao_che": "CAPSULE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1.25 g/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1.5 g/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "10.25 g/g"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1025 mg/mg"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1280 mg/mg"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1540 mg/mg"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "5.13 g/g"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "513 mg/mg"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "750 mg/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "VANCOMYCIN HYDROCHLORIDE",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "769 mg/mg"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS",
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1 g/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "1 g/20mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "10 g/100mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "5 g/100mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "vancomycin hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "5 g/100mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [
+        {
+          "hoat_chat": "VANCOMYCIN HYDROCHLORIDE",
+          "ham_luong": "500 mg/10mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, LYOPHILIZED, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "FIRVANQ",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [],
+      "dang_bao_che": "KIT",
+      "duong_dung": []
+    },
+    {
+      "ten_biet_duoc": "Vancomycin Hydrochloride for Oral Solution",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [],
+      "dang_bao_che": "KIT",
+      "duong_dung": []
+    },
+    {
+      "ten_biet_duoc": "vancomycin hydrochloride",
+      "ten_chung": "vancomycin hydrochloride",
+      "ham_luong": [],
+      "dang_bao_che": "KIT",
+      "duong_dung": []
+    }
+  ]
+}

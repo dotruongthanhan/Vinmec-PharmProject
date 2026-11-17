@@ -100,10 +100,18 @@ class _FakeAiRunner:
             ban_ghi_ids=["XN-DEMO02-01"],
             trich_dan=[],
         )
+        rule_rows = [
+            NhanDinhCuoi(
+                nguon_goc="luat",
+                phat_hien=ph,
+                dien_giai=explanation if idx == 0 else None,
+            )
+            for idx, ph in enumerate(ket_qua.phat_hien)
+        ]
         llm_out = KetQuaLLM(
             trang_thai="ok",
             nhan_dinh=[
-                NhanDinhCuoi(nguon_goc="luat", phat_hien=rule_finding, dien_giai=explanation),
+                *rule_rows,
                 NhanDinhCuoi(nguon_goc="ai_da_kiem_chung", de_xuat=ai_verified),
                 NhanDinhCuoi(
                     nguon_goc="ai_chua_kiem_chung",

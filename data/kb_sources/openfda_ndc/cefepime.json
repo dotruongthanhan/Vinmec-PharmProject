@@ -1,0 +1,18 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Cefepime",
+      "ten_chung": "cefepime",
+      "ham_luong": [
+        {
+          "hoat_chat": "CEFEPIME HYDROCHLORIDE",
+          "ham_luong": "1 g/50mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

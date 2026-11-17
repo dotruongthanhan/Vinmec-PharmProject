@@ -317,3 +317,84 @@ def test_build_real_meropenem_smoke(tmp_path: Path) -> None:
     assert chunks
     assert all(c.hoat_chat_ids == ["meropenem"] for c in chunks)
     assert any(c.loai_noi_dung == "bang" for c in chunks)
+
+
+def test_build_same_label_for_two_routes_does_not_duplicate_chunk_ids(tmp_path: Path) -> None:
+    sources_dir = _prepare_synthetic_sources(tmp_path)
+    manifest_path = sources_dir / "manifest.json"
+    entries = json.loads(manifest_path.read_text(encoding="utf-8"))
+    duplicate = dict(entries[0])
+    duplicate["duong_dan"] = "openfda/meropenem__intravenous.json"
+    shutil.copyfile(sources_dir / entries[0]["duong_dan"], sources_dir / duplicate["duong_dan"])
+    entries.append(duplicate)
+    manifest_path.write_text(json.dumps(entries), encoding="utf-8")
+    out_dir = tmp_path / "out"
+    assert (
+        main(
+            [
+                "--sources",
+                str(sources_dir),
+                "--out",
+                str(out_dir),
+                "--reports",
+                str(tmp_path / "reports"),
+            ]
+        )
+        == 0
+    )
+    chunks = load_chunks(out_dir / "chunks.jsonl")
+    assert len({chunk.doan_trich_id for chunk in chunks}) == len(chunks)
+
+
+def test_build_records_before_after_and_preserves_unchanged_ids(tmp_path: Path) -> None:
+    sources_dir = _prepare_synthetic_sources(tmp_path)
+    out_dir = tmp_path / "out"
+    reports_dir = tmp_path / "reports"
+    args = ["--sources", str(sources_dir), "--out", str(out_dir), "--reports", str(reports_dir)]
+    assert main(args) == 0
+    before = load_chunks(out_dir / "chunks.jsonl")
+    assert main(args) == 0
+    report = json.loads(next(reports_dir.glob("openfda_build_*.json")).read_text(encoding="utf-8"))
+    assert report["so_doan_truoc"] == len(before)
+    assert report["so_nhan_truoc"] == 2
+    assert report["so_ma_doan_bi_doi"] == 0
+    assert report["so_ma_doan_khong_doi_noi_dung_bi_doi"] == 0
+    assert load_chunks(out_dir / "chunks.jsonl") == before
+
+
+def test_build_uses_newest_version_of_shared_label_across_routes(tmp_path: Path) -> None:
+    sources_dir = _prepare_synthetic_sources(tmp_path)
+    manifest_path = sources_dir / "manifest.json"
+    entries = json.loads(manifest_path.read_text(encoding="utf-8"))
+    duplicate = dict(entries[0])
+    duplicate["duong_dan"] = "openfda/meropenem__intravenous.json"
+    newer_path = sources_dir / duplicate["duong_dan"]
+    payload = json.loads((sources_dir / entries[0]["duong_dan"]).read_text(encoding="utf-8"))
+    payload["results"][0]["effective_time"] = "20260610"
+    payload["results"][0]["indications_and_usage"] = [
+        "Newer synthetic indication is retained in the curated knowledge base. " * 4
+    ]
+    newer_path.write_text(json.dumps(payload), encoding="utf-8")
+    duplicate["sha256"] = _sha256(newer_path)
+    # Kiểm cả trường hợp manifest cũ chưa có ngày hoặc chưa cập nhật ngày.
+    duplicate.pop("effective_time", None)
+    entries.append(duplicate)
+    manifest_path.write_text(json.dumps(entries), encoding="utf-8")
+    out_dir = tmp_path / "out"
+    assert (
+        main(
+            [
+                "--sources",
+                str(sources_dir),
+                "--out",
+                str(out_dir),
+                "--reports",
+                str(tmp_path / "reports"),
+            ]
+        )
+        == 0
+    )
+    chunks = load_chunks(out_dir / "chunks.jsonl")
+    meropenem = [chunk for chunk in chunks if chunk.hoat_chat_ids == ["meropenem"]]
+    assert all(chunk.phien_ban_nguon == "20260610" for chunk in meropenem)
+    assert any("Newer synthetic indication" in chunk.noi_dung_goc for chunk in meropenem)

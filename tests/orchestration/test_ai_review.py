@@ -192,10 +192,18 @@ def test_present_ai_result_demo02_keeps_rules_adds_verified_drops_unverified() -
         trich_dan=[],
     )
 
+    rule_rows = [
+        NhanDinhCuoi(
+            nguon_goc="luat",
+            phat_hien=ph,
+            dien_giai=explanation if idx == 0 else None,
+        )
+        for idx, ph in enumerate(rule_result.phat_hien)
+    ]
     llm_out = KetQuaLLM(
         trang_thai="ok",
         nhan_dinh=[
-            NhanDinhCuoi(nguon_goc="luat", phat_hien=rule_finding, dien_giai=explanation),
+            *rule_rows,
             NhanDinhCuoi(nguon_goc="ai_da_kiem_chung", de_xuat=verified_ai),
             NhanDinhCuoi(
                 nguon_goc="ai_chua_kiem_chung",
@@ -265,7 +273,10 @@ def test_present_ai_result_enforces_invariant_1_and_error_states() -> None:
     altered_finding = rule_finding.model_copy(update={"ket_luan": "dat", "muc_do": "thong_tin"})
     altered_llm = KetQuaLLM(
         trang_thai="ok",
-        nhan_dinh=[NhanDinhCuoi(nguon_goc="luat", phat_hien=altered_finding)],
+        nhan_dinh=[
+            NhanDinhCuoi(nguon_goc="luat", phat_hien=altered_finding),
+            *[NhanDinhCuoi(nguon_goc="luat", phat_hien=ph) for ph in rule_result.phat_hien[1:]],
+        ],
         so_lan_goi=1,
         canh_bao=[],
         phien_ban_prompt="tong_hop.v1",

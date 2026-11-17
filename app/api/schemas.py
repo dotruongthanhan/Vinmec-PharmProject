@@ -1,8 +1,8 @@
-"""Mô hình trao đổi JSON theo hợp đồng API v1 và bổ sung v1.1."""
+"""Mô hình trao đổi JSON theo hợp đồng API v1, v1.1 và hỏi đáp v1.2."""
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 MucDoMa = Literal["nghiem_trong", "can_luu_y"] | None
 KetLuanMa = Literal["dat", "can_xem", "khong_du_du_lieu", "ngoai_hdsd"]
@@ -34,6 +34,10 @@ class DongHangDoi(ApiModel):
     so_can_luu_y: int
     so_thieu_du_lieu: int
     da_phan_hoi_het: bool
+    ma_y_lenh: str | None = None
+    thoi_diem_ke: str | None = None
+    nguoi_benh_tom_tat: str | None = None
+    thuoc: list[str] = Field(default_factory=list)
 
 
 class LoadError(ApiModel):
@@ -246,14 +250,26 @@ class ChatMessage(ApiModel):
 
 class GuiCauHoi(ApiModel):
     cau_hoi: str
-    lich_su: list[ChatMessage]
+    lich_su: list[ChatMessage] = Field(default_factory=list)
+    nhan_dinh_id: str | None = None
+
+    @field_validator("cau_hoi")
+    @classmethod
+    def _validate_cau_hoi(cls, value: str) -> str:
+        """Cắt khoảng trắng đầu cuối và kiểm tra độ dài 1–1000 ký tự."""
+        cleaned = value.strip()
+        if not 1 <= len(cleaned) <= 1000:
+            raise ValueError("cau_hoi phải dài từ 1 đến 1000 ký tự")
+        return cleaned
 
 
 class Citation(ApiModel):
     so: int
     loai_ma: LoaiCanCuMa
     nhan: str
-    ban_ghi_id: str | None
+    ban_ghi_id: str | None = None
+    doan_trich_id: str | None = None
+    trich_nguyen_van: str | None = None
 
 
 class TraLoi(ApiModel):
@@ -261,6 +277,7 @@ class TraLoi(ApiModel):
     noi_dung: str
     trich_dan: list[Citation]
     cong_cu_da_goi: list[str]
+    thoi_gian_ms: int = 0
 
 
 class AiFindings(ApiModel):

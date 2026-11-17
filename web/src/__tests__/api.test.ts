@@ -143,8 +143,8 @@ describe('dữ liệu mẫu và MockClient', () => {
     }
   })
 
-  it('MockClient ghi phản hồi, cập nhật da_phan_hoi_het và trả chua_san_sang cho ask', async () => {
-    const client = new MockClient({ delayMs: 0 })
+  it('MockClient ghi phản hồi, cập nhật da_phan_hoi_het và trả lời ask theo hợp đồng v1.2', async () => {
+    const client = new MockClient({ delayMs: 0, askDelayMs: 0 })
     const fb = await client.sendFeedback('DEMO-02', {
       nhan_dinh_id: 'lieu_than_can_chinh|CT-DEMO02-01',
       phan_hoi: 'dong_y',
@@ -157,7 +157,28 @@ describe('dữ liệu mẫu và MockClient', () => {
     const row = queue.cases.find((c) => c.ca_id === 'DEMO-02')
     expect(row?.da_phan_hoi_het).toBe(true)
 
-    const reply = await client.ask('DEMO-02', { cau_hoi: 'Vì sao chỉnh liều?', lich_su: [] })
-    expect(reply.trang_thai).toBe('chua_san_sang')
+    const demo02Reply = await client.ask('DEMO-02', { cau_hoi: 'Vì sao chỉnh liều?', lich_su: [] })
+    expect(demo02Reply.trang_thai).toBe('ok')
+    expect(demo02Reply.trich_dan).toHaveLength(2)
+    expect(demo02Reply.trich_dan.map((t) => t.loai_ma)).toEqual(['du_lieu', 'tai_lieu'])
+
+    const otherReply = await client.ask('DEMO-01', { cau_hoi: 'Có vấn đề gì?', lich_su: [] })
+    expect(otherReply.trang_thai).toBe('khong_co_nguon')
+
+    const disabledClient = new MockClient({
+      delayMs: 0,
+      askDelayMs: 0,
+      details: {
+        'DEMO-02': {
+          ...MOCK_CASE_DETAILS['DEMO-02'],
+          che_do: { ...MOCK_CASE_DETAILS['DEMO-02'].che_do, hoi_them: false },
+        },
+      },
+    })
+    const notReadyReply = await disabledClient.ask('DEMO-02', {
+      cau_hoi: 'Vì sao chỉnh liều?',
+      lich_su: [],
+    })
+    expect(notReadyReply.trang_thai).toBe('chua_san_sang')
   })
 })

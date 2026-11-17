@@ -52,7 +52,12 @@ def present_warnings(warnings: Sequence[str]) -> list[str]:
     return result
 
 
-def current_mode(*, co_llm: bool = False, has_corpus: bool = False) -> s.CheDo:
+def current_mode(
+    *,
+    co_llm: bool = False,
+    has_corpus: bool = False,
+    hoi_them: bool = False,
+) -> s.CheDo:
     """Trả trạng thái thực tế của đường chạy hiện tại theo bất biến 4 v1.1."""
     notices: list[str] = []
     if not co_llm:
@@ -62,7 +67,7 @@ def current_mode(*, co_llm: bool = False, has_corpus: bool = False) -> s.CheDo:
     return s.CheDo(
         co_llm=co_llm,
         truy_xuat="san_sang" if has_corpus else "chua_co",
-        hoi_them=False,
+        hoi_them=hoi_them,
         thong_bao=notices,
     )
 
@@ -70,7 +75,7 @@ def current_mode(*, co_llm: bool = False, has_corpus: bool = False) -> s.CheDo:
 def ai_finding_id(de_xuat: NhanDinhDeXuat) -> str:
     """Tạo mã nhận định ổn định cho dòng do AI đề xuất đã kiểm chứng."""
     line_ids = ",".join(sorted(de_xuat.chi_tiet_y_lenh_id))
-    raw = f"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}".encode("utf-8")
+    raw = f"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}".encode()
     return "ai|" + hashlib.sha256(raw).hexdigest()[:12]
 
 
@@ -114,13 +119,40 @@ def present_queue(
     rows = []
     for row in vm.queue_rows(cases, results):
         case_id = str(row["ca_id"])
+        case = by_id[case_id]
         attention, _ = vm.split_findings(
             vm.finding_rows(by_id[case_id], results[case_id].phat_hien)
         )
         done = bool(attention) and all(
             vm.feedback_status(case_id, item, feedbacks) is not None for item in attention
         )
-        rows.append(s.DongHangDoi.model_validate({**row, "da_phan_hoi_het": done}))
+        patient = case.nguoi_benh
+        sex = {"nam": "Nam", "nu": "Nữ"}.get(patient.gioi_tinh or "", "Thiếu giới tính")
+        age = f"{patient.tuoi} tuổi" if patient.tuoi is not None else "thiếu tuổi"
+        drugs_by_id = {drug.thuoc_id: drug for drug in case.danh_muc_thuoc}
+        drugs: list[str] = []
+        for line in case.y_lenh_cho_duyet.chi_tiet:
+            drug = drugs_by_id.get(line.thuoc_id or "")
+            if drug is None:
+                drugs.append(line.ten_tu_do or f"Thiếu thuốc: {line.thuoc_id}")
+                continue
+            name = drug.ten_thuoc.strip()
+            strength = (drug.ham_luong or "").strip()
+            if strength and strength.casefold() not in name.casefold():
+                name = f"{name} {strength}"
+            drugs.append(name)
+        rows.append(
+            s.DongHangDoi.model_validate(
+                {
+                    **row,
+                    "da_phan_hoi_het": done,
+                    "ma_y_lenh": case.y_lenh_cho_duyet.y_lenh_id,
+                    "thoi_diem_ke": case.y_lenh_cho_duyet.thoi_diem_ke.isoformat(),
+                    "nguoi_benh_tom_tat": f"{sex}, {age}",
+                    "thuoc": drugs,
+                }
+            )
+        )
     return rows
 
 
@@ -509,8 +541,7 @@ def present_ai_result(
 
     base_case = present_case(case, rule_result, feedbacks)
     expected_rules = {
-        row.nhan_dinh_id: row
-        for row in (*base_case.nhan_dinh.can_chu_y, *base_case.nhan_dinh.dat)
+        row.nhan_dinh_id: row for row in (*base_case.nhan_dinh.can_chu_y, *base_case.nhan_dinh.dat)
     }
     chunk_by_id = {chunk.doan_trich_id: chunk for chunk in source_chunks}
 

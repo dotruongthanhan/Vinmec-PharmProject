@@ -3,7 +3,7 @@ import type { BanGhi, CheDo, ChiTietCa, DanhSachCa, DoanNguon, NhanDinh, TrichDa
 export const MOCK_CHE_DO: CheDo = {
   co_llm: true,
   truy_xuat: 'san_sang',
-  hoi_them: false,
+  hoi_them: true,
   thong_bao: [],
 }
 
@@ -19,6 +19,10 @@ export const MOCK_CASES: DanhSachCa = {
   cases: [
     {
       ca_id: 'DEMO-02',
+      ma_y_lenh: 'YL-DEMO-02',
+      thoi_diem_ke: '2026-11-10T05:50:00+07:00',
+      nguoi_benh_tom_tat: 'Nữ, 75 tuổi',
+      thuoc: ['Meropenem 1 g'],
       khoa: 'Hô hấp',
       mo_ta: 'Nữ 75 tuổi, viêm phổi, suy giảm chức năng thận nhưng liều meropenem chưa chỉnh',
       uu_tien: 0,
@@ -30,6 +34,10 @@ export const MOCK_CASES: DanhSachCa = {
     },
     {
       ca_id: 'DEMO-06',
+      ma_y_lenh: 'YL-DEMO-06',
+      thoi_diem_ke: '2026-11-10T07:55:00+07:00',
+      nguoi_benh_tom_tat: 'Nữ, 40 tuổi',
+      thuoc: ['Amoxicillin 500 mg'],
       khoa: 'Hô hấp',
       mo_ta: 'Nữ 40 tuổi, viêm họng cấp, dị ứng chéo penicillin với amoxicillin và câu chèn lệnh',
       uu_tien: 0,
@@ -41,6 +49,10 @@ export const MOCK_CASES: DanhSachCa = {
     },
     {
       ca_id: 'DEMO-05',
+      ma_y_lenh: 'YL-DEMO-05',
+      thoi_diem_ke: '2026-11-10T07:45:00+07:00',
+      nguoi_benh_tom_tat: 'Nam, 55 tuổi',
+      thuoc: ['Metoprolol tartrat 50 mg'],
       khoa: 'Tim mạch',
       mo_ta: 'Nam 55 tuổi, tăng huyết áp, lịch dùng Metoprolol 50 mg thiếu liều tối',
       uu_tien: 1,
@@ -52,6 +64,10 @@ export const MOCK_CASES: DanhSachCa = {
     },
     {
       ca_id: 'DEMO-03',
+      ma_y_lenh: 'YL-DEMO-03',
+      thoi_diem_ke: '2026-11-10T07:55:00+07:00',
+      nguoi_benh_tom_tat: 'Nam, 60 tuổi',
+      thuoc: ['Amoxicillin + acid clavulanic 875 mg/125 mg'],
       khoa: 'Tai mũi họng',
       mo_ta: 'Nam 60 tuổi, viêm xoang cấp ngoại trú, hồ sơ chưa có thông tin dị ứng',
       uu_tien: 3,
@@ -63,6 +79,10 @@ export const MOCK_CASES: DanhSachCa = {
     },
     {
       ca_id: 'DEMO-01',
+      ma_y_lenh: 'YL-DEMO-01',
+      thoi_diem_ke: '2026-11-10T07:45:00+07:00',
+      nguoi_benh_tom_tat: 'Nam, 45 tuổi',
+      thuoc: ['Amlodipin 5 mg'],
       khoa: 'Tim mạch',
       mo_ta: 'Nam 45 tuổi, tăng huyết áp nội trú, đơn Amlodipin 5 mg sạch',
       uu_tien: 4,
@@ -74,6 +94,10 @@ export const MOCK_CASES: DanhSachCa = {
     },
     {
       ca_id: 'DEMO-04',
+      ma_y_lenh: 'YL-DEMO-04',
+      thoi_diem_ke: '2026-11-10T08:00:00+07:00',
+      nguoi_benh_tom_tat: 'Nữ, 68 tuổi',
+      thuoc: ['Ceftriaxon 2 g'],
       khoa: 'Chấn thương chỉnh hình',
       mo_ta: 'Nữ 68 tuổi, gãy cổ xương đùi, dùng ceftriaxon có căn cứ từ kết quả vi sinh nước tiểu',
       uu_tien: 4,

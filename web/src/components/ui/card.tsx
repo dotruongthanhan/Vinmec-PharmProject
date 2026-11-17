@@ -3,12 +3,12 @@ import { cn } from '@/lib/cn'
 
 export type CardProps = ComponentPropsWithRef<'div'>
 
-/** Khung thẻ bề mặt trắng chuẩn với viền mảnh và bóng nhẹ. */
+/** Khung thẻ bề mặt trắng chuẩn với viền mảnh 1px. */
 export function Card({ ref, className, ...props }: CardProps) {
   return (
     <div
       ref={ref}
-      className={cn('rounded-md border border-line bg-surface shadow-xs', className)}
+      className={cn('rounded-md border border-line bg-surface', className)}
       {...props}
     />
   )

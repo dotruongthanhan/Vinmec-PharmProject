@@ -1,94 +1,156 @@
 import {
-  PanelLeftClose,
-  PanelLeftOpen,
+  ChevronRight,
+  Menu,
   PanelRightClose,
   PanelRightOpen,
-  Pill,
   Scale,
-  Sparkles,
+  Search,
+  X,
 } from 'lucide-react'
+import type { RefObject } from 'react'
+import { Link } from 'react-router-dom'
 import type { CheDo } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
 import { IconButton } from '@/components/ui/icon-button'
+import { Kbd } from '@/components/ui/kbd'
 
 export interface TopBarProps {
   cheDo: CheDo | null
-  queueOpen: boolean
-  onToggleQueue: () => void
-  chatOpen: boolean
-  onToggleChat: () => void
-  chatAvailable?: boolean
+  activeOrderCode: string | null
+  searchQuery: string
+  searchInputRef: RefObject<HTMLInputElement | null>
+  isDemoMode: boolean
+  showSidebarTrigger: boolean
+  sidebarOpen: boolean
+  assistantOpen: boolean
+  onToggleSidebar: () => void
+  onToggleAssistant: () => void
+  onSearchChange: (value: string) => void
+  onSearchFocusOrSubmit: () => void
 }
 
-/** Thanh tiêu đề trên cùng 48 px hiển thị tên công cụ, chế độ chạy và hai nút đóng mở thanh bên. */
+/** Thanh trên cùng của vùng giữa cao 48 px: đường dẫn, ô tìm kiếm, nhãn chế độ và nút mở/đóng trợ lý. */
 export function TopBar({
   cheDo,
-  queueOpen,
-  onToggleQueue,
-  chatOpen,
-  onToggleChat,
-  chatAvailable = true,
+  activeOrderCode,
+  searchQuery,
+  searchInputRef,
+  isDemoMode,
+  showSidebarTrigger,
+  sidebarOpen,
+  assistantOpen,
+  onToggleSidebar,
+  onToggleAssistant,
+  onSearchChange,
+  onSearchFocusOrSubmit,
 }: TopBarProps) {
   const isAiEnabled = Boolean(cheDo?.co_llm)
 
   return (
     <header
-      className="h-12 bg-surface border-b border-line px-4 flex items-center justify-between gap-3 shrink-0"
-      aria-label="Thanh điều hướng ứng dụng"
+      className="workspace-toolbar flex min-h-12 shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-line bg-surface px-3 py-1.5"
+      aria-label="Thanh công cụ bàn làm việc"
     >
-      <div className="flex items-center gap-2.5 min-w-0">
-        <IconButton
-          icon={
-            queueOpen ? (
-              <PanelLeftClose className="size-4" strokeWidth={1.75} />
-            ) : (
-              <PanelLeftOpen className="size-4" strokeWidth={1.75} />
-            )
-          }
-          aria-label={queueOpen ? 'Thu gọn hàng đợi y lệnh' : 'Mở hàng đợi y lệnh'}
-          aria-expanded={queueOpen}
-          onClick={onToggleQueue}
-        />
-        <Pill size={18} strokeWidth={1.75} className="text-primary shrink-0" aria-hidden="true" />
-        <h1 className="text-md font-semibold text-fg truncate">Hỗ trợ thẩm định y lệnh</h1>
+      <div className="flex shrink-0 items-center gap-2">
+        {showSidebarTrigger ? (
+          <IconButton
+            icon={<Menu className="size-4" strokeWidth={1.75} />}
+            aria-label={sidebarOpen ? 'Đóng thanh điều hướng' : 'Mở thanh điều hướng'}
+            aria-expanded={sidebarOpen}
+            onClick={onToggleSidebar}
+          />
+        ) : null}
+
+        <nav aria-label="Đường dẫn" className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-sm">
+          <Link
+            to="/app"
+            className={
+              activeOrderCode
+                ? 'text-fg-muted hover:text-fg transition-colors duration-120'
+                : 'font-semibold text-fg'
+            }
+          >
+            Y lệnh
+          </Link>
+          {activeOrderCode ? (
+            <>
+              <ChevronRight
+                className="size-3.5 shrink-0 text-fg-disabled"
+                strokeWidth={1.75}
+                aria-hidden="true"
+              />
+              <span className="font-mono text-xs font-semibold text-fg">
+                {activeOrderCode}
+              </span>
+            </>
+          ) : null}
+        </nav>
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <Badge tone="warning" variant="soft">
+        <div className="toolbar-search relative items-center">
+          <Search
+            className="pointer-events-none absolute left-2.5 size-3.5 text-fg-subtle"
+            strokeWidth={1.75}
+            aria-hidden="true"
+          />
+          <input
+            ref={searchInputRef}
+            type="search"
+            value={searchQuery}
+            aria-label="Tìm kiếm y lệnh"
+            placeholder="Tìm y lệnh, thuốc, khoa…"
+            onFocus={onSearchFocusOrSubmit}
+            onChange={(e) => {
+              onSearchChange(e.target.value)
+              onSearchFocusOrSubmit()
+            }}
+            className="h-8 w-44 rounded-sm border border-line-strong bg-surface pl-8 pr-14 text-xs text-fg placeholder:text-fg-subtle focus:border-primary"
+          />
+          {searchQuery ? (
+            <button
+              type="button"
+              aria-label="Xoá từ khoá tìm kiếm"
+              onClick={() => onSearchChange('')}
+              className="absolute right-1.5 inline-flex size-5 cursor-pointer items-center justify-center rounded-sm text-fg-subtle hover:bg-surface-muted hover:text-fg"
+            >
+              <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
+            </button>
+          ) : (
+            <Kbd className="pointer-events-none absolute right-2">Ctrl K</Kbd>
+          )}
+        </div>
+
+        <Badge tone="warning" variant="soft" className="toolbar-mode">
           Dữ liệu giả lập
         </Badge>
+
         <Badge
           tone={isAiEnabled ? 'ai' : 'neutral'}
           variant="soft"
-          icon={
-            isAiEnabled ? (
-              <Sparkles className="size-3.5" strokeWidth={1.75} />
-            ) : (
-              <Scale className="size-3.5" strokeWidth={1.75} />
-            )
-          }
+          className="toolbar-mode"
+          icon={!isAiEnabled ? <Scale className="size-3.5" strokeWidth={1.75} /> : undefined}
         >
           {isAiEnabled ? 'AI bật' : 'Chỉ bộ luật'}
         </Badge>
+
+        {isDemoMode ? (
+          <Badge tone="neutral" variant="outline">
+            Demo · không xác thực
+          </Badge>
+        ) : null}
+
         <IconButton
           icon={
-            chatOpen ? (
+            assistantOpen ? (
               <PanelRightClose className="size-4" strokeWidth={1.75} />
             ) : (
               <PanelRightOpen className="size-4" strokeWidth={1.75} />
             )
           }
-          aria-label={chatOpen ? 'Ẩn khung hỏi thêm' : 'Mở khung hỏi thêm'}
-          aria-expanded={chatOpen}
-          disabled={!chatAvailable}
-          tooltip={
-            !chatAvailable
-              ? 'Chọn một ca để mở khung hỏi thêm'
-              : chatOpen
-                ? 'Ẩn khung hỏi thêm'
-                : 'Mở khung hỏi thêm'
-          }
-          onClick={onToggleChat}
+          aria-label={assistantOpen ? 'Thu gọn trợ lý' : 'Mở trợ lý'}
+          aria-expanded={assistantOpen}
+          onClick={onToggleAssistant}
         />
       </div>
     </header>

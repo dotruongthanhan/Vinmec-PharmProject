@@ -14,12 +14,8 @@ _MANIFEST_PATH = _ROOT / "data" / "kb_sources" / "manifest.json"
 
 def _manifest_entries() -> list[dict]:
     raw = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8"))
-    if isinstance(raw, list):
-        return raw
-    for val in raw.values():
-        if isinstance(val, list) and val and isinstance(val[0], dict) and "ten_goi" in val[0]:
-            return val
-    raise AssertionError("Khong doc duoc danh sach manifest")
+    items = raw if isinstance(raw, list) else raw["tep"]
+    return [item for item in items if item.get("nguon") == "openfda_drug_label"]
 
 
 def test_normalize_key_basic() -> None:

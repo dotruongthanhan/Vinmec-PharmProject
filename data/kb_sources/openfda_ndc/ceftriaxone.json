@@ -1,0 +1,49 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "ceftriaxone",
+      "ten_chung": "ceftriaxone",
+      "ham_luong": [
+        {
+          "hoat_chat": "CEFTRIAXONE SODIUM",
+          "ham_luong": "1 g/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ceftriaxone",
+      "ten_chung": "ceftriaxone",
+      "ham_luong": [
+        {
+          "hoat_chat": "CEFTRIAXONE SODIUM",
+          "ham_luong": "2 g/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Ceftriaxone",
+      "ten_chung": "ceftriaxone",
+      "ham_luong": [
+        {
+          "hoat_chat": "CEFTRIAXONE SODIUM",
+          "ham_luong": "250 mg/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

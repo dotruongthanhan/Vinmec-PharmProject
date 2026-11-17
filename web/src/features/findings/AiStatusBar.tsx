@@ -1,4 +1,4 @@
-import { LoaderCircle, RotateCw } from 'lucide-react'
+import { LoaderCircle, RotateCw, Info } from 'lucide-react'
 import type { TrangThaiAI } from '@/api/types'
 import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
@@ -98,6 +98,7 @@ export function AiStatusBar({
     <InlineAlert
       tone="ai"
       role="status"
+      icon={<Info className="size-4" strokeWidth={1.75} />}
       action={
         <Button
           variant="ghost"

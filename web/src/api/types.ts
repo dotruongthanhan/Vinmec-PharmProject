@@ -30,6 +30,10 @@ export interface CheDo {
 
 export interface DongHangDoi {
   ca_id: string
+  ma_y_lenh?: string | null
+  thoi_diem_ke?: string | null
+  nguoi_benh_tom_tat?: string | null
+  thuoc?: string[] | null
   khoa: string
   mo_ta: string
   uu_tien: 0 | 1 | 2 | 3 | 4
@@ -266,6 +270,7 @@ export interface LichSuHoiDapItem {
 export interface GuiCauHoi {
   cau_hoi: string
   lich_su: LichSuHoiDapItem[]
+  nhan_dinh_id?: string | null
 }
 
 export interface TrichDanTraLoi {
@@ -273,6 +278,8 @@ export interface TrichDanTraLoi {
   loai_ma: LoaiCanCuMa
   nhan: string
   ban_ghi_id: string | null
+  doan_trich_id?: string | null
+  trich_nguyen_van?: string | null
 }
 
 export interface TraLoi {
@@ -280,6 +287,7 @@ export interface TraLoi {
   noi_dung: string
   trich_dan: TrichDanTraLoi[]
   cong_cu_da_goi: string[]
+  thoi_gian_ms?: number
 }
 
 export interface HealthResponse {

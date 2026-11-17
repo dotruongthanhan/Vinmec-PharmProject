@@ -1,10 +1,17 @@
 import type { QueueFilter } from './queue.ts'
+import { parseThemePreference } from './theme.ts'
+import type { ThemePreference } from './theme.ts'
+
+export const ASSISTANT_MIN_WIDTH = 320
+export const ASSISTANT_MAX_WIDTH = 560
+export const ASSISTANT_DEFAULT_WIDTH = 400
 
 export interface UiPrefs {
   selectedCaseId: string | null
   queueFilter: QueueFilter
   queueCollapsed: boolean
   chatCollapsed: boolean
+  assistantWidth: number
 }
 
 const PREFIX = 'pharm_review_ui_'
@@ -12,6 +19,8 @@ const KEY_SELECTED_CASE = `${PREFIX}selected_case_id`
 const KEY_QUEUE_FILTER = `${PREFIX}queue_filter`
 const KEY_QUEUE_COLLAPSED = `${PREFIX}queue_collapsed`
 const KEY_CHAT_COLLAPSED = `${PREFIX}chat_collapsed`
+const KEY_ASSISTANT_WIDTH = `${PREFIX}assistant_width`
+const KEY_THEME = `${PREFIX}theme`
 
 function safeGetStorage(): Storage | null {
   try {
@@ -24,8 +33,31 @@ function safeGetStorage(): Storage | null {
   }
 }
 
+export function loadThemePreference(): ThemePreference {
+  try {
+    return parseThemePreference(safeGetStorage()?.getItem(KEY_THEME))
+  } catch {
+    return 'system'
+  }
+}
+
+export function saveThemePreference(preference: ThemePreference): void {
+  try {
+    safeGetStorage()?.setItem(KEY_THEME, preference)
+  } catch {
+    // Vẫn đổi màu trong phiên khi trình duyệt chặn bộ nhớ.
+  }
+}
+
 function isQueueFilter(value: string | null): value is QueueFilter {
   return value === 'tat_ca' || value === 'can_xem' || value === 'da_phan_hoi_het'
+}
+
+export function clampAssistantWidth(raw: number): number {
+  if (!Number.isFinite(raw)) {
+    return ASSISTANT_DEFAULT_WIDTH
+  }
+  return Math.min(ASSISTANT_MAX_WIDTH, Math.max(ASSISTANT_MIN_WIDTH, Math.round(raw)))
 }
 
 export function loadUiPrefs(): UiPrefs {
@@ -36,6 +68,7 @@ export function loadUiPrefs(): UiPrefs {
       queueFilter: 'tat_ca',
       queueCollapsed: false,
       chatCollapsed: false,
+      assistantWidth: ASSISTANT_DEFAULT_WIDTH,
     }
   }
   try {
@@ -43,11 +76,14 @@ export function loadUiPrefs(): UiPrefs {
     const rawFilter = storage.getItem(KEY_QUEUE_FILTER)
     const rawQueueCollapsed = storage.getItem(KEY_QUEUE_COLLAPSED)
     const rawChatCollapsed = storage.getItem(KEY_CHAT_COLLAPSED)
+    const rawWidth = storage.getItem(KEY_ASSISTANT_WIDTH)
+    const parsedWidth = rawWidth ? Number(rawWidth) : ASSISTANT_DEFAULT_WIDTH
     return {
       selectedCaseId: selectedCaseId || null,
       queueFilter: isQueueFilter(rawFilter) ? rawFilter : 'tat_ca',
       queueCollapsed: rawQueueCollapsed === '1',
       chatCollapsed: rawChatCollapsed === '1',
+      assistantWidth: clampAssistantWidth(parsedWidth),
     }
   } catch {
     return {
@@ -55,6 +91,7 @@ export function loadUiPrefs(): UiPrefs {
       queueFilter: 'tat_ca',
       queueCollapsed: false,
       chatCollapsed: false,
+      assistantWidth: ASSISTANT_DEFAULT_WIDTH,
     }
   }
 }
@@ -106,6 +143,18 @@ export function saveChatCollapsed(collapsed: boolean): void {
   }
   try {
     storage.setItem(KEY_CHAT_COLLAPSED, collapsed ? '1' : '0')
+  } catch {
+    // Bỏ qua khi trình duyệt chặn ghi tuỳ chọn giao diện.
+  }
+}
+
+export function saveAssistantWidth(width: number): void {
+  const storage = safeGetStorage()
+  if (!storage) {
+    return
+  }
+  try {
+    storage.setItem(KEY_ASSISTANT_WIDTH, String(clampAssistantWidth(width)))
   } catch {
     // Bỏ qua khi trình duyệt chặn ghi tuỳ chọn giao diện.
   }

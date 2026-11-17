@@ -2,6 +2,7 @@
 
 import math
 import re
+from collections.abc import Collection, Sequence
 
 from app.llm.schema import GoiCanCu, NhanDinhDeXuat
 
@@ -33,6 +34,7 @@ _NUMBER_TOKEN = re.compile(
 )
 
 _EN_THOUSAND_PATTERN = re.compile(r"(?<![A-Za-z0-9_])[1-9]\d{0,2}(?:,\d{3})+\b")
+_CITATION_MARKER = re.compile(r"\[(\d+)\]")
 
 
 def _mask_ignored(text: str) -> str:
@@ -73,23 +75,33 @@ def extract_numbers(text: str) -> list[float]:
     return [value for value, _ in _extract_number_pairs(text)]
 
 
-def check_numbers(de_xuat: NhanDinhDeXuat, goi: GoiCanCu) -> list[str]:
-    """Kiểm tra mọi con số trong nhan_xet và de_xuat đều có nguồn trong gói căn cứ."""
-    allowed_numbers = list(goi.so_cho_phep)
-    cited_ids = {quote.doan_trich_id for quote in de_xuat.trich_dan}
-    for chunk in goi.doan:
-        if chunk.doan_trich_id in cited_ids:
-            allowed_numbers.extend(extract_numbers(chunk.noi_dung_goc))
-            if chunk.ngon_ngu == "en":
-                for match in _EN_THOUSAND_PATTERN.finditer(_mask_ignored(chunk.noi_dung_goc)):
-                    allowed_numbers.append(float(match.group(0).replace(",", "")))
+def numbers_in_text(text: str, *, include_en_thousands: bool = False) -> list[float]:
+    """Lấy các con số trong văn bản, tuỳ chọn nhận dạng dấu phẩy hàng nghìn tiếng Anh."""
+    numbers = extract_numbers(text)
+    if include_en_thousands:
+        for match in _EN_THOUSAND_PATTERN.finditer(_mask_ignored(text)):
+            numbers.append(float(match.group(0).replace(",", "")))
+    return numbers
 
-    texts_to_check = [de_xuat.nhan_xet]
-    if de_xuat.de_xuat:
-        texts_to_check.append(de_xuat.de_xuat)
 
+def mask_citation_markers(text: str, citation_numbers: Collection[int]) -> str:
+    """Thay các dấu trích dẫn [n] hợp lệ bằng khoảng trắng để tránh kiểm nhầm số liệu."""
+    if not citation_numbers:
+        return text
+    allowed = set(citation_numbers)
+
+    def _replace(match: re.Match[str]) -> str:
+        if int(match.group(1)) in allowed:
+            return " " * len(match.group(0))
+        return match.group(0)
+
+    return _CITATION_MARKER.sub(_replace, text)
+
+
+def unverified_numbers(texts: Sequence[str], allowed_numbers: Sequence[float]) -> list[str]:
+    """Tìm các số trong texts không có trong allowed_numbers theo sai số chuẩn."""
     errors: list[str] = []
-    for text in texts_to_check:
+    for text in texts:
         for num, label in _extract_number_pairs(text):
             matched = any(
                 math.isclose(num, ref, rel_tol=1e-3, abs_tol=1e-6) for ref in allowed_numbers
@@ -97,3 +109,23 @@ def check_numbers(de_xuat: NhanDinhDeXuat, goi: GoiCanCu) -> list[str]:
             if not matched:
                 errors.append(f"so_khong_co_nguon:{label}")
     return list(dict.fromkeys(errors))
+
+
+def check_numbers(de_xuat: NhanDinhDeXuat, goi: GoiCanCu) -> list[str]:
+    """Kiểm tra mọi con số trong nhan_xet và de_xuat đều có nguồn trong gói căn cứ."""
+    allowed_numbers = list(goi.so_cho_phep)
+    cited_ids = {quote.doan_trich_id for quote in de_xuat.trich_dan}
+    for chunk in goi.doan:
+        if chunk.doan_trich_id in cited_ids:
+            allowed_numbers.extend(
+                numbers_in_text(
+                    chunk.noi_dung_goc,
+                    include_en_thousands=chunk.ngon_ngu == "en",
+                )
+            )
+
+    texts_to_check = [de_xuat.nhan_xet]
+    if de_xuat.de_xuat:
+        texts_to_check.append(de_xuat.de_xuat)
+
+    return unverified_numbers(texts_to_check, allowed_numbers)

@@ -5,9 +5,17 @@ import unicodedata
 from app.llm.schema import GoiCanCu, NhanDinhDeXuat
 
 
-def _normalize_text(text: str) -> str:
+def normalize_text(text: str) -> str:
     """Chuẩn hoá Unicode NFC, gộp mọi khoảng trắng thành một dấu cách và bỏ hai đầu."""
     return " ".join(unicodedata.normalize("NFC", text).split())
+
+
+def quote_matches_source(quote: str, source: str) -> bool:
+    """Kiểm tra câu trích khác rỗng có là chuỗi con của đoạn nguồn sau chuẩn hoá."""
+    norm_quote = normalize_text(quote)
+    if not norm_quote:
+        return False
+    return norm_quote in normalize_text(source)
 
 
 def check_citations(de_xuat: NhanDinhDeXuat, goi: GoiCanCu) -> list[str]:
@@ -33,14 +41,14 @@ def check_citations(de_xuat: NhanDinhDeXuat, goi: GoiCanCu) -> list[str]:
 
     chunk_by_id = {chunk.doan_trich_id: chunk for chunk in goi.doan}
     for quote in de_xuat.trich_dan:
-        norm_quote = _normalize_text(quote.trich_nguyen_van)
+        norm_quote = normalize_text(quote.trich_nguyen_van)
         if len(norm_quote) < 15:
             errors.append("trich_qua_ngan")
         chunk = chunk_by_id.get(quote.doan_trich_id)
         if chunk is None:
             errors.append("ma_doan_la")
             continue
-        norm_source = _normalize_text(chunk.noi_dung_goc)
+        norm_source = normalize_text(chunk.noi_dung_goc)
         if norm_quote not in norm_source:
             errors.append("trich_khong_khop")
 

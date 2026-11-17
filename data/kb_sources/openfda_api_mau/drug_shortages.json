@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "disclaimer": "Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalidated. We may limit or otherwise restrict your access to the API in line with our Terms of Service.",
+    "terms": "https://open.fda.gov/terms/",
+    "license": "https://open.fda.gov/license/",
+    "last_updated": "2026-11-16",
+    "results": {
+      "skip": 0,
+      "limit": 1,
+      "total": 1583
+    }
+  },
+  "results": [
+    {
+      "update_type": "Reverified",
+      "initial_posting_date": "04/02/2020",
+      "package_ndc": "0409-2305-17",
+      "generic_name": "Midazolam Hydrochloride Injection",
+      "contact_info": "844-646-4398",
+      "availability": "Limited Availability",
+      "related_info": "Next Estimated Delivery and Estimated Recovery: December 2026",
+      "openfda": {
+        "application_number": [
+          "ANDA075857"
+        ],
+        "brand_name": [
+          "MIDAZOLAM"
+        ],
+        "generic_name": [
+          "MIDAZOLAM HYDROCHLORIDE"
+        ],
+        "manufacturer_name": [
+          "Hospira, Inc."
+        ],
+        "product_ndc": [
+          "0409-2305",
+          "0409-2308",
+          "0409-0001"
+        ],
+        "product_type": [
+          "HUMAN PRESCRIPTION DRUG"
+        ],
+        "route": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "substance_name": [
+          "MIDAZOLAM HYDROCHLORIDE"
+        ],
+        "rxcui": [
+          "1666800",
+          "1666814",
+          "1666823",
+          "1666798"
+        ],
+        "spl_id": [
+          "2f69c5b1-6505-42dc-8bb3-edbd9b6c0781",
+          "8954486a-8512-4831-8178-0b49f1efb73e"
+        ],
+        "spl_set_id": [
+          "b95415fa-17c2-42ab-a6b0-e628d01c94ed",
+          "1abda8b8-48a8-4995-af86-39220d1aa240"
+        ],
+        "package_ndc": [
+          "0409-2305-55",
+          "0409-2305-50",
+          "0409-2308-69",
+          "0409-2308-49",
+          "0409-2308-70",
+          "0409-2308-50",
+          "0409-2305-16",
+          "0409-2305-17",
+          "0409-2305-04",
+          "0409-2305-05",
+          "0409-2308-21",
+          "0409-2308-01",
+          "0409-2308-22",
+          "0409-2308-02",
+          "0409-0001-01",
+          "0409-0001-25"
+        ],
+        "unii": [
+          "W7TTW573JJ"
+        ]
+      },
+      "update_date": "11/09/2026",
+      "therapeutic_category": [
+        "Anesthesia",
+        "Neurology"
+      ],
+      "dosage_form": "Injection",
+      "presentation": "Midazolam Hydrochloride Preservative Free, Injection, 2 mg/2mL (1 mg/mL) (NDC 0409-2305-17)",
+      "company_name": "Hospira, Inc., a Pfizer Company",
+      "shortage_reason": "Demand increase for the drug",
+      "status": "Current"
+    }
+  ]
+}

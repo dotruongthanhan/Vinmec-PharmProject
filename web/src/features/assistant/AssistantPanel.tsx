@@ -1,0 +1,686 @@
+import {
+  CornerDownRight,
+  ExternalLink,
+  LoaderCircle,
+  MessageSquareText,
+  PanelRightClose,
+  RotateCw,
+  SendHorizontal,
+  ShieldCheck,
+  Square,
+  X,
+} from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { KeyboardEvent } from 'react'
+import type { ReviewApiClient } from '@/api/client'
+import type { ChiTietCa, DoanNguon, NhanDinh, TrangThaiTraLoi, TrichDanTraLoi } from '@/api/types'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Collapsible,
+  CollapsibleChevron,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { EmptyState } from '@/components/ui/empty-state'
+import { IconButton } from '@/components/ui/icon-button'
+import { InlineAlert } from '@/components/ui/inline-alert'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getSafeHttpsUrl, splitHighlightSegments } from '@/lib/aiReview'
+import {
+  MAX_ASSISTANT_QUESTION_LENGTH,
+  buildSuggestedQuestions,
+  getAssistantInputState,
+} from '@/lib/assistant'
+import { extractOrderCode, formatClinicalText } from '@/lib/displayFormat'
+import { inferMetricFromCitation, parseCitationsInText } from '@/lib/presentation'
+import type { EvidenceTarget } from '@/lib/uiTypes'
+import type { ChatMessage } from '@/state/useChat'
+
+export interface FocusedFindingContext {
+  nhanDinhId: string
+  label: string
+}
+
+export interface AssistantPanelProps {
+  client: ReviewApiClient
+  detail: ChiTietCa | null
+  attentionFindings: readonly NhanDinh[]
+  messages: readonly ChatMessage[]
+  sending: boolean
+  lastStatus: TrangThaiTraLoi | null
+  focusedFinding: FocusedFindingContext | null
+  onClearFocusedFinding: () => void
+  onSend: (caId: string, question: string, nhanDinhId?: string | null) => Promise<void>
+  onStop: (caId: string) => void
+  onRetryLast: (caId: string) => Promise<void>
+  onClear: (caId: string) => void
+  onClose: () => void
+  onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
+}
+
+type AssistantTab = 'hoi_dap' | 'nguon'
+
+interface SourceSelection {
+  caId: string
+  doanTrichId: string
+  nhan: string
+  trichNguyenVan: string
+}
+
+type SourceLoadState =
+  | { key: string; status: 'loading' }
+  | { key: string; status: 'error'; message: string }
+  | { key: string; status: 'loaded'; data: DoanNguon }
+
+/** Khung Trợ lý AI cột phải: gồm thẻ Hỏi đáp và thẻ Nguồn, hỗ trợ trích dẫn và AbortController. */
+export function AssistantPanel({
+  client,
+  detail,
+  attentionFindings,
+  messages,
+  sending,
+  lastStatus,
+  focusedFinding,
+  onClearFocusedFinding,
+  onSend,
+  onStop,
+  onRetryLast,
+  onClear,
+  onClose,
+  onOpenEvidence,
+}: AssistantPanelProps) {
+  const [activeTab, setActiveTab] = useState<AssistantTab>('hoi_dap')
+  const [draft, setDraft] = useState<string>('')
+  const [sourceSelection, setSourceSelection] = useState<SourceSelection | null>(null)
+  const [sourceState, setSourceState] = useState<SourceLoadState | null>(null)
+  const [sourceReloadTick, setSourceReloadTick] = useState<number>(0)
+
+  const [prevCaId, setPrevCaId] = useState<string | null>(detail?.ca_id ?? null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const currentCaId = detail?.ca_id ?? null
+  if (prevCaId !== currentCaId) {
+    setPrevCaId(currentCaId)
+    setDraft('')
+    setSourceSelection(null)
+    setSourceState(null)
+    setActiveTab('hoi_dap')
+  }
+
+  useEffect(() => {
+    const el = textareaRef.current
+    if (!el) {
+      return
+    }
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight, 132)}px`
+  }, [draft])
+
+  const sourceFetchKey = sourceSelection
+    ? `${sourceSelection.caId}::${sourceSelection.doanTrichId}::${sourceReloadTick}`
+    : null
+
+  useEffect(() => {
+    if (!sourceSelection || !sourceFetchKey) {
+      return
+    }
+    let cancelled = false
+    client
+      .getSource(sourceSelection.caId, sourceSelection.doanTrichId)
+      .then((data) => {
+        if (cancelled) {
+          return
+        }
+        setSourceState({ key: sourceFetchKey, status: 'loaded', data })
+      })
+      .catch((err: unknown) => {
+        if (cancelled) {
+          return
+        }
+        const message =
+          err instanceof Error && err.message
+            ? err.message
+            : 'Không tải được đoạn nguồn tài liệu.'
+        setSourceState({ key: sourceFetchKey, status: 'error', message })
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [client, sourceSelection, sourceFetchKey])
+
+  const hoiThemEnabled = Boolean(detail?.che_do.hoi_them)
+  const inputState = getAssistantInputState({
+    hasCase: detail !== null,
+    hoiThemEnabled,
+    lastStatus,
+    sending,
+    draft,
+  })
+
+  const suggestedQuestions = useMemo(
+    () => (detail ? buildSuggestedQuestions(detail, attentionFindings) : []),
+    [detail, attentionFindings],
+  )
+
+  const orderCode = detail
+    ? extractOrderCode(detail.chi_tiet.y_lenh.thong_tin_text, detail.ca_id)
+    : null
+
+  const handleOpenCitation = (td: TrichDanTraLoi, trigger: HTMLButtonElement) => {
+    if (!detail) {
+      return
+    }
+    if (td.loai_ma === 'tai_lieu' && td.doan_trich_id) {
+      setSourceSelection({
+        caId: detail.ca_id,
+        doanTrichId: td.doan_trich_id,
+        nhan: td.nhan,
+        trichNguyenVan: td.trich_nguyen_van ?? '',
+      })
+      setActiveTab('nguon')
+      return
+    }
+    if (td.loai_ma === 'du_lieu' && td.ban_ghi_id) {
+      onOpenEvidence(
+        {
+          kind: 'record',
+          caId: detail.ca_id,
+          banGhiId: td.ban_ghi_id,
+          titleHint: td.nhan,
+        },
+        trigger,
+      )
+      return
+    }
+    if (td.loai_ma === 'tinh_toan') {
+      const metric = inferMetricFromCitation(detail.chi_so, td.ban_ghi_id, td.nhan)
+      if (metric) {
+        onOpenEvidence(
+          {
+            kind: 'metric',
+            metric,
+            titleHint: td.nhan,
+          },
+          trigger,
+        )
+        return
+      }
+    }
+    onOpenEvidence(
+      {
+        kind: 'document',
+        moTa: td.nhan,
+        ghiChu:
+          td.loai_ma === 'tai_lieu'
+            ? 'Không có mã đoạn nguồn để mở trực tiếp.'
+            : null,
+      },
+      trigger,
+    )
+  }
+
+  const handleSubmit = () => {
+    if (!detail || !inputState.canSend) {
+      return
+    }
+    const clean = draft.trim()
+    const targetFindingId = focusedFinding?.nhanDinhId ?? null
+    setDraft('')
+    onClearFocusedFinding()
+    void onSend(detail.ca_id, clean, targetFindingId)
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing &&
+      event.nativeEvent.keyCode !== 229
+    ) {
+      event.preventDefault()
+      handleSubmit()
+    }
+  }
+
+  const handlePickSuggestion = (question: string) => {
+    setDraft(question)
+    textareaRef.current?.focus()
+  }
+
+  const currentSourceLoaded =
+    sourceFetchKey && sourceState?.key === sourceFetchKey && sourceState.status === 'loaded'
+      ? sourceState.data
+      : null
+  const currentSourceError =
+    sourceFetchKey && sourceState?.key === sourceFetchKey && sourceState.status === 'error'
+      ? sourceState.message
+      : null
+  const currentSourceLoading =
+    Boolean(sourceFetchKey) &&
+    (!sourceState || sourceState.key !== sourceFetchKey || sourceState.status === 'loading')
+  const safeSourceUrl = currentSourceLoaded ? getSafeHttpsUrl(currentSourceLoaded.url_goc) : null
+
+  return (
+    <div className="flex h-full w-full flex-col min-h-0 bg-surface" aria-label="Trợ lý AI">
+      <Tabs
+        value={activeTab}
+        onValueChange={(val) => setActiveTab(val as AssistantTab)}
+        className="flex h-full min-h-0 flex-col"
+      >
+        <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-line px-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <h2 className="text-sm font-semibold text-fg">Trợ lý</h2>
+            <TabsList aria-label="Chế độ khung trợ lý" className="border-b-0 px-0 gap-4">
+              <TabsTrigger value="hoi_dap" className="py-3 text-xs">
+                Hỏi đáp
+              </TabsTrigger>
+              <TabsTrigger value="nguon" className="py-3 text-xs">
+                Nguồn
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <div className="flex items-center gap-1 shrink-0">
+            {detail && messages.length > 0 ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={sending}
+                onClick={() => onClear(detail.ca_id)}
+              >
+                Xoá
+              </Button>
+            ) : null}
+            <IconButton
+              icon={<PanelRightClose className="size-4" strokeWidth={1.75} />}
+              aria-label="Thu gọn trợ lý"
+              onClick={onClose}
+            />
+          </div>
+        </div>
+
+        {/* Thẻ Hỏi đáp */}
+        <TabsContent
+          value="hoi_dap"
+          className="hidden data-[state=active]:flex flex-1 min-h-0 flex-col"
+        >
+          <ScrollArea className="flex-1 min-h-0" viewportClassName="p-4">
+            <div className="flex flex-col gap-3">
+              {detail === null ? (
+                <EmptyState
+                  icon={MessageSquareText}
+                  title="Chưa mở y lệnh"
+                  description="Mở một y lệnh để hỏi về ca đó."
+                  className="px-2 py-8"
+                />
+              ) : (
+                <>
+                  {inputState.lockMessage ? (
+                    <InlineAlert tone="neutral" role="status">
+                      {inputState.lockMessage}
+                    </InlineAlert>
+                  ) : null}
+
+                  {!inputState.lockMessage && messages.length === 0 && !sending ? (
+                    <div className="flex flex-col gap-3">
+                      <p className="text-sm text-fg-muted leading-relaxed">
+                        Đặt câu hỏi về dữ liệu ca, liều dùng hoặc nguồn thuốc của{' '}
+                        <span className="font-mono font-medium text-fg">{orderCode}</span>.
+                      </p>
+
+                      {suggestedQuestions.length > 0 ? (
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-xs font-medium text-fg-subtle">
+                            Gợi ý câu hỏi
+                          </span>
+                          {suggestedQuestions.map((q) => (
+                            <Button
+                              key={q}
+                              variant="secondary"
+                              size="sm"
+                              iconLeft={<CornerDownRight className="size-3.5" strokeWidth={1.75} />}
+                              className="h-auto min-h-8 justify-start whitespace-normal py-1.5 text-left font-normal"
+                              onClick={() => handlePickSuggestion(q)}
+                            >
+                              {q}
+                            </Button>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  {messages.length > 0 ? (
+                    <div className="flex flex-col gap-4">
+                      {messages.map((msg) => {
+                        if (msg.vai === 'nguoi_dung') {
+                          return (
+                            <div
+                              key={msg.id}
+                              className="self-end max-w-[88%] rounded-md border border-line bg-surface-muted px-3 py-2 text-sm text-fg whitespace-pre-wrap break-words"
+                            >
+                              {msg.noi_dung}
+                            </div>
+                          )
+                        }
+
+                        const status = msg.tra_loi.trang_thai
+                        const segments = parseCitationsInText(
+                          msg.tra_loi.noi_dung,
+                          msg.tra_loi.trich_dan,
+                        )
+
+                        return (
+                          <div
+                            key={msg.id}
+                            className="flex flex-col gap-2.5 border-b border-line pb-3.5 last:border-b-0 last:pb-0 text-sm text-fg"
+                          >
+                            {status === 'khong_co_nguon' ? (
+                              <div>
+                                <Badge tone="neutral" variant="outline">
+                                  Không có nguồn phù hợp
+                                </Badge>
+                              </div>
+                            ) : status === 'ngoai_pham_vi' ? (
+                              <div>
+                                <Badge tone="neutral" variant="outline">
+                                  Ngoài phạm vi
+                                </Badge>
+                              </div>
+                            ) : status === 'loi' ? (
+                              <div>
+                                <Badge tone="danger" variant="soft">
+                                  Không hoàn tất
+                                </Badge>
+                              </div>
+                            ) : status === 'chua_san_sang' ? (
+                              <div>
+                                <Badge tone="neutral" variant="soft">
+                                  Chưa sẵn sàng
+                                </Badge>
+                              </div>
+                            ) : null}
+
+                            <div className="whitespace-pre-wrap break-words leading-relaxed text-fg">
+                              {segments.map((seg, idx) =>
+                                seg.kind === 'text' ? (
+                                  <span key={`${msg.id}-t-${idx}`}>{formatClinicalText(seg.value)}</span>
+                                ) : (
+                                  <button
+                                    key={`${msg.id}-c-${idx}`}
+                                    type="button"
+                                    onClick={(e) => handleOpenCitation(seg.citation, e.currentTarget)}
+                                    title={seg.citation.nhan}
+                                    aria-label={`Mở trích dẫn ${seg.label}: ${seg.citation.nhan}`}
+                                    className="mx-0.5 inline-flex cursor-pointer items-center rounded-sm border border-primary-line bg-primary-soft px-1.5 py-0.5 font-mono text-2xs font-semibold text-primary tabular-nums hover:bg-primary hover:text-on-primary transition-colors duration-120"
+                                  >
+                                    {seg.label}
+                                  </button>
+                                ),
+                              )}
+                            </div>
+
+                            {status === 'loi' ? (
+                              <div>
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  iconLeft={<RotateCw className="size-3.5" strokeWidth={1.75} />}
+                                  onClick={() => {
+                                    void onRetryLast(detail.ca_id)
+                                  }}
+                                >
+                                  Gửi lại
+                                </Button>
+                              </div>
+                            ) : null}
+
+                            {msg.tra_loi.trich_dan.length > 0 ? (
+                              <ol className="flex flex-col gap-1.5 border-t border-line pt-2">
+                                {msg.tra_loi.trich_dan.map((td) => (
+                                  <li key={`${msg.id}-ref-${td.so}`}>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => handleOpenCitation(td, e.currentTarget)}
+                                      className="flex w-full cursor-pointer items-start gap-2 rounded-sm px-1.5 py-1 text-left text-xs text-fg-muted transition-colors duration-120 hover:bg-surface-hover hover:text-fg"
+                                    >
+                                      <span className="font-mono text-2xs font-semibold text-primary tabular-nums shrink-0 mt-0.5">
+                                        [{td.so}]
+                                      </span>
+                                      <span className="min-w-0 flex-1 break-words">
+                                        <span className="font-medium text-fg">{td.nhan}</span>
+                                        {td.ban_ghi_id ? (
+                                          <span className="ml-1.5 font-mono text-2xs text-fg-subtle">
+                                            {td.ban_ghi_id}
+                                          </span>
+                                        ) : null}
+                                      </span>
+                                    </button>
+                                  </li>
+                                ))}
+                              </ol>
+                            ) : null}
+
+                            {msg.tra_loi.cong_cu_da_goi.length > 0 ? (
+                              <Collapsible className="pt-1">
+                                <CollapsibleTrigger className="group inline-flex cursor-pointer items-center gap-1 text-xs text-fg-subtle hover:text-fg">
+                                  <CollapsibleChevron size={13} />
+                                  <span>Đã tra ({msg.tra_loi.cong_cu_da_goi.length})</span>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="mt-1 pl-4">
+                                  <ul className="list-disc space-y-0.5 text-xs text-fg-subtle">
+                                    {msg.tra_loi.cong_cu_da_goi.map((tool, tIdx) => (
+                                      <li key={`${msg.id}-tool-${tIdx}`} className="font-mono">
+                                        {tool}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </CollapsibleContent>
+                              </Collapsible>
+                            ) : null}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : null}
+
+                  {sending ? (
+                    <div
+                      className="flex items-center gap-2 py-2 text-xs text-fg-muted"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      <LoaderCircle
+                        className="size-3.5 animate-spin text-primary shrink-0"
+                        strokeWidth={1.75}
+                        aria-hidden="true"
+                      />
+                      <span>Đang tra cứu dữ liệu ca và nguồn…</span>
+                    </div>
+                  ) : null}
+                </>
+              )}
+            </div>
+          </ScrollArea>
+
+          {/* Vùng nhập câu hỏi */}
+          <div className="shrink-0 border-t border-line bg-surface px-4 py-3 flex flex-col gap-2">
+            {detail ? (
+              <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                <span className="text-fg-subtle">
+                  Đang hỏi về:{' '}
+                  <span className="font-mono font-medium text-fg">{orderCode}</span>
+                </span>
+                {focusedFinding ? (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-primary-line bg-primary-soft px-2 py-0.5 text-2xs font-medium text-primary">
+                    <span className="max-w-44 truncate">{focusedFinding.label}</span>
+                    <button
+                      type="button"
+                      aria-label="Bỏ chọn nhận định đang hỏi"
+                      onClick={onClearFocusedFinding}
+                      className="inline-flex cursor-pointer items-center justify-center rounded-full hover:bg-primary/15"
+                    >
+                      <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
+                    </button>
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+
+            <div className="flex items-end gap-2">
+              <textarea
+                ref={textareaRef}
+                rows={1}
+                maxLength={MAX_ASSISTANT_QUESTION_LENGTH}
+                aria-label="Nhập câu hỏi về ca đang mở"
+                placeholder={
+                  detail === null
+                    ? 'Mở một y lệnh để hỏi về ca đó.'
+                    : inputState.lockMessage
+                      ? inputState.lockMessage
+                      : 'Nhập câu hỏi… (Enter gửi, Shift+Enter xuống dòng)'
+                }
+                value={draft}
+                disabled={inputState.inputLocked}
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="flex-1 min-h-[38px] max-h-[132px] resize-none overflow-y-auto rounded-sm border border-line-strong bg-surface px-2.5 py-2 text-sm text-fg placeholder:text-fg-subtle disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-fg-disabled"
+              />
+
+              {inputState.showStop && detail ? (
+                <Button
+                  variant="secondary"
+                  size="md"
+                  iconLeft={<Square className="size-3.5" strokeWidth={1.75} />}
+                  onClick={() => onStop(detail.ca_id)}
+                  className="shrink-0 h-[38px]"
+                >
+                  Dừng
+                </Button>
+              ) : (
+                <IconButton
+                  variant="primary"
+                  size="md"
+                  icon={<SendHorizontal className="size-4" strokeWidth={1.75} />}
+                  aria-label="Gửi câu hỏi"
+                  disabled={!inputState.canSend}
+                  onClick={handleSubmit}
+                  className="shrink-0 h-[38px] w-[38px]"
+                />
+              )}
+            </div>
+
+            <div className="flex items-center justify-between gap-2 text-2xs text-fg-subtle">
+              <span>Trả lời để tham khảo. Dược sĩ kiểm chứng và quyết định.</span>
+              {inputState.showCharCounter ? (
+                <span className="font-mono tabular-nums shrink-0">
+                  Còn {inputState.remainingChars}
+                </span>
+              ) : null}
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Thẻ Nguồn */}
+        <TabsContent
+          value="nguon"
+          className="hidden data-[state=active]:flex flex-1 min-h-0 flex-col"
+        >
+          <ScrollArea className="flex-1 min-h-0" viewportClassName="p-4">
+            {!sourceSelection ? (
+              <EmptyState
+                icon={ShieldCheck}
+                title="Chưa chọn đoạn nguồn"
+                description="Bấm một trích dẫn tài liệu [n] trong phần Hỏi đáp để xem nguyên văn đoạn nguồn tại đây."
+                className="px-2 py-8"
+              />
+            ) : currentSourceLoading ? (
+              <div className="flex flex-col gap-3" role="status" aria-label="Đang tải đoạn nguồn">
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-32 w-full" />
+              </div>
+            ) : currentSourceError ? (
+              <InlineAlert
+                tone="danger"
+                role="alert"
+                title="Không tải được đoạn nguồn"
+                action={
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setSourceReloadTick((n) => n + 1)}
+                  >
+                    Thử lại
+                  </Button>
+                }
+              >
+                {currentSourceError}
+              </InlineAlert>
+            ) : currentSourceLoaded ? (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-semibold text-fg">
+                      {currentSourceLoaded.nguon_nhan}
+                    </h3>
+                    <p className="mt-0.5 text-xs text-fg-muted">
+                      {currentSourceLoaded.duong_dan_muc}
+                    </p>
+                  </div>
+                  <Badge
+                    tone={currentSourceLoaded.tang_tin_cay === 1 ? 'success' : 'neutral'}
+                    variant="soft"
+                    className="shrink-0 tabular-nums"
+                  >
+                    Tầng {currentSourceLoaded.tang_tin_cay}
+                  </Badge>
+                </div>
+
+                <div className="text-xs text-fg-subtle">
+                  Phiên bản: {currentSourceLoaded.phien_ban}
+                </div>
+
+                {safeSourceUrl ? (
+                  <div>
+                    <a
+                      href={safeSourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
+                    >
+                      <span>Mở trang gốc</span>
+                      <ExternalLink className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                    </a>
+                  </div>
+                ) : null}
+
+                <div className="rounded-md border border-line bg-surface-muted/50 p-3 text-sm leading-relaxed text-fg whitespace-pre-wrap">
+                  {splitHighlightSegments(
+                    currentSourceLoaded.noi_dung,
+                    sourceSelection.trichNguyenVan,
+                  ).map((seg, idx) =>
+                    seg.highlighted ? (
+                      <mark
+                        key={`src-seg-${idx}`}
+                        className="rounded-sm bg-warning-bg px-0.5 font-semibold text-fg"
+                      >
+                        {seg.text}
+                      </mark>
+                    ) : (
+                      <span key={`src-seg-${idx}`}>{seg.text}</span>
+                    ),
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </ScrollArea>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}

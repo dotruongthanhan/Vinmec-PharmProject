@@ -1,0 +1,22 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Imipenem and Cilastatin",
+      "ten_chung": "Imipenem and Cilastatin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CILASTATIN SODIUM",
+          "ham_luong": "500 mg/1"
+        },
+        {
+          "hoat_chat": "IMIPENEM ANHYDROUS",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

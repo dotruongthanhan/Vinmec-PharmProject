@@ -1,0 +1,46 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Allopurinol",
+      "ten_chung": "allopurinol",
+      "ham_luong": [
+        {
+          "hoat_chat": "ALLOPURINOL",
+          "ham_luong": "100 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Allopurinol",
+      "ten_chung": "allopurinol",
+      "ham_luong": [
+        {
+          "hoat_chat": "ALLOPURINOL",
+          "ham_luong": "200 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Allopurinol",
+      "ten_chung": "allopurinol",
+      "ham_luong": [
+        {
+          "hoat_chat": "ALLOPURINOL",
+          "ham_luong": "300 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

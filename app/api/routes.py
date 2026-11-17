@@ -1,4 +1,6 @@
-"""Các điểm cuối HTTP theo hợp đồng API v1 và bổ sung v1.1."""
+"""Các điểm cuối HTTP theo hợp đồng API v1, bổ sung v1.1 và hỏi đáp v1.2."""
+
+from typing import Annotated
 
 from fastapi import APIRouter, Body, Request
 
@@ -45,7 +47,7 @@ def feedback(ca_id: str, body: s.GuiPhanHoi, request: Request) -> s.PhanHoiDaGhi
 
 @router.post("/cases/{ca_id}/ask", response_model=s.TraLoi)
 def ask(ca_id: str, body: s.GuiCauHoi, request: Request) -> s.TraLoi:
-    """Trả trạng thái hỏi thêm hiện tại."""
+    """Trả lời câu hỏi theo ca bệnh đang mở dựa trên hồ sơ và tài liệu."""
     return _service(request).ask(ca_id, body)
 
 
@@ -53,7 +55,7 @@ def ask(ca_id: str, body: s.GuiCauHoi, request: Request) -> s.TraLoi:
 def start_ai(
     ca_id: str,
     request: Request,
-    body: s.ChayAI | None = Body(default=None),
+    body: Annotated[s.ChayAI | None, Body()] = None,
 ) -> s.KetQuaAI:
     """Khởi động phân tích AI nền cho một ca hoặc trả trạng thái hiện có."""
     return _service(request).start_ai(ca_id, restart=body.chay_lai if body is not None else False)

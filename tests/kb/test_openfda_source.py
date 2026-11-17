@@ -18,13 +18,9 @@ _MANIFEST_PATH = _ROOT / "data" / "kb_sources" / "manifest.json"
 
 def _find_manifest_entry(ten_goi: str) -> dict:
     raw = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8"))
-    items = (
-        raw
-        if isinstance(raw, list)
-        else next(v for v in raw.values() if isinstance(v, list) and v and "ten_goi" in v[0])
-    )
+    items = raw if isinstance(raw, list) else raw["tep"]
     for item in items:
-        if item.get("ten_goi") == ten_goi:
+        if item.get("nguon") == "openfda_drug_label" and item.get("ten_goi") == ten_goi:
             return item
     raise AssertionError(f"Khong tim thay {ten_goi} trong manifest")
 
