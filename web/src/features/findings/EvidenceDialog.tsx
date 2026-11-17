@@ -25,7 +25,8 @@ import {
 import { InlineAlert } from '@/components/ui/inline-alert'
 import { RecordId } from '@/components/ui/record-id'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getSafeHttpsUrl, splitHighlightSegments } from '@/lib/aiReview'
+import { splitHighlightSegments } from '@/lib/aiReview'
+import { buildSourceLink } from '@/lib/sourceLink'
 import { formatClinicalText } from '@/lib/displayFormat'
 import type { EvidenceTarget } from '@/lib/uiTypes'
 
@@ -141,7 +142,13 @@ export function EvidenceDialog({
   const record = matchingResult?.kind === 'record' ? matchingResult.data : null
   const source = matchingResult?.kind === 'source' ? matchingResult.data : null
 
-  const safeSourceUrl = source ? getSafeHttpsUrl(source.url_goc) : null
+  const safeSourceUrl = source
+    ? buildSourceLink({
+        urlGoc: source.url_goc,
+        duongDanMuc: source.duong_dan_muc,
+        trichNguyenVan: target?.kind === 'source' ? target.trichNguyenVan : null,
+      })
+    : null
   const subtitle = getDialogSubtitle(target)
 
   return (

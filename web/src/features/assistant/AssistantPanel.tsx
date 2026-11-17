@@ -32,7 +32,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/cn'
-import { getSafeHttpsUrl, splitHighlightSegments } from '@/lib/aiReview'
+import { splitHighlightSegments } from '@/lib/aiReview'
+import { buildSourceLink } from '@/lib/sourceLink'
 import {
   MAX_ASSISTANT_QUESTION_LENGTH,
   buildSuggestedQuestions,
@@ -301,7 +302,13 @@ export function AssistantPanel({
   const currentSourceLoading =
     Boolean(sourceFetchKey) &&
     (!sourceState || sourceState.key !== sourceFetchKey || sourceState.status === 'loading')
-  const safeSourceUrl = currentSourceLoaded ? getSafeHttpsUrl(currentSourceLoaded.url_goc) : null
+  const safeSourceUrl = currentSourceLoaded
+    ? buildSourceLink({
+        urlGoc: currentSourceLoaded.url_goc,
+        duongDanMuc: currentSourceLoaded.duong_dan_muc,
+        trichNguyenVan: sourceSelection?.trichNguyenVan,
+      })
+    : null
 
   return (
     <div className="flex h-full w-full flex-col min-h-0 bg-surface" aria-label="Trợ lý AI">

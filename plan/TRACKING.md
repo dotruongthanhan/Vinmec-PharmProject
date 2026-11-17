@@ -111,6 +111,21 @@ Trạng thái: `chờ giao` · `đang giao` · `chờ review` · `cần sửa` �
     3. **Luồng điều phối Agent (`LangGraph` / multi-turn tool calling):** Tạm giữ luồng điều phối hiện tại đang chạy ổn định; người dùng sẽ tự tổ chức và kiểm tra lại flow sau.
     4. **Các trường suy diễn trên bảng danh sách y lệnh (`Mã BN`, `Ưu tiên`, `Trạng thái` Đã duyệt / Đang chờ / Đã hủy) và API duyệt đơn:** Sẽ thực hiện ở đợt tiếp theo sau khi chốt xong phần hiện tại.
 
+
+- **17/11 (phiên 7 – Liên kết nguồn: "Mở trang gốc" cuộn đúng mục và tô sáng đúng câu):**
+  - **Mã:** `web/src/lib/sourceLink.ts` (hàm `buildSourceLink`), gọi ở `AssistantPanel.tsx` (thẻ Nguồn) và `EvidenceDialog.tsx` (hộp thoại bản ghi/nguồn). Test: `web/src/__tests__/sourceLink.test.ts`. Backend không đổi: số mục và câu trích suy ra ở giao diện từ `duong_dan_muc` và `trich_nguyen_van` đã có sẵn.
+  - **Logic (ba lớp, mỗi lớp chỉ thêm phần sau dấu `#` nên sai thì trang vẫn mở, không hỏng liên kết):**
+    0. **Trang nền.** `url_goc` lưu `drugInfo.cfm?setid=X`, nhưng trang này gấp mọi mục bằng `display:none` (lớp `toggle-content closed`), chỉ mở khi bấm mục lục, nên neo và text fragment đều không chạy (đã thử trên trình duyệt). Vì vậy `printerFriendlyUrl` đổi sang bản nhãn đầy đủ `/dailymed/fda/fdaDrugXsl.cfm?setid=X&type=display` (nút "Official label (printer friendly)" của DailyMed), hiển thị trọn nhãn và có neo.
+    1. **Neo mục lớn `#section-N`.** N lấy từ `duong_dan_muc` (ví dụ "Warnings and Precautions > 5.4 …" cho 5); mục cha không số ("Contraindications") đổi sang số chuẩn PLR (bảng `PLR_MAJOR_SECTIONS`); không suy ra được (Boxed Warning, Precautions của nhãn cũ…) thì bỏ neo. Chỉ neo mục lớn vì neo tiểu mục (`section-5.4`) chỉ có ở khoảng 82% nhãn.
+    2. **Text fragment `:~:text=đầu,cuối`.** Lấy đoạn văn xuôi dài nhất của câu trích (bỏ ký tự `|`, `(`, `)`, `[`, `]` vì bảng và ngoặc trên trang khác chữ đã lưu), ≤10 từ thì dùng nguyên, dài hơn thì lấy 5 từ đầu và 5 từ cuối (`FRAGMENT_EDGE_WORDS`); dấu `-` mã hoá thành `%2D`. Nguồn không phải DailyMed giữ nguyên đường dẫn.
+  - **Đo thực tế (`node web/scripts/verifySourceLinks.ts`, tải 50 nhãn, 3730 đoạn, báo cáo ở `data/kb_reports/lien-ket-nguon.md`):** neo mục lớn có thật 3077/3080 (99,9%); 82,6% đoạn sinh được neo; câu trích mô phỏng (25 từ giữa đoạn) khớp được đủ hai đầu 77,3%; trong số đó 33% có phần mở đầu lặp lại ở chỗ khác trên trang (thường do phần Highlights đầu nhãn lặp lại nội dung), trình duyệt tô sáng lần xuất hiện đầu. Đã tự kiểm trên trình duyệt: nhãn meropenem mục 5.4 cuộn đúng và tô sáng đúng câu.
+  - **Giới hạn đã biết (nếu thấy "mở ra mà không tô sáng", tra theo đây):**
+    - Câu trích nằm trong bảng, hoặc kéo qua nhiều ô bảng/đoạn: text fragment không khớp xuyên khối HTML; trang vẫn cuộn tới đúng mục lớn nhờ neo (ví dụ dòng CrCl 10–25 của meropenem: tới đầu mục 2, bảng nằm ngay dưới).
+    - Nhãn cũ không theo định dạng PLR (Warnings, Precautions…): không có neo `section-N`, chỉ còn text fragment.
+    - Nhãn DailyMed được cập nhật làm chữ đổi: fragment hụt, neo còn nguyên nếu số mục không đổi.
+    - Trình duyệt không hỗ trợ text fragment (Firefox cũ, Safari cũ) thì chỉ có neo mục lớn. Điều hướng bằng mã (không do người bấm) cũng có thể bị chặn tô sáng.
+  - **Hướng cải thiện nếu cần chính xác hơn:** (a) thêm ngữ cảnh `prefix-,` vào fragment để tránh trùng với Highlights; (b) lưu sẵn tập neo có thật của từng nhãn khi nạp kho (chạy `verifySourceLinks`) để dùng neo tiểu mục khi có; (c) với câu trích là dòng bảng, chọn riêng nội dung một ô; (d) đo lại bằng trích dẫn thật của agent thay vì câu mô phỏng.
+
 ## 5. Việc chờ người dùng
 
 0. Xoá thư mục `tests/architecture/.tmp` bằng quyền quản trị. Cấu hình xong Supabase (bật phần mở rộng `vector`) và đặt `DATABASE_URL` vào `.env` (cho T14). Xin Khoa Dược bản chính thức QĐ 5948/QĐ-BYT và quyền dùng Dược thư.
