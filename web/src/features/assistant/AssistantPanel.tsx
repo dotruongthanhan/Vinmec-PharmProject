@@ -463,29 +463,37 @@ export function AssistantPanel({
                             ) : null}
 
                             {msg.tra_loi.trich_dan.length > 0 ? (
-                              <ol className="flex flex-col gap-1.5 border-t border-line pt-2">
-                                {msg.tra_loi.trich_dan.map((td) => (
-                                  <li key={`${msg.id}-ref-${td.so}`}>
-                                    <button
-                                      type="button"
-                                      onClick={(e) => handleOpenCitation(td, e.currentTarget)}
-                                      className="flex w-full cursor-pointer items-start gap-2 rounded-sm px-1.5 py-1 text-left text-xs text-fg-muted transition-colors duration-120 hover:bg-surface-hover hover:text-fg"
-                                    >
-                                      <span className="font-mono text-2xs font-semibold text-primary tabular-nums shrink-0 mt-0.5">
-                                        [{td.so}]
-                                      </span>
-                                      <span className="min-w-0 flex-1 break-words">
-                                        <span className="font-medium text-fg">{td.nhan}</span>
-                                        {td.ban_ghi_id ? (
-                                          <span className="ml-1.5 font-mono text-2xs text-fg-subtle">
-                                            {td.ban_ghi_id}
+                              <Collapsible className="border-t border-line pt-2">
+                                <CollapsibleTrigger className="group inline-flex cursor-pointer items-center gap-1 text-xs text-fg-subtle hover:text-fg">
+                                  <CollapsibleChevron size={13} />
+                                  <span>Nguồn tham khảo ({msg.tra_loi.trich_dan.length})</span>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="mt-1.5">
+                                  <ol className="flex flex-col gap-1.5">
+                                    {msg.tra_loi.trich_dan.map((td) => (
+                                      <li key={`${msg.id}-ref-${td.so}`}>
+                                        <button
+                                          type="button"
+                                          onClick={(e) => handleOpenCitation(td, e.currentTarget)}
+                                          className="flex w-full cursor-pointer items-start gap-2 rounded-sm px-1.5 py-1 text-left text-xs text-fg-muted transition-colors duration-120 hover:bg-surface-hover hover:text-fg"
+                                        >
+                                          <span className="font-mono text-2xs font-semibold text-primary tabular-nums shrink-0 mt-0.5">
+                                            [{td.so}]
                                           </span>
-                                        ) : null}
-                                      </span>
-                                    </button>
-                                  </li>
-                                ))}
-                              </ol>
+                                          <span className="min-w-0 flex-1 break-words">
+                                            <span className="font-medium text-fg">{td.nhan}</span>
+                                            {td.ban_ghi_id ? (
+                                              <span className="ml-1.5 font-mono text-2xs text-fg-subtle">
+                                                {td.ban_ghi_id}
+                                              </span>
+                                            ) : null}
+                                          </span>
+                                        </button>
+                                      </li>
+                                    ))}
+                                  </ol>
+                                </CollapsibleContent>
+                              </Collapsible>
                             ) : null}
 
                             {msg.tra_loi.cong_cu_da_goi.length > 0 ? (
