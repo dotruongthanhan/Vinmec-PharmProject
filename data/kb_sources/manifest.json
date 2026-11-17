@@ -1,0 +1,1206 @@
+{
+ "ngay_lay": "2026-11-16",
+ "cach_lay": "curl, phien Claude 2",
+ "tep": [
+  {
+   "duong_dan": "openfda/acetaminophen.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "acetaminophen",
+   "generic_name": [
+    "ACETAMINOPHEN"
+   ],
+   "brand_name": [
+    "ACETAMINOPHEN"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+   "phien_ban_nguon": "20260924",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+   "sha256": "ee9ea399f30242ceaeaaa14bb97e9ff7ec32fde19553493289b73b53ed918e60",
+   "kich_thuoc": 43243
+  },
+  {
+   "duong_dan": "openfda/acyclovir.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "acyclovir",
+   "generic_name": [
+    "ACYCLOVIR"
+   ],
+   "brand_name": [
+    "Acyclovir"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "83e82707-85b6-2fea-e053-2991aa0a99ef",
+   "phien_ban_nguon": "20261104",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=83e82707-85b6-2fea-e053-2991aa0a99ef",
+   "sha256": "d590a044f1c6a1d8ad1bd67ad4ce905414cfd7d5d315e7fdb922fe02f71dd75b",
+   "kich_thuoc": 36586
+  },
+  {
+   "duong_dan": "openfda/allopurinol.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "allopurinol",
+   "generic_name": [
+    "ALLOPURINOL"
+   ],
+   "brand_name": [
+    "Allopurinol"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+   "phien_ban_nguon": "20261105",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+   "sha256": "a8b0c90dcee05cadc77f974de1857a48f2f5257fa12acb6aabdf3a4a17bd6ad8",
+   "kich_thuoc": 73622
+  },
+  {
+   "duong_dan": "openfda/amikacin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "amikacin",
+   "generic_name": [
+    "AMIKACIN SULFATE"
+   ],
+   "brand_name": [
+    "amikacin sulfate"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "f260ff2a-76a0-4672-9516-91c344b67890",
+   "phien_ban_nguon": "20260727",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f260ff2a-76a0-4672-9516-91c344b67890",
+   "sha256": "6d5b7fc0f1dca896252fb19c3d2e140d709edbfd2b5cdfea100308726a9b1dc8",
+   "kich_thuoc": 52991
+  },
+  {
+   "duong_dan": "openfda/amiodarone.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "amiodarone",
+   "generic_name": [
+    "AMIODARONE HYDROCHLORIDE"
+   ],
+   "brand_name": [
+    "AMIODARONE HYDROCHLORIDE"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+   "phien_ban_nguon": "20261026",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+   "sha256": "a7cd02f3771af41f1c69db430e5f20bc8e2a41ea8764a3e62eb4dc8c0c071bd4",
+   "kich_thuoc": 53887
+  },
+  {
+   "duong_dan": "openfda/amlodipine.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "amlodipine",
+   "generic_name": [
+    "AMLODIPINE BESYLATE"
+   ],
+   "brand_name": [
+    "Amlodipine Besylate"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+   "sha256": "3871bfced1f0da7009d8c6ad73d11031c5dec05ed7644218ab66b3988752e5b4",
+   "kich_thuoc": 68830
+  },
+  {
+   "duong_dan": "openfda/amoxicillin_and_clavulanate_potassium.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "amoxicillin_and_clavulanate_potassium",
+   "generic_name": [
+    "AMOXICILLIN AND CLAVULANATE POTASSIUM"
+   ],
+   "brand_name": [
+    "Amoxicillin and Clavulanate Potassium"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "416fa58c-88fa-42aa-9195-74aeba641577",
+   "phien_ban_nguon": "20261105",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=416fa58c-88fa-42aa-9195-74aeba641577",
+   "sha256": "25fa73a77556e61995f05c76bc8b5439858aa4bc85abab7dae64a08214c13639",
+   "kich_thuoc": 96307
+  },
+  {
+   "duong_dan": "openfda/apixaban.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "apixaban",
+   "generic_name": [
+    "APIXABAN"
+   ],
+   "brand_name": [
+    "ELIQUIS"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+   "phien_ban_nguon": "20260924",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25",
+   "sha256": "188179c1b241995fa4e01d7aa03087961bc8fd3f46af02ff79fbb946a269961d",
+   "kich_thuoc": 282039
+  },
+  {
+   "duong_dan": "openfda/atorvastatin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "atorvastatin",
+   "generic_name": [
+    "ATORVASTATIN CALCIUM"
+   ],
+   "brand_name": [
+    "ATORVASTATIN CALCIUM"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "4e06b20d-cc5d-46eb-991b-5972248de3af",
+   "phien_ban_nguon": "20261106",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4e06b20d-cc5d-46eb-991b-5972248de3af",
+   "sha256": "9217568e7ae30b79b6970e189c38d89a17a461286c58851ae5fa1d9ed65d5198",
+   "kich_thuoc": 208303
+  },
+  {
+   "duong_dan": "openfda/cefepime.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "cefepime",
+   "generic_name": [
+    "CEFEPIME"
+   ],
+   "brand_name": [
+    "Cefepime"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+   "phien_ban_nguon": "20260625",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+   "sha256": "2a3a438080da25e5918d5ba1446bdfcef4599ca7696537678136bcd7aefa9a01",
+   "kich_thuoc": 108345
+  },
+  {
+   "duong_dan": "openfda/ceftriaxone.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "ceftriaxone",
+   "generic_name": [
+    "CEFTRIAXONE"
+   ],
+   "brand_name": [
+    "Ceftriaxone"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+   "phien_ban_nguon": "20260930",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+   "sha256": "e446ee902ddc80ded6c8580df01a7f4764dc8113d8e7d41001256dcd5dda3c5b",
+   "kich_thuoc": 83085
+  },
+  {
+   "duong_dan": "openfda/ciprofloxacin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "ciprofloxacin",
+   "generic_name": [
+    "CIPROFLOXACIN"
+   ],
+   "brand_name": [
+    "Ciprofloxacin"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+   "phien_ban_nguon": "20261105",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+   "sha256": "3257cfd9b8cac26cea57dceae453ae31a7cbbfb7db3358e0465604d75be87bcf",
+   "kich_thuoc": 245675
+  },
+  {
+   "duong_dan": "openfda/clarithromycin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "clarithromycin",
+   "generic_name": [
+    "CLARITHROMYCIN"
+   ],
+   "brand_name": [
+    "Clarithromycin"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+   "sha256": "238613b1ec6a634d796519e1898ac16e9aa90e2991deeb4e4086ff4e99c9bbe9",
+   "kich_thuoc": 246070
+  },
+  {
+   "duong_dan": "openfda/clopidogrel.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "clopidogrel",
+   "generic_name": [
+    "CLOPIDOGREL BISULFATE"
+   ],
+   "brand_name": [
+    "Clopidogrel Bisulfate"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "03bec9ad-cd22-44d3-9b82-2796157de1d1",
+   "phien_ban_nguon": "20261105",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03bec9ad-cd22-44d3-9b82-2796157de1d1",
+   "sha256": "04fe68146b70b1486e7f7ae4f1fb7574faf09abd2dcaf1a10de9265d119536c0",
+   "kich_thuoc": 82605
+  },
+  {
+   "duong_dan": "openfda/colistimethate.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "colistimethate",
+   "generic_name": [
+    "COLISTIMETHATE SODIUM"
+   ],
+   "brand_name": [
+    "COLISTIMETHATE SODIUM"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+   "phien_ban_nguon": "20261104",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+   "sha256": "d0a56f9b982cbe3d24c60ddf080bf170f6deb83d973aed218aef3bc9a2ca9b57",
+   "kich_thuoc": 34800
+  },
+  {
+   "duong_dan": "openfda/dabigatran.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "dabigatran",
+   "generic_name": [
+    "DABIGATRAN ETEXILATE"
+   ],
+   "brand_name": [
+    "Dabigatran Etexilate"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "e7eff2fc-3fac-4ad5-985b-2b8cc28eb84a",
+   "phien_ban_nguon": "20261106",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e7eff2fc-3fac-4ad5-985b-2b8cc28eb84a",
+   "sha256": "357621c03dd51997b23114e48fdfbbaacc2ac9aae871370b60ec55f17d56706c",
+   "kich_thuoc": 230599
+  },
+  {
+   "duong_dan": "openfda/digoxin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "digoxin",
+   "generic_name": [
+    "DIGOXIN"
+   ],
+   "brand_name": [
+    "Digoxin"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+   "phien_ban_nguon": "20261106",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+   "sha256": "574d8e088bbf840dffe93c774b2b49b271eceb368f1e22c8df01992cc0896cf3",
+   "kich_thuoc": 47801
+  },
+  {
+   "duong_dan": "openfda/enalapril.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "enalapril",
+   "generic_name": [
+    "ENALAPRIL MALEATE"
+   ],
+   "brand_name": [
+    "ENALAPRIL MALEATE"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+   "phien_ban_nguon": "20261009",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+   "sha256": "29d6d958b123d60910a9e7e76f948b8437cc80d57751a7cffb048ee31e526153",
+   "kich_thuoc": 94803
+  },
+  {
+   "duong_dan": "openfda/enoxaparin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "enoxaparin",
+   "generic_name": [
+    "ENOXAPARIN SODIUM INJECTION,USP"
+   ],
+   "brand_name": [
+    "Enoxaparin Sodium Injection,USP"
+   ],
+   "duong_dung": [
+    "SUBCUTANEOUS"
+   ],
+   "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+   "phien_ban_nguon": "20261015",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+   "sha256": "f926a7419f70db6c7062893ca37d79ecf7f0ffc06f04db3e11541d4c36503cb5",
+   "kich_thuoc": 166159
+  },
+  {
+   "duong_dan": "openfda/esomeprazole.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "esomeprazole",
+   "generic_name": [
+    "ESOMEPRAZOLE MAGNESIUM"
+   ],
+   "brand_name": [
+    "Esomeprazole Magnesium"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+   "phien_ban_nguon": "20261102",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+   "sha256": "325f68effcb7d2599f20511ee3c93522fd5ea7940537ab8a6c3625906b03990e",
+   "kich_thuoc": 185990
+  },
+  {
+   "duong_dan": "openfda/fentanyl.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "fentanyl",
+   "generic_name": [
+    "FENTANYL CITRATE"
+   ],
+   "brand_name": [
+    "Fentanyl Citrate"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+   "phien_ban_nguon": "20261023",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+   "sha256": "2d2c39c09239dd55f1c6438394db7088623ddf60585f6a2270d944a117f50b0e",
+   "kich_thuoc": 98725
+  },
+  {
+   "duong_dan": "openfda/fluconazole.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "fluconazole",
+   "generic_name": [
+    "FLUCONAZOLE"
+   ],
+   "brand_name": [
+    "Fluconazole"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "8f90f169-6a72-4c33-a2af-0bc943602bc2",
+   "phien_ban_nguon": "20261106",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8f90f169-6a72-4c33-a2af-0bc943602bc2",
+   "sha256": "15631d6894102f03fb16561d3e016d27585a5b71fd95a446a8d38111ae8cc612",
+   "kich_thuoc": 205044
+  },
+  {
+   "duong_dan": "openfda/furosemide.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "furosemide",
+   "generic_name": [
+    "FUROSEMIDE"
+   ],
+   "brand_name": [
+    "Furosemide"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "2f547f7c-0322-465c-9764-43f955d98ab2",
+   "phien_ban_nguon": "20261102",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2f547f7c-0322-465c-9764-43f955d98ab2",
+   "sha256": "2a08cb5762ecd81faafd81c4622eec69d81aba0becf9d105cc097d61b1b4ebe2",
+   "kich_thuoc": 45325
+  },
+  {
+   "duong_dan": "openfda/gentamicin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "gentamicin",
+   "generic_name": [
+    "GENTAMICIN SULFATE"
+   ],
+   "brand_name": [
+    "Gentamicin"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+   "phien_ban_nguon": "20261102",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+   "sha256": "41f42f4d7880f1fbef2234af456811c64565d5cf25761eb47226d2e6d92fc249",
+   "kich_thuoc": 35362
+  },
+  {
+   "duong_dan": "openfda/heparin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "heparin",
+   "generic_name": [
+    "HEPARIN SODIUM"
+   ],
+   "brand_name": [
+    "Heparin Sodium"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS",
+    "SUBCUTANEOUS"
+   ],
+   "set_id": "301b19bc-21c2-4a35-9d29-569b08d855c4",
+   "phien_ban_nguon": "20261103",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=301b19bc-21c2-4a35-9d29-569b08d855c4",
+   "sha256": "0e76497fa68d9260c9bf159dd227b8010fbcf78a3bade8b925298878a1806dc3",
+   "kich_thuoc": 55679
+  },
+  {
+   "duong_dan": "openfda/ibuprofen.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "ibuprofen",
+   "generic_name": [
+    "IBUPROFEN"
+   ],
+   "brand_name": [
+    "Ibuprofen"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "dc91a427-8214-484b-af72-52075b2286a1",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc91a427-8214-484b-af72-52075b2286a1",
+   "sha256": "deb4db0ca4eb09c0d39f91a967fa736d576baa45356226910aae160eb5aae14b",
+   "kich_thuoc": 78837
+  },
+  {
+   "duong_dan": "openfda/imipenem_and_cilastatin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "imipenem_and_cilastatin",
+   "generic_name": [
+    "IMIPENEM AND CILASTATIN"
+   ],
+   "brand_name": [
+    "Imipenem and Cilastatin"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "46f54df9-5afe-430c-aa19-0d84c2044b0b",
+   "phien_ban_nguon": "20250116",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46f54df9-5afe-430c-aa19-0d84c2044b0b",
+   "sha256": "e072b5e45ae9c894b3f1e4a9dd5297e55f0eb61488198dfcdb87073cc4325723",
+   "kich_thuoc": 108300
+  },
+  {
+   "duong_dan": "openfda/insulin_glargine.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "insulin_glargine",
+   "generic_name": [
+    "INSULIN GLARGINE-ALDY"
+   ],
+   "brand_name": [
+    "LANGLARA"
+   ],
+   "duong_dung": [
+    "SUBCUTANEOUS"
+   ],
+   "set_id": "5328761e-59d3-ca7a-e063-6394a90ae810",
+   "phien_ban_nguon": "20261015",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5328761e-59d3-ca7a-e063-6394a90ae810",
+   "sha256": "07e6216af972e785644bb7285a5a01adecacbc0a75034a8c157317f9f054a78f",
+   "kich_thuoc": 189328
+  },
+  {
+   "duong_dan": "openfda/ketorolac.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "ketorolac",
+   "generic_name": [
+    "KETOROLAC TROMETHAMINE"
+   ],
+   "brand_name": [
+    "KETOROLAC TROMETHAMINE"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "862dd7b7-8ed5-42bf-870e-a45b86740226",
+   "phien_ban_nguon": "20261103",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=862dd7b7-8ed5-42bf-870e-a45b86740226",
+   "sha256": "5486b44b0bb69f29ce1a1ea5d4a7cf8aa4c83a4a4bfecfa71c479d02b517355b",
+   "kich_thuoc": 190127
+  },
+  {
+   "duong_dan": "openfda/levetiracetam.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "levetiracetam",
+   "generic_name": [
+    "LEVETIRACETAM"
+   ],
+   "brand_name": [
+    "Levetiracetam"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "46852061-e59a-4a8c-aba0-ce4c7887f366",
+   "phien_ban_nguon": "20261106",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46852061-e59a-4a8c-aba0-ce4c7887f366",
+   "sha256": "eb446eb24252db05bdbee9996b5065433e5fbcf296c954d55a325d9afb27d079",
+   "kich_thuoc": 161871
+  },
+  {
+   "duong_dan": "openfda/levofloxacin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "levofloxacin",
+   "generic_name": [
+    "LEVOFLOXACIN"
+   ],
+   "brand_name": [
+    "Levofloxacin"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "814450ae-439e-4a5d-8c60-9b21b6f14be5",
+   "phien_ban_nguon": "20261105",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=814450ae-439e-4a5d-8c60-9b21b6f14be5",
+   "sha256": "6094e5ef1ab56b6542be0674504b3a5e5c5fcfc726d9eac0f53ed073393f0f61",
+   "kich_thuoc": 261085
+  },
+  {
+   "duong_dan": "openfda/linezolid.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "linezolid",
+   "generic_name": [
+    "LINEZOLID"
+   ],
+   "brand_name": [
+    "Zyvox"
+   ],
+   "duong_dung": [
+    "ORAL",
+    "INTRAVENOUS"
+   ],
+   "set_id": "6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+   "phien_ban_nguon": "20261103",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+   "sha256": "d6184d95a00264b5b091a56a5181b98b6ea9f135d8be0757fa6270a1c0f4ec7f",
+   "kich_thuoc": 250024
+  },
+  {
+   "duong_dan": "openfda/losartan.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "losartan",
+   "generic_name": [
+    "LOSARTAN POTASSIUM"
+   ],
+   "brand_name": [
+    "Losartan Potassium"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+   "sha256": "55eaa724fd215549564d5bded0c7bf9a6ae4af86613d8a5f5891c91c02dbfa18",
+   "kich_thuoc": 120275
+  },
+  {
+   "duong_dan": "openfda/meropenem.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "meropenem",
+   "generic_name": [
+    "MEROPENEM"
+   ],
+   "brand_name": [
+    "MEROPENEM"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "31dd2160-7dbd-51fa-e054-00144ff88e88",
+   "phien_ban_nguon": "20261102",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=31dd2160-7dbd-51fa-e054-00144ff88e88",
+   "sha256": "83b26dd55e2aa19ee0113a4cf7f9f227319d7ccbdf8c5fd554a1e340fea1d601",
+   "kich_thuoc": 126707
+  },
+  {
+   "duong_dan": "openfda/metformin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "metformin",
+   "generic_name": [
+    "METFORMIN HYDROCHLORIDE"
+   ],
+   "brand_name": [
+    "Metformin Hydrochloride"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+   "sha256": "5e856a184323fd9dd8d1af6f2efeebb2f0fddb12f7c999281727f979f6438301",
+   "kich_thuoc": 120597
+  },
+  {
+   "duong_dan": "openfda/methotrexate.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "methotrexate",
+   "generic_name": [
+    "METHOTREXATE"
+   ],
+   "brand_name": [
+    "JYLAMVO"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+   "phien_ban_nguon": "20261105",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+   "sha256": "7ce8ca8bbe049a5c28cf1afdb52df3b89d9a94aeee3d427a81548fe2948d46b8",
+   "kich_thuoc": 106139
+  },
+  {
+   "duong_dan": "openfda/metoprolol_succinate.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "metoprolol_succinate",
+   "generic_name": [
+    "METOPROLOL SUCCINATE"
+   ],
+   "brand_name": [
+    "Metoprolol Succinate"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+   "phien_ban_nguon": "20261104",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+   "sha256": "a1d24aa1167dd99e80571ff0732194b697d403f254be7bbf1141957569e56296",
+   "kich_thuoc": 60628
+  },
+  {
+   "duong_dan": "openfda/metoprolol_tartrate.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "metoprolol_tartrate",
+   "generic_name": [
+    "METOPROLOL TARTRATE"
+   ],
+   "brand_name": [
+    "METOPROLOL TARTRATE"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+   "phien_ban_nguon": "20261029",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+   "sha256": "3db75cdf23f6c965bed9de090d5a9158f82eaa91b807225a1ae5fad6a5791e94",
+   "kich_thuoc": 48133
+  },
+  {
+   "duong_dan": "openfda/morphine.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "morphine",
+   "generic_name": [
+    "MORPHINE SULFATE"
+   ],
+   "brand_name": [
+    "Morphine Sulfate"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+   "phien_ban_nguon": "20261014",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+   "sha256": "556b14485139dbe61b16e297383b091c49fc2a11db764b76a29fd8fb832b1d30",
+   "kich_thuoc": 136019
+  },
+  {
+   "duong_dan": "openfda/omeprazole.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "omeprazole",
+   "generic_name": [
+    "OMEPRAZOLE"
+   ],
+   "brand_name": [
+    "Omeprazole"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+   "phien_ban_nguon": "20261027",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+   "sha256": "d2c9829c71d9aa7a7d0ebcd951f2ad8c5ce26970ffac6ab23870bb2087f82751",
+   "kich_thuoc": 272983
+  },
+  {
+   "duong_dan": "openfda/phenytoin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "phenytoin",
+   "generic_name": [
+    "PHENYTOIN SODIUM"
+   ],
+   "brand_name": [
+    "Phenytoin Sodium"
+   ],
+   "duong_dung": [
+    "INTRAMUSCULAR",
+    "INTRAVENOUS"
+   ],
+   "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+   "phien_ban_nguon": "20261106",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653",
+   "sha256": "2cd6b52d6a8cf4c71d516dfdd7b417fbdb7ef11d3733714253e5516cfbf0c75d",
+   "kich_thuoc": 55079
+  },
+  {
+   "duong_dan": "openfda/piperacillin_and_tazobactam.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "piperacillin_and_tazobactam",
+   "generic_name": [
+    "PIPERACILLIN AND TAZOBACTAM"
+   ],
+   "brand_name": [
+    "piperacillin and tazobactam"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "24d9b4f1-109c-4db4-8a99-03afff045b47",
+   "phien_ban_nguon": "20261022",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24d9b4f1-109c-4db4-8a99-03afff045b47",
+   "sha256": "e893a933b3b8ce09d52332f3c59d20f429f307fae2723f23a5784142e065c138",
+   "kich_thuoc": 121991
+  },
+  {
+   "duong_dan": "openfda/rivaroxaban.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "rivaroxaban",
+   "generic_name": [
+    "RIVAROXABAN"
+   ],
+   "brand_name": [
+    "Rivaroxaban"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "e98f6d83-5172-97a1-ee41-5d7d1d8ba2fd",
+   "phien_ban_nguon": "20261021",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e98f6d83-5172-97a1-ee41-5d7d1d8ba2fd",
+   "sha256": "5e30e5eedd6dbe7a1a637bb4461caaed5c40fbd5014dfb0c4837594eda15af9a",
+   "kich_thuoc": 122718
+  },
+  {
+   "duong_dan": "openfda/simvastatin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "simvastatin",
+   "generic_name": [
+    "SIMVASTATIN"
+   ],
+   "brand_name": [
+    "Simvastatin"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+   "phien_ban_nguon": "20261103",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+   "sha256": "98ad6afba3c3a25b9525210e59e82a681fcab14d1fe6e562437f5b6cbaf389c3",
+   "kich_thuoc": 155470
+  },
+  {
+   "duong_dan": "openfda/spironolactone.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "spironolactone",
+   "generic_name": [
+    "SPIRONOLACTONE"
+   ],
+   "brand_name": [
+    "Spironolactone"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+   "sha256": "26fa1c693ccca4b9bfae285a71c8022dc276152aef3bd77678eb818c50cc9319",
+   "kich_thuoc": 49566
+  },
+  {
+   "duong_dan": "openfda/sulfamethoxazole_and_trimethoprim.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "sulfamethoxazole_and_trimethoprim",
+   "generic_name": [
+    "SULFAMETHOXAZOLE AND TRIMETHOPRIM"
+   ],
+   "brand_name": [
+    "Sulfamethoxazole and Trimethoprim"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "3ef62512-0dc3-4821-9b60-6b375841c4c0",
+   "phien_ban_nguon": "20261014",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef62512-0dc3-4821-9b60-6b375841c4c0",
+   "sha256": "b4ed1c204f63a1a81f5ccdf8116546ac91eb7f106a20c9128f1e83b9691e142f",
+   "kich_thuoc": 94044
+  },
+  {
+   "duong_dan": "openfda/tramadol.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "tramadol",
+   "generic_name": [
+    "TRAMADOL HYDROCHLORIDE"
+   ],
+   "brand_name": [
+    "Tramadol Hydrochloride"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+   "phien_ban_nguon": "20261103",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+   "sha256": "bec67e5899248148f3a21bf667f0bdb838d55d4cf3031dd447f956f6d4c22fff",
+   "kich_thuoc": 162517
+  },
+  {
+   "duong_dan": "openfda/valproate.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "valproate",
+   "generic_name": [
+    "VALPROATE SODIUM"
+   ],
+   "brand_name": [
+    "Valproate Sodium"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+   "phien_ban_nguon": "20260312",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+   "sha256": "2305446956c1f1afc13527d493ad65435beb43d2e10865c854c42ff304984f2b",
+   "kich_thuoc": 159544
+  },
+  {
+   "duong_dan": "openfda/vancomycin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "vancomycin",
+   "generic_name": [
+    "VANCOMYCIN HYDROCHLORIDE"
+   ],
+   "brand_name": [
+    "Vancomycin Hydrochloride"
+   ],
+   "duong_dung": [
+    "INTRAVENOUS"
+   ],
+   "set_id": "b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+   "phien_ban_nguon": "20261008",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+   "sha256": "a371a566c8f9a0b58ca50a13772f361da4350ac8c7e8074e7608565cd5545ba7",
+   "kich_thuoc": 48471
+  },
+  {
+   "duong_dan": "openfda/warfarin.json",
+   "nguon": "openfda_drug_label",
+   "tang_tin_cay": 3,
+   "giay_phep": "Public domain (FDA)",
+   "ten_goi": "warfarin",
+   "generic_name": [
+    "WARFARIN SODIUM"
+   ],
+   "brand_name": [
+    "Warfarin Sodium"
+   ],
+   "duong_dung": [
+    "ORAL"
+   ],
+   "set_id": "61ab23a7-bc67-4777-854a-bf43c788a69a",
+   "phien_ban_nguon": "20261109",
+   "url_goc": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61ab23a7-bc67-4777-854a-bf43c788a69a",
+   "sha256": "19fdb1c340762974cecdcc358077a5f99398b1ab4cfb977eaef1f372f027bf88",
+   "kich_thuoc": 102143
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_A.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 56367,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "a22ca451d2b755ca2331886f7e00540c86f555f9f55704a59a19c691251f52e0",
+   "kich_thuoc": 3343434
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_B.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 15140,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "76de5115a55587f0e822e1096b684fd3ddde058fbefcbb19896df58820ace130",
+   "kich_thuoc": 867726
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_C.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 60454,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "0885978959af84e183cfc86c8bcb48536f690a4c7e951eff06607a5616883aeb",
+   "kich_thuoc": 3453462
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_D.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 25681,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "c0627ec39965dbe27829e4934cd20d71eb079f4e373287678737bba9423a306a",
+   "kich_thuoc": 1520704
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_G.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 34282,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "6a4d8d1eaac6da1ffc54bd23a625f9c5e28e3ca37bd26b3bca4d2cc26505fb99",
+   "kich_thuoc": 1994473
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_H.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 11727,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "f0f925f0ba1ee68c4668d3e7a6732719b34623b22a0f5d017f9090e59f63c88e",
+   "kich_thuoc": 705088
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_J.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 44414,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "e5dbb8e5cb3179905b426ee4a2ee5c93756c38cdd54215a55c5b8255a5b14e04",
+   "kich_thuoc": 2554201
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_L.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 65389,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "f54f4486cc00344f8c86508c31c2ca3fad6d1d37ec3af5bcf609b4bbda5507ef",
+   "kich_thuoc": 3885702
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_M.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 22097,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "2a57eb78818803b4662116490023c20c8bbfe145e60c35680a0efb8ac635a0ad",
+   "kich_thuoc": 1271889
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_N.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 91595,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "854733ff382210b030bcece135113f01ca3f6924d3803feca2ff71c1d939c797",
+   "kich_thuoc": 5218194
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_P.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 5492,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "83f8c0edb20d09ef29b8500b48f9623e208379525688ade9e70a7df2d8749d55",
+   "kich_thuoc": 317460
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_R.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 30563,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "1c39c3d4a6e41659b7a988538d7f363867592abc6f41a815de8746f6e2150574",
+   "kich_thuoc": 1793766
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_S.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 32430,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "c3888df996d97ebf1346b11a98df0b334cfa3c150a89a31150ffd354eebcbfe5",
+   "kich_thuoc": 1932541
+  },
+  {
+   "duong_dan": "ddinter/ddinter_downloads_code_V.csv",
+   "nguon": "ddinter_2.0",
+   "tang_tin_cay": 4,
+   "giay_phep": "CC BY-NC-SA 4.0 (phi thuong mai) - chi de sang loc",
+   "so_dong": 12024,
+   "url_goc": "https://ddinter2.scbdd.com/download/",
+   "sha256": "353973fb300453946aea95733e8fb52338e4b59426d2ce6ca318363d4f84f10a",
+   "kich_thuoc": 700777
+  }
+ ]
+}
