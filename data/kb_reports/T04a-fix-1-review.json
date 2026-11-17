@@ -1,0 +1,3727 @@
+{
+  "brief": "T04a-fix-1",
+  "bao_cao_build": "data/kb_reports/openfda_build_20261116_072736.json",
+  "loi_bang": {
+    "vi_tri_loi": "code gan bang, khong phai fixture",
+    "nguyen_nhan": "Mau tim ghep 4 tu dau caption voi tieu de cot, bo qua phan con lai cua caption nen khong khop van ban.",
+    "cach_sua": "Tim caption day du doc lap khi gan bang vao tieu muc; giu cach loc Highlights va assert len(renal_tables) == 2.",
+    "fixture_da_sua": false
+  },
+  "doi_chieu_noi_dung_va_ma": {
+    "sha256_chunks_truoc": "a7a36482e89d865a16f396eb40c3c81e2c4904fd2ee1eeee1ffe4e14f56ffcee",
+    "sha256_chunks_sau": "21e1f7f9abe48e3317c46497bac33ee6649a43c9bbd5cb89f74678a50a87f061",
+    "so_doan_truoc": 3738,
+    "so_doan_sau": 3738,
+    "so_noi_dung_goc_bi_sua": 0,
+    "so_noi_dung_goc_bi_xoa": 0,
+    "so_noi_dung_goc_them": 0,
+    "so_doan_giu_nguyen_noi_dung_duong_dan_va_ma": 3351,
+    "so_ma_doi": 387,
+    "so_ma_doi_theo_ly_do": {
+      "sua_ranh_gioi_tieu_de": 342,
+      "gan_lai_bang": 45
+    },
+    "so_ma_doi_theo_loai_noi_dung": {
+      "van_ban": 338,
+      "bang": 49
+    },
+    "so_ma_doi_khi_noi_dung_va_duong_dan_khong_doi": 0,
+    "ghi_chu": "Ma bam van phu thuoc duong_dan_muc; cac ma doi deu co duong dan doi. Khi cung noi dung va duong dan, build tai su dung ma truoc do de tranh thay ma do thu tu bang.",
+    "chi_tiet_ma_doi": [
+      {
+        "tai_lieu_id": "openfda:dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a1f9a851a096",
+        "ma_moi": "DT-9ee8123be8ed",
+        "duong_dan_cu": "Dosage and Administration > 2.1 General Dosing Information Acetaminophen Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 General Dosing Information Acetaminophen",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-deab3b6e9bd9",
+        "ma_moi": "DT-ff9e4e42aee7",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Patients with Hepatic Impairment Acetaminophen",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Patients with Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9002cca203e1",
+        "ma_moi": "DT-3391dcc1eda4",
+        "duong_dan_cu": "Clinical Pharmacology > 12.2 Pharmacodynamics Acetaminophen",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7f3402f3863f",
+        "ma_moi": "DT-f805ce4e9342",
+        "duong_dan_cu": "Dosage and Administration > 2.2 Recommended Prophylaxis for Gout Flares Gout",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Recommended Prophylaxis for Gout Flares",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c8c0e976bf8d",
+        "ma_moi": "DT-35d8159daf49",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 Gout Flares Gout",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Gout Flares",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b31ff802b2dd",
+        "ma_moi": "DT-ef96b08d322b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Allopurinol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-026bc3fbc03b",
+        "ma_moi": "DT-1cecbd4f6e33",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Allopurinol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:682dd8b8-fc6e-47c5-95b7-82d7ad96b750",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-45cf5894093c",
+        "ma_moi": "DT-98e92bb9844e",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Allopurinol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5ed00ce98d23",
+        "ma_moi": "DT-06144b30c3dd",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Hypotension Hypotension",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Hypotension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-859010793ffa",
+        "ma_moi": "DT-efd5f696b9c0",
+        "duong_dan_cu": "Warnings and Precautions > 5.4 Proarrhythmia Amiodarone",
+        "duong_dan_moi": "Warnings and Precautions > 5.4 Proarrhythmia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-551c988563be",
+        "ma_moi": "DT-300bd645e0f2",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Amiodarone",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ce92153415e4",
+        "ma_moi": "DT-30e59448a46b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Amiodarone",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5960efab8848",
+        "ma_moi": "DT-3505ba113a1c",
+        "duong_dan_cu": "Clinical Pharmacology > 12.2 Pharmacodynamics Intravenous",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-802e05e100b6",
+        "ma_moi": "DT-91461afe7baa",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Hypotension Symptomatic",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Hypotension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9b665999695a",
+        "ma_moi": "DT-f8b861baff63",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Amlodipine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-efcfb677cc13",
+        "ma_moi": "DT-d44ba07af57c",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Amlodipine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9492c74571b2",
+        "ma_moi": "DT-a3611fba6203",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Amlodipine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:416fa58c-88fa-42aa-9195-74aeba641577",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-610a8ca8d042",
+        "ma_moi": "DT-2a9a91f982af",
+        "duong_dan_cu": "Use in Specific Populations > 8.3 Nursing Mothers Amoxicillin",
+        "duong_dan_moi": "Use in Specific Populations > 8.3 Nursing Mothers",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:416fa58c-88fa-42aa-9195-74aeba641577",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-64d8e08d1abf",
+        "ma_moi": "DT-97c20980c9f1",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Amoxicillin",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:416fa58c-88fa-42aa-9195-74aeba641577",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b6de99191399",
+        "ma_moi": "DT-24185175bff2",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Amoxicillin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:416fa58c-88fa-42aa-9195-74aeba641577",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-96354891940c",
+        "ma_moi": "DT-a59f8ae991ea",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Amoxicillin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:416fa58c-88fa-42aa-9195-74aeba641577",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-16e9a270e685",
+        "ma_moi": "DT-f37a26f18d55",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Amoxicillin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:416fa58c-88fa-42aa-9195-74aeba641577",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ae8bf902b3b3",
+        "ma_moi": "DT-8b4be8c606d8",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Amoxicillin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:41a133ef-e461-48ad-8221-b735bdd0ec25",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-66958e7ef095",
+        "ma_moi": "DT-814a442388b2",
+        "duong_dan_cu": "Indications and Usage > 1.3 Treatment of Deep Vein Thrombosis ELIQUIS",
+        "duong_dan_moi": "Indications and Usage > 1.3 Treatment of Deep Vein Thrombosis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:41a133ef-e461-48ad-8221-b735bdd0ec25",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-02dd07db14a1",
+        "ma_moi": "DT-f2776bd37c9e",
+        "duong_dan_cu": "Indications and Usage > 1.4 Treatment of Pulmonary Embolism ELIQUIS",
+        "duong_dan_moi": "Indications and Usage > 1.4 Treatment of Pulmonary Embolism",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:41a133ef-e461-48ad-8221-b735bdd0ec25",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a400935aed7f",
+        "ma_moi": "DT-5b11dec21a63",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Apixaban",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a6030d825cd9",
+        "ma_moi": "DT-dff2e769f37d",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d606cbfc028a",
+        "ma_moi": "DT-ac57a1f8ecd3",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-29dba2beb240",
+        "ma_moi": "DT-a41ef08d1292",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8466fec1a49f",
+        "ma_moi": "DT-f5d84918553a",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a60494b06b5c",
+        "ma_moi": "DT-e15cc77a49aa",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-42cdd73c0a89",
+        "ma_moi": "DT-3c87f036f76e",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-59345971f3d5",
+        "ma_moi": "DT-121891bbdff7",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-383fc3472c80",
+        "ma_moi": "DT-3a2ebcc68a1f",
+        "duong_dan_cu": "Drug Interactions > 7.1 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.1 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7254b4c06979",
+        "ma_moi": "DT-96f9756a5ec2",
+        "duong_dan_cu": "Drug Interactions > 7.2 Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.2 Drug",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c8c18ca55cf1",
+        "ma_moi": "DT-eada0197c78d",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Renal",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-80004726261f",
+        "ma_moi": "DT-fe6258f2bb62",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Atorvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-128f978d2db0",
+        "ma_moi": "DT-6b7d79e1f601",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Atorvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Atorvastatin",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:4e06b20d-cc5d-46eb-991b-5972248de3af",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-fb20569025d1",
+        "ma_moi": "DT-ce3e65b061d1",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Atorvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Atorvastatin",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-56a442ba93e6",
+        "ma_moi": "DT-8a3ad06479d5",
+        "duong_dan_cu": "Indications and Usage > 1.1 Pneumonia Cefepime Injection",
+        "duong_dan_moi": "Indications and Usage > 1.1 Pneumonia Cefepime",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-537ea808de77",
+        "ma_moi": "DT-1b27524535e3",
+        "duong_dan_cu": "Indications and Usage > 1.5 Complicated Intra-abdominal Infections Cefepime Injection",
+        "duong_dan_moi": "Indications and Usage > 1.5 Complicated Intra-abdominal Infections Cefepime",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c76650b8dec3",
+        "ma_moi": "DT-75a9eab0e728",
+        "duong_dan_cu": "Drug Interactions > 7.2 Aminoglycosides Renal",
+        "duong_dan_moi": "Drug Interactions > 7.2 Aminoglycosides",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a62734b271b0",
+        "ma_moi": "DT-f3a398dc547e",
+        "duong_dan_cu": "Drug Interactions > 7.3 Diuretics Nephrotoxicity",
+        "duong_dan_moi": "Drug Interactions > 7.3 Diuretics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c7abc878a6a7",
+        "ma_moi": "DT-f488f7f0c090",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Cefepime",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9a22b2b5e1c3",
+        "ma_moi": "DT-a3247876ebd7",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Cefepime",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-e17723e662c0",
+        "ma_moi": "DT-cba1f7b47b3b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Cefepime",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Pharmacokinetic",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-6a732fca1b6f",
+        "ma_moi": "DT-e9b6177a0fde",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Cefepime",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Pharmacokinetic",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f898bb417dde",
+        "ma_moi": "DT-a60cb4ed97cc",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Cefepime",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-54d5a4dee575",
+        "ma_moi": "DT-81dde8157940",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Cefepime",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-da4ed15e8171",
+        "ma_moi": "DT-cb68459b1530",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Cefepime",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0bcb6f74d65c",
+        "ma_moi": "DT-9157536f1f93",
+        "duong_dan_cu": "Indications and Usage > 1.1 Skin and Skin Structure Infections Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.1 Skin and Skin Structure Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a1e819303d68",
+        "ma_moi": "DT-2227201e061c",
+        "duong_dan_cu": "Indications and Usage > 1.2 Bone and Joint Infections Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.2 Bone and Joint Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-95ec5e585ce0",
+        "ma_moi": "DT-4ee3a25e7800",
+        "duong_dan_cu": "Indications and Usage > 1.3 Complicated Intra-Abdominal Infections Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.3 Complicated Intra-Abdominal Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3e307a30d1d0",
+        "ma_moi": "DT-f0d73db6bf38",
+        "duong_dan_cu": "Indications and Usage > 1.4 Infectious Diarrhea Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.4 Infectious Diarrhea",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-77210630acbc",
+        "ma_moi": "DT-1ee8a9af02c5",
+        "duong_dan_cu": "Indications and Usage > 1.5 Typhoid Fever (Enteric Fever) Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.5 Typhoid Fever (Enteric Fever)",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4f1640221f0e",
+        "ma_moi": "DT-86e3143fde34",
+        "duong_dan_cu": "Indications and Usage > 1.6 Uncomplicated Cervical and Urethral Gonorrhea Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.6 Uncomplicated Cervical and Urethral Gonorrhea",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8ba712e85315",
+        "ma_moi": "DT-06b212bf58d0",
+        "duong_dan_cu": "Indications and Usage > 1.7 Inhalational Anthrax (Post-Exposure) Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.7 Inhalational Anthrax (Post-Exposure)",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-66c1323365ba",
+        "ma_moi": "DT-9f1302fdc2e0",
+        "duong_dan_cu": "Indications and Usage > 1.8 Plague Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.8 Plague",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f3eb0659e0d9",
+        "ma_moi": "DT-81c5b802d6d0",
+        "duong_dan_cu": "Indications and Usage > 1.9 Chronic Bacterial Prostatitis Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.9 Chronic Bacterial Prostatitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d2cebd7b7843",
+        "ma_moi": "DT-6e86eb01d686",
+        "duong_dan_cu": "Indications and Usage > 1.10 Lower Respiratory Tract Infections Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.10 Lower Respiratory Tract Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-071578b01f4f",
+        "ma_moi": "DT-cbe5ef7824a3",
+        "duong_dan_cu": "Indications and Usage > 1.12 Acute Sinusitis Ciprofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.12 Acute Sinusitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-a6c34b2677ad",
+        "ma_moi": "DT-d931f2ca3fb2",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Dosage in Adults",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Dosage in Pediatric Patients Dosing and",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-609684884bb1",
+        "ma_moi": "DT-dcda0633682e",
+        "duong_dan_cu": "Dosage and Administration > 2.3 Dosage Modifications in Patients with Renal Impairment Ciprofloxacin",
+        "duong_dan_moi": "Dosage and Administration > 2.3 Dosage Modifications in Patients with Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d78e1eea39f2",
+        "ma_moi": "DT-17ec3c575ebd",
+        "duong_dan_cu": "Dosage and Administration > 2.3 Dosage Modifications in Patients with Renal Impairment Ciprofloxacin",
+        "duong_dan_moi": "Dosage and Administration > 2.3 Dosage Modifications in Patients with Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-d206eda2ac83",
+        "ma_moi": "DT-1c81ba58956b",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Dosage in Adults",
+        "duong_dan_moi": "Dosage and Administration > 2.3 Dosage Modifications in Patients with Renal Impairment",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e90a413d3e74",
+        "ma_moi": "DT-96969592b20c",
+        "duong_dan_cu": "Contraindications > 4.1 Hypersensitivity Ciprofloxacin",
+        "duong_dan_moi": "Contraindications > 4.1 Hypersensitivity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8f5f2e88a380",
+        "ma_moi": "DT-95375670d96d",
+        "duong_dan_cu": "Warnings and Precautions > 5.16 Interference with Timely Diagnosis of Syphilis Ciprofloxacin",
+        "duong_dan_moi": "Warnings and Precautions > 5.16 Interference with Timely Diagnosis of Syphilis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e342e521b96d",
+        "ma_moi": "DT-bfbccc6a849f",
+        "duong_dan_cu": "Use in Specific Populations > 8.3 Nursing Mothers Ciprofloxacin",
+        "duong_dan_moi": "Use in Specific Populations > 8.3 Nursing Mothers",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-114647faa4d2",
+        "ma_moi": "DT-0574ffdfa614",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Geriatric",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-fe8773010d3a",
+        "ma_moi": "DT-b22d43b7453b",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Geriatric",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cfdbc9b8bdd7",
+        "ma_moi": "DT-30fc2347d402",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Geriatric",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a01ae51dc347",
+        "ma_moi": "DT-c003a5d3162e",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Ciprofloxacin",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-a1263dcc5945",
+        "ma_moi": "DT-024444d8853b",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.2 Postmarketing Experience",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-dfdb75c0d971",
+        "ma_moi": "DT-dc49404a40f3",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Ciprofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-5c325141a03c",
+        "ma_moi": "DT-f72204ae8373",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Ciprofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-2f4a15248c4d",
+        "ma_moi": "DT-5f50b3ece753",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Ciprofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-782f34d4214e",
+        "ma_moi": "DT-bc7b988b175d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Ciprofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:74e2dd24-5c6e-4dde-a2ab-f2d2e61734d8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-2cef7e55621c",
+        "ma_moi": "DT-7d7eb2caa38d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Ciprofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5a775f88554c",
+        "ma_moi": "DT-3f09ea72a85a",
+        "duong_dan_cu": "Indications and Usage > 1.1 Acute Bacterial Exacerbation of Chronic Bronchitis Clarithromycin",
+        "duong_dan_moi": "Indications and Usage > 1.1 Acute Bacterial Exacerbation of Chronic Bronchitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2ad90e57e2a8",
+        "ma_moi": "DT-470592545f9d",
+        "duong_dan_cu": "Indications and Usage > 1.2 Acute Maxillary Sinusitis Clarithromycin",
+        "duong_dan_moi": "Indications and Usage > 1.2 Acute Maxillary Sinusitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c96356885bb3",
+        "ma_moi": "DT-a8fb882a69ae",
+        "duong_dan_cu": "Indications and Usage > 1.3 Community-Acquired Pneumonia Clarithromycin",
+        "duong_dan_moi": "Indications and Usage > 1.3 Community-Acquired Pneumonia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-42ed67722518",
+        "ma_moi": "DT-6419f13b5680",
+        "duong_dan_cu": "Indications and Usage > 1.4 Pharyngitis/Tonsillitis Clarithromycin",
+        "duong_dan_moi": "Indications and Usage > 1.4 Pharyngitis/Tonsillitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-054d840b2e5f",
+        "ma_moi": "DT-dd5f1c78fd18",
+        "duong_dan_cu": "Indications and Usage > 1.5 Uncomplicated Skin and Skin Structure Infections Clarithromycin",
+        "duong_dan_moi": "Indications and Usage > 1.5 Uncomplicated Skin and Skin Structure Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7796576a8ec6",
+        "ma_moi": "DT-e2be1ee14e62",
+        "duong_dan_cu": "Indications and Usage > 1.6 Acute Otitis Media Clarithromycin",
+        "duong_dan_moi": "Indications and Usage > 1.6 Acute Otitis Media",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9e0f896457b3",
+        "ma_moi": "DT-62d7c8ef50d1",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Important Administration Instructions Clarithromycin",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Important Administration Instructions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-58a255302eb0",
+        "ma_moi": "DT-3e461543d117",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Important Administration Instructions Clarithromycin",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Adult Dosage",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-f876ce9b57e2",
+        "ma_moi": "DT-8e00cbc90fdf",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Important Administration Instructions Clarithromycin",
+        "duong_dan_moi": "Dosage and Administration > 2.6 Dosage Adjustment in Patients with Renal Impairment",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5db122f50a04",
+        "ma_moi": "DT-ec3e53247642",
+        "duong_dan_cu": "Contraindications > 4.1 Hypersensitivity Clarithromycin",
+        "duong_dan_moi": "Contraindications > 4.1 Hypersensitivity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2b8b1275fce6",
+        "ma_moi": "DT-a7368b70b1a3",
+        "duong_dan_cu": "Contraindications > 4.3 Cholestatic Jaundice/Hepatic Dysfunction Clarithromycin",
+        "duong_dan_moi": "Contraindications > 4.3 Cholestatic Jaundice/Hepatic Dysfunction",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5916c42e4076",
+        "ma_moi": "DT-25d25e81a7f3",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 QT Prolongation Clarithromycin",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 QT Prolongation",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-816117d1377d",
+        "ma_moi": "DT-bea30c1adbb4",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal and Hepatic Impairment Clarithromycin",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal and Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-af1e07daf69e",
+        "ma_moi": "DT-87db6d4e437b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Clarithromycin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-b24d3f149560",
+        "ma_moi": "DT-f8ac1184661c",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Clarithromycin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Clarithromycin Tablets",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-00fc026e2cc9",
+        "ma_moi": "DT-824740399a14",
+        "duong_dan_cu": "Indications and Usage > 1.1 Acute Coronary Syndrome (ACS) Clopidogrel",
+        "duong_dan_moi": "Indications and Usage > 1.1 Acute Coronary Syndrome (ACS)",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f88b9e71fb42",
+        "ma_moi": "DT-8f071b283f71",
+        "duong_dan_cu": "Contraindications > 4.1 Active Bleeding Clopidogrel",
+        "duong_dan_moi": "Contraindications > 4.1 Active Bleeding",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-20eb0416bd88",
+        "ma_moi": "DT-c265a0c20460",
+        "duong_dan_cu": "Contraindications > 4.2 Hypersensitivity Clopidogrel",
+        "duong_dan_moi": "Contraindications > 4.2 Hypersensitivity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9ec7b10b8206",
+        "ma_moi": "DT-1677201cde12",
+        "duong_dan_cu": "Drug Interactions > 7.2 CYP2C19 Inhibitors Clopidogrel",
+        "duong_dan_moi": "Drug Interactions > 7.2 CYP2C19 Inhibitors",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-97ece9013bee",
+        "ma_moi": "DT-448479a13ab8",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Experience",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-fdaf00747b9b",
+        "ma_moi": "DT-4248a4ac504a",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-fd53c8e5c3bd",
+        "ma_moi": "DT-68f2a555ff2f",
+        "duong_dan_cu": "Clinical Pharmacology > 12.2 Pharmacodynamics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-bb4e84783460",
+        "ma_moi": "DT-d9a7821c56be",
+        "duong_dan_cu": "Clinical Pharmacology > 12.2 Pharmacodynamics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cb83ff7654ba",
+        "ma_moi": "DT-70d4fa04c52e",
+        "duong_dan_cu": "Clinical Pharmacology > 12.2 Pharmacodynamics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-12ceb59cafb1",
+        "ma_moi": "DT-61cff19b8301",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5102d4cac673",
+        "ma_moi": "DT-ea490e2aa440",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f9162eed2063",
+        "ma_moi": "DT-a81340b60881",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-620444ae8643",
+        "ma_moi": "DT-6fe54a79481e",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6215862a59fa",
+        "ma_moi": "DT-a049fa6e0853",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:03bec9ad-cd22-44d3-9b82-2796157de1d1",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-700220a40a30",
+        "ma_moi": "DT-436416a28160",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Clopidogrel",
+        "duong_dan_moi": "Clinical Pharmacology > 12.5 Pharmacogenomics CYP2C19",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:e7eff2fc-3fac-4ad5-985b-2b8cc28eb84a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d8f0edfef965",
+        "ma_moi": "DT-0d15ff7379cd",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Important Dosage Information Dabigatran",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Important Dosage Information",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d754ac429f24",
+        "ma_moi": "DT-53bc42d9ec49",
+        "duong_dan_cu": "Indications and Usage > 1.1 Heart Failure in Adults Digoxin",
+        "duong_dan_moi": "Indications and Usage > 1.1 Heart Failure in Adults",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b5560fbe1870",
+        "ma_moi": "DT-514024d213b6",
+        "duong_dan_cu": "Indications and Usage > 1.2 Atrial Fibrillation in Adults Digoxin",
+        "duong_dan_moi": "Indications and Usage > 1.2 Atrial Fibrillation in Adults",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-fbbc3ce3e293",
+        "ma_moi": "DT-5b63d037be7d",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 Sinus Bradycardia and Sino-atrial Block Digoxin",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Sinus Bradycardia and Sino-atrial Block",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0610a41e2210",
+        "ma_moi": "DT-f1c306c1df59",
+        "duong_dan_cu": "Warnings and Precautions > 5.6 Vasoconstriction in Patients With Myocarditis Digoxin",
+        "duong_dan_moi": "Warnings and Precautions > 5.6 Vasoconstriction in Patients With Myocarditis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2184f60acfb1",
+        "ma_moi": "DT-c84f4abd9ebe",
+        "duong_dan_cu": "Warnings and Precautions > 5.8 Reduced Efficacy in Patients With Hypocalcemia Hypocalcemia",
+        "duong_dan_moi": "Warnings and Precautions > 5.8 Reduced Efficacy in Patients With Hypocalcemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6633d4583308",
+        "ma_moi": "DT-8f03bd5c8a9c",
+        "duong_dan_cu": "Drug Interactions > 7.1 P-Glycoprotein (PGP) Inducers/Inhibitors Digoxin",
+        "duong_dan_moi": "Drug Interactions > 7.1 P-Glycoprotein (PGP) Inducers/Inhibitors",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f257591fcc3f",
+        "ma_moi": "DT-42982f2c73ea",
+        "duong_dan_cu": "Drug Interactions > 7.2 Pharmacokinetic Drug Interactions Pharmacokinetic",
+        "duong_dan_moi": "Drug Interactions > 7.2 Pharmacokinetic Drug Interactions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-af9f304609a4",
+        "ma_moi": "DT-c3131e926069",
+        "duong_dan_cu": "Warnings and Precautions > 5.5 Thrombocytopenia Thrombocytopenia",
+        "duong_dan_moi": "Warnings and Precautions > 5.5 Thrombocytopenia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-dcdf56736bf7",
+        "ma_moi": "DT-ac6a70c973ca",
+        "duong_dan_cu": "Use in Specific Populations > 8.9 Obese Patients Obese",
+        "duong_dan_moi": "Use in Specific Populations > 8.9 Obese Patients",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ce0ab33198ec",
+        "ma_moi": "DT-3671aa6b2227",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-010caacba24d",
+        "ma_moi": "DT-898ddfef3d61",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f9e032b4fb58",
+        "ma_moi": "DT-c562463f5afb",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-89a42766e1e8",
+        "ma_moi": "DT-02a2c83c2bee",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5472f663e3a0",
+        "ma_moi": "DT-7f6582ec81f9",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1b23f5fc3573",
+        "ma_moi": "DT-dd56ced23c5b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ad2ed952f134",
+        "ma_moi": "DT-a3b0b8321090",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-58b1871b0c5c",
+        "ma_moi": "DT-f9101f11f897",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-196704aeda91",
+        "ma_moi": "DT-fbb96fd5b7e3",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-2d033b90d857",
+        "ma_moi": "DT-6e938862e130",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action Enoxaparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9e24e19a51a6",
+        "ma_moi": "DT-a78bf3371973",
+        "duong_dan_cu": "Warnings and Precautions > 5.13 Fundic Gland Polyps PPI",
+        "duong_dan_moi": "Warnings and Precautions > 5.13 Fundic Gland Polyps",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-529be2fa19c3",
+        "ma_moi": "DT-9da03d2b6ee5",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Esomeprazole",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1a6061d2be12",
+        "ma_moi": "DT-81acfc1872ec",
+        "duong_dan_cu": "Warnings and Precautions > 5.6 Severe Cardiovascular Depression Fentanyl Citrate Injection",
+        "duong_dan_moi": "Warnings and Precautions > 5.6 Severe Cardiovascular Depression Fentanyl Citrate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2c8cc2b5ecc5",
+        "ma_moi": "DT-fea12efb4817",
+        "duong_dan_cu": "Warnings and Precautions > 5.11 Risks of Gastrointestinal Complications Fentanyl",
+        "duong_dan_moi": "Warnings and Precautions > 5.11 Risks of Gastrointestinal Complications",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2a305fa50cd7",
+        "ma_moi": "DT-c0c3acf5fa42",
+        "duong_dan_cu": "Warnings and Precautions > 5.13 Risk of Driving and Operating Machinery Fentanyl Citrate Injection",
+        "duong_dan_moi": "Warnings and Precautions > 5.13 Risk of Driving and Operating Machinery Fentanyl Citrate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-46cdb9fdd6e8",
+        "ma_moi": "DT-77b11974fdf6",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Fentanyl",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ed9a5d802b46",
+        "ma_moi": "DT-b428a97aec13",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Hepatic Impairment Fentanyl Citrate Injection",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Hepatic Impairment Fentanyl Citrate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-84c6caf93833",
+        "ma_moi": "DT-54ea13d9094a",
+        "duong_dan_cu": "Use in Specific Populations > 8.7 Renal Impairment Fentanyl Citrate Injection",
+        "duong_dan_moi": "Use in Specific Populations > 8.7 Renal Impairment Fentanyl Citrate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1cd4b68272e9",
+        "ma_moi": "DT-3aa0db08142d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Fentanyl Citrate Injection",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action Fentanyl Citrate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:58dcd3f7-e3d8-4929-a186-8f680a51ff11",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2d145122a9aa",
+        "ma_moi": "DT-1317bab954e0",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Fentanyl Citrate Injection",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Fentanyl Citrate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:301b19bc-21c2-4a35-9d29-569b08d855c4",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ad89acdaff92",
+        "ma_moi": "DT-863e4fee91b9",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Hyperkalemia Heparin",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Hyperkalemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:301b19bc-21c2-4a35-9d29-569b08d855c4",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-82c716355f2a",
+        "ma_moi": "DT-a848042d5783",
+        "duong_dan_cu": "Drug Interactions > 7.1 Oral Anticoagulants Heparin",
+        "duong_dan_moi": "Drug Interactions > 7.1 Oral Anticoagulants",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:301b19bc-21c2-4a35-9d29-569b08d855c4",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4ff1591cfd01",
+        "ma_moi": "DT-b0751be3b5ae",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Heparin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0485e09566df",
+        "ma_moi": "DT-6baec78e1be7",
+        "duong_dan_cu": "Indications and Usage > 1.8 Endocarditis Imipenem and Cilastatin for Injection, USP",
+        "duong_dan_moi": "Indications and Usage > 1.8 Endocarditis Imipenem and Cilastatin for Injection,",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-aa046e16cb63",
+        "ma_moi": "DT-0a64604b8368",
+        "duong_dan_cu": "Dosage and Administration > 2.2 Dosage in Pediatric Patients Imipenem and Cilastatin for Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Dosage in Pediatric Patients Imipenem and Cilastatin for",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-96663d5381c4",
+        "ma_moi": "DT-025703a04a25",
+        "duong_dan_cu": "Dosage and Administration > 2.2 Dosage in Pediatric Patients Imipenem and Cilastatin for Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Dosage in Pediatric Patients Imipenem and Cilastatin for",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-88ed99ac2837",
+        "ma_moi": "DT-c1835a40a528",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Dosage in Adults For Intravenous Injection Only •",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Dosage in Pediatric Patients Imipenem and Cilastatin for",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-47ae354fc355",
+        "ma_moi": "DT-aff0900ee03b",
+        "duong_dan_cu": "Drug Interactions > 7.1 Ganciclovir Generalized",
+        "duong_dan_moi": "Drug Interactions > 7.1 Ganciclovir",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-238e0d5a1069",
+        "ma_moi": "DT-67b717af8f21",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Dosage",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-3bc106563676",
+        "ma_moi": "DT-4ae391919c4a",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.2 Postmarketing Experience",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:46f54df9-5afe-430c-aa19-0d84c2044b0b",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-2682ad09fe53",
+        "ma_moi": "DT-438023d4af31",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Imipenem and",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Intravenous",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:5328761e-59d3-ca7a-e063-6394a90ae810",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-aa2c36f1e447",
+        "ma_moi": "DT-afa5379d7933",
+        "duong_dan_cu": "Dosage and Administration > 2.4 Switching to LANGLARA from Other Insulin Therapies Dosage",
+        "duong_dan_moi": "Dosage and Administration > 2.4 Switching to LANGLARA from Other Insulin Therapies",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:5328761e-59d3-ca7a-e063-6394a90ae810",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c877af6684f3",
+        "ma_moi": "DT-8db98f60e030",
+        "duong_dan_cu": "Warnings and Precautions > 5.3 Hypoglycemia Hypoglycemia",
+        "duong_dan_moi": "Warnings and Precautions > 5.3 Hypoglycemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:5328761e-59d3-ca7a-e063-6394a90ae810",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-19234d72f52f",
+        "ma_moi": "DT-ef14a757d747",
+        "duong_dan_cu": "Warnings and Precautions > 5.3 Hypoglycemia Hypoglycemia",
+        "duong_dan_moi": "Warnings and Precautions > 5.3 Hypoglycemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-66c3d4132243",
+        "ma_moi": "DT-2e78bbf386d6",
+        "duong_dan_cu": "Indications and Usage > 1.1 Partial-Onset Seizures Levetiracetam",
+        "duong_dan_moi": "Indications and Usage > 1.1 Partial-Onset Seizures",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a6a6227daa99",
+        "ma_moi": "DT-89b40bb9d8d1",
+        "duong_dan_cu": "Indications and Usage > 1.3 Primary Generalized Tonic-Clonic Seizures Levetiracetam",
+        "duong_dan_moi": "Indications and Usage > 1.3 Primary Generalized Tonic-Clonic Seizures",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b252851b17f8",
+        "ma_moi": "DT-9d01652844bc",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Important Administration Instructions Levetiracetam",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Important Administration Instructions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1bef289d4227",
+        "ma_moi": "DT-008e05ec1cbb",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-69b82eb0296d",
+        "ma_moi": "DT-34f7cefaf412",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0a7d979b475c",
+        "ma_moi": "DT-1706d65d0717",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ab29a8d496c6",
+        "ma_moi": "DT-4b3e95a27093",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-eefc3c8906b6",
+        "ma_moi": "DT-b124757f3838",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-d8a8ac08c64a",
+        "ma_moi": "DT-07830ccc3077",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Behavioral Abnormalities and Psychotic Symptoms Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Suicidal Behavior and Ideation Antiepileptic",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6fbddb576e4b",
+        "ma_moi": "DT-5255f793db8c",
+        "duong_dan_cu": "Warnings and Precautions > 5.3 Somnolence and Fatigue Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.3 Somnolence and Fatigue",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-64edd300fa68",
+        "ma_moi": "DT-9ecfd1f5af75",
+        "duong_dan_cu": "Warnings and Precautions > 5.3 Somnolence and Fatigue Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.3 Somnolence and Fatigue",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7bec4a2a5af8",
+        "ma_moi": "DT-bc1f90c91512",
+        "duong_dan_cu": "Warnings and Precautions > 5.4 Anaphylaxis and Angioedema Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.4 Anaphylaxis and Angioedema",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8ad9b28c35a7",
+        "ma_moi": "DT-8c912d606fe1",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Coordination Difficulties Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Coordination Difficulties",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-34e9c00333d6",
+        "ma_moi": "DT-46285e93da88",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Hematologic Abnormalities Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Hematologic Abnormalities",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e288c2350143",
+        "ma_moi": "DT-58d783e343de",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Hematologic Abnormalities Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Hematologic Abnormalities",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-76a7b5252cf4",
+        "ma_moi": "DT-54f504868da3",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Hematologic Abnormalities Levetiracetam",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Hematologic Abnormalities",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3ce5b1fe0b2e",
+        "ma_moi": "DT-d77dd5dd003e",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Levetiracetam",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-68f44a49f353",
+        "ma_moi": "DT-108b91960922",
+        "duong_dan_cu": "Indications and Usage > 1.1 Nosocomial Pneumonia Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.1 Nosocomial Pneumonia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-17b2683a25c6",
+        "ma_moi": "DT-23ae5e65d542",
+        "duong_dan_cu": "Indications and Usage > 1.4 Complicated Skin and Skin Structure Infections Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.4 Complicated Skin and Skin Structure Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0ddaaeaa6686",
+        "ma_moi": "DT-003f4b234e16",
+        "duong_dan_cu": "Indications and Usage > 1.5 Uncomplicated Skin and Skin Structure Infections Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.5 Uncomplicated Skin and Skin Structure Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c0b06920d273",
+        "ma_moi": "DT-22a8da930b74",
+        "duong_dan_cu": "Indications and Usage > 1.6 Chronic Bacterial Prostatitis Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.6 Chronic Bacterial Prostatitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-97346b2d574c",
+        "ma_moi": "DT-e29095ed4b08",
+        "duong_dan_cu": "Indications and Usage > 1.7 Inhalational Anthrax (Post-Exposure) Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.7 Inhalational Anthrax (Post-Exposure)",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b3d5fa93b164",
+        "ma_moi": "DT-eff22f5b4e27",
+        "duong_dan_cu": "Indications and Usage > 1.8 Plague Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.8 Plague",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1f71b3ddf93f",
+        "ma_moi": "DT-4e277b7d47d1",
+        "duong_dan_cu": "Indications and Usage > 1.12 Uncomplicated Urinary Tract Infections Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.12 Uncomplicated Urinary Tract Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-bc28492d96c3",
+        "ma_moi": "DT-de0f20846ccd",
+        "duong_dan_cu": "Indications and Usage > 1.13 Acute Bacterial Exacerbation of Chronic Bronchitis Levofloxacin",
+        "duong_dan_moi": "Indications and Usage > 1.13 Acute Bacterial Exacerbation of Chronic Bronchitis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f4523753b238",
+        "ma_moi": "DT-31885af4d7f4",
+        "duong_dan_cu": "Dosage and Administration > 2.5 Important Administration Instructions Levofloxacin",
+        "duong_dan_moi": "Dosage and Administration > 2.5 Important Administration Instructions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6833fc621832",
+        "ma_moi": "DT-c1f0e51289a5",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Geriatric",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4f2c49146a6e",
+        "ma_moi": "DT-62e7034b96d1",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Geriatric",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ee0e55def487",
+        "ma_moi": "DT-4512d2c48587",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Geriatric",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-f9e0965955b5",
+        "ma_moi": "DT-3735480e9b7b",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trial Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.2 Postmarketing Experience",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9fce42f56417",
+        "ma_moi": "DT-dfda04ac7dcb",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-7bd4e59faa25",
+        "ma_moi": "DT-e34509e9983c",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0c5e5849c21d",
+        "ma_moi": "DT-993fc87844f7",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-69eb7f18729a",
+        "ma_moi": "DT-ec0d523d81c0",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d09badda6639",
+        "ma_moi": "DT-f01938240ad0",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-76985e6462c3",
+        "ma_moi": "DT-d302357a07c1",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ccdbafbf586b",
+        "ma_moi": "DT-29325029e8ce",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:814450ae-439e-4a5d-8c60-9b21b6f14be5",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cb09fbb68d01",
+        "ma_moi": "DT-904bd7e9424d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Levofloxacin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-00aed01ad1ae",
+        "ma_moi": "DT-3150e43ac765",
+        "duong_dan_cu": "Indications and Usage > 1.1 Nosocomial Pneumonia ZYVOX",
+        "duong_dan_moi": "Indications and Usage > 1.1 Nosocomial Pneumonia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cefd74a1201f",
+        "ma_moi": "DT-56a7c89e9b05",
+        "duong_dan_cu": "Indications and Usage > 1.2 Community-acquired Pneumonia ZYVOX",
+        "duong_dan_moi": "Indications and Usage > 1.2 Community-acquired Pneumonia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cd9c9ae390d1",
+        "ma_moi": "DT-c13495353f33",
+        "duong_dan_cu": "Indications and Usage > 1.3 Complicated Skin and Skin Structure Infections ZYVOX",
+        "duong_dan_moi": "Indications and Usage > 1.3 Complicated Skin and Skin Structure Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ab59782e2833",
+        "ma_moi": "DT-3c7f50583518",
+        "duong_dan_cu": "Indications and Usage > 1.4 Uncomplicated Skin and Skin Structure Infections ZYVOX",
+        "duong_dan_moi": "Indications and Usage > 1.4 Uncomplicated Skin and Skin Structure Infections",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6c91296e98c6",
+        "ma_moi": "DT-3f0572f599d1",
+        "duong_dan_cu": "Indications and Usage > 1.6 Limitations of Use • ZYVOX",
+        "duong_dan_moi": "Indications and Usage > 1.6 Limitations of Use •",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-a7b11234fcda",
+        "ma_moi": "DT-f8fd30483d7f",
+        "duong_dan_cu": "Dosage and Administration",
+        "duong_dan_moi": "Dosage and Administration > 2.1 General Dosage and Administration",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-bc3f4fbe4ce4",
+        "ma_moi": "DT-03b4d1505997",
+        "duong_dan_cu": "Dosage and Administration > 2.5 Constitution of Oral Suspension ZYVOX for Oral Suspension",
+        "duong_dan_moi": "Dosage and Administration > 2.5 Constitution of Oral Suspension ZYVOX for Oral",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3be0d3ed267f",
+        "ma_moi": "DT-7d8d099dcf8d",
+        "duong_dan_cu": "Contraindications > 4.1 Hypersensitivity ZYVOX",
+        "duong_dan_moi": "Contraindications > 4.1 Hypersensitivity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-590c01699b8d",
+        "ma_moi": "DT-f1b73ab0d258",
+        "duong_dan_cu": "Contraindications > 4.2 Monoamine Oxidase Inhibitors Linezolid",
+        "duong_dan_moi": "Contraindications > 4.2 Monoamine Oxidase Inhibitors",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c2ebc89502d3",
+        "ma_moi": "DT-b0661a4e25e8",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Lactic Acidosis Lactic",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Lactic Acidosis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6339c28d7739",
+        "ma_moi": "DT-ed5624cd1064",
+        "duong_dan_cu": "Warnings and Precautions > 5.8 Convulsions Convulsions",
+        "duong_dan_moi": "Warnings and Precautions > 5.8 Convulsions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1e8a4258c7d3",
+        "ma_moi": "DT-6b6679682b91",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Rhabdomyolysis Rhabdomyolysis",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e1eed8906612",
+        "ma_moi": "DT-36f39ad3a7ca",
+        "duong_dan_cu": "Warnings and Precautions > 5.12 Risks in Patients with Phenylketonuria Phenylalanine",
+        "duong_dan_moi": "Warnings and Precautions > 5.12 Risks in Patients with Phenylketonuria",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2a5b9826e7ca",
+        "ma_moi": "DT-ff04f7a22a0c",
+        "duong_dan_cu": "Drug Interactions > 7.1 Monoamine Oxidase Inhibitors Linezolid",
+        "duong_dan_moi": "Drug Interactions > 7.1 Monoamine Oxidase Inhibitors",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-465966e31a18",
+        "ma_moi": "DT-1b3d3f113646",
+        "duong_dan_cu": "Drug Interactions > 7.2 Adrenergic and Serotonergic Agents Linezolid",
+        "duong_dan_moi": "Drug Interactions > 7.2 Adrenergic and Serotonergic Agents",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-379c2044dac1",
+        "ma_moi": "DT-e5595cb8f43f",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Linezolid",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-651f6f74fd46",
+        "ma_moi": "DT-d3488989329a",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.4 Nausea 5.1 4.5 6.6 4.6 Vomiting 2.0 1.5 4.3 2.3",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-01cf47df4b33",
+        "ma_moi": "DT-362c34b5feb5",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.4 Nausea 5.1 4.5 6.6 4.6 Vomiting 2.0 1.5 4.3 2.3",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-04c3ec36e323",
+        "ma_moi": "DT-37b29d52a5ee",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.4 Nausea 5.1 4.5 6.6 4.6 Vomiting 2.0 1.5 4.3 2.3",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-373652d5845a",
+        "ma_moi": "DT-dbdd86aba36a",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.4 Nausea 5.1 4.5 6.6 4.6 Vomiting 2.0 1.5 4.3 2.3",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-4b9a24dc1cea",
+        "ma_moi": "DT-126cac8a4ea7",
+        "duong_dan_cu": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "duong_dan_moi": "Adverse Reactions > 6.4 Nausea 5.1 4.5 6.6 4.6 Vomiting 2.0 1.5 4.3 2.3",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f34a5d6529cc",
+        "ma_moi": "DT-5299cc5f76df",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action ZYVOX",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-3ff6bdfa7113",
+        "ma_moi": "DT-e0f61fa5fbdb",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action ZYVOX",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-60021468097b",
+        "ma_moi": "DT-578cbe8b65b0",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action ZYVOX",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-c7832ed72bd6",
+        "ma_moi": "DT-5b989328bd0d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action ZYVOX",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-a9bce7925158",
+        "ma_moi": "DT-f6e0441b0c23",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action ZYVOX",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7efa11159950",
+        "ma_moi": "DT-eca774e92fe6",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Linezolid",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-608624ef28d9",
+        "ma_moi": "DT-86b9b88eb048",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Linezolid",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-77a5585f8905",
+        "ma_moi": "DT-2204b87e92ff",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Linezolid",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b1902d0b4e56",
+        "ma_moi": "DT-5116fb33745f",
+        "duong_dan_cu": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action Linezolid",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-91626350863f",
+        "ma_moi": "DT-668ed0170f21",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Fetal Toxicity Losartan",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Fetal Toxicity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7fa024c56d39",
+        "ma_moi": "DT-a812d3eed82d",
+        "duong_dan_cu": "Use in Specific Populations > 8.1 Pregnancy Risk Summary Losartan",
+        "duong_dan_moi": "Use in Specific Populations > 8.1 Pregnancy Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c872cade4d1b",
+        "ma_moi": "DT-c745f1f45ce5",
+        "duong_dan_cu": "Use in Specific Populations > 8.1 Pregnancy Risk Summary Losartan",
+        "duong_dan_moi": "Use in Specific Populations > 8.1 Pregnancy Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a07d2a2b2f88",
+        "ma_moi": "DT-9d9d93cbc549",
+        "duong_dan_cu": "Use in Specific Populations > 8.1 Pregnancy Risk Summary Losartan",
+        "duong_dan_moi": "Use in Specific Populations > 8.1 Pregnancy Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8f1cc1c5590b",
+        "ma_moi": "DT-57610838044e",
+        "duong_dan_cu": "Use in Specific Populations > 8.1 Pregnancy Risk Summary Losartan",
+        "duong_dan_moi": "Use in Specific Populations > 8.1 Pregnancy Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-8902c1cf6340",
+        "ma_moi": "DT-a0e8db99786a",
+        "duong_dan_cu": "Adverse Reactions",
+        "duong_dan_moi": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-9706aceca435",
+        "ma_moi": "DT-c42975cf2a3e",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Angiotensin II [formed from",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Absorption Following",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3ce3462bac37",
+        "ma_moi": "DT-29d993e0da56",
+        "duong_dan_cu": "Dosage and Administration > 2.2 Use in Adult Patients with Renal Impairment Dosage",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Use in Adult Patients with Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-78eef075ea22",
+        "ma_moi": "DT-ce5c05ef1725",
+        "duong_dan_cu": "Dosage and Administration > 2.2 Use in Adult Patients with Renal Impairment Dosage",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Use in Adult Patients with Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-32226cc518fb",
+        "ma_moi": "DT-19823e22bf13",
+        "duong_dan_cu": "Warnings and Precautions > 5.3 Rhabdomyolysis Rhabdomyolysis",
+        "duong_dan_moi": "Warnings and Precautions > 5.3 Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c89b4e733e4e",
+        "ma_moi": "DT-21f9eb1194df",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Meropenem",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7357f80f471f",
+        "ma_moi": "DT-7aa373d23c15",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Patients with Renal Impairment Dosage",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Patients with Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-928c6c299c9c",
+        "ma_moi": "DT-1d4bbba18ce2",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Meropenem",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-03a678c40bc9",
+        "ma_moi": "DT-73994850f158",
+        "duong_dan_cu": "Mechanism of Action > 12.1 Mechanism of Action Meropenem",
+        "duong_dan_moi": "Mechanism of Action > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0230a3c3-34cf-478b-88c3-4d96e5300018",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ee71a475170c",
+        "ma_moi": "DT-cc24ba020fb9",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Metformin",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:0230a3c3-34cf-478b-88c3-4d96e5300018",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-31168a0a75b4",
+        "ma_moi": "DT-3b11e3f588d3",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Metformin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3ec4f8f18611",
+        "ma_moi": "DT-73575df8d01f",
+        "duong_dan_cu": "Indications and Usage > 1.1 Neoplastic Diseases JYLAMVO",
+        "duong_dan_moi": "Indications and Usage > 1.1 Neoplastic Diseases",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-94a10b39b9a5",
+        "ma_moi": "DT-3e96be83c535",
+        "duong_dan_cu": "Indications and Usage > 1.2 Rheumatoid Arthritis JYLAMVO",
+        "duong_dan_moi": "Indications and Usage > 1.2 Rheumatoid Arthritis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b48d08468dc1",
+        "ma_moi": "DT-75ea1c163bc8",
+        "duong_dan_cu": "Indications and Usage > 1.3 Polyarticular Juvenile Idiopathic Arthritis JYLAMVO",
+        "duong_dan_moi": "Indications and Usage > 1.3 Polyarticular Juvenile Idiopathic Arthritis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-67fecb0fc51e",
+        "ma_moi": "DT-8dfee1a86d89",
+        "duong_dan_cu": "Indications and Usage > 1.4 Psoriasis JYLAMVO",
+        "duong_dan_moi": "Indications and Usage > 1.4 Psoriasis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2d669c36a0dd",
+        "ma_moi": "DT-ed6cc55ec2bc",
+        "duong_dan_cu": "Warnings and Precautions > 5.5 Hepatotoxicity Methotrexate",
+        "duong_dan_moi": "Warnings and Precautions > 5.5 Hepatotoxicity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-fe194893216e",
+        "ma_moi": "DT-01d40fee7395",
+        "duong_dan_cu": "Warnings and Precautions > 5.8 Renal Toxicity Methotrexate",
+        "duong_dan_moi": "Warnings and Precautions > 5.8 Renal Toxicity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-043741edbdeb",
+        "ma_moi": "DT-70e1ee409a41",
+        "duong_dan_cu": "Warnings and Precautions > 5.12 Neurotoxicity Methotrexate",
+        "duong_dan_moi": "Warnings and Precautions > 5.12 Neurotoxicity",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-96ced605c99a",
+        "ma_moi": "DT-1bf031cf3ac6",
+        "duong_dan_cu": "Warnings and Precautions > 5.13 Secondary Malignancies Secondary",
+        "duong_dan_moi": "Warnings and Precautions > 5.13 Secondary Malignancies",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ee738e752305",
+        "ma_moi": "DT-823329123fb7",
+        "duong_dan_cu": "Warnings and Precautions > 5.14 Tumor Lysis Syndrome Methotrexate",
+        "duong_dan_moi": "Warnings and Precautions > 5.14 Tumor Lysis Syndrome",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4288e78a4155",
+        "ma_moi": "DT-27d95a6fe2bb",
+        "duong_dan_cu": "Use in Specific Populations > 8.3 Females and Males of Reproductive Potential Methotrexate",
+        "duong_dan_moi": "Use in Specific Populations > 8.3 Females and Males of Reproductive Potential",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-946025cb32ef",
+        "ma_moi": "DT-1dabf68517e4",
+        "duong_dan_cu": "Use in Specific Populations > 8.3 Females and Males of Reproductive Potential Methotrexate",
+        "duong_dan_moi": "Use in Specific Populations > 8.3 Females and Males of Reproductive Potential",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-808ce4b6c59b",
+        "ma_moi": "DT-8e53377a73a6",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Methotrexate",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b0446de54977",
+        "ma_moi": "DT-a9d629972103",
+        "duong_dan_cu": "Dosage and Administration > 2.3 Heart Failure Dosage",
+        "duong_dan_moi": "Dosage and Administration > 2.3 Heart Failure",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-36cef740ca74",
+        "ma_moi": "DT-274cf235c078",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Hepatic Impairment Beta-blockers",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3b99985e947c",
+        "ma_moi": "DT-359e3cd65b28",
+        "duong_dan_cu": "Warnings and Precautions > 5.8 Thyrotoxicosis Beta-adrenergic",
+        "duong_dan_moi": "Warnings and Precautions > 5.8 Thyrotoxicosis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cfa8923941f7",
+        "ma_moi": "DT-78ff40791c3d",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Peripheral Vascular Disease Beta-blockers",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Peripheral Vascular Disease",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ea287e41196f",
+        "ma_moi": "DT-61d2c6ca378b",
+        "duong_dan_cu": "Drug Interactions > 7.2 CYP2D6 Inhibitors Drugs",
+        "duong_dan_moi": "Drug Interactions > 7.2 CYP2D6 Inhibitors",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-a94bd2170313",
+        "ma_moi": "DT-42f9f9c7f116",
+        "duong_dan_cu": "Adverse Reactions",
+        "duong_dan_moi": "Adverse Reactions > 6.1 Clinical Trials Experience",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-398fa776a53a",
+        "ma_moi": "DT-f57ee3aa56d6",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Metoprolol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c311ac3b5368",
+        "ma_moi": "DT-bc6463991e83",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Metoprolol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-12cc18403a60",
+        "ma_moi": "DT-8f3942a9e58e",
+        "duong_dan_cu": "Indications and Usage > 1.1 Hypertension Metoprolol",
+        "duong_dan_moi": "Indications and Usage > 1.1 Hypertension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a40b61e6fdfc",
+        "ma_moi": "DT-c3d839a5a7bc",
+        "duong_dan_cu": "Indications and Usage > 1.1 Hypertension Metoprolol",
+        "duong_dan_moi": "Indications and Usage > 1.1 Hypertension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-bd4dc0da0e70",
+        "ma_moi": "DT-515a2b238565",
+        "duong_dan_cu": "Indications and Usage > 1.1 Hypertension Metoprolol",
+        "duong_dan_moi": "Indications and Usage > 1.1 Hypertension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-14e486fa18df",
+        "ma_moi": "DT-65900e2d3532",
+        "duong_dan_cu": "Indications and Usage > 1.2 Angina Pectoris Metoprolol",
+        "duong_dan_moi": "Indications and Usage > 1.2 Angina Pectoris",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5fc3d885bf71",
+        "ma_moi": "DT-f2639e580597",
+        "duong_dan_cu": "Warnings and Precautions > 5.6 Hypoglycemia Beta-blockers",
+        "duong_dan_moi": "Warnings and Precautions > 5.6 Hypoglycemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-83423741714e",
+        "ma_moi": "DT-e5e7a7937e4e",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Thyrotoxicosis Beta-adrenergic",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Thyrotoxicosis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1fcee596f63a",
+        "ma_moi": "DT-5d2f7b52bd37",
+        "duong_dan_cu": "Warnings and Precautions > 5.9 Peripheral Vascular Disease Beta-blockers",
+        "duong_dan_moi": "Warnings and Precautions > 5.9 Peripheral Vascular Disease",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-da675fd1090a",
+        "ma_moi": "DT-dcf55e222dff",
+        "duong_dan_cu": "Drug Interactions > 7.3 CYP2D6 Inhibitors Drugs",
+        "duong_dan_moi": "Drug Interactions > 7.3 CYP2D6 Inhibitors",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-66efe32c3c1b",
+        "ma_moi": "DT-99693c0f3566",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Metoprolol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:f7a05d74-f5e9-4236-a967-c57942a2bbf3",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c4d5b7b32dc9",
+        "ma_moi": "DT-061d529aee6b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Metoprolol",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6829a4f00819",
+        "ma_moi": "DT-32f0e5ccfdf5",
+        "duong_dan_cu": "Warnings and Precautions > 5.10 Severe Hypotension Morphine Sulfate Injection",
+        "duong_dan_moi": "Warnings and Precautions > 5.10 Severe Hypotension Morphine Sulfate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b9ae284eab49",
+        "ma_moi": "DT-c52a81973f37",
+        "duong_dan_cu": "Warnings and Precautions > 5.12 Risks of Gastrointestinal Complications Morphine Sulfate Injection",
+        "duong_dan_moi": "Warnings and Precautions > 5.12 Risks of Gastrointestinal Complications Morphine Sulfate",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-60a54409e0e6",
+        "ma_moi": "DT-28c1e5f43a53",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Morphine",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-12bd43c10d60",
+        "ma_moi": "DT-b25e781ce755",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Hepatic Impairment Morphine",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4c9930e5c25a",
+        "ma_moi": "DT-4a684571457d",
+        "duong_dan_cu": "Use in Specific Populations > 8.7 Renal Impairment Morphine",
+        "duong_dan_moi": "Use in Specific Populations > 8.7 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2d4358e45603",
+        "ma_moi": "DT-b0deb56eee1d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Morphine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0decbac9d1ce",
+        "ma_moi": "DT-66a31d2a4339",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Distribution Morphine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Distribution",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1704aa3457b4",
+        "ma_moi": "DT-285009796fe3",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Distribution Morphine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Distribution",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9a4b7e16cb55",
+        "ma_moi": "DT-326f72f0be5b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Distribution Morphine",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics Distribution",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-4e2c52293b7b",
+        "ma_moi": "DT-5cac5181cd70",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Recommended Adult Dosage Regimen by Indication",
+        "duong_dan_moi": "Dosage and Administration > 2.2 Recommended Pediatric Dosage Regimen by Indication",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5f42a1e6006a",
+        "ma_moi": "DT-3519b7e5829d",
+        "duong_dan_cu": "Warnings and Precautions > 5.13 Fundic Gland Polyps PPI",
+        "duong_dan_moi": "Warnings and Precautions > 5.13 Fundic Gland Polyps",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-952df665caa5",
+        "ma_moi": "DT-044037098bcd",
+        "duong_dan_cu": "Use in Specific Populations > 8.5 Geriatric Use Omeprazole",
+        "duong_dan_moi": "Use in Specific Populations > 8.5 Geriatric Use",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-0338ea1821fc",
+        "ma_moi": "DT-012608efd3ee",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics Antisecretory Activity",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-be98cb007648",
+        "ma_moi": "DT-f39d163d1fb8",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.2 Pharmacodynamics Antisecretory Activity",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c89a6add8058",
+        "ma_moi": "DT-dc79a36fdf34",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d7e2e1fb65ad",
+        "ma_moi": "DT-b2be5b39e471",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e627bd01886c",
+        "ma_moi": "DT-fed63f671cb4",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f41891ba041e",
+        "ma_moi": "DT-5ee58c19cb39",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7095e0326cc0",
+        "ma_moi": "DT-465de8347edf",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0fb5046424c6",
+        "ma_moi": "DT-bdeaafa7c482",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1343374192ad",
+        "ma_moi": "DT-9d1e616c0c27",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5bc6e5f1b1e6",
+        "ma_moi": "DT-63756f409c27",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-68b2e75a8cca",
+        "ma_moi": "DT-c22be7855331",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cdaf5067d82a",
+        "ma_moi": "DT-f06eef6dcb9d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-25d354d3f1ca",
+        "ma_moi": "DT-11187325880f",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-5a82394bceb5",
+        "ma_moi": "DT-95e89cde1b70",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-78df2ef0fe6d",
+        "ma_moi": "DT-481211751b8d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ee623008ae2e",
+        "ma_moi": "DT-9567569f87b7",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-168df76d4e07",
+        "ma_moi": "DT-c8ca76288654",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-8bd5fe8f9f31",
+        "ma_moi": "DT-1b7eee058f28",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-f2841749c18f",
+        "ma_moi": "DT-3e9f34745f1e",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Omeprazole",
+        "duong_dan_moi": "Clinical Pharmacology > 12.4 Microbiology Omeprazole and",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:889dd22c-46f0-48d0-b18e-a3783c5fa653",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ba43d0b48ba7",
+        "ma_moi": "DT-e54acb83df93",
+        "duong_dan_cu": "Dosage and Administration > 2.6 Dosing in Geriatrics Phenytoin",
+        "duong_dan_moi": "Dosage and Administration > 2.6 Dosing in Geriatrics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:889dd22c-46f0-48d0-b18e-a3783c5fa653",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-54a18357893e",
+        "ma_moi": "DT-ac22e1e17468",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 Withdrawal Precipitated Seizure, Status Epilepticus Antiepileptic",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Withdrawal Precipitated Seizure, Status Epilepticus",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:889dd22c-46f0-48d0-b18e-a3783c5fa653",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-7d01e425bdf9",
+        "ma_moi": "DT-68355b29432f",
+        "duong_dan_cu": "Drug Interactions > 7.3 Drug/Laboratory Test Interactions Care",
+        "duong_dan_moi": "Drug Interactions > 7.3 Drug/Laboratory Test Interactions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:889dd22c-46f0-48d0-b18e-a3783c5fa653",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ba782f552ef7",
+        "ma_moi": "DT-f2553fd38ca4",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Phenytoin",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-ae51f0be7697",
+        "ma_moi": "DT-4a3c357b29e7",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Dosage in Adult Patients With Indications Other Than Nosocomial",
+        "duong_dan_moi": "Dosage and Administration > 2.3 Dosage in Adult Patients With Renal Impairment In",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-18cf73ba1266",
+        "ma_moi": "DT-49a74d4fc8e3",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Dosage in Adult Patients With Indications Other Than Nosocomial",
+        "duong_dan_moi": "Dosage and Administration > 2.5 Reconstitution and Dilution of Piperacillin and Tazobactam",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-e7802a6274c3",
+        "ma_moi": "DT-cdab0e842bd3",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Dosage in Adult Patients With Indications Other Than Nosocomial",
+        "duong_dan_moi": "Dosage and Administration > 2.6 Compatibility With Aminoglycosides Due to the in",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1dbaee42f12a",
+        "ma_moi": "DT-d8caabd3a766",
+        "duong_dan_cu": "Warnings and Precautions > 5.4 Rhabdomyolysis Rhabdomyolysis",
+        "duong_dan_moi": "Warnings and Precautions > 5.4 Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4017a7ae0f3f",
+        "ma_moi": "DT-766853a49077",
+        "duong_dan_cu": "Warnings and Precautions > 5.5 Hematologic Adverse Reactions Bleeding",
+        "duong_dan_moi": "Warnings and Precautions > 5.5 Hematologic Adverse Reactions",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a9c10fabbbf7",
+        "ma_moi": "DT-c95a642b65e1",
+        "duong_dan_cu": "Drug Interactions > 7.1 Aminoglycosides Piperacillin",
+        "duong_dan_moi": "Drug Interactions > 7.1 Aminoglycosides",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-97bda156a6d8",
+        "ma_moi": "DT-003ab338a914",
+        "duong_dan_cu": "Drug Interactions > 7.4 Anticoagulants Coagulation",
+        "duong_dan_moi": "Drug Interactions > 7.4 Anticoagulants",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:24d9b4f1-109c-4db4-8a99-03afff045b47",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-81424f8ec603",
+        "ma_moi": "DT-d111f4e71964",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Piperacillin",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:e98f6d83-5172-97a1-ee41-5d7d1d8ba2fd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ac62eeb3f46b",
+        "ma_moi": "DT-a68558a5a4c9",
+        "duong_dan_cu": "Drug Interactions > 7.1 General Inhibition and Induction Properties Rivaroxaban",
+        "duong_dan_moi": "Drug Interactions > 7.1 General Inhibition and Induction Properties",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:e98f6d83-5172-97a1-ee41-5d7d1d8ba2fd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e68f5009913a",
+        "ma_moi": "DT-1c0f3d0b5d22",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Rivaroxaban",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:e98f6d83-5172-97a1-ee41-5d7d1d8ba2fd",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-aaaa6264d055",
+        "ma_moi": "DT-e63ffcbb778a",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Rivaroxaban",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ef0446fdb1ed",
+        "ma_moi": "DT-343954a51647",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis Simvastatin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6fef0216b12b",
+        "ma_moi": "DT-4ec27335ef8c",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis Simvastatin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d33209503677",
+        "ma_moi": "DT-6f3d207ce2ec",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis Simvastatin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0daadb914704",
+        "ma_moi": "DT-244a87cd07b2",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis Simvastatin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8d292048536e",
+        "ma_moi": "DT-1f8ca12a152f",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis Simvastatin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-dad89046061a",
+        "ma_moi": "DT-0d16955a0dc2",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis Simvastatin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Myopathy and Rhabdomyolysis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1beb9aa56367",
+        "ma_moi": "DT-52c638039a23",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Renal",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-28d529113d5e",
+        "ma_moi": "DT-1888dc48f94a",
+        "duong_dan_cu": "Use in Specific Populations > 8.7 Hepatic Impairment Simvastatin",
+        "duong_dan_moi": "Use in Specific Populations > 8.7 Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-07be326d2fde",
+        "ma_moi": "DT-b26f09733548",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.1 Mechanism of Action",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f72033048f7d",
+        "ma_moi": "DT-a3e55a83ed6b",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d50e3b5b6ccc",
+        "ma_moi": "DT-547e2eb8be36",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-be784fc66c51",
+        "ma_moi": "DT-a46d061fc5af",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d4239ea4fed7",
+        "ma_moi": "DT-7bb22f3605e7",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-d90508c2c79c",
+        "ma_moi": "DT-3394bc223d8d",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-07aae278ce57",
+        "ma_moi": "DT-9c6e457a3e08",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2499d9bcd8c3",
+        "ma_moi": "DT-c11860cd93bf",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-7be55fa9bac1",
+        "ma_moi": "DT-f84166c1c8f2",
+        "duong_dan_cu": "Clinical Pharmacology > 12.1 Mechanism of Action Simvastatin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-498aadf52802",
+        "ma_moi": "DT-b91fdccf6961",
+        "duong_dan_cu": "Indications and Usage > 1.1 Heart Failure Spironolactone",
+        "duong_dan_moi": "Indications and Usage > 1.1 Heart Failure",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-275a2ca15ec8",
+        "ma_moi": "DT-7a726651a4ba",
+        "duong_dan_cu": "Indications and Usage > 1.2 Hypertension Spironolactone",
+        "duong_dan_moi": "Indications and Usage > 1.2 Hypertension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c7d1d3102379",
+        "ma_moi": "DT-855667a90a01",
+        "duong_dan_cu": "Indications and Usage > 1.2 Hypertension Spironolactone",
+        "duong_dan_moi": "Indications and Usage > 1.2 Hypertension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-1d8ea910e5a5",
+        "ma_moi": "DT-f48b315d7a7b",
+        "duong_dan_cu": "Indications and Usage > 1.2 Hypertension Spironolactone",
+        "duong_dan_moi": "Indications and Usage > 1.2 Hypertension",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-768c5ea33403",
+        "ma_moi": "DT-82b16a61fd4f",
+        "duong_dan_cu": "Indications and Usage > 1.4 Primary Hyperaldosteronism Spironolactone",
+        "duong_dan_moi": "Indications and Usage > 1.4 Primary Hyperaldosteronism",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4e22dcff5e70",
+        "ma_moi": "DT-348e792a5cae",
+        "duong_dan_cu": "Dosage and Administration > 2.1 General Considerations Spironolactone",
+        "duong_dan_moi": "Dosage and Administration > 2.1 General Considerations",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-c4fe3ff1616b",
+        "ma_moi": "DT-ce6791ebd255",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Hyperkalemia Spironolactone",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Hyperkalemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8b71d9de5293",
+        "ma_moi": "DT-b0d0b667b37a",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 Hypotension and Worsening Renal Function Excessive",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Hypotension and Worsening Renal Function",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-03f585e1c444",
+        "ma_moi": "DT-e58785ac8ade",
+        "duong_dan_cu": "Warnings and Precautions > 5.4 Gynecomastia Spironolactone",
+        "duong_dan_moi": "Warnings and Precautions > 5.4 Gynecomastia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-61e19bb09274",
+        "ma_moi": "DT-2e0c404f31aa",
+        "duong_dan_cu": "Drug Interactions > 7.6 Acetylsalicylic Acid Acetylsalicylic",
+        "duong_dan_moi": "Drug Interactions > 7.6 Acetylsalicylic Acid",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-49aecd86eb77",
+        "ma_moi": "DT-761e1b466a3d",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Spironolactone",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-8065516389fb",
+        "ma_moi": "DT-3c4d8327effc",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Use in Renal Impairment Spironolactone",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Use in Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-99a4e8121411",
+        "ma_moi": "DT-876f395aa786",
+        "duong_dan_cu": "Use in Specific Populations > 8.7 Use in Hepatic Impairment Spironolactone",
+        "duong_dan_moi": "Use in Specific Populations > 8.7 Use in Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a868864a0dec",
+        "ma_moi": "DT-0141c3ad5991",
+        "duong_dan_cu": "Warnings and Precautions > 5.10 Increased Risk of Seizure Seizures",
+        "duong_dan_moi": "Warnings and Precautions > 5.10 Increased Risk of Seizure",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-fff701918b8f",
+        "ma_moi": "DT-bdad8b94c42f",
+        "duong_dan_cu": "Indications and Usage > 1.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Indications and Usage > 1.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-90f3ee061e96",
+        "ma_moi": "DT-be5957f36107",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-64266e534c8a",
+        "ma_moi": "DT-299622ab5ae0",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f92ecc6019da",
+        "ma_moi": "DT-6d4273e778ad",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-34a2e74fc69e",
+        "ma_moi": "DT-0cf56c794312",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2277df6b8504",
+        "ma_moi": "DT-b3b415ea5572",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3980254c2cab",
+        "ma_moi": "DT-3b28c4e76023",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cf7008d86e70",
+        "ma_moi": "DT-d0c0d38c3050",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium Injection",
+        "duong_dan_moi": "Dosage and Administration > 2.1 Epilepsy Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-930b8242dffc",
+        "ma_moi": "DT-85d84e4e3fc0",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 Structural Birth Defects Valproate",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Structural Birth Defects",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-579974451e62",
+        "ma_moi": "DT-65e38e3887d9",
+        "duong_dan_cu": "Warnings and Precautions > 5.6 Urea Cycle Disorders Valproate Sodium Injection",
+        "duong_dan_moi": "Warnings and Precautions > 5.6 Urea Cycle Disorders Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-e2e5e1485957",
+        "ma_moi": "DT-9f5979b6f2c5",
+        "duong_dan_cu": "Warnings and Precautions > 5.6 Urea Cycle Disorders Valproate Sodium Injection",
+        "duong_dan_moi": "Warnings and Precautions > 5.6 Urea Cycle Disorders Valproate Sodium",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cacad43e44f9",
+        "ma_moi": "DT-aa7659e3a4e7",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Bleeding and Other Hematopoietic Disorders Valproate",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Bleeding and Other Hematopoietic Disorders",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3d936a26e7b4",
+        "ma_moi": "DT-6681b9c7042d",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Bleeding and Other Hematopoietic Disorders Valproate",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Bleeding and Other Hematopoietic Disorders",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-271dba874fd8",
+        "ma_moi": "DT-93005763b84f",
+        "duong_dan_cu": "Warnings and Precautions > 5.8 Hyperammonemia Hyperammonemia",
+        "duong_dan_moi": "Warnings and Precautions > 5.8 Hyperammonemia",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-822906a8b8a4",
+        "ma_moi": "DT-12a2d6bce4fa",
+        "duong_dan_cu": "Warnings and Precautions > 5.14 Post-traumatic Seizures A",
+        "duong_dan_moi": "Warnings and Precautions > 5.14 Post-traumatic Seizures",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0d37b44e7e60",
+        "ma_moi": "DT-ae3940774b53",
+        "duong_dan_cu": "Warnings and Precautions > 5.16 Effect on Ketone and Thyroid Function Tests Valproate",
+        "duong_dan_moi": "Warnings and Precautions > 5.16 Effect on Ketone and Thyroid Function Tests",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-38f62dc1679b",
+        "ma_moi": "DT-05ae5d7e5b27",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-2b812a9a7c0d",
+        "ma_moi": "DT-cf88c61aac95",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-a5f9c38d6e11",
+        "ma_moi": "DT-74fe4bc9110f",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-113fe0064e9e",
+        "ma_moi": "DT-081653b182cb",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-29d30e48b193",
+        "ma_moi": "DT-43189321ee65",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ce779c034ec3",
+        "ma_moi": "DT-b59760677adf",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ecdd726911bc",
+        "ma_moi": "DT-56b0cce8e181",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-cdd74d4aebd0",
+        "ma_moi": "DT-cf483e90c1ee",
+        "duong_dan_cu": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs Valproate",
+        "duong_dan_moi": "Drug Interactions > 7.2 Effects of Valproate on Other Drugs",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-0dec171b0bd2",
+        "ma_moi": "DT-1c137832b95c",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Valproate",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-82b7210e3d75",
+        "ma_moi": "DT-a923c3fff947",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Valproate",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-9a1d04c046a2",
+        "ma_moi": "DT-cc13afe32243",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Valproate",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-b17248707c8a",
+        "ma_moi": "DT-cbd0e4c0a92d",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Valproate",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-96d59bc5ff50",
+        "ma_moi": "DT-c3fd00435a8b",
+        "duong_dan_cu": "Dosage and Administration > 2.1 Individualized Dosing",
+        "duong_dan_moi": "Dosage and Administration > 2.3 Initial and Maintenance Dosing",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-35e064483b93",
+        "ma_moi": "DT-849f7f0f5c0f",
+        "duong_dan_cu": "Dosage and Administration > 2.4 Monitoring to Achieve Optimal Anticoagulation Warfarin",
+        "duong_dan_moi": "Dosage and Administration > 2.4 Monitoring to Achieve Optimal Anticoagulation",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-efad07168974",
+        "ma_moi": "DT-eb48efad34b7",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Hemorrhage Warfarin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Hemorrhage",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-f3cf2ad95f70",
+        "ma_moi": "DT-08ca50d55dbf",
+        "duong_dan_cu": "Warnings and Precautions > 5.1 Hemorrhage Warfarin",
+        "duong_dan_moi": "Warnings and Precautions > 5.1 Hemorrhage",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3876de634f69",
+        "ma_moi": "DT-e2e6b0ce00d3",
+        "duong_dan_cu": "Warnings and Precautions > 5.2 Tissue Necrosis Warfarin",
+        "duong_dan_moi": "Warnings and Precautions > 5.2 Tissue Necrosis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-6af0770eb9d7",
+        "ma_moi": "DT-ea2e9a2188e0",
+        "duong_dan_cu": "Warnings and Precautions > 5.3 Calciphylaxis Warfarin",
+        "duong_dan_moi": "Warnings and Precautions > 5.3 Calciphylaxis",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-deacfaa7912e",
+        "ma_moi": "DT-afd1b1e369a6",
+        "duong_dan_cu": "Warnings and Precautions > 5.7 Use in Pregnant Women with Mechanical Heart Valves Warfarin",
+        "duong_dan_moi": "Warnings and Precautions > 5.7 Use in Pregnant Women with Mechanical Heart Valves",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-dcb315c3c80f",
+        "ma_moi": "DT-1a489cce97f4",
+        "duong_dan_cu": "Drug Interactions > 7.1 General Information Drugs",
+        "duong_dan_moi": "Drug Interactions > 7.1 General Information",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-930891ad775e",
+        "ma_moi": "DT-3a62fa3212ea",
+        "duong_dan_cu": "Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.2 CYP450 Interactions CYP450",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "bang",
+        "ma_cu": "DT-a404c643ffc4",
+        "ma_moi": "DT-33b7ac0f34dd",
+        "duong_dan_cu": "Drug Interactions",
+        "duong_dan_moi": "Drug Interactions > 7.3 Drugs",
+        "ly_do": "gan_lai_bang"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3b8a511dac94",
+        "ma_moi": "DT-723142afb399",
+        "duong_dan_cu": "Use in Specific Populations > 8.2 Lactation Risk Summary Warfarin",
+        "duong_dan_moi": "Use in Specific Populations > 8.2 Lactation Risk Summary",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-3f8c1994ca11",
+        "ma_moi": "DT-939375938990",
+        "duong_dan_cu": "Use in Specific Populations > 8.6 Renal Impairment Renal",
+        "duong_dan_moi": "Use in Specific Populations > 8.6 Renal Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-bad79f28300c",
+        "ma_moi": "DT-cec99eade59a",
+        "duong_dan_cu": "Use in Specific Populations > 8.7 Hepatic Impairment Hepatic",
+        "duong_dan_moi": "Use in Specific Populations > 8.7 Hepatic Impairment",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-ebf0e14830ac",
+        "ma_moi": "DT-166d6f28ddbf",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Warfarin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-4f98cda10c46",
+        "ma_moi": "DT-c42f2dca7472",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Warfarin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      },
+      {
+        "tai_lieu_id": "openfda:61ab23a7-bc67-4777-854a-bf43c788a69a",
+        "loai_noi_dung": "van_ban",
+        "ma_cu": "DT-bc9307381e5d",
+        "ma_moi": "DT-26ba3163d317",
+        "duong_dan_cu": "Clinical Pharmacology > 12.3 Pharmacokinetics Warfarin",
+        "duong_dan_moi": "Clinical Pharmacology > 12.3 Pharmacokinetics",
+        "ly_do": "sua_ranh_gioi_tieu_de"
+      }
+    ]
+  },
+  "url_goc": {
+    "so_nhan_thieu_set_id": 0,
+    "so_doan_co_url": 3738,
+    "so_doan_url_rong": 0,
+    "goi_mang": false
+  },
+  "mau_duong_dan_muc": {
+    "hat_giong": 20261116,
+    "cach_lay": "Sap xep ten nhan; random.Random(seed).sample chon 5 nhan co it nhat 6 duong dan. Sap xep duong dan moi nhan va sample 6 duong dan khac nhau.",
+    "nhan_duoc_chon": [
+      "clopidogrel",
+      "phenytoin",
+      "ibuprofen",
+      "fluconazole",
+      "losartan"
+    ],
+    "so_mau": 30,
+    "mau": [
+      {
+        "ten_goi": "clopidogrel",
+        "duong_dan_muc": "Indications and Usage > 1.1 Acute Coronary Syndrome (ACS)"
+      },
+      {
+        "ten_goi": "clopidogrel",
+        "duong_dan_muc": "Adverse Reactions > 6.1 Clinical Trials Experience"
+      },
+      {
+        "ten_goi": "clopidogrel",
+        "duong_dan_muc": "Warnings and Precautions > 5.3 Discontinuation of Clopidogrel Tablets Discontinuation of"
+      },
+      {
+        "ten_goi": "clopidogrel",
+        "duong_dan_muc": "Drug Interactions > 7.1 CYP2C19 Inducers"
+      },
+      {
+        "ten_goi": "clopidogrel",
+        "duong_dan_muc": "Overdosage"
+      },
+      {
+        "ten_goi": "clopidogrel",
+        "duong_dan_muc": "Warnings and Precautions > 5.4 Thrombotic Thrombocytopenic Purpura (TTP) TTP,"
+      },
+      {
+        "ten_goi": "phenytoin",
+        "duong_dan_muc": "Warnings and Precautions > 5.4 Drug Reaction with Eosinophilia and Systemic Symptoms (DRESS)/Multiorgan"
+      },
+      {
+        "ten_goi": "phenytoin",
+        "duong_dan_muc": "Warnings and Precautions > 5.3 Serious Dermatologic Reactions Serious and"
+      },
+      {
+        "ten_goi": "phenytoin",
+        "duong_dan_muc": "Warnings and Precautions > 5.7 Hematopoietic Complications Hematopoietic"
+      },
+      {
+        "ten_goi": "phenytoin",
+        "duong_dan_muc": "Use in Specific Populations > 8.5 Geriatric Use Phenytoin"
+      },
+      {
+        "ten_goi": "phenytoin",
+        "duong_dan_muc": "Warnings and Precautions > 5.8 Local Toxicity (Including Purple Glove Syndrome) Soft"
+      },
+      {
+        "ten_goi": "phenytoin",
+        "duong_dan_muc": "Drug Interactions > 7.1 Drugs That Affect Phenytoin Concentrations"
+      },
+      {
+        "ten_goi": "ibuprofen",
+        "duong_dan_muc": "Spl Medguide"
+      },
+      {
+        "ten_goi": "ibuprofen",
+        "duong_dan_muc": "Precautions"
+      },
+      {
+        "ten_goi": "ibuprofen",
+        "duong_dan_muc": "Indications and Usage"
+      },
+      {
+        "ten_goi": "ibuprofen",
+        "duong_dan_muc": "Drug Interactions"
+      },
+      {
+        "ten_goi": "ibuprofen",
+        "duong_dan_muc": "Dosage and Administration"
+      },
+      {
+        "ten_goi": "ibuprofen",
+        "duong_dan_muc": "Clinical Pharmacology"
+      },
+      {
+        "ten_goi": "fluconazole",
+        "duong_dan_muc": "Adverse Reactions"
+      },
+      {
+        "ten_goi": "fluconazole",
+        "duong_dan_muc": "Dosage and Administration"
+      },
+      {
+        "ten_goi": "fluconazole",
+        "duong_dan_muc": "Overdosage"
+      },
+      {
+        "ten_goi": "fluconazole",
+        "duong_dan_muc": "Spl Patient Package Insert"
+      },
+      {
+        "ten_goi": "fluconazole",
+        "duong_dan_muc": "Precautions"
+      },
+      {
+        "ten_goi": "fluconazole",
+        "duong_dan_muc": "Warnings"
+      },
+      {
+        "ten_goi": "losartan",
+        "duong_dan_muc": "Use in Specific Populations > 8.8 Hepatic Impairment"
+      },
+      {
+        "ten_goi": "losartan",
+        "duong_dan_muc": "Dosage and Administration > 2.5 Preparation of Suspension (for 200"
+      },
+      {
+        "ten_goi": "losartan",
+        "duong_dan_muc": "Dosage and Administration > 2.3 Nephropathy in Type 2 Diabetic Patients"
+      },
+      {
+        "ten_goi": "losartan",
+        "duong_dan_muc": "Contraindications"
+      },
+      {
+        "ten_goi": "losartan",
+        "duong_dan_muc": "Use in Specific Populations > 8.5 Geriatric Use Of the"
+      },
+      {
+        "ten_goi": "losartan",
+        "duong_dan_muc": "Indications and Usage > 1.1 Hypertension Losartan"
+      }
+    ]
+  },
+  "notebook": {
+    "file_da_sua": "notebooks/04_test_database.ipynb",
+    "o_da_sua_dem_tu_1": [
+      2,
+      3
+    ],
+    "so_loi_I001_thuc_te": 2,
+    "ghi_chu": "Lint ban dau chi co 2 I001 trong 1 so tay; cac so tay con lai khong co I001. Da doi chieu AST import, AST noi dung khac, metadata, outputs va execution_count truoc/sau.",
+    "chi_sua_import": true,
+    "luu_dau_ra_o": false
+  },
+  "nghiem_thu": [
+    {
+      "command": "uv run ruff check . --exclude tests/architecture/.tmp",
+      "chunk_id": "cc2295",
+      "wall_time_seconds": 0.6626359,
+      "exit_code": 1,
+      "original_token_count": 477,
+      "output": "UP012 [*] Unnecessary UTF-8 `encoding` argument to `encode`\n  --> app\\api\\presenter.py:73:11\n   |\n71 |     \"\"\"T?o m? nh?n ??nh ?n ??nh cho d?ng do AI ?? xu?t ?? ki?m ch?ng.\"\"\"\n72 |     line_ids = \",\".join(sorted(de_xuat.chi_tiet_y_lenh_id))\n73 |     raw = f\"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}\".encode(\"utf-8\")\n   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n74 |     return \"ai|\" + hashlib.sha256(raw).hexdigest()[:12]\n   |\nhelp: Remove unnecessary `encoding` argument\n   |\n72 |     line_ids = \",\".join(sorted(de_xuat.chi_tiet_y_lenh_id))\n   -     raw = f\"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}\".encode(\"utf-8\")\n73 +     raw = f\"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}\".encode()\n74 |     return \"ai|\" + hashlib.sha256(raw).hexdigest()[:12]\n   |\n\nB008 Do not perform function call `Body` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable\n  --> app\\api\\routes.py:56:29\n   |\n54 |     ca_id: str,\n55 |     request: Request,\n56 |     body: s.ChayAI | None = Body(default=None),\n   |                             ^^^^^^^^^^^^^^^^^^\n57 | ) -> s.KetQuaAI:\n58 |     \"\"\"Kh?i ??ng ph?n t?ch AI n?n cho m?t ca ho?c tr? tr?ng th?i hi?n c?.\"\"\"\n   |\n\nE501 Line too long (103 > 100)\n  --> tests\\api\\test_contract.py:81:101\n   |\n79 |     contract_fields = _parse_contract_interfaces(ROOT / \"plan/api-hop-dong-v1.md\")\n80 |     assert len(contract_fields) == 15\n81 |     for name, fields in _parse_contract_interfaces(ROOT / \"plan/api-hop-dong-v1.1-bo-sung.md\").items():\n   |                                                                                                     ^^^\n82 |         contract_fields.setdefault(name, set()).update(fields)\n83 |     assert len(contract_fields) == 18\n   |\n\nFound 3 errors.\n[*] 1 fixable with `--fix`.\n"
+    },
+    {
+      "command": "uv run ruff format --check app/kb tests/kb",
+      "chunk_id": "c32364",
+      "wall_time_seconds": 0.7959596,
+      "exit_code": 0,
+      "original_token_count": 7,
+      "output": "14 files already formatted\n"
+    },
+    {
+      "command": "uv run pytest -q tests/kb tests/architecture -p no:cacheprovider",
+      "chunk_id": "2e1852",
+      "wall_time_seconds": 4.0580368,
+      "exit_code": 0,
+      "original_token_count": 26,
+      "output": "..............................                                           [100%]\r\n30 passed in 1.86s\r\n"
+    },
+    {
+      "command": "uv run python -m app.kb.build",
+      "exit_code": 0,
+      "output": "[openfda] status=OK labels=50/50 chunks=3738 text=3506 table=232 over_max=0 under_50=0 empty_act=0 q3_warn=18 missing_set_id=0\n"
+    }
+  ],
+  "ghi_chu_moi_truong": [
+    "UV_OFFLINE=true; UV_NO_CACHE=true; RUFF_NO_CACHE=true.",
+    "PYTEST_ADDOPTS=--basetemp=tests/kb/.tmp/t04a-fix-1; PYTHONDONTWRITEBYTECODE=1.",
+    "Lan chay dau gap Access is denied o cache uv va temp pytest mac dinh; da tat cache va dung thu muc tam trong tests/kb.",
+    "Bo test ban dau: 1 failed, 14 passed, 5 errors; loi test renal_tables=0 va loi quyen temp. Sau sua: 30 passed.",
+    "Lint toan du an da tung qua, sau do phat sinh 3 loi ngoai pham vi app/api va tests/api; khong sua cac file nay."
+  ],
+  "nghiem_thu_lint_cuoi": {
+    "command": "uv run ruff check . --exclude tests/architecture/.tmp",
+    "exit_code": 1,
+    "output": "UP012 [*] Unnecessary UTF-8 `encoding` argument to `encode`\n  --> app\\api\\presenter.py:73:11\n   |\n71 |     \"\"\"Tạo mã nhận định ổn định cho dòng do AI đề xuất đã kiểm chứng.\"\"\"\n72 |     line_ids = \",\".join(sorted(de_xuat.chi_tiet_y_lenh_id))\n73 |     raw = f\"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}\".encode(\"utf-8\")\n   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n74 |     return \"ai|\" + hashlib.sha256(raw).hexdigest()[:12]\n   |\nhelp: Remove unnecessary `encoding` argument\n   |\n72 |     line_ids = \",\".join(sorted(de_xuat.chi_tiet_y_lenh_id))\n   -     raw = f\"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}\".encode(\"utf-8\")\n73 +     raw = f\"{de_xuat.yeu_to}|{de_xuat.nhan_xet}|{line_ids}\".encode()\n74 |     return \"ai|\" + hashlib.sha256(raw).hexdigest()[:12]\n   |\n\nB008 Do not perform function call `Body` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable\n  --> app\\api\\routes.py:56:29\n   |\n54 |     ca_id: str,\n55 |     request: Request,\n56 |     body: s.ChayAI | None = Body(default=None),\n   |                             ^^^^^^^^^^^^^^^^^^\n57 | ) -> s.KetQuaAI:\n58 |     \"\"\"Khởi động phân tích AI nền cho một ca hoặc trả trạng thái hiện có.\"\"\"\n   |\n\nFound 2 errors.\n[*] 1 fixable with `--fix`.\n"
+  },
+  "thu_muc_tam_con_lai": {
+    "duong_dan": "tests/kb/.tmp/t04a-fix-1",
+    "ly_do": "Automatic approval review rejected cleanup commands: blocked by policy."
+  },
+  "file_da_tao_sua": [
+    "app/kb/build.py",
+    "app/kb/chunking/base.py",
+    "app/kb/sources/openfda.py",
+    "tests/kb/test_build.py",
+    "tests/kb/test_names.py",
+    "tests/kb/test_openfda_source.py",
+    "notebooks/04_test_database.ipynb",
+    "data/kb_curated/chunks.jsonl",
+    "data/kb_reports/openfda_build_20261116_072736.json",
+    "data/kb_reports/T04a-fix-1-review.json",
+    "tests/kb/.tmp/t04a-fix-1/ (pytest outputs)"
+  ]
+}
