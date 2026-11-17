@@ -1,0 +1,277 @@
+# Danh mục đúng 50 nhãn hiện có; dược sĩ tự bổ sung khi chốt.
+# thanh_phan chỉ khai báo cho dạng phối hợp; đối chiếu đúng từng thành phần.
+- hoat_chat: acetaminophen
+  ma: acetaminophen
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: acyclovir
+  ma: acyclovir
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Bổ sung đúng dạng tiêm theo README; thay nhãn uống khi tìm được nhãn phù
+    hợp.
+- hoat_chat: allopurinol
+  ma: allopurinol
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: amikacin sulfate
+  ma: amikacin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: amiodarone hydrochloride
+  ma: amiodarone
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: amlodipine besylate
+  ma: amlodipine
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: amoxicillin and clavulanate potassium
+  ma: amoxicillin_and_clavulanate_potassium
+  duong_dung:
+  - ORAL
+  ghi_chu: Phối hợp đã có trong danh mục; chỉ nhận đúng các thành phần ghi rõ dưới
+    đây.
+  thanh_phan:
+  - amoxicillin
+  - clavulanate potassium
+- hoat_chat: apixaban
+  ma: apixaban
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: atorvastatin calcium
+  ma: atorvastatin
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: cefepime
+  ma: cefepime
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: ceftriaxone
+  ma: ceftriaxone
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: ciprofloxacin
+  ma: ciprofloxacin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Bổ sung đúng dạng tiêm theo README; thay nhãn uống khi tìm được nhãn phù
+    hợp.
+- hoat_chat: clarithromycin
+  ma: clarithromycin
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: clopidogrel bisulfate
+  ma: clopidogrel
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: colistimethate sodium
+  ma: colistimethate
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: dabigatran etexilate
+  ma: dabigatran
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: digoxin
+  ma: digoxin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: enalapril maleate
+  ma: enalapril
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: enoxaparin sodium
+  ma: enoxaparin
+  duong_dung:
+  - SUBCUTANEOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: esomeprazole magnesium
+  ma: esomeprazole
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: fentanyl citrate
+  ma: fentanyl
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: fluconazole
+  ma: fluconazole
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Bổ sung đúng dạng tiêm theo README; thay nhãn uống khi tìm được nhãn phù
+    hợp.
+- hoat_chat: furosemide
+  ma: furosemide
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: gentamicin sulfate
+  ma: gentamicin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: heparin sodium
+  ma: heparin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: ibuprofen
+  ma: ibuprofen
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: imipenem and cilastatin
+  ma: imipenem_and_cilastatin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Phối hợp đã có trong danh mục; chỉ nhận đúng các thành phần ghi rõ dưới
+    đây.
+  thanh_phan:
+  - imipenem anhydrous
+  - cilastatin sodium
+- hoat_chat: insulin glargine
+  ma: insulin_glargine
+  duong_dung:
+  - SUBCUTANEOUS
+  ghi_chu: Truy vấn đúng tên insulin glargine, không dùng tên có hậu tố của bản tương
+    tự sinh học.
+- hoat_chat: ketorolac tromethamine
+  ma: ketorolac
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Bổ sung đúng dạng tiêm theo README; thay nhãn uống khi tìm được nhãn phù
+    hợp.
+- hoat_chat: levetiracetam
+  ma: levetiracetam
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: levofloxacin
+  ma: levofloxacin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Bổ sung đúng dạng tiêm theo README; thay nhãn uống khi tìm được nhãn phù
+    hợp.
+- hoat_chat: linezolid
+  ma: linezolid
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: losartan potassium
+  ma: losartan
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: meropenem
+  ma: meropenem
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: metformin hydrochloride
+  ma: metformin
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: methotrexate
+  ma: methotrexate
+  duong_dung:
+  - ORAL
+  ghi_chu: README chỉ xác định nhãn hiện tại là dung dịch uống, chưa xác định đường
+    dùng cần thay; giữ ORAL, cần dược sĩ chốt.
+- hoat_chat: metoprolol succinate
+  ma: metoprolol_succinate
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ ORAL của dạng succinate; yêu cầu bổ sung nhãn tiêm áp dụng mục metoprolol_tartrate,
+    không suy ra succinate có dạng tiêm.
+- hoat_chat: metoprolol tartrate
+  ma: metoprolol_tartrate
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Bổ sung đúng dạng tiêm theo README; thay nhãn uống khi tìm được nhãn phù
+    hợp.
+- hoat_chat: morphine sulfate
+  ma: morphine
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: omeprazole
+  ma: omeprazole
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: phenytoin sodium
+  ma: phenytoin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: piperacillin and tazobactam
+  ma: piperacillin_and_tazobactam
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Phối hợp đã có trong danh mục; chỉ nhận đúng các thành phần ghi rõ dưới
+    đây.
+  thanh_phan:
+  - piperacillin sodium
+  - tazobactam sodium
+- hoat_chat: rivaroxaban
+  ma: rivaroxaban
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: simvastatin
+  ma: simvastatin
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: spironolactone
+  ma: spironolactone
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: sulfamethoxazole and trimethoprim
+  ma: sulfamethoxazole_and_trimethoprim
+  duong_dung:
+  - ORAL
+  ghi_chu: Phối hợp đã có trong danh mục; chỉ nhận đúng các thành phần ghi rõ dưới
+    đây.
+  thanh_phan:
+  - sulfamethoxazole
+  - trimethoprim
+- hoat_chat: tramadol hydrochloride
+  ma: tramadol
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: valproate sodium
+  ma: valproate
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: vancomycin hydrochloride
+  ma: vancomycin
+  duong_dung:
+  - INTRAVENOUS
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.
+- hoat_chat: warfarin sodium
+  ma: warfarin
+  duong_dung:
+  - ORAL
+  ghi_chu: Giữ đường dùng đã có trong nguồn; danh mục chờ dược sĩ chốt.

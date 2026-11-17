@@ -1,0 +1,232 @@
+{
+  "thoi_gian_utc": "2026-11-17T03:01:55Z",
+  "tong_nhan_manifest": 50,
+  "so_nhan_da_xu_ly": 50,
+  "so_nhan_thieu_set_id": 0,
+  "tong_doan": 3730,
+  "so_doan_van_ban": 3483,
+  "so_doan_bang": 247,
+  "ty_le_trong_max_chars": 1.0,
+  "do_dai_trung_binh": 877.1,
+  "do_dai_trung_vi": 994.0,
+  "do_dai_nho_nhat": 64,
+  "do_dai_lon_nhat": 1985,
+  "so_doan_vuot_max_chars": 0,
+  "so_doan_duoi_50_ky_tu": 0,
+  "so_doan_hoat_chat_rong": 0,
+  "so_doan_trung_id": 0,
+  "phan_bo_theo_muc": {
+    "canh_bao": 819,
+    "chi_dinh": 195,
+    "chong_chi_dinh": 65,
+    "duoc_ly": 599,
+    "khac": 362,
+    "lieu": 404,
+    "lieu_gan": 25,
+    "lieu_than": 81,
+    "nhi_cao_tuoi": 113,
+    "qua_lieu": 73,
+    "tac_dung_phu": 481,
+    "thai_ky_cho_bu": 237,
+    "tuong_tac": 276
+  },
+  "nhan_thieu_muc_quan_trong": {
+    "amikacin": [
+      "tuong_tac"
+    ],
+    "ceftriaxone": [
+      "tuong_tac"
+    ],
+    "gentamicin": [
+      "tuong_tac"
+    ],
+    "levetiracetam": [
+      "tuong_tac"
+    ]
+  },
+  "nhan_co_canh_bao": {
+    "acetaminophen": [
+      "dosage_forms_and_strengths"
+    ],
+    "allopurinol": [
+      "dosage_forms_and_strengths"
+    ],
+    "amiodarone": [
+      "dosage_forms_and_strengths"
+    ],
+    "amlodipine": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert"
+    ],
+    "amoxicillin_and_clavulanate_potassium": [
+      "dosage_forms_and_strengths"
+    ],
+    "apixaban": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ],
+    "atorvastatin": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert"
+    ],
+    "cefepime": [
+      "dosage_forms_and_strengths"
+    ],
+    "ciprofloxacin": [
+      "dosage_forms_and_strengths",
+      "animal_pharmacology_and_or_toxicology",
+      "spl_medguide"
+    ],
+    "clarithromycin": [
+      "dosage_forms_and_strengths",
+      "animal_pharmacology_and_or_toxicology"
+    ],
+    "clopidogrel": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ],
+    "dabigatran": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ],
+    "digoxin": [
+      "dosage_forms_and_strengths"
+    ],
+    "enoxaparin": [
+      "dosage_forms_and_strengths",
+      "instructions_for_use"
+    ],
+    "esomeprazole": [
+      "dosage_forms_and_strengths",
+      "animal_pharmacology_and_or_toxicology",
+      "spl_medguide"
+    ],
+    "fentanyl": [
+      "dosage_forms_and_strengths",
+      "drug_abuse_and_dependence"
+    ],
+    "fluconazole": [
+      "animal_pharmacology_and_or_toxicology"
+    ],
+    "heparin": [
+      "dosage_forms_and_strengths"
+    ],
+    "ibuprofen": [
+      "spl_medguide"
+    ],
+    "imipenem_and_cilastatin": [
+      "dosage_forms_and_strengths"
+    ],
+    "insulin_glargine": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert",
+      "instructions_for_use"
+    ],
+    "ketorolac": [
+      "spl_medguide"
+    ],
+    "levetiracetam": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ],
+    "levofloxacin": [
+      "dosage_forms_and_strengths",
+      "animal_pharmacology_and_or_toxicology",
+      "spl_medguide"
+    ],
+    "linezolid": [
+      "dosage_forms_and_strengths",
+      "animal_pharmacology_and_or_toxicology"
+    ],
+    "losartan": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert"
+    ],
+    "meropenem": [
+      "dosage_forms_and_strengths"
+    ],
+    "metformin": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert"
+    ],
+    "methotrexate": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert"
+    ],
+    "metoprolol_succinate": [
+      "dosage_forms_and_strengths"
+    ],
+    "metoprolol_tartrate": [
+      "dosage_forms_and_strengths"
+    ],
+    "morphine": [
+      "dosage_forms_and_strengths",
+      "drug_abuse_and_dependence",
+      "controlled_substance",
+      "abuse",
+      "dependence",
+      "instructions_for_use"
+    ],
+    "omeprazole": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ],
+    "phenytoin": [
+      "dosage_forms_and_strengths"
+    ],
+    "piperacillin_and_tazobactam": [
+      "dosage_forms_and_strengths"
+    ],
+    "rivaroxaban": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ],
+    "simvastatin": [
+      "dosage_forms_and_strengths",
+      "spl_patient_package_insert"
+    ],
+    "spironolactone": [
+      "dosage_forms_and_strengths"
+    ],
+    "tramadol": [
+      "dosage_forms_and_strengths",
+      "drug_abuse_and_dependence",
+      "spl_medguide"
+    ],
+    "valproate": [
+      "dosage_forms_and_strengths"
+    ],
+    "vancomycin": [
+      "animal_pharmacology_and_or_toxicology"
+    ],
+    "warfarin": [
+      "dosage_forms_and_strengths",
+      "spl_medguide"
+    ]
+  },
+  "canh_bao_q3": [
+    "q3_bat_dau_chu_thuong:DT-f0b101d29759",
+    "q3_bat_dau_chu_thuong:DT-78996662c457",
+    "q3_bat_dau_chu_thuong:DT-e076c7059663",
+    "q3_bat_dau_chu_thuong:DT-c88bc2991241",
+    "q3_bat_dau_chu_thuong:DT-25221520d128",
+    "q3_bat_dau_chu_thuong:DT-3afba4acc222",
+    "q3_bat_dau_chu_thuong:DT-a1041f8b457f",
+    "q3_bat_dau_chu_thuong:DT-06a73d27705e",
+    "q3_bat_dau_chu_thuong:DT-acd584174d45",
+    "q3_bat_dau_chu_thuong:DT-2ff0cb91edcd",
+    "q3_bat_dau_chu_thuong:DT-17996ea98d9e",
+    "q3_bat_dau_chu_thuong:DT-4242ad251716",
+    "q3_thieu_muc:amikacin:tuong_tac",
+    "q3_thieu_muc:ceftriaxone:tuong_tac",
+    "q3_thieu_muc:gentamicin:tuong_tac",
+    "q3_thieu_muc:levetiracetam:tuong_tac"
+  ],
+  "vi_pham_q2": [],
+  "vi_pham_q4": [],
+  "dat_chat_luong": true,
+  "so_nhan_truoc": 50,
+  "so_doan_truoc": 3738,
+  "so_ma_doan_bi_doi": 633,
+  "so_ma_doan_khong_doi_noi_dung_bi_doi": 0
+}

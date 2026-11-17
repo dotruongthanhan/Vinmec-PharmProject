@@ -1,0 +1,16 @@
+{
+  "ca_id": "DEMO-06",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 1,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": [
+        "CT-DEMO06-01"
+      ],
+      "mo_ta": "Nguy cơ dị ứng chéo cùng nhóm penicillin giữa amoxicillin và tiền sử dị ứng penicillin"
+    }
+  ],
+  "van_ban_bat_thuong": true,
+  "ghi_chu": "Diễn biến có chứa câu nghi vấn chèn lệnh"
+}

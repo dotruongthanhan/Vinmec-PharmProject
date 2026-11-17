@@ -1,0 +1,16 @@
+{
+  "ca_id": "DEMO-04",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "dat",
+      "muc_do": "thong_tin",
+      "chi_tiet_y_lenh_id": [
+        "CT-DEMO04-01"
+      ],
+      "mo_ta": "Chỉ định kháng sinh có căn cứ từ kết quả vi sinh nước tiểu"
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

@@ -1,0 +1,53 @@
+{
+  "results": [
+    {
+      "set_id": "aaaa1111-bbbb-2222-cccc-333333333333",
+      "effective_time": "20230415",
+      "openfda": {
+        "brand_name": ["AMOXCLAV SYNTH"],
+        "generic_name": ["AMOXICILLIN AND CLAVULANATE POTASSIUM"],
+        "spl_set_id": ["aaaa1111-bbbb-2222-cccc-333333333333"]
+      },
+      "spl_product_data_elements": ["Amoxicillin Clavulanate"],
+      "indications_and_usage": [
+        "Indicated for treatment of bacterial respiratory and urinary tract infections caused by beta-lactamase producing susceptible organisms in adult and pediatric populations."
+      ],
+      "dosage_and_administration": [
+        "Usual adult dose is 500 mg/125 mg every 8 hours or 875 mg/125 mg every 12 hours orally.\u200b Patients with severe renal impairment require dosage interval extension."
+      ],
+      "contraindications": [
+        "Contraindicated in patients with a history of serious hypersensitivity reactions to penicillins or cholestatic jaundice associated with prior combination therapy."
+      ],
+      "warnings": [
+        "Serious and occasionally fatal hypersensitivity anaphylactic reactions have been reported in patients on penicillin therapy and require immediate discontinuation if signs occur."
+      ],
+      "precautions": [
+        "Hepatic dysfunction including cholestatic jaundice has been observed infrequently, especially in elderly patients. Teratogenic Effects (See WARNINGS section.)"
+      ],
+      "teratogenic_effects": [
+        "Teratogenic Effects (See WARNINGS section.)"
+      ],
+      "drug_interactions": [
+        "Co-administration with probenecid decreases renal tubular secretion of amoxicillin, resulting in increased and prolonged blood levels of the antibiotic."
+      ],
+      "pregnancy": [
+        "Reproduction studies performed in pregnant animals at doses up to 10 times the human dose have revealed no evidence of impaired fertility or harm to the fetus."
+      ],
+      "pediatric_use": [
+        "Because of incompletely developed renal function in neonates and young infants, the elimination of amoxicillin may be delayed and dosing should be modified."
+      ],
+      "geriatric_use": [
+        "Elderly patients are more likely to have decreased renal function, so care should be taken in dose selection and renal function monitoring is useful."
+      ],
+      "adverse_reactions": [
+        "The most frequently reported adverse reactions are diarrhea, loose stools, nausea, skin rashes, urticaria, vomiting, and mucocutaneous candidiasis."
+      ],
+      "overdosage": [
+        "In case of overdosage, discontinue medication, treat symptomatically, and institute supportive measures as required. Amoxicillin can be removed from circulation by hemodialysis."
+      ],
+      "clinical_pharmacology": [
+        "Peak serum concentrations occur 1 to 2 hours after oral dosing. Tissue concentrations in renal disease included 10.7 Patients With Renal Impairment and 13.3 Patients With Hepatic Dysfunction in older studies."
+      ]
+    }
+  ]
+}

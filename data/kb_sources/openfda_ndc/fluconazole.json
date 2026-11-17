@@ -1,0 +1,102 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Fluconazole",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "10 mg/mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Diflucan",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "1400 mg/35mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Fluconazole",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "40 mg/mL"
+        }
+      ],
+      "dang_bao_che": "POWDER, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "fluconazole",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "100 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "fluconazole",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "150 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "fluconazole",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "200 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "fluconazole",
+      "ten_chung": "fluconazole",
+      "ham_luong": [
+        {
+          "hoat_chat": "FLUCONAZOLE",
+          "ham_luong": "50 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

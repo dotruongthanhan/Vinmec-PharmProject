@@ -1,0 +1,10 @@
+app:
+  profile: "test"
+llm:
+  provider: "fake"
+embedding:
+  provider: "fake"
+rerank:
+  provider: "noop"
+vector_store:
+  provider: "memory"

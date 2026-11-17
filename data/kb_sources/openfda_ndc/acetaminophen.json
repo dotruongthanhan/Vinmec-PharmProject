@@ -1,0 +1,18 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Acetaminophen",
+      "ten_chung": "acetaminophen",
+      "ham_luong": [
+        {
+          "hoat_chat": "ACETAMINOPHEN",
+          "ham_luong": "10 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

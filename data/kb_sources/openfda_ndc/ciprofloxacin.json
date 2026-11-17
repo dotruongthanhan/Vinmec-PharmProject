@@ -1,0 +1,158 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN",
+          "ham_luong": "2 mg/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Ciprofloxacin in Dextrose",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN",
+          "ham_luong": "200 mg/100mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Ciprofloxacin in Dextrose",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN",
+          "ham_luong": "400 mg/200mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Cipro",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [],
+      "dang_bao_che": "KIT",
+      "duong_dung": []
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [],
+      "dang_bao_che": "KIT",
+      "duong_dung": []
+    },
+    {
+      "ten_biet_duoc": "CIPROFLOXACIN OTIC",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN",
+          "ham_luong": ".5 mg/.25mL"
+        }
+      ],
+      "dang_bao_che": "SOLUTION/ DROPS",
+      "duong_dung": [
+        "AURICULAR (OTIC)"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN HYDROCHLORIDE",
+          "ham_luong": "250 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN HYDROCHLORIDE",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN HYDROCHLORIDE",
+          "ham_luong": "750 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN HYDROCHLORIDE",
+          "ham_luong": "250 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN HYDROCHLORIDE",
+          "ham_luong": "500 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ciprofloxacin",
+      "ten_chung": "ciprofloxacin",
+      "ham_luong": [
+        {
+          "hoat_chat": "CIPROFLOXACIN HYDROCHLORIDE",
+          "ham_luong": "750 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

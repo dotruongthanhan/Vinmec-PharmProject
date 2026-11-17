@@ -1,0 +1,19 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "FENTANYL CITRATE",
+      "ten_chung": "fentanyl citrate",
+      "ham_luong": [
+        {
+          "hoat_chat": "FENTANYL CITRATE",
+          "ham_luong": "50 ug/mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, SOLUTION",
+      "duong_dung": [
+        "INTRAMUSCULAR",
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

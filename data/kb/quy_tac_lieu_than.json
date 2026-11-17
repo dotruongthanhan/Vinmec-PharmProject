@@ -1,0 +1,17 @@
+{
+  "phien_ban": "0.1",
+  "ghi_chu": "Bản MVP. Chưa được dược sĩ duyệt.",
+  "quy_tac": [
+    {
+      "ten_quoc_te": "meropenem",
+      "nguon": "Nhãn thuốc FDA: MERREM IV (meropenem for injection), mục Dosage and Administration - Use in Adult Patients with Renal Impairment",
+      "nguoi_duyet": null,
+      "muc": [
+        {"crcl_tu": 50, "crcl_den": null, "bao_gom_can_duoi": false, "can_chinh": false, "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"},
+        {"crcl_tu": 26, "crcl_den": 50, "bao_gom_can_duoi": true, "can_chinh": true, "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"},
+        {"crcl_tu": 10, "crcl_den": 25, "bao_gom_can_duoi": true, "can_chinh": true, "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"},
+        {"crcl_tu": null, "crcl_den": 10, "bao_gom_can_duoi": false, "can_chinh": true, "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"}
+      ]
+    }
+  ]
+}

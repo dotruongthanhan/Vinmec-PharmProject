@@ -1,0 +1,32 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Clopidogrel",
+      "ten_chung": "clopidogrel bisulfate",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLOPIDOGREL BISULFATE",
+          "ham_luong": "300 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Clopidogrel",
+      "ten_chung": "clopidogrel bisulfate",
+      "ham_luong": [
+        {
+          "hoat_chat": "CLOPIDOGREL BISULFATE",
+          "ham_luong": "75 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

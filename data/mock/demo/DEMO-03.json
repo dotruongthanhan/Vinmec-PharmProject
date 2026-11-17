@@ -1,0 +1,145 @@
+{
+  "ca_id": "DEMO-03",
+  "mo_ta_ngan": "Nam 60 tuổi, viêm xoang cấp ngoại trú, hồ sơ chưa có thông tin dị ứng",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-DEMO-03",
+    "tuoi": 60,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "chua_co_thong_tin",
+    "nguon": null,
+    "thoi_diem": null
+  },
+  "di_ung": [],
+  "dot_dieu_tri": {
+    "dot_dieu_tri_id": "DT-DEMO-03",
+    "khoa_dieu_tri": "Tai mũi họng",
+    "loai_dieu_tri": "ngoai_tru",
+    "thoi_diem_bat_dau": "2026-11-10T07:30:00+07:00"
+  },
+  "chan_doan": [
+    {
+      "chan_doan_id": "CD-DEMO03-01",
+      "ma_icd10": "J01.9",
+      "noi_dung": "Viêm xoang cấp",
+      "loai": "chinh"
+    }
+  ],
+  "co_dia": [],
+  "sinh_hieu": [
+    {
+      "sinh_hieu_id": "SH-DEMO03-01",
+      "loai": "can_nang",
+      "gia_tri": 65.0,
+      "don_vi": "kg",
+      "thoi_diem_do": "2026-11-10T07:35:00+07:00"
+    },
+    {
+      "sinh_hieu_id": "SH-DEMO03-02",
+      "loai": "chieu_cao",
+      "gia_tri": 165.0,
+      "don_vi": "cm",
+      "thoi_diem_do": "2026-11-10T07:35:00+07:00"
+    }
+  ],
+  "xet_nghiem": [
+    {
+      "xet_nghiem_id": "XN-DEMO03-01",
+      "ma_xet_nghiem": "creatinin",
+      "ten_xet_nghiem": "Creatinin máu",
+      "gia_tri_so": 90.0,
+      "gia_tri_text": null,
+      "don_vi": "umol/L",
+      "nguong_duoi": 62,
+      "nguong_tren": 106,
+      "thoi_diem_ket_qua": "2026-11-10T07:45:00+07:00"
+    }
+  ],
+  "vi_sinh": [],
+  "dien_bien": [
+    {
+      "dien_bien_id": "DB-DEMO03-01",
+      "loai_ho_so": "Phiếu khám",
+      "noi_dung": "Người bệnh khám ngoại trú vì đau tức vùng xoang mặt, kê đơn kháng sinh đường uống.",
+      "thoi_diem_ghi": "2026-11-10T07:50:00+07:00"
+    }
+  ],
+  "thuoc_dang_dung": [],
+  "y_lenh_cho_duyet": {
+    "y_lenh_id": "YL-DEMO-03",
+    "khoa_ke_don": "Tai mũi họng",
+    "luong_duyet": "hau_kiem",
+    "muc_uu_tien": null,
+    "thoi_diem_ke": "2026-11-10T07:55:00+07:00",
+    "chi_tiet": [
+      {
+        "chi_tiet_y_lenh_id": "CT-DEMO03-01",
+        "thuoc_id": "T-AMOX-CLAV-875-125",
+        "ten_tu_do": null,
+        "loai_san_pham": "thuoc",
+        "lieu_moi_lan": 1.0,
+        "don_vi_lieu": "viên",
+        "tan_suat": "2 lần/ngày",
+        "so_lan_moi_ngay": 2,
+        "khoang_cach_gio": 12.0,
+        "duong_dung": "uống",
+        "cach_dung": "Uống ngay trước bữa ăn mỗi 12 giờ",
+        "bat_dau": "2026-11-10T08:00:00+07:00",
+        "ket_thuc": null,
+        "nguon_thuoc": "Nhà thuốc",
+        "trang_thai_dong": "active",
+        "lich_dung": [
+          {
+            "thoi_diem_du_kien": "2026-11-10T08:00:00+07:00",
+            "lieu": 1.0,
+            "don_vi": "viên"
+          },
+          {
+            "thoi_diem_du_kien": "2026-11-10T20:00:00+07:00",
+            "lieu": 1.0,
+            "don_vi": "viên"
+          }
+        ]
+      }
+    ]
+  },
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-AMOX-CLAV-875-125",
+      "ten_thuoc": "Amoxicillin + acid clavulanic 875 mg/125 mg",
+      "ham_luong": "875 mg/125 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-AMOXICILLIN",
+          "ham_luong_thanh_phan": 875.0,
+          "don_vi": "mg"
+        },
+        {
+          "hoat_chat_id": "HC-ACID-CLAVULANIC",
+          "ham_luong_thanh_phan": 125.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-AMOXICILLIN",
+      "ten_hoat_chat": "Amoxicillin",
+      "ten_quoc_te": "amoxicillin",
+      "ma_atc": "J01CA04",
+      "nhom_duoc_ly": "penicillin"
+    },
+    {
+      "hoat_chat_id": "HC-ACID-CLAVULANIC",
+      "ten_hoat_chat": "Acid clavulanic",
+      "ten_quoc_te": "clavulanic acid",
+      "ma_atc": "J01CR02",
+      "nhom_duoc_ly": "uc_che_beta_lactamase"
+    }
+  ]
+}

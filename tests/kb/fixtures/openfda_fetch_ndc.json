@@ -1,0 +1,8 @@
+{
+  "meta": {"results": {"skip": 0, "limit": 100, "total": 3}},
+  "results": [
+    {"product_ndc": "00000-001", "brand_name": "Synthetic A", "generic_name": "MEROPENEM", "active_ingredients": [{"name": "MEROPENEM", "strength": "1 g/vial"}], "dosage_form": "POWDER, FOR SOLUTION", "route": ["INTRAVENOUS"], "product_type": "HUMAN PRESCRIPTION DRUG"},
+    {"product_ndc": "00000-002", "brand_name": "Synthetic A", "generic_name": "MEROPENEM", "active_ingredients": [{"name": "MEROPENEM", "strength": "1 g/vial"}], "dosage_form": "POWDER, FOR SOLUTION", "route": ["INTRAVENOUS"], "product_type": "HUMAN PRESCRIPTION DRUG"},
+    {"product_ndc": "00000-003", "brand_name": "Synthetic B", "generic_name": "MEROPENEM", "active_ingredients": [{"name": "MEROPENEM", "strength": "500 mg/vial"}], "dosage_form": "POWDER, FOR SOLUTION", "route": ["INTRAVENOUS"], "product_type": "HUMAN PRESCRIPTION DRUG"}
+  ]
+}

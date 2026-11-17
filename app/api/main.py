@@ -1,0 +1,99 @@
+"""Lắp ứng dụng FastAPI, lỗi thống nhất và bản web đóng gói nếu có."""
+
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException
+from starlette.responses import JSONResponse, Response
+from starlette.staticfiles import StaticFiles
+from starlette.types import Scope
+
+from app.api.routes import router
+from app.api.service import CaseService
+from app.config.settings import load_settings
+
+_ROOT = Path(__file__).resolve().parents[2]
+
+
+class WebFiles(StaticFiles):
+    """Phục vụ tệp web và trả trang gốc cho đường dẫn phía trình duyệt."""
+
+    async def get_response(self, path: str, scope: Scope) -> Response:
+        """Giữ lỗi API ngoài cơ chế trả trang gốc của web."""
+        if path.lstrip("/").startswith("api"):
+            raise HTTPException(404)
+        try:
+            return await super().get_response(path, scope)
+        except HTTPException as exc:
+            if exc.status_code != 404:
+                raise
+            return await super().get_response("index.html", scope)
+
+
+def _error(status: int, code: str, message: str) -> JSONResponse:
+    """Tạo thân lỗi đúng hợp đồng, không đính kèm dữ liệu đầu vào."""
+    return JSONResponse(status_code=status, content={"loi": {"ma": code, "thong_bao": message}})
+
+
+@asynccontextmanager
+async def _lifespan(application: FastAPI) -> AsyncIterator[None]:
+    """Đóng bộ chạy nền AI và kết nối HTTP khi ứng dụng kết thúc."""
+    try:
+        yield
+    finally:
+        shutdown = getattr(application.state.service, "shutdown", None)
+        if callable(shutdown):
+            shutdown()
+
+
+def create_app(service: CaseService | None = None) -> FastAPI:
+    """Dựng ứng dụng với dịch vụ được tiêm hoặc cấu hình công khai của kho."""
+    application = FastAPI(openapi_url=None, docs_url=None, redoc_url=None, lifespan=_lifespan)
+    if service is None:
+        settings = load_settings()
+        service = CaseService(
+            _ROOT / settings.app.case_dir,
+            _ROOT / "data/kb/quy_tac_lieu_than.json",
+            _ROOT / "data/runtime/phan_hoi.jsonl",
+        )
+    application.state.service = service
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+        allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type"],
+    )
+
+    @application.exception_handler(HTTPException)
+    async def http_error(request: Request, exc: HTTPException) -> JSONResponse:
+        """Thay cả lỗi định tuyến mặc định bằng thân lỗi API."""
+        if isinstance(exc.detail, dict) and "ma" in exc.detail and "thong_bao" in exc.detail:
+            return _error(exc.status_code, str(exc.detail["ma"]), str(exc.detail["thong_bao"]))
+        if exc.status_code == 404:
+            return _error(404, "khong_tim_thay", "Không tìm thấy tài nguyên.")
+        if exc.status_code >= 500:
+            return _error(exc.status_code, "loi_he_thong", "Đã xảy ra lỗi hệ thống.")
+        return _error(exc.status_code, "du_lieu_khong_hop_le", "Dữ liệu không hợp lệ.")
+
+    @application.exception_handler(RequestValidationError)
+    async def validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
+        """Không phản chiếu thân yêu cầu trong thông báo kiểm tra dữ liệu."""
+        return _error(422, "du_lieu_khong_hop_le", "Dữ liệu không hợp lệ.")
+
+    @application.exception_handler(Exception)
+    async def unexpected_error(request: Request, exc: Exception) -> JSONResponse:
+        """Ẩn nội dung ngoại lệ và dấu vết ngăn xếp khỏi người gọi."""
+        return _error(500, "loi_he_thong", "Đã xảy ra lỗi hệ thống.")
+
+    application.include_router(router)
+    dist = _ROOT / "web/dist"
+    if (dist / "index.html").is_file():
+        application.mount("/", WebFiles(directory=dist), name="web")
+    return application
+
+
+app = create_app()

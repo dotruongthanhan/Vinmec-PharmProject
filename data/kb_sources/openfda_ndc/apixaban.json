@@ -1,0 +1,95 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "ELIQUIS SPRINKLE",
+      "ten_chung": "apixaban",
+      "ham_luong": [
+        {
+          "hoat_chat": "APIXABAN",
+          "ham_luong": ".15 mg/1"
+        }
+      ],
+      "dang_bao_che": "CAPSULE",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ELIQUIS 30-Day Starter Pack",
+      "ten_chung": "apixaban",
+      "ham_luong": [],
+      "dang_bao_che": "KIT",
+      "duong_dung": []
+    },
+    {
+      "ten_biet_duoc": "ELIQUIS",
+      "ten_chung": "apixaban",
+      "ham_luong": [
+        {
+          "hoat_chat": "APIXABAN",
+          "ham_luong": "2.5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "apixaban",
+      "ten_chung": "apixaban",
+      "ham_luong": [
+        {
+          "hoat_chat": "APIXABAN",
+          "ham_luong": "2.5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ELIQUIS",
+      "ten_chung": "apixaban",
+      "ham_luong": [
+        {
+          "hoat_chat": "APIXABAN",
+          "ham_luong": "5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "apixaban",
+      "ten_chung": "apixaban",
+      "ham_luong": [
+        {
+          "hoat_chat": "APIXABAN",
+          "ham_luong": "5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "ELIQUIS",
+      "ten_chung": "apixaban",
+      "ham_luong": [
+        {
+          "hoat_chat": "APIXABAN",
+          "ham_luong": ".5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FOR SUSPENSION",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

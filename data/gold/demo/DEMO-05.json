@@ -1,0 +1,16 @@
+{
+  "ca_id": "DEMO-05",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 7,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": [
+        "CT-DEMO05-01"
+      ],
+      "mo_ta": "Lịch dùng thiếu liều so với tần suất kê"
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

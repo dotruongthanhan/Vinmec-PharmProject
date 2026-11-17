@@ -1,0 +1,130 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "Piperacillin and Tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": ".25 g/10mL"
+        },
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "2 g/10mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "piperacillin and tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": ".25 g/10mL"
+        },
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "2 g/10mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Piperacillin and Tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": ".375 g/15mL"
+        },
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "3 g/15mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "piperacillin and tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": ".375 g/15mL"
+        },
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "3 g/15mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Piperacillin and Tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": ".5 g/20mL"
+        },
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "4 g/20mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "piperacillin and tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": ".5 g/20mL"
+        },
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "4 g/20mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    },
+    {
+      "ten_biet_duoc": "Piperacillin and Tazobactam",
+      "ten_chung": "piperacillin and tazobactam",
+      "ham_luong": [
+        {
+          "hoat_chat": "PIPERACILLIN SODIUM",
+          "ham_luong": "36 g/180mL"
+        },
+        {
+          "hoat_chat": "TAZOBACTAM SODIUM",
+          "ham_luong": "4.5 g/180mL"
+        }
+      ],
+      "dang_bao_che": "INJECTION, POWDER, FOR SOLUTION",
+      "duong_dung": [
+        "INTRAVENOUS"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "san_pham": [
+    {
+      "ten_biet_duoc": "simvastatin",
+      "ten_chung": "simvastatin",
+      "ham_luong": [
+        {
+          "hoat_chat": "SIMVASTATIN",
+          "ham_luong": "10 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "simvastatin",
+      "ten_chung": "simvastatin",
+      "ham_luong": [
+        {
+          "hoat_chat": "SIMVASTATIN",
+          "ham_luong": "20 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "simvastatin",
+      "ten_chung": "simvastatin",
+      "ham_luong": [
+        {
+          "hoat_chat": "SIMVASTATIN",
+          "ham_luong": "40 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "simvastatin",
+      "ten_chung": "simvastatin",
+      "ham_luong": [
+        {
+          "hoat_chat": "SIMVASTATIN",
+          "ham_luong": "5 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    },
+    {
+      "ten_biet_duoc": "simvastatin",
+      "ten_chung": "simvastatin",
+      "ham_luong": [
+        {
+          "hoat_chat": "SIMVASTATIN",
+          "ham_luong": "80 mg/1"
+        }
+      ],
+      "dang_bao_che": "TABLET, FILM COATED",
+      "duong_dung": [
+        "ORAL"
+      ]
+    }
+  ]
+}

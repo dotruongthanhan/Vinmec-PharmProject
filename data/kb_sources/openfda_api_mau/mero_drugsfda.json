@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "disclaimer": "Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalidated. We may limit or otherwise restrict your access to the API in line with our Terms of Service.",
+    "terms": "https://open.fda.gov/terms/",
+    "license": "https://open.fda.gov/license/",
+    "last_updated": "2026-11-16",
+    "results": {
+      "skip": 0,
+      "limit": 1,
+      "total": 10
+    }
+  },
+  "results": [
+    {
+      "submissions": [
+        {
+          "submission_type": "ORIG",
+          "submission_number": "1",
+          "submission_status": "AP",
+          "submission_status_date": "20240722",
+          "review_priority": "STANDARD",
+          "submission_class_code": "UNKNOWN"
+        },
+        {
+          "submission_type": "SUPPL",
+          "submission_number": "7",
+          "submission_status": "AP",
+          "submission_status_date": "20260217",
+          "review_priority": "STANDARD",
+          "submission_class_code": "LABELING",
+          "submission_class_code_description": "Labeling"
+        }
+      ],
+      "application_number": "ANDA216424",
+      "sponsor_name": "QILU",
+      "openfda": {
+        "application_number": [
+          "ANDA216424"
+        ],
+        "brand_name": [
+          "MEROPENEM"
+        ],
+        "generic_name": [
+          "MEROPENEM"
+        ],
+        "manufacturer_name": [
+          "Qilu Antibiotics Pharmaceutical Co., Ltd.",
+          "Sagent Pharmaceuticals",
+          "Hikma Pharmaceuticals USA Inc."
+        ],
+        "product_ndc": [
+          "51810-502",
+          "51810-503",
+          "25021-160",
+          "25021-161",
+          "0143-9430",
+          "0143-9431"
+        ],
+        "product_type": [
+          "HUMAN PRESCRIPTION DRUG"
+        ],
+        "route": [
+          "INTRAVENOUS"
+        ],
+        "substance_name": [
+          "MEROPENEM"
+        ],
+        "rxcui": [
+          "1722934",
+          "1722939"
+        ],
+        "spl_id": [
+          "787e8e01-2098-46ef-838c-1f7170c37630",
+          "88e3a173-e663-4d73-bcc8-0096bdc4aff4",
+          "9f2a2947-434c-4f43-aef4-b914cd862815"
+        ],
+        "spl_set_id": [
+          "1f9591ed-3a6c-422e-b1be-7b3e4fe5bf3c",
+          "e8848f4a-bca9-4978-b0a1-38483fd4d639",
+          "d54fdbad-ca93-467c-92d7-c1bd88f3bbe3"
+        ],
+        "package_ndc": [
+          "51810-503-01",
+          "51810-503-02",
+          "51810-502-01",
+          "51810-502-02",
+          "25021-161-30",
+          "25021-160-20",
+          "0143-9431-01",
+          "0143-9431-10",
+          "0143-9430-01",
+          "0143-9430-10"
+        ],
+        "unii": [
+          "FV9J3JU8B1"
+        ]
+      },
+      "products": [
+        {
+          "product_number": "002",
+          "reference_drug": "No",
+          "brand_name": "MEROPENEM",
+          "active_ingredients": [
+            {
+              "name": "MEROPENEM",
+              "strength": "1GM/VIAL"
+            }
+          ],
+          "reference_standard": "No",
+          "dosage_form": "INJECTABLE",
+          "route": "INJECTION",
+          "marketing_status": "Prescription",
+          "te_code": "AP"
+        },
+        {
+          "product_number": "001",
+          "reference_drug": "No",
+          "brand_name": "MEROPENEM",
+          "active_ingredients": [
+            {
+              "name": "MEROPENEM",
+              "strength": "500MG/VIAL"
+            }
+          ],
+          "reference_standard": "No",
+          "dosage_form": "INJECTABLE",
+          "route": "INJECTION",
+          "marketing_status": "Prescription",
+          "te_code": "AP"
+        }
+      ]
+    }
+  ]
+}
