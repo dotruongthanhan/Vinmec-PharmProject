@@ -42,12 +42,49 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.dot_dieu_tri (
     loai_dieu_tri text NOT NULL CHECK (loai_dieu_tri IN ('noi_tru', 'ngoai_tru')),
     thoi_diem_bat_dau timestamptz NOT NULL,
     nguoi_benh_id text NOT NULL REFERENCES nghiep_vu.nguoi_benh,
-    ca_id text NOT NULL UNIQUE,
-    mo_ta_ngan text NOT NULL,
+    thu_tu integer,
+    thoi_diem_ket_thuc timestamptz,
+    so_ngay_dieu_tri integer,
+    hinh_thuc_vao text,
+    lich_su_khoa jsonb,
+    ly_do_vao_vien text,
+    benh_su text,
+    tien_su jsonb,
+    kham_benh text,
+    tom_tat text,
+    tong_ket text,
+    tuoi_luc_vao integer,
     co_dia jsonb NOT NULL,
     nap_luc timestamptz DEFAULT now(),
-    nguon_tep text
+    nguon_tep text,
+    UNIQUE (nguoi_benh_id, thu_tu)
 );
+
+-- T45: chỉ thêm cột; áp dụng lại an toàn với kho đã có dữ liệu.
+ALTER TABLE nghiep_vu.nguoi_benh
+    ADD COLUMN IF NOT EXISTS ho_ten text CHECK (ho_ten IS NULL OR length(trim(ho_ten)) > 0),
+    ADD COLUMN IF NOT EXISTS ngay_sinh date,
+    ADD COLUMN IF NOT EXISTS dan_toc text CHECK (dan_toc IN ('Kinh', 'Tày', 'Mường', 'Nùng', 'Hoa')),
+    ADD COLUMN IF NOT EXISTS ngoai_kieu text,
+    ADD COLUMN IF NOT EXISTS nghe_nghiep text,
+    ADD COLUMN IF NOT EXISTS dia_chi jsonb CHECK (dia_chi IS NULL OR (jsonb_typeof(dia_chi) = 'object' AND dia_chi ?& ARRAY['so_nha', 'thon_pho', 'xa_phuong', 'huyen', 'tinh_thanh'])),
+    ADD COLUMN IF NOT EXISTS doi_tuong text CHECK (doi_tuong IN ('bhyt', 'thu_phi', 'mien', 'khac')),
+    ADD COLUMN IF NOT EXISTS bhyt jsonb CHECK (bhyt IS NULL OR (jsonb_typeof(bhyt) = 'object' AND bhyt ?& ARRAY['so_the', 'gia_tri_den'] AND bhyt->>'so_the' ~ '^[A-Z]{2}[0-9]{13}$' AND bhyt->>'gia_tri_den' ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$')),
+    ADD COLUMN IF NOT EXISTS nguoi_bao_tin jsonb CHECK (nguoi_bao_tin IS NULL OR (jsonb_typeof(nguoi_bao_tin) = 'object' AND nguoi_bao_tin ?& ARRAY['ho_ten', 'quan_he', 'dien_thoai'] AND nguoi_bao_tin->>'dien_thoai' ~ '^0900 000 0[0-9]{2}$')),
+    ADD COLUMN IF NOT EXISTS bo_me jsonb CHECK (bo_me IS NULL OR (tuoi < 16 AND jsonb_typeof(bo_me) = 'object' AND bo_me ?& ARRAY['bo', 'me'])),
+    ADD COLUMN IF NOT EXISTS chieu_cao_cm double precision CHECK (chieu_cao_cm > 0),
+    ADD COLUMN IF NOT EXISTS can_nang_kg double precision CHECK (can_nang_kg > 0),
+    ADD COLUMN IF NOT EXISTS nhom_mau text CHECK (nhom_mau IN ('A', 'B', 'AB', 'O'));
+
+ALTER TABLE nghiep_vu.dot_dieu_tri
+    ADD COLUMN IF NOT EXISTS noi_gioi_thieu text CHECK (noi_gioi_thieu IN ('co_quan_y_te', 'tu_den', 'khac')),
+    ADD COLUMN IF NOT EXISTS tuyen_chuyen_den text,
+    ADD COLUMN IF NOT EXISTS vao_khoa_luc timestamptz CHECK (vao_khoa_luc >= thoi_diem_bat_dau),
+    ADD COLUMN IF NOT EXISTS so_giuong text,
+    ADD COLUMN IF NOT EXISTS so_luu_tru text CHECK (so_luu_tru ~ '^LT-2026-[0-9]{5}$'),
+    ADD COLUMN IF NOT EXISTS ma_yt text,
+    ADD COLUMN IF NOT EXISTS ra_vien jsonb CHECK (ra_vien IS NULL OR (thoi_diem_ket_thuc IS NOT NULL AND jsonb_typeof(ra_vien) = 'object' AND ra_vien ?& ARRAY['hinh_thuc', 'chuyen_vien_den', 'ly_do'] AND ra_vien->>'hinh_thuc' IN ('ra_vien', 'xin_ve', 'bo_ve', 'dua_ve', 'chuyen_vien'))),
+    ADD COLUMN IF NOT EXISTS bac_si_dieu_tri text CHECK (bac_si_dieu_tri = 'Bác sĩ điều trị');
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.di_ung (
     di_ung_id text PRIMARY KEY,
@@ -89,6 +126,7 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.chan_doan (
     noi_dung text NOT NULL,
     loai text NOT NULL CHECK (loai IN ('chinh', 'kem')),
     dot_dieu_tri_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri,
+    thoi_diem timestamptz,
     nap_luc timestamptz DEFAULT now(),
     nguon_tep text
 );
@@ -146,20 +184,66 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.dien_bien (
     noi_dung text NOT NULL,
     thoi_diem_ghi timestamptz NOT NULL,
     dot_dieu_tri_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri,
+    nguoi_ghi_vai_tro text,
     nap_luc timestamptz DEFAULT now(),
     nguon_tep text
 );
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.y_lenh (
     y_lenh_id text PRIMARY KEY,
+    ca_id text UNIQUE,
+    mo_ta_ngan text,
+    vai_tro_nguoi_ke text CHECK (vai_tro_nguoi_ke IN ('bac_si_dieu_tri', 'bac_si_truc', 'hoi_chan')),
+    loai text CHECK (loai IN ('thuong_quy', 'cap_cuu', 'khi_can', 'hoi_chan')),
+    trang_thai text NOT NULL CHECK (trang_thai IN ('cho_duyet', 'da_duyet', 'dang_thuc_hien', 'ngung', 'hoan_tat')),
+    thay_the_y_lenh_id text REFERENCES nghiep_vu.y_lenh(y_lenh_id) DEFERRABLE INITIALLY DEFERRED,
+    ly_do_ngung text,
+    thoi_diem_ngung timestamptz,
     khoa_ke_don text NOT NULL,
     luong_duyet text NOT NULL CHECK (luong_duyet IN ('truc_tiep', 'hau_kiem')),
     muc_uu_tien text,
     thoi_diem_ke timestamptz NOT NULL,
     dot_dieu_tri_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri,
     nap_luc timestamptz DEFAULT now(),
-    nguon_tep text
+    nguon_tep text,
+    UNIQUE (y_lenh_id, ca_id)
 );
+
+-- Khoá kép bảo đảm liên kết phiếu/y lệnh không vượt sang đợt khác.
+CREATE UNIQUE INDEX IF NOT EXISTS y_lenh_id_dot_unique
+ON nghiep_vu.y_lenh(y_lenh_id, dot_dieu_tri_id);
+
+CREATE TABLE IF NOT EXISTS nghiep_vu.phieu_dieu_tri (
+    phieu_dieu_tri_id text PRIMARY KEY,
+    dot_dieu_tri_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri,
+    ngay_dieu_tri integer NOT NULL CHECK (ngay_dieu_tri >= 1),
+    thoi_diem_lap timestamptz NOT NULL,
+    vai_tro_nguoi_lap text NOT NULL CHECK (vai_tro_nguoi_lap IN ('bac_si_dieu_tri', 'bac_si_truc', 'hoi_chan')),
+    dien_bien text NOT NULL,
+    danh_gia text NOT NULL,
+    huong_xu_tri text NOT NULL,
+    che_do_cham_soc text,
+    che_do_an text NOT NULL,
+    theo_doi jsonb NOT NULL CHECK (jsonb_typeof(theo_doi) = 'array'),
+    dan_do text,
+    nap_luc timestamptz DEFAULT now(),
+    nguon_tep text,
+    UNIQUE (phieu_dieu_tri_id, dot_dieu_tri_id)
+);
+
+CREATE TABLE IF NOT EXISTS nghiep_vu.phieu_y_lenh (
+    phieu_dieu_tri_id text NOT NULL,
+    y_lenh_id text NOT NULL,
+    dot_dieu_tri_id text NOT NULL,
+    nap_luc timestamptz DEFAULT now(),
+    nguon_tep text,
+    PRIMARY KEY (phieu_dieu_tri_id, y_lenh_id),
+    FOREIGN KEY (phieu_dieu_tri_id, dot_dieu_tri_id) REFERENCES nghiep_vu.phieu_dieu_tri(phieu_dieu_tri_id, dot_dieu_tri_id),
+    FOREIGN KEY (y_lenh_id, dot_dieu_tri_id) REFERENCES nghiep_vu.y_lenh(y_lenh_id, dot_dieu_tri_id)
+);
+CREATE INDEX IF NOT EXISTS phieu_dieu_tri_dot_idx ON nghiep_vu.phieu_dieu_tri(dot_dieu_tri_id);
+CREATE INDEX IF NOT EXISTS phieu_y_lenh_dot_idx ON nghiep_vu.phieu_y_lenh(dot_dieu_tri_id);
+REVOKE ALL ON nghiep_vu.phieu_dieu_tri, nghiep_vu.phieu_y_lenh FROM PUBLIC, anon, authenticated;
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.chi_tiet_y_lenh (
     chi_tiet_y_lenh_id text PRIMARY KEY,
@@ -177,13 +261,21 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.chi_tiet_y_lenh (
     ket_thuc timestamptz,
     nguon_thuoc text,
     trang_thai_dong text NOT NULL CHECK (trang_thai_dong IN ('active', 'pending', 'discontinued', 'completed')),
-    y_lenh_id text REFERENCES nghiep_vu.y_lenh,
+    y_lenh_id text NOT NULL REFERENCES nghiep_vu.y_lenh,
     dot_dieu_tri_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri,
-    thuoc_dang_dung boolean NOT NULL,
     nap_luc timestamptz DEFAULT now(),
     nguon_tep text,
     CHECK (COALESCE(length(trim(thuoc_id)), 0) > 0 OR COALESCE(length(trim(ten_tu_do)), 0) > 0)
 );
+
+-- Chạy với quyền của bên gọi để giữ hiệu lực RLS của bảng nguồn.
+CREATE OR REPLACE VIEW nghiep_vu.v_thuoc_dang_dung WITH (security_invoker = true) AS
+SELECT ct.*
+FROM nghiep_vu.chi_tiet_y_lenh ct
+JOIN nghiep_vu.y_lenh yl ON yl.y_lenh_id = ct.y_lenh_id
+WHERE ct.trang_thai_dong = 'active'
+  AND yl.trang_thai IN ('da_duyet', 'dang_thuc_hien');
+REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM PUBLIC, anon, authenticated;
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.lich_dung (
     chi_tiet_y_lenh_id text NOT NULL REFERENCES nghiep_vu.chi_tiet_y_lenh,
@@ -200,11 +292,12 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.lich_dung (
 CREATE TABLE IF NOT EXISTS nghiep_vu.lan_tham_dinh (
     tham_dinh_id text PRIMARY KEY,
     y_lenh_id text NOT NULL REFERENCES nghiep_vu.y_lenh,
-    ca_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri(ca_id),
+    ca_id text NOT NULL REFERENCES nghiep_vu.y_lenh(ca_id),
     van_ban_bat_thuong boolean NOT NULL,
     ghi_chu text,
     nap_luc timestamptz DEFAULT now(),
-    nguon_tep text
+    nguon_tep text,
+    FOREIGN KEY (y_lenh_id, ca_id) REFERENCES nghiep_vu.y_lenh(y_lenh_id, ca_id)
 );
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.nhan_dinh (
@@ -238,7 +331,7 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.can_cu (
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.phan_hoi (
     thoi_diem timestamptz NOT NULL,
-    ca_id text NOT NULL REFERENCES nghiep_vu.dot_dieu_tri(ca_id),
+    ca_id text NOT NULL REFERENCES nghiep_vu.y_lenh(ca_id),
     ma_luat text NOT NULL,
     yeu_to integer NOT NULL CHECK (yeu_to BETWEEN 1 AND 7),
     chi_tiet_y_lenh_id jsonb NOT NULL,
@@ -345,6 +438,8 @@ ALTER TABLE nghiep_vu.vi_sinh ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.khang_sinh_do ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.dien_bien ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.y_lenh ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nghiep_vu.phieu_dieu_tri ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nghiep_vu.phieu_y_lenh ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.chi_tiet_y_lenh ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.lich_dung ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.lan_tham_dinh ENABLE ROW LEVEL SECURITY;

@@ -1,8 +1,29 @@
 # Nạp dữ liệu giả lập vào Supabase
 
-Ứng dụng vẫn đọc JSON. Bộ lệnh này dùng PostgreSQL trực tiếp, chỉ quản lý
+Ứng dụng mặc định đọc JSON. Bộ lệnh này dùng PostgreSQL trực tiếp, chỉ quản lý
 `nghiep_vu` và `tri_thuc`. Chuỗi kết nối đọc qua `database.url_env` trong cấu hình
 sẵn có, mặc định là `DATABASE_URL` trong `.env`; không đưa giá trị vào log.
+
+## Nguồn đọc ca bệnh của API
+
+Đặt `CASE_SOURCE=db` để API đọc Supabase qua `DATABASE_URL`; `CASE_SOURCE=file`
+(mặc định) giữ 6 ca demo từ thư mục JSON hiện tại. Nguồn DB dựng 66 ca theo y
+lệnh có `ca_id`, giữ đúng đợt điều trị, nạp lười và đệm trên thực thể dịch vụ;
+`DbReviewService.refresh()` xoá đệm để lượt đọc kế tiếp nạp lại. Kết nối bật
+`default_transaction_read_only`, chỉ SELECT theo lô trong cùng ảnh chụp.
+Thiếu cấu hình hoặc lỗi DB: health vẫn 200, API ca trả lỗi 503 thống nhất.
+
+Kiểm nguồn DB với tệp, không ghi DB:
+
+```bash
+uv run python -m app.db.reader verify-read
+```
+
+Lệnh nằm trong `reader.py` để không sửa CLI nạp dữ liệu. Đối chiếu bỏ khác
+biệt thứ tự, mã hoạt chất và biểu diễn múi giờ; danh mục chỉ giữ thuốc xuất
+hiện và hoạt chất được tham chiếu, dùng metadata hoạt chất KB giống bộ nạp.
+Không bỏ qua sai lệch số liệu lâm sàng, liều, đơn vị hay đường dùng. Chi tiết
+các khác biệt nguồn và kết quả kiểm tại `plan/reports/T43.md`.
 
 ## Chạy lần đầu
 
@@ -22,12 +43,62 @@ in số dòng duy nhất sau gộp trùng và các dòng bị loại, không m�
 | --- | --- |
 | `schema` | Tạo đối tượng chưa có theo `db/schema.sql` |
 | `reset --yes` | Xoá hai lược đồ bằng CASCADE rồi tạo lại |
-| `load cases [--dry-run] [--replace]` | 6 ca demo, danh mục thuốc và đáp án vàng |
+| `load cases [--dry-run] [--replace]` | 6 ca demo + 60 hồ sơ nhiều lần vào viện, danh mục thuốc và đáp án vàng |
 | `load kb [--dry-run] [--replace]` | Hoạt chất, tên gọi, nhãn, đoạn trích và mức liều thận |
 | `load ddinter [--dry-run] [--replace]` | 14 CSV, gộp cặp đảo chiều, COPY vào bảng tạm rồi upsert |
 | `load embeddings [--dry-run] [--replace]` | Chỉ đọc SQLite, cập nhật véc-tơ đã có trong cache |
 | `all [--dry-run] [--reset --yes]` | Schema → cases → kb → ddinter → embeddings → verify |
-| `verify` | Đối chiếu mọi bảng, khoá ngoại và độ phủ véc-tơ; lệch trả mã 1 |
+| `verify` | Đối chiếu mọi bảng, view thuốc đang dùng, ca_id, khoá ngoại và độ phủ véc-tơ; lệch trả mã 1 |
+
+## Quan hệ và thứ tự nạp
+
+Người bệnh → lần vào viện (`dot_dieu_tri`) → y lệnh → dòng thuốc → lịch dùng.
+Một hồ sơ có nhiều lần vào viện, mỗi lần có nhiều y lệnh. **Ca là y lệnh trọng
+tâm**: chỉ y lệnh này có `ca_id` duy nhất (mã demo hoặc `ho_so_id`), kèm mô tả
+ngắn. Đợt điều trị giữ bệnh sử, tiền sử, tóm tắt, lịch sử khoa và tuổi lúc vào
+viện nếu nguồn có. Tuổi người bệnh vẫn lấy trực tiếp từ hồ sơ.
+
+Đáp án vàng và phản hồi tham chiếu `y_lenh.ca_id`; cặp `(y_lenh_id, ca_id)` ở
+lần thẩm định có khoá ngoại tổng hợp để không trỏ nhầm y lệnh. Chuỗi thay thế
+y lệnh dùng khoá ngoại tự tham chiếu hoãn kiểm tới cuối giao dịch.
+
+Thứ tự bảng trong `mapping.py`: hoạt chất → người bệnh → đợt → dị ứng → thuốc
+→ thành phần thuốc → chẩn đoán → sinh hiệu → xét nghiệm → vi sinh → kháng sinh
+đồ → diễn biến → y lệnh → dòng thuốc → lịch dùng → lần thẩm định → nhận định
+→ thuốc của nhận định → căn cứ → phản hồi → tên thuốc → tài liệu → đoạn trích
+→ mức liều thận → tương tác sàng lọc. Xoá nhóm theo thứ tự ngược lại.
+
+Không lưu cờ thuốc đang dùng trên dòng thuốc. View `nghiep_vu.v_thuoc_dang_dung`
+chọn dòng `active` của y lệnh `da_duyet` hoặc `dang_thuc_hien`. Với demo có
+thuốc nền rời, bộ nạp tạo một y lệnh `YL-<ca_id>-NEN`, lấy thời điểm bắt đầu
+sớm nhất của các dòng; không tạo nếu danh sách rỗng. View dùng quyền bên gọi,
+không cấp quyền cho `PUBLIC`, `anon`, `authenticated`.
+
+Mã `HC-...` được chuẩn hoá trước khi ghi hoạt chất, thành phần thuốc, dị ứng
+và kháng sinh đồ; tên chuẩn đã có dùng thông tin từ KB. Mã ngoài KB được in
+rõ, thêm từ danh mục hồ sơ với `can_duyet=true`. Thuốc trùng ID được gộp khi
+tên, hàm lượng và thành phần giống nhau (sau chuẩn hoá mã hoạt chất); giữ các
+thuộc tính còn lại của bản đầu. Nếu khác các trường này, giữ bản đầu và ghi
+nguyên bản sau vào `data/runtime/nap_loi.jsonl`, không nạp thành phần của bản
+bị loại. Không tự quy đổi đơn vị hoặc đồng nhất tên thuốc khác nhau.
+
+## Nạp từ đầu một lệnh
+
+Sau khi review nguồn và kết quả dry-run, người vận hành chỉ cần chạy:
+
+```bash
+uv run python -m app.db all --reset --yes
+```
+
+Lệnh kiểm nguồn trước khi kết nối, rồi xoá hai lược đồ, dựng lại từ
+`db/schema.sql`, nạp `cases` → `kb` → `ddinter` → `embeddings`, cuối cùng chạy
+`verify`. Không cần chạy riêng `schema` hay từng nhóm nạp. Mọi thay đổi cột
+chỉ cần sửa `db/schema.sql` + `app/db/mapping.py` rồi chạy lại lệnh này;
+nếu thay cấu trúc nguồn thì cập nhật thêm bộ đọc trong `sources.py`.
+
+Tại thời điểm T40, nguồn có 9 bản thuốc xung đột trên 127 bản (vượt ngưỡng
+5%), nên kiểm nguồn dừng trước kết nối. Chi tiết ở
+[báo cáo T40](../plan/reports/T40.md); cần thống nhất danh mục nguồn trước khi nạp thật.
 
 Mỗi nhóm `load` là một giao dịch; lỗi sẽ hoàn tác cả nhóm. `all` giữ ranh giới
 giao dịch riêng cho từng nhóm. Upsert theo khoá chính không tạo dòng trùng;

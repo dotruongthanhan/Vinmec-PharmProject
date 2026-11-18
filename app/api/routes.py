@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends, Request, Response
 
 from app.api import schemas as s
 from app.api.auth_schemas import NguoiDung
@@ -52,14 +52,16 @@ def sign_out(request: Request, principal: LogoutCaller) -> dict[str, bool]:
 
 
 @router.get("/cases", response_model=s.DanhSachCa)
-def list_cases(request: Request, principal: Caller) -> s.DanhSachCa:
+def list_cases(request: Request, response: Response, principal: Caller) -> s.DanhSachCa:
     """Trả hàng đợi thẩm định."""
+    response.headers["Cache-Control"] = "private, no-store"
     return _service(request).list_cases()
 
 
 @router.get("/cases/{ca_id}", response_model=s.ChiTietCa)
-def get_case(ca_id: str, request: Request, principal: Caller) -> s.ChiTietCa:
+def get_case(ca_id: str, request: Request, response: Response, principal: Caller) -> s.ChiTietCa:
     """Trả chi tiết ca bệnh đã nạp."""
+    response.headers["Cache-Control"] = "private, no-store"
     return _service(request).get_case(ca_id)
 
 

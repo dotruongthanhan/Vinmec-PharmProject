@@ -582,6 +582,26 @@ def present_ai_result(
             continue
         if item.nguon_goc == "ai_da_kiem_chung" and item.de_xuat is not None:
             ai_row = _present_ai_finding(case, item.de_xuat, chunk_by_id, feedbacks)
+            # Mã nhận định băm yếu tố, nhận xét và dòng thuốc. Câu chèn lệnh luôn có nhận xét
+            # cố định, không có dòng thuốc, nên hai bản ghi chứa chỉ thị cho cùng mã. Gộp căn cứ
+            # vào dòng đầu tiên để không mất bằng chứng và không tạo hai thẻ trùng khóa.
+            previous = next(
+                (row for row in presented_items if row.nhan_dinh_id == ai_row.nhan_dinh_id), None
+            )
+            if previous is not None:
+                known = {evidence.ban_ghi_id for evidence in previous.can_cu}
+                for evidence in ai_row.can_cu:
+                    if evidence.ban_ghi_id not in known:
+                        previous.can_cu.append(
+                            evidence.model_copy(update={"so": len(previous.can_cu) + 1})
+                        )
+                        known.add(evidence.ban_ghi_id)
+                previous.thong_tin_con_thieu = list(
+                    dict.fromkeys([*previous.thong_tin_con_thieu, *ai_row.thong_tin_con_thieu])
+                )
+                if previous.de_xuat_ai is None:
+                    previous.de_xuat_ai = ai_row.de_xuat_ai
+                continue
             presented_items.append(ai_row)
 
     if rule_mismatch or seen_rule_ids != set(expected_rules):

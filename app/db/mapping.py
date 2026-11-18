@@ -1,10 +1,11 @@
 """Ánh xạ nguồn → cột; sửa tên trường và phép chuyển tại từng khối bảng."""
 
 from collections.abc import Callable
+from datetime import date
 from functools import cached_property
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, create_model
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, create_model
 
 from app.core.types import Chunk
 from app.domain import models as m
@@ -101,6 +102,126 @@ def fk(column: str, table: str, target: str | None = None) -> ForeignKey:
     return ForeignKey(columns=(column,), table=table, target=(target or column,))
 
 
+ACTIVE_ORDER_STATUSES = ("da_duyet", "dang_thuc_hien")
+ACTIVE_DRUG_VIEW = "nghiep_vu.v_thuoc_dang_dung"
+ACTIVE_INGREDIENT_ALIASES = {
+    "amlodipin": "amlodipine",
+    "ceftriaxon": "ceftriaxone",
+    "acid_clavulanic": "clavulanic_acid",
+    "sulfamethoxazol": "sulfamethoxazole",
+    "colistimethat": "colistimethate",
+    "valproate": "valproic_acid",
+    "acidvalproic": "valproic_acid",
+    "insulin_glargin": "insulin_glargine",
+    "enoxaparin": "enoxaparin",
+    "heparin": "heparin",
+    "trimethoprim": "trimethoprim",
+}
+
+
+def normalize_ingredient(code: str) -> str:
+    """Đổi mã nguồn về mã chuẩn theo quy tắc của brief."""
+    value = code.removeprefix("HC-").lower().replace("-", "_")
+    return ACTIVE_INGREDIENT_ALIASES.get(value, value)
+
+
+def ingredient_column(annotation: Any = str, default: Any = ...) -> Column:
+    return Column(
+        source="hoat_chat_id",
+        annotation=annotation,
+        default=default,
+        transform=lambda value: normalize_ingredient(value) if value is not None else None,
+    )
+
+
+class Address(BaseModel):
+    """Địa chỉ hiển thị ngoài mô hình AI."""
+
+    model_config = ConfigDict(extra="forbid")
+    so_nha: str
+    thon_pho: str
+    xa_phuong: str
+    huyen: str
+    tinh_thanh: str
+
+
+class Insurance(BaseModel):
+    """Thẻ BHYT giả lập."""
+
+    model_config = ConfigDict(extra="forbid")
+    so_the: Annotated[str, Field(pattern=r"^[A-Z]{2}[0-9]{13}$")]
+    gia_tri_den: date
+
+
+class Contact(BaseModel):
+    """Người báo tin, không truyền vào pipeline AI."""
+
+    model_config = ConfigDict(extra="forbid")
+    ho_ten: str
+    quan_he: str
+    dien_thoai: Annotated[str, Field(pattern=r"^0900 000 0[0-9]{2}$")]
+
+
+class Parent(BaseModel):
+    """Thông tin bố hoặc mẹ của trẻ."""
+
+    model_config = ConfigDict(extra="forbid")
+    ho_ten: str
+    nghe_nghiep: str | None
+
+
+class Parents(BaseModel):
+    """Chỉ ghi khi người bệnh dưới 16 tuổi."""
+
+    model_config = ConfigDict(extra="forbid")
+    bo: Parent
+    me: Parent
+
+
+class Discharge(BaseModel):
+    """Hình thức kết thúc một lần vào viện."""
+
+    model_config = ConfigDict(extra="forbid")
+    hinh_thuc: Literal["ra_vien", "xin_ve", "bo_ve", "dua_ve", "chuyen_vien"]
+    chuyen_vien_den: str | None
+    ly_do: str | None
+
+
+PATIENT_ADMINISTRATIVE = {
+    "ho_ten": field("ho_ten", str | None, None),
+    "ngay_sinh": field("ngay_sinh", date | None, None),
+    "dan_toc": field("dan_toc", Literal["Kinh", "Tày", "Mường", "Nùng", "Hoa"] | None, None),
+    "ngoai_kieu": field("ngoai_kieu", str | None, None),
+    "nghe_nghiep": field("nghe_nghiep", str | None, None),
+    "dia_chi": field("dia_chi", Address | None, None),
+    "doi_tuong": field("doi_tuong", Literal["bhyt", "thu_phi", "mien", "khac"] | None, None),
+    "bhyt": field("bhyt", Insurance | None, None),
+    "nguoi_bao_tin": field("nguoi_bao_tin", Contact | None, None),
+    "bo_me": field("bo_me", Parents | None, None),
+    "chieu_cao_cm": field("chieu_cao_cm", Annotated[float, Field(gt=0)] | None, None),
+    "can_nang_kg": field("can_nang_kg", Annotated[float, Field(gt=0)] | None, None),
+    "nhom_mau": field("nhom_mau", Literal["A", "B", "AB", "O"] | None, None),
+}
+ENCOUNTER_ADMINISTRATIVE = {
+    "noi_gioi_thieu": field(
+        "noi_gioi_thieu", Literal["co_quan_y_te", "tu_den", "khac"] | None, None
+    ),
+    "tuyen_chuyen_den": field("tuyen_chuyen_den", str | None, None),
+    "vao_khoa_luc": field("vao_khoa_luc", AwareDatetime | None, None),
+    "so_giuong": field("so_giuong", str | None, None),
+    "so_luu_tru": field(
+        "so_luu_tru", Annotated[str, Field(pattern=r"^LT-2026-[0-9]{5}$")] | None, None
+    ),
+    "ma_yt": field("ma_yt", str | None, None),
+    "ra_vien": field("ra_vien", Discharge | None, None),
+    "bac_si_dieu_tri": field("bac_si_dieu_tri", Literal["Bác sĩ điều trị"] | None, None),
+}
+ADMINISTRATIVE_COLUMNS = {
+    "nghiep_vu.nguoi_benh": tuple(PATIENT_ADMINISTRATIVE),
+    "nghiep_vu.dot_dieu_tri": tuple(ENCOUNTER_ADMINISTRATIVE),
+}
+
+
 TABLE_LIST = (
     Table(
         name="tri_thuc.hoat_chat",
@@ -125,8 +246,9 @@ TABLE_LIST = (
         columns={
             **model_columns(m.NguoiBenh),
             "tinh_trang_di_ung": field("tinh_trang_di_ung", m.TinhTrangDiUng),
+            **PATIENT_ADMINISTRATIVE,
         },
-        json_columns=("tinh_trang_di_ung",),
+        json_columns=("tinh_trang_di_ung", "dia_chi", "bhyt", "nguoi_bao_tin", "bo_me"),
     ),
     Table(
         name="nghiep_vu.dot_dieu_tri",
@@ -134,17 +256,38 @@ TABLE_LIST = (
         columns={
             **model_columns(m.DotDieuTri),
             "nguoi_benh_id": field("nguoi_benh_id"),
-            "ca_id": field("ca_id"),
-            "mo_ta_ngan": field("mo_ta_ngan"),
             "co_dia": field("co_dia", list[m.CoDia], []),
+            **{
+                key: field(key, int | None, None)
+                for key in ("thu_tu", "so_ngay_dieu_tri", "tuoi_luc_vao")
+            },
+            "thoi_diem_ket_thuc": field("thoi_diem_ket_thuc", AwareDatetime | None, None),
+            **{
+                key: field(key, str | None, None)
+                for key in (
+                    "hinh_thuc_vao",
+                    "ly_do_vao_vien",
+                    "benh_su",
+                    "kham_benh",
+                    "tom_tat",
+                    "tong_ket",
+                )
+            },
+            "lich_su_khoa": field("lich_su_khoa", list[dict[str, Any]] | None, None),
+            "tien_su": field("tien_su", dict[str, Any] | None, None),
+            **ENCOUNTER_ADMINISTRATIVE,
         },
         foreign_keys=(fk("nguoi_benh_id", "nghiep_vu.nguoi_benh"),),
-        json_columns=("co_dia",),
+        json_columns=("co_dia", "lich_su_khoa", "tien_su", "ra_vien"),
     ),
     Table(
         name="nghiep_vu.di_ung",
         primary_key=("di_ung_id",),
-        columns={**model_columns(m.DiUng), "nguoi_benh_id": field("nguoi_benh_id")},
+        columns={
+            **model_columns(m.DiUng),
+            "nguoi_benh_id": field("nguoi_benh_id"),
+            "hoat_chat_id": ingredient_column(str | None, None),
+        },
         foreign_keys=(
             fk("nguoi_benh_id", "nghiep_vu.nguoi_benh"),
             fk("hoat_chat_id", "tri_thuc.hoat_chat"),
@@ -158,13 +301,21 @@ TABLE_LIST = (
     Table(
         name="nghiep_vu.thuoc_hoat_chat",
         primary_key=("thuoc_id", "hoat_chat_id"),
-        columns={"thuoc_id": field("thuoc_id"), **model_columns(m.ThanhPhan)},
+        columns={
+            "thuoc_id": field("thuoc_id"),
+            **model_columns(m.ThanhPhan),
+            "hoat_chat_id": ingredient_column(),
+        },
         foreign_keys=(fk("thuoc_id", "nghiep_vu.thuoc"), fk("hoat_chat_id", "tri_thuc.hoat_chat")),
     ),
     Table(
         name="nghiep_vu.chan_doan",
         primary_key=("chan_doan_id",),
-        columns={**model_columns(m.ChanDoan), "dot_dieu_tri_id": field("dot_dieu_tri_id")},
+        columns={
+            **model_columns(m.ChanDoan),
+            "dot_dieu_tri_id": field("dot_dieu_tri_id"),
+            "thoi_diem": field("thoi_diem", AwareDatetime | None, None),
+        },
         foreign_keys=(fk("dot_dieu_tri_id", "nghiep_vu.dot_dieu_tri"),),
     ),
     Table(
@@ -191,7 +342,11 @@ TABLE_LIST = (
     Table(
         name="nghiep_vu.khang_sinh_do",
         primary_key=("vi_sinh_id", "hoat_chat_id"),
-        columns={"vi_sinh_id": field("vi_sinh_id"), **model_columns(m.KhangSinhDo)},
+        columns={
+            "vi_sinh_id": field("vi_sinh_id"),
+            **model_columns(m.KhangSinhDo),
+            "hoat_chat_id": ingredient_column(),
+        },
         foreign_keys=(
             fk("vi_sinh_id", "nghiep_vu.vi_sinh"),
             fk("hoat_chat_id", "tri_thuc.hoat_chat"),
@@ -200,23 +355,93 @@ TABLE_LIST = (
     Table(
         name="nghiep_vu.dien_bien",
         primary_key=("dien_bien_id",),
-        columns={**model_columns(m.DienBien), "dot_dieu_tri_id": field("dot_dieu_tri_id")},
+        columns={
+            **model_columns(m.DienBien),
+            "dot_dieu_tri_id": field("dot_dieu_tri_id"),
+            "nguoi_ghi_vai_tro": field("nguoi_ghi_vai_tro", str | None, None),
+        },
         foreign_keys=(fk("dot_dieu_tri_id", "nghiep_vu.dot_dieu_tri"),),
     ),
     Table(
         name="nghiep_vu.y_lenh",
         primary_key=("y_lenh_id",),
-        columns={**model_columns(m.YLenh, "chi_tiet"), "dot_dieu_tri_id": field("dot_dieu_tri_id")},
+        columns={
+            **model_columns(m.YLenh, "chi_tiet"),
+            "dot_dieu_tri_id": field("dot_dieu_tri_id"),
+            "ca_id": field("ca_id", str | None, None),
+            "mo_ta_ngan": field("mo_ta_ngan", str | None, None),
+            "vai_tro_nguoi_ke": field(
+                "vai_tro_nguoi_ke",
+                Literal["bac_si_dieu_tri", "bac_si_truc", "hoi_chan"] | None,
+                None,
+            ),
+            "loai": field(
+                "loai", Literal["thuong_quy", "cap_cuu", "khi_can", "hoi_chan"] | None, None
+            ),
+            "trang_thai": field(
+                "trang_thai",
+                Literal["cho_duyet", "da_duyet", "dang_thuc_hien", "ngung", "hoan_tat"],
+            ),
+            "thay_the_y_lenh_id": field("thay_the_y_lenh_id", str | None, None),
+            "ly_do_ngung": field("ly_do_ngung", str | None, None),
+            "thoi_diem_ngung": field("thoi_diem_ngung", AwareDatetime | None, None),
+        },
+        foreign_keys=(
+            fk("dot_dieu_tri_id", "nghiep_vu.dot_dieu_tri"),
+            fk("thay_the_y_lenh_id", "nghiep_vu.y_lenh", "y_lenh_id"),
+        ),
+    ),
+    Table(
+        name="nghiep_vu.phieu_dieu_tri",
+        primary_key=("phieu_dieu_tri_id",),
+        columns={
+            **{
+                key: field(key)
+                for key in (
+                    "phieu_dieu_tri_id",
+                    "dot_dieu_tri_id",
+                    "dien_bien",
+                    "danh_gia",
+                    "huong_xu_tri",
+                    "che_do_an",
+                )
+            },
+            "ngay_dieu_tri": field("ngay_dieu_tri", Annotated[int, Field(ge=1)]),
+            "thoi_diem_lap": field("thoi_diem_lap", AwareDatetime),
+            "vai_tro_nguoi_lap": field(
+                "vai_tro_nguoi_lap", Literal["bac_si_dieu_tri", "bac_si_truc", "hoi_chan"]
+            ),
+            "che_do_cham_soc": field("che_do_cham_soc", str | None),
+            "theo_doi": field("theo_doi", list[str]),
+            "dan_do": field("dan_do", str | None),
+        },
         foreign_keys=(fk("dot_dieu_tri_id", "nghiep_vu.dot_dieu_tri"),),
+        json_columns=("theo_doi",),
+    ),
+    Table(
+        name="nghiep_vu.phieu_y_lenh",
+        primary_key=("phieu_dieu_tri_id", "y_lenh_id"),
+        columns={key: field(key) for key in ("phieu_dieu_tri_id", "y_lenh_id", "dot_dieu_tri_id")},
+        foreign_keys=(
+            ForeignKey(
+                columns=("phieu_dieu_tri_id", "dot_dieu_tri_id"),
+                table="nghiep_vu.phieu_dieu_tri",
+                target=("phieu_dieu_tri_id", "dot_dieu_tri_id"),
+            ),
+            ForeignKey(
+                columns=("y_lenh_id", "dot_dieu_tri_id"),
+                table="nghiep_vu.y_lenh",
+                target=("y_lenh_id", "dot_dieu_tri_id"),
+            ),
+        ),
     ),
     Table(
         name="nghiep_vu.chi_tiet_y_lenh",
         primary_key=("chi_tiet_y_lenh_id",),
         columns={
             **model_columns(m.ChiTietYLenh, "lich_dung"),
-            "y_lenh_id": field("y_lenh_id", str | None, None),
+            "y_lenh_id": field("y_lenh_id"),
             "dot_dieu_tri_id": field("dot_dieu_tri_id"),
-            "thuoc_dang_dung": field("thuoc_dang_dung", bool),
         },
         foreign_keys=(
             fk("thuoc_id", "nghiep_vu.thuoc"),
@@ -244,7 +469,15 @@ TABLE_LIST = (
             "van_ban_bat_thuong": field("van_ban_bat_thuong", bool, False),
             "ghi_chu": field("ghi_chu", str | None, None),
         },
-        foreign_keys=(fk("y_lenh_id", "nghiep_vu.y_lenh"), fk("ca_id", "nghiep_vu.dot_dieu_tri")),
+        foreign_keys=(
+            fk("y_lenh_id", "nghiep_vu.y_lenh"),
+            fk("ca_id", "nghiep_vu.y_lenh"),
+            ForeignKey(
+                columns=("y_lenh_id", "ca_id"),
+                table="nghiep_vu.y_lenh",
+                target=("y_lenh_id", "ca_id"),
+            ),
+        ),
     ),
     Table(
         name="nghiep_vu.nhan_dinh",
@@ -283,7 +516,7 @@ TABLE_LIST = (
         primary_key=("ca_id", "ma_luat", "thoi_diem"),
         # nguoi_dung_id, phien_id chỉ có ở tệp JSONL tới khi bảng phan_hoi mở rộng (plan 1.6, T33).
         columns=model_columns(PhanHoi, "nguoi_dung_id", "phien_id"),
-        foreign_keys=(fk("ca_id", "nghiep_vu.dot_dieu_tri"),),
+        foreign_keys=(fk("ca_id", "nghiep_vu.y_lenh"),),
         json_columns=("chi_tiet_y_lenh_id",),
     ),
     Table(

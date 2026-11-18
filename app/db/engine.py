@@ -8,7 +8,14 @@ import psycopg
 from psycopg import sql
 from psycopg.types.json import Jsonb
 
-from app.db.mapping import SCHEMAS, TABLES, Table
+from app.db.mapping import (
+    ACTIVE_DRUG_VIEW,
+    ACTIVE_ORDER_STATUSES,
+    ADMINISTRATIVE_COLUMNS,
+    SCHEMAS,
+    TABLES,
+    Table,
+)
 from app.db.sources import Batch, Embeddings, SourceError
 
 
@@ -111,6 +118,15 @@ def load_batch(
                 )
 
 
+def load_treatment_sheets(connection: psycopg.Connection[Any], batch: Batch) -> None:
+    """Chỉ upsert phiếu/liên kết; khoá cha phải có sẵn, không xoá dữ liệu."""
+    if batch.rejected or batch.orphans():
+        raise SourceError("Phiếu có dòng bị loại hoặc thiếu khoá cha; dừng trước giao dịch")
+    if batch.tables != {"nghiep_vu.phieu_dieu_tri", "nghiep_vu.phieu_y_lenh"}:
+        raise SourceError("Lượt nạp phiếu chứa bảng ngoài phạm vi")
+    load_batch(connection, batch, "phieu-dieu-tri")
+
+
 def load_embeddings(
     connection: psycopg.Connection[Any], embeddings: Embeddings, replace: bool = False
 ) -> None:
@@ -125,6 +141,34 @@ def load_embeddings(
             )
             if cursor.rowcount != len(embeddings.vectors):
                 raise SourceError("thiếu doan_trich_id trong cơ sở dữ liệu; chạy load kb trước")
+
+
+def load_administrative(connection: psycopg.Connection[Any], batch: Batch) -> None:
+    """Chỉ UPDATE cột T45; thiếu bản ghi làm hoàn tác toàn bộ lượt nạp."""
+    if batch.rejected:
+        raise SourceError("Có dòng hành chính bị loại; dừng trước giao dịch")
+    with connection.transaction(), connection.cursor() as cursor:
+        for name, columns in ADMINISTRATIVE_COLUMNS.items():
+            table = TABLES[name]
+            assignments = sql.SQL(", ").join(
+                sql.SQL("{} = %s").format(sql.Identifier(column)) for column in columns
+            )
+            where = sql.SQL(" AND ").join(
+                sql.SQL("{} = %s").format(sql.Identifier(column)) for column in table.primary_key
+            )
+            statement = sql.SQL("UPDATE {} SET {} WHERE {}").format(
+                identifier(name), assignments, where
+            )
+            for row in batch.rows[name]:
+                values = tuple(
+                    Jsonb(row[column])
+                    if column in table.json_columns and row[column] is not None
+                    else row[column]
+                    for column in columns
+                ) + tuple(row[column] for column in table.primary_key)
+                cursor.execute(statement, values)
+                if cursor.rowcount != 1:
+                    raise SourceError(f"thiếu bản ghi {name}; chạy load cases trước")
 
 
 def check(connection: psycopg.Connection[Any]) -> None:
@@ -144,11 +188,25 @@ def check(connection: psycopg.Connection[Any]) -> None:
 
 def expected_counts(batches: Iterable[Batch]) -> dict[str, int]:
     keys: dict[str, set[tuple[Any, ...]]] = {name: set() for name in TABLES}
+    active_lines: set[str] = set()
     for batch in batches:
         for name in batch.tables:
             for row in batch.rows[name]:
                 keys[name].add(tuple(row[col] for col in TABLES[name].primary_key))
-    return {name: len(values) for name, values in keys.items()}
+        active_orders = {
+            row["y_lenh_id"]
+            for row in batch.rows["nghiep_vu.y_lenh"]
+            if row["trang_thai"] in ACTIVE_ORDER_STATUSES
+        }
+        active_lines.update(
+            row["chi_tiet_y_lenh_id"]
+            for row in batch.rows["nghiep_vu.chi_tiet_y_lenh"]
+            if row["trang_thai_dong"] == "active" and row["y_lenh_id"] in active_orders
+        )
+    return {
+        **{name: len(values) for name, values in keys.items()},
+        ACTIVE_DRUG_VIEW: len(active_lines),
+    }
 
 
 def verify(
@@ -192,6 +250,41 @@ def verify(
                 orphan_total += connection.execute(query).fetchone()[0]
         print(f"Khoá ngoại mồ côi: {orphan_total}")
         matched = matched and orphan_total == 0
+        for label, query in (
+            (
+                "ca_id trùng",
+                "SELECT count(*) FROM (SELECT ca_id FROM nghiep_vu.y_lenh "
+                "WHERE ca_id IS NOT NULL GROUP BY ca_id HAVING count(*) > 1) q",
+            ),
+            (
+                "Ca không chờ duyệt",
+                "SELECT count(*) FROM nghiep_vu.y_lenh "
+                "WHERE ca_id IS NOT NULL AND trang_thai <> 'cho_duyet'",
+            ),
+            (
+                "Thứ tự đợt trùng",
+                "SELECT count(*) FROM (SELECT nguoi_benh_id, thu_tu "
+                "FROM nghiep_vu.dot_dieu_tri WHERE thu_tu IS NOT NULL "
+                "GROUP BY nguoi_benh_id, thu_tu HAVING count(*) > 1) q",
+            ),
+            (
+                "Dòng thiếu y lệnh",
+                "SELECT count(*) FROM nghiep_vu.chi_tiet_y_lenh WHERE y_lenh_id IS NULL",
+            ),
+            (
+                "View khác nguồn",
+                "WITH expected AS (SELECT ct.* FROM nghiep_vu.chi_tiet_y_lenh ct "
+                "JOIN nghiep_vu.y_lenh yl ON yl.y_lenh_id = ct.y_lenh_id "
+                "WHERE ct.trang_thai_dong = 'active' "
+                "AND yl.trang_thai IN ('da_duyet', 'dang_thuc_hien')) "
+                "SELECT count(*) FROM ((SELECT * FROM expected EXCEPT "
+                "SELECT * FROM nghiep_vu.v_thuoc_dang_dung) UNION ALL "
+                "(SELECT * FROM nghiep_vu.v_thuoc_dang_dung EXCEPT SELECT * FROM expected)) q",
+            ),
+        ):
+            errors = connection.execute(query).fetchone()[0]
+            print(f"{label}: {errors}")
+            matched = matched and errors == 0
         if connection.execute("SELECT to_regclass(%s)", ("tri_thuc.doan_trich",)).fetchone()[0]:
             missing, available = connection.execute(
                 "SELECT count(*) FILTER (WHERE embedding IS NULL), "

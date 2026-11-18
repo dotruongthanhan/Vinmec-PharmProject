@@ -2,6 +2,8 @@
 
 import json
 import logging
+import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import RLock
@@ -25,9 +27,11 @@ from app.api.presenter import (
 )
 from app.auth.principal import Principal
 from app.auth.roles import ADMIN
-from app.config.settings import get_secret
+from app.config.settings import get_secret, load_case_source
 from app.core.errors import ConfigError
 from app.core.types import Chunk
+from app.db import administrative, medical_record
+from app.db.reader import DatabaseReadError, DbReviewService
 from app.domain.models import CaBenh
 from app.feedback import PhanHoi, load_feedback, save_feedback
 from app.kb.names import DrugNameIndex
@@ -41,7 +45,7 @@ from app.pipeline import KetQuaThamDinh, run_case
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import RenalRuleBook, load_renal_rules
 from app.ui.labels import NHOM_LY_DO
-from app.ui.services import NotReadyAskService, PipelineReviewService
+from app.ui.services import NotReadyAskService, PipelineReviewService, ReviewService
 
 _AUTO = object()
 _ROOT = Path(__file__).resolve().parents[2]
@@ -69,6 +73,9 @@ class AskRunner(Protocol):
     ) -> AskResult: ...
 
 
+_DB_READ_TTL_SECONDS = 60.0
+
+
 def _is_ai_disabled() -> bool:
     """Đọc cờ tắt AI qua lớp cấu hình tập trung, không đọc .env trực tiếp."""
     try:
@@ -90,7 +97,11 @@ class CaseService:
         corpus_path: Path | None = None,
         asker: Any = _AUTO,
     ) -> None:
-        self._loader = PipelineReviewService(case_dir, renal_rules_path)
+        self._loader: ReviewService = (
+            DbReviewService(renal_rules_path)
+            if load_case_source() == "db"
+            else PipelineReviewService(case_dir, renal_rules_path)
+        )
         self._renal_rules_path = Path(renal_rules_path)
         self._feedback_path = Path(feedback_path)
         self._corpus_path = (
@@ -102,6 +113,8 @@ class CaseService:
         self._renal_rules: RenalRuleBook | None = None
         self._ask = NotReadyAskService()
         self._lock = RLock()
+        self._db_cache: dict[tuple[str, ...], tuple[float, Any]] = {}
+        self._db_cache_lock = RLock()
         self._jobs = AiJobManager()
         self._ask_sources: dict[str, dict[str, Chunk]] = {}
         self._container: container_mod.Container | None = None
@@ -218,8 +231,39 @@ class CaseService:
                 self._load_errors = [s.LoadError(tep=path, loi=error) for path, error in errors]
             cases = list(self._cases.values())
             results = {case.ca_id: self._review(case) for case in cases}
+            queue = present_queue(cases, results, load_feedback(self._feedback_path))
+            records = self._administrative(cases)
+            by_id = {case.ca_id: case for case in cases}
+            for row in queue:
+                case = by_id[row.ca_id]
+                row.chan_doan_chinh = (
+                    "; ".join(
+                        diagnosis.noi_dung
+                        for diagnosis in case.chan_doan
+                        if diagnosis.loai == "chinh"
+                    )
+                    or None
+                )
+                row.vao_vien = case.dot_dieu_tri.thoi_diem_bat_dau
+                record = records.get(case.nguoi_benh.nguoi_benh_id)
+                if record is None:
+                    continue
+                row.ho_ten = record.dinh_danh_day_du.ho_ten
+                row.ngay_sinh = record.dinh_danh_day_du.ngay_sinh
+                encounter = next(
+                    (
+                        item
+                        for item in record.lich_su_vao_vien
+                        if item.dot_dieu_tri_id == case.dot_dieu_tri.dot_dieu_tri_id
+                    ),
+                    None,
+                )
+                if encounter:
+                    row.chan_doan_chinh = encounter.chan_doan_chinh
+                    row.vao_vien = encounter.thoi_diem_bat_dau
+                    row.so_y_lenh = len(encounter.y_lenh)
             return s.DanhSachCa(
-                cases=present_queue(cases, results, load_feedback(self._feedback_path)),
+                cases=queue,
                 loi_nap=self._load_errors,
                 che_do=self.mode(),
             )
@@ -231,7 +275,94 @@ class CaseService:
             rule_result = self._review(case)
             feedbacks = load_feedback(self._feedback_path)
             mode = self.mode()
-        return present_case(case, rule_result, feedbacks, che_do=mode)
+        detail = present_case(case, rule_result, feedbacks, che_do=mode)
+        medical_future = None
+        if isinstance(self._loader, DbReviewService):
+            # Hai lần đọc DB độc lập: chạy song song để không cộng dồn độ trễ mạng.
+            medical_pool = ThreadPoolExecutor(max_workers=1)
+            medical_future = medical_pool.submit(
+                self._cached_read,
+                ("med", case.nguoi_benh.nguoi_benh_id, case.ca_id),
+                lambda: medical_record.read_medical_record(
+                    case.nguoi_benh.nguoi_benh_id, case.ca_id
+                ),
+            )
+            medical_pool.shutdown(wait=False)
+        record = self._administrative([case]).get(case.nguoi_benh.nguoi_benh_id)
+        if record:
+            detail.dinh_danh_day_du = record.dinh_danh_day_du
+            detail.lich_su_vao_vien = record.lich_su_vao_vien
+            encounter = next(
+                (
+                    item
+                    for item in record.lich_su_vao_vien
+                    if item.dot_dieu_tri_id == case.dot_dieu_tri.dot_dieu_tri_id
+                ),
+                None,
+            )
+            if encounter:
+                detail.quan_ly_nguoi_benh = s.PatientManagement.model_validate(
+                    encounter.model_dump(include=set(s.PatientManagement.model_fields))
+                )
+        if medical_future is not None:
+            try:
+                medical = medical_future.result()
+            except DatabaseReadError:
+                raise DatabaseReadError("Không thể đọc y lệnh và phiếu điều trị.") from None
+            detail.danh_sach_y_lenh = medical.danh_sach_y_lenh
+            detail.phieu_dieu_tri = medical.phieu_dieu_tri
+        else:
+            order = case.y_lenh_cho_duyet
+            detail.danh_sach_y_lenh = [
+                s.MedicalOrder(
+                    y_lenh_id=order.y_lenh_id,
+                    dot_dieu_tri_id=case.dot_dieu_tri.dot_dieu_tri_id,
+                    thu_tu_dot=1,
+                    thoi_diem_ke=order.thoi_diem_ke,
+                    trang_thai="cho_duyet",
+                    khoa_ke_don=order.khoa_ke_don,
+                    luong_duyet=order.luong_duyet,
+                    la_trong_tam=True,
+                    **detail.chi_tiet.y_lenh.cho_duyet.model_dump(),
+                )
+            ]
+            if case.thuoc_dang_dung and detail.chi_tiet.y_lenh.dang_dung:
+                detail.danh_sach_y_lenh.append(
+                    s.MedicalOrder(
+                        y_lenh_id=f"YL-{case.ca_id}-NEN",
+                        dot_dieu_tri_id=case.dot_dieu_tri.dot_dieu_tri_id,
+                        thu_tu_dot=1,
+                        thoi_diem_ke=min(line.bat_dau for line in case.thuoc_dang_dung),
+                        trang_thai="dang_thuc_hien",
+                        khoa_ke_don=case.dot_dieu_tri.khoa_dieu_tri,
+                        luong_duyet=order.luong_duyet,
+                        la_trong_tam=False,
+                        **detail.chi_tiet.y_lenh.dang_dung.model_dump(),
+                    )
+                )
+            detail.danh_sach_y_lenh.sort(key=lambda item: (str(item.thoi_diem_ke), item.y_lenh_id))
+        return detail
+
+    def _administrative(self, cases: list[CaBenh]) -> dict[str, s.AdministrativeRecord]:
+        """Đọc riêng từng yêu cầu, không gắn vào bộ đệm ca hay kết quả AI."""
+        if not isinstance(self._loader, DbReviewService):
+            return {}
+        patient_ids = sorted({case.nguoi_benh.nguoi_benh_id for case in cases})
+        return administrative.read_administrative(patient_ids)
+
+    def _cached_read(self, key: tuple[str, ...], loader: Any) -> Any:
+        """Bộ đệm 60 giây cho y lệnh và phiếu điều trị; dữ liệu hành chính không vào đây."""
+        now = time.monotonic()
+        with self._db_cache_lock:
+            hit = self._db_cache.get(key)
+            if hit is not None and now - hit[0] < _DB_READ_TTL_SECONDS:
+                return hit[1]
+        value = loader()
+        with self._db_cache_lock:
+            if len(self._db_cache) > 256:
+                self._db_cache.clear()
+            self._db_cache[key] = (time.monotonic(), value)
+        return value
 
     def get_record(self, case_id: str, record_id: str) -> s.BanGhi:
         """Tra bản ghi trong đúng ca mà không truy cập đường dẫn từ người gọi."""
