@@ -11,6 +11,7 @@ from app.rules.engine import run_rules
 from app.rules.renal_dose import load_renal_rules
 
 _DEFAULT_RENAL_RULES_PATH = Path("data/kb/quy_tac_lieu_than.json")
+_DEFAULT_INTERACTION_RULES_PATH = Path("data/kb_curated/tuong_tac.jsonl")
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -26,6 +27,12 @@ def _build_parser() -> argparse.ArgumentParser:
         default=_DEFAULT_RENAL_RULES_PATH,
         help="Đường dẫn bảng quy tắc chỉnh liều theo thận",
     )
+    parser.add_argument(
+        "--interaction-rules",
+        type=Path,
+        default=_DEFAULT_INTERACTION_RULES_PATH,
+        help="Đường dẫn kho quy tắc tương tác thuốc (JSONL)",
+    )
     return parser
 
 
@@ -36,9 +43,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         sys.stdout.reconfigure(encoding="utf-8")
 
     args = _build_parser().parse_args(argv)
+    from app.rules.interaction import load_interaction_rules_if_exists
+
     ca = load_case(args.case_path)
     renal_rules = load_renal_rules(args.renal_rules)
-    findings = run_rules(ca, renal_rules)
+    interaction_rules = load_interaction_rules_if_exists(args.interaction_rules)
+    findings = run_rules(ca, renal_rules, interaction_rules)
     payload = [item.model_dump(mode="json") for item in findings]
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0

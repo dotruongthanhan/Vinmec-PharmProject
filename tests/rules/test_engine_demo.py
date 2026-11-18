@@ -141,7 +141,7 @@ def test_engine_isolates_rule_runtime_error(monkeypatch: pytest.MonkeyPatch) -> 
     other_codes = {item.ma_luat for item in findings}
     assert "di_ung_khong_co" in other_codes
     assert "lich_dung_thieu_lieu" in other_codes
-    assert [item.ket_luan for item in findings] == ["can_xem", "khong_du_du_lieu", "dat"]
+    assert [item.ket_luan for item in findings] == ["can_xem", "khong_du_du_lieu", "dat", "dat"]
 
 
 def test_cli_outputs_valid_utf8_json(capsys: pytest.CaptureFixture[str]) -> None:

@@ -104,8 +104,9 @@ def test_demo02_detail(client: TestClient) -> None:
     assert body["tom_tat"]["bat_thuong"][0]["huong"] == "▲"
     assert "150" in body["tom_tat"]["bat_thuong"][0]["so_voi_truoc"]
     assert body["tom_tat"]["nam_vien_text"].startswith("3 ngày")
-    assert "4. Tương tác thuốc" in body["nhan_dinh"]["yeu_to_chua_kiem"]
-    assert body["nhan_dinh"]["so_luat_da_chay"] == 5
+    assert "5. Độc tính" in body["nhan_dinh"]["yeu_to_chua_kiem"]
+    assert "4. Tương tác thuốc" not in body["nhan_dinh"]["yeu_to_chua_kiem"]
+    assert body["nhan_dinh"]["so_luat_da_chay"] == 6
 
 
 def test_missing_data_and_microbiology(client: TestClient) -> None:

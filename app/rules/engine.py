@@ -25,12 +25,27 @@ def _priority_key(finding: PhatHien) -> int:
     return 6
 
 
-def run_rules(ca: CaBenh, renal_rules: RenalRuleBook) -> list[PhatHien]:
-    """Chạy lần lượt 5 luật theo thứ tự 4.1 -> 4.5, cô lập lỗi và sắp xếp ổn định."""
+def run_rules(
+    ca: CaBenh,
+    renal_rules: RenalRuleBook,
+    interaction_rules: object | None = None,
+) -> list[PhatHien]:
+    """Chạy lần lượt 6 luật theo thứ tự 1, 2, 3, 4, 6, 7, cô lập lỗi và sắp xếp ổn định."""
+    from pathlib import Path
+
+    from app.rules import interaction
+    from app.rules.interaction import InteractionBook, load_interaction_rules_if_exists
+
+    resolved_interactions = (
+        interaction_rules
+        if isinstance(interaction_rules, InteractionBook)
+        else load_interaction_rules_if_exists(Path("data/kb_curated/tuong_tac.jsonl"))
+    )
     steps: list[tuple[str, int, Callable[[], list[PhatHien]]]] = [
         ("allergy", 1, lambda: allergy.check(ca)),
         ("duplicate", 2, lambda: duplicate.check(ca)),
         ("antibiotic", 3, lambda: antibiotic.check(ca)),
+        ("interaction", 4, lambda: interaction.check(ca, resolved_interactions)),
         ("renal_dose", 6, lambda: renal_dose.check(ca, renal_rules)),
         ("schedule", 7, lambda: schedule.check(ca)),
     ]

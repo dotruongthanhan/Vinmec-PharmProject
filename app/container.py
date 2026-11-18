@@ -21,6 +21,7 @@ from app.core.interfaces import (
 from app.providers.bm25_index import Bm25Index
 from app.providers.fakes import FakeLLM, HashEmbedder, NoopReranker
 from app.providers.memory_store import InMemoryVectorStore
+from app.rules.interaction import InteractionBook, load_interaction_rules_if_exists
 from app.rules.registry import default_rules
 from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 from app.storage.case_repo import JsonCaseRepository
@@ -73,6 +74,10 @@ class Container:
     @cached_property
     def renal_rules(self) -> RenalRuleBook:
         return load_renal_rules(_ROOT / "data/kb/quy_tac_lieu_than.json")
+
+    @cached_property
+    def interaction_rules(self) -> InteractionBook:
+        return load_interaction_rules_if_exists(_ROOT / "data/kb_curated/tuong_tac.jsonl")
 
     @cached_property
     def rules(self) -> list[Rule]:

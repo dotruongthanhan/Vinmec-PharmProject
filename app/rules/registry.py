@@ -18,6 +18,7 @@ class RuleContext:
     """Phụ thuộc dùng chung của các luật."""
 
     renal_rules: RenalRuleBook
+    interaction_rules: object | None = None
 
 
 class AllergyRule:
@@ -70,9 +71,37 @@ class ScheduleRule:
         return schedule.check(ca)
 
 
+class InteractionRule:
+    """Bộ chuyển đổi luật yếu tố 4 (tương tác thuốc – thuốc)."""
+
+    ma_nhom = "interaction"
+    yeu_to = 4
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        """Chạy luật tương tác bằng InteractionBook trong ctx hoặc bản mặc định."""
+        from pathlib import Path
+
+        from app.rules import interaction
+        from app.rules.interaction import InteractionBook, load_interaction_rules_if_exists
+
+        book = (
+            ctx.interaction_rules
+            if isinstance(ctx.interaction_rules, InteractionBook)
+            else load_interaction_rules_if_exists(Path("data/kb_curated/tuong_tac.jsonl"))
+        )
+        return interaction.check(ca, book)
+
+
 def default_rules() -> list["Rule"]:
     """Giữ nguyên thứ tự luật trong engine hiện có."""
-    return [AllergyRule(), DuplicateRule(), AntibioticRule(), RenalDoseRule(), ScheduleRule()]
+    return [
+        AllergyRule(),
+        DuplicateRule(),
+        AntibioticRule(),
+        InteractionRule(),
+        RenalDoseRule(),
+        ScheduleRule(),
+    ]
 
 
 def run_registered(ca: CaBenh, ctx: RuleContext, rules: list["Rule"]) -> list[PhatHien]:

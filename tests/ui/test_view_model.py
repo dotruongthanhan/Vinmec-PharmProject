@@ -366,7 +366,8 @@ def test_unchecked_factors_and_suggested_questions() -> None:
     ca_01 = load_case(_DEMO_DIR / "DEMO-01.json")
     res_01 = run_case(ca_01, load_renal_rules(_RENAL_RULES_PATH))
     unchecked = unchecked_factors(res_01.phat_hien)
-    assert "4. Tương tác thuốc" in unchecked
+    assert "5. Độc tính" in unchecked
+    assert "4. Tương tác thuốc" not in unchecked
 
     q_01 = suggested_questions(ca_01)
     assert len(q_01) == 3

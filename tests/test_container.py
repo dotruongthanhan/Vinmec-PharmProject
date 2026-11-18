@@ -28,7 +28,7 @@ def test_test_container_protocols_and_caching() -> None:
         assert isinstance(getattr(container, name), protocol)
         assert getattr(container, name) is getattr(container, name)
     assert container.embedder.dimensions == container.settings.embedding.dimensions
-    assert len(container.rules) == 5
+    assert len(container.rules) == 6
     assert len(container.case_repo.list_ids()) == 6
     assert container.renal_rules is container.renal_rules
     assert container.rules is container.rules
@@ -40,7 +40,7 @@ def test_dev_container_is_lazy_and_independent_of_cwd(
     monkeypatch.chdir(tmp_path)
     container = build_container("dev")
     assert len(container.case_repo.list_ids()) == 6
-    assert len(container.rules) == 5
+    assert len(container.rules) == 6
     for name, block, provider in [
         ("llm", "llm", "deepseek"),
         ("embedder", "embedding", "openrouter"),

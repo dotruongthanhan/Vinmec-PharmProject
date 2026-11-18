@@ -29,6 +29,7 @@ def test_strip_salt_removes_trailing_salts() -> None:
     assert strip_salt("Metoprolol Succinate") == "metoprolol"
     assert strip_salt("clavulanate potassium") == "clavulanate"
     assert strip_salt("clopidogrel hydrogen sulfate") == "clopidogrel"
+    assert strip_salt("imipenem anhydrous") == "imipenem"
     assert strip_salt("acid valproic") == "acid valproic"
 
 
@@ -39,10 +40,13 @@ def test_resolve_from_real_hoat_chat_index() -> None:
         "amoxicillin",
         "clavulanic_acid",
     ]
+    assert index.resolve("IMIPENEM ANHYDROUS") == ["imipenem"]
     assert index.resolve("Metoprolol Succinate") == ["metoprolol"]
     assert index.resolve("amoxicilin") == ["amoxicillin"]
     assert index.resolve("Co-trimoxazole") == ["sulfamethoxazole", "trimethoprim"]
     assert index.resolve("Paracetamol") == ["acetaminophen"]
+    assert "paracetamol" in index.synonyms_for("acetaminophen")
+    assert len(index.single_ingredient_ids()) >= 50
     assert index.resolve("thuoc la") == []
     assert index.resolve("") == []
 

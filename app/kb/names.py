@@ -56,6 +56,8 @@ _SALT_TOKENS: frozenset[str] = frozenset(
         "chloride",
         "bromide",
         "hydrogen",
+        "anhydrous",
+        "hydrate",
     }
 )
 
@@ -172,3 +174,31 @@ class DrugNameIndex:
     def inn_names(self, hoat_chat_ids: list[str]) -> list[str]:
         """Lay danh sach ten INN tuong ung voi cac hoat_chat_id."""
         return [self._inn_by_id.get(hid, hid) for hid in hoat_chat_ids]
+
+    def synonyms_for(self, hoat_chat_id: str) -> list[str]:
+        """Tra ve danh sach ten goc/dong nghia de do tim trong van ban openFDA."""
+        for entry in self._entries:
+            if str(entry.get("hoat_chat_id")) != hoat_chat_id:
+                continue
+            terms: list[str] = []
+            seen: set[str] = set()
+            candidates = [
+                str(entry.get("ten_inn") or ""),
+                str(entry.get("ten_viet") or ""),
+                hoat_chat_id.replace("_", " "),
+                *[str(syn) for syn in entry.get("dong_nghia") or []],
+            ]
+            for term in candidates:
+                cleaned = term.strip()
+                key = cleaned.lower()
+                if cleaned and key not in seen:
+                    seen.add(key)
+                    terms.append(cleaned)
+            return terms
+        return [hoat_chat_id.replace("_", " ")]
+
+    def single_ingredient_ids(self) -> list[str]:
+        """Tra ve danh sach cac hoat_chat_id don chat trong chi muc."""
+        return [
+            str(entry["hoat_chat_id"]) for entry in self._entries if not entry.get("thanh_phan")
+        ]

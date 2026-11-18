@@ -21,6 +21,7 @@ def test_registered_matches_existing_engine(number: int) -> None:
         ("allergy", 1),
         ("duplicate", 2),
         ("antibiotic", 3),
+        ("interaction", 4),
         ("renal_dose", 6),
         ("schedule", 7),
     ]

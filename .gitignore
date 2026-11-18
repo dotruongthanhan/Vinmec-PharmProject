@@ -228,4 +228,8 @@ skills-lock.json
 tests/**/.tmp/
 data/runtime/
 data/cache/*.sqlite
+data/kb_sources/ddinter/.fetch_cache.sqlite*
 web/qa/artifacts/
+
+# macOS
+.DS_Store

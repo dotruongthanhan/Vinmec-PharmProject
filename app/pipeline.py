@@ -89,8 +89,12 @@ def _attach_provenance(
     return result.model_copy(update={"dau_vao": updated_inputs})
 
 
-def run_case(ca: CaBenh, renal_rules: RenalRuleBook) -> KetQuaThamDinh:
-    """Chạy tính 4 chỉ số lâm sàng và bộ luật v0 cho một ca bệnh."""
+def run_case(
+    ca: CaBenh,
+    renal_rules: RenalRuleBook,
+    interaction_rules: object | None = None,
+) -> KetQuaThamDinh:
+    """Chạy tính 4 chỉ số lâm sàng và bộ luật (6 yếu tố hiện có) cho một ca bệnh."""
     start = time.perf_counter()
 
     weight_vital = latest_vital(ca, "can_nang")
@@ -146,7 +150,7 @@ def run_case(ca: CaBenh, renal_rules: RenalRuleBook) -> KetQuaThamDinh:
     chi_so = [
         _attach_provenance(res, weight_vital, height_vital, creatinin_lab) for res in raw_results
     ]
-    phat_hien = run_rules(ca, renal_rules)
+    phat_hien = run_rules(ca, renal_rules, interaction_rules)
     elapsed_ms = (time.perf_counter() - start) * 1000.0
 
     return KetQuaThamDinh(

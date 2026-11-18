@@ -9,6 +9,7 @@ from app.domain.loader import load_case
 from app.domain.models import CaBenh
 from app.pipeline import KetQuaThamDinh, run_case
 from app.rules import RenalRuleBook, load_renal_rules
+from app.rules.interaction import InteractionBook, load_interaction_rules_if_exists
 
 _NOT_READY_MESSAGE = (
     "Chức năng hỏi thêm chưa được nối với hệ thống. Bảng nhận định bên trái vẫn dùng được."
@@ -56,10 +57,21 @@ class AskService(Protocol):
 class PipelineReviewService:
     """Dịch vụ thẩm định dùng bộ nạp ca bệnh JSON và pipeline run_case."""
 
-    def __init__(self, case_dir: Path, renal_rules_path: Path) -> None:
+    def __init__(
+        self,
+        case_dir: Path,
+        renal_rules_path: Path,
+        interaction_rules_path: Path | None = None,
+    ) -> None:
         self._case_dir = Path(case_dir)
         self._renal_rules_path = Path(renal_rules_path)
         self._renal_rules: RenalRuleBook | None = None
+        self._interaction_rules_path = (
+            Path(interaction_rules_path)
+            if interaction_rules_path is not None
+            else Path("data/kb_curated/tuong_tac.jsonl")
+        )
+        self._interaction_rules: InteractionBook | None = None
 
     def _get_renal_rules(self) -> RenalRuleBook:
         """Nạp và giữ bảng quy tắc chỉnh liều thận trên thực thể dịch vụ."""
@@ -83,9 +95,15 @@ class PipelineReviewService:
         cases.sort(key=lambda ca: ca.ca_id)
         return cases, errors
 
+    def _get_interaction_rules(self) -> InteractionBook:
+        """Nạp bảng tương tác thuốc một lần và giữ trong dịch vụ."""
+        if self._interaction_rules is None:
+            self._interaction_rules = load_interaction_rules_if_exists(self._interaction_rules_path)
+        return self._interaction_rules
+
     def review(self, ca: CaBenh) -> KetQuaThamDinh:
         """Chạy pipeline thẩm định trên một ca bệnh."""
-        return run_case(ca, self._get_renal_rules())
+        return run_case(ca, self._get_renal_rules(), self._get_interaction_rules())
 
 
 class NotReadyAskService:

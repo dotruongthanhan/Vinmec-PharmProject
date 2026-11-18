@@ -38,6 +38,7 @@ from app.orchestration.jobs import AiJobManager, AiJobState
 from app.pipeline import KetQuaThamDinh, run_case
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import RenalRuleBook, load_renal_rules
+from app.rules.interaction import InteractionBook, load_interaction_rules_if_exists
 from app.ui.labels import NHOM_LY_DO
 from app.ui.services import NotReadyAskService, PipelineReviewService
 
@@ -87,8 +88,18 @@ class CaseService:
         ai_runner: Any = _AUTO,
         corpus_path: Path | None = None,
         asker: Any = _AUTO,
+        interaction_rules_path: Path | None = None,
     ) -> None:
-        self._loader = PipelineReviewService(case_dir, renal_rules_path)
+        self._interaction_rules_path = (
+            Path(interaction_rules_path)
+            if interaction_rules_path is not None
+            else _ROOT / "data/kb_curated/tuong_tac.jsonl"
+        )
+        self._loader = PipelineReviewService(
+            case_dir,
+            renal_rules_path,
+            self._interaction_rules_path,
+        )
         self._renal_rules_path = Path(renal_rules_path)
         self._feedback_path = Path(feedback_path)
         self._corpus_path = (
@@ -98,6 +109,7 @@ class CaseService:
         self._load_errors: list[s.LoadError] = []
         self._results: dict[str, KetQuaThamDinh] = {}
         self._renal_rules: RenalRuleBook | None = None
+        self._interaction_rules: InteractionBook | None = None
         self._ask = NotReadyAskService()
         self._lock = RLock()
         self._jobs = AiJobManager()
@@ -204,7 +216,15 @@ class CaseService:
         if case.ca_id not in self._results:
             if self._renal_rules is None:
                 self._renal_rules = load_renal_rules(self._renal_rules_path)
-            self._results[case.ca_id] = run_case(case, self._renal_rules)
+            if self._interaction_rules is None:
+                self._interaction_rules = load_interaction_rules_if_exists(
+                    self._interaction_rules_path
+                )
+            self._results[case.ca_id] = run_case(
+                case,
+                self._renal_rules,
+                self._interaction_rules,
+            )
         return self._results[case.ca_id]
 
     def list_cases(self) -> s.DanhSachCa:
