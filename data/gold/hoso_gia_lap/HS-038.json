@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-038",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 1,
+      "ket_luan": "khong_du_du_lieu",
+      "muc_do": null,
+      "chi_tiet_y_lenh_id": ["CT-HS-038-05-01"],
+      "mo_ta": "Ceftriaxon 2 g được kê khi cả hai lần vào viện đều chưa có thông tin dị ứng, không đủ dữ liệu để đánh giá."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

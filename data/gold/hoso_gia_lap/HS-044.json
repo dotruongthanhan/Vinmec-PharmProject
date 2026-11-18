@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-044",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-044-04-01"],
+      "mo_ta": "Metoprolol tartrat 50 mg uống 2 lần/ngày nhưng lịch dùng chỉ có mốc 08:00, thiếu liều buổi tối."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

@@ -1,0 +1,584 @@
+{
+  "ho_so_id": "HS-026",
+  "kich_ban_id": "HS-026",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-026",
+    "tuoi": 80,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T08:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-GENTAMICIN",
+      "ten_hoat_chat": "Gentamicin",
+      "ten_quoc_te": "gentamicin",
+      "ma_atc": "J01GB03",
+      "nhom_duoc_ly": "khang sinh nhom aminoglycosid"
+    },
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "khang sinh nhom cephalosporin the 3"
+    },
+    {
+      "hoat_chat_id": "HC-ESOMEPRAZOLE",
+      "ten_hoat_chat": "Esomeprazol",
+      "ten_quoc_te": "esomeprazole",
+      "ma_atc": "A02BC05",
+      "nhom_duoc_ly": "thuoc uc che bom proton"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "thuoc giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-GENTAMICIN-80",
+      "ten_thuoc": "Gentamicin 80 mg/2 mL",
+      "ham_luong": "80 mg/2 mL",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-GENTAMICIN",
+          "ham_luong_thanh_phan": 80.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "ten_thuoc": "Ceftriaxon 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-ESOMEPRAZOLE-40",
+      "ten_thuoc": "Esomeprazol 40 mg",
+      "ham_luong": "40 mg",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ESOMEPRAZOLE",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-ACETAMINOPHEN-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-026-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội thận",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-07-02T09:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-07-09T10:00:00+07:00",
+      "so_ngay_dieu_tri": 7,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội thận",
+          "tu": "2026-07-02T09:00:00+07:00",
+          "den": "2026-07-09T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Mệt, phù hai chân",
+      "benh_su": "BN nam 79T suy thận mạn theo dõi ngoại trú, nhập viện vì mệt và phù nhẹ hai chân khoảng 1 tuần. Không sốt, không đau bụng.",
+      "tien_su": {
+        "ban_than": "Suy thận mạn theo dõi tại khoa Thận. Chưa ghi nhận bệnh lý nền khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận thuốc đặc biệt."
+      },
+      "kham_benh": "HA 138/80 mmHg, mạch 84 lần/phút, phù nhẹ hai chân. Phổi không ran. Bụng mềm.",
+      "tom_tat": "BN nam 79T suy thận mạn, phù nhẹ hai chân. Creatinin 200 umol/L, kali 4,5 mmol/L. Theo dõi chức năng thận, ra viện ổn định.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS026-01",
+          "ma_icd10": "N18.4",
+          "noi_dung": "Bệnh thận mạn giai đoạn 4",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS026-01",
+          "loai": "can_nang",
+          "gia_tri": 64.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-07-02T09:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 138.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-07-02T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 80.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-07-02T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-04",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-07-02T09:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS026-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 200.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-07-02T10:15:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS026-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.5,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-07-02T10:15:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-026-01",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN nam 79T suy thận mạn, phù nhẹ hai chân, mệt. Creatinin 200 umol/L, kali 4,5 mmol/L. Cân nặng 64 kg, theo dõi nước tiểu và cân nặng hằng ngày. Paracetamol khi đau. Hẹn tái khám khoa Thận.",
+          "thoi_diem_ghi": "2026-07-02T10:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-026-01",
+          "thoi_diem_ke": "2026-07-02T10:00:00+07:00",
+          "khoa_ke_don": "Nội thận",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-026-01-01",
+              "thuoc_id": "T-ACETAMINOPHEN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi cần, tối đa 4 lần/ngày",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi đau, cách nhau ít nhất 6 giờ",
+              "bat_dau": "2026-07-02T10:00:00+07:00",
+              "ket_thuc": "2026-07-09T08:00:00+07:00",
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Ra viện ổn định, creatinin ổn định so với lúc vào viện. Hẹn tái khám khoa Thận."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-026-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-11T14:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Cấp cứu",
+          "tu": "2026-11-11T14:00:00+07:00",
+          "den": "2026-11-11T17:30:00+07:00"
+        },
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-11-11T17:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao, đau bụng lan tỏa",
+      "benh_su": "BN nam 80T suy thận mạn đã biết, vào viện sau 3 ngày sốt cao, đau bụng lan tỏa, ăn kém, tiểu ít. Lần vào viện trước (4 tháng trước) suy thận mạn, creatinin 200 umol/L.",
+      "tien_su": {
+        "ban_than": "Suy thận mạn giai đoạn 4 theo dõi ngoại trú. Đã nhập viện một lần, khoa Nội thận.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận thuốc đặc biệt trước khi vào viện."
+      },
+      "kham_benh": "BN tỉnh, sốt 38,4 độ C, HA 102/60 mmHg, mạch 112 lần/phút, SpO2 94% khí phòng. Bụng chướng nhẹ, đau khắp bụng, có phản ứng thành bụng. Phù nhẹ hai chân.",
+      "tom_tat": "BN nam 80T suy thận mạn, nghi nhiễm khuẩn ổ bụng. Sốt, HA thấp nhẹ, bạch cầu cao. Creatinin 220 umol/L, CrCl ~22 mL/phút. Đã dùng ceftriaxon, chuyển kháng sinh theo phác đồ, theo dõi huyết động và nước tiểu.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS026-02",
+          "ma_icd10": "K65.0",
+          "noi_dung": "Viêm phúc mạc cấp (nhiễm khuẩn ổ bụng)",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS026-03",
+          "ma_icd10": "N18.4",
+          "noi_dung": "Bệnh thận mạn giai đoạn 4",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [
+        {
+          "loai": "suy_than",
+          "trang_thai": "co",
+          "gia_tri": "CrCl ~22 mL/phút (Cockcroft-Gault)",
+          "thoi_diem": "2026-11-14T07:30:00+07:00",
+          "nguon": "xét nghiệm"
+        }
+      ],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS026-05",
+          "loai": "can_nang",
+          "gia_tri": 64.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-11T14:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-06",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 102.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-07",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 60.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-08",
+          "loai": "mach",
+          "gia_tri": 112.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-09",
+          "loai": "nhiet_do",
+          "gia_tri": 38.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-10",
+          "loai": "spo2",
+          "gia_tri": 94.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-11",
+          "loai": "can_nang",
+          "gia_tri": 64.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-12",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 110.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS026-13",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 66.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T07:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS026-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 205.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-11T15:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS026-04",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 220.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS026-05",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 16.4,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS026-06",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.6,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-026-02",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 80T, đau bụng lan tỏa 3 ngày, sốt 38,4 độ C, mệt, ăn kém, tiểu ít. HA 102/60 mmHg, mạch 112 lần/phút, SpO2 94%. Bụng chướng nhẹ, phản ứng thành bụng. Creatinin 205 umol/L. Cân nặng 64 kg. Cấy máu, cấy dịch ổ bụng. Ceftriaxon 2 g truyền tĩnh mạch 1 lần/ngày, esomeprazol 40 mg tiêm tĩnh mạch, truyền NaCl 0,9%. Chuyển HSTC theo dõi huyết động.",
+          "thoi_diem_ghi": "2026-11-11T15:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-026-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "NT ngày 2. Còn sốt, đau bụng giảm nhẹ. HA 104/62 mmHg, mạch 108 lần/phút. Tiểu khoảng 1000 mL/24 giờ. Tiếp tục ceftriaxon, esomeprazol, NaCl 0,9%. Theo dõi huyết động, nước tiểu.",
+          "thoi_diem_ghi": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-026-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "NT ngày 3. Sốt nhẹ 37,8 độ C. BN còn mệt, ăn được ít. Chờ kết quả cấy dịch ổ bụng và cấy máu. Chưa thay đổi thuốc.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-026-05",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "NT ngày 4. Creatinin 220 umol/L, CrCl ~22 mL/phút, kali 4,6 mmol/L, bạch cầu 16,4 G/L. Cân nặng 64 kg. Còn sốt nhẹ. Chuyển kháng sinh theo y lệnh bác sĩ điều trị, tiếp tục theo dõi nước tiểu và chức năng thận.",
+          "thoi_diem_ghi": "2026-11-14T08:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-026-02",
+          "thoi_diem_ke": "2026-11-11T15:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Thay kháng sinh theo phác đồ",
+          "thoi_diem_ngung": "2026-11-14T10:00:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-026-02-01",
+              "thuoc_id": "T-CEFTRIAXON-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-11T15:30:00+07:00",
+              "ket_thuc": "2026-11-14T10:00:00+07:00",
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-026-03",
+          "thoi_diem_ke": "2026-11-11T16:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-026-03-01",
+              "thuoc_id": "T-ESOMEPRAZOLE-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm tĩnh mạch",
+              "cach_dung": "Tiêm tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-11T16:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-026-04",
+          "thoi_diem_ke": "2026-11-11T16:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-026-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL, 1 lần/ngày",
+              "bat_dau": "2026-11-11T16:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-026-05",
+          "thoi_diem_ke": "2026-11-14T10:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": "YL-HS-026-02",
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-026-05-01",
+              "thuoc_id": "T-GENTAMICIN-80",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 320.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Pha loãng, truyền tĩnh mạch trong 60 phút, 1 lần/ngày",
+              "bat_dau": "2026-11-14T14:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T14:00:00+07:00",
+                  "lieu": 320.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T14:00:00+07:00",
+                  "lieu": 320.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-026-05"
+}

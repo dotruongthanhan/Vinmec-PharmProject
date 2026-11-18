@@ -16,7 +16,17 @@
     "dot_dieu_tri_id": "DT-DEMO-04",
     "khoa_dieu_tri": "Chấn thương chỉnh hình",
     "loai_dieu_tri": "noi_tru",
-    "thoi_diem_bat_dau": "2026-11-08T14:00:00+07:00"
+    "thoi_diem_bat_dau": "2026-11-08T14:00:00+07:00",
+    "quan_ly": {
+      "noi_gioi_thieu": "tu_den",
+      "tuyen_chuyen_den": null,
+      "vao_khoa_luc": "2026-11-08T14:00:00+07:00",
+      "so_giuong": "G-064-01",
+      "so_luu_tru": "LT-2026-06401",
+      "ma_yt": "YT-2026-064-01",
+      "ra_vien": null,
+      "bac_si_dieu_tri": "Bác sĩ điều trị"
+    }
   },
   "chan_doan": [
     {
@@ -167,5 +177,33 @@
       "ma_atc": "J01DD04",
       "nhom_duoc_ly": "cephalosporin_the_he_3"
     }
-  ]
+  ],
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 64",
+    "ngay_sinh": "1958-11-08",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9064",
+      "thon_pho": "Thôn Đoài",
+      "xa_phuong": "Việt Hùng",
+      "huyen": "Đông Anh",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000064",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 64",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 064"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 55.0,
+    "nhom_mau": null
+  }
 }

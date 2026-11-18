@@ -1,0 +1,768 @@
+{
+  "ho_so_id": "HS-014",
+  "kich_ban_id": "HS-014",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-014",
+    "tuoi": 71,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T08:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ENALAPRIL",
+      "ten_hoat_chat": "Enalapril",
+      "ten_quoc_te": "enalapril",
+      "ma_atc": "C09AA02",
+      "nhom_duoc_ly": "uc che men chuyen"
+    },
+    {
+      "hoat_chat_id": "HC-LOSARTAN",
+      "ten_hoat_chat": "Losartan",
+      "ten_quoc_te": "losartan",
+      "ma_atc": "C09CA01",
+      "nhom_duoc_ly": "doi khang thu the angiotensin II"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-ENALAPRIL-10",
+      "ten_thuoc": "Enalapril 10 mg",
+      "ham_luong": "10 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ENALAPRIL",
+          "ham_luong_thanh_phan": 10.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-LOSARTAN-50",
+      "ten_thuoc": "Losartan 50 mg",
+      "ham_luong": "50 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-LOSARTAN",
+          "ham_luong_thanh_phan": 50.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-014-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-02-03T09:30:00+07:00",
+      "thoi_diem_ket_thuc": "2026-02-08T09:00:00+07:00",
+      "so_ngay_dieu_tri": 5,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-02-03T09:30:00+07:00",
+          "den": "2026-02-08T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Nhức đầu, HA cao tại nhà",
+      "benh_su": "BN nam 71T, THA nhiều năm, nhức đầu vùng chẩm 2 ngày, HA tại nhà 170/100. Bệnh thận mạn G2 theo dõi ngoại trú. Khởi trị losartan 50 mg/ngày, HA giảm dần.",
+      "tien_su": {
+        "ban_than": "THA. Bệnh thận mạn giai đoạn 2.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc hạ áp trước đó."
+      },
+      "kham_benh": "HA 168/98 mmHg, M 80. Tim đều, phổi không ran. Phù nhẹ mu chân.",
+      "tom_tat": "BN nam 71T, THA và bệnh thận mạn G2. Khởi trị losartan 50 mg/ngày, HA giảm dần sau 5 ngày. Ra viện tiếp tục losartan tại nhà, tái khám.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS014-1-01",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp vô căn",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS014-1-02",
+          "ma_icd10": "N18.2",
+          "noi_dung": "Bệnh thận mạn giai đoạn 2",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS014-1-01",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 168.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-02-03T10:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-1-02",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 98.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-02-03T10:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS014-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 98.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-02-03T11:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-014-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì nhức đầu vùng chẩm 2 ngày, HA tại nhà 170/100. THA, bệnh thận mạn G2 theo dõi ngoại trú. Khởi trị losartan 50 mg uống mỗi ngày.",
+          "thoi_diem_ghi": "2026-02-03T09:45:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-014-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "HA giảm dần còn 138/86, hết nhức đầu. Creatinin ổn. Tiếp tục losartan.",
+          "thoi_diem_ghi": "2026-02-06T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-014-01",
+          "thoi_diem_ke": "2026-02-03T10:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-014-01-01",
+              "thuoc_id": "T-LOSARTAN-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-02-03T10:30:00+07:00",
+              "ket_thuc": "2026-02-08T09:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-014-02",
+          "thoi_diem_ke": "2026-02-03T10:05:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-014-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-02-03T10:30:00+07:00",
+              "ket_thuc": "2026-02-04T10:30:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "THA, bệnh thận mạn G2. Khởi trị losartan 50 mg/ngày, HA ổn định khi ra viện. Ra viện tiếp tục losartan 50 mg/ngày tại nhà.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-02-03T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 71 tuổi, tăng huyết áp nhiều năm, nhức đầu vùng chẩm 2 ngày, huyết áp tại nhà cao. Khám huyết áp 168/98 mmHg, tim đều, phổi không ran, phù nhẹ mu chân. Creatinin 98 umol/L. Bệnh thận mạn giai đoạn 2 đang theo dõi ngoại trú.",
+          "danh_gia": "Tăng huyết áp chưa kiểm soát có triệu chứng nhức đầu, kèm bệnh thận mạn giai đoạn 2 với chức năng thận hiện còn trong giới hạn. Chưa dùng thuốc hạ áp trước khi vào viện.",
+          "huong_xu_tri": "Khởi trị losartan 50 mg uống mỗi ngày. Truyền natri clorid 0,9% 500 mL mỗi ngày. Theo dõi huyết áp và chức năng thận, ghi nhận đáp ứng điều trị trong vài ngày tới.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-01",
+            "YL-HS-014-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm nhạt, ít muối, ít đạm",
+          "theo_doi": [
+            "Huyết áp mỗi 4 giờ",
+            "Creatinin và kali sau 3 đến 5 ngày"
+          ],
+          "dan_do": "Đo huyết áp tại nhà mỗi sáng và ghi lại số đo. Báo khi nhức đầu nhiều hơn hoặc chóng mặt."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-02-04T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Nhức đầu giảm nhẹ so với hôm vào viện. Huyết áp đo sáng nay giảm dần. BN ăn uống được, không chóng mặt, không khó thở.",
+          "danh_gia": "Huyết áp đang giảm dần dưới tác dụng của losartan nhưng chưa về mục tiêu. Chức năng thận chưa có thay đổi bất lợi.",
+          "huong_xu_tri": "Tiếp tục losartan 50 mg mỗi ngày, theo dõi huyết áp mỗi ngày. Chưa cần thay đổi thuốc hạ áp hôm nay. Theo dõi lượng nước tiểu trong khi truyền dịch. Truyền natri clorid 0,9% theo y lệnh, dự kiến kết thúc trong buổi sáng nay.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-01",
+            "YL-HS-014-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm nhạt, ít muối",
+          "theo_doi": [
+            "Huyết áp mỗi 6 giờ",
+            "Triệu chứng nhức đầu và chóng mặt"
+          ],
+          "dan_do": "Đứng dậy từ từ khi vừa thức dậy để tránh chóng mặt."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-02-05T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Huyết áp tiếp tục giảm, nhức đầu hết rõ rệt. BN ăn uống tốt, đi lại được trong khoa, ngủ được ban đêm. Không có phù tăng thêm, không khó thở.",
+          "danh_gia": "Tăng huyết áp đáp ứng tốt với losartan. Chức năng thận chưa có dấu hiệu xấu đi trong quá trình điều trị.",
+          "huong_xu_tri": "Tiếp tục losartan 50 mg mỗi ngày. Theo dõi huyết áp hằng ngày trước khi ra viện. Ghi nhận cân nặng và phù chi dưới trước khi ra viện. Chuẩn bị hướng dẫn dùng thuốc tại nhà. Đánh giá lại khả năng tự đo huyết áp của BN và người nhà trước khi ra viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cơm nhạt, ít muối",
+          "theo_doi": [
+            "Huyết áp mỗi ngày",
+            "Triệu chứng nhức đầu"
+          ],
+          "dan_do": "Uống losartan đúng giờ mỗi ngày, không bỏ liều."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-02-06T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Huyết áp giảm dần còn ở mức an toàn hơn, hết nhức đầu. Creatinin ổn định so với lúc vào viện. BN không khó chịu, không phát ban, không chóng mặt.",
+          "danh_gia": "Tăng huyết áp đang được kiểm soát dần. Chưa ghi nhận tác dụng không mong muốn của losartan. Bệnh thận mạn giai đoạn 2 ổn định. Chưa có triệu chứng chóng mặt khi đứng dậy.",
+          "huong_xu_tri": "Tiếp tục losartan. Lên kế hoạch tái khám ngoại trú, xét nghiệm creatinin và kali sau khi ra viện. Dự kiến ra viện trong 1 đến 2 ngày. Tiếp tục theo dõi chế độ ăn nhạt tại khoa.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cơm nhạt, ít muối",
+          "theo_doi": [
+            "Huyết áp mỗi ngày",
+            "Phù mu chân"
+          ],
+          "dan_do": "Tiếp tục đo huyết áp tại nhà và ghi số đo để đưa đi tái khám."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-02-07T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN không đau đầu, không chóng mặt, ăn ngủ tốt. Phù mu chân giảm. Đi lại bình thường trong khoa. Gia đình đã được hướng dẫn về lịch tái khám. Dự kiến ra viện sáng mai.",
+          "danh_gia": "Tăng huyết áp đã kiểm soát tương đối, bệnh thận mạn giai đoạn 2 ổn định. BN đủ điều kiện ra viện điều trị ngoại trú.",
+          "huong_xu_tri": "Ra viện ngày mai. Tiếp tục losartan 50 mg mỗi ngày tại nhà. Hẹn tái khám tim mạch và xét nghiệm chức năng thận trong thời gian ngắn. Dặn BN mang theo đơn thuốc và sổ theo dõi huyết áp khi đi tái khám.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cơm nhạt, ít muối",
+          "theo_doi": [
+            "Huyết áp tại nhà",
+            "Phù mu chân"
+          ],
+          "dan_do": "Tái khám đúng hẹn, mang theo sổ theo dõi huyết áp khi đi khám."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-02-03T09:30:00+07:00",
+        "so_giuong": "G-014-01",
+        "so_luu_tru": "LT-2026-01401",
+        "ma_yt": "YT-2026-014-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "THA, bệnh thận mạn G2. Khởi trị losartan 50 mg/ngày, HA ổn định khi ra viện. Ra viện tiếp tục losartan 50 mg/ngày tại nhà."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-014-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-14T08:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-14T08:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Nhức đầu, HA cao tại nhà",
+      "benh_su": "BN nam 71T, THA, bệnh thận mạn G2, đang dùng losartan 50 mg/ngày tại nhà. Nhức đầu vùng chẩm 3 ngày, HA tại nhà 162/96. Nhập khoa Tim mạch theo dõi HA.",
+      "tien_su": {
+        "ban_than": "THA 2 năm. Bệnh thận mạn giai đoạn 2, theo dõi ngoại trú.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Losartan 50 mg uống 1 lần/ngày tại nhà."
+      },
+      "kham_benh": "T 36,8, M 78, HA 162/96 mmHg. Tim đều, phổi không ran. Phù nhẹ mu chân hai bên.",
+      "tom_tat": "BN nam 71T, THA và bệnh thận mạn G2, đang dùng losartan tại nhà. Vào viện vì nhức đầu, HA cao. Creatinin 105 umol/L, K 4,8 mmol/L hôm nay, HA còn 158/94.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS014-2-01",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp vô căn",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS014-2-02",
+          "ma_icd10": "N18.2",
+          "noi_dung": "Bệnh thận mạn giai đoạn 2",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS014-2-01",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 162.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-2-02",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 96.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-2-03",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-2-04",
+          "loai": "can_nang",
+          "gia_tri": 74.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T08:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-2-05",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 158.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-16T08:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-2-06",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 94.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-16T08:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS014-2-07",
+          "loai": "can_nang",
+          "gia_tri": 74.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-16T08:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS014-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 101.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS014-2-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.5,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-14T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS014-2-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 105.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS014-2-04",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.8,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-16T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-014-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì nhức đầu vùng chẩm 3 ngày, HA tại nhà 162/96. THA, bệnh thận mạn G2, đang dùng losartan tại nhà. Nhập khoa Tim mạch theo dõi HA, làm chức năng thận và điện giải.",
+          "thoi_diem_ghi": "2026-11-14T08:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-014-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Nhức đầu giảm nhiều, HA chiều qua 160/94. Ăn uống được, không chóng mặt. Tiếp tục theo dõi.",
+          "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-014-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay HA 158/94, M 76. Creatinin 105 umol/L, K 4,8 mmol/L. Cân nặng 74 kg. Tiếp tục đánh giá HA, điều chỉnh thuốc hạ áp nếu cần.",
+          "thoi_diem_ghi": "2026-11-16T08:15:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-014-03",
+          "thoi_diem_ke": "2026-11-14T09:20:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-014-03-01",
+              "thuoc_id": "T-LOSARTAN-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-14T09:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-014-04",
+          "thoi_diem_ke": "2026-11-14T09:25:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-014-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-14T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-014-05",
+          "thoi_diem_ke": "2026-11-14T09:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-014-05-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi đau, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi đau đầu, cách nhau tối thiểu 6 giờ",
+              "bat_dau": "2026-11-14T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-014-06",
+          "thoi_diem_ke": "2026-11-16T08:40:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-014-06-01",
+              "thuoc_id": "T-ENALAPRIL-10",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 10.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày, buổi sáng",
+              "bat_dau": "2026-11-16T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-16T09:00:00+07:00",
+                  "lieu": 10.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-17T09:00:00+07:00",
+                  "lieu": 10.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-14T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 71 tuổi, tăng huyết áp và bệnh thận mạn giai đoạn 2, đang dùng losartan 50 mg mỗi ngày tại nhà. Nhức đầu vùng chẩm 3 ngày, huyết áp tại nhà cao. Khám huyết áp 162/96 mmHg, mạch 78 lần/phút, nhiệt độ bình thường, cân nặng 74 kg. Creatinin 101 umol/L, kali 4,5 mmol/L. Phù nhẹ mu chân hai bên.",
+          "danh_gia": "Tăng huyết áp chưa kiểm soát kèm bệnh thận mạn giai đoạn 2. Creatinin và kali còn trong giới hạn bình thường. Nhức đầu có thể liên quan đến huyết áp cao.",
+          "huong_xu_tri": "Tiếp tục losartan 50 mg mỗi sáng, truyền natri clorid 0,9% mỗi ngày, paracetamol khi đau đầu theo y lệnh. Theo dõi huyết áp và điện giải, đánh giá điều chỉnh thuốc hạ áp trong 48 giờ tới.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-03",
+            "YL-HS-014-04",
+            "YL-HS-014-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm nhạt, ít muối, hạn chế đạm",
+          "theo_doi": [
+            "Huyết áp mỗi 6 giờ",
+            "Creatinin và kali sau 48 giờ",
+            "Phù chi dưới"
+          ],
+          "dan_do": "Nằm nghỉ khi đau đầu. Báo điều dưỡng nếu chóng mặt hoặc đau đầu nhiều hơn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-15T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Nhức đầu giảm nhiều so với hôm qua. Huyết áp chiều qua còn cao nhẹ. BN ăn uống được, không chóng mặt, không khó thở. Vẫn đang dùng losartan và truyền dịch theo y lệnh.",
+          "danh_gia": "Huyết áp vẫn còn cao nhưng triệu chứng nhức đầu đã đỡ. Chức năng thận cần theo dõi thêm sau khi truyền dịch.",
+          "huong_xu_tri": "Tiếp tục losartan và truyền natri clorid theo y lệnh. Theo dõi huyết áp, xét nghiệm creatinin và kali sáng mai. Đánh giá lại phác đồ hạ áp sau khi có kết quả. Nếu kali tăng thêm, cần cân nhắc lại thuốc trước khi tiếp tục.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-03",
+            "YL-HS-014-04",
+            "YL-HS-014-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm nhạt, ít muối",
+          "theo_doi": [
+            "Huyết áp mỗi 6 giờ",
+            "Triệu chứng nhức đầu"
+          ],
+          "dan_do": "Đo huyết áp và báo điều dưỡng nếu thấy số đo tăng hơn hôm qua."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-014-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-16T08:40:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay huyết áp 158/94 mmHg. Cân nặng 74 kg, không thay đổi so với hôm nhập viện. Creatinin 105 umol/L, kali 4,8 mmol/L (sát giới hạn trên bình thường). Nhức đầu nhiều lần đã giảm, BN ăn uống được.",
+          "danh_gia": "Tăng huyết áp còn chưa kiểm soát dù đang dùng losartan 50 mg mỗi ngày. Creatinin tăng nhẹ so với ngày 14, kali sát giới hạn trên. Cần cân nhắc tăng cường thuốc hạ áp và theo dõi sát chức năng thận và kali.",
+          "huong_xu_tri": "Đề nghị enalapril 10 mg uống mỗi sáng, bắt đầu 9 giờ sáng nay, chờ duyệt. Tiếp tục losartan 50 mg mỗi ngày. Theo dõi huyết áp, creatinin và kali sau khi điều chỉnh thuốc.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-014-03",
+            "YL-HS-014-04",
+            "YL-HS-014-05",
+            "YL-HS-014-06"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm nhạt, ít muối, hạn chế đạm",
+          "theo_doi": [
+            "Huyết áp mỗi 4 giờ",
+            "Creatinin và kali sau 24 giờ",
+            "Phù chi dưới"
+          ],
+          "dan_do": "Báo điều dưỡng nếu chóng mặt khi đứng dậy hoặc nhức đầu tăng trở lại."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-14T08:30:00+07:00",
+        "so_giuong": "G-014-02",
+        "so_luu_tru": "LT-2026-01402",
+        "ma_yt": "YT-2026-014-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-014-06",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 14",
+    "ngay_sinh": "1955-02-03",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9014",
+      "thon_pho": "Phố Bạch Mai",
+      "xa_phuong": "Bạch Mai",
+      "huyen": "Hai Bà Trưng",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000014",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 14",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 014"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 170.0,
+    "can_nang_kg": 74.0,
+    "nhom_mau": null
+  }
+}

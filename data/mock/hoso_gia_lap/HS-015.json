@@ -1,0 +1,355 @@
+{
+  "ho_so_id": "HS-015",
+  "kich_ban_id": "HS-015",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-015",
+    "tuoi": 60,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T09:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ESOMEPRAZOLE",
+      "ten_hoat_chat": "Esomeprazol",
+      "ten_quoc_te": "esomeprazole",
+      "ma_atc": "A02BC05",
+      "nhom_duoc_ly": "uc che bom proton"
+    },
+    {
+      "hoat_chat_id": "HC-OMEPRAZOLE",
+      "ten_hoat_chat": "Omeprazol",
+      "ten_quoc_te": "omeprazole",
+      "ma_atc": "A02BC01",
+      "nhom_duoc_ly": "uc che bom proton"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-ESOMEPRAZOL-40",
+      "ten_thuoc": "Esomeprazol 40 mg",
+      "ham_luong": "40 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ESOMEPRAZOLE",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-OMEPRAZOL-20",
+      "ten_thuoc": "Omeprazol 20 mg",
+      "ham_luong": "20 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-OMEPRAZOLE",
+          "ham_luong_thanh_phan": 20.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-015-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tiêu hóa",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-14T10:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tiêu hóa",
+          "tu": "2026-11-14T10:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau rát thượng vị, ợ chua tăng",
+      "benh_su": "BN nữ 60T, đau rát sau xương ức và ợ chua tăng 3 tuần, ăn không ngon, đã dùng thuốc ức chế bơm proton tại nhà nhưng không đỡ. Nhập khoa Tiêu hóa.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Omeprazol 20 mg uống 2 lần/ngày tại nhà."
+      },
+      "kham_benh": "T 36,7, M 82, HA 118/74 mmHg. Bụng mềm, đau nhẹ thượng vị, không đề kháng.",
+      "tom_tat": "BN nữ 60T, trào ngược dạ dày thực quản, đang dùng omeprazol tại nhà, triệu chứng chưa đỡ. Nhập viện theo dõi, điều chỉnh thuốc ức chế bơm proton. Cân nặng 58 kg.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS015-1-01",
+          "ma_icd10": "K21.9",
+          "noi_dung": "Trào ngược dạ dày thực quản",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS015-1-01",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T10:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS015-1-02",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-16T07:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-015-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì đau rát thượng vị, ợ chua tăng 3 tuần, đã dùng omeprazol tại nhà nhưng chưa đỡ. Nhập khoa Tiêu hóa, tiếp tục thuốc ức chế bơm proton và theo dõi.",
+          "thoi_diem_ghi": "2026-11-14T10:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-015-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN đỡ ợ chua một phần, vẫn đau thượng vị âm ỉ, ăn được cháo loãng. Không nôn, không đi ngoài phân đen.",
+          "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-015-1-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay BN đau thượng vị giảm, cân nặng 58 kg. Tiếp tục theo dõi đáp ứng thuốc ức chế bơm proton.",
+          "thoi_diem_ghi": "2026-11-16T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-015-01",
+          "thoi_diem_ke": "2026-11-14T11:00:00+07:00",
+          "khoa_ke_don": "Tiêu hóa",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-015-01-01",
+              "thuoc_id": "T-OMEPRAZOL-20",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 20.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày, trước ăn",
+              "bat_dau": "2026-11-14T12:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-015-02",
+          "thoi_diem_ke": "2026-11-14T11:05:00+07:00",
+          "khoa_ke_don": "Tiêu hóa",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-015-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-14T11:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-015-03",
+          "thoi_diem_ke": "2026-11-16T08:30:00+07:00",
+          "khoa_ke_don": "Tiêu hóa",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-015-03-01",
+              "thuoc_id": "T-ESOMEPRAZOL-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày, trước ăn sáng",
+              "bat_dau": "2026-11-16T06:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-16T06:30:00+07:00",
+                  "lieu": 40.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-17T06:30:00+07:00",
+                  "lieu": 40.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-015-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-14T12:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 60 tuổi đau rát sau xương ức và ợ chua tăng 3 tuần, ăn không ngon. Đã dùng omeprazol 20 mg tại nhà nhưng triệu chứng chưa đỡ. Khám bụng mềm, đau nhẹ thượng vị, không đề kháng. Cân nặng 58 kg. Đã nhập khoa Tiêu hóa.",
+          "danh_gia": "Trào ngược dạ dày thực quản, triệu chứng chưa đáp ứng với ức chế bơm proton liều dùng tại nhà. Chưa ghi nhận dấu hiệu xuất huyết tiêu hóa hay tắc nghẽn đường tiêu hóa trên khi thăm khám.",
+          "huong_xu_tri": "Chỉ định omeprazol 20 mg uống hai lần mỗi ngày, trước ăn, và truyền natri clorid 0,9% mỗi ngày. Theo dõi đáp ứng triệu chứng và cân nặng. Ăn nhẹ nhiều bữa, không nằm ngay sau ăn.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-015-01",
+            "YL-HS-015-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cháo loãng, ăn chia nhỏ bữa",
+          "theo_doi": [
+            "Triệu chứng đau thượng vị và ợ chua mỗi ca",
+            "Tình trạng nôn và màu phân"
+          ],
+          "dan_do": "Không nằm ngay sau khi ăn, kê đầu cao khi ngủ. Báo điều dưỡng nếu nôn ra máu hoặc đi ngoài phân đen."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-015-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-15T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN đỡ ợ chua một phần, vẫn đau thượng vị âm ỉ. Ăn được cháo loãng. Không nôn, không đi ngoài phân đen. Đang truyền natri clorid theo y lệnh.",
+          "danh_gia": "Đáp ứng một phần với ức chế bơm proton. Chưa có dấu hiệu chảy máu tiêu hóa. Cần đánh giá lại đáp ứng sau 24 đến 48 giờ. Triệu chứng về đêm và khi ăn no cần được ghi nhận thêm.",
+          "huong_xu_tri": "Tiếp tục omeprazol và truyền dịch theo y lệnh. Theo dõi triệu chứng và tình trạng ăn uống. Đánh giá lại đáp ứng vào ngày kế tiếp. Ghi nhận cân nặng và lượng ăn trong ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-015-01",
+            "YL-HS-015-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cháo loãng, chia nhỏ bữa",
+          "theo_doi": [
+            "Đau thượng vị và ợ chua",
+            "Màu phân"
+          ],
+          "dan_do": "Tránh đồ cay, rượu bia, cà phê khi còn đau rát."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-015-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-16T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay đau thượng vị đã giảm so với hôm qua. Cân nặng 58 kg, ổn định. BN ăn được và không nôn. Tiếp tục theo dõi đáp ứng thuốc ức chế bơm proton.",
+          "danh_gia": "Trào ngược dạ dày thực quản đang đáp ứng dần, cân nặng ổn định. Cần chọn phác đồ ức chế bơm proton phù hợp cho giai đoạn tiếp theo trước khi ra viện.",
+          "huong_xu_tri": "Đề nghị esomeprazol 40 mg uống mỗi sáng, trước ăn, chờ duyệt. Tiếp tục theo dõi triệu chứng và đáp ứng. Dự kiến ra viện khi triệu chứng ổn định và ăn uống tốt.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-015-01",
+            "YL-HS-015-02",
+            "YL-HS-015-03"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cháo, cơm mềm, ăn chia nhỏ bữa",
+          "theo_doi": [
+            "Triệu chứng đau thượng vị và ợ chua",
+            "Cân nặng mỗi 2 ngày"
+          ],
+          "dan_do": "Uống thuốc ức chế bơm proton trước ăn sáng, không nằm ngay sau ăn."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-14T10:00:00+07:00",
+        "so_giuong": "G-015-01",
+        "so_luu_tru": "LT-2026-01501",
+        "ma_yt": "YT-2026-015-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-015-03",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 15",
+    "ngay_sinh": "1966-11-14",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9015",
+      "thon_pho": "Phố Dịch Vọng",
+      "xa_phuong": "Dịch Vọng",
+      "huyen": "Cầu Giấy",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000015",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 15",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 015"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 58.0,
+    "nhom_mau": null
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-013",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 1,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-013-04-01"],
+      "mo_ta": "BN có dị ứng penicillin (phát ban toàn thân, nặng) nhưng y lệnh kê piperacillin + tazobactam, thuốc cùng nhóm penicillin."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

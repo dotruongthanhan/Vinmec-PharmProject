@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-011",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 1,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-011-04-01"],
+      "mo_ta": "BN có dị ứng sulfonamid (phát ban) nhưng y lệnh kê sulfamethoxazol + trimethoprim, thuốc cùng nhóm sulfonamid."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

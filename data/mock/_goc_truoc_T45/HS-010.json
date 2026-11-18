@@ -1,0 +1,189 @@
+{
+  "ho_so_id": "HS-010",
+  "kich_ban_id": "HS-010",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-010",
+    "tuoi": 40,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "co_di_ung",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T08:00:00+07:00"
+  },
+  "di_ung": [
+    {
+      "di_ung_id": "DU-HS-010-01",
+      "tac_nhan": "Penicillin",
+      "loai_tac_nhan": "thuoc",
+      "hoat_chat_id": null,
+      "nhom_duoc_ly": "penicillin",
+      "phan_ung": "Nổi mề đay",
+      "muc_do": "trung_binh"
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-AMOXICILLIN",
+      "ten_hoat_chat": "Amoxicillin",
+      "ten_quoc_te": "amoxicillin",
+      "ma_atc": "J01CA04",
+      "nhom_duoc_ly": "penicillin"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-AMOXICILLIN-500",
+      "ten_thuoc": "Amoxicillin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-AMOXICILLIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-010-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2026-11-12T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau họng, sốt nhẹ 2 ngày",
+      "benh_su": "BN nữ 40T đau họng 2 ngày, nuốt đau, sốt nhẹ, ho ít. Không khó thở.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol khi sốt, không rõ liều."
+      },
+      "kham_benh": "Họng đỏ, amydan không sưng, không có mủ. Phổi trong. T 37,8 °C.",
+      "tom_tat": "BN nữ 40T viêm họng cấp, T 37,8 °C, mạch 88 lần/phút. Chỉ định amoxicillin 500 mg uống 3 lần/ngày, 7 ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS010-01",
+          "ma_icd10": "J02.9",
+          "noi_dung": "Viêm họng cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS010-01",
+          "loai": "can_nang",
+          "gia_tri": 55.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS010-02",
+          "loai": "mach",
+          "gia_tri": 88.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS010-03",
+          "loai": "nhiet_do",
+          "gia_tri": 37.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS010-04",
+          "loai": "spo2",
+          "gia_tri": 98.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-010-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 40T đau họng 2 ngày, sốt nhẹ, nuốt đau. Họng đỏ, amydan không sưng, không mủ. Phổi trong. T 37,8 °C, mạch 88 lần/phút, SpO2 98%. Viêm họng cấp, kê kháng sinh uống 7 ngày, hẹn tái khám nếu chưa đỡ sau 3 ngày.",
+          "thoi_diem_ghi": "2026-11-12T08:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-010-01",
+          "thoi_diem_ke": "2026-11-12T08:50:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-010-01-01",
+              "thuoc_id": "T-AMOXICILLIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 500 mg mỗi 8 giờ, dùng 7 ngày",
+              "bat_dau": "2026-11-12T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-010-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T08:55:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 40T đau họng 2 ngày, nuốt đau, sốt nhẹ, ho ít, không khó thở. Khám: họng đỏ, amydan không sưng, không có mủ, phổi trong. Nhiệt độ 37,8 °C, mạch 88 lần/phút, SpO2 98%, cân nặng 55 kg. Tiền sử dị ứng penicillin ghi nhận trong hồ sơ, biểu hiện nổi mề đay mức độ trung bình.",
+          "danh_gia": "Viêm họng cấp, chưa có dấu hiệu viêm amydan có mủ hoặc biến chứng. Triệu chứng nhẹ, uống được, không có dấu hiệu suy hô hấp. Không cần nhập viện, điều trị ngoại trú là phù hợp.",
+          "huong_xu_tri": "Đề nghị amoxicillin 500 mg uống 3 lần/ngày, mỗi 8 giờ, dùng trong 7 ngày. Hạ sốt bằng paracetamol khi cần và uống đủ nước ấm. Hẹn tái khám nếu chưa đỡ sau 3 ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-010-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn mềm, lỏng, uống nhiều nước ấm",
+          "theo_doi": [
+            "Nhiệt độ hằng ngày",
+            "Mức độ đau họng và khả năng ăn uống",
+            "Phát ban, ngứa hoặc nổi mề đay sau khi uống thuốc"
+          ],
+          "dan_do": "Uống thuốc đúng giờ đến hết đợt điều trị. Ngưng thuốc và đến khám ngay nếu nổi mẩn, khó thở hoặc sưng mặt."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-010-01"
+}

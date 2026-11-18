@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-041",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 6,
+      "ket_luan": "khong_du_du_lieu",
+      "muc_do": null,
+      "chi_tiet_y_lenh_id": ["CT-HS-041-05-01"],
+      "mo_ta": "Levofloxacin 500 mg uống 1 lần/ngày được kê cho người bệnh nữ 36 tuổi nhưng hồ sơ chưa rõ tình trạng thai, chưa có thông tin thử thai để đánh giá."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

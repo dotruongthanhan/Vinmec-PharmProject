@@ -1,0 +1,541 @@
+{
+  "ho_so_id": "HS-022",
+  "kich_ban_id": "HS-022",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-022",
+    "tuoi": 68,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-10T08:40:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-WARFARIN",
+      "ten_hoat_chat": "Warfarin",
+      "ten_quoc_te": "warfarin",
+      "ma_atc": "B01AA03",
+      "nhom_duoc_ly": "thuoc chong dong vien khang vitamin K"
+    },
+    {
+      "hoat_chat_id": "HC-CLARITHROMYCIN",
+      "ten_hoat_chat": "Clarithromycin",
+      "ten_quoc_te": "clarithromycin",
+      "ma_atc": "J01FA09",
+      "nhom_duoc_ly": "macrolid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-WARFARIN-5",
+      "ten_thuoc": "Warfarin 5 mg",
+      "ham_luong": "5 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-WARFARIN",
+          "ham_luong_thanh_phan": 5.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-CLARITHROMYCIN-500",
+      "ten_thuoc": "Clarithromycin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CLARITHROMYCIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-022-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-01-12T14:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-01-18T09:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-01-12T14:00:00+07:00",
+          "den": "2026-01-18T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Hồi hộp, mệt, tim nhịp không đều 2 ngày",
+      "benh_su": "BN nam 67T, hồi hộp, mệt, tim nhịp không đều 2 ngày. Phát hiện rung nhĩ, khởi trị warfarin, INR đích 2-3. Chưa ghi nhận chảy máu.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "Mạch không đều, tần số 92 lần/phút. Phổi trong. Không chảy máu dưới da.",
+      "tom_tat": "BN nam rung nhĩ, khởi trị warfarin, INR đạt đích 2-3. Ra viện, tiếp tục warfarin 5 mg mỗi tối theo đơn, hẹn tái khám INR.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS022-1-01",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS022-1-01",
+          "ma_xet_nghiem": "inr",
+          "ten_xet_nghiem": "INR",
+          "gia_tri_so": 2.3,
+          "gia_tri_text": null,
+          "don_vi": "",
+          "nguong_duoi": 0.8,
+          "nguong_tren": 1.2,
+          "thoi_diem_ket_qua": "2026-01-16T08:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-022-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì hồi hộp, mệt, tim nhịp không đều 2 ngày. Rung nhĩ. Khởi trị warfarin 5 mg uống mỗi tối, INR đích 2-3.",
+          "thoi_diem_ghi": "2026-01-12T14:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-022-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "INR 2,3, không chảy máu. Tiếp tục warfarin 5 mg mỗi tối. Dặn người bệnh tái khám xét nghiệm INR.",
+          "thoi_diem_ghi": "2026-01-16T08:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-022-06",
+          "thoi_diem_ke": "2026-01-12T14:40:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-06-01",
+              "thuoc_id": "T-WARFARIN-5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 5 mg mỗi tối",
+              "bat_dau": "2026-01-12T20:00:00+07:00",
+              "ket_thuc": "2026-01-18T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-022-07",
+          "thoi_diem_ke": "2026-01-16T07:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-07-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Xét nghiệm INR",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "lấy máu tĩnh mạch",
+              "cach_dung": "Lấy máu xét nghiệm",
+              "bat_dau": "2026-01-16T07:35:00+07:00",
+              "ket_thuc": "2026-01-16T08:00:00+07:00",
+              "nguon_thuoc": "Phòng xét nghiệm",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Rung nhĩ, khởi trị warfarin, INR đạt đích 2-3. Ra viện tiếp tục warfarin 5 mg mỗi tối theo đơn, hẹn theo dõi INR."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-022-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-10T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-10T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Ho, sốt, khó thở nhẹ 2 ngày",
+      "benh_su": "BN nam 68T, ho đờm, sốt 2 ngày, khó thở nhẹ, đau ngực kiểu màng phổi khi ho. Có rung nhĩ, đang dùng warfarin 5 mg mỗi tối theo đơn ngoại trú.",
+      "tien_su": {
+        "ban_than": "Rung nhĩ, khởi trị warfarin lần vào viện trước, INR đích 2-3.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Warfarin 5 mg uống mỗi tối."
+      },
+      "kham_benh": "T 38,6 °C. Ran ẩm đáy phổi phải. Mạch không đều 88 lần/phút. Không chảy máu dưới da, không đi ngoài phân đen.",
+      "tom_tat": "BN nam 68T, viêm phổi J18.9, rung nhĩ đang dùng warfarin 5 mg mỗi tối, CN 70 kg. Sốt giảm dần, theo dõi INR và đáp ứng. Chưa ghi nhận chảy máu.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS022-2-01",
+          "ma_icd10": "J18.9",
+          "noi_dung": "Viêm phổi",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS022-2-02",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ, đang dùng warfarin",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS022-01",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-10T09:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS022-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-10T09:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS022-03",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS022-04",
+          "loai": "nhiet_do",
+          "gia_tri": 37.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS022-05",
+          "loai": "mach",
+          "gia_tri": 88.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS022-2-01",
+          "ma_xet_nghiem": "inr",
+          "ten_xet_nghiem": "INR",
+          "gia_tri_so": 2.4,
+          "gia_tri_text": null,
+          "don_vi": "",
+          "nguong_duoi": 0.8,
+          "nguong_tren": 1.2,
+          "thoi_diem_ket_qua": "2026-11-10T10:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS022-2-02",
+          "ma_xet_nghiem": "inr",
+          "ten_xet_nghiem": "INR",
+          "gia_tri_so": 2.6,
+          "gia_tri_text": null,
+          "don_vi": "",
+          "nguong_duoi": 0.8,
+          "nguong_tren": 1.2,
+          "thoi_diem_ket_qua": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS022-2-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 90.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-12T08:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-022-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì ho, sốt 38,6 °C, khó thở nhẹ 2 ngày. Ran ẩm đáy phổi phải. X-quang ngực: đông đặc đáy phổi phải. Đang dùng warfarin 5 mg mỗi tối.",
+          "thoi_diem_ghi": "2026-11-10T08:40:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-022-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sốt còn, T 37,9 °C. Ho đờm vàng, khó thở giảm. Chờ kết quả cấy đờm. Không chảy máu, tiếp tục theo dõi.",
+          "thoi_diem_ghi": "2026-11-11T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-022-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "T 37,6 °C, ho đỡ, khó thở giảm. INR 2,6, creatinin 90 umol/L. Mạch nhịp không đều, ổn định. Dự kiến kê kháng sinh đường uống.",
+          "thoi_diem_ghi": "2026-11-12T08:20:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-022-01",
+          "thoi_diem_ke": "2026-11-10T08:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL truyền tĩnh mạch",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch",
+              "bat_dau": "2026-11-10T08:45:00+07:00",
+              "ket_thuc": "2026-11-10T10:30:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-10T08:45:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-022-02",
+          "thoi_diem_ke": "2026-11-10T09:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Xét nghiệm INR, creatinin máu, công thức máu",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "lấy máu tĩnh mạch",
+              "cach_dung": "Lấy máu xét nghiệm",
+              "bat_dau": "2026-11-10T09:10:00+07:00",
+              "ket_thuc": "2026-11-10T10:30:00+07:00",
+              "nguon_thuoc": "Phòng xét nghiệm",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-022-03",
+          "thoi_diem_ke": "2026-11-10T09:20:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-03-01",
+              "thuoc_id": "T-WARFARIN-5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 5 mg mỗi tối, tiếp tục theo đơn ngoại trú",
+              "bat_dau": "2026-11-10T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-10T20:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-11T20:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-022-04",
+          "thoi_diem_ke": "2026-11-12T07:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Xét nghiệm INR, creatinin máu",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "lấy máu tĩnh mạch",
+              "cach_dung": "Lấy máu xét nghiệm",
+              "bat_dau": "2026-11-12T07:05:00+07:00",
+              "ket_thuc": "2026-11-12T08:00:00+07:00",
+              "nguon_thuoc": "Phòng xét nghiệm",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-022-05",
+          "thoi_diem_ke": "2026-11-12T09:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-022-05-01",
+              "thuoc_id": "T-CLARITHROMYCIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 500 mg mỗi 12 giờ",
+              "bat_dau": "2026-11-12T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T10:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-12T22:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T10:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T22:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-022-05"
+}

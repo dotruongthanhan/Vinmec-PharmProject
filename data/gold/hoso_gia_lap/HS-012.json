@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-012",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 1,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-012-07-01"],
+      "mo_ta": "Ceftriaxon được kê nhưng ô dị ứng lần này để trống; lần vào viện đầu ghi phản vệ độ 2 với ceftriaxon, nằm trong diễn biến và tiền sử lần trước."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "xuyên lần"
+}

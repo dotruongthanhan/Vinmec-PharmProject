@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-020",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-020-03-01"],
+      "mo_ta": "Paracetamol 500 mg mỗi 6 giờ cho trẻ 14 kg, khoảng 36 mg/kg mỗi lần, vượt ngưỡng 10–15 mg/kg mỗi lần."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-037",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 7,
+      "ket_luan": "can_xem",
+      "muc_do": "thong_tin",
+      "chi_tiet_y_lenh_id": ["CT-HS-037-04-01"],
+      "mo_ta": "Morphin 10 mg tiêm dưới da khi cần không ghi chỉ định cụ thể và không có giới hạn liều tối đa trong 24 giờ."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

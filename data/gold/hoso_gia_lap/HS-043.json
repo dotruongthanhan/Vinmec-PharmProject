@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-043",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 5,
+      "ket_luan": "khong_du_du_lieu",
+      "muc_do": null,
+      "chi_tiet_y_lenh_id": ["CT-HS-043-01-01"],
+      "mo_ta": "Metformin 1000 mg uống 2 lần/ngày được kê nhưng hồ sơ không có creatinin hay eGFR để đánh giá chức năng thận, phiếu khám không có nội dung."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

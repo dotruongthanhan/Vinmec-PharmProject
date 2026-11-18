@@ -1,0 +1,149 @@
+{
+  "ca_id": "DEMO-02",
+  "mo_ta_ngan": "Nữ 75 tuổi, viêm phổi, suy giảm chức năng thận nhưng liều meropenem chưa chỉnh",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-DEMO-02",
+    "tuoi": 75,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-06T10:30:00+07:00"
+  },
+  "di_ung": [],
+  "dot_dieu_tri": {
+    "dot_dieu_tri_id": "DT-DEMO-02",
+    "khoa_dieu_tri": "Hô hấp",
+    "loai_dieu_tri": "noi_tru",
+    "thoi_diem_bat_dau": "2026-11-06T10:00:00+07:00"
+  },
+  "chan_doan": [
+    {
+      "chan_doan_id": "CD-DEMO02-01",
+      "ma_icd10": "J18.9",
+      "noi_dung": "Viêm phổi",
+      "loai": "chinh"
+    }
+  ],
+  "co_dia": [],
+  "sinh_hieu": [
+    {
+      "sinh_hieu_id": "SH-DEMO02-01",
+      "loai": "can_nang",
+      "gia_tri": 50.0,
+      "don_vi": "kg",
+      "thoi_diem_do": "2026-11-10T05:00:00+07:00"
+    },
+    {
+      "sinh_hieu_id": "SH-DEMO02-02",
+      "loai": "chieu_cao",
+      "gia_tri": 155.0,
+      "don_vi": "cm",
+      "thoi_diem_do": "2026-11-06T10:15:00+07:00"
+    }
+  ],
+  "xet_nghiem": [
+    {
+      "xet_nghiem_id": "XN-DEMO02-01",
+      "ma_xet_nghiem": "creatinin",
+      "ten_xet_nghiem": "Creatinin máu",
+      "gia_tri_so": 212.0,
+      "gia_tri_text": null,
+      "don_vi": "umol/L",
+      "nguong_duoi": 44,
+      "nguong_tren": 80,
+      "thoi_diem_ket_qua": "2026-11-10T05:30:00+07:00"
+    },
+    {
+      "xet_nghiem_id": "XN-DEMO02-02",
+      "ma_xet_nghiem": "creatinin",
+      "ten_xet_nghiem": "Creatinin máu",
+      "gia_tri_so": 150.0,
+      "gia_tri_text": null,
+      "don_vi": "umol/L",
+      "nguong_duoi": 44,
+      "nguong_tren": 80,
+      "thoi_diem_ket_qua": "2026-11-07T05:30:00+07:00"
+    }
+  ],
+  "vi_sinh": [],
+  "dien_bien": [
+    {
+      "dien_bien_id": "DB-DEMO02-01",
+      "loai_ho_so": "Phiếu điều trị",
+      "noi_dung": "Người bệnh viêm phổi điều trị nội trú, creatinin máu tăng từ 150 lên 212 umol/L sau 3 ngày.",
+      "thoi_diem_ghi": "2026-11-10T05:40:00+07:00"
+    }
+  ],
+  "thuoc_dang_dung": [],
+  "y_lenh_cho_duyet": {
+    "y_lenh_id": "YL-DEMO-02",
+    "khoa_ke_don": "Hô hấp",
+    "luong_duyet": "truc_tiep",
+    "muc_uu_tien": null,
+    "thoi_diem_ke": "2026-11-10T05:50:00+07:00",
+    "chi_tiet": [
+      {
+        "chi_tiet_y_lenh_id": "CT-DEMO02-01",
+        "thuoc_id": "T-MEROPENEM-1G",
+        "ten_tu_do": null,
+        "loai_san_pham": "thuoc",
+        "lieu_moi_lan": 1.0,
+        "don_vi_lieu": "g",
+        "tan_suat": "3 lần/ngày",
+        "so_lan_moi_ngay": 3,
+        "khoang_cach_gio": 8.0,
+        "duong_dung": "truyền tĩnh mạch",
+        "cach_dung": "Truyền tĩnh mạch mỗi 8 giờ",
+        "bat_dau": "2026-11-10T06:00:00+07:00",
+        "ket_thuc": null,
+        "nguon_thuoc": "Kho nội trú",
+        "trang_thai_dong": "active",
+        "lich_dung": [
+          {
+            "thoi_diem_du_kien": "2026-11-10T06:00:00+07:00",
+            "lieu": 1.0,
+            "don_vi": "g"
+          },
+          {
+            "thoi_diem_du_kien": "2026-11-10T14:00:00+07:00",
+            "lieu": 1.0,
+            "don_vi": "g"
+          },
+          {
+            "thoi_diem_du_kien": "2026-11-10T22:00:00+07:00",
+            "lieu": 1.0,
+            "don_vi": "g"
+          }
+        ]
+      }
+    ]
+  },
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-MEROPENEM-1G",
+      "ten_thuoc": "Meropenem 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-MEROPENEM",
+          "ham_luong_thanh_phan": 1.0,
+          "don_vi": "g"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-MEROPENEM",
+      "ten_hoat_chat": "Meropenem",
+      "ten_quoc_te": "meropenem",
+      "ma_atc": "J01DH02",
+      "nhom_duoc_ly": "carbapenem"
+    }
+  ]
+}

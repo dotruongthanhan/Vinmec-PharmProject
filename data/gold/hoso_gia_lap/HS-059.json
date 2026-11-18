@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-059",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 5,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-059-04-01"],
+      "mo_ta": "Gentamicin 330 mg (5 mg/kg) mỗi ngày khi creatinin 240 umol/L, CrCl khoảng 20 mL/phút: nguy cơ độc thận cao, cần đánh giá lại liều và khoảng cách."
+    }
+  ],
+  "van_ban_bat_thuong": true,
+  "ghi_chu": "Có chèn lệnh, y lệnh có độc thận khi suy thận"
+}

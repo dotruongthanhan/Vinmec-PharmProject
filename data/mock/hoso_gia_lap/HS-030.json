@@ -1,0 +1,421 @@
+{
+  "ho_so_id": "HS-030",
+  "kich_ban_id": "HS-030",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-030",
+    "tuoi": 30,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-13T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ENALAPRIL",
+      "ten_hoat_chat": "Enalapril",
+      "ten_quoc_te": "enalapril",
+      "ma_atc": "C09AA02",
+      "nhom_duoc_ly": "thuoc uc che men chuyen"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-ENALAPRIL-10",
+      "ten_thuoc": "Enalapril 10 mg",
+      "ham_luong": "10 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ENALAPRIL",
+          "ham_luong_thanh_phan": 10.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-030-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Sản",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-10T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Sản",
+          "tu": "2026-11-10T09:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Khám thai 24 tuần, huyết áp cao",
+      "benh_su": "BN nữ 30T, thai 24 tuần, tăng huyết áp mạn từ trước khi mang thai. Không đau đầu, không nhìn mờ, không phù rõ.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp mạn, theo dõi ngoại trú.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Enalapril 10 mg uống 1 lần/ngày, dùng trước khi biết có thai."
+      },
+      "kham_benh": "T 36,9, M 82, HA 146/92. Tim đều, phổi không ran. Bụng to phù hợp tuổi thai. Phù nhẹ hai mắt cá.",
+      "tom_tat": "BN nữ 30T, thai 24 tuần, THA mạn, HA cao. Creatinin 60 umol/L. Đang theo dõi huyết áp và tim thai.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS030-1-01",
+          "ma_icd10": "O10.0",
+          "noi_dung": "Tăng huyết áp mạn sẵn có trong thai kỳ",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS030-1-02",
+          "ma_icd10": null,
+          "noi_dung": "Thai 24 tuần",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [
+        {
+          "loai": "mang_thai",
+          "trang_thai": "co",
+          "gia_tri": "24 tuần",
+          "thoi_diem": "2026-11-10T09:00:00+07:00",
+          "nguon": "EMR"
+        }
+      ],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS030-1-01",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 146.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS030-1-02",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 92.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS030-1-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 150.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-13T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS030-1-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 95.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-13T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS030-1-05",
+          "loai": "can_nang",
+          "gia_tri": 68.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS030-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 62.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-10T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS030-1-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 60.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-13T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-030-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 30T thai 24 tuần, THA mạn. HA 146/92. Tim thai đều. Nhập khoa Sản theo dõi huyết áp, xét nghiệm creatinin.",
+          "thoi_diem_ghi": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-030-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN không đau đầu, không nhìn mờ. Tim thai nghe được đều. Theo dõi HA mỗi 4 giờ.",
+          "thoi_diem_ghi": "2026-11-11T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-030-1-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "HA chiều qua còn cao. Chưa điều chỉnh thuốc hạ áp, chờ hội chẩn. Nước tiểu chưa có kết quả.",
+          "thoi_diem_ghi": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-030-1-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay HA 150/95, mạch đều, BN tỉnh, không đau đầu. Tim thai đều. Creatinin 60 umol/L. Cân nặng 68 kg. Kê thuốc hạ áp theo y lệnh.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-030-01",
+          "thoi_diem_ke": "2026-11-10T10:00:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-030-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyen tinh mach",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-10T10:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-030-02",
+          "thoi_diem_ke": "2026-11-10T10:05:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-030-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Vitamin tổng hợp cho thai phụ 1 viên",
+              "loai_san_pham": "dinh_duong",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "viên",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 1 viên mỗi ngày sau ăn sáng",
+              "bat_dau": "2026-11-10T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-030-03",
+          "thoi_diem_ke": "2026-11-13T10:20:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-030-03-01",
+              "thuoc_id": "T-ENALAPRIL-10",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 10.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-13T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-13T20:00:00+07:00",
+                  "lieu": 10.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T20:00:00+07:00",
+                  "lieu": 10.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-030-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-10T10:40:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 30T khám thai 24 tuần, tăng huyết áp mạn từ trước khi mang thai, không đau đầu, không nhìn mờ. Khám: T 36,9 °C, mạch 82 lần/phút, HA 146/92 mmHg, tim thai nghe đều, bụng to phù hợp tuổi thai, phù nhẹ hai mắt cá.",
+          "danh_gia": "Tăng huyết áp mạn sẵn có trong thai kỳ (O10.0), thai 24 tuần. Creatinin 62 umol/L trong giới hạn bình thường. Chưa có triệu chứng nặng, cần theo dõi huyết áp sát trong 24 giờ đầu.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL mỗi ngày. Vitamin tổng hợp cho thai phụ 1 viên mỗi ngày. Theo dõi huyết áp mỗi 4 giờ và tim thai. Hội chẩn với khoa liên quan để chọn phương án hạ áp phù hợp với thai kỳ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-030-01",
+            "YL-HS-030-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt vừa phải, đủ đạm và rau xanh, uống đủ nước",
+          "theo_doi": [
+            "Huyết áp mỗi 4 giờ",
+            "Tim thai mỗi ngày",
+            "Đau đầu, nhìn mờ, phù"
+          ],
+          "dan_do": "Báo điều dưỡng ngay nếu đau đầu, nhìn mờ, đau vùng thượng vị hoặc ra máu âm đạo."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-030-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-11T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Không đau đầu, không nhìn mờ, không đau vùng thượng vị. Tim thai nghe được đều qua các lần nghe trong ngày. Đang theo dõi huyết áp mỗi 4 giờ, người bệnh ăn uống được.",
+          "danh_gia": "Tăng huyết áp mạn trong thai kỳ, chưa có triệu chứng thần kinh hay thị giác. Thai còn ổn về tim thai. Cần tiếp tục theo dõi huyết áp sát và chờ các xét nghiệm bổ sung.",
+          "huong_xu_tri": "Tiếp tục truyền natri clorid 0,9% và vitamin tổng hợp. Theo dõi huyết áp mỗi 4 giờ, theo dõi tim thai. Chờ kết quả xét nghiệm nước tiểu để đánh giá thêm.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-030-01",
+            "YL-HS-030-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt vừa phải, đủ đạm và rau xanh, uống đủ nước",
+          "theo_doi": [
+            "Huyết áp mỗi 4 giờ",
+            "Tim thai",
+            "Đau đầu, nhìn mờ"
+          ],
+          "dan_do": "Nằm nghiêng trái khi nghỉ. Báo điều dưỡng nếu có đau đầu hoặc nhìn mờ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-030-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-12T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Huyết áp chiều hôm qua còn cao. Không đau đầu, không nhìn mờ, không đau thượng vị. Tim thai đều. Chưa có kết quả xét nghiệm nước tiểu.",
+          "danh_gia": "Tăng huyết áp mạn trong thai kỳ, huyết áp chưa kiểm soát hoàn toàn. Creatinin trong giới hạn bình thường. Cần hội chẩn trước khi quyết định thuốc hạ áp để bảo đảm an toàn cho thai.",
+          "huong_xu_tri": "Chưa điều chỉnh thuốc hạ áp hôm nay, chờ hội chẩn. Tiếp tục truyền natri clorid 0,9% và vitamin tổng hợp. Theo dõi huyết áp mỗi 4 giờ và chờ kết quả nước tiểu.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-030-01",
+            "YL-HS-030-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt vừa phải, đủ đạm và rau xanh, uống đủ nước",
+          "theo_doi": [
+            "Huyết áp mỗi 4 giờ",
+            "Tim thai",
+            "Triệu chứng đau đầu, nhìn mờ"
+          ],
+          "dan_do": "Ghi lại huyết áp mỗi lần đo và báo điều dưỡng khi thấy tăng cao."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-030-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-13T10:20:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay HA 150/95 mmHg, mạch đều, BN tỉnh, không đau đầu. Tim thai đều. Creatinin 60 umol/L. Cân nặng 68 kg.",
+          "danh_gia": "Tăng huyết áp mạn trong thai kỳ, huyết áp vẫn còn cao (150/95 mmHg). Creatinin 60 umol/L trong giới hạn, chưa có triệu chứng thần kinh hay thị giác.",
+          "huong_xu_tri": "Đề nghị enalapril 10 mg uống mỗi ngày, y lệnh đang chờ duyệt. Tiếp tục truyền natri clorid 0,9% và vitamin tổng hợp. Theo dõi huyết áp, tim thai và kết quả nước tiểu.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-030-01",
+            "YL-HS-030-02",
+            "YL-HS-030-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt vừa phải, đủ đạm và rau xanh, uống đủ nước",
+          "theo_doi": [
+            "Huyết áp mỗi 4 giờ",
+            "Tim thai mỗi ngày",
+            "Đau đầu, nhìn mờ"
+          ],
+          "dan_do": "Báo điều dưỡng ngay nếu đau đầu, nhìn mờ hoặc phù tăng nhanh."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-10T09:00:00+07:00",
+        "so_giuong": "G-030-01",
+        "so_luu_tru": "LT-2026-03001",
+        "ma_yt": "YT-2026-030-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-030-03",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 30",
+    "ngay_sinh": "1996-11-10",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9030",
+      "thon_pho": "Phố Trưng Trắc",
+      "xa_phuong": "Quang Trung",
+      "huyen": "Hưng Yên",
+      "tinh_thanh": "Hưng Yên"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000030",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 30",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 030"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 68.0,
+    "nhom_mau": null
+  }
+}

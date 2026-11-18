@@ -1,0 +1,164 @@
+{
+  "ho_so_id": "HS-043",
+  "kich_ban_id": "HS-043",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-043",
+    "tuoi": 68,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T08:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-METFORMIN",
+      "ten_hoat_chat": "Metformin",
+      "ten_quoc_te": "metformin",
+      "ma_atc": "A10BA02",
+      "nhom_duoc_ly": "thuoc ha duong huyet nhom biguanid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-METFORMIN-1000",
+      "ten_thuoc": "Metformin 1000 mg",
+      "ham_luong": "1000 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METFORMIN",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-043-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-14T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tiết",
+          "tu": "2026-11-14T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Tái khám đái tháo đường típ 2, kê lại thuốc",
+      "benh_su": "BN nam 68T, đái tháo đường típ 2 đã biết, tái khám theo hẹn. Không triệu chứng hạ đường huyết. Không đau bụng, không tiêu chảy.",
+      "tien_su": {
+        "ban_than": "Đái tháo đường típ 2 khoảng 8 năm, tăng huyết áp.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Metformin 1000 mg, 2 lần/ngày, uống đều."
+      },
+      "kham_benh": "Mạch 78 lần/phút, HA 130/80 mmHg, cân nặng 80 kg, chiều cao 170 cm. Tim phổi không bất thường.",
+      "tom_tat": "BN nam 68T ĐTĐ típ 2 ổn định, đang dùng metformin. Tái khám định kỳ, kê lại thuốc.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS043-1-01",
+          "ma_icd10": "E11.9",
+          "noi_dung": "Đái tháo đường típ 2 không có biến chứng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS043-1-01",
+          "loai": "can_nang",
+          "gia_tri": 80.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS043-1-02",
+          "loai": "chieu_cao",
+          "gia_tri": 170.0,
+          "don_vi": "cm",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS043-1-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 130.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS043-1-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 80.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS043-1-05",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS043-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "",
+          "thoi_diem_ghi": "2026-11-14T08:20:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-043-01",
+          "thoi_diem_ke": "2026-11-14T08:30:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-043-01-01",
+              "thuoc_id": "T-METFORMIN-1000",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1000.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày, sau ăn sáng và sau ăn tối",
+              "bat_dau": "2026-11-14T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-043-01"
+}

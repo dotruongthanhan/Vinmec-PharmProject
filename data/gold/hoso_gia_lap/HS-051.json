@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-051",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-051-04-01"],
+      "mo_ta": "Levofloxacin 500 mg uống 1 lần/ngày được kê trong khi kháng sinh đồ ghi Klebsiella pneumoniae kháng levofloxacin (R); ceftriaxon và gentamicin nhạy (S)."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "Có vi sinh, levofloxacin kháng"
+}

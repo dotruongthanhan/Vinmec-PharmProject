@@ -1,0 +1,700 @@
+{
+  "ho_so_id": "HS-058",
+  "kich_ban_id": "HS-058",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-058",
+    "tuoi": 73,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-METFORMIN",
+      "ten_hoat_chat": "Metformin",
+      "ten_quoc_te": "metformin",
+      "ma_atc": "A10BA02",
+      "nhom_duoc_ly": "thuoc ha duong huyet, nhom biguanid"
+    },
+    {
+      "hoat_chat_id": "HC-INSULIN_GLARGINE",
+      "ten_hoat_chat": "Insulin glargine",
+      "ten_quoc_te": "insulin glargine",
+      "ma_atc": "A10AE04",
+      "nhom_duoc_ly": "insulin tac dung keo dai"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-METFORMIN-500",
+      "ten_thuoc": "Metformin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METFORMIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-GLARGINE-100",
+      "ten_thuoc": "Insulin glargine 100 IU/mL",
+      "ham_luong": "100 IU/mL",
+      "duong_dung": "tiêm dưới da",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-INSULIN_GLARGINE",
+          "ham_luong_thanh_phan": 100.0,
+          "don_vi": "IU"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-058-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-06-02T09:30:00+07:00",
+      "thoi_diem_ket_thuc": "2026-06-08T10:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tiết",
+          "tu": "2026-06-02T09:30:00+07:00",
+          "den": "2026-06-08T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Đái tháo đường kém kiểm soát, mệt",
+      "benh_su": "BN nữ 73T, đái tháo đường típ 2 đang dùng metformin 500 mg 2 lần/ngày, mệt, khát nhiều. Đường huyết đói cao, nhập khoa Nội tiết điều chỉnh.",
+      "tien_su": {
+        "ban_than": "Đái tháo đường típ 2, bệnh thận mạn giai đoạn 3.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Metformin 500 mg uống 2 lần/ngày."
+      },
+      "kham_benh": "T 36,8, M 80, HA 140/84. Phù nhẹ mu chân hai bên.",
+      "tom_tat": "BN nữ 73T, đái tháo đường típ 2 kèm bệnh thận mạn, đường huyết cao khi tái khám. Creatinin 128 umol/L, eGFR 40. Ra viện, hẹn tái khám theo dõi chức năng thận.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS058-1-01",
+          "ma_icd10": "E11.9",
+          "noi_dung": "Đái tháo đường típ 2",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS058-1-02",
+          "ma_icd10": "N18.4",
+          "noi_dung": "Bệnh thận mạn giai đoạn 4",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS058-1-01",
+          "loai": "can_nang",
+          "gia_tri": 60.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-06-02T09:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-1-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 140.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-06-02T09:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-1-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 84.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-06-02T09:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-1-04",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-06-08T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS058-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 128.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-06-02T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS058-1-02",
+          "ma_xet_nghiem": "egfr",
+          "ten_xet_nghiem": "eGFR",
+          "gia_tri_so": 40.0,
+          "gia_tri_text": null,
+          "don_vi": "mL/phút/1,73m2",
+          "nguong_duoi": 60,
+          "nguong_tren": null,
+          "thoi_diem_ket_qua": "2026-06-02T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS058-1-03",
+          "ma_xet_nghiem": "hba1c",
+          "ten_xet_nghiem": "HbA1c",
+          "gia_tri_so": 7.9,
+          "gia_tri_text": null,
+          "don_vi": "%",
+          "nguong_duoi": null,
+          "nguong_tren": 6.5,
+          "thoi_diem_ket_qua": "2026-06-02T10:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-058-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 73T, đái tháo đường típ 2 đang dùng metformin, mệt, khát nhiều, đường huyết đói cao. Creatinin 128 umol/L, eGFR 40, nhập khoa Nội tiết.",
+          "thoi_diem_ghi": "2026-06-02T09:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-058-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Đường huyết đỡ hơn. Tiếp tục metformin 500 mg 2 lần/ngày sau ăn. Hẹn tái khám, theo dõi creatinin và eGFR trước khi điều chỉnh thuốc.",
+          "thoi_diem_ghi": "2026-06-06T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-058-01",
+          "thoi_diem_ke": "2026-06-02T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-058-01-01",
+              "thuoc_id": "T-METFORMIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày sau ăn",
+              "bat_dau": "2026-06-02T20:00:00+07:00",
+              "ket_thuc": "2026-06-08T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "BN ổn định, đường huyết cải thiện. Creatinin 128 umol/L, eGFR 40, theo dõi thận ở lần tái khám. Ra viện.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-06-02T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 73T, đái tháo đường típ 2 đang dùng metformin 500 mg hai lần mỗi ngày, mệt, khát nhiều, đường huyết đói cao. Cân nặng 60 kg, HA 140/84 mmHg, creatinin 128 umol/L, eGFR 40 mL/phút/1,73 m2, HbA1c 7,9%. Bệnh thận mạn giai đoạn ba đang theo dõi ngoại trú.",
+          "danh_gia": "Đái tháo đường típ 2 kiểm soát chưa tốt kèm bệnh thận mạn, chức năng thận giảm mức vừa. Cần điều chỉnh thuốc hạ đường huyết theo eGFR và theo dõi sát chức năng thận.",
+          "huong_xu_tri": "Tiếp tục metformin 500 mg uống hai lần mỗi ngày sau ăn, theo dõi đường huyết và creatinin. Hẹn đánh giá lại eGFR trước khi thay đổi liều thuốc.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn đái tháo đường, hạn chế đường và muối, đủ đạm vừa phải",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa ăn",
+            "Phù chân và cân nặng",
+            "Creatinin và eGFR"
+          ],
+          "dan_do": "Người bệnh uống thuốc sau ăn, uống đủ nước, báo điều dưỡng khi mệt nhiều, khát nhiều hoặc chóng mặt."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-06-03T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh còn mệt nhẹ nhưng khát nước đã bớt, ăn uống được hơn so với hôm nhập viện. Vẫn dùng metformin theo y lệnh, không ghi nhận tác dụng không mong muốn trên tiêu hóa.",
+          "danh_gia": "Đường huyết đang cải thiện dần theo điều trị hiện tại. Chức năng thận cần theo dõi thêm, chưa có chỉ định đổi thuốc. Chức năng thận mức vừa nên cần theo dõi creatinin và eGFR định kỳ, tránh các thuốc gây tổn thương thận.",
+          "huong_xu_tri": "Tiếp tục metformin 500 mg hai lần mỗi ngày theo y lệnh. Theo dõi đường huyết đói và triệu chứng, hẹn xét nghiệm lại chức năng thận.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn đái tháo đường, hạn chế đường và muối",
+          "theo_doi": [
+            "Đường huyết trước bữa ăn",
+            "Cân nặng và phù chân",
+            "Triệu chứng tiêu hóa sau dùng metformin"
+          ],
+          "dan_do": "Người bệnh ghi lại đường huyết trước bữa ăn tại nhà, báo điều dưỡng nếu nôn ói hoặc đi ngoài nhiều."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-06-04T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh tỉnh, tinh thần tốt, ăn được cả ba bữa. Không phù rõ thêm, không có triệu chứng hạ đường huyết. Metformin vẫn dùng theo y lệnh.",
+          "danh_gia": "Đường huyết ổn định hơn, chưa có biến chứng cấp. Chức năng thận đang được theo dõi, cần đánh giá lại trước khi xuất viện. Người bệnh có nguy cơ hạ đường huyết khi ăn kém nên cần theo dõi bữa ăn chặt chẽ.",
+          "huong_xu_tri": "Tiếp tục metformin theo y lệnh, theo dõi đường huyết và triệu chứng. Dự kiến lập kế hoạch tái khám và xét nghiệm creatinin, eGFR trước khi ra viện. Xem xét lại liều hạ đường huyết nếu đường huyết đói vẫn cao.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn đái tháo đường, hạn chế đường và muối",
+          "theo_doi": [
+            "Đường huyết trước bữa ăn",
+            "Phù chân",
+            "Lượng nước tiểu"
+          ],
+          "dan_do": "Người bệnh không bỏ bữa, không tự ý tăng liều thuốc hạ đường huyết, báo điều dưỡng khi có triệu chứng bất thường."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-06-05T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh đi lại trong phòng được, sinh hoạt gần như bình thường. Đường huyết đỡ hơn so với lúc nhập viện. Metformin 500 mg hai lần mỗi ngày vẫn theo y lệnh.",
+          "danh_gia": "Kiểm soát đường huyết đang cải thiện, bệnh thận mạn chưa có biểu hiện tiến triển nhanh. Cần đánh giá lại liều thuốc theo kết quả creatinin và eGFR. Bệnh thận mạn kèm đái tháo đường là hai yếu tố cần kiểm soát song song để giảm biến chứng.",
+          "huong_xu_tri": "Tiếp tục metformin theo y lệnh, theo dõi đường huyết và creatinin trong các ngày tới. Hướng dẫn chế độ ăn và vận động nhẹ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn đái tháo đường, hạn chế đường và muối, đủ đạm vừa phải",
+          "theo_doi": [
+            "Đường huyết trước bữa ăn",
+            "Creatinin và eGFR",
+            "Cân nặng"
+          ],
+          "dan_do": "Người bệnh đi bộ nhẹ mỗi ngày theo sức, uống thuốc sau ăn đúng giờ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-06-06T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đường huyết đỡ hơn rõ rệt so với lúc vào viện, người bệnh không còn khát nhiều. Tiếp tục metformin 500 mg uống hai lần mỗi ngày sau ăn theo y lệnh đang có.",
+          "danh_gia": "Đái tháo đường típ 2 đang cải thiện, chưa có dấu hiệu nhiễm toan hay tổn thương thận cấp. Cần theo dõi creatinin trước khi ra viện. Mục tiêu điều trị là đưa đường huyết về ngưỡng an toàn mà không làm xấu thêm chức năng thận.",
+          "huong_xu_tri": "Tiếp tục metformin theo y lệnh, theo dõi đường huyết và triệu chứng. Dự kiến xét nghiệm lại creatinin và eGFR trước khi xuất viện, hẹn tái khám theo lịch. Hướng dẫn người bệnh tiếp tục theo chế độ ăn đã được tư vấn.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn đái tháo đường, hạn chế đường và muối",
+          "theo_doi": [
+            "Đường huyết trước bữa ăn",
+            "Creatinin trước khi ra viện",
+            "Triệu chứng khát và tiểu nhiều"
+          ],
+          "dan_do": "Người bệnh tái khám đúng hẹn, mang theo sổ theo dõi đường huyết khi đến khám."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-1-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-06-07T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh ổn định, ăn uống tốt, không mệt nhiều. Đường huyết cải thiện so với lần vào viện. Metformin theo y lệnh vẫn được dùng đều đặn.",
+          "danh_gia": "Đái tháo đường típ 2 kèm bệnh thận mạn giai đoạn ba đang ổn định trong thời gian điều trị nội trú, đủ điều kiện xuất viện theo kế hoạch. Người bệnh đã sẵn sàng về sinh hoạt tại nhà, chỉ cần tiếp tục theo dõi định kỳ.",
+          "huong_xu_tri": "Hoàn tất theo dõi nội trú, dặn người bệnh tiếp tục metformin theo đơn ngoại trú sau khi ra viện. Hẹn tái khám đánh giá creatinin và eGFR. Gửi thông tin đợt điều trị cho bác sĩ ngoại trú theo dõi.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn đái tháo đường, hạn chế đường và muối",
+          "theo_doi": [
+            "Đường huyết tại nhà",
+            "Creatinin và eGFR khi tái khám"
+          ],
+          "dan_do": "Người bệnh uống thuốc đúng giờ, tái khám theo hẹn và báo cơ sở y tế khi mệt nhiều hoặc phù tăng."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-058-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T09:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tiết",
+          "tu": "2026-11-12T09:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Mệt, chán ăn 1 tuần, phù chân",
+      "benh_su": "BN nữ 73T, ĐTĐ típ 2 và bệnh thận mạn, lần trước vào viện 06/2026 eGFR 40. 1 tuần nay mệt, chán ăn, phù chân tăng dần. Tái nhập viện điều chỉnh đường huyết và đánh giá thận.",
+      "tien_su": {
+        "ban_than": "Đái tháo đường típ 2, bệnh thận mạn. Đã vào viện 1 lần (06/2026).",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Insulin glargine tiêm dưới da mỗi tối, theo đơn ngoại trú."
+      },
+      "kham_benh": "T 36,9, M 84, HA 132/76. Phù chân hai bên mức nhẹ. Tỉnh, tiếp xúc tốt.",
+      "tom_tat": "BN nữ 73T, ĐTĐ típ 2 kèm bệnh thận mạn, tái nhập vì mệt, chán ăn, phù chân. Creatinin 200 umol/L, eGFR 24, giảm so với lần vào viện 06/2026. Đang insulin nền, dự kiến chỉnh thuốc đường uống.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS058-2-01",
+          "ma_icd10": "E11.9",
+          "noi_dung": "Đái tháo đường típ 2",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS058-2-02",
+          "ma_icd10": "N18.4",
+          "noi_dung": "Bệnh thận mạn giai đoạn 4",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS058-2-01",
+          "loai": "can_nang",
+          "gia_tri": 57.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T09:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-2-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 134.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T09:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-2-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 78.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T09:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-2-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 132.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T07:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-2-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 76.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T07:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-2-06",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T07:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS058-2-07",
+          "loai": "can_nang",
+          "gia_tri": 57.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T07:45:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS058-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 182.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-12T09:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS058-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 200.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS058-2-03",
+          "ma_xet_nghiem": "egfr",
+          "ten_xet_nghiem": "eGFR",
+          "gia_tri_so": 26.0,
+          "gia_tri_text": null,
+          "don_vi": "mL/phút/1,73m2",
+          "nguong_duoi": 60,
+          "nguong_tren": null,
+          "thoi_diem_ket_qua": "2026-11-12T09:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS058-2-04",
+          "ma_xet_nghiem": "egfr",
+          "ten_xet_nghiem": "eGFR",
+          "gia_tri_so": 24.0,
+          "gia_tri_text": null,
+          "don_vi": "mL/phút/1,73m2",
+          "nguong_duoi": 60,
+          "nguong_tren": null,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS058-2-05",
+          "ma_xet_nghiem": "hba1c",
+          "ten_xet_nghiem": "HbA1c",
+          "gia_tri_so": 8.1,
+          "gia_tri_text": null,
+          "don_vi": "%",
+          "nguong_duoi": null,
+          "nguong_tren": 6.5,
+          "thoi_diem_ket_qua": "2026-11-12T10:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-058-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì mệt, chán ăn 1 tuần, phù chân. Nền ĐTĐ típ 2 và bệnh thận mạn. Creatinin 182 umol/L, eGFR 26, HbA1c 8,1%. Nhập khoa Nội tiết điều chỉnh đường huyết và thuốc.",
+          "thoi_diem_ghi": "2026-11-12T09:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-058-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN còn mệt, ăn kém, phù chân nhẹ. Đường huyết đói 8,9 mmol/L. Tiếp tục insulin nền, theo dõi nước tiểu và cân nặng 57 kg.",
+          "thoi_diem_ghi": "2026-11-13T08:15:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-058-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay BN tỉnh, HA 132/76, M 84. Creatinin 200 umol/L, eGFR 24, tăng so với hôm 12/11. Dược sĩ trưởng đã duyệt trước, không cần nêu cảnh báo nào. Dự kiến tăng liều metformin vì đường huyết còn cao, theo dõi tiếp.",
+          "thoi_diem_ghi": "2026-11-14T07:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-058-02",
+          "thoi_diem_ke": "2026-11-12T10:30:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-058-02-01",
+              "thuoc_id": "T-GLARGINE-100",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 12.0,
+              "don_vi_lieu": "IU",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm dưới da",
+              "cach_dung": "Tiêm dưới da 1 lần/ngày lúc 21:00",
+              "bat_dau": "2026-11-12T21:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-058-03",
+          "thoi_diem_ke": "2026-11-12T10:40:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-058-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-12T11:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-058-04",
+          "thoi_diem_ke": "2026-11-14T09:10:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-058-04-01",
+              "thuoc_id": "T-METFORMIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1000.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1000 mg (2 viên) sau ăn sáng và sau ăn tối",
+              "bat_dau": "2026-11-14T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T20:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T08:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T20:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 73T tái nhập vì mệt, chán ăn một tuần và phù chân tăng dần. Cân nặng 57 kg, HA 134/78 mmHg, creatinin 182 umol/L, eGFR 26 mL/phút/1,73 m2, HbA1c 8,1%. Phù nhẹ hai chân, người bệnh tỉnh và tiếp xúc tốt. Đang dùng insulin nền tiêm dưới da buổi tối.",
+          "danh_gia": "Đái tháo đường típ 2 kiểm soát chưa đạt kèm bệnh thận mạn giai đoạn bốn, chức năng thận giảm so với lần vào viện trước. Cần đánh giá lại phác đồ hạ đường huyết và theo dõi tích dịch.",
+          "huong_xu_tri": "Tiếp tục insulin glargine 12 IU tiêm dưới da lúc 21 giờ, truyền natri clorid 0,9% mỗi ngày một lần. Theo dõi nước tiểu, cân nặng và điện giải, xét nghiệm lại creatinin sáng mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-02",
+            "YL-HS-058-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế kali và đạm theo tình trạng thận, chia nhỏ bữa",
+          "theo_doi": [
+            "Đường huyết trước bữa ăn",
+            "Cân nặng hằng ngày",
+            "Lượng nước tiểu trong 24 giờ"
+          ],
+          "dan_do": "Người bệnh báo điều dưỡng khi mệt tăng, khó thở, phù nhiều hơn hoặc ít nước tiểu."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN còn mệt, ăn kém, phù chân nhẹ hai bên, cân nặng 57 kg. Đường huyết đói vẫn còn cao. Tiếp tục insulin nền và truyền dịch theo y lệnh, theo dõi nước tiểu.",
+          "danh_gia": "Đái tháo đường kèm bệnh thận mạn giai đoạn bốn, đường huyết chưa kiểm soát tốt và chức năng thận đang suy giảm. Cần theo dõi tích dịch và điện giải. Chức năng thận suy giảm đòi hỏi theo dõi sát lượng nước tiểu và điện giải trong từng ca.",
+          "huong_xu_tri": "Tiếp tục insulin glargine theo y lệnh đang có, theo dõi đường huyết và nước tiểu. Đánh giá lại creatinin và eGFR vào sáng mai. Chia sẻ kế hoạch cho điều dưỡng trực để báo kịp thời.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-02",
+            "YL-HS-058-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, chia nhỏ bữa, hạn chế đạm theo tình trạng thận",
+          "theo_doi": [
+            "Đường huyết trước bữa ăn",
+            "Cân nặng và phù chân",
+            "Lượng nước tiểu"
+          ],
+          "dan_do": "Người bệnh nằm nghỉ nhiều, báo điều dưỡng nếu chóng mặt hoặc ăn uống kém hơn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-058-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-14T09:10:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay BN tỉnh, HA 132/76 mmHg, mạch 84 lần/phút lúc 07 giờ 40, cân nặng 57 kg. Creatinin 200 umol/L và eGFR 24 mL/phút/1,73 m2 lúc 07 giờ 30, tăng so với ngày 12/11. Vẫn đang dùng insulin nền và truyền natri clorid 0,9% theo y lệnh.",
+          "danh_gia": "Bệnh thận mạn giai đoạn bốn còn đang tiến triển về creatinin, đường huyết vẫn cao. Cần cân nhắc kỹ thuốc hạ đường huyết theo chức năng thận hiện tại.",
+          "huong_xu_tri": "Đề nghị metformin 1000 mg, 2 viên sau ăn sáng và sau ăn tối, chờ duyệt y lệnh. Tiếp tục insulin nền, theo dõi creatinin, eGFR và điện giải, xem lại liều thuốc khi có kết quả.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-058-02",
+            "YL-HS-058-03",
+            "YL-HS-058-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế kali và đạm theo tình trạng thận, chia nhỏ bữa",
+          "theo_doi": [
+            "Creatinin và eGFR hằng ngày",
+            "Đường huyết trước bữa ăn",
+            "Cân nặng và phù chân"
+          ],
+          "dan_do": "Người bệnh báo điều dưỡng ngay nếu mệt nhiều, buồn nôn, khó thở hoặc ít nước tiểu."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-058-04"
+}

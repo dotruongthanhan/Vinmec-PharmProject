@@ -1,0 +1,877 @@
+{
+  "ho_so_id": "HS-006",
+  "kich_ban_id": "HS-006",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-006",
+    "tuoi": 66,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T22:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-APIXABAN",
+      "ten_hoat_chat": "Apixaban",
+      "ten_quoc_te": "apixaban",
+      "ma_atc": "B01AF02",
+      "nhom_duoc_ly": "thuoc chong dong duong uong, uc che yeu to Xa"
+    },
+    {
+      "hoat_chat_id": "HC-METOPROLOL",
+      "ten_hoat_chat": "Metoprolol",
+      "ten_quoc_te": "metoprolol",
+      "ma_atc": "C07AB02",
+      "nhom_duoc_ly": "chan beta chon loc"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-APIXABAN-5",
+      "ten_thuoc": "Apixaban 5 mg",
+      "ham_luong": "5 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-APIXABAN",
+          "ham_luong_thanh_phan": 5.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-METOPROLOL-25",
+      "ten_thuoc": "Metoprolol tartrat 25 mg",
+      "ham_luong": "25 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METOPROLOL",
+          "ham_luong_thanh_phan": 25.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-006-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2025-09-10T14:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-09-14T09:00:00+07:00",
+      "so_ngay_dieu_tri": 4,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2025-09-10T14:00:00+07:00",
+          "den": "2025-09-14T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Đánh trống ngực, hồi hộp 1 ngày",
+      "benh_su": "BN nam 65T, đánh trống ngực và hồi hộp từng cơn 1 ngày, không đau ngực, không ngất. Khám mạch không đều. ECG rung nhĩ, đáp ứng thất trung bình. Khởi trị metoprolol tartrat 25 mg x 2 lần/ngày.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc thường xuyên."
+      },
+      "kham_benh": "T 36,9, M 118 không đều, HA 136/84, SpO2 98%. Tim không đều, không âm thổi bệnh lý. Phổi không ran.",
+      "tom_tat": "BN nam 65T, rung nhĩ mới phát hiện không do bệnh van tim, tần số thất khoảng 110 l/ph. Khởi trị metoprolol, nhịp chậm lại. Ra viện, tái khám.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS006-1-01",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ không do bệnh van tim",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS006-1-01",
+          "loai": "mach",
+          "gia_tri": 118.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2025-09-10T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-1-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 136.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2025-09-10T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-1-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 84.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2025-09-10T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-1-04",
+          "loai": "mach",
+          "gia_tri": 82.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2025-09-12T08:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS006-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 88.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2025-09-10T15:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS006-1-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.1,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2025-09-10T15:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-006-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì đánh trống ngực, hồi hộp 1 ngày. Mạch không đều 118 lần/phút. ECG rung nhĩ, đáp ứng thất trung bình. Khởi trị metoprolol tartrat 25 mg uống 2 lần/ngày.",
+          "thoi_diem_ghi": "2025-09-10T14:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-006-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Mạch 82 lần/phút, đỡ hồi hộp. Tiếp tục metoprolol. Hẹn tái khám và siêu âm tim.",
+          "thoi_diem_ghi": "2025-09-12T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-006-01",
+          "thoi_diem_ke": "2025-09-10T14:50:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-01-01",
+              "thuoc_id": "T-METOPROLOL-25",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 25.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên sáng và tối",
+              "bat_dau": "2025-09-10T15:00:00+07:00",
+              "ket_thuc": "2025-09-14T09:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-006-02",
+          "thoi_diem_ke": "2025-09-10T14:55:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Điện tâm đồ 12 chuyển đạo",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "không áp dụng",
+              "cach_dung": "Làm ngay tại khoa",
+              "bat_dau": "2025-09-10T14:55:00+07:00",
+              "ket_thuc": "2025-09-10T15:00:00+07:00",
+              "nguon_thuoc": "Khoa thăm dò chức năng",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Rung nhĩ không do bệnh van tim, nhịp thất kiểm soát sau khởi trị metoprolol. Ra viện, tái khám và siêu âm tim theo lịch.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-09-10T15:40:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 65T vào viện vì đánh trống ngực, hồi hộp 1 ngày, không đau ngực, không ngất. Khám: mạch 118 lần/phút không đều, HA 136/84 mmHg, SpO2 98%, nhiệt độ 36,9 °C. Tim không đều, không có âm thổi bệnh lý, phổi không ran. Điện tâm đồ cho thấy rung nhĩ đáp ứng thất trung bình.",
+          "danh_gia": "Rung nhĩ không do bệnh van tim, mới được phát hiện, tần số thất khoảng 110 lần/phút trước khi điều trị. Creatinin 88 umol/L và kali 4,1 mmol/L trong khoảng tham chiếu. Chưa có chảy máu hay dấu hiệu suy tim rõ trên lâm sàng.",
+          "huong_xu_tri": "Tiếp tục metoprolol tartrat 25 mg uống 2 lần/ngày, sáng và tối. Điện tâm đồ 12 chuyển đạo đã thực hiện tại khoa. Theo dõi mạch và huyết áp mỗi ca, đánh giá lại nhịp vào ngày mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-01",
+            "YL-HS-006-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế cà phê, rượu bia",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Huyết áp 2 lần mỗi ngày",
+            "Đánh trống ngực, khó thở hoặc choáng"
+          ],
+          "dan_do": "Nằm nghỉ khi thấy hồi hộp, báo ngay nếu đau ngực, ngất hoặc khó thở."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2025-09-11T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 2 BN đỡ hồi hộp dần, không ngất, không đau ngực. Tiếp tục uống metoprolol tartrat 25 mg đúng giờ. Không chảy máu, không chóng mặt nhiều khi đứng dậy, ăn ngủ được. Điều dưỡng ghi nhận mạch đều đặn hơn so với lúc vào viện.",
+          "danh_gia": "Đáp ứng ban đầu với metoprolol, nhịp thất đang được kiểm soát dần. Chưa có vấn đề tồn đọng, cần theo dõi nhịp thêm vài ngày trước khi xuất viện. Huyết áp và nhịp tim sẽ được ghi lại đều trong ca.",
+          "huong_xu_tri": "Tiếp tục metoprolol tartrat 25 mg uống 2 lần/ngày. Hẹn đánh giá lại nhịp và chuẩn bị kế hoạch siêu âm tim trước khi xuất viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm mềm, ít muối",
+          "theo_doi": [
+            "Mạch và nhịp tim mỗi ca",
+            "Huyết áp 2 lần mỗi ngày",
+            "Mệt, chóng mặt"
+          ],
+          "dan_do": "Không tự ngưng thuốc chẹn beta khi thấy đã đỡ hồi hộp."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2025-09-12T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 3 mạch 82 lần/phút, BN đỡ hồi hộp rõ rệt. Không đau ngực, không khó thở khi nằm. Tiếp tục metoprolol tartrat 25 mg uống 2 lần/ngày, chưa thấy tác dụng phụ đáng kể. Người bệnh đã làm quen với việc tự đo mạch tại giường.",
+          "danh_gia": "Nhịp thất kiểm soát tốt sau khi khởi trị metoprolol. Cần siêu âm tim để đánh giá cấu trúc tim trước khi quyết định hướng điều trị lâu dài.",
+          "huong_xu_tri": "Tiếp tục metoprolol tartrat 25 mg uống 2 lần/ngày. Hẹn tái khám và siêu âm tim theo lịch, cân nhắc đánh giá nguy cơ huyết khối trước khi xuất viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, nhiều rau xanh",
+          "theo_doi": [
+            "Mạch 2 lần mỗi ca",
+            "Triệu chứng hồi hộp",
+            "Tác dụng phụ của metoprolol như mệt hoặc chậm nhịp"
+          ],
+          "dan_do": "Đi lại nhẹ nhàng, tránh gắng sức khi chưa có kết quả siêu âm tim."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2025-09-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 4 BN không hồi hộp đáng kể, không ngất, không đau ngực. Mạch nhịp thất đã kiểm soát, ăn ngủ được. Metoprolol vẫn được dùng đúng giờ theo y lệnh. Bệnh nhân và người nhà đã được hướng dẫn các dấu hiệu cần đến khám sớm.",
+          "danh_gia": "Rung nhĩ kiểm soát tần số tốt bằng metoprolol, không có biến chứng trong đợt nằm viện. Sẵn sàng xuất viện sau khi thống nhất kế hoạch tái khám và siêu âm tim.",
+          "huong_xu_tri": "Ra viện sáng mai, tiếp tục metoprolol tartrat 25 mg uống 2 lần/ngày. Hẹn tái khám và siêu âm tim theo lịch. Hướng dẫn người bệnh tự theo dõi mạch tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế cà phê",
+          "theo_doi": [
+            "Mạch và nhịp tim tại nhà",
+            "Hồi hộp tái phát",
+            "Mệt, chậm nhịp"
+          ],
+          "dan_do": "Mang theo đơn thuốc và lịch tái khám. Đến khám sớm nếu hồi hộp kéo dài hoặc có ngất."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-006-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-05-04T08:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-05-07T10:00:00+07:00",
+      "so_ngay_dieu_tri": 4,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-05-04T08:00:00+07:00",
+          "den": "2026-05-07T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Rung nhĩ tái phát, hồi hộp, nhập viện chuyển nhịp có kiểm soát",
+      "benh_su": "BN nam 65T, rung nhĩ đã biết từ lần nhập viện trước. Đã ngưng metoprolol sau ra viện do mệt, ngủ kém. Hồi hộp tái phát từng cơn khi gắng sức. Được chỉ định chuyển nhịp có kiểm soát.",
+      "tien_su": {
+        "ban_than": "Rung nhĩ không do bệnh van tim.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc chống rung nhĩ trước khi nhập viện."
+      },
+      "kham_benh": "T 36,8, M 96 không đều, HA 130/82, SpO2 97%. Tim không đều, không âm thổi. Phổi trong.",
+      "tom_tat": "BN nam 65T, rung nhĩ tái phát. Siêu âm qua thực quản không thấy huyết khối nhĩ trái. Chuyển nhịp điện có kiểm soát thành công. Bắt đầu apixaban 5 mg x 2 lần/ngày sau chuyển nhịp.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS006-2-01",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ không do bệnh van tim",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS006-2-01",
+          "loai": "mach",
+          "gia_tri": 96.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-05-04T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-2-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 130.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-05-04T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-2-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 82.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-05-04T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-2-04",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-05-05T09:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS006-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 92.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-05-04T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS006-2-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.3,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-05-04T09:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-006-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Nhập viện chuyển nhịp có kiểm soát. Rung nhĩ kéo dài, nhịp 96 lần/phút không đều, HA 130/82. Siêu âm qua thực quản không thấy huyết khối nhĩ trái.",
+          "thoi_diem_ghi": "2026-05-04T08:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-006-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Chuyển nhịp xoang thành công sau một lần sốc điện. Nhịp xoang 78 lần/phút. Bắt đầu apixaban 5 mg uống 2 lần/ngày. Theo dõi ổn, dự kiến ra viện.",
+          "thoi_diem_ghi": "2026-05-05T09:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-006-03",
+          "thoi_diem_ke": "2026-05-04T08:40:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Chuyển nhịp điện có kiểm soát",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "không áp dụng",
+              "cach_dung": "Thủ thuật chuyển nhịp điện có gây mê",
+              "bat_dau": "2026-05-04T10:00:00+07:00",
+              "ket_thuc": "2026-05-04T10:30:00+07:00",
+              "nguon_thuoc": "Phòng thủ thuật",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-006-04",
+          "thoi_diem_ke": "2026-05-05T09:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-04-01",
+              "thuoc_id": "T-APIXABAN-5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên sáng và tối",
+              "bat_dau": "2026-05-05T10:00:00+07:00",
+              "ket_thuc": "2026-05-07T10:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Chuyển nhịp xoang thành công. Ra viện, uống apixaban 5 mg x 2 lần/ngày theo đơn ngoại trú, tái khám sau 1 tháng.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-05-04T08:45:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 65T, rung nhĩ đã biết từ đợt nhập viện trước. Đã ngưng metoprolol sau ra viện do mệt và ngủ kém, hồi hộp tái phát từng cơn khi gắng sức. Khám: mạch 96 lần/phút không đều, HA 130/82 mmHg, nhiệt độ 36,8 °C, SpO2 97%. Phổi trong, không phù. Siêu âm qua thực quản không thấy huyết khối nhĩ trái.",
+          "danh_gia": "Rung nhĩ không do bệnh van tim tái phát, đủ điều kiện chuyển nhịp có kiểm soát vì không có huyết khối nhĩ trái trên siêu âm qua thực quản. Creatinin 92 umol/L và kali 4,3 mmol/L trong khoảng tham chiếu.",
+          "huong_xu_tri": "Chuyển nhịp điện có kiểm soát dưới gây mê sáng nay. Sau thủ thuật theo dõi nhịp và tri giác, dự kiến dùng kháng đông đường uống sau chuyển nhịp. Hướng dẫn BN không tự ngưng thuốc đã có.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Nhịn ăn trước thủ thuật, sau đó ăn lỏng mềm",
+          "theo_doi": [
+            "Nhịp tim và mạch sau thủ thuật",
+            "Huyết áp và SpO2",
+            "Dấu hiệu chảy máu hoặc đau ngực"
+          ],
+          "dan_do": "Nhịn ăn uống theo hướng dẫn trước thủ thuật, báo ngay nếu đau ngực hoặc khó thở."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-05-05T09:45:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Chuyển nhịp xoang thành công sau một lần sốc điện, nhịp xoang khoảng 78 lần/phút lúc 09:00. BN tỉnh, không đau ngực, không tím. Không ghi nhận chảy máu tại vị trí đặt điện cực. Chỉ định apixaban 5 mg uống 2 lần/ngày, bắt đầu 10 giờ hôm nay.",
+          "danh_gia": "Rung nhĩ đã chuyển nhịp xoang sau thủ thuật có kiểm soát. Cần kháng đông đường uống để giảm nguy cơ thuyên tắc sau chuyển nhịp. Chưa có biến chứng ghi nhận.",
+          "huong_xu_tri": "Bắt đầu apixaban 5 mg uống 2 lần/ngày từ 10 giờ, tiếp tục đến khi xuất viện. Theo dõi nhịp xoang và tri giác. Dự kiến ra viện sau vài ngày theo dõi.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng mềm, uống đủ nước",
+          "theo_doi": [
+            "Nhịp tim và mạch",
+            "Dấu hiệu chảy máu khi dùng apixaban",
+            "Đau ngực, khó thở"
+          ],
+          "dan_do": "Uống apixaban đúng giờ, không tự ngưng. Báo ngay nếu chảy máu chân răng hoặc đi cầu phân đen."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-05-06T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 3 BN ổn định, nhịp xoang đều, không hồi hộp. Đã uống apixaban đủ liều sáng và tối theo y lệnh. Không chảy máu, da niêm mạc không xanh nhợt, ăn ngủ tốt. Người bệnh đi lại trong phòng bệnh không khó khăn.",
+          "danh_gia": "Duy trì nhịp xoang sau chuyển nhịp, đáp ứng tốt. Chưa ghi nhận biến chứng chảy máu trong quá trình dùng kháng đông, chưa có vấn đề tồn đọng về thuốc chống đông.",
+          "huong_xu_tri": "Tiếp tục apixaban 5 mg uống 2 lần/ngày. Hướng dẫn chế độ sinh hoạt sau chuyển nhịp và chuẩn bị đơn ra viện cho người bệnh. Người bệnh có thể sinh hoạt nhẹ trong phòng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, mềm, hạn chế đồ dầu mỡ",
+          "theo_doi": [
+            "Nhịp tim và triệu chứng hồi hộp",
+            "Dấu hiệu chảy máu",
+            "Huyết áp 2 lần mỗi ngày"
+          ],
+          "dan_do": "Không tự ngưng hoặc đổi liều apixaban khi chưa có ý kiến bác sĩ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-05-07T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày cuối đợt, BN không hồi hộp, không đau ngực, không chảy máu. Nhịp xoang ổn định. Tình trạng đủ điều kiện xuất viện trong sáng nay. Người bệnh cảm thấy khỏe, không mệt nhiều khi đi lại.",
+          "danh_gia": "Sau chuyển nhịp xoang thành công, tình trạng ổn định trước khi ra viện. Vấn đề tồn đọng là tiếp tục kháng đông đường uống theo đơn ngoại trú và tái khám đúng hẹn.",
+          "huong_xu_tri": "Ra viện với apixaban 5 mg uống 2 lần/ngày theo đơn ngoại trú. Hẹn tái khám sau 1 tháng để đánh giá nhịp và chức năng thận. Đã hướng dẫn người nhà cách theo dõi dấu hiệu chảy máu tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, đủ nước",
+          "theo_doi": [
+            "Nhịp tim và triệu chứng tại nhà",
+            "Dấu hiệu chảy máu",
+            "Tái khám sau 1 tháng"
+          ],
+          "dan_do": "Mang theo đơn thuốc, uống apixaban đều hai lần mỗi ngày. Báo ngay nếu chảy máu nhiều hoặc yếu liệt tay chân."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-006-3",
+      "thu_tu": 3,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-14T22:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-14T22:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đánh trống ngực, hồi hộp 2 ngày",
+      "benh_su": "BN nam 66T, rung nhĩ không do bệnh van tim, đang dùng apixaban 5 mg x 2 lần/ngày theo đơn ngoại trú. Hồi hộp, đánh trống ngực từng cơn 2 ngày, mệt. Không đau ngực, không ngất, không chảy máu.",
+      "tien_su": {
+        "ban_than": "Rung nhĩ không do bệnh van tim, đã chuyển nhịp có kiểm soát 05/2026.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Apixaban 5 mg x 2 lần/ngày theo đơn ngoại trú."
+      },
+      "kham_benh": "T 36,8, M 112 không đều, HA 132/84, SpO2 97%. Tim nhịp không đều, không âm thổi. Phổi trong. Không phù.",
+      "tom_tat": "BN nam 66T, rung nhĩ tái phát, đánh trống ngực 2 ngày, mạch 112 không đều. Đang dùng apixaban 5 mg x 2 lần/ngày. Creatinin 90 umol/L, cân nặng 78 kg. Theo dõi nhịp, kiểm soát tần số.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS006-3-01",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ không do bệnh van tim",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS006-3-01",
+          "loai": "nhiet_do",
+          "gia_tri": 36.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T22:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-3-02",
+          "loai": "mach",
+          "gia_tri": 112.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T22:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-3-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 132.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T22:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-3-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 84.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T22:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-3-05",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-14T22:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-3-06",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS006-3-07",
+          "loai": "can_nang",
+          "gia_tri": 78.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS006-3-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 92.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T23:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS006-3-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 90.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS006-3-03",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.2,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-006-3-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì đánh trống ngực, hồi hộp 2 ngày. Mạch 112 lần/phút không đều, HA 132/84. Ghi điện tim: rung nhĩ đáp ứng thất nhanh. BN xác nhận vẫn uống apixaban đều theo đơn.",
+          "thoi_diem_ghi": "2026-11-14T23:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-006-3-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Mạch 84 lần/phút, đỡ hồi hộp sau truyền NaCl 0,9%. Chưa có chảy máu. Tiếp tục theo dõi nhịp, xét nghiệm creatinin và kali. Tiếp tục kháng đông đường uống theo đơn.",
+          "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-006-05",
+          "thoi_diem_ke": "2026-11-14T23:10:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-05-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "truyền 1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL trong 4 giờ",
+              "bat_dau": "2026-11-14T23:20:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-006-06",
+          "thoi_diem_ke": "2026-11-15T10:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-06-01",
+              "thuoc_id": "T-APIXABAN-5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên sáng và tối",
+              "bat_dau": "2026-11-15T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T20:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T08:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T20:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-006-07",
+          "thoi_diem_ke": "2026-11-15T06:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "da_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-006-07-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Xét nghiệm creatinin, kali máu",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "không áp dụng",
+              "cach_dung": "Lấy máu xét nghiệm sáng",
+              "bat_dau": "2026-11-15T06:15:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Phòng xét nghiệm",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-3-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-14T23:45:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nam 66T vào viện vì đánh trống ngực, hồi hộp 2 ngày, mệt, không đau ngực, không ngất, không chảy máu. Khám: mạch 112 lần/phút không đều, HA 132/84 mmHg, SpO2 97%, nhiệt độ 36,8 °C, phổi trong, không phù. Ghi điện tim thấy rung nhĩ đáp ứng thất nhanh. BN xác nhận vẫn uống apixaban 5 mg đều theo đơn.",
+          "danh_gia": "Rung nhĩ không do bệnh van tim tái phát, đáp ứng thất nhanh khi vào viện. Creatinin 92 umol/L lúc 23:30 trong khoảng tham chiếu. Đang dùng apixaban đều theo đơn, chưa có dấu hiệu chảy máu. Cần theo dõi kali và creatinin sáng mai.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL trong 4 giờ để giữ đường truyền và hỗ trợ tuần hoàn. Kiểm soát tần số tim và theo dõi nhịp liên tục. Xét nghiệm creatinin và kali sáng mai, tiếp tục kháng đông đường uống theo đơn.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhẹ, lỏng mềm",
+          "theo_doi": [
+            "Mạch và nhịp tim liên tục",
+            "Dấu hiệu chảy máu, đi cầu phân đen",
+            "Huyết áp và SpO2"
+          ],
+          "dan_do": "Báo điều dưỡng khi hồi hộp tăng, đau ngực hoặc có chảy máu bất thường."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-006-3-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-15T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay mạch 84 lần/phút, BN đỡ hồi hộp sau truyền natri clorid 0,9%, chưa có chảy máu. Cân nặng 78 kg lúc 07:00. Creatinin 90 umol/L và kali 4,2 mmol/L lúc 06:30, trong khoảng tham chiếu, ổn định so với đêm qua.",
+          "danh_gia": "Tần số thất kiểm soát tốt vào sáng nay. Creatinin và kali ổn định. Vấn đề tồn đọng là kháng đông đường uống cần được tiếp tục trong viện theo đơn ngoại trú đang dùng.",
+          "huong_xu_tri": "Đề nghị apixaban 5 mg uống 2 lần/ngày, bắt đầu 20 giờ tối nay, tiếp tục theo đơn ngoại trú. Kết quả creatinin và kali đã có, xét nghiệm lại khi cần. Dự kiến ra viện khi nhịp ổn định.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-006-05",
+            "YL-HS-006-06",
+            "YL-HS-006-07"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, lỏng mềm",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Dấu hiệu chảy máu",
+            "Creatinin và kali theo lịch"
+          ],
+          "dan_do": "Không tự dùng thêm thuốc chống đông ngoài đơn đã kê. Báo điều dưỡng khi có chảy máu hoặc đau ngực."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-006-06"
+}

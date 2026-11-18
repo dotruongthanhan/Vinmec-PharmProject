@@ -1,0 +1,946 @@
+{
+  "ho_so_id": "HS-050",
+  "kich_ban_id": "HS-050",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-050",
+    "tuoi": 62,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-09T09:20:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol (acetaminophen)",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "thuoc_giam_dau_ha_sot"
+    },
+    {
+      "hoat_chat_id": "HC-SULFAMETHOXAZOLE",
+      "ten_hoat_chat": "Sulfamethoxazol",
+      "ten_quoc_te": "sulfamethoxazole",
+      "ma_atc": "J01EE01",
+      "nhom_duoc_ly": "sulfonamid_phoi_hop_trimethoprim"
+    },
+    {
+      "hoat_chat_id": "HC-TRIMETHOPRIM",
+      "ten_hoat_chat": "Trimethoprim",
+      "ten_quoc_te": "trimethoprim",
+      "ma_atc": "J01EA01",
+      "nhom_duoc_ly": "sulfonamid_phoi_hop_trimethoprim"
+    },
+    {
+      "hoat_chat_id": "HC-ENOXAPARIN",
+      "ten_hoat_chat": "Enoxaparin",
+      "ten_quoc_te": "enoxaparin",
+      "ma_atc": "B01AB05",
+      "nhom_duoc_ly": "heparin_trong_luong_phan_tu_thap"
+    },
+    {
+      "hoat_chat_id": "HC-LINEZOLID",
+      "ten_hoat_chat": "Linezolid",
+      "ten_quoc_te": "linezolid",
+      "ma_atc": "J01XX08",
+      "nhom_duoc_ly": "oxazolidinon"
+    },
+    {
+      "hoat_chat_id": "HC-VANCOMYCIN",
+      "ten_hoat_chat": "Vancomycin",
+      "ten_quoc_te": "vancomycin",
+      "ma_atc": "J01XA01",
+      "nhom_duoc_ly": "glycopeptid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-ACETAMINOPHEN-500MG",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-COTRIMOXAZOL-800",
+      "ten_thuoc": "Cotrimoxazol 800/160 mg",
+      "ham_luong": "800/160 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-SULFAMETHOXAZOLE",
+          "ham_luong_thanh_phan": 800.0,
+          "don_vi": "mg"
+        },
+        {
+          "hoat_chat_id": "HC-TRIMETHOPRIM",
+          "ham_luong_thanh_phan": 160.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-ENOXAPARIN-40MG",
+      "ten_thuoc": "Enoxaparin 40 mg/0,4 mL",
+      "ham_luong": "40 mg/0,4 mL",
+      "duong_dung": "tiêm dưới da",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ENOXAPARIN",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-VANCOMYCIN-1G",
+      "ten_thuoc": "Vancomycin 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-VANCOMYCIN",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-050-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Ngoại tổng quát",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-03-10T16:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-03-18T10:00:00+07:00",
+      "so_ngay_dieu_tri": 8,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ngoại tổng quát",
+          "tu": "2026-03-10T16:00:00+07:00",
+          "den": "2026-03-18T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Áp xe cẳng chân phải",
+      "benh_su": "BN nam, sưng đau cẳng chân phải 4 ngày, có ổ mủ dưới da. Đã rạch dẫn lưu tại chỗ.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh nền",
+        "gia_dinh": "Chưa ghi nhận",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc thường xuyên"
+      },
+      "kham_benh": "Tỉnh. Cẳng chân phải sưng đỏ nhẹ quanh vết rạch, đã dẫn lưu, ít dịch. Không sốt.",
+      "tom_tat": "BN nam, áp xe cẳng chân P đã rạch dẫn lưu. Dùng kháng sinh uống. Vết mổ khô, ra viện ổn định sau 8 ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS-050-01",
+          "ma_icd10": "L02.2",
+          "noi_dung": "Áp xe da, nhọt và nhọt cụm cẳng chân",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS-050-01",
+          "loai": "nhiet_do",
+          "gia_tri": 37.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-03-10T16:15:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS-050-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 81.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-03-10T17:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-050-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Áp xe cẳng chân P, đã rạch dẫn lưu. Cho kháng sinh uống, tái khám sau 7 ngày.",
+          "thoi_diem_ghi": "2026-03-10T16:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-050-01",
+          "thoi_diem_ke": "2026-03-10T16:40:00+07:00",
+          "khoa_ke_don": "Ngoại tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-050-01-01",
+              "thuoc_id": "T-COTRIMOXAZOL-800",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "viên",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên mỗi 12 giờ, 7 ngày",
+              "bat_dau": "2026-03-10T20:00:00+07:00",
+              "ket_thuc": "2026-03-17T20:00:00+07:00",
+              "nguon_thuoc": "Kho ngoại",
+              "trang_thai_dong": "completed",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-03-10T20:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "viên"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-050-02",
+          "thoi_diem_ke": "2026-03-10T16:45:00+07:00",
+          "khoa_ke_don": "Ngoại tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Hết đợt điều trị, ra viện",
+          "thoi_diem_ngung": "2026-03-18T09:30:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-050-02-01",
+              "thuoc_id": "T-ACETAMINOPHEN-500MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, tối đa 4 lần/ngày",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt trên 38 °C",
+              "bat_dau": "2026-03-10T16:45:00+07:00",
+              "ket_thuc": "2026-03-18T09:30:00+07:00",
+              "nguon_thuoc": "Kho ngoại",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Vết rạch khô, không sốt sau 3 ngày. Ra viện ổn định, hẹn tái khám ngoại trú.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-03-10T17:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam vào viện vì áp xe cẳng chân phải, sưng đau 4 ngày có ổ mủ dưới da, đã rạch dẫn lưu tại chỗ. Người bệnh tỉnh, không sốt, nhiệt độ 37,2 °C lúc 16 giờ 15. Quanh vết rạch đỏ nhẹ, ít dịch. Creatinin 81 umol/L lúc 17 giờ.",
+          "danh_gia": "Áp xe da cẳng chân phải đã dẫn lưu (L02.2), chưa có dấu hiệu toàn thân. Chức năng thận đo creatinin 81 umol/L, cần theo dõi khi điều trị kháng sinh uống. Người bệnh không có bệnh nền đáng kể và không dùng thuốc thường xuyên trước khi vào viện.",
+          "huong_xu_tri": "Cotrimoxazol 800/160 mg uống 1 viên mỗi 12 giờ trong 7 ngày. Paracetamol 500 mg uống khi sốt trên 38 độ, tối đa 4 lần mỗi ngày. Thay băng vết rạch hàng ngày và tái khám sau 7 ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, uống đủ nước.",
+          "theo_doi": [
+            "Vết rạch, dịch và đỏ nề",
+            "Nhiệt độ"
+          ],
+          "dan_do": "Không tự nặn mủ, thay băng đúng cách, báo ngay khi sưng đỏ tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-03-11T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vết rạch khô dần, ít dịch, không sốt. Ăn uống bình thường, đi lại được trong buồng bệnh. Đau nhẹ khi đè vùng quanh vết rạch, người bệnh chịu được và không cần thêm thuốc giảm đau. Băng vết rạch thấm dịch ít hơn so với hôm trước.",
+          "danh_gia": "Áp xe đang lành, không có dấu hiệu lan rộng ra mô xung quanh. Chưa ghi nhận tác dụng phụ của cotrimoxazol như phát ban hay rối loạn tiêu hóa. Người bệnh đang tuân thủ liều uống đều đặn.",
+          "huong_xu_tri": "Tiếp tục cotrimoxazol đúng liều, thay băng theo khoa. Theo dõi phát ban và tiêu chảy khi dùng thuốc, đo nhiệt độ hai lần mỗi ngày. Hướng dẫn người bệnh giữ vùng chân nâng cao khi nghỉ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường.",
+          "theo_doi": [
+            "Vết rạch",
+            "Phát ban",
+            "Tiêu chảy"
+          ],
+          "dan_do": "Uống thuốc sau ăn để tránh khó chịu dạ dày."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-03-12T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vết rạch khô, không đỏ nề thêm, đau ít khi đi lại. Không sốt. Tinh thần tốt, không khó chịu nhiều. Người bệnh đã tự thay băng dưới sự hướng dẫn của điều dưỡng.",
+          "danh_gia": "Đáp ứng tốt với dẫn lưu và kháng sinh uống. Không có dấu hiệu nhiễm khuẩn lan rộng hay sốt tái phát. Tình trạng toàn thân ổn định, chức năng vận động chi dưới không bị ảnh hưởng.",
+          "huong_xu_tri": "Tiếp tục cotrimoxazol đến hết liệu trình. Thay băng vết rạch và theo dõi đáp ứng ở vùng da quanh vết rạch. Dặn người bệnh báo nếu xuất hiện vùng đỏ mới lan ra ngoài bờ vết thương.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, nhiều đạm.",
+          "theo_doi": [
+            "Vết rạch",
+            "Nhiệt độ",
+            "Phát ban"
+          ],
+          "dan_do": "Nâng cao chân khi nghỉ, tránh đi lại nhiều trong ngày."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-03-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vết rạch khô, không rỉ dịch. Tình trạng toàn thân tốt, ăn ngủ bình thường. Không đau nhiều khi đi lại. Người bệnh cho biết không có cảm giác nóng rát hay ngứa ở vùng vết rạch.",
+          "danh_gia": "Áp xe đang lành tốt, không có biến chứng. Đáp ứng điều trị phù hợp với kế hoạch đã đặt ra từ ngày vào viện. Chưa có chỉ định can thiệp bổ sung ở vết rạch.",
+          "huong_xu_tri": "Duy trì cotrimoxazol theo y lệnh đến hết liệu trình. Thay băng theo khoa và đánh giá lại vết rạch trước khi ra viện. Ghi nhận cân nặng và thông báo kết quả cho người bệnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường.",
+          "theo_doi": [
+            "Vết rạch",
+            "Nhiệt độ"
+          ],
+          "dan_do": "Tránh ngâm nước lâu khi vết rạch chưa lành hẳn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-03-14T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vết rạch liền dần, không đỏ nề, không sốt. Không ghi nhận phát ban hay tiêu chảy khi dùng cotrimoxazol. Người bệnh ăn ngủ tốt và tự vận động quanh giường.",
+          "danh_gia": "Đáp ứng điều trị tốt, dự kiến ra viện sau khi hoàn thành cotrimoxazol. Nguy cơ tái phát ổ áp xe thấp khi vết rạch đang liền tốt và không có ổ mủ mới. Người bệnh được hướng dẫn quan sát vùng da mỗi ngày sau khi về nhà.",
+          "huong_xu_tri": "Tiếp tục cotrimoxazol theo lịch đã kê. Theo dõi tác dụng phụ trên da và tiêu hóa, hướng dẫn lịch tái khám ngoại trú. Chuẩn bị giấy hẹn để người bệnh mang theo khi ra viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, uống đủ nước.",
+          "theo_doi": [
+            "Phát ban",
+            "Tiêu chảy",
+            "Vết rạch"
+          ],
+          "dan_do": "Báo ngay nếu có phát ban hoặc đau bụng nhiều."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-03-15T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vết rạch khô, không sốt, ăn ngủ tốt. Đi lại nhẹ trong buồng bệnh, không đau nhiều. Người bệnh nói đã quen với việc thay băng và không còn lo lắng về vết thương. Ăn uống đều, không buồn nôn.",
+          "danh_gia": "Tình trạng ổn định, không có dấu hiệu tái phát ổ áp xe. Vết rạch đang liền theo đúng tiến trình bình thường, chưa cần thêm can thiệp.",
+          "huong_xu_tri": "Tiếp tục cotrimoxazol đến hết liều theo y lệnh. Chuẩn bị hướng dẫn chăm sóc vết rạch tại nhà, gồm cách thay băng và dấu hiệu cần quay lại khám. Ghi lại liều cotrimoxazol đã uống vào sổ theo dõi.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, nhiều đạm.",
+          "theo_doi": [
+            "Vết rạch",
+            "Nhiệt độ",
+            "Tiêu hóa"
+          ],
+          "dan_do": "Tiếp tục giữ vết rạch sạch và khô."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-07",
+          "ngay_dieu_tri": 7,
+          "thoi_diem_lap": "2026-03-16T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Không sốt, vết rạch khô, không đau nhiều. Ăn uống tốt, ngủ được. Người bệnh tự thay băng được và ghi nhớ giờ uống thuốc. Không có than phiền mới.",
+          "danh_gia": "Tình trạng tốt, sẵn sàng ra viện khi đủ liệu trình. Không có biến chứng ghi nhận trong suốt đợt điều trị nội trú. Đáp ứng với dẫn lưu và kháng sinh uống đều tốt. Người bệnh không cần thêm xét nghiệm trong ngày.",
+          "huong_xu_tri": "Tiếp tục cotrimoxazol, liều cuối vào tối ngày mai. Dự kiến ra viện sau khi hoàn thành liệu trình. Hướng dẫn người bệnh tái khám đúng hẹn và mang theo đơn thuốc. Nhắc lại dấu hiệu cần quay lại khám sớm.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường.",
+          "theo_doi": [
+            "Vết rạch",
+            "Nhiệt độ"
+          ],
+          "dan_do": "Không tự ngừng thuốc trước khi hết liệu trình."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-1-08",
+          "ngay_dieu_tri": 8,
+          "thoi_diem_lap": "2026-03-17T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vết rạch khô, không sốt, không đau nhiều. Người bệnh tự chăm sóc vết thương được, ăn uống bình thường. Không có triệu chứng toàn thân mới trong suốt đợt nội trú.",
+          "danh_gia": "Áp xe cẳng chân phải đã dẫn lưu, đáp ứng tốt. Đủ điều kiện ra viện sau khi uống liều cotrimoxazol cuối tối nay. Không có dấu hiệu cần chuyển tuyến hay can thiệp thêm. Vết rạch có thể tiếp tục chăm sóc tại nhà theo hướng dẫn.",
+          "huong_xu_tri": "Liều cotrimoxazol cuối tối nay, ngày mai ra viện. Hẹn tái khám ngoại trú sau 7 ngày và dặn dò chăm sóc vết rạch tại nhà. Đã giải thích lịch uống thuốc còn lại cho người bệnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-01",
+            "YL-HS-050-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, nhiều đạm, uống đủ nước.",
+          "theo_doi": [
+            "Vết rạch",
+            "Nhiệt độ"
+          ],
+          "dan_do": "Tái khám đúng hẹn, mang theo đơn thuốc và sổ theo dõi."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-03-10T16:00:00+07:00",
+        "so_giuong": "G-050-01",
+        "so_luu_tru": "LT-2026-05001",
+        "ma_yt": "YT-2026-050-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Vết rạch khô, không sốt sau 3 ngày. Ra viện ổn định, hẹn tái khám ngoại trú."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-050-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Truyền nhiễm",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-09T09:20:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Truyền nhiễm",
+          "tu": "2026-11-09T09:20:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao rét run, mạch nhanh",
+      "benh_su": "BN nam 62t, sốt cao rét run 2 ngày, mệt nhiều, vùng cẳng chân P vết rạch cũ đã lành. Vào cấp cứu.",
+      "tien_su": {
+        "ban_than": "Áp xe cẳng chân P đã dẫn lưu tháng 3/2026",
+        "gia_dinh": "Chưa ghi nhận",
+        "thuoc_truoc_vao_vien": "Không rõ"
+      },
+      "kham_benh": "Tỉnh, sốt cao, da ấm. Cẳng chân P vết mổ cũ khô, không đỏ nề. Phổi trong, tim đều. Bụng mềm.",
+      "tom_tat": "BN nam 62t, nhiễm khuẩn huyết nghi nguồn da mềm. Cấy máu có tụ cầu vàng, KSĐ đã có. Hôm nay T 37,8, mạch 88, creatinin 85, CRP 92, đã dùng thuốc hạ sốt, chờ điều trị.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS-050-02",
+          "ma_icd10": "A41.0",
+          "noi_dung": "Nhiễm khuẩn huyết do Staphylococcus aureus, MRSA",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS-050-02",
+          "loai": "can_nang",
+          "gia_tri": 78.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-09T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-03",
+          "loai": "nhiet_do",
+          "gia_tri": 38.9,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-09T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-04",
+          "loai": "mach",
+          "gia_tri": 104.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-09T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-05",
+          "loai": "can_nang",
+          "gia_tri": 78.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-06",
+          "loai": "nhiet_do",
+          "gia_tri": 37.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-07",
+          "loai": "mach",
+          "gia_tri": 88.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-08",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 108.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-050-09",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 66.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS-050-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 96.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-09T11:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-050-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 85.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-12T06:45:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-050-04",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 156.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-09T11:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-050-05",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 92.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-12T06:45:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-050-06",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu (WBC)",
+          "gia_tri_so": 16.8,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-09T11:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [
+        {
+          "vi_sinh_id": "VS-HS-050-01",
+          "benh_pham": "máu (cấy 2 chai)",
+          "vi_khuan": "Staphylococcus aureus kháng methicillin (MRSA)",
+          "thoi_diem_lay_mau": "2026-11-09T10:00:00+07:00",
+          "khang_sinh_do": [
+            {
+              "hoat_chat_id": "HC-VANCOMYCIN",
+              "ket_qua": "S",
+              "mic": 1.0
+            },
+            {
+              "hoat_chat_id": "HC-LINEZOLID",
+              "ket_qua": "S",
+              "mic": 2.0
+            }
+          ]
+        }
+      ],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-050-02",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 62t, sốt 38,9 °C, mạch 104, rét run. Đã cấy máu 2 chai trước khi dùng kháng sinh. Truyền dịch. Nghi nhiễm khuẩn huyết, ổ nhiễm chưa rõ.",
+          "thoi_diem_ghi": "2026-11-09T09:40:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-050-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 2. Sốt giảm nhẹ còn 38,2 °C sau hạ sốt. Cấy máu đang theo dõi. Đau cẳng chân P nhẹ, vết cũ khô.",
+          "thoi_diem_ghi": "2026-11-10T07:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-050-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 3. Cấy máu có tụ cầu vàng, đã có kháng sinh đồ. Creatinin 96, CRP 156 hôm vào viện. Chưa có y lệnh kháng sinh đường tĩnh mạch.",
+          "thoi_diem_ghi": "2026-11-11T07:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-050-05",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 4. T 37,8 °C, mạch 88, HA 108/66. Tỉnh, ăn uống được. Creatinin 85, CRP 92, bạch cầu hôm vào viện 16,8. Cân nặng 78 kg.",
+          "thoi_diem_ghi": "2026-11-12T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-050-03",
+          "thoi_diem_ke": "2026-11-09T10:00:00+07:00",
+          "khoa_ke_don": "Truyền nhiễm",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-050-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL, bù dịch",
+              "bat_dau": "2026-11-09T10:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T08:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-050-04",
+          "thoi_diem_ke": "2026-11-09T10:15:00+07:00",
+          "khoa_ke_don": "Truyền nhiễm",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-050-04-01",
+              "thuoc_id": "T-ACETAMINOPHEN-500MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, tối đa 4 lần/ngày",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt trên 38 °C",
+              "bat_dau": "2026-11-09T10:15:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-09T10:15:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-050-05",
+          "thoi_diem_ke": "2026-11-09T10:30:00+07:00",
+          "khoa_ke_don": "Truyền nhiễm",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-050-05-01",
+              "thuoc_id": "T-ENOXAPARIN-40MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm dưới da",
+              "cach_dung": "Tiêm dưới da 1 lần/ngày, dự phòng huyết khối",
+              "bat_dau": "2026-11-09T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T20:00:00+07:00",
+                  "lieu": 40.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-050-06",
+          "thoi_diem_ke": "2026-11-12T11:30:00+07:00",
+          "khoa_ke_don": "Truyền nhiễm",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-050-06-01",
+              "thuoc_id": "T-VANCOMYCIN-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch mỗi 12 giờ",
+              "bat_dau": "2026-11-12T13:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T13:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T01:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T13:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-09T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nam sốt cao rét run 2 ngày, mệt nhiều, mạch nhanh, vào cấp cứu. Khám lúc 9 giờ 30: nhiệt độ 38,9 °C, mạch 104 lần/phút, cân nặng 78 kg. Người bệnh tỉnh, da ấm. Vết rạch cẳng chân phải cũ khô, không đỏ nề. Phổi trong, tim đều, bụng mềm. Đã cấy máu hai chai trước khi dùng kháng sinh.",
+          "danh_gia": "Nhiễm khuẩn huyết nghi nguồn da mềm (A41.0), ổ nhiễm chưa rõ. Bạch cầu 16,8 G/L, CRP 156 mg/L và creatinin 96 umol/L ghi nhận sáng nay, cần theo dõi chức năng thận trong điều trị. Bệnh cảnh toàn thân cần theo dõi sát mạch và huyết áp.",
+          "huong_xu_tri": "Bù dịch natri clorid 0,9% 500 mL mỗi ngày, paracetamol 500 mg khi sốt trên 38 độ, tối đa 4 lần mỗi ngày. Enoxaparin 40 mg tiêm dưới da mỗi ngày, bắt đầu từ tối nay. Chờ kết quả cấy máu để chọn kháng sinh tĩnh mạch.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-03",
+            "YL-HS-050-04",
+            "YL-HS-050-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, cháo, uống nhiều nước.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Mạch và huyết áp",
+            "Dấu hiệu lơ mơ"
+          ],
+          "dan_do": "Uống đủ nước, báo ngay nếu rét run hoặc lơ mơ tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-10T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sốt giảm nhẹ sau khi dùng thuốc hạ sốt. Cấy máu đang theo dõi. Đau cẳng chân phải nhẹ, vết cũ khô, không đỏ nề mới. Ăn uống được hơn so với hôm qua, người bệnh bớt mệt. Đêm qua ngủ được.",
+          "danh_gia": "Nhiễm khuẩn huyết đang theo dõi, tình trạng toàn thân cải thiện nhẹ nhưng chưa ổn định hoàn toàn. Chưa có kết quả cấy máu trong ngày, chưa đủ cơ sở để kết luận về tác nhân và độ nhạy kháng sinh.",
+          "huong_xu_tri": "Theo dõi nhiệt độ, mạch và cấy máu. Chờ kết quả cấy máu để chọn kháng sinh đường tĩnh mạch. Tiếp tục bù dịch và enoxaparin theo y lệnh đã có.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-03",
+            "YL-HS-050-04",
+            "YL-HS-050-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, cháo.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Kết quả cấy máu",
+            "Vết rạch cũ"
+          ],
+          "dan_do": "Nằm nghỉ tại giường, uống đủ nước."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-11T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Cấy máu ghi nhận tụ cầu vàng kháng methicillin, đã có kháng sinh đồ. Tỉnh, ăn uống được, vết cũ khô. Chưa ghi nhận sốt cao trong buổi sáng. Người bệnh hiểu về tình trạng nhiễm trùng và kế hoạch điều trị.",
+          "danh_gia": "Nhiễm khuẩn huyết do MRSA đã xác định, cần kháng sinh tĩnh mạch theo kháng sinh đồ. Các chỉ số viêm và creatinin tiếp tục theo dõi trong những ngày tới. Ổ nhiễm nguồn da mềm có vết rạch cũ đã khô, chưa thấy ổ mới.",
+          "huong_xu_tri": "Chuẩn bị chỉ định kháng sinh tĩnh mạch theo kháng sinh đồ đã có. Theo dõi sốt, mạch và creatinin mỗi ngày. Tiếp tục bù dịch và enoxaparin, đánh giá lại vùng chân phải mỗi buổi sáng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-03",
+            "YL-HS-050-04",
+            "YL-HS-050-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, nhiều đạm.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Mạch và huyết áp",
+            "Creatinin"
+          ],
+          "dan_do": "Uống đủ nước và báo khi sốt lại."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-050-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-12T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay nhiệt độ 37,8 °C, mạch 88 lần/phút, HA 108/66 mmHg lúc 6 giờ 30, cân nặng 78 kg. Người bệnh tỉnh, ăn uống được. Creatinin 85 umol/L và CRP 92 mg/L lúc 6 giờ 45.",
+          "danh_gia": "Nhiễm khuẩn huyết do MRSA đang đáp ứng: sốt giảm, CRP giảm từ 156 xuống 92 mg/L. Cần kháng sinh tĩnh mạch theo kháng sinh đồ đã có, bắt đầu càng sớm càng tốt để không kéo dài bệnh cảnh nhiễm khuẩn.",
+          "huong_xu_tri": "Đề nghị vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ, bắt đầu 1 giờ chiều nay (chỉ định, chờ duyệt). Tiếp tục natri clorid, paracetamol khi sốt và enoxaparin. Theo dõi creatinin khi dùng vancomycin và đánh giá lại HA sau mỗi ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-050-03",
+            "YL-HS-050-04",
+            "YL-HS-050-05",
+            "YL-HS-050-06"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, nhiều đạm.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Creatinin",
+            "Mạch và huyết áp"
+          ],
+          "dan_do": "Uống đủ nước, báo nếu nổi mẩn ngứa khi dùng thuốc truyền."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-09T09:20:00+07:00",
+        "so_giuong": "G-050-02",
+        "so_luu_tru": "LT-2026-05002",
+        "ma_yt": "YT-2026-050-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-050-06",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 50",
+    "ngay_sinh": "1964-03-10",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9050",
+      "thon_pho": "Phố Bạch Mai",
+      "xa_phuong": "Bạch Mai",
+      "huyen": "Hai Bà Trưng",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000050",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 50",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 050"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 170.0,
+    "can_nang_kg": 78.0,
+    "nhom_mau": null
+  }
+}

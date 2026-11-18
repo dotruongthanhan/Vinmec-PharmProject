@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-024",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 4,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-024-04-01"],
+      "mo_ta": "Amiodaron 200 mg 2 lần/ngày được kê khi đang dùng digoxin 0,25 mg/ngày; amiodaron làm tăng nồng độ digoxin, digoxin máu 1,6 ng/mL cần theo dõi."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}
