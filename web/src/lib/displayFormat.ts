@@ -1,5 +1,17 @@
 import type { SemanticTone } from './severity.ts'
 
+/** Ngày thuần lịch giữ nguyên; ngày giờ hiển thị theo giờ Việt Nam. */
+export function administrativeDate(value?: string | null): string {
+  if (!value) return 'Chưa ghi nhận'
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value.split('-').reverse().join('/')
+  const date = new Date(value)
+  if (Number.isNaN(date.valueOf())) return 'Chưa ghi nhận'
+  return new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hour12: false,
+  }).format(date)
+}
+
 export type TrendDirection = 'up' | 'down'
 
 export interface ParsedTrendValue {
@@ -102,7 +114,7 @@ export function formatClinicalText(text: string): string {
   const step1 = formatIsoTimestampsInText(text)
   const step2 = formatClinicalUnits(step1)
   const step3 = formatWeightTypes(step2)
-  return formatDecimalCommas(step3)
+  return formatDecimalCommas(step3).replace(/\btuoi\b/g, 'tuổi')
 }
 
 /** Định dạng thời điểm dạng DD/MM/YYYY HH:MM hoặc ISO thành HH:MM · DD/MM/YYYY. */

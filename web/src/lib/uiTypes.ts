@@ -1,5 +1,11 @@
 import type { ChiSo } from '../api/types.ts'
 
+export interface EncounterGroup<T> {
+  id: string
+  thuTu: number | null
+  items: T[]
+}
+
 export type DetailTabId =
   | 'ho_so_benh_an'
   | 'y_lenh'

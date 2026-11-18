@@ -1,6 +1,6 @@
 import { Search, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { apiClient } from '@/api/index'
 import type { NhanDinh, PhanHoiDaGhi } from '@/api/types'
 import { AppShell } from '@/app/AppShell'
@@ -12,6 +12,7 @@ import type { SignOutOptions } from '@/features/auth/useAuth'
 import { EvidenceDialog } from '@/features/findings/EvidenceDialog'
 import { OrderDetailView } from '@/features/order-detail/OrderDetailView'
 import { OrdersTable } from '@/features/orders/OrdersTable'
+import { MedicalRecordsList } from '@/features/medical-records/MedicalRecordsList'
 import { SettingsDialog } from '@/features/settings/SettingsDialog'
 import { SidebarNav } from '@/features/sidebar/SidebarNav'
 import { DetailSkeleton, ErrorState } from '@/features/states/StateViews'
@@ -49,14 +50,16 @@ interface DialogState {
   triggerEl: HTMLElement | null
 }
 
-/** Bàn làm việc ba cột cho tuyến /app (danh sách y lệnh) và /app/y-lenh/:caId (chi tiết y lệnh). */
+/** Bàn làm việc ba cột cho danh sách y lệnh, hồ sơ và chi tiết ca. */
 export function WorkspacePage() {
   const { caId: routeCaId } = useParams<{ caId?: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const { userEmail, isDemoMode, vaiTro, signOut } = useAuth()
 
   const activeCaseId = routeCaId ?? null
   const isListRoute = activeCaseId === null
+  const isRecordsRoute = location.pathname.replace(/\/$/, '') === '/app/ho-so'
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
     () => loadUiPrefs().queueCollapsed,
@@ -355,6 +358,8 @@ export function WorkspacePage() {
   const activeMode = detail?.che_do ?? casesData?.che_do ?? null
 
   const sidebarCommonProps = {
+    activeSection: isRecordsRoute ? 'records' as const : 'orders' as const,
+    onNavigate: () => setDrawerSidebarOpen(false),
     counts,
     activeFilter,
     isListRoute,
@@ -428,7 +433,19 @@ export function WorkspacePage() {
           />
         }
       >
-        {isListRoute ? (
+        {isRecordsRoute ? (
+          <MedicalRecordsList
+            cases={allCases}
+            loading={casesLoading}
+            error={casesError}
+            searchQuery={searchQuery}
+            onRetry={reloadCases}
+            onOpenRecord={(caId) => {
+              setDrawerSidebarOpen(false)
+              navigate(`/app/y-lenh/${encodeURIComponent(caId)}?tab=ho_so_benh_an`)
+            }}
+          />
+        ) : isListRoute ? (
           <div className="mx-auto w-full max-w-[1200px] px-3 py-5 sm:px-6 flex flex-col gap-3">
             {/* Ô tìm kiếm cho màn hình hẹp (< 640px) khi ô trên thanh công cụ ẩn */}
             <div className="list-search relative flex items-center">

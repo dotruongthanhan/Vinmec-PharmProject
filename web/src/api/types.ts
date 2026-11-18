@@ -36,6 +36,11 @@ export interface CheDo {
 }
 
 export interface DongHangDoi {
+  ho_ten?: string | null
+  ngay_sinh?: string | null
+  chan_doan_chinh?: string | null
+  vao_vien?: string | null
+  so_y_lenh?: number | null
   ca_id: string
   ma_y_lenh?: string | null
   thoi_diem_ke?: string | null
@@ -49,6 +54,50 @@ export interface DongHangDoi {
   so_can_luu_y: number
   so_thieu_du_lieu: number
   da_phan_hoi_het: boolean
+}
+
+export interface FullIdentity {
+  ho_ten?: string | null
+  ngay_sinh?: string | null
+  tuoi?: number | null
+  gioi_tinh?: 'nam' | 'nu' | null
+  can_nang_kg?: number | null
+  chieu_cao_cm?: number | null
+  dan_toc?: string | null
+  ngoai_kieu?: string | null
+  nghe_nghiep?: string | null
+  dia_chi?: { so_nha?: string | null; thon_pho?: string | null; xa_phuong?: string | null; huyen?: string | null; tinh_thanh?: string | null } | null
+  dia_chi_text?: string | null
+  doi_tuong?: 'bhyt' | 'thu_phi' | 'mien' | 'khac' | null
+  bhyt?: { so_the?: string | null; gia_tri_den?: string | null } | null
+  nguoi_bao_tin?: { ho_ten?: string | null; quan_he?: string | null; dien_thoai?: string | null } | null
+  bo_me?: { bo?: { ho_ten?: string | null; nghe_nghiep?: string | null } | null; me?: { ho_ten?: string | null; nghe_nghiep?: string | null } | null } | null
+  nhom_mau?: string | null
+}
+
+export interface PatientManagement {
+  dot_dieu_tri_id: string
+  khoa_dieu_tri?: string | null
+  thoi_diem_bat_dau?: string | null
+  thoi_diem_ket_thuc?: string | null
+  hinh_thuc_vao?: string | null
+  so_ngay_dieu_tri?: number | null
+  lich_su_khoa?: { khoa: string; tu?: string | null; den?: string | null }[]
+  noi_gioi_thieu?: 'co_quan_y_te' | 'tu_den' | 'khac' | null
+  tuyen_chuyen_den?: string | null
+  vao_khoa_luc?: string | null
+  so_giuong?: string | null
+  so_luu_tru?: string | null
+  ma_yt?: string | null
+  ra_vien?: { hinh_thuc: string; chuyen_vien_den?: string | null; ly_do?: string | null } | null
+  bac_si_dieu_tri?: string | null
+}
+
+export interface EncounterHistory extends PatientManagement {
+  thu_tu?: number | null
+  chan_doan_chinh?: string | null
+  y_lenh?: { y_lenh_id: string; thoi_diem_ke?: string | null; trang_thai?: string | null; thuoc?: string[] }[]
+  phieu_dieu_tri?: { thoi_diem_ghi?: string | null; loai_ho_so?: string | null; noi_dung: string }[]
 }
 
 export interface LoiNapCa {
@@ -229,7 +278,49 @@ export interface ChiTietViSinhDong {
   khang_sinh_do: KhangSinhDoDong[]
 }
 
+export interface MedicalOrder {
+  y_lenh_id: string
+  dot_dieu_tri_id: string
+  thu_tu_dot?: number | null
+  thoi_diem_ke?: string | null
+  trang_thai?: string | null
+  loai?: string | null
+  vai_tro_nguoi_ke?: string | null
+  khoa_ke_don?: string | null
+  luong_duyet?: string | null
+  ly_do_ngung?: string | null
+  thoi_diem_ngung?: string | null
+  thay_the_y_lenh_id?: string | null
+  la_trong_tam: boolean
+  cot: string[]
+  dong: Record<string, string>[]
+}
+
+export interface TreatmentSheet {
+  phieu_dieu_tri_id: string
+  dot_dieu_tri_id: string
+  thu_tu_dot?: number | null
+  ngay_dieu_tri: number
+  thoi_diem_lap: string
+  vai_tro_nguoi_lap: string
+  dien_bien: string
+  danh_gia: string
+  huong_xu_tri: string
+  y_lenh_trong_ngay: string[]
+  che_do_cham_soc: string | null
+  che_do_an: string
+  theo_doi: string[]
+  dan_do: string | null
+  nap_luc?: string | null
+  nguon_tep?: string | null
+}
+
 export interface ChiTietCa {
+  danh_sach_y_lenh?: MedicalOrder[]
+  phieu_dieu_tri?: TreatmentSheet[]
+  dinh_danh_day_du?: FullIdentity | null
+  quan_ly_nguoi_benh?: PatientManagement | null
+  lich_su_vao_vien?: EncounterHistory[]
   ca_id: string
   dinh_danh: DinhDanhCa
   tom_tat: TomTat
