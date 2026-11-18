@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-032",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 6,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-032-03-01"],
+      "mo_ta": "Warfarin 7,5 mg được kê khi INR hôm nay 5,2, trên đích 2-3, kèm Hb 118 g/L; liều tăng cần xem lại trước khi duyệt."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-034",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 7,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-034-03-01"],
+      "mo_ta": "Ceftriaxon được kê tiếp tục ngày thứ 12 khi đã hết sốt 7 ngày và CRP, bạch cầu bình thường, chưa có đánh giá lại chỉ định kháng sinh."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

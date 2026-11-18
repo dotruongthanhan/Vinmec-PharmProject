@@ -1,5 +1,6 @@
 """Mô hình trao đổi JSON theo hợp đồng API v1, v1.1 và hỏi đáp v1.2."""
 
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -38,6 +39,11 @@ class DongHangDoi(ApiModel):
     thoi_diem_ke: str | None = None
     nguoi_benh_tom_tat: str | None = None
     thuoc: list[str] = Field(default_factory=list)
+    ho_ten: str | None = None
+    ngay_sinh: date | None = None
+    chan_doan_chinh: str | None = None
+    vao_vien: datetime | None = None
+    so_y_lenh: int | None = None
 
 
 class LoadError(ApiModel):
@@ -217,6 +223,155 @@ class CaseDetails(ApiModel):
     dien_bien: list[ProgressNote]
 
 
+class Address(ApiModel):
+    so_nha: str | None = None
+    thon_pho: str | None = None
+    xa_phuong: str | None = None
+    huyen: str | None = None
+    tinh_thanh: str | None = None
+
+
+class Insurance(ApiModel):
+    so_the: str | None = None
+    gia_tri_den: date | None = None
+
+
+class Contact(ApiModel):
+    ho_ten: str | None = None
+    quan_he: str | None = None
+    dien_thoai: str | None = None
+
+
+class Parent(ApiModel):
+    ho_ten: str | None = None
+    nghe_nghiep: str | None = None
+
+
+class Parents(ApiModel):
+    bo: Parent | None = None
+    me: Parent | None = None
+
+
+class FullIdentity(ApiModel):
+    ho_ten: str | None = None
+    ngay_sinh: date | None = None
+    tuoi: int | None = None
+    gioi_tinh: Literal["nam", "nu"] | None = None
+    chieu_cao_cm: float | None = None
+    can_nang_kg: float | None = None
+    dan_toc: str | None = None
+    ngoai_kieu: str | None = None
+    nghe_nghiep: str | None = None
+    dia_chi: Address | None = None
+    dia_chi_text: str | None = None
+    doi_tuong: Literal["bhyt", "thu_phi", "mien", "khac"] | None = None
+    bhyt: Insurance | None = None
+    nguoi_bao_tin: Contact | None = None
+    bo_me: Parents | None = None
+    nhom_mau: str | None = None
+
+
+class Discharge(ApiModel):
+    hinh_thuc: Literal["ra_vien", "xin_ve", "bo_ve", "dua_ve", "chuyen_vien"]
+    chuyen_vien_den: str | None = None
+    ly_do: str | None = None
+
+
+class DepartmentStay(ApiModel):
+    khoa: str
+    tu: datetime | None = None
+    den: datetime | None = None
+
+
+class PatientManagement(ApiModel):
+    dot_dieu_tri_id: str
+    khoa_dieu_tri: str | None = None
+    thoi_diem_bat_dau: datetime | None = None
+    thoi_diem_ket_thuc: datetime | None = None
+    hinh_thuc_vao: str | None = None
+    so_ngay_dieu_tri: int | None = None
+    lich_su_khoa: list[DepartmentStay] = Field(default_factory=list)
+    noi_gioi_thieu: Literal["co_quan_y_te", "tu_den", "khac"] | None = None
+    tuyen_chuyen_den: str | None = None
+    vao_khoa_luc: datetime | None = None
+    so_giuong: str | None = None
+    so_luu_tru: str | None = None
+    ma_yt: str | None = None
+    ra_vien: Discharge | None = None
+    bac_si_dieu_tri: str | None = None
+
+
+class EncounterOrder(ApiModel):
+    y_lenh_id: str
+    thoi_diem_ke: datetime | None = None
+    trang_thai: str | None = None
+    thuoc: list[str] = Field(default_factory=list)
+
+
+class EncounterNote(ApiModel):
+    thoi_diem_ghi: datetime | None = None
+    loai_ho_so: str | None = None
+    noi_dung: str
+
+
+class EncounterHistory(PatientManagement):
+    thu_tu: int | None = None
+    chan_doan_chinh: str | None = None
+    y_lenh: list[EncounterOrder] = Field(default_factory=list)
+    phieu_dieu_tri: list[EncounterNote] = Field(default_factory=list)
+
+
+class AdministrativeRecord(ApiModel):
+    dinh_danh_day_du: FullIdentity
+    lich_su_vao_vien: list[EncounterHistory]
+
+
+class MedicalOrder(ApiModel):
+    """Y lệnh để xem hồ sơ, không làm đầu vào AI."""
+
+    y_lenh_id: str
+    dot_dieu_tri_id: str
+    thu_tu_dot: int | None = None
+    thoi_diem_ke: datetime | None = None
+    trang_thai: str | None = None
+    loai: str | None = None
+    vai_tro_nguoi_ke: str | None = None
+    khoa_ke_don: str | None = None
+    luong_duyet: str | None = None
+    ly_do_ngung: str | None = None
+    thoi_diem_ngung: datetime | None = None
+    thay_the_y_lenh_id: str | None = None
+    la_trong_tam: bool
+    cot: list[str] = Field(default_factory=list)
+    dong: list[dict[str, str]]
+
+
+class TreatmentSheet(ApiModel):
+    """Phiếu theo ngày, tham chiếu y lệnh trong cùng đợt."""
+
+    phieu_dieu_tri_id: str
+    dot_dieu_tri_id: str
+    thu_tu_dot: int | None = None
+    ngay_dieu_tri: int
+    thoi_diem_lap: datetime
+    vai_tro_nguoi_lap: str
+    dien_bien: str
+    danh_gia: str
+    huong_xu_tri: str
+    y_lenh_trong_ngay: list[str]
+    che_do_cham_soc: str | None
+    che_do_an: str
+    theo_doi: list[str]
+    dan_do: str | None
+    nap_luc: datetime | None = None
+    nguon_tep: str | None = None
+
+
+class MedicalRecord(ApiModel):
+    danh_sach_y_lenh: list[MedicalOrder] = Field(default_factory=list)
+    phieu_dieu_tri: list[TreatmentSheet] = Field(default_factory=list)
+
+
 class ChiTietCa(ApiModel):
     ca_id: str
     dinh_danh: DinhDanhCa
@@ -228,6 +383,11 @@ class ChiTietCa(ApiModel):
     nhom_ly_do: list[str]
     thoi_gian_ms: float
     che_do: CheDo
+    dinh_danh_day_du: FullIdentity | None = None
+    quan_ly_nguoi_benh: PatientManagement | None = None
+    lich_su_vao_vien: list[EncounterHistory] = Field(default_factory=list)
+    danh_sach_y_lenh: list[MedicalOrder] = Field(default_factory=list)
+    phieu_dieu_tri: list[TreatmentSheet] = Field(default_factory=list)
 
 
 class BanGhi(ApiModel):

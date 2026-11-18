@@ -1,0 +1,597 @@
+{
+  "ho_so_id": "HS-038",
+  "kich_ban_id": "HS-038",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-038",
+    "tuoi": 55,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "chua_co_thong_tin",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "khang sinh cephalosporin the he 3"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "ten_thuoc": "Ceftriaxon 2 g",
+      "ham_luong": "2 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 2000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-038-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Ngoại tổng quát",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2025-12-03T08:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-12-09T10:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ngoại tổng quát",
+          "tu": "2025-12-03T08:00:00+07:00",
+          "den": "2025-12-09T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Đau bụng hạ sườn phải",
+      "benh_su": "BN nam 54T đau bụng hạ sườn phải từng cơn 2 ngày, ăn kém. Đã biết sỏi túi mật.",
+      "tien_su": {
+        "ban_than": "Sỏi túi mật phát hiện trước đó, chưa mổ.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol khi đau."
+      },
+      "kham_benh": "T 37,4 độ. Bụng mềm, ấn đau nhẹ hạ sườn phải, không đề kháng.",
+      "tom_tat": "BN nam 54T sỏi túi mật không viêm, điều trị nội khoa, giảm đau. Ra viện ổn định, hẹn tái khám.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS038-1-01",
+          "ma_icd10": "K80.2",
+          "noi_dung": "Sỏi túi mật không kèm viêm túi mật",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS038-1-01",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2025-12-03T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS038-1-02",
+          "loai": "nhiet_do",
+          "gia_tri": 37.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2025-12-03T08:20:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS038-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 82.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2025-12-03T09:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-038-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN đau bụng HSP 2 ngày, siêu âm có sỏi túi mật, thành túi mật không dày. Không sốt. Điều trị nội khoa, giảm đau, ăn lỏng.",
+          "thoi_diem_ghi": "2025-12-03T08:40:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-038-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Đau HSP giảm rõ, ăn được. Không sốt. Dự kiến ra viện sau 2 ngày nếu ổn.",
+          "thoi_diem_ghi": "2025-12-07T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-038-01",
+          "thoi_diem_ke": "2025-12-03T09:00:00+07:00",
+          "khoa_ke_don": "Ngoại tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-038-01-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 3 lần/ngày khi đau",
+              "bat_dau": "2025-12-03T09:30:00+07:00",
+              "ket_thuc": "2025-12-09T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Sỏi túi mật không viêm, điều trị nội khoa, ra viện ổn định. Hẹn tái khám ngoại trú.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-12-03T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nam 54 tuổi, đau bụng hạ sườn phải từng cơn 2 ngày, ăn kém. Đã biết sỏi túi mật trước đó, chưa mổ. Khám: T 37,4, mạch 78, bụng mềm, ấn đau nhẹ hạ sườn phải, không đề kháng. Creatinin 82 umol/L. Siêu âm có sỏi túi mật, thành túi mật không dày.",
+          "danh_gia": "Cơn đau do sỏi túi mật không kèm viêm, chưa sốt cao. Chưa có chỉ định ngoại khoa trong đợt này.",
+          "huong_xu_tri": "Điều trị nội khoa, paracetamol 500 mg uống 3 lần mỗi ngày khi đau. Ăn lỏng, theo dõi đau và thân nhiệt. Theo dõi dấu hiệu viêm túi mật tái phát và đau tăng khi vận động.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, ít mỡ, chia nhỏ bữa.",
+          "theo_doi": [
+            "Đau bụng và vị trí đau",
+            "Thân nhiệt hai lần mỗi ngày",
+            "Nôn và vàng da"
+          ],
+          "dan_do": "Tránh ăn nhiều mỡ. Báo ngay nếu đau dữ dội kéo dài, sốt hoặc vàng da."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2025-12-04T09:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau hạ sườn phải giảm dần khi dùng thuốc giảm đau. Ăn uống được hơn, không buồn nôn. Bụng mềm, không đề kháng. Điều dưỡng ghi nhận BN đi tiểu bình thường, uống nước đều và đã ăn được vài bữa cháo lỏng. Không nôn, không ợ nhiều.",
+          "danh_gia": "Cơn đau do sỏi túi mật đáp ứng với điều trị nội khoa. Chưa có dấu hiệu viêm túi mật. Đau có xu hướng giảm dần khi điều trị nội khoa được duy trì đều đặn.",
+          "huong_xu_tri": "Tiếp tục điều trị nội khoa và theo dõi đau. Đánh giá ăn uống và thân nhiệt ngày kế. Điều dưỡng hướng dẫn BN báo ngay khi đau bụng tăng đột ngột.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng chuyển dần sang ăn mềm, ít mỡ.",
+          "theo_doi": [
+            "Đau bụng",
+            "Thân nhiệt"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2025-12-05T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN đỡ đau hơn, ăn lỏng được. Không sốt, không vàng da. Bụng mềm, ấn nhẹ hạ sườn phải. BN ngủ được hơn, không đau bụng về đêm. Điều dưỡng ghi nhận BN đi lại quanh giường và tự thay đổi tư thế dễ dàng. Không có triệu chứng nôn.",
+          "danh_gia": "Sỏi túi mật không viêm, đang ổn định dần. Tình trạng sỏi túi mật không viêm đang được kiểm soát, cần theo dõi thêm để xác định hướng xử trí.",
+          "huong_xu_tri": "Tiếp tục theo dõi, chuyển dần sang ăn nhạt ít mỡ. Hẹn siêu âm kiểm tra lại khi cần. Điều dưỡng ghi nhận thân nhiệt và đau bụng mỗi ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng chuyển dần sang ăn mềm, ít mỡ.",
+          "theo_doi": [
+            "Đau bụng",
+            "Thân nhiệt"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2025-12-06T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau giảm rõ, ngủ được. Không sốt. BN đi lại được trong buồng bệnh, ăn được các bữa chính. Điều dưỡng ghi nhận BN ăn hết khẩu phần mềm, đi tiêu bình thường. Không nôn, không vàng da, không chảy máu.",
+          "danh_gia": "Tình trạng ổn định, chưa có biến chứng viêm túi mật. Đáp ứng điều trị nội khoa tốt, cần theo dõi thêm trước khi quyết định ra viện. Chưa có chỉ định điều trị ngoại khoa trong đợt này.",
+          "huong_xu_tri": "Tiếp tục theo dõi, thuốc giảm đau khi cần. Dự kiến ra viện sau khi ăn được bữa thường. Hướng dẫn BN về chế độ ăn ít mỡ và cách theo dõi đau tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn mềm, ít mỡ, chia nhỏ bữa.",
+          "theo_doi": [
+            "Đau bụng",
+            "Thân nhiệt"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2025-12-07T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau hạ sườn phải giảm rõ, ăn được. Không sốt. Bụng mềm, không đề kháng. BN nói đã đỡ đau nhiều, không phải dùng thêm thuốc giảm đau trong buổi sáng. Điều dưỡng ghi nhận BN đi lại tự do trong buồng bệnh.",
+          "danh_gia": "Ổn định, đáp ứng điều trị nội khoa tốt. Bệnh nhân đang hồi phục ổn định và có khả năng tự chăm sóc tốt hơn. Cần đánh giá lại trước khi ra viện.",
+          "huong_xu_tri": "Dự kiến ra viện sau 2 ngày nếu tiếp tục ổn. Tái khám ngoại trú để cân nhắc phương án xử trí sỏi túi mật. Chuẩn bị đơn thuốc giảm đau khi cần và lịch hẹn tái khám.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn mềm, ít mỡ, chia nhỏ bữa.",
+          "theo_doi": [
+            "Đau bụng",
+            "Thân nhiệt"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-1-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2025-12-08T16:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Chiều nay BN ăn uống bình thường, không đau bụng đáng kể. Không sốt, không vàng da. Điều dưỡng ghi nhận BN không đau bụng khi đi lại, ăn được các bữa cơm nhạt, ngủ đủ giấc. Người nhà đã đến thăm và nắm được kế hoạch.",
+          "danh_gia": "Sỏi túi mật không viêm, điều trị nội khoa đạt kết quả. Đủ điều kiện ra viện. Bệnh cảnh sỏi túi mật không viêm đã ổn định trong thời gian nằm viện.",
+          "huong_xu_tri": "Ra viện sáng mai nếu không đau tái phát. Hẹn tái khám ngoại trú chuyên khoa ngoại tiêu hóa. Ôn lại dấu hiệu cần quay lại khám sớm trước khi ra viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn nhạt, ít mỡ, chia nhỏ bữa.",
+          "theo_doi": [
+            "Đau bụng sau ăn"
+          ],
+          "dan_do": "Ăn uống theo chế độ ít mỡ. Báo ngay nếu đau bụng kéo dài, sốt hoặc vàng da."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-038-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Ngoại tổng quát",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-11T14:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ngoại tổng quát",
+          "tu": "2026-11-11T14:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau bụng hạ sườn phải, sốt",
+      "benh_su": "BN nam 55T đau bụng HSP tăng dần 1 ngày, sốt 38,2 độ, buồn nôn 1 lần. Lần trước đã có sỏi túi mật, điều trị nội khoa.",
+      "tien_su": {
+        "ban_than": "Sỏi túi mật, điều trị nội khoa lần trước.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol khi đau."
+      },
+      "kham_benh": "Bụng mềm, ấn đau hạ sườn phải, Murphy (+) nhẹ, không đề kháng. Không vàng da.",
+      "tom_tat": "BN nam 55T viêm túi mật cấp, Murphy (+), sốt nhẹ. Creatinin 85 umol/L, cân nặng 70 kg. Chỉ định ceftriaxon 2 g truyền tĩnh mạch 1 lần/ngày, theo dõi.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS038-2-01",
+          "ma_icd10": "K81.0",
+          "noi_dung": "Viêm túi mật cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS038-2-01",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-11T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS038-2-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-11T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS038-2-03",
+          "loai": "mach",
+          "gia_tri": 92.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-11T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS038-2-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 128.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-11T14:25:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS038-2-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 80.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-11T14:25:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS038-2-06",
+          "loai": "nhiet_do",
+          "gia_tri": 37.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS038-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 84.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-11T14:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS038-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 85.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-12T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS038-2-03",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 62.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-11T14:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS038-2-04",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 14.2,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-11T14:40:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-038-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 55T vào viện vì đau bụng HSP 1 ngày, sốt 38,2. Murphy (+) nhẹ. Siêu âm: túi mật to, thành dày, có sỏi. Nhập khoa Ngoại tổng quát, theo dõi.",
+          "thoi_diem_ghi": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-038-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sau 1 ngày đau HSP còn nhẹ, sốt nhẹ 37,6. Ăn uống kém. Creatinin 85 umol/L, cân nặng 70 kg. Chỉ định kháng sinh điều trị viêm túi mật.",
+          "thoi_diem_ghi": "2026-11-12T07:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-038-03",
+          "thoi_diem_ke": "2026-11-11T15:00:00+07:00",
+          "khoa_ke_don": "Ngoại tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-038-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-11T15:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-038-04",
+          "thoi_diem_ke": "2026-11-11T15:10:00+07:00",
+          "khoa_ke_don": "Ngoại tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-038-04-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi đau hoặc sốt, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi đau hoặc sốt",
+              "bat_dau": "2026-11-11T15:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-038-05",
+          "thoi_diem_ke": "2026-11-12T09:00:00+07:00",
+          "khoa_ke_don": "Ngoại tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-038-05-01",
+              "thuoc_id": "T-CEFTRIAXONE-2G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2000.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-12T09:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T09:30:00+07:00",
+                  "lieu": 2000.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T09:30:00+07:00",
+                  "lieu": 2000.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-11T15:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 55 tuổi, đau bụng hạ sườn phải tăng dần 1 ngày, sốt 38,2 độ, buồn nôn 1 lần. Khám: mạch 92, HA 128/80 mmHg, bụng mềm, ấn đau hạ sườn phải, Murphy dương tính nhẹ, không đề kháng, không vàng da. Cân nặng 70 kg. Creatinin 84 umol/L, CRP 62 mg/L, bạch cầu 14,2 G/L.",
+          "danh_gia": "Viêm túi mật cấp có sốt nhẹ, bạch cầu và CRP tăng. Chức năng thận trong giới hạn bình thường. Chưa có thông tin dị ứng thuốc trong hồ sơ, cần hỏi lại trước khi dùng kháng sinh.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL mỗi ngày, paracetamol khi đau hoặc sốt, cách nhau tối thiểu 6 giờ. Theo dõi thân nhiệt và đau bụng, cấy máu nếu sốt tăng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-03",
+            "YL-HS-038-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, ít mỡ, uống nhiều nước.",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Đau bụng và dấu hiệu viêm phúc mạc",
+            "Lượng nước tiểu"
+          ],
+          "dan_do": "Báo ngay nếu đau bụng tăng nhanh, sốt cao hoặc vàng da."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-038-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-12T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sau 1 ngày nhập viện, đau hạ sườn phải còn nhẹ, sốt nhẹ 37,6 độ, ăn uống kém. Creatinin 85 umol/L, cân nặng 70 kg. Chưa có thông tin dị ứng thuốc trong hồ sơ.",
+          "danh_gia": "Viêm túi mật cấp đang đáp ứng nhẹ với điều trị hỗ trợ. Cần kháng sinh điều trị viêm túi mật theo chỉ định, sau khi hỏi lại tiền sử dị ứng. Cần theo dõi chặt đáp ứng để quyết định các bước điều trị tiếp theo.",
+          "huong_xu_tri": "Đề nghị ceftriaxon 2 g truyền tĩnh mạch 1 lần mỗi ngày, chỉ định chờ duyệt. Tiếp tục dịch và paracetamol theo y lệnh. Điều dưỡng ghi nhận thân nhiệt và lượng nước tiểu mỗi ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-038-03",
+            "YL-HS-038-04",
+            "YL-HS-038-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, ít mỡ, uống nhiều nước.",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Đau bụng",
+            "Lượng nước tiểu"
+          ],
+          "dan_do": null
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-038-05"
+}

@@ -16,7 +16,17 @@
     "dot_dieu_tri_id": "DT-DEMO-02",
     "khoa_dieu_tri": "Hô hấp",
     "loai_dieu_tri": "noi_tru",
-    "thoi_diem_bat_dau": "2026-11-06T10:00:00+07:00"
+    "thoi_diem_bat_dau": "2026-11-06T10:00:00+07:00",
+    "quan_ly": {
+      "noi_gioi_thieu": "tu_den",
+      "tuyen_chuyen_den": null,
+      "vao_khoa_luc": "2026-11-06T10:00:00+07:00",
+      "so_giuong": "G-062-01",
+      "so_luu_tru": "LT-2026-06201",
+      "ma_yt": "YT-2026-062-01",
+      "ra_vien": null,
+      "bac_si_dieu_tri": "Bác sĩ điều trị"
+    }
   },
   "chan_doan": [
     {
@@ -145,5 +155,33 @@
       "ma_atc": "J01DH02",
       "nhom_duoc_ly": "carbapenem"
     }
-  ]
+  ],
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 62",
+    "ngay_sinh": "1951-11-06",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9062",
+      "thon_pho": "Phố Bạch Mai",
+      "xa_phuong": "Bạch Mai",
+      "huyen": "Hai Bà Trưng",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000062",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 62",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 062"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 155.0,
+    "can_nang_kg": 50.0,
+    "nhom_mau": null
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-014",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 2,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-014-06-01"],
+      "mo_ta": "Enalapril 10 mg được kê khi losartan 50 mg/ngày đang dùng (active) cùng lúc: hai thuốc cùng nhóm ức chế hệ renin-angiotensin, cần xem lại."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

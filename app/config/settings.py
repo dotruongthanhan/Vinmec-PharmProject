@@ -14,6 +14,14 @@ from app.core.errors import ConfigError
 _ROOT = Path(__file__).resolve().parents[2]
 
 
+def load_case_source() -> Literal["db", "file"]:
+    """Chọn nguồn ca; mặc định giữ bộ nạp tệp hiện có."""
+    value = os.getenv("CASE_SOURCE", "file").strip().lower()
+    if value not in ("db", "file"):
+        raise ConfigError("CASE_SOURCE phải là db hoặc file")
+    return value
+
+
 def load_access_log_enabled() -> bool:
     """Nhật ký mặc định bật, chỉ tắt khi ACCESS_LOG=off."""
     return os.getenv("ACCESS_LOG", "on") != "off"
@@ -273,6 +281,11 @@ def load_settings(profile: str | None = None, config_dir: Path | None = None) ->
             for error in exc.errors(include_input=False, include_context=False)
         ]
         raise ConfigError("; ".join(errors)) from exc
+
+
+def load_env_file() -> None:
+    """Nạp `.env` gốc vào môi trường khi chạy local; biến đã có sẵn luôn được ưu tiên."""
+    load_dotenv(dotenv_path=_ROOT / ".env", override=False)
 
 
 def get_secret(name: str) -> str:

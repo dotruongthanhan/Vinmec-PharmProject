@@ -19,9 +19,18 @@ from app.api.routes import router
 from app.api.service import CaseService
 from app.auth.revocation import RevocationList
 from app.auth.verifier import Authenticator, JwtVerifier
-from app.config.settings import load_access_log_enabled, load_auth_settings, load_settings
+from app.config.settings import (
+    load_access_log_enabled,
+    load_auth_settings,
+    load_env_file,
+    load_settings,
+)
+from app.db.reader import DatabaseReadError
 
 _ROOT = Path(__file__).resolve().parents[2]
+# Chạy local (uvicorn app.api.main:app) cần SUPABASE_URL, SUPABASE_ANON_KEY... từ .env gốc.
+# Biến đã có trong môi trường (Docker, CI, test) được ưu tiên, nên EC2 không đổi hành vi.
+load_env_file()
 
 
 class WebFiles(StaticFiles):
@@ -112,6 +121,11 @@ def create_app(
     async def validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
         """Không phản chiếu thân yêu cầu trong thông báo kiểm tra dữ liệu."""
         return _error(request, 422, "du_lieu_khong_hop_le", "Dữ liệu không hợp lệ.")
+
+    @application.exception_handler(DatabaseReadError)
+    async def database_error(request: Request, exc: DatabaseReadError) -> JSONResponse:
+        """Giữ thân lỗi thống nhất, chỉ dùng thông báo DB đã được làm sạch."""
+        return _error(request, 503, "loi_he_thong", str(exc))
 
     @application.exception_handler(Exception)
     async def unexpected_error(request: Request, exc: Exception) -> JSONResponse:

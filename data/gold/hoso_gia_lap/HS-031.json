@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-031",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 6,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-031-07-01"],
+      "mo_ta": "Spironolacton 50 mg uống mỗi ngày được kê khi K máu 5,8 mmol/L hôm nay và đang dùng enalapril; lần vào viện 2 đã có K 5,4 mmol/L và ghi cần theo dõi kali (xuyên lần)."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "xuyên lần"
+}

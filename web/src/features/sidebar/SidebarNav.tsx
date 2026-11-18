@@ -1,6 +1,8 @@
 ﻿import {
   ChevronsUpDown,
   CircleHelp,
+  ClipboardList,
+  FileText,
   LogIn,
   LogOut,
   PanelLeftClose,
@@ -9,6 +11,7 @@
 } from 'lucide-react'
 import { useState } from 'react'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { VinmecLogo } from '@/components/VinmecLogo'
@@ -24,6 +27,8 @@ export interface SidebarNavProps {
   activeFilter: OrderSelectionFilter
   collapsed: boolean
   inDrawer?: boolean
+  activeSection: 'orders' | 'records'
+  onNavigate: () => void
   userEmail: string | null
   vaiTro?: AuthRole | null
   isDemoMode: boolean
@@ -34,10 +39,12 @@ export interface SidebarNavProps {
   onSignOut: (options?: { scope?: 'local' | 'global' }) => void
 }
 
-/** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px); phần lọc giữa để trống vì đã lọc theo cột. */
+/** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px). */
 export function SidebarNav({
   collapsed,
   inDrawer = false,
+  activeSection,
+  onNavigate,
   userEmail,
   vaiTro,
   isDemoMode,
@@ -130,7 +137,37 @@ export function SidebarNav({
         ) : null}
       </div>
 
-      {/* 2. Vùng giữa tạm để trống (bộ lọc đã nằm trong cột bảng; hội thoại gần đây chuyển sang thẻ Lịch sử của Trợ lý) */}
+      {/* 2. Hai mục điều hướng chính */}
+      <div className="flex shrink-0 flex-col gap-1 p-2">
+        {([
+          { section: 'orders', to: '/app', label: 'Y lệnh', icon: ClipboardList },
+          { section: 'records', to: '/app/ho-so', label: 'Hồ sơ bệnh án', icon: FileText },
+        ] as const).map(({ section, to, label, icon: Icon }) => {
+          const link = (
+            <Link
+              to={to}
+              aria-label={label}
+              aria-current={activeSection === section ? 'page' : undefined}
+              onClick={onNavigate}
+              className={cn(
+                'flex h-9 min-w-0 items-center gap-2 rounded-sm text-sm transition-colors duration-120 hover:bg-ink-soft hover:text-ink-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+                effectiveCollapsed ? 'justify-center' : 'px-3',
+                activeSection === section ? 'bg-ink-soft font-semibold text-ink-fg' : 'text-ink-muted',
+              )}
+            >
+              <Icon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+              {!effectiveCollapsed ? <span>{label}</span> : null}
+            </Link>
+          )
+          return effectiveCollapsed ? (
+            <Tooltip key={section}>
+              <TooltipTrigger asChild>{link}</TooltipTrigger>
+              <TooltipContent side="right">{label}</TooltipContent>
+            </Tooltip>
+          ) : <div key={section}>{link}</div>
+        })}
+      </div>
+
       <div className="flex-1 min-h-0" aria-hidden="true" />
 
       {/* 4. Đáy: thanh hồ sơ gọn và nút Cài đặt kiểu Claude Desktop */}

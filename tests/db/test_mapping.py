@@ -24,6 +24,9 @@ def test_mapping_matches_schema_and_rls() -> None:
                 re.M,
             )
         )
+        additions = re.search(rf"ALTER TABLE {re.escape(name)}\n(.*?);", sql, re.S)
+        if additions:
+            columns.update(re.findall(r"ADD COLUMN IF NOT EXISTS (\w+) ", additions.group(1)))
         assert columns == set(table.column_names) | set(table.generated_columns), name
         assert f"ALTER TABLE {name} ENABLE ROW LEVEL SECURITY;" in sql
     assert "CREATE POLICY" not in sql
@@ -33,9 +36,13 @@ def test_mapping_matches_schema_and_rls() -> None:
 
 
 def test_six_cases_preserve_source_counts_and_foreign_keys() -> None:
-    from app.db.sources import prepare
+    from unittest.mock import patch
 
-    batch = prepare("cases", ROOT)
+    from app.db.sources import prepare, read_cases
+
+    demo = [(path, case) for path, case in read_cases(ROOT) if path.parent.name == "demo"]
+    with patch("app.db.sources.read_cases", return_value=demo):
+        batch = prepare("cases", ROOT)
     cases = [
         json.loads(p.read_text(encoding="utf-8")) for p in (ROOT / "data/mock/demo").glob("*.json")
     ]
@@ -75,7 +82,8 @@ def test_load_order_respects_foreign_keys() -> None:
     positions = {name: i for i, name in enumerate(TABLES)}
     for name, table in TABLES.items():
         for reference in table.foreign_keys:
-            assert positions[reference.table] < positions[name]
+            if reference.table != name:
+                assert positions[reference.table] < positions[name]
 
 
 def test_invalid_row_names_missing_field_and_rejection_threshold(tmp_path: Path) -> None:

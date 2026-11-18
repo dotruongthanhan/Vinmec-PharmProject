@@ -29,6 +29,7 @@ export function AppRouter() {
           <Route path="/dang-nhap" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/app" element={<WorkspacePage />} />
+            <Route path="/app/ho-so" element={<WorkspacePage />} />
             <Route path="/app/y-lenh/:caId" element={<WorkspacePage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-022",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 4,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-022-05-01"],
+      "mo_ta": "Clarithromycin được kê khi người bệnh đang dùng warfarin 5 mg mỗi tối; clarithromycin có thể làm tăng INR, nguy cơ chảy máu."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

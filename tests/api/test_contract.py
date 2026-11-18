@@ -99,6 +99,15 @@ def test_interface_field_sets_match_contract() -> None:
     for field in queue_fields:
         assert f"`{field}`" in v12_doc
     contract_fields["DongHangDoi"].update(queue_fields)
+    for name, fields in _parse_contract_interfaces(
+        ROOT / "plan/api-hop-dong-v1.5-hanh-chinh.md"
+    ).items():
+        contract_fields.setdefault(name, set()).update(fields)
+
+    for name, fields in _parse_contract_interfaces(
+        ROOT / "plan/api-hop-dong-v1.4-ho-so-y-lenh-phieu.md"
+    ).items():
+        contract_fields.setdefault(name, set()).update(fields)
 
     for name, fields in contract_fields.items():
         model = getattr(schemas, name)

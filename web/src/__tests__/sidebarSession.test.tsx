@@ -39,6 +39,8 @@ function render(overrides: Partial<SidebarNavProps> = {}) {
     counts: { tat_ca: 0, can_xem: 0, thieu_du_lieu: 0, dat: 0, da_phan_hoi: 0, departments: [] },
     activeFilter: { type: 'group', group: 'tat_ca' },
     collapsed: false,
+    activeSection: 'orders',
+    onNavigate: () => {},
     userEmail: 'tai-khoan@example.invalid',
     isDemoMode: false,
     onSelectFilter: () => {},

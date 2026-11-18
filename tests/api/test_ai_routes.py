@@ -340,3 +340,55 @@ def test_get_case_detail_does_not_block_while_ai_is_running(tmp_path: Path) -> N
 
         finished = _poll_ai_until_done(client, "DEMO-02", timeout=3.0)
         assert finished["trang_thai"] == "xong"
+
+
+class _InjectionRunner(_FakeAiRunner):
+    """Thêm hai nhận định chỉ thị chèn lệnh: cùng nhận xét cố định, khác bản ghi dẫn chứng."""
+
+    def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
+        result = super().run(ca, ket_qua)
+
+        def injected(record_id: str) -> NhanDinhCuoi:
+            return NhanDinhCuoi(
+                nguon_goc="ai_da_kiem_chung",
+                de_xuat=NhanDinhDeXuat(
+                    chi_tiet_y_lenh_id=[],
+                    yeu_to=7,
+                    ket_luan="can_xem",
+                    muc_do="can_luu_y",
+                    nhan_xet="Bệnh án có đoạn văn bản bất thường, giống chỉ thị cho hệ thống",
+                    ban_ghi_ids=[record_id],
+                    trich_dan=[],
+                ),
+            )
+
+        llm = result.llm.model_copy(
+            update={
+                "nhan_dinh": [
+                    *result.llm.nhan_dinh,
+                    injected("XN-DEMO02-01"),
+                    injected("XN-DEMO02-02"),
+                ]
+            }
+        )
+        return result.model_copy(update={"llm": llm})
+
+
+def test_injection_findings_with_same_code_are_merged_not_duplicated(tmp_path: Path) -> None:
+    service = CaseService(
+        ROOT / "data/mock/demo",
+        ROOT / "data/kb/quy_tac_lieu_than.json",
+        tmp_path / "phan_hoi.jsonl",
+        ai_runner=_InjectionRunner(),
+    )
+    with TestClient(create_app(service), raise_server_exceptions=False) as client:
+        assert client.post("/api/cases/DEMO-02/ai").status_code == 200
+        finished = _poll_ai_until_done(client, "DEMO-02")
+        rows = [*finished["nhan_dinh"]["can_chu_y"], *finished["nhan_dinh"]["dat"]]
+        ids = [row["nhan_dinh_id"] for row in rows]
+        assert len(ids) == len(set(ids)), "mỗi thẻ nhận định phải có mã duy nhất"
+        injected = [r for r in rows if "chỉ thị cho hệ thống" in r["nhan_xet"]]
+        assert len(injected) == 1
+        records = {item["ban_ghi_id"] for item in injected[0]["can_cu"]}
+        assert records == {"XN-DEMO02-01", "XN-DEMO02-02"}
+        assert [item["so"] for item in injected[0]["can_cu"]] == [1, 2]

@@ -1,0 +1,667 @@
+{
+  "ho_so_id": "HS-031",
+  "kich_ban_id": "HS-031",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-031",
+    "tuoi": 66,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-13T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ENALAPRIL",
+      "ten_hoat_chat": "Enalapril",
+      "ten_quoc_te": "enalapril",
+      "ma_atc": "C09AA02",
+      "nhom_duoc_ly": "thuoc uc che men chuyen"
+    },
+    {
+      "hoat_chat_id": "HC-FUROSEMIDE",
+      "ten_hoat_chat": "Furosemid",
+      "ten_quoc_te": "furosemide",
+      "ma_atc": "C03CA01",
+      "nhom_duoc_ly": "thuoc loi tieu quai"
+    },
+    {
+      "hoat_chat_id": "HC-SPIRONOLACTONE",
+      "ten_hoat_chat": "Spironolacton",
+      "ten_quoc_te": "spironolactone",
+      "ma_atc": "C03DA01",
+      "nhom_duoc_ly": "thuoc loi tieu giu kali"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-ENALAPRIL-10",
+      "ten_thuoc": "Enalapril 10 mg",
+      "ham_luong": "10 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ENALAPRIL",
+          "ham_luong_thanh_phan": 10.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-FUROSEMID-40",
+      "ten_thuoc": "Furosemid 40 mg/4 mL",
+      "ham_luong": "40 mg/4 mL",
+      "duong_dung": "tiem tinh mach",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-FUROSEMIDE",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-SPIRONOLACTON-50",
+      "ten_thuoc": "Spironolacton 50 mg",
+      "ham_luong": "50 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-SPIRONOLACTONE",
+          "ham_luong_thanh_phan": 50.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-031-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2025-07-08T09:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-07-15T10:00:00+07:00",
+      "so_ngay_dieu_tri": 7,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2025-07-08T09:00:00+07:00",
+          "den": "2025-07-15T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Khó thở tăng dần, phù hai chân 2 tuần",
+      "benh_su": "BN nam 64T, khó thở gắng sức tăng dần, phù hai chân 2 tuần. Được chẩn đoán suy tim mới.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp, chưa điều trị đều.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "T 36,8, M 96, HA 150/92. Ran ẩm đáy phổi hai bên. Phù chi dưới hai bên ấn lõm.",
+      "tom_tat": "BN nam suy tim mới, phù và khó thở đáp ứng lợi tiểu tiêm tĩnh mạch. Khởi trị enalapril. Ra viện ổn định.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS031-1-01",
+          "ma_icd10": "I50.9",
+          "noi_dung": "Suy tim mới",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS031-1-02",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS031-1-01",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.5,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2025-07-08T11:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS031-1-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 98.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2025-07-08T11:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-031-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì khó thở tăng, phù hai chân 2 tuần. Ran ẩm đáy phổi. Nhập khoa Tim mạch, dùng lợi tiểu tiêm tĩnh mạch.",
+          "thoi_diem_ghi": "2025-07-08T09:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-031-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Khó thở giảm, phù giảm sau lợi tiểu. Khởi trị enalapril 10 mg uống 1 lần/ngày, theo dõi kali và creatinin.",
+          "thoi_diem_ghi": "2025-07-12T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-031-01",
+          "thoi_diem_ke": "2025-07-08T10:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-01-01",
+              "thuoc_id": "T-FUROSEMID-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "tiem tinh mach",
+              "cach_dung": "Tiêm tĩnh mạch 2 lần/ngày",
+              "bat_dau": "2025-07-08T10:30:00+07:00",
+              "ket_thuc": "2025-07-11T20:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-031-02",
+          "thoi_diem_ke": "2025-07-12T09:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-02-01",
+              "thuoc_id": "T-ENALAPRIL-10",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 10.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2025-07-12T20:00:00+07:00",
+              "ket_thuc": "2025-07-15T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Suy tim mới, đáp ứng lợi tiểu. Khởi trị enalapril, theo dõi kali và creatinin. Ra viện ổn định."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-031-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-03-16T08:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-03-21T09:00:00+07:00",
+      "so_ngay_dieu_tri": 5,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-03-16T08:00:00+07:00",
+          "den": "2026-03-21T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Khó thở nhẹ, mệt 3 ngày",
+      "benh_su": "BN nam suy tim đang uống enalapril 10 mg 1 lần/ngày. Khó thở nhẹ, mệt 3 ngày, phù chân nhẹ. K máu 5,4 mmol/L.",
+      "tien_su": {
+        "ban_than": "Suy tim, tăng huyết áp, đang theo dõi ngoại trú.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Enalapril 10 mg uống 1 lần/ngày."
+      },
+      "kham_benh": "T 36,7, M 88, HA 138/84. Ran ẩm nhẹ đáy phổi. Phù chi dưới nhẹ.",
+      "tom_tat": "BN nam suy tim, K 5,4 mmol/L, đã ghi cần theo dõi kali khi dùng enalapril. Khó thở giảm sau lợi tiểu. Ra viện, tái khám.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS031-2-01",
+          "ma_icd10": "I50.9",
+          "noi_dung": "Suy tim",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS031-2-02",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS031-2-01",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 5.4,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-03-16T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS031-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 104.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-03-16T09:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-031-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì khó thở nhẹ, mệt 3 ngày. Đang uống enalapril 10 mg 1 lần/ngày. K 5,4 mmol/L. Nhập khoa Tim mạch.",
+          "thoi_diem_ghi": "2026-03-16T08:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-031-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Khó thở giảm, phù giảm sau lợi tiểu. K máu 5,4 mmol/L, ghi chú cần theo dõi kali khi dùng enalapril, hẹn xét nghiệm lại.",
+          "thoi_diem_ghi": "2026-03-19T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-031-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ổn định, ra viện. Tái khám theo dõi kali máu và creatinin.",
+          "thoi_diem_ghi": "2026-03-21T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-031-03",
+          "thoi_diem_ke": "2026-03-16T09:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-03-01",
+              "thuoc_id": "T-FUROSEMID-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "tiem tinh mach",
+              "cach_dung": "Tiêm tĩnh mạch 2 lần/ngày",
+              "bat_dau": "2026-03-16T10:00:00+07:00",
+              "ket_thuc": "2026-03-19T20:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-031-04",
+          "thoi_diem_ke": "2026-03-16T09:40:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-04-01",
+              "thuoc_id": "T-ENALAPRIL-10",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 10.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-03-16T20:00:00+07:00",
+              "ket_thuc": "2026-03-21T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Suy tim, khó thở giảm sau lợi tiểu. K 5,4 mmol/L, đã ghi cần theo dõi kali khi dùng enalapril. Ra viện, tái khám."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-031-3",
+      "thu_tu": 3,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-10T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-10T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Khó thở, phù hai chân tăng 4 ngày, tiểu ít",
+      "benh_su": "BN nam 66T, suy tim, tăng huyết áp. Khó thở gắng sức tăng dần, phù hai chân, tiểu ít 2 ngày. Đang dùng enalapril 10 mg uống 1 lần/ngày.",
+      "tien_su": {
+        "ban_than": "Suy tim, tăng huyết áp. Đã nhập viện 2 lần vì suy tim.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Enalapril 10 mg uống 1 lần/ngày đều đặn."
+      },
+      "kham_benh": "T 37,0, M 92, HA 142/88, SpO2 95% khí phòng. Ran ẩm hai đáy phổi. Phù chi dưới hai bên ấn lõm.",
+      "tom_tat": "BN nam 66T suy tim, tăng huyết áp, khó thở và phù. Creatinin 130 umol/L, K 5,8 mmol/L hôm nay. Đang dùng enalapril. Theo dõi chức năng thận và kali máu.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS031-3-01",
+          "ma_icd10": "I50.9",
+          "noi_dung": "Suy tim",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS031-3-02",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS031-3-01",
+          "loai": "nhiet_do",
+          "gia_tri": 37.0,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-10T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS031-3-02",
+          "loai": "mach",
+          "gia_tri": 92.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-10T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS031-3-03",
+          "loai": "spo2",
+          "gia_tri": 95.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-10T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS031-3-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 142.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS031-3-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 88.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS031-3-06",
+          "loai": "can_nang",
+          "gia_tri": 72.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS031-3-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 124.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-10T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS031-3-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.6,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-10T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS031-3-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 130.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS031-3-04",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 5.8,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-13T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-031-3-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì khó thở, phù hai chân tăng 4 ngày, tiểu ít. Ran ẩm hai đáy phổi. Creatinin 124 umol/L, K 4,6 mmol/L. Nhập khoa Tim mạch, lợi tiểu tiêm tĩnh mạch.",
+          "thoi_diem_ghi": "2026-11-10T08:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-031-3-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Khó thở giảm nhẹ, tiểu tốt hơn sau lợi tiểu. Phù còn ít. Tiếp tục enalapril theo y lệnh.",
+          "thoi_diem_ghi": "2026-11-11T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-031-3-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Mạch 90, HA 138/86, SpO2 96%. Chưa thấy ran phổi mới. Chờ kết quả kali và creatinin ngày kế.",
+          "thoi_diem_ghi": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-031-3-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay khỏe hơn, khó thở nhẹ khi gắng sức. Creatinin 130 umol/L, K 5,8 mmol/L. Cân nặng 72 kg. Dự kiến bổ sung spironolacton cho suy tim.",
+          "thoi_diem_ghi": "2026-11-13T08:10:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-031-05",
+          "thoi_diem_ke": "2026-11-10T09:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-05-01",
+              "thuoc_id": "T-ENALAPRIL-10",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 10.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-10T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-031-06",
+          "thoi_diem_ke": "2026-11-10T09:10:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-06-01",
+              "thuoc_id": "T-FUROSEMID-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "tiem tinh mach",
+              "cach_dung": "Tiêm tĩnh mạch 2 lần/ngày",
+              "bat_dau": "2026-11-10T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-031-07",
+          "thoi_diem_ke": "2026-11-13T10:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-031-07-01",
+              "thuoc_id": "T-SPIRONOLACTON-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-13T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-13T20:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T20:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-031-07"
+}

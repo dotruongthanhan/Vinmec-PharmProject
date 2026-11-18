@@ -16,7 +16,17 @@
     "dot_dieu_tri_id": "DT-DEMO-03",
     "khoa_dieu_tri": "Tai mũi họng",
     "loai_dieu_tri": "ngoai_tru",
-    "thoi_diem_bat_dau": "2026-11-10T07:30:00+07:00"
+    "thoi_diem_bat_dau": "2026-11-10T07:30:00+07:00",
+    "quan_ly": {
+      "noi_gioi_thieu": "tu_den",
+      "tuyen_chuyen_den": null,
+      "vao_khoa_luc": "2026-11-10T07:30:00+07:00",
+      "so_giuong": null,
+      "so_luu_tru": "LT-2026-06301",
+      "ma_yt": "YT-2026-063-01",
+      "ra_vien": null,
+      "bac_si_dieu_tri": "Bác sĩ điều trị"
+    }
   },
   "chan_doan": [
     {
@@ -141,5 +151,30 @@
       "ma_atc": "J01CR02",
       "nhom_duoc_ly": "uc_che_beta_lactamase"
     }
-  ]
+  ],
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 63",
+    "ngay_sinh": "1966-11-10",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9063",
+      "thon_pho": "Phố Dịch Vọng",
+      "xa_phuong": "Dịch Vọng",
+      "huyen": "Cầu Giấy",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "thu_phi",
+    "bhyt": null,
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 63",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 063"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 165.0,
+    "can_nang_kg": 65.0,
+    "nhom_mau": null
+  }
 }

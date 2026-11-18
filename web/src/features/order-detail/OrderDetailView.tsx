@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, ClipboardList, FileText, Pill, X } from 'lucide-react'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import type {
   ChiTietCa,
@@ -53,6 +53,9 @@ import {
 import type { InfoItem } from './DetailSections'
 import { InteractionMatrix } from './InteractionMatrix'
 import { SixFactorStrip } from './SixFactorStrip'
+import { AdministrativeSections } from './AdministrativeSections'
+import { medicalOrders, orderSelectionParams, selectMedicalOrder } from '@/lib/medicalRecord'
+import { OrderExtraInfo, OrderSelector, SelectedOrderDetails, TreatmentSheets } from './MedicalRecordSections'
 
 export type OrderDetailTab = DetailTabId
 
@@ -110,11 +113,34 @@ function primaryDiagnosis(detail: ChiTietCa): string {
     .join('; ')
 }
 
+/** Tách họ tên, tuổi, giới, cân nặng, chiều cao thành ô riêng; thiếu thì dùng chuỗi ghép cũ hoặc "Chưa ghi nhận". */
+function patientFieldItems(detail: ChiTietCa): InfoItem[] {
+  const full = detail.dinh_danh_day_du
+  const missing = 'Chưa ghi nhận'
+  const gender =
+    full?.gioi_tinh === 'nam'
+      ? 'Nam'
+      : full?.gioi_tinh === 'nu'
+        ? 'Nữ'
+        : (detail.dinh_danh.gioi_tuoi.match(/(Nam|Nữ)/i)?.[1] ?? missing)
+  const age =
+    full?.tuoi != null ? `${full.tuoi} tuổi` : (detail.dinh_danh.gioi_tuoi.match(/\d+\s*tuổi/i)?.[0] ?? missing)
+  const num = (value: number | null | undefined, unit: string) =>
+    value != null ? `${String(value).replace('.', ',')} ${unit}` : missing
+  return [
+    { label: 'Họ tên', value: full?.ho_ten ? full.ho_ten.toUpperCase() : missing },
+    { label: 'Giới tính', value: gender },
+    { label: 'Tuổi', value: age },
+    { label: 'Cân nặng', value: full ? num(full.can_nang_kg, 'kg') : detail.dinh_danh.can_nang },
+    { label: 'Chiều cao', value: num(full?.chieu_cao_cm, 'cm') },
+  ]
+}
+
 function patientInfoItems(detail: ChiTietCa): InfoItem[] {
   const { dinh_danh, tom_tat } = detail
   return [
     { label: 'Mã ca', value: detail.ca_id },
-    { label: 'Người bệnh', value: `${dinh_danh.gioi_tuoi} · ${dinh_danh.can_nang}` },
+    ...patientFieldItems(detail),
     { label: 'Khoa, loại hồ sơ', value: dinh_danh.khoa_loai },
     {
       label: 'Vào viện',
@@ -140,9 +166,21 @@ function MedicalRecordTabContent({
 
   return (
     <div className="flex flex-col gap-7">
-      <section aria-label="Thông tin hành chính" className="flex flex-col gap-2.5">
-        <SectionHeading title="Hành chính và tiếp nhận" />
-        <InfoRows items={patientInfoItems(detail)} />
+      <AdministrativeSections identity={detail.dinh_danh_day_du}
+        management={detail.quan_ly_nguoi_benh} history={detail.lich_su_vao_vien}
+        legacy={detail.dinh_danh_day_du ? undefined : {
+          gioi_tuoi: dinh_danh.gioi_tuoi, can_nang: dinh_danh.can_nang,
+          vao_vien: formatClinicalText(tom_tat.vao_vien_text),
+          nam_vien: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : null,
+          khoa: dinh_danh.khoa_loai,
+        }} />
+
+      <section aria-label="Chẩn đoán" className="flex flex-col gap-2.5">
+        <SectionHeading title="III. Chẩn đoán" />
+        <InfoRows items={[
+          { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
+          { label: 'Dị ứng', value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text },
+        ]} />
       </section>
 
       <section aria-label="Cơ địa" className="flex flex-col gap-2.5">
@@ -256,6 +294,36 @@ export function OrderDetailView({
   const [passedOpen, setPassedOpen] = useState<boolean>(false)
   const [prevCaId, setPrevCaId] = useState<string>(detail.ca_id)
   const tabTriggerRefs = useRef<Partial<Record<OrderDetailTab, HTMLButtonElement | null>>>({})
+  const requestedOrderId = searchParams.get('yl')
+  const [orderLocation, setOrderLocation] = useState({
+    caseId: detail.ca_id, requested: requestedOrderId, selected: requestedOrderId,
+  })
+  const lastUrlCase = useRef(detail.ca_id)
+  const orders = useMemo(() => medicalOrders(detail), [detail])
+  let selectedOrderId = orderLocation.selected
+  if (orderLocation.caseId !== detail.ca_id) {
+    selectedOrderId = null
+    setOrderLocation({ caseId: detail.ca_id, requested: requestedOrderId, selected: null })
+  } else if (orderLocation.requested !== requestedOrderId) {
+    selectedOrderId = requestedOrderId
+    setOrderLocation({ caseId: detail.ca_id, requested: requestedOrderId, selected: requestedOrderId })
+  }
+  const selectedOrder = selectMedicalOrder(orders, selectedOrderId)
+
+  useEffect(() => {
+    if (lastUrlCase.current === detail.ca_id) return
+    lastUrlCase.current = detail.ca_id
+    setSearchParams((previous) => {
+      const next = new URLSearchParams(previous)
+      next.delete('yl')
+      return next
+    }, { replace: true })
+  }, [detail.ca_id, setSearchParams])
+
+  const handleSelectOrder = (id: string) => {
+    setSelectedDrug(null)
+    setSearchParams((previous) => orderSelectionParams(previous, id), { replace: true })
+  }
 
   if (prevCaId !== detail.ca_id) {
     setPrevCaId(detail.ca_id)
@@ -335,12 +403,7 @@ export function OrderDetailView({
     [detail.chi_tiet.dien_bien],
   )
 
-  const orderDrugCount = useMemo(
-    () =>
-      detail.chi_tiet.y_lenh.cho_duyet.dong.length +
-      (detail.chi_tiet.y_lenh.dang_dung?.dong.length ?? 0),
-    [detail.chi_tiet.y_lenh],
-  )
+  const treatmentSheetCount = detail.phieu_dieu_tri?.length || treatmentSheetNotes.length
 
   const aiSummary = useMemo(() => countAiSummary(aiKetQua), [aiKetQua])
   const orderTimeText = useMemo(
@@ -364,10 +427,7 @@ export function OrderDetailView({
       .filter((pair) => pair.label)
       .map((pair) => ({ label: pair.label, value: pair.value }))
     items.push(
-      {
-        label: 'Người bệnh',
-        value: `${detail.dinh_danh.gioi_tuoi} · ${detail.dinh_danh.can_nang}`,
-      },
+      ...patientFieldItems(detail),
       { label: 'Dị ứng', value: parseLeadingSymbolLabel(detail.dinh_danh.di_ung_text).text },
       {
         label: 'Kết quả thẩm định',
@@ -441,7 +501,7 @@ export function OrderDetailView({
                   tabTriggerRefs.current.y_lenh = el
                 }}
               >
-                Y lệnh ({orderDrugCount})
+                Y lệnh ({orders.length})
               </TabsTrigger>
               <TabsTrigger
                 value="phieu_dieu_tri"
@@ -449,7 +509,7 @@ export function OrderDetailView({
                   tabTriggerRefs.current.phieu_dieu_tri = el
                 }}
               >
-                Phiếu điều trị ({treatmentSheetNotes.length})
+                Phiếu điều trị ({treatmentSheetCount})
               </TabsTrigger>
               <TabsTrigger
                 value="xet_nghiem"
@@ -500,9 +560,12 @@ export function OrderDetailView({
         </TabsContent>
 
         <TabsContent value="y_lenh" className="flex flex-col gap-7">
+          <OrderSelector orders={orders} selected={selectedOrder} detail={detail} onSelect={handleSelectOrder} />
+          {selectedOrder?.la_trong_tam ? <>
           <section aria-label="Thông tin y lệnh" className="flex flex-col gap-2.5">
             <SectionHeading title="Thông tin y lệnh" />
             <InfoRows items={orderInfoItems} />
+            <OrderExtraInfo order={selectedOrder} />
           </section>
 
           <section aria-label="Y lệnh chờ duyệt" className="flex flex-col gap-2.5">
@@ -534,6 +597,9 @@ export function OrderDetailView({
               />
             </section>
           ) : null}
+          </> : selectedOrder ? <SelectedOrderDetails order={selectedOrder} /> : (
+            <EmptyBox icon={Pill} title="Chưa có y lệnh" description="Hồ sơ chưa có y lệnh để hiển thị." />
+          )}
         </TabsContent>
 
         <TabsContent value="phieu_dieu_tri" className="flex flex-col gap-7">
@@ -542,8 +608,8 @@ export function OrderDetailView({
             <InfoRows items={patientInfoItems(detail)} />
           </section>
           <section aria-label="Phiếu điều trị" className="flex flex-col gap-2.5">
-            <SectionHeading title="Phiếu điều trị" aside={`${treatmentSheetNotes.length} lần ghi`} />
-            {treatmentSheetNotes.length > 0 ? (
+            <SectionHeading title="Phiếu điều trị" aside={`${treatmentSheetCount} phiếu`} />
+            {detail.phieu_dieu_tri?.length ? <TreatmentSheets detail={detail} /> : treatmentSheetNotes.length > 0 ? (
               <NotesTable notes={treatmentSheetNotes} />
             ) : (
               <EmptyBox

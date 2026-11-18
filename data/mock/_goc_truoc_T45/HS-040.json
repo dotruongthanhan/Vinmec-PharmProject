@@ -1,0 +1,304 @@
+{
+  "ho_so_id": "HS-040",
+  "kich_ban_id": "HS-040",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-040",
+    "tuoi": 4,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-15T10:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-PARACETAMOL-SIRO-150",
+      "ten_thuoc": "Paracetamol 150 mg/5 mL",
+      "ham_luong": "150 mg/5 mL",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 150.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-040-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nhi",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-15T10:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nhi",
+          "tu": "2026-11-15T10:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao 2 ngày",
+      "benh_su": "BN nam 4T sốt cao 2 ngày, ho sổ mũi, ăn kém, ngủ không yên. Chưa dùng thuốc hạ sốt trước khi vào viện.",
+      "tien_su": {
+        "ban_than": "Phát triển bình thường, tiêm chủng theo sổ.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc hạ sốt."
+      },
+      "kham_benh": "Bé tỉnh, quấy khóc, họng đỏ. Phổi nghe thô, không ran. Bụng mềm. Chiều cao 102 cm.",
+      "tom_tat": "BN nam 4T sốt siêu vi 2 ngày, sốt cao, ăn kém. Chỉ định paracetamol khi sốt, uống nhiều nước.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS040-1-01",
+          "ma_icd10": "B34.9",
+          "noi_dung": "Sốt siêu vi",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS040-1-01",
+          "loai": "chieu_cao",
+          "gia_tri": 102.0,
+          "don_vi": "cm",
+          "thoi_diem_do": "2026-11-15T10:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS040-1-02",
+          "loai": "nhiet_do",
+          "gia_tri": 39.0,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T10:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS040-1-03",
+          "loai": "mach",
+          "gia_tri": 132.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T10:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS040-1-04",
+          "loai": "nhiet_do",
+          "gia_tri": 38.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS040-1-05",
+          "loai": "mach",
+          "gia_tri": 118.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS040-1-01",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 9.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-15T10:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS040-1-02",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 6.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-16T07:10:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-040-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 4T sốt cao 2 ngày, ho sổ mũi, ăn kém, quấy khóc. Họng đỏ, phổi không ran. Chẩn đoán sốt siêu vi. Hạ sốt khi sốt, uống nhiều nước, theo dõi.",
+          "thoi_diem_ghi": "2026-11-15T10:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-040-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sốt còn 38,6 độ, bé ít quấy hơn, uống được nước. Không co giật. Tiếp tục theo dõi, hạ sốt khi sốt.",
+          "thoi_diem_ghi": "2026-11-16T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-040-01",
+          "thoi_diem_ke": "2026-11-15T11:00:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-040-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Oresol (gói pha 200 mL)",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 200.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "theo nhu cầu",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống từng ngụm nhỏ, pha theo hướng dẫn",
+              "bat_dau": "2026-11-15T11:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-040-02",
+          "thoi_diem_ke": "2026-11-15T11:30:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-040-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% nhỏ mũi 5 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "nhỏ mũi",
+              "cach_dung": "Nhỏ mũi 3 lần/ngày trước bữa ăn",
+              "bat_dau": "2026-11-15T12:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-040-03",
+          "thoi_diem_ke": "2026-11-16T08:00:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-040-03-01",
+              "thuoc_id": "T-PARACETAMOL-SIRO-150",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": null,
+              "don_vi_lieu": "mg/kg",
+              "tan_suat": "mỗi 6 giờ khi sốt",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "15 mg/kg uống mỗi 6 giờ khi sốt",
+              "bat_dau": "2026-11-16T08:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-040-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-15T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 4 tuổi, sốt cao 2 ngày, ho sổ mũi, ăn kém, quấy khóc, ngủ không yên. Chưa dùng thuốc hạ sốt trước khi vào viện. Khám: T 39,0, mạch 132 lần/phút, chiều cao 102 cm. Họng đỏ, phổi nghe thô không ran, bụng mềm. CRP 9 mg/L.",
+          "danh_gia": "Sốt siêu vi đường hô hấp trên ở trẻ nhỏ, chưa có dấu hiệu nhiễm khuẩn nặng. Cần theo dõi sốt, bù nước và tình trạng ăn uống.",
+          "huong_xu_tri": "Bù nước bằng oresol theo nhu cầu, nhỏ mũi nước muối sinh lý trước bữa ăn. Hạ sốt sẽ được xử trí theo y lệnh khi cần. Theo dõi nhiệt độ và số lần đi tiểu.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-040-01",
+            "YL-HS-040-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cháo, súp, sữa, uống nhiều nước từng ngụm nhỏ.",
+          "theo_doi": [
+            "Nhiệt độ mỗi 4 giờ",
+            "Số lần đi tiểu mỗi ngày",
+            "Co giật, lừ đừ hoặc khó thở"
+          ],
+          "dan_do": "Lau mát khi sốt, không chườm lạnh. Đưa trẻ đi khám ngay nếu co giật, nôn nhiều hoặc không uống được."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-040-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-16T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sốt còn 38,6 độ, bé ít quấy hơn, uống được nước. Không co giật. Mạch 118 lần/phút, CRP 6 mg/L. Chưa ghi cân nặng để tính liều theo cân nặng. Điều dưỡng ghi nhận bé uống được oresol từng ngụm nhỏ, không nôn nhiều. Bé ngủ được đoạn ngắn sau khi lau mát.",
+          "danh_gia": "Sốt siêu vi đang diễn tiến đúng hướng, CRP thấp, bé uống được. Chưa có chỉ định kháng sinh. Các dấu hiệu mất nước chưa rõ, cần tiếp tục theo dõi lượng nước vào và ra.",
+          "huong_xu_tri": "Đề nghị paracetamol uống 15 mg/kg mỗi 6 giờ khi sốt, chỉ định chờ duyệt. Tiếp tục bù nước và nhỏ mũi, cần cân nặng để tính liều chính xác.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-040-01",
+            "YL-HS-040-02",
+            "YL-HS-040-03"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Cháo, súp, sữa, uống nhiều nước từng ngụm nhỏ.",
+          "theo_doi": [
+            "Nhiệt độ mỗi 4 giờ",
+            "Lượng nước vào và số lần đi tiểu",
+            "Tình trạng tỉnh và co giật"
+          ],
+          "dan_do": "Cho bé uống nhiều nước và nghỉ ngơi. Báo ngay nếu sốt cao kéo dài trên 3 ngày hoặc có co giật."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-040-03"
+}

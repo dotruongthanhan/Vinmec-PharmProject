@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-045",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-045-03-01"],
+      "mo_ta": "Ceftriaxon 1 g truyền tĩnh mạch mỗi 12 giờ nhưng lịch dùng ghi hai liều sát nhau lúc 08:00 và 09:00 mỗi ngày."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

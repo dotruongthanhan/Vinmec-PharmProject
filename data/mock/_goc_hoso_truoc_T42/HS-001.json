@@ -1,0 +1,173 @@
+{
+  "ho_so_id": "HS-001",
+  "kich_ban_id": "HS-001",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-001",
+    "tuoi": 58,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T07:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-LOSARTAN",
+      "ten_hoat_chat": "Losartan",
+      "ten_quoc_te": "losartan",
+      "ma_atc": "C09CA01",
+      "nhom_duoc_ly": "doi khang thu the angiotensin II"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-LOSARTAN-50",
+      "ten_thuoc": "Losartan 50 mg",
+      "ham_luong": "50 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-LOSARTAN",
+          "ham_luong_thanh_phan": 50.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-001-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-12T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Tái khám tăng huyết áp",
+      "benh_su": "BN nam 58T, THA đang theo dõi ngoại trú, tái khám. Không đau đầu, không khó thở. Chưa ghi nhận thuốc hạ áp đang dùng trước khi khám.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp, theo dõi ngoại trú.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa ghi nhận thuốc đang dùng."
+      },
+      "kham_benh": "T 36,8, M 78, HA 150/90 mmHg. Tim đều, phổi không ran. Không phù.",
+      "tom_tat": "BN nam 58T, THA I10 tái khám ngoại trú, HA 150/90 mmHg. Creatinin 85 umol/L, K 4,2 mmol/L. Chỉ định losartan 50 mg uống 1 lần/ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS001-1-01",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp nguyên phát",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS001-1-01",
+          "loai": "can_nang",
+          "gia_tri": 72.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T08:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS001-1-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 150.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS001-1-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 90.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS001-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 85.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-12T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS001-1-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.2,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-12T07:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-001-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN tái khám THA, không đau đầu, không khó thở. HA 150/90 mmHg. Creatinin 85 umol/L, K 4,2 mmol/L. Chỉ định losartan 50 mg uống 1 lần/ngày, hẹn tái khám sau 4 tuần.",
+          "thoi_diem_ghi": "2026-11-12T08:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-001-01",
+          "thoi_diem_ke": "2026-11-12T08:35:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-001-01-01",
+              "thuoc_id": "T-LOSARTAN-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-12T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-001-01"
+}

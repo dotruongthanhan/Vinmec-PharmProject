@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-048",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-048-03-01"],
+      "mo_ta": "Ceftriaxon 2 g được kê nhưng vi sinh nước tiểu E. coli sinh ESBL đề kháng ceftriaxon (R), meropenem nhạy (S)."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

@@ -1,0 +1,345 @@
+{
+  "ho_so_id": "HS-039",
+  "kich_ban_id": "HS-039",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-039",
+    "tuoi": 75,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T21:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-GENTAMICIN",
+      "ten_hoat_chat": "Gentamicin",
+      "ten_quoc_te": "gentamicin",
+      "ma_atc": "J01GB03",
+      "nhom_duoc_ly": "khang sinh aminoglycosid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-GENTAMICIN-80",
+      "ten_thuoc": "Gentamicin 80 mg/2 mL",
+      "ham_luong": "80 mg/2 mL",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-GENTAMICIN",
+          "ham_luong_thanh_phan": 80.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-039-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-14T21:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-11-14T21:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao, tụt huyết áp",
+      "benh_su": "BN nam 75T sốt cao 1 ngày, lạnh run, lơ mơ, HA tụt. Nguồn nhiễm đang tìm.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp, đái tháo đường type 2 đã biết.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa rõ tên thuốc đang dùng ở nhà."
+      },
+      "kham_benh": "Mạch 118 lần/phút, HA 88/52 mmHg, SpO2 92% khí phòng. Tỉnh nhưng lơ mơ. Phổi ran ẩm hai đáy, bụng mềm.",
+      "tom_tat": "BN nam 75T nhiễm khuẩn huyết, sốt cao, HA tụt, đang hồi sức. Cân nặng 70 kg. Chỉ định gentamicin 5 mg/kg truyền tĩnh mạch 1 lần/ngày, theo dõi.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS039-1-01",
+          "ma_icd10": "A41.9",
+          "noi_dung": "Nhiễm khuẩn huyết, chưa rõ tác nhân",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS039-1-01",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T21:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-02",
+          "loai": "nhiet_do",
+          "gia_tri": 39.0,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T21:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-03",
+          "loai": "mach",
+          "gia_tri": 118.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T21:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 88.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T21:25:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 52.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T21:25:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-06",
+          "loai": "spo2",
+          "gia_tri": 92.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-14T21:25:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-07",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T07:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-08",
+          "loai": "nhiet_do",
+          "gia_tri": 38.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T07:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-09",
+          "loai": "mach",
+          "gia_tri": 104.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T07:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-10",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 102.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T07:25:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS039-1-11",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 60.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T07:25:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS039-1-01",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 18.6,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-14T21:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS039-1-02",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 16.9,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-15T07:10:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS039-1-03",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 168.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-14T21:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS039-1-04",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 152.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-15T07:10:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS039-1-05",
+          "ma_xet_nghiem": "hb",
+          "ten_xet_nghiem": "Hemoglobin",
+          "gia_tri_so": 108.0,
+          "gia_tri_text": null,
+          "don_vi": "g/L",
+          "nguong_duoi": 130.0,
+          "nguong_tren": 170.0,
+          "thoi_diem_ket_qua": "2026-11-14T21:40:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-039-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 75T sốt 39 độ, lạnh run, lơ mơ, HA 88/52 mmHg, mạch 118. Nhập HSTC. Lấy máu xét nghiệm, bù dịch, theo dõi sát.",
+          "thoi_diem_ghi": "2026-11-14T21:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-039-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay sốt 38,4, HA 102/60, mạch 104. Tỉnh hơn, còn lơ mơ nhẹ. Bạch cầu 16,9 G/L, CRP 152 mg/L. Cân nặng 70 kg. Dự kiến kháng sinh theo kinh nghiệm, nguồn nhiễm đang tìm.",
+          "thoi_diem_ghi": "2026-11-15T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-039-01",
+          "thoi_diem_ke": "2026-11-14T22:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-039-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 1000 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1000.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "truyền theo chỉ định",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch, bù dịch, điều chỉnh theo huyết áp",
+              "bat_dau": "2026-11-14T22:10:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-039-02",
+          "thoi_diem_ke": "2026-11-14T22:20:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-039-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Ringer lactat 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "truyền theo chỉ định",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL, theo dõi nước tiểu",
+              "bat_dau": "2026-11-14T22:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-039-03",
+          "thoi_diem_ke": "2026-11-15T08:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-039-03-01",
+              "thuoc_id": "T-GENTAMICIN-80",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 350.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm truyền tĩnh mạch",
+              "cach_dung": "5 mg/kg (cân nặng 70 kg), pha loãng truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-15T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T09:00:00+07:00",
+                  "lieu": 350.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T09:00:00+07:00",
+                  "lieu": 350.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-039-03"
+}

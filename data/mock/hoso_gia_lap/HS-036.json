@@ -1,0 +1,732 @@
+{
+  "ho_so_id": "HS-036",
+  "kich_ban_id": "HS-036",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-036",
+    "tuoi": 70,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T09:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-INSULIN_GLARGINE",
+      "ten_hoat_chat": "Insulin glargine",
+      "ten_quoc_te": "insulin glargine",
+      "ma_atc": "A10AE04",
+      "nhom_duoc_ly": "insulin tác dụng kéo dài"
+    },
+    {
+      "hoat_chat_id": "HC-METFORMIN",
+      "ten_hoat_chat": "Metformin",
+      "ten_quoc_te": "metformin",
+      "ma_atc": "A10BA02",
+      "nhom_duoc_ly": "biguanid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-INSULIN-GLARGIN-100",
+      "ten_thuoc": "Insulin glargin 100 UI/mL",
+      "ham_luong": "100 UI/mL",
+      "duong_dung": "tiêm dưới da",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-INSULIN_GLARGINE",
+          "ham_luong_thanh_phan": 100.0,
+          "don_vi": "UI"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-METFORMIN-500MG",
+      "ten_thuoc": "Metformin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METFORMIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-036-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-04-10T08:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-04-17T10:00:00+07:00",
+      "so_ngay_dieu_tri": 7,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tiết",
+          "tu": "2026-04-10T08:00:00+07:00",
+          "den": "2026-04-17T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Đái tháo đường típ 2, đường huyết cao, khởi trị insulin",
+      "benh_su": "BN nam 70t, ĐTĐ típ 2 đã biết nhiều năm, điều trị metformin uống nhưng đường huyết đói vẫn cao. Vào viện khởi trị insulin.",
+      "tien_su": {
+        "ban_than": "ĐTĐ típ 2. Chưa ghi nhận bệnh tim mạch.",
+        "gia_dinh": "Chưa ghi nhận",
+        "thuoc_truoc_vao_vien": "Metformin 500 mg uống sáng và tối"
+      },
+      "kham_benh": "BN tỉnh, tiếp xúc tốt. Tim phổi chưa ghi nhận bất thường. Bàn chân chưa ghi nhận loét.",
+      "tom_tat": "BN nam 70t ĐTĐ típ 2 E11.9, khởi trị insulin glargin 20 đơn vị (UI) buổi tối. Đường huyết đói giảm dần sau 1 tuần. Ra viện ổn định.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS036-01",
+          "ma_icd10": "E11.9",
+          "noi_dung": "Đái tháo đường típ 2 không biến chứng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS036-01",
+          "loai": "can_nang",
+          "gia_tri": 74.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-04-10T08:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS036-01",
+          "ma_xet_nghiem": "glucose",
+          "ten_xet_nghiem": "Glucose máu đói",
+          "gia_tri_so": 14.2,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.9,
+          "nguong_tren": 6.1,
+          "thoi_diem_ket_qua": "2026-04-10T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS036-02",
+          "ma_xet_nghiem": "glucose",
+          "ten_xet_nghiem": "Glucose máu đói",
+          "gia_tri_so": 7.8,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.9,
+          "nguong_tren": 6.1,
+          "thoi_diem_ket_qua": "2026-04-16T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS036-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN vào viện vì đường huyết đói cao, mệt nhiều, tiểu nhiều. Tỉnh, không khó thở. Đường huyết đói 14,2 mmol/L. Chỉ định khởi trị insulin glargin 20 đơn vị (UI) tiêm dưới da buổi tối.",
+          "thoi_diem_ghi": "2026-04-10T09:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS036-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 6 điều trị. Đường huyết đói 7,8 mmol/L, không hạ đường huyết. Ăn uống được. Tiếp tục insulin glargin 20 đơn vị (UI) buổi tối, theo dõi đường huyết mao mạch.",
+          "thoi_diem_ghi": "2026-04-16T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-036-01",
+          "thoi_diem_ke": "2026-04-10T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-036-01-01",
+              "thuoc_id": "T-INSULIN-GLARGIN-100",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 20.0,
+              "don_vi_lieu": "UI",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm dưới da",
+              "cach_dung": "Tiêm dưới da 20 UI buổi tối",
+              "bat_dau": "2026-04-10T20:00:00+07:00",
+              "ket_thuc": "2026-04-17T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-04-10T20:00:00+07:00",
+                  "lieu": 20.0,
+                  "don_vi": "UI"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Ra viện ổn định, đường huyết đói 7,8 mmol/L. Tiếp tục insulin glargin 20 UI tiêm dưới da buổi tối tại nhà, tái khám sau 1 tháng.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-04-10T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 70 tuổi, đái tháo đường típ 2 đã biết, dùng metformin nhưng vào viện vì đường huyết đói cao, mệt nhiều và tiểu nhiều. Tỉnh, không sốt, không khó thở. Đường huyết đói 14,2 mmol/L, cân nặng 74 kg. Bàn chân chưa ghi nhận loét.",
+          "danh_gia": "Đái tháo đường típ 2 mất kiểm soát khi chỉ dùng thuốc uống, cần khởi trị insulin nền. Chưa ghi nhận dấu hiệu biến chứng cấp.",
+          "huong_xu_tri": "Khởi trị insulin glargin 20 UI tiêm dưới da buổi tối. Theo dõi đường huyết mao mạch trước bữa và trước ngủ, đánh giá đáp ứng sau vài ngày. Điều dưỡng ghi nhật ký đường huyết và hướng dẫn BN tiêm đúng vị trí.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ, hạn chế đường và tinh bột tinh chế.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết",
+            "Cân nặng hằng ngày"
+          ],
+          "dan_do": "Tiêm insulin đúng giờ mỗi tối, không bỏ bữa sau khi đã tiêm. Báo điều dưỡng khi đường huyết dưới 4 hoặc trên 15 mmol/L."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-04-11T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN tỉnh, ăn uống khá hơn, mệt đỡ hơn. Chưa ghi nhận hạ đường huyết. Tiếp tục đo đường huyết mao mạch trước bữa. Điều dưỡng ghi nhận BN tiêm insulin đúng giờ, ăn đủ các bữa chính và bữa phụ. Không có triệu chứng đói hay run.",
+          "danh_gia": "Đáp ứng ban đầu với insulin nền đang được theo dõi, chưa đạt mục tiêu đường huyết. Cần tiếp tục theo dõi để đánh giá đáp ứng sau vài ngày khởi trị.",
+          "huong_xu_tri": "Tiếp tục insulin glargin 20 UI buổi tối, chưa điều chỉnh liều trong ngày. Theo dõi đường huyết đói sáng mai. Điều dưỡng ghi lại đường huyết mỗi lần đo.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ, hạn chế đường và tinh bột tinh chế.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-04-12T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN tỉnh, đỡ mệt, ăn được. Đường huyết mao mạch trong ngày còn cao nhưng chưa có đợt hạ. Không đau bụng, không buồn nôn. BN hỏi thêm về cách điều chỉnh liều insulin khi ăn ít và đã được giải thích. Bàn chân được khám lại, da còn tốt.",
+          "danh_gia": "Tăng đường huyết đang cải thiện chậm. Chưa thấy biến chứng cấp. Người bệnh cần thêm thời gian để làm quen với lịch tiêm và đo đường huyết tại nhà.",
+          "huong_xu_tri": "Tiếp tục insulin nền theo kế hoạch hiện tại. Đánh giá lại đường huyết đói sau 2 ngày. Điều dưỡng chuẩn bị tài liệu hướng dẫn tự theo dõi cho người bệnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-04-13T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đường huyết đói các buổi sáng đang giảm dần. BN không mệt nhiều, ăn uống tốt. Không ghi nhận hạ đường huyết. BN nói đã quen với việc tự đo đường huyết và ghi chép kết quả. Không có cơn hạ đường huyết nào được ghi nhận.",
+          "danh_gia": "Đáp ứng insulin nền ở mức chậm nhưng đúng hướng. Cần tiếp tục theo dõi trước khi quyết định ra viện. Đường huyết đói đang có xu hướng giảm đều trong các buổi sáng.",
+          "huong_xu_tri": "Tiếp tục insulin glargin 20 UI tiêm dưới da buổi tối. Hướng dẫn BN và người nhà kỹ thuật tiêm và đo đường huyết. Đánh giá lại nhu cầu điều chỉnh liều vào ngày kế.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Nhật ký đường huyết"
+          ],
+          "dan_do": "Ghi nhật ký đường huyết mỗi ngày để mang theo khi tái khám."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-04-14T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN khỏe, tiếp xúc tốt, không khó thở. Bàn chân không loét, không tê nhiều. Đường huyết đói sáng nay giảm so với lúc vào viện, chưa hạ đường huyết. Điều dưỡng ghi nhận BN ăn uống đều và không bỏ bữa. Người nhà đã cùng tham gia buổi hướng dẫn tiêm insulin.",
+          "danh_gia": "Kiểm soát đường huyết cải thiện. BN đang học cách tự tiêm và tự đo tại nhà. Kiểm soát đường huyết đang cải thiện, cần thêm thời gian để ổn định.",
+          "huong_xu_tri": "Tiếp tục insulin nền 20 UI buổi tối. Lấy đường huyết đói ngày 16/04 trước khi ra viện. Chuẩn bị kế hoạch xuất viện và lịch tái khám.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Kỹ thuật tiêm insulin"
+          ],
+          "dan_do": "Tự tiêm đúng liều và đúng giờ, không tự ý ngưng insulin khi ăn kém."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-04-15T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN ăn uống tốt, tỉnh táo. Không ghi nhận hạ đường huyết. Đo đường huyết mao mạch trước bữa đều trong ngày. Điều dưỡng ghi nhận BN thực hiện đúng lịch đo đường huyết trong ngày. Không có triệu chứng hạ đường huyết khi nghỉ ngơi và vận động nhẹ.",
+          "danh_gia": "Đường huyết đã dần ổn định hơn dưới insulin nền, cần tiếp tục theo dõi. Đường huyết ổn định hơn so với các ngày đầu điều trị, chưa có biến chứng cấp.",
+          "huong_xu_tri": "Tiếp tục insulin glargin 20 UI tiêm buổi tối. Hướng dẫn chế độ ăn và cách theo dõi tại nhà trước khi ra viện. Ôn lại chế độ ăn và kỹ thuật tiêm cho BN và người nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-1-07",
+          "ngay_dieu_tri": 7,
+          "thoi_diem_lap": "2026-04-16T15:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đường huyết đói sáng nay 7,8 mmol/L, không hạ đường huyết. BN tỉnh, ăn uống được, không khó thở. Chuẩn bị ra viện. BN tự tiêm và đo đường huyết được dưới sự giám sát của điều dưỡng.",
+          "danh_gia": "Đường huyết đói giảm rõ sau khởi trị insulin nền, tình trạng ổn định để tiếp tục điều trị tại nhà. Người bệnh đã thể hiện sự hiểu biết về cách xử trí khi đường huyết thấp.",
+          "huong_xu_tri": "Ra viện sáng mai khi BN đã thành thạo tiêm và đo đường huyết tại nhà. Tiếp tục insulin glargin 20 UI tiêm buổi tối, tái khám sau 1 tháng. Cấp đơn thuốc và lịch tái khám cho người bệnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia 3 bữa chính và 2 bữa phụ.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết khi về nhà"
+          ],
+          "dan_do": "Tiêm insulin đúng giờ mỗi tối, đo đường huyết trước bữa và trước ngủ, ghi nhật ký gửi khi tái khám. Báo ngay nếu run, vã mồ hôi hoặc đường huyết dưới 4 mmol/L."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-04-10T08:00:00+07:00",
+        "so_giuong": "G-036-01",
+        "so_luu_tru": "LT-2026-03601",
+        "ma_yt": "YT-2026-036-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Ra viện ổn định, đường huyết đói 7,8 mmol/L. Tiếp tục insulin glargin 20 UI tiêm dưới da buổi tối tại nhà, tái khám sau 1 tháng."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-036-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tiết",
+          "tu": "2026-11-12T09:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đường huyết đói cao, mệt nhiều",
+      "benh_su": "BN nam 70t, ĐTĐ típ 2 đã điều trị insulin glargin 20 đơn vị (UI) buổi tối tại nhà sau lần nhập viện tháng 4/2026. Đến khám vì đường huyết đói cao, mệt, ăn kém hơn trước.",
+      "tien_su": {
+        "ban_than": "ĐTĐ típ 2, nhập viện khởi trị insulin lần 1 (tháng 4/2026). Chưa ghi nhận bệnh tim mạch.",
+        "gia_dinh": "Chưa ghi nhận",
+        "thuoc_truoc_vao_vien": "Insulin glargin 20 đơn vị (UI) tiêm dưới da buổi tối tại nhà. Metformin 500 mg uống sáng và tối."
+      },
+      "kham_benh": "BN tỉnh, tiếp xúc tốt. Tim phổi chưa ghi nhận bất thường. Bàn chân chưa ghi nhận loét. Không phù.",
+      "tom_tat": "BN nam 70t, ĐTĐ típ 2 E11.9, đang insulin glargin 20 UI tại nhà. Đường huyết đói 12,4 mmol/L lúc vào viện, cn 72 kg. Chưa ghi nhận hạ đường huyết. Điều chỉnh điều trị theo đường huyết.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS036-02",
+          "ma_icd10": "E11.9",
+          "noi_dung": "Đái tháo đường típ 2 không biến chứng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS036-02",
+          "loai": "can_nang",
+          "gia_tri": 72.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS036-03",
+          "loai": "can_nang",
+          "gia_tri": 72.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS036-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 128.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS036-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 80.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS036-06",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS036-07",
+          "loai": "nhiet_do",
+          "gia_tri": 36.9,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS036-08",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS036-03",
+          "ma_xet_nghiem": "glucose",
+          "ten_xet_nghiem": "Glucose máu đói",
+          "gia_tri_so": 12.4,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.9,
+          "nguong_tren": 6.1,
+          "thoi_diem_ket_qua": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS036-04",
+          "ma_xet_nghiem": "glucose",
+          "ten_xet_nghiem": "Glucose máu đói",
+          "gia_tri_so": 8.6,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.9,
+          "nguong_tren": 6.1,
+          "thoi_diem_ket_qua": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS036-05",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 92.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-15T06:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS036-03",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN vào viện vì đường huyết đói cao, mệt, ăn kém. Tỉnh, không sốt. HA 126/78. Đường huyết đói 12,4 mmol/L.",
+          "thoi_diem_ghi": "2026-11-12T09:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS036-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 2. Đường huyết mao mạch 9–11 mmol/L trong ngày, chưa hạ đường huyết. Ăn uống được hơn. Theo dõi đường huyết mao mạch trước bữa và trước ngủ.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS036-05",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 3. BN tỉnh, đỡ mệt. Mạch 80, HA 124/76. Đường huyết mao mạch sáng nay 9,4 mmol/L. Tiếp tục theo dõi.",
+          "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS036-06",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 4. Đường huyết đói 8,6 mmol/L. Cn 72 kg, creatinin 92 umol/L. Mạch 78, HA 128/80, T 36,9, SpO2 97%. Chưa đạt mục tiêu đường huyết, cần điều chỉnh liều insulin nền.",
+          "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-036-02",
+          "thoi_diem_ke": "2026-11-12T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-036-02-01",
+              "thuoc_id": "T-METFORMIN-500MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 500 mg sau ăn sáng và sau ăn tối",
+              "bat_dau": "2026-11-12T19:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T19:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T07:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-036-03",
+          "thoi_diem_ke": "2026-11-12T10:15:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-036-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Đo đường huyết mao mạch trước bữa và trước ngủ",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": null,
+              "don_vi_lieu": null,
+              "tan_suat": "4 lần/ngày",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": null,
+              "duong_dung": null,
+              "cach_dung": "Đo đường huyết mao mạch và báo bác sĩ nếu dưới 4 hoặc trên 15 mmol/L",
+              "bat_dau": "2026-11-12T10:15:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": null,
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-036-04",
+          "thoi_diem_ke": "2026-11-15T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-036-04-01",
+              "thuoc_id": "T-INSULIN-GLARGIN-100",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 30.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm dưới da",
+              "cach_dung": "Tiêm dưới da buổi tối",
+              "bat_dau": "2026-11-15T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T20:00:00+07:00",
+                  "lieu": 30.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T20:00:00+07:00",
+                  "lieu": 30.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 70 tuổi, đái tháo đường típ 2 đang tiêm insulin glargin 20 UI buổi tối tại nhà, vào viện vì đường huyết đói cao, mệt và ăn kém hơn. Đường huyết đói 12,4 mmol/L, cân nặng 72 kg. Tỉnh, không sốt, không phù, bàn chân chưa ghi nhận loét. Điều dưỡng hướng dẫn BN ghi chép đường huyết ở nhà.",
+          "danh_gia": "Đái tháo đường típ 2 chưa kiểm soát tốt dù đã có insulin nền ở nhà. Chưa ghi nhận hạ đường huyết hay biến chứng cấp.",
+          "huong_xu_tri": "Tiếp tục metformin 500 mg uống sau ăn sáng và sau ăn tối theo y lệnh. Đo đường huyết mao mạch trước bữa và trước ngủ, báo khi bất thường.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-02",
+            "YL-HS-036-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia bữa đều trong ngày.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đường huyết mao mạch trong ngày còn cao, chưa có đợt hạ. BN ăn uống tốt hơn so với hôm vào viện, tỉnh, không khó thở. Điều dưỡng ghi nhận BN ăn uống đều và tuân thủ việc đo đường huyết trước bữa. Không có dấu hiệu hạ đường huyết.",
+          "danh_gia": "Đường huyết chưa đạt mục tiêu, đang theo dõi đáp ứng với điều trị hiện tại. Đáp ứng điều trị hiện tại đang được đánh giá tiếp.",
+          "huong_xu_tri": "Tiếp tục theo dõi đường huyết và chế độ ăn. Đánh giá điều chỉnh liều insulin nền sau khi có đường huyết đói sáng mai. Điều dưỡng hỗ trợ BN ghi nhật ký đường huyết mỗi ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-02",
+            "YL-HS-036-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia bữa đều trong ngày.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-14T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN đỡ mệt, tỉnh, ăn đủ bữa. Mạch và huyết áp ổn theo khám sáng nay. Không có triệu chứng hạ đường huyết, bàn chân không loét. BN tỉnh táo, ngủ được, đi lại quanh giường. Không có cảm giác đói hay run.",
+          "danh_gia": "Đường huyết đang giảm dần nhưng chưa đạt mục tiêu. Cần đánh giá lại đường huyết đói và liều insulin nền. Đường huyết vẫn cần điều chỉnh thêm để đạt mục tiêu đã đề ra.",
+          "huong_xu_tri": "Tiếp tục metformin và theo dõi đường huyết mao mạch. Lấy đường huyết đói sáng mai để quyết định điều chỉnh insulin. Theo dõi sát đường huyết trước khi quyết định điều chỉnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-02",
+            "YL-HS-036-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia bữa đều trong ngày.",
+          "theo_doi": [
+            "Đường huyết mao mạch trước bữa và trước ngủ",
+            "Dấu hiệu hạ đường huyết"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-036-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-15T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đường huyết đói sáng nay 8,6 mmol/L. Cân nặng 72 kg, creatinin 92 umol/L. Mạch 78, HA 128/80 mmHg, T 36,9, SpO2 97%. BN tỉnh, không hạ đường huyết.",
+          "danh_gia": "Đường huyết chưa đạt mục tiêu dù đã dùng insulin nền và metformin, cần điều chỉnh insulin nền. Chức năng thận ghi nhận creatinin trong giới hạn bình thường.",
+          "huong_xu_tri": "Đề nghị tăng liều insulin glargin buổi tối theo y lệnh, chờ duyệt. Tiếp tục metformin, đo đường huyết trước bữa và trước ngủ, ôn lại kỹ thuật tiêm với BN. Điều dưỡng hướng dẫn người bệnh mang theo nhật ký đường huyết khi tái khám.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-036-02",
+            "YL-HS-036-03",
+            "YL-HS-036-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Chế độ ăn đái tháo đường, chia bữa đều trong ngày.",
+          "theo_doi": [
+            "Đường huyết đói và trước bữa",
+            "Cân nặng và huyết áp hằng ngày"
+          ],
+          "dan_do": "Báo điều dưỡng nếu đường huyết dưới 4 hoặc trên 15 mmol/L."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-12T09:00:00+07:00",
+        "so_giuong": "G-036-02",
+        "so_luu_tru": "LT-2026-03602",
+        "ma_yt": "YT-2026-036-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-036-04",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 36",
+    "ngay_sinh": "1956-04-10",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9036",
+      "thon_pho": "Phố Trưng Trắc",
+      "xa_phuong": "Quang Trung",
+      "huyen": "Hưng Yên",
+      "tinh_thanh": "Hưng Yên"
+    },
+    "doi_tuong": "thu_phi",
+    "bhyt": null,
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 36",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 036"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 170.0,
+    "can_nang_kg": 72.0,
+    "nhom_mau": null
+  }
+}

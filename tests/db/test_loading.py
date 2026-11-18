@@ -198,3 +198,29 @@ def test_missing_allergy_status_is_rejected() -> None:
     batch.add("nghiep_vu.nguoi_benh", {"nguoi_benh_id": "NB-DEMO-01"}, "demo.json")
     assert batch.rejected
     assert "tinh_trang_di_ung" in batch.rejected[0].ly_do
+
+
+def test_verify_checks_view_and_composite_order_reference() -> None:
+    from app.db.mapping import ACTIVE_DRUG_VIEW
+
+    connection = RecordingConnection()
+    assert verify(connection, {ACTIVE_DRUG_VIEW: 0}, Embeddings())
+    statements = [text for text, _ in connection.statements]
+    assert any('SELECT count(*) FROM "nghiep_vu"."v_thuoc_dang_dung"' == q for q in statements)
+    assert any('c."y_lenh_id" = p."y_lenh_id" AND c."ca_id" = p."ca_id"' in q for q in statements)
+    assert any('c."thay_the_y_lenh_id" = p."y_lenh_id"' in q for q in statements)
+    assert any("EXCEPT SELECT * FROM expected" in q for q in statements)
+    assert any("GROUP BY ca_id HAVING count(*) > 1" in q for q in statements)
+
+
+@pytest.mark.parametrize("query_fragment", ["v_thuoc_dang_dung", "GROUP BY ca_id", 'c."ca_id"'])
+def test_verify_reports_new_view_or_case_constraint_discrepancy(query_fragment: str) -> None:
+    class InconsistentConnection(RecordingConnection):
+        def execute(self, query: Any, params: Any = None) -> "InconsistentConnection":
+            super().execute(query, params)
+            statement = self.statements[-1][0]
+            if "to_regclass" not in statement and query_fragment in statement:
+                self.answer = (1,)
+            return self
+
+    assert not verify(InconsistentConnection(), {"nghiep_vu.v_thuoc_dang_dung": 0}, Embeddings())

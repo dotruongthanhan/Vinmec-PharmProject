@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-057",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 4,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-057-04-01"],
+      "mo_ta": "Clarithromycin 500 mg uống 2 lần/ngày khi đang dùng warfarin: tương tác làm tăng INR và nguy cơ chảy máu, INR đã 2,8."
+    }
+  ],
+  "van_ban_bat_thuong": true,
+  "ghi_chu": "Có chèn lệnh, y lệnh có tương tác thuốc"
+}

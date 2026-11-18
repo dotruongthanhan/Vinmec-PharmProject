@@ -1,0 +1,576 @@
+{
+  "ho_so_id": "HS-048",
+  "kich_ban_id": "HS-048",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-048",
+    "tuoi": 68,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T10:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol (acetaminophen)",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "thuoc_giam_dau_ha_sot"
+    },
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin_the_he_3"
+    },
+    {
+      "hoat_chat_id": "HC-CIPROFLOXACIN",
+      "ten_hoat_chat": "Ciprofloxacin",
+      "ten_quoc_te": "ciprofloxacin",
+      "ma_atc": "J01MA02",
+      "nhom_duoc_ly": "fluoroquinolon"
+    },
+    {
+      "hoat_chat_id": "HC-MEROPENEM",
+      "ten_hoat_chat": "Meropenem",
+      "ten_quoc_te": "meropenem",
+      "ma_atc": "J01DH02",
+      "nhom_duoc_ly": "carbapenem"
+    },
+    {
+      "hoat_chat_id": "HC-ENOXAPARIN",
+      "ten_hoat_chat": "Enoxaparin",
+      "ten_quoc_te": "enoxaparin",
+      "ma_atc": "B01AB05",
+      "nhom_duoc_ly": "heparin_trong_luong_phan_tu_thap"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-ACETAMINOPHEN-1G",
+      "ten_thuoc": "Paracetamol 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "ten_thuoc": "Ceftriaxon 2 g",
+      "ham_luong": "2 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 2000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-ENOXAPARIN-40MG",
+      "ten_thuoc": "Enoxaparin 40 mg/0,4 mL",
+      "ham_luong": "40 mg/0,4 mL",
+      "duong_dung": "tiêm dưới da",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ENOXAPARIN",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-048-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Ngoại chỉnh hình",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-12T10:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ngoại chỉnh hình",
+          "tu": "2026-11-12T10:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Té ngã đau hông trái, không đi được",
+      "benh_su": "BN nữ 68 tuổi té ngã tại nhà, đau hông trái, không đứng được. Tiểu buốt, tiểu rắt 2 ngày trước vào viện. Không sốt cao lúc vào viện.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh nền đáng kể",
+        "gia_dinh": "Chưa ghi nhận",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc thường xuyên"
+      },
+      "kham_benh": "Tỉnh, tiếp xúc tốt. Hông trái đau, hạn chế gấp duỗi, bàn chân ấm. Bụng mềm. Ấn đau nhẹ vùng trên xương mu, không có đau hố thắt lưng.",
+      "tom_tat": "BN nữ 68t, gãy cổ xương đùi T sau té ngã, chờ mổ. Tiểu buốt, tiểu rắt, sốt nhẹ, CRP tăng. Cấy nước tiểu đã có kết quả. Hôm nay T 37,6, HA 128/76, mạch 84, creatinin 74.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS-048-01",
+          "ma_icd10": "S72.0",
+          "noi_dung": "Gãy cổ xương đùi trái",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS-048-02",
+          "ma_icd10": "N39.0",
+          "noi_dung": "Nhiễm khuẩn đường tiết niệu",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS-048-01",
+          "loai": "chieu_cao",
+          "gia_tri": 158.0,
+          "don_vi": "cm",
+          "thoi_diem_do": "2026-11-12T10:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-02",
+          "loai": "can_nang",
+          "gia_tri": 55.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T10:45:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-03",
+          "loai": "nhiet_do",
+          "gia_tri": 38.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-04",
+          "loai": "can_nang",
+          "gia_tri": 55.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-05",
+          "loai": "nhiet_do",
+          "gia_tri": 37.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-06",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 128.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-07",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 76.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS-048-08",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T06:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS-048-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 79.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-13T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-048-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 74.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-15T06:45:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-048-03",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu (WBC)",
+          "gia_tri_so": 14.2,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-13T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-048-04",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 62.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-13T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS-048-05",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 38.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-15T06:45:00+07:00"
+        }
+      ],
+      "vi_sinh": [
+        {
+          "vi_sinh_id": "VS-HS-048-01",
+          "benh_pham": "nước tiểu",
+          "vi_khuan": "Escherichia coli (sinh ESBL)",
+          "thoi_diem_lay_mau": "2026-11-12T11:20:00+07:00",
+          "khang_sinh_do": [
+            {
+              "hoat_chat_id": "HC-CEFTRIAXONE",
+              "ket_qua": "R",
+              "mic": 32.0
+            },
+            {
+              "hoat_chat_id": "HC-MEROPENEM",
+              "ket_qua": "S",
+              "mic": 0.5
+            },
+            {
+              "hoat_chat_id": "HC-CIPROFLOXACIN",
+              "ket_qua": "R",
+              "mic": 4.0
+            }
+          ]
+        }
+      ],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-048-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 68t, té ngã đau hông T, X-quang gãy cổ xương đùi T. Tiểu buốt tiểu rắt 2 ngày. Chờ lịch mổ, lấy nước tiểu cấy.",
+          "thoi_diem_ghi": "2026-11-12T10:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-048-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 2. BN tỉnh, tiểu buốt còn. T 38,4 °C. Mạch 98 lần/phút. Chưa mổ do chờ ổn định. Đau hông giảm khi nghỉ.",
+          "thoi_diem_ghi": "2026-11-13T07:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-048-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 3. Nước tiểu đục, tiểu buốt. T 37,8 °C. Ăn uống được. Chờ kết quả cấy nước tiểu, chưa có y lệnh kháng sinh.",
+          "thoi_diem_ghi": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-048-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 4. T 37,6 °C, HA 128/76, mạch 84. Tiểu buốt còn. Kết quả cấy nước tiểu đã có trong hồ sơ. Lên lịch mổ sau khi ổn định.",
+          "thoi_diem_ghi": "2026-11-15T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-048-01",
+          "thoi_diem_ke": "2026-11-12T11:30:00+07:00",
+          "khoa_ke_don": "Ngoại chỉnh hình",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-048-01-01",
+              "thuoc_id": "T-ACETAMINOPHEN-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 g mỗi 8 giờ",
+              "bat_dau": "2026-11-12T14:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T06:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T14:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T22:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-048-02",
+          "thoi_diem_ke": "2026-11-12T11:35:00+07:00",
+          "khoa_ke_don": "Ngoại chỉnh hình",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-048-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL/ngày",
+              "bat_dau": "2026-11-12T11:45:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T08:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-048-03",
+          "thoi_diem_ke": "2026-11-15T10:00:00+07:00",
+          "khoa_ke_don": "Ngoại chỉnh hình",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-048-03-01",
+              "thuoc_id": "T-CEFTRIAXONE-2G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-15T14:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T14:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T14:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-048-04",
+          "thoi_diem_ke": "2026-11-12T12:00:00+07:00",
+          "khoa_ke_don": "Ngoại chỉnh hình",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-048-04-01",
+              "thuoc_id": "T-ENOXAPARIN-40MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm dưới da",
+              "cach_dung": "Tiêm dưới da 1 lần/ngày, dự phòng huyết khối",
+              "bat_dau": "2026-11-12T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T20:00:00+07:00",
+                  "lieu": 40.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-048-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T12:15:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 68 tuổi té ngã tại nhà, đau hông trái không đứng được. Tiểu buốt, tiểu rắt 2 ngày trước vào viện, không sốt cao khi vào. Khám: tỉnh, tiếp xúc tốt, hông trái đau, hạn chế gấp duỗi, bàn chân ấm, bụng mềm, ấn đau nhẹ trên xương mu. Cân nặng 55 kg, chiều cao 158 cm. Đã lấy nước tiểu làm cấy.",
+          "danh_gia": "Gãy cổ xương đùi trái sau té ngã (S72.0), chờ mổ sau khi ổn định. Kèm nhiễm khuẩn đường tiết niệu có triệu chứng tiểu buốt, tiểu rắt (N39.0). Chưa ghi nhận bệnh nền đáng kể. Người bệnh có nguy cơ huyết khối tĩnh mạch sau gãy xương và cần dự phòng trong thời gian nằm viện.",
+          "huong_xu_tri": "Giảm đau bằng paracetamol 1 g uống mỗi 8 giờ. Duy trì natri clorid 0,9% 500 mL mỗi ngày. Enoxaparin 40 mg tiêm dưới da mỗi ngày để dự phòng huyết khối. Chờ kết quả cấy nước tiểu, lên lịch mổ khi ổn định.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-048-01",
+            "YL-HS-048-02",
+            "YL-HS-048-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, uống nhiều nước.",
+          "theo_doi": [
+            "Đau hông và khả năng vận động",
+            "Nhiệt độ",
+            "Dấu chảy máu dưới da"
+          ],
+          "dan_do": "Không tự đi lại khi chưa có hướng dẫn, dùng dụng cụ hỗ trợ khi đi. Giữ chân trái thẳng khi trở mình."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-048-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-13T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày thứ 2: tỉnh, tiểu buốt còn, đau hông giảm khi nghỉ. Sáng nay nhiệt độ 38,4 °C, bạch cầu 14,2 G/L, CRP 62 mg/L, creatinin 79 umol/L. Chưa mổ do chờ ổn định. Người bệnh được hướng dẫn tập vận động nhẹ tại giường.",
+          "danh_gia": "Nhiễm khuẩn tiết niệu còn sốt nhẹ, bạch cầu và CRP còn cao, cần kiểm soát nhiễm trùng trước khi mổ gãy cổ xương đùi. Creatinin 79 umol/L. Đau hông giảm khi nghỉ nên chưa cần thêm thuốc giảm đau ngoài kế hoạch hiện tại.",
+          "huong_xu_tri": "Tiếp tục paracetamol, natri clorid và enoxaparin theo y lệnh. Chờ kết quả cấy nước tiểu để chọn kháng sinh. Hội chẩn lịch mổ khi các chỉ số viêm giảm. Theo dõi nước tiểu và tình trạng tiểu buốt mỗi ca trực.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-048-01",
+            "YL-HS-048-02",
+            "YL-HS-048-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, uống nhiều nước.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Tiểu buốt, màu nước tiểu",
+            "Đau hông"
+          ],
+          "dan_do": "Uống đủ nước, không nín tiểu."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-048-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-14T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày thứ 3: nước tiểu đục, còn tiểu buốt. Ăn uống được, đau hông giảm khi nằm nghỉ, đi lại có người hỗ trợ. Ăn được hết khẩu phần, ngủ được ban đêm.",
+          "danh_gia": "Nhiễm khuẩn tiết niệu chưa hết triệu chứng, nước tiểu còn đục. Đang chờ kết quả cấy nước tiểu để chọn kháng sinh phù hợp trước khi lên lịch mổ. Nhiễm trùng cần được kiểm soát để giảm nguy cơ biến chứng sau mổ.",
+          "huong_xu_tri": "Tiếp tục các thuốc đang dùng theo y lệnh, gồm paracetamol, natri clorid và enoxaparin. Không thay đổi thuốc trong ngày. Ghi nhận dấu hiệu sốt và tiểu buốt để so sánh với ngày hôm sau.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-048-01",
+            "YL-HS-048-02",
+            "YL-HS-048-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, nhiều nước.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Tiểu buốt, màu nước tiểu",
+            "Vận động hông"
+          ],
+          "dan_do": "Vệ sinh vùng sinh dục, uống nước đều trong ngày."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-048-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-15T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Lúc 6 giờ 30: nhiệt độ 37,6 °C, HA 128/76 mmHg, mạch 84 lần/phút, cân nặng 55 kg. Creatinin 74 umol/L và CRP 38 mg/L lúc 6 giờ 45, CRP giảm so với hôm trước. Tiểu buốt còn. Kết quả cấy nước tiểu ghi nhận E. coli sinh ESBL.",
+          "danh_gia": "Nhiễm khuẩn tiết niệu do E. coli sinh ESBL (N39.0), sốt giảm và CRP giảm dần. Gãy cổ xương đùi trái chờ mổ, đang chờ ổn định để lên lịch. Người bệnh đi lại còn khó, cần tiếp tục dự phòng huyết khối.",
+          "huong_xu_tri": "Đề nghị ceftriaxon 2 g truyền tĩnh mạch 1 lần mỗi ngày, bắt đầu 14 giờ hôm nay (chỉ định, chờ duyệt). Tiếp tục paracetamol, natri clorid và enoxaparin. Lên lịch mổ khi đủ điều kiện và theo dõi CRP cùng creatinin mỗi ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-048-01",
+            "YL-HS-048-02",
+            "YL-HS-048-03",
+            "YL-HS-048-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, nhiều nước.",
+          "theo_doi": [
+            "Nhiệt độ và tiểu buốt",
+            "Vận động hông",
+            "Dấu chảy máu khi dùng enoxaparin"
+          ],
+          "dan_do": "Không nín tiểu, uống đủ nước, giữ chân trái không xoay vặn."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-048-03"
+}

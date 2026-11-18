@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-018",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-018-03-01"],
+      "mo_ta": "Levofloxacin 750 mg truyền mỗi 12 giờ không đúng tần suất thường dùng (1 lần/ngày) và creatinin 130 umol/L (CrCl khoảng 40 mL/phút) cần chỉnh khoảng cách hoặc liều."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

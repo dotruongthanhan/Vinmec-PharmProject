@@ -1,0 +1,694 @@
+{
+  "ho_so_id": "HS-044",
+  "kich_ban_id": "HS-044",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-044",
+    "tuoi": 55,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-METOPROLOL",
+      "ten_hoat_chat": "Metoprolol",
+      "ten_quoc_te": "metoprolol",
+      "ma_atc": "C07AB02",
+      "nhom_duoc_ly": "chen beta chon loc"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-METOPROLOL-50",
+      "ten_thuoc": "Metoprolol tartrat 50 mg",
+      "ham_luong": "50 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METOPROLOL",
+          "ham_luong_thanh_phan": 50.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-044-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-06-02T09:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-06-06T10:00:00+07:00",
+      "so_ngay_dieu_tri": 4,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-06-02T09:00:00+07:00",
+          "den": "2026-06-06T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Tăng huyết áp, HA cao tại phòng khám",
+      "benh_su": "BN nam 54T, tăng huyết áp đã biết khoảng 2 năm, không dùng thuốc đều. HA đo tại phòng khám 162/100 mmHg. Không đau ngực, không khó thở.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp, không dùng thuốc đều đặn.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc hạ áp trong 1 tháng nay."
+      },
+      "kham_benh": "HA 162/100 mmHg, mạch 84 lần/phút, tim đều, phổi không ran, không phù.",
+      "tom_tat": "BN nam THA chưa kiểm soát, khởi trị metoprolol tartrat 50 mg x 2 lần/ngày. HA giảm còn 138/86 khi ra viện. Tái khám ngoại trú.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS044-1-01",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS044-1-01",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 162.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-06-02T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-1-02",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 100.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-06-02T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-1-03",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-06-02T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-1-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 138.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-06-05T08:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-1-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 86.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-06-05T08:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS044-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 84.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-06-02T10:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-044-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào khám vì HA cao 162/100 mmHg, không đau ngực, không khó thở. Khởi trị metoprolol tartrat 50 mg uống 2 lần/ngày.",
+          "thoi_diem_ghi": "2026-06-02T09:15:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-044-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sau 3 ngày dùng metoprolol, HA còn 140/90, mạch 72. Không chóng mặt, không mệt nhiều.",
+          "thoi_diem_ghi": "2026-06-05T08:10:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-044-01",
+          "thoi_diem_ke": "2026-06-02T09:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-044-01-01",
+              "thuoc_id": "T-METOPROLOL-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày",
+              "bat_dau": "2026-06-02T10:00:00+07:00",
+              "ket_thuc": "2026-06-06T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Tăng huyết áp, khởi trị metoprolol tartrat 50 mg x 2 lần/ngày, HA giảm khi ra viện. Tái khám ngoại trú.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-06-02T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam vào khám vì HA cao 162/100 mmHg tại phòng khám. Tăng huyết áp đã biết khoảng 2 năm, không dùng thuốc đều đặn và không dùng thuốc hạ áp trong 1 tháng nay. Không đau ngực, không khó thở. Khám: mạch 84 lần/phút, tim đều, phổi không ran, không phù. Người bệnh được giải thích về vai trò của việc uống thuốc đều hằng ngày.",
+          "danh_gia": "Tăng huyết áp chưa kiểm soát (I10) do gián đoạn điều trị, chưa ghi nhận biến cố tim mạch cấp. Creatinin 84 umol/L lúc 10 giờ là kết quả nền của đợt điều trị, chưa có chỉ định xử trí khác. Cần kiểm soát HA ổn định trước khi cho ra viện.",
+          "huong_xu_tri": "Khởi trị metoprolol tartrat 50 mg uống 2 lần mỗi ngày. Theo dõi HA, mạch và triệu chứng chóng mặt, ghi chép giờ uống thuốc. Đánh giá lại HA trước khi quyết định ngày ra viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế muối dưới 5 g mỗi ngày.",
+          "theo_doi": [
+            "Huyết áp hai lần mỗi ngày",
+            "Mạch",
+            "Chóng mặt khi đứng dậy"
+          ],
+          "dan_do": "Đứng dậy từ từ, uống thuốc đúng giờ mỗi ngày."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-06-03T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đã dùng metoprolol đều theo y lệnh, chưa ghi nhận chóng mặt rõ hay mệt nhiều. Không đau đầu, không khó thở. Không có triệu chứng thần kinh mới. Người bệnh ngủ được, ăn uống bình thường, không có than phiền về tim đập chậm.",
+          "danh_gia": "Tăng huyết áp đang đáp ứng dần với metoprolol, không có tác dụng phụ rõ trong ngày đầu tiên đến ngày thứ hai. Cần thêm vài ngày để đánh giá HA đã ổn định hay chưa, nên chưa thay đổi liều.",
+          "huong_xu_tri": "Duy trì liều metoprolol tartrat 50 mg hai lần mỗi ngày theo y lệnh. Đo HA hai lần mỗi ngày và ghi lại nhịp tim trước mỗi liều. Báo bác sĩ nếu HA giảm mạnh hoặc chóng mặt tăng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, uống đủ nước, không uống rượu bia.",
+          "theo_doi": [
+            "Huyết áp hai lần mỗi ngày",
+            "Nhịp tim",
+            "Chóng mặt"
+          ],
+          "dan_do": "Không tự ngưng thuốc khi thấy HA đã thấp hơn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-06-04T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày thứ 3 điều trị, tỉnh, ăn uống bình thường, không than khó chịu. Không ngất, không chóng mặt rõ, không đau ngực. Tim phổi không bất thường khi khám lại. Người bệnh cho biết đã nhớ giờ uống thuốc và không bỏ liều.",
+          "danh_gia": "HA đang giảm dần so với lúc vào viện, còn cần theo dõi thêm để đạt kiểm soát ổn định. Chưa ghi nhận tác dụng không mong muốn đáng kể. Thuốc được dung nạp tốt trong 3 ngày đầu.",
+          "huong_xu_tri": "Tiếp tục điều trị đến khi đánh giá HA ổn định. Dự kiến đánh giá HA sáng mai trước khi quyết định hướng điều trị ngoại trú. Hướng dẫn người bệnh ghi lại HA tại nhà để đối chiếu.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, chế độ ăn tim mạch.",
+          "theo_doi": [
+            "Huyết áp",
+            "Nhịp tim",
+            "Triệu chứng chóng mặt"
+          ],
+          "dan_do": "Mang theo sổ theo dõi huyết áp khi ra viện."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-06-05T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "HA sáng nay 138/86 mmHg lúc 8 giờ. Mạch đều, không chóng mặt, không mệt nhiều. Tim phổi không bất thường, không phù. Người bệnh tự tin đo HA đúng cách và hiểu lịch tái khám.",
+          "danh_gia": "Tăng huyết áp đáp ứng với metoprolol, HA giảm từ 162/100 mmHg khi vào viện xuống 138/86 mmHg. Dự kiến ra viện sau một ngày nữa nếu HA ổn định và không có triệu chứng mới.",
+          "huong_xu_tri": "Tiếp tục metoprolol tartrat 50 mg uống 2 lần mỗi ngày đến khi ra viện. Hướng dẫn theo dõi HA tại nhà và lịch tái khám ngoại trú. Dặn người bệnh không tự ý ngừng thuốc khi HA đã cải thiện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn nhạt, hạn chế muối.",
+          "theo_doi": [
+            "Huyết áp tại nhà hai lần mỗi ngày",
+            "Chóng mặt khi đứng dậy"
+          ],
+          "dan_do": "Tái khám ngoại trú đúng hẹn, mang theo đơn thuốc."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-06-02T09:00:00+07:00",
+        "so_giuong": "G-044-01",
+        "so_luu_tru": "LT-2026-04401",
+        "ma_yt": "YT-2026-044-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Tăng huyết áp, khởi trị metoprolol tartrat 50 mg x 2 lần/ngày, HA giảm khi ra viện. Tái khám ngoại trú."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-044-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-10T10:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-10T10:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Tăng huyết áp, đau đầu nhẹ",
+      "benh_su": "BN nam 55T, tăng huyết áp, HA đo tại nhà thường trên 140/90. Đau đầu nhẹ, không dùng thuốc hạ áp 1 tuần nay. Vào viện để điều chỉnh điều trị.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp, đã điều trị metoprolol đợt trước.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc hạ áp trong 1 tuần nay."
+      },
+      "kham_benh": "HA 150/94 mmHg khi vào viện, mạch 78 lần/phút, tim đều, không phù.",
+      "tom_tat": "BN nam 55T THA, HA còn cao khi nhập viện. Creatinin và kali trong giới hạn. Điều chỉnh điều trị hạ áp, dự kiến khởi lại metoprolol.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS044-2-01",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS044-2-01",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 150.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-02",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 94.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 146.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 92.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-05",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 142.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-06",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 88.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-07",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS044-2-08",
+          "loai": "can_nang",
+          "gia_tri": 76.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS044-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 88.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS044-2-02",
+          "ma_xet_nghiem": "kali",
+          "ten_xet_nghiem": "Kali máu",
+          "gia_tri_so": 4.1,
+          "gia_tri_text": null,
+          "don_vi": "mmol/L",
+          "nguong_duoi": 3.5,
+          "nguong_tren": 5.1,
+          "thoi_diem_ket_qua": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-044-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì HA cao, đau đầu nhẹ. HA 150/94 mmHg. Tim phổi không bất thường. Nhập khoa Tim mạch.",
+          "thoi_diem_ghi": "2026-11-10T09:45:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-044-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Theo dõi HA, HA sáng nay 146/92. Không đau đầu, không khó thở. Chờ kết quả xét nghiệm nền.",
+          "thoi_diem_ghi": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-044-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "HA 142/88, mạch 78. Creatinin 88 umol/L, kali 4,1 mmol/L. Dự kiến khởi lại metoprolol tartrat 50 mg, uống 2 lần mỗi ngày.",
+          "thoi_diem_ghi": "2026-11-14T07:10:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-044-02",
+          "thoi_diem_ke": "2026-11-10T11:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-044-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-10T11:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-044-03",
+          "thoi_diem_ke": "2026-11-10T11:10:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-044-03-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi đau đầu, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi đau đầu",
+              "bat_dau": "2026-11-10T12:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-044-04",
+          "thoi_diem_ke": "2026-11-14T07:30:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-044-04-01",
+              "thuoc_id": "T-METOPROLOL-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày",
+              "bat_dau": "2026-11-14T08:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T08:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T08:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-10T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam vào viện vì HA cao và đau đầu nhẹ, không dùng thuốc hạ áp trong 1 tuần nay, HA tại nhà thường cao. Khám lúc 9 giờ 30: HA 150/94 mmHg, tim đều, phổi không ran, không phù, không đau ngực. Tiền sử tăng huyết áp, đã từng điều trị thuốc hạ áp trong đợt trước.",
+          "danh_gia": "Tăng huyết áp chưa kiểm soát sau khi ngừng thuốc (I10). Chưa có biến chứng cấp rõ ràng, đau đầu nhẹ cần theo dõi thêm. Creatinin và kali đang chờ xét nghiệm nền để làm cơ sở chọn thuốc.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL mỗi ngày, paracetamol khi đau đầu. Chờ kết quả creatinin và kali nền để chọn thuốc hạ áp phù hợp. Theo dõi HA hai lần mỗi ngày và ghi lại triệu chứng đau đầu.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-02",
+            "YL-HS-044-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế muối, không uống rượu bia.",
+          "theo_doi": [
+            "Huyết áp hai lần mỗi ngày",
+            "Đau đầu",
+            "Kết quả creatinin và kali"
+          ],
+          "dan_do": "Báo ngay nếu đau đầu dữ dội, nhìn mờ, đau ngực hoặc khó thở."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-11T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau đầu đỡ hơn so với hôm vào viện. Không đau ngực, không khó thở, ăn ngủ được. Chưa dùng thuốc hạ áp kê mới trong ngày. Người bệnh chấp nhận kế hoạch chờ xét nghiệm nền trước khi chọn thuốc.",
+          "danh_gia": "Tăng huyết áp đang theo dõi, chưa có dấu hiệu tổn thương cơ quan đích rõ trên lâm sàng. Cần có xét nghiệm nền trước khi quyết định khởi trị, tránh chọn thuốc khi thiếu thông tin về chức năng thận và kali.",
+          "huong_xu_tri": "Tiếp tục theo dõi HA và triệu chứng, chờ kết quả xét nghiệm nền. Không thay đổi y lệnh hôm nay. Nhắc người bệnh ghi nhật ký HA tại buồng bệnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-02",
+            "YL-HS-044-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, chia bữa đều.",
+          "theo_doi": [
+            "Huyết áp",
+            "Đau đầu",
+            "Đau ngực"
+          ],
+          "dan_do": "Đo HA đều đặn và ghi lại kết quả."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-12T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "HA sáng nay 146/92 mmHg lúc 7 giờ 30. Không đau đầu, không khó thở, không đau ngực. Ăn uống được, ngủ được. Đang chờ kết quả xét nghiệm nền để cân nhắc thuốc.",
+          "danh_gia": "HA còn cao, chưa đạt mục tiêu khi chưa dùng thuốc hạ áp. Cần điều chỉnh thuốc sau khi có creatinin và kali, không có dấu hiệu cấp cứu tăng huyết áp trên lâm sàng. Chưa có triệu chứng thần kinh khu trú.",
+          "huong_xu_tri": "Tiếp tục theo dõi HA, lấy creatinin và kali để đánh giá trước khi kê lại thuốc hạ áp. Dự kiến quyết định điều trị trong 1 đến 2 ngày. Theo dõi triệu chứng đau đầu và đau ngực.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-02",
+            "YL-HS-044-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, ít muối.",
+          "theo_doi": [
+            "Huyết áp hai lần mỗi ngày",
+            "Kết quả creatinin và kali"
+          ],
+          "dan_do": "Nghỉ ngơi, tránh căng thẳng, báo khi đau đầu tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sinh hoạt bình thường trong buồng bệnh, không đau đầu, không khó thở. Chưa dùng thuốc hạ áp từ khi vào viện. Người bệnh hỏi về kế hoạch dùng thuốc lâu dài và cách theo dõi tại nhà sau khi ra viện.",
+          "danh_gia": "Tăng huyết áp chưa kiểm soát khi chưa dùng thuốc, cần chọn thuốc hạ áp phù hợp sau khi có xét nghiệm nền. Không ghi nhận biến cố cấp. Người bệnh có nguy cơ tái phát nếu không duy trì thuốc đều đặn.",
+          "huong_xu_tri": "Chờ kết quả creatinin và kali ngày mai, sau đó dự kiến khởi lại thuốc hạ áp. Theo dõi HA và nhịp tim mỗi ngày. Hướng dẫn người bệnh cách đo HA tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-02",
+            "YL-HS-044-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, hạn chế rượu bia.",
+          "theo_doi": [
+            "Huyết áp",
+            "Nhịp tim",
+            "Kết quả xét nghiệm nền"
+          ],
+          "dan_do": "Ghi nhật ký huyết áp tại nhà mỗi sáng và tối."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-044-2-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-11-14T07:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Lúc 7 giờ: HA 142/88 mmHg, mạch 78 lần/phút, cân nặng 76 kg. Creatinin 88 umol/L, kali 4,1 mmol/L. Không đau đầu, không đau ngực, tỉnh táo, ăn uống được.",
+          "danh_gia": "Tăng huyết áp chưa kiểm soát khi chưa dùng thuốc hạ áp. Các xét nghiệm nền đã có kết quả và được ghi nhận trong hồ sơ, kết quả tóm tắt của khoa cho thấy creatinin và kali trong giới hạn. Đủ điều kiện để khởi lại thuốc hạ áp.",
+          "huong_xu_tri": "Đề nghị khởi lại metoprolol tartrat 50 mg uống 2 lần mỗi ngày, bắt đầu 8 giờ sáng nay (chỉ định, chờ duyệt). Theo dõi HA và mạch sau mỗi liều. Tái đánh giá HA vào ngày mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-044-02",
+            "YL-HS-044-03",
+            "YL-HS-044-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, ít muối.",
+          "theo_doi": [
+            "Huyết áp và mạch trước mỗi liều",
+            "Chóng mặt sau khi bắt đầu thuốc"
+          ],
+          "dan_do": "Đứng dậy chậm, báo ngay nếu chóng mặt, ngất hoặc mạch chậm bất thường."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-10T10:00:00+07:00",
+        "so_giuong": "G-044-02",
+        "so_luu_tru": "LT-2026-04402",
+        "ma_yt": "YT-2026-044-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-044-04",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 44",
+    "ngay_sinh": "1971-06-02",
+    "dan_toc": "Tày",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9044",
+      "thon_pho": "Phố Bạch Mai",
+      "xa_phuong": "Bạch Mai",
+      "huyen": "Hai Bà Trưng",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000044",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 44",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 044"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 170.0,
+    "can_nang_kg": 76.0,
+    "nhom_mau": null
+  }
+}

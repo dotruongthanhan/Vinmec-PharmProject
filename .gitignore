@@ -236,3 +236,15 @@ web/qa/artifacts/
 
 # File khoa AWS va tai lieu nhay cam tai may (khong duoc commit)
 important/
+
+# Dữ liệu tham khảo ngoài (ODbL, tải lại được; xem data/tham_khao/README.md)
+data/tham_khao/*
+!data/tham_khao/README.md
+
+# thư mục tạm của pytest
+.pytest-*/
+.pytest_tmp*/
+.pytest_chk*/
+
+# nhật ký chạy agent
+.t*.log
