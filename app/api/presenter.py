@@ -142,15 +142,34 @@ def present_queue(
             if strength and strength.casefold() not in name.casefold():
                 name = f"{name} {strength}"
             drugs.append(name)
+        order_time_iso = case.y_lenh_cho_duyet.thoi_diem_ke.isoformat()
+        missing_count = int(row.get("so_thieu_du_lieu", 0))
+        patient_status: s.TrangThaiNbMa = (
+            "da_xong" if done else ("dang_cho" if missing_count > 0 else "chua_duyet")
+        )
+        diagnoses = [
+            s.Diagnosis(
+                loai_nhan="Chính" if item.loai == "chinh" else "Kèm",
+                noi_dung=item.noi_dung,
+                ma_icd10=item.ma_icd10,
+            )
+            for item in sorted(case.chan_doan, key=lambda item: item.loai != "chinh")
+        ]
         rows.append(
             s.DongHangDoi.model_validate(
                 {
                     **row,
                     "da_phan_hoi_het": done,
                     "ma_y_lenh": case.y_lenh_cho_duyet.y_lenh_id,
-                    "thoi_diem_ke": case.y_lenh_cho_duyet.thoi_diem_ke.isoformat(),
+                    "thoi_diem_ke": order_time_iso,
                     "nguoi_benh_tom_tat": f"{sex}, {age}",
                     "thuoc": drugs,
+                    "nguoi_benh_id": patient.nguoi_benh_id,
+                    "thoi_diem_ke_xa_nhat": order_time_iso,
+                    "thoi_diem_ke_gan_nhat": order_time_iso,
+                    "so_don_cho": 0 if done else 1,
+                    "chan_doan": diagnoses,
+                    "trang_thai_nb": patient_status,
                 }
             )
         )

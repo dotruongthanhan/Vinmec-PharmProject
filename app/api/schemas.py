@@ -12,12 +12,19 @@ KetLuanMa = Literal["dat", "can_xem", "khong_du_du_lieu", "ngoai_hdsd"]
 DiUngMa = Literal["co_di_ung", "khong_di_ung_da_hoi", "chua_co_thong_tin"]
 LoaiCanCuMa = Literal["du_lieu", "tinh_toan", "tai_lieu"]
 PhanHoiMa = Literal["dong_y", "bac_bo", "can_sua"]
+TrangThaiNbMa = Literal["chua_duyet", "dang_cho", "da_huy", "da_xong"]
 
 
 class ApiModel(BaseModel):
     """Từ chối trường ngoài hợp đồng, kể cả trong các đối tượng lồng nhau."""
 
     model_config = ConfigDict(extra="forbid")
+
+
+class Diagnosis(ApiModel):
+    loai_nhan: str
+    noi_dung: str
+    ma_icd10: str | None
 
 
 class CheDo(ApiModel):
@@ -46,6 +53,12 @@ class DongHangDoi(ApiModel):
     chan_doan_chinh: str | None = None
     vao_vien: datetime | None = None
     so_y_lenh: int | None = None
+    nguoi_benh_id: str | None = None
+    thoi_diem_ke_xa_nhat: str | None = None
+    thoi_diem_ke_gan_nhat: str | None = None
+    so_don_cho: int | None = None
+    chan_doan: list[Diagnosis] = Field(default_factory=list)
+    trang_thai_nb: TrangThaiNbMa | None = None
 
 
 class LoadError(ApiModel):
@@ -78,12 +91,6 @@ class DinhDanhCa(ApiModel):
     di_ung_ma: DiUngMa
     di_ung_text: str
     dem: FindingCounts
-
-
-class Diagnosis(ApiModel):
-    loai_nhan: str
-    noi_dung: str
-    ma_icd10: str | None
 
 
 class ProgressNote(ApiModel):
@@ -272,6 +279,8 @@ class FullIdentity(ApiModel):
     nguoi_bao_tin: Contact | None = None
     bo_me: Parents | None = None
     nhom_mau: str | None = None
+    cccd: str | None = None
+    dien_thoai: str | None = None
 
 
 class Discharge(ApiModel):

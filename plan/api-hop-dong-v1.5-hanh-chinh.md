@@ -29,6 +29,12 @@ interface DongHangDoi {
   chan_doan_chinh?: string | null;
   vao_vien?: string | null;
   so_y_lenh?: number | null;
+  nguoi_benh_id?: string | null;
+  thoi_diem_ke_xa_nhat?: string | null;
+  thoi_diem_ke_gan_nhat?: string | null;
+  so_don_cho?: number | null;
+  chan_doan?: Diagnosis[];
+  trang_thai_nb?: 'chua_duyet' | 'dang_cho' | 'da_huy' | 'da_xong' | null;
 }
 interface ChiTietCa {
   dinh_danh_day_du?: FullIdentity | null;
@@ -76,6 +82,8 @@ interface FullIdentity {
   nguoi_bao_tin: Contact | null;
   bo_me: Parents | null;
   nhom_mau: string | null;
+  cccd?: string | null;
+  dien_thoai?: string | null;
 }
 interface Discharge {
   hinh_thuc: 'ra_vien' | 'xin_ve' | 'bo_ve' | 'dua_ve' | 'chuyen_vien';

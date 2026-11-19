@@ -3,6 +3,7 @@
 import json
 import logging
 import time
+from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
@@ -84,6 +85,95 @@ def _is_ai_disabled() -> bool:
         return get_secret("CDSS_AI").strip().lower() == "off"
     except ConfigError:
         return False
+
+
+_PATIENT_STATUS_PRIORITY: dict[s.TrangThaiNbMa, int] = {
+    "chua_duyet": 0,
+    "dang_cho": 1,
+    "da_huy": 2,
+    "da_xong": 3,
+}
+
+
+def _map_order_status(
+    raw_status: str | None,
+    *,
+    is_focal: bool,
+    focal_done: bool,
+    focal_missing: int,
+) -> s.TrangThaiNbMa:
+    """Ánh xạ trạng thái từng y lệnh sang 4 trạng thái chuẩn của người bệnh."""
+    if is_focal:
+        if focal_done:
+            return "da_xong"
+        if focal_missing > 0:
+            return "dang_cho"
+        return "chua_duyet"
+    normalized = (raw_status or "").strip().lower()
+    if normalized in ("cho_duyet", "chua_duyet"):
+        return "chua_duyet"
+    if normalized == "dang_cho":
+        return "dang_cho"
+    if normalized in ("ngung", "da_huy"):
+        return "da_huy"
+    return "da_xong"
+
+
+def _highest_patient_status(statuses: Sequence[s.TrangThaiNbMa]) -> s.TrangThaiNbMa:
+    """Trả trạng thái cao nhất theo thứ tự: Chưa duyệt > Đang chờ > Đã hủy > Đã xong."""
+    if not statuses:
+        return "da_xong"
+    return min(statuses, key=lambda item: _PATIENT_STATUS_PRIORITY[item])
+
+
+def _merge_patient_queue(rows: list[s.DongHangDoi]) -> list[s.DongHangDoi]:
+    """Gom nhiều ca bệnh cùng mã người bệnh về 1 dòng, giữ ưu tiên cao nhất."""
+    grouped: dict[str, s.DongHangDoi] = {}
+    ordered_keys: list[str] = []
+    for row in rows:
+        key = row.nguoi_benh_id or row.ca_id
+        existing = grouped.get(key)
+        if existing is None:
+            grouped[key] = row.model_copy(deep=True)
+            ordered_keys.append(key)
+            continue
+        existing.so_nghiem_trong += row.so_nghiem_trong
+        existing.so_can_luu_y += row.so_can_luu_y
+        existing.so_thieu_du_lieu += row.so_thieu_du_lieu
+        existing.da_phan_hoi_het = existing.da_phan_hoi_het and row.da_phan_hoi_het
+        if row.uu_tien < existing.uu_tien:
+            existing.uu_tien = row.uu_tien
+            existing.huy_hieu = row.huy_hieu
+            existing.ca_id = row.ca_id
+            existing.ma_y_lenh = row.ma_y_lenh
+            existing.mo_ta = row.mo_ta
+            existing.khoa = row.khoa
+        if row.so_don_cho is not None:
+            existing.so_don_cho = (existing.so_don_cho or 0) + row.so_don_cho
+        times_old = [t for t in (existing.thoi_diem_ke_xa_nhat, row.thoi_diem_ke_xa_nhat) if t]
+        if times_old:
+            existing.thoi_diem_ke_xa_nhat = min(times_old)
+        times_new = [t for t in (existing.thoi_diem_ke_gan_nhat, row.thoi_diem_ke_gan_nhat) if t]
+        if times_new:
+            existing.thoi_diem_ke_gan_nhat = max(times_new)
+        existing.trang_thai_nb = _highest_patient_status(
+            [s for s in (existing.trang_thai_nb, row.trang_thai_nb) if s is not None]
+        )
+        seen_diag = {(d.noi_dung, d.ma_icd10) for d in existing.chan_doan}
+        for diag in row.chan_doan:
+            sig = (diag.noi_dung, diag.ma_icd10)
+            if sig not in seen_diag:
+                existing.chan_doan.append(diag)
+                seen_diag.add(sig)
+    result = [grouped[key] for key in ordered_keys]
+    result.sort(
+        key=lambda item: (
+            item.uu_tien,
+            item.thoi_diem_ke_xa_nhat or item.thoi_diem_ke or "",
+            item.ca_id,
+        )
+    )
+    return result
 
 
 class CaseService:
@@ -320,6 +410,46 @@ class CaseService:
                 row.chan_doan_chinh = encounter.chan_doan_chinh
                 row.vao_vien = encounter.thoi_diem_bat_dau
                 row.so_y_lenh = len(encounter.y_lenh)
+            all_orders = [
+                order for item in record.lich_su_vao_vien for order in item.y_lenh
+            ]
+            if all_orders:
+                focal_id = case.y_lenh_cho_duyet.y_lenh_id
+                pending_orders = [
+                    order
+                    for order in all_orders
+                    if order.trang_thai == "cho_duyet"
+                    and not (order.y_lenh_id == focal_id and row.da_phan_hoi_het)
+                ]
+                row.so_don_cho = len(pending_orders)
+                pending_times = sorted(
+                    order.thoi_diem_ke
+                    for order in pending_orders
+                    if order.thoi_diem_ke is not None
+                )
+                if pending_times:
+                    row.thoi_diem_ke_xa_nhat = pending_times[0].isoformat()
+                    row.thoi_diem_ke_gan_nhat = pending_times[-1].isoformat()
+                else:
+                    all_times = sorted(
+                        order.thoi_diem_ke
+                        for order in all_orders
+                        if order.thoi_diem_ke is not None
+                    )
+                    if all_times:
+                        row.thoi_diem_ke_xa_nhat = all_times[0].isoformat()
+                        row.thoi_diem_ke_gan_nhat = all_times[-1].isoformat()
+                statuses = [
+                    _map_order_status(
+                        order.trang_thai,
+                        is_focal=(order.y_lenh_id == focal_id),
+                        focal_done=row.da_phan_hoi_het,
+                        focal_missing=row.so_thieu_du_lieu,
+                    )
+                    for order in all_orders
+                ]
+                row.trang_thai_nb = _highest_patient_status(statuses)
+        queue = _merge_patient_queue(queue)
         return s.DanhSachCa(
             cases=queue,
             loi_nap=load_errors,

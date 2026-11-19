@@ -119,7 +119,7 @@ describe('tìm kiếm y lệnh phía trình duyệt', () => {
     { ...MOCK_CASES.cases[0], ca_id: 'CA-A', khoa: 'Khoa A', uu_tien: 0, trang_thai_y_lenh: 'chua_duyet' },
     { ...MOCK_CASES.cases[0], ca_id: 'CA-B', khoa: 'Khoa B', uu_tien: 1, trang_thai_y_lenh: 'dang_cho' },
     { ...MOCK_CASES.cases[0], ca_id: 'CA-C', khoa: 'Khoa C', uu_tien: 1, trang_thai_y_lenh: 'da_huy' },
-    { ...MOCK_CASES.cases[4], ca_id: 'CA-D', khoa: 'Khoa B', uu_tien: 4, trang_thai_y_lenh: 'da_duyet' },
+    { ...MOCK_CASES.cases[4], ca_id: 'CA-D', khoa: 'Khoa B', uu_tien: 4, trang_thai_y_lenh: 'da_xong' },
   ]
   const all = { type: 'group', group: 'tat_ca' } as const
 
@@ -131,7 +131,7 @@ describe('tìm kiếm y lệnh phía trình duyệt', () => {
   it('lấy giao giữa các cột, kể cả trạng thái và cảnh báo', () => {
     expect(filterOrders(rows, all, '', {
       priority: ['trung_binh', 'thap'], khoa: ['Khoa A', 'Khoa B'],
-      status: ['dang_cho', 'da_duyet'], aiWarning: ['nghiem_trong', 'can_luu_y'],
+      status: ['dang_cho', 'da_xong'], aiWarning: ['nghiem_trong', 'can_luu_y'],
     })).toEqual([rows[1]])
     expect(countOrderGroups(rows, { khoa: ['Khoa A', 'Khoa C'] })).toMatchObject({
       tat_ca: 2,
@@ -191,5 +191,18 @@ describe('tìm kiếm y lệnh phía trình duyệt', () => {
 
     const sortedByDeptAsc = sortOrders(MOCK_CASES.cases, 'khoa', 'asc')
     expect(sortedByDeptAsc[0].khoa).toBe('Chấn thương chỉnh hình')
+
+    const statusRows: OrderRowInput[] = [
+      { ...MOCK_CASES.cases[0], ca_id: 'S-DONE', trang_thai_y_lenh: 'da_xong' },
+      { ...MOCK_CASES.cases[0], ca_id: 'S-CANCEL', trang_thai_y_lenh: 'da_huy' },
+      { ...MOCK_CASES.cases[0], ca_id: 'S-WAIT', trang_thai_y_lenh: 'dang_cho' },
+      { ...MOCK_CASES.cases[0], ca_id: 'S-UNREV', trang_thai_y_lenh: 'chua_duyet' },
+    ]
+    expect(sortOrders(statusRows, 'trang_thai', 'asc').map((r) => r.ca_id)).toEqual([
+      'S-UNREV',
+      'S-WAIT',
+      'S-CANCEL',
+      'S-DONE',
+    ])
   })
 })

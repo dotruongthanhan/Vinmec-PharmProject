@@ -153,15 +153,23 @@ describe('bảng hồ sơ dùng dữ liệu danh sách ca hiện có', () => {
     expect(html).toContain('Y lệnh (lần cuối)')
     expect(html.match(/<td\b/g)).toHaveLength(MOCK_CASES.cases.length * 7)
     expect(html).toContain('NB-DEMO-02')
-    expect(html).toContain('Nữ, 75 tuổi')
+    expect(html).toContain('NGUYỄN THỊ 62')
+    expect(html).toContain('Viêm phổi')
     expect(html).toContain('Hô hấp')
-    expect(html.match(/>Chưa ghi nhận<\/td>/g)).toHaveLength(MOCK_CASES.cases.length * 4)
+    expect(html.match(/>Chưa ghi nhận<\/td>/g)).toHaveLength(MOCK_CASES.cases.length * 3)
     expect(html).not.toContain('05:50')
     expect(html).not.toContain('Meropenem')
   })
 
   it('không suy diễn dữ liệu khi thiếu tóm tắt người bệnh và khoa', () => {
-    const row = { ...MOCK_CASES.cases[0], nguoi_benh_tom_tat: null, khoa: '' }
+    const row = {
+      ...MOCK_CASES.cases[0],
+      nguoi_benh_id: null,
+      ho_ten: null,
+      chan_doan_chinh: null,
+      nguoi_benh_tom_tat: null,
+      khoa: '',
+    }
     const html = renderToStaticMarkup(<MedicalRecordsList {...listProps({ cases: [row] })} />)
     expect(html).not.toContain('NB-DEMO-02')
     expect(html).toContain('aria-label="Mở hồ sơ DEMO-02"')

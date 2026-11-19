@@ -11,18 +11,25 @@ export type OrderSortField =
   | 'ket_qua'
   | 'uu_tien'
   | 'thoi_diem_ke'
+  | 'thoi_diem_ke_xa_nhat'
+  | 'thoi_diem_ke_gan_nhat'
   | 'ma_y_lenh'
   | 'ca_id'
   | 'ma_bn'
+  | 'ho_ten'
   | 'nguoi_benh'
   | 'khoa'
+  | 'chan_doan'
+  | 'so_don_cho'
   | 'trang_thai'
 
 export type OrderSortDirection = 'asc' | 'desc'
 
 export type OrderPriorityLevel = 'cao' | 'trung_binh' | 'thap'
 
-export type OrderWorkflowStatus = 'chua_duyet' | 'da_duyet' | 'dang_cho' | 'da_huy'
+export type OrderWorkflowStatus = 'chua_duyet' | 'dang_cho' | 'da_huy' | 'da_xong'
+
+export type LegacyOrderWorkflowStatus = OrderWorkflowStatus | 'da_duyet'
 
 export type OrderAiWarningFilter =
   | 'nghiem_trong'
@@ -32,7 +39,7 @@ export type OrderAiWarningFilter =
   | 'dat'
 
 export type OrderRowInput = DongHangDoi & {
-  trang_thai_y_lenh?: OrderWorkflowStatus | null
+  trang_thai_y_lenh?: LegacyOrderWorkflowStatus | null
 }
 
 type OrderFilterValues<T extends string> = T | readonly T[] | 'all'
@@ -67,7 +74,7 @@ export interface OrderGroupCounts {
 }
 
 export const ORDER_FILTER_LABELS: Record<OrderFilterGroup, string> = {
-  tat_ca: 'Tất cả y lệnh',
+  tat_ca: 'Tất cả người bệnh',
   can_xem: 'Cần xem',
   thieu_du_lieu: 'Thiếu dữ liệu',
   dat: 'Đạt',
@@ -82,9 +89,9 @@ export const ORDER_PRIORITY_LABELS: Record<OrderPriorityLevel, string> = {
 
 export const ORDER_STATUS_LABELS: Record<OrderWorkflowStatus, string> = {
   chua_duyet: 'Chưa duyệt',
-  da_duyet: 'Đã duyệt',
-  dang_cho: 'Đang chờ (On hold)',
-  da_huy: 'Đã hủy (Cancel)',
+  dang_cho: 'Đang chờ',
+  da_huy: 'Đã hủy',
+  da_xong: 'Đã xong',
 }
 
 export const ORDER_AI_WARNING_LABELS: Record<OrderAiWarningFilter, string> = {
@@ -119,18 +126,57 @@ export function getOrderPriorityLevel(item: Pick<DongHangDoi, 'uu_tien'>): Order
   return 'thap'
 }
 
-/** Xác định trạng thái xử lý y lệnh (Đã duyệt, Chưa duyệt, Đang chờ, Đã hủy). */
+/** Chuẩn hoá trạng thái đơn về 4 giá trị chuẩn của người bệnh. */
+export function normalizeWorkflowStatus(status: LegacyOrderWorkflowStatus): OrderWorkflowStatus {
+  return status === 'da_duyet' ? 'da_xong' : status
+}
+
+/** Xác định trạng thái người bệnh theo thứ tự ưu tiên: Chưa duyệt > Đang chờ > Đã hủy > Đã xong. */
 export function getOrderWorkflowStatus(item: OrderRowInput): OrderWorkflowStatus {
   if (item.trang_thai_y_lenh) {
-    return item.trang_thai_y_lenh
+    return normalizeWorkflowStatus(item.trang_thai_y_lenh)
+  }
+  if (item.da_phan_hoi_het && (item.so_don_cho ?? 1) <= 1) {
+    return 'da_xong'
+  }
+  if (item.trang_thai_nb) {
+    return item.trang_thai_nb
   }
   if (item.da_phan_hoi_het) {
-    return 'da_duyet'
+    return 'da_xong'
   }
   if (item.so_thieu_du_lieu > 0) {
     return 'dang_cho'
   }
   return 'chua_duyet'
+}
+
+/** Lấy thời điểm kê xa nhất (đơn chờ lâu nhất) của người bệnh. */
+export function getOldestPendingTime(item: DongHangDoi): string | null {
+  return item.thoi_diem_ke_xa_nhat ?? item.thoi_diem_ke ?? null
+}
+
+/** Lấy thời điểm kê gần nhất (đơn chờ mới nhất) của người bệnh. */
+export function getLatestPendingTime(item: DongHangDoi): string | null {
+  return item.thoi_diem_ke_gan_nhat ?? item.thoi_diem_ke ?? null
+}
+
+/** Lấy số đơn đang chờ duyệt của người bệnh. */
+export function getPendingOrderCount(item: DongHangDoi): number {
+  if (typeof item.so_don_cho === 'number' && Number.isFinite(item.so_don_cho)) {
+    return item.so_don_cho
+  }
+  return item.da_phan_hoi_het ? 0 : 1
+}
+
+/** Ghép toàn bộ chẩn đoán kèm mã ICD-10 tương ứng để hiển thị và tìm kiếm. */
+export function formatDiagnosesWithIcd(item: DongHangDoi): string {
+  if (item.chan_doan && item.chan_doan.length > 0) {
+    return item.chan_doan
+      .map((diag) => (diag.ma_icd10 ? `${diag.noi_dung} (${diag.ma_icd10})` : diag.noi_dung))
+      .join('; ')
+  }
+  return item.chan_doan_chinh?.trim() ?? ''
 }
 
 /** Phân loại nhóm cảnh báo AI chính của dòng y lệnh. */
@@ -167,8 +213,11 @@ export function getOrderAiWarningTooltip(item: DongHangDoi): string {
   return `Đạt — ${item.mo_ta}`
 }
 
-/** Lấy mã bệnh nhân khử định danh; trả chuỗi rỗng nếu dòng không có thông tin người bệnh. */
+/** Lấy mã bệnh nhân; ưu tiên `nguoi_benh_id` thật từ hệ thống, dự phòng `NB-{ca_id}`. */
 export function getOrderPatientCode(item: DongHangDoi): string {
+  if (item.nguoi_benh_id && item.nguoi_benh_id.trim()) {
+    return item.nguoi_benh_id.trim()
+  }
   if (!item.nguoi_benh_tom_tat || !item.nguoi_benh_tom_tat.trim()) {
     return ''
   }
@@ -285,6 +334,7 @@ function matchesSearchQuery(item: OrderRowInput, normalizedQuery: string): boole
     item.ho_ten ?? '',
     item.ngay_sinh ?? '',
     item.chan_doan_chinh ?? '',
+    formatDiagnosesWithIcd(item),
     item.khoa,
     ...(item.thuoc ?? []),
     item.mo_ta,
@@ -328,16 +378,19 @@ export function applyOrderColumnFilters<T extends OrderRowInput>(
       return false
     }
     if (normDateExact) {
-      const itemYmd = extractOrderDateYmd(item.thoi_diem_ke)
-      if (itemYmd !== normDateExact) {
+      const oldestYmd = extractOrderDateYmd(getOldestPendingTime(item))
+      const latestYmd = extractOrderDateYmd(getLatestPendingTime(item))
+      if (oldestYmd !== normDateExact && latestYmd !== normDateExact) {
         return false
       }
     }
     if (normTimeText) {
-      const rawTime = item.thoi_diem_ke ?? ''
-      const readableTime = rawTime ? formatIsoTimestamp(rawTime) : ''
-      const itemYmd = extractOrderDateYmd(rawTime)
-      const combined = `${rawTime} ${readableTime} ${itemYmd}`.toLowerCase()
+      const candidates = [getOldestPendingTime(item), getLatestPendingTime(item), item.thoi_diem_ke]
+        .filter((v): v is string => Boolean(v))
+      const combined = candidates
+        .map((rawTime) => `${rawTime} ${formatIsoTimestamp(rawTime)} ${extractOrderDateYmd(rawTime)}`)
+        .join(' ')
+        .toLowerCase()
       if (!combined.includes(normTimeText)) {
         return false
       }
@@ -403,12 +456,12 @@ function compareTimes(aTime: string | null | undefined, bTime: string | null | u
 const STATUS_SORT_RANK: Record<OrderWorkflowStatus, number> = {
   chua_duyet: 0,
   dang_cho: 1,
-  da_duyet: 2,
-  da_huy: 3,
+  da_huy: 2,
+  da_xong: 3,
 }
 
 /**
- * Sắp xếp danh sách y lệnh ổn định trên mọi cột bằng Intl.Collator và mốc thời gian số.
+ * Sắp xếp danh sách người bệnh ổn định trên mọi cột bằng Intl.Collator và mốc thời gian số.
  */
 export function sortOrders<T extends OrderRowInput>(
   cases: readonly T[],
@@ -423,10 +476,16 @@ export function sortOrders<T extends OrderRowInput>(
       const severityDiff = a.item.uu_tien - b.item.uu_tien
       cmp = sortDirection === 'desc' ? severityDiff : -severityDiff
       if (cmp === 0) {
-        cmp = compareTimes(a.item.thoi_diem_ke, b.item.thoi_diem_ke)
+        cmp = compareTimes(getOldestPendingTime(a.item), getOldestPendingTime(b.item))
       }
-    } else if (sortField === 'thoi_diem_ke') {
-      const timeDiff = compareTimes(a.item.thoi_diem_ke, b.item.thoi_diem_ke)
+    } else if (sortField === 'thoi_diem_ke' || sortField === 'thoi_diem_ke_xa_nhat') {
+      const timeDiff = compareTimes(getOldestPendingTime(a.item), getOldestPendingTime(b.item))
+      cmp = sortDirection === 'asc' ? timeDiff : -timeDiff
+      if (cmp === 0) {
+        cmp = a.item.uu_tien - b.item.uu_tien
+      }
+    } else if (sortField === 'thoi_diem_ke_gan_nhat') {
+      const timeDiff = compareTimes(getLatestPendingTime(a.item), getLatestPendingTime(b.item))
       cmp = sortDirection === 'asc' ? timeDiff : -timeDiff
       if (cmp === 0) {
         cmp = a.item.uu_tien - b.item.uu_tien
@@ -439,6 +498,9 @@ export function sortOrders<T extends OrderRowInput>(
     } else if (sortField === 'ma_bn') {
       const diff = VI_COLLATOR.compare(getOrderPatientCode(a.item), getOrderPatientCode(b.item))
       cmp = sortDirection === 'asc' ? diff : -diff
+    } else if (sortField === 'ho_ten') {
+      const diff = VI_COLLATOR.compare(a.item.ho_ten ?? '', b.item.ho_ten ?? '')
+      cmp = sortDirection === 'asc' ? diff : -diff
     } else if (sortField === 'nguoi_benh') {
       const diff = VI_COLLATOR.compare(
         a.item.nguoi_benh_tom_tat ?? '',
@@ -447,6 +509,15 @@ export function sortOrders<T extends OrderRowInput>(
       cmp = sortDirection === 'asc' ? diff : -diff
     } else if (sortField === 'khoa') {
       const diff = VI_COLLATOR.compare(a.item.khoa, b.item.khoa)
+      cmp = sortDirection === 'asc' ? diff : -diff
+    } else if (sortField === 'chan_doan') {
+      const diff = VI_COLLATOR.compare(
+        formatDiagnosesWithIcd(a.item),
+        formatDiagnosesWithIcd(b.item),
+      )
+      cmp = sortDirection === 'asc' ? diff : -diff
+    } else if (sortField === 'so_don_cho') {
+      const diff = getPendingOrderCount(a.item) - getPendingOrderCount(b.item)
       cmp = sortDirection === 'asc' ? diff : -diff
     } else if (sortField === 'trang_thai') {
       const diff =

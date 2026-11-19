@@ -28,11 +28,15 @@ import {
   ORDER_PRIORITY_LABELS,
   ORDER_STATUS_LABELS,
   applyOrderColumnFilters,
+  formatDiagnosesWithIcd,
+  getLatestPendingTime,
+  getOldestPendingTime,
   getOrderAiWarningKind,
   getOrderAiWarningTooltip,
   getOrderPatientCode,
   getOrderPriorityLevel,
   getOrderWorkflowStatus,
+  getPendingOrderCount,
   selectedFilterValues,
   stepOrderSelection,
 } from '@/lib/orders'
@@ -85,17 +89,36 @@ const STATUS_BADGE_TONE: Record<
   OrderWorkflowStatus,
   'success' | 'warning' | 'missing' | 'neutral'
 > = {
-  da_duyet: 'success',
   chua_duyet: 'warning',
   dang_cho: 'missing',
   da_huy: 'neutral',
+  da_xong: 'success',
 }
 
 const STATUS_SHORT_LABELS: Record<OrderWorkflowStatus, string> = {
   chua_duyet: 'Chưa duyệt',
-  da_duyet: 'Đã duyệt',
   dang_cho: 'Đang chờ',
   da_huy: 'Đã hủy',
+  da_xong: 'Đã xong',
+}
+
+function FormattedTimestampCell({ value }: { value: string | null }) {
+  if (!value) {
+    return <span className="text-fg-subtle">—</span>
+  }
+  const readable = formatReadableDateTime(value)
+  return (
+    <time dateTime={value} title={readable}>
+      {readable
+        .replace(/\/\d{4}$/, '')
+        .split(' · ')
+        .map((part, index) => (
+          <span key={index} className="block leading-tight">
+            {part}
+          </span>
+        ))}
+    </time>
+  )
 }
 
 const AI_WARNING_ICON_STYLE: Record<
@@ -381,7 +404,7 @@ export function OrdersTable({
             {filterTitle}
           </h1>
           <span className="font-mono text-xs text-fg-subtle tabular-nums">
-            {loading ? 'Đang tải…' : `${displayedOrders.length} y lệnh`}
+            {loading ? 'Đang tải…' : `${displayedOrders.length} người bệnh`}
           </span>
           {searchQuery.trim() ? (
             <span className="text-xs text-fg-muted">
@@ -501,7 +524,7 @@ export function OrdersTable({
         <div
           className="overflow-hidden rounded-md border border-line bg-surface"
           aria-busy="true"
-          aria-label="Đang tải danh sách y lệnh"
+          aria-label="Đang tải danh sách người bệnh chờ duyệt"
         >
           <div className="h-9 border-b border-line bg-surface-muted px-3 flex items-center">
             <Skeleton className="h-3 w-48" />
@@ -520,33 +543,35 @@ export function OrdersTable({
           ))}
         </div>
       ) : error ? (
-        <ErrorState title="Không tải được danh sách y lệnh" message={error} onRetry={onRetry} />
+        <ErrorState title="Không tải được danh sách người bệnh" message={error} onRetry={onRetry} />
       ) : totalCount === 0 ? (
         <div className="rounded-md border border-line bg-surface">
           <EmptyState
             role="status"
             icon={ClipboardList}
-            title="Không có y lệnh chờ thẩm định"
+            title="Không có người bệnh chờ duyệt đơn"
           />
         </div>
       ) : (
         <div
           role="region"
-          aria-label="Bảng danh sách y lệnh"
+          aria-label="Bảng danh sách người bệnh chờ duyệt đơn"
           tabIndex={0}
           className="relative w-full overflow-x-auto rounded-md border border-line bg-surface"
         >
           <table
-            className="orders-table w-full table-fixed border-collapse text-xs"
-            aria-label="Danh sách y lệnh"
+            className="orders-table w-full min-w-[980px] table-fixed border-collapse text-xs"
+            aria-label="Danh sách người bệnh chờ duyệt đơn"
           >
             <colgroup>
               <col className="order-priority" />
-              <col className="order-time" />
-              <col className="order-code" />
+              <col className="order-time-oldest" />
+              <col className="order-time-latest" />
               <col className="order-patient-id" />
-              <col className="order-patient" />
+              <col className="order-patient-name" />
               <col className="order-dept" />
+              <col className="order-diagnosis" />
+              <col className="order-pending-count" />
               <col className="order-status" />
               <col className="order-ai-warn" />
             </colgroup>
@@ -564,8 +589,8 @@ export function OrdersTable({
                   />
                 </th>
 
-                {/* 2. Thời điểm kê */}
-                <th scope="col" aria-sort={getAriaSort('thoi_diem_ke')}>
+                {/* 2. Thời điểm kê xa nhất */}
+                <th scope="col" aria-sort={getAriaSort('thoi_diem_ke_xa_nhat', 'thoi_diem_ke')}>
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
@@ -574,11 +599,12 @@ export function OrdersTable({
                           'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
                           (columnFilters.dateExact ||
                             columnFilters.timeText?.trim() ||
+                            sortField === 'thoi_diem_ke_xa_nhat' ||
                             sortField === 'thoi_diem_ke') &&
                             'text-fg',
                         )}
                       >
-                        <span>Thời điểm kê</span>
+                        <span className="truncate">Kê xa nhất</span>
                         <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
                       </button>
                     </PopoverTrigger>
@@ -586,11 +612,12 @@ export function OrdersTable({
                       <div className="flex flex-col gap-2">
                         <div className="flex flex-col">
                           <SortMenuItems
-                            field="thoi_diem_ke"
+                            field="thoi_diem_ke_xa_nhat"
+                            aliasField="thoi_diem_ke"
                             sortField={sortField}
                             sortDirection={sortDirection}
-                            descLabel="Mới nhất trước"
-                            ascLabel="Cũ nhất trước"
+                            ascLabel="Chờ lâu nhất trước"
+                            descLabel="Mới hơn trước"
                             onApplySort={handleApplySort}
                           />
                         </div>
@@ -674,28 +701,28 @@ export function OrdersTable({
                   </Popover>
                 </th>
 
-                {/* 3. Mã y lệnh */}
-                <th scope="col" aria-sort={getAriaSort('ma_y_lenh')}>
+                {/* 3. Thời điểm kê gần nhất */}
+                <th scope="col" aria-sort={getAriaSort('thoi_diem_ke_gan_nhat')}>
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
                         type="button"
                         className={cn(
                           'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          sortField === 'ma_y_lenh' && 'text-fg',
+                          sortField === 'thoi_diem_ke_gan_nhat' && 'text-fg',
                         )}
                       >
-                        <span>Mã y lệnh</span>
+                        <span className="truncate">Kê gần nhất</span>
                         <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent align="start" className="w-44 p-1.5 text-xs">
+                    <PopoverContent align="start" className="w-48 p-1.5 text-xs">
                       <SortMenuItems
-                        field="ma_y_lenh"
+                        field="thoi_diem_ke_gan_nhat"
                         sortField={sortField}
                         sortDirection={sortDirection}
-                        ascLabel="Mã A → Z"
-                        descLabel="Mã Z → A"
+                        descLabel="Mới nhất trước"
+                        ascLabel="Cũ nhất trước"
                         onApplySort={handleApplySort}
                       />
                     </PopoverContent>
@@ -730,28 +757,28 @@ export function OrdersTable({
                   </Popover>
                 </th>
 
-                {/* 5. Người bệnh */}
-                <th scope="col" aria-sort={getAriaSort('nguoi_benh')}>
+                {/* 5. Họ tên */}
+                <th scope="col" aria-sort={getAriaSort('ho_ten')}>
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
                         type="button"
                         className={cn(
                           'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          sortField === 'nguoi_benh' && 'text-fg',
+                          sortField === 'ho_ten' && 'text-fg',
                         )}
                       >
-                        <span>Người bệnh</span>
+                        <span>Họ tên</span>
                         <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
                       </button>
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-48 p-1.5 text-xs">
                       <SortMenuItems
-                        field="nguoi_benh"
+                        field="ho_ten"
                         sortField={sortField}
                         sortDirection={sortDirection}
-                        ascLabel="Tăng dần (A → Z)"
-                        descLabel="Giảm dần (Z → A)"
+                        ascLabel="Họ tên A → Z"
+                        descLabel="Họ tên Z → A"
                         onApplySort={handleApplySort}
                       />
                     </PopoverContent>
@@ -769,22 +796,78 @@ export function OrdersTable({
                   />
                 </th>
 
-                {/* 7. Trạng thái */}
+                {/* 7. Chẩn đoán (bên phải Khoa, đầy đủ tên + mã ICD-10) */}
+                <th scope="col" aria-sort={getAriaSort('chan_doan')}>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        className={cn(
+                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
+                          sortField === 'chan_doan' && 'text-fg',
+                        )}
+                      >
+                        <span>Chẩn đoán</span>
+                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-48 p-1.5 text-xs">
+                      <SortMenuItems
+                        field="chan_doan"
+                        sortField={sortField}
+                        sortDirection={sortDirection}
+                        ascLabel="Chẩn đoán A → Z"
+                        descLabel="Chẩn đoán Z → A"
+                        onApplySort={handleApplySort}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </th>
+
+                {/* 8. Số đơn chờ */}
+                <th scope="col" aria-sort={getAriaSort('so_don_cho')}>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        className={cn(
+                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
+                          sortField === 'so_don_cho' && 'text-fg',
+                        )}
+                      >
+                        <span className="truncate">Đơn chờ</span>
+                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-48 p-1.5 text-xs">
+                      <SortMenuItems
+                        field="so_don_cho"
+                        sortField={sortField}
+                        sortDirection={sortDirection}
+                        descLabel="Nhiều đơn nhất trước"
+                        ascLabel="Ít đơn nhất trước"
+                        onApplySort={handleApplySort}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </th>
+
+                {/* 9. Trạng thái NB */}
                 <th scope="col" aria-sort={getAriaSort('trang_thai')}>
                   <ColumnFilterMenu
-                    label="Trạng thái" field="trang_thai" align="end"
+                    label="Trạng thái NB" field="trang_thai" align="end"
                     sortField={sortField} sortDirection={sortDirection}
-                    ascLabel="Chưa duyệt → Đã duyệt" descLabel="Đã duyệt → Chưa duyệt" onApplySort={handleApplySort}
+                    ascLabel="Chưa duyệt → Đã xong" descLabel="Đã xong → Chưa duyệt" onApplySort={handleApplySort}
                     options={STATUS_OPTIONS} selected={statuses}
                     optionLabel={(value) => ORDER_STATUS_LABELS[value]}
                     onChange={(values) => setColumnFilters((prev) => ({ ...prev, status: values }))}
                   />
                 </th>
 
-                {/* 8. Cảnh báo AI */}
+                {/* 10. Cảnh báo AI */}
                 <th scope="col" aria-sort={getAriaSort('ket_qua')}>
                   <ColumnFilterMenu
-                    label="Cảnh báo AI" field="ket_qua" aliasField="uu_tien" align="end"
+                    label="AI" field="ket_qua" aliasField="uu_tien" align="end"
                     sortField={sortField} sortDirection={sortDirection}
                     ascLabel="Đạt trước" descLabel="Nghiêm trọng trước" onApplySort={handleApplySort}
                     options={WARNING_OPTIONS} selected={warnings}
@@ -798,10 +881,10 @@ export function OrdersTable({
             <tbody className="divide-y divide-line bg-surface">
               {displayedOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center">
+                  <td colSpan={10} className="py-8 text-center">
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-sm font-medium text-fg">
-                        Không có y lệnh phù hợp bộ lọc hiện tại
+                        Không có người bệnh phù hợp bộ lọc hiện tại
                       </p>
                     </div>
                   </td>
@@ -811,6 +894,13 @@ export function OrdersTable({
                   const priorityLevel = getOrderPriorityLevel(item)
                   const priorityLabel = ORDER_PRIORITY_LABELS[priorityLevel]
                   const patientCode = getOrderPatientCode(item)
+                  const patientName = item.ho_ten?.trim()
+                    ? item.ho_ten.trim().toLocaleUpperCase('vi-VN')
+                    : 'Chưa ghi nhận'
+                  const oldestTime = getOldestPendingTime(item)
+                  const latestTime = getLatestPendingTime(item)
+                  const diagnosisText = formatDiagnosesWithIcd(item)
+                  const pendingCount = getPendingOrderCount(item)
                   const workflowStatus = getOrderWorkflowStatus(item)
                   const statusShortLabel = STATUS_SHORT_LABELS[workflowStatus]
                   const statusFullLabel = ORDER_STATUS_LABELS[workflowStatus]
@@ -825,7 +915,7 @@ export function OrdersTable({
                       tabIndex={0}
                       onClick={() => onOpenOrder(item.ca_id)}
                       onKeyDown={(e) => handleRowKeyDown(e, item.ca_id)}
-                      className="h-[44px] cursor-pointer transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-primary-soft/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+                      className="min-h-[44px] cursor-pointer transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-primary-soft/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
                     >
                       {/* 1. Ưu tiên */}
                       <td className="whitespace-nowrap">
@@ -841,47 +931,30 @@ export function OrdersTable({
                         </span>
                       </td>
 
-                      {/* 2. Thời điểm kê */}
+                      {/* 2. Thời điểm kê xa nhất */}
                       <td className="font-mono text-xs tabular-nums whitespace-nowrap text-fg-muted">
-                        {item.thoi_diem_ke ? (
-                          <time
-                            dateTime={item.thoi_diem_ke}
-                            title={formatReadableDateTime(item.thoi_diem_ke)}
-                          >
-                            {formatReadableDateTime(item.thoi_diem_ke)
-                              .replace(/\/\d{4}$/, '')
-                              .split(' · ')
-                              .map((part, index) => (
-                                <span key={index} className="block leading-tight">
-                                  {part}
-                                </span>
-                              ))}
-                          </time>
-                        ) : null}
+                        <FormattedTimestampCell value={oldestTime} />
                       </td>
 
-                      {/* 3. Mã y lệnh */}
-                      <td
-                        className="font-mono text-xs font-semibold text-fg whitespace-nowrap"
-                        title={item.ma_y_lenh ?? undefined}
-                      >
-                        <span className="block truncate">{item.ma_y_lenh ?? ''}</span>
+                      {/* 3. Thời điểm kê gần nhất */}
+                      <td className="font-mono text-xs tabular-nums whitespace-nowrap text-fg-muted">
+                        <FormattedTimestampCell value={latestTime} />
                       </td>
 
                       {/* 4. Mã BN */}
                       <td
-                        className="font-mono text-xs text-fg-muted whitespace-nowrap"
+                        className="font-mono text-xs font-semibold text-fg whitespace-nowrap"
                         title={patientCode || undefined}
                       >
-                        <span className="block truncate">{patientCode}</span>
+                        <span className="block truncate">{patientCode || '—'}</span>
                       </td>
 
-                      {/* 5. Người bệnh */}
+                      {/* 5. Họ tên */}
                       <td
-                        className="text-xs text-fg whitespace-nowrap"
-                        title={item.nguoi_benh_tom_tat ?? undefined}
+                        className="text-xs font-medium text-fg whitespace-nowrap"
+                        title={patientName}
                       >
-                        <span className="block truncate">{item.nguoi_benh_tom_tat ?? ''}</span>
+                        <span className="block truncate">{patientName}</span>
                       </td>
 
                       {/* 6. Khoa */}
@@ -889,14 +962,35 @@ export function OrdersTable({
                         <span className="block truncate">{item.khoa}</span>
                       </td>
 
-                      {/* 7. Trạng thái */}
+                      {/* 7. Chẩn đoán + mã ICD-10 */}
+                      <td
+                        className="text-xs text-fg"
+                        title={diagnosisText || undefined}
+                      >
+                        <span className="line-clamp-2 break-words leading-snug">
+                          {diagnosisText || 'Chưa ghi nhận'}
+                        </span>
+                      </td>
+
+                      {/* 8. Số đơn chờ */}
+                      <td className="text-center font-mono text-xs font-semibold tabular-nums text-fg whitespace-nowrap">
+                        <Badge
+                          tone={pendingCount > 0 ? 'warning' : 'neutral'}
+                          variant="soft"
+                          className="min-w-6 justify-center font-mono tabular-nums"
+                        >
+                          {pendingCount}
+                        </Badge>
+                      </td>
+
+                      {/* 9. Trạng thái NB */}
                       <td className="whitespace-nowrap" title={statusFullLabel}>
                         <Badge tone={STATUS_BADGE_TONE[workflowStatus]} variant="soft">
                           {statusShortLabel}
                         </Badge>
                       </td>
 
-                      {/* 8. Cảnh báo AI (chỉ icon + tooltip khi hover) */}
+                      {/* 10. Cảnh báo AI (chỉ icon + tooltip khi hover) */}
                       <td className="text-center">
                         <AiWarningIconCell item={item} />
                       </td>

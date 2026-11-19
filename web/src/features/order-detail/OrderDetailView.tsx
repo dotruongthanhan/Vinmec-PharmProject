@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ClipboardList, FileText, Pill, X } from 'lucide-react'
+import { ClipboardList, FileText, Pill, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import type {
@@ -33,7 +33,6 @@ import {
   extractOrderTimeText,
   formatClinicalText,
   parseLeadingSymbolLabel,
-  parseTrendValue,
 } from '@/lib/displayFormat'
 import {
   computeSixFactorsStatus,
@@ -47,13 +46,13 @@ import type { DetailTabId, EvidenceTarget, FeedbackDraft } from '@/lib/uiTypes'
 import {
   InfoRows,
   LabPivotTable,
-  MetricsTable,
   NotesTable,
   OrderLinesTable,
   SectionHeading,
 } from './DetailSections'
 import type { InfoItem } from './DetailSections'
 import { InteractionMatrix } from './InteractionMatrix'
+import { PatientPinnedHeader } from './PatientPinnedHeader'
 import { SixFactorStrip } from './SixFactorStrip'
 import { AdministrativeSections } from './AdministrativeSections'
 import { countMedicalOrders, medicalOrders, orderSelectionParams, selectMedicalOrder } from '@/lib/medicalRecord'
@@ -116,78 +115,23 @@ function primaryDiagnosis(detail: ChiTietCa): string {
     .join('; ')
 }
 
-/** Tách họ tên, tuổi, giới, cân nặng, chiều cao thành ô riêng; thiếu thì dùng chuỗi ghép cũ hoặc "Chưa ghi nhận". */
-function patientFieldItems(detail: ChiTietCa): InfoItem[] {
-  const full = detail.dinh_danh_day_du
-  const missing = 'Chưa ghi nhận'
-  const gender =
-    full?.gioi_tinh === 'nam'
-      ? 'Nam'
-      : full?.gioi_tinh === 'nu'
-        ? 'Nữ'
-        : (detail.dinh_danh.gioi_tuoi.match(/(Nam|Nữ)/i)?.[1] ?? missing)
-  const age =
-    full?.tuoi != null ? `${full.tuoi} tuổi` : (detail.dinh_danh.gioi_tuoi.match(/\d+\s*tuổi/i)?.[0] ?? missing)
-  const num = (value: number | null | undefined, unit: string) =>
-    value != null ? `${String(value).replace('.', ',')} ${unit}` : missing
-  return [
-    { label: 'Họ tên', value: full?.ho_ten ? full.ho_ten.toUpperCase() : missing },
-    { label: 'Giới tính', value: gender },
-    { label: 'Tuổi', value: age },
-    { label: 'Cân nặng', value: full ? num(full.can_nang_kg, 'kg') : detail.dinh_danh.can_nang },
-    { label: 'Chiều cao', value: num(full?.chieu_cao_cm, 'cm') },
-  ]
-}
-
-function patientInfoItems(detail: ChiTietCa): InfoItem[] {
-  const { dinh_danh, tom_tat } = detail
-  return [
-    { label: 'Mã ca', value: detail.ca_id },
-    ...patientFieldItems(detail),
-    { label: 'Khoa, loại hồ sơ', value: dinh_danh.khoa_loai },
-    {
-      label: 'Vào viện',
-      value: tom_tat.vao_vien_text ? formatClinicalText(tom_tat.vao_vien_text) : 'Chưa ghi nhận',
-    },
-    {
-      label: 'Thời gian nằm viện',
-      value: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : 'Không áp dụng',
-    },
-    { label: 'Dị ứng', value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text },
-    { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
-  ]
-}
-
 function MedicalRecordTabContent({
   detail,
-  onOpenEvidence,
 }: {
   detail: ChiTietCa
-  onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
 }) {
-  const { dinh_danh, tom_tat, chi_so } = detail
+  const { dinh_danh, tom_tat } = detail
 
-  return (
-    <div className="flex flex-col gap-7">
-      <AdministrativeSections identity={detail.dinh_danh_day_du}
-        management={detail.quan_ly_nguoi_benh} history={detail.lich_su_vao_vien}
-        legacy={detail.dinh_danh_day_du ? undefined : {
-          gioi_tuoi: dinh_danh.gioi_tuoi, can_nang: dinh_danh.can_nang,
-          vao_vien: formatClinicalText(tom_tat.vao_vien_text),
-          nam_vien: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : null,
-          khoa: dinh_danh.khoa_loai,
-        }} />
-
-      <section aria-label="Chẩn đoán" className="flex flex-col gap-2.5">
-        <SectionHeading title="III. Chẩn đoán" />
-        <InfoRows items={[
+  const diagnosisSection = (
+    <div className="flex flex-col gap-4">
+      <InfoRows
+        items={[
           { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
           { label: 'Dị ứng', value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text },
-        ]} />
-      </section>
-
-      <section aria-label="Cơ địa" className="flex flex-col gap-2.5">
-        <SectionHeading title="Cơ địa đặc biệt" />
+        ]}
+      />
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-medium text-fg-subtle">Cơ địa đặc biệt</span>
         {tom_tat.co_dia.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {tom_tat.co_dia.map((item) => (
@@ -199,79 +143,29 @@ function MedicalRecordTabContent({
         ) : (
           <p className="text-sm text-fg-subtle">Không ghi nhận cơ địa đặc biệt.</p>
         )}
-      </section>
+      </div>
+    </div>
+  )
 
-      <section aria-label="Chỉ số lâm sàng" className="flex flex-col gap-2.5">
-        <SectionHeading
-          title="Chỉ số lâm sàng tính từ hồ sơ"
-          aside="Tính bằng công thức, không do AI tính"
-        />
-        <MetricsTable
-          metrics={chi_so}
-          crclAbnormal={dinh_danh.crcl_bat_thuong}
-          onOpenEvidence={onOpenEvidence}
-        />
-      </section>
-
-      <section aria-label="Bất thường xét nghiệm" className="flex flex-col gap-2.5">
-        <SectionHeading title="Giá trị cận lâm sàng ngoài ngưỡng" />
-        {tom_tat.bat_thuong.length > 0 ? (
-          <DataTable>
-            <DataTableHeader>
-              <tr>
-                <DataTableHead>Xét nghiệm</DataTableHead>
-                <DataTableHead align="right">Giá trị</DataTableHead>
-                <DataTableHead>Đơn vị</DataTableHead>
-                <DataTableHead>So với lần trước</DataTableHead>
-                <DataTableHead>Thời điểm</DataTableHead>
-              </tr>
-            </DataTableHeader>
-            <DataTableBody>
-              {tom_tat.bat_thuong.map((bt, idx) => {
-                const dir = parseTrendValue(bt.huong).direction
-                const Arrow = dir === 'up' ? ArrowUp : dir === 'down' ? ArrowDown : null
-                return (
-                  <DataTableRow key={`${bt.ten}-${bt.thoi_diem_text}-${idx}`}>
-                    <DataTableCell className="font-medium">{bt.ten}</DataTableCell>
-                    <DataTableCell align="right" className="font-semibold text-danger-fg">
-                      <span className="inline-flex items-center justify-end gap-1">
-                        {Arrow ? (
-                          <Arrow className="size-3.5" strokeWidth={2} aria-hidden="true" />
-                        ) : null}
-                        {formatClinicalText(bt.gia_tri_text)}
-                      </span>
-                    </DataTableCell>
-                    <DataTableCell className="text-fg-subtle">
-                      {formatClinicalText(bt.don_vi)}
-                    </DataTableCell>
-                    <DataTableCell className="text-fg-muted">
-                      {bt.so_voi_truoc ? formatClinicalText(bt.so_voi_truoc) : '—'}
-                    </DataTableCell>
-                    <DataTableCell className="whitespace-nowrap tabular-nums">
-                      {formatClinicalText(bt.thoi_diem_text)}
-                    </DataTableCell>
-                  </DataTableRow>
-                )
-              })}
-            </DataTableBody>
-          </DataTable>
-        ) : (
-          <p className="text-sm text-fg-subtle">
-            {tom_tat.bat_thuong_ghi_chu
-              ? formatClinicalText(tom_tat.bat_thuong_ghi_chu)
-              : 'Không ghi nhận chỉ số bất thường.'}
-          </p>
-        )}
-      </section>
-
-      <section aria-label="Diễn biến gần nhất" className="flex flex-col gap-2.5">
-        <SectionHeading title="Diễn biến gần nhất" />
-        {tom_tat.dien_bien_moi_nhat ? (
-          <NotesTable notes={[tom_tat.dien_bien_moi_nhat]} />
-        ) : (
-          <p className="text-sm text-fg-subtle">Chưa ghi nhận diễn biến mới nhất.</p>
-        )}
-      </section>
+  return (
+    <div className="flex flex-col gap-3">
+      <AdministrativeSections
+        identity={detail.dinh_danh_day_du}
+        management={detail.quan_ly_nguoi_benh}
+        history={detail.lich_su_vao_vien}
+        diagnosisSection={diagnosisSection}
+        legacy={
+          detail.dinh_danh_day_du
+            ? undefined
+            : {
+                gioi_tuoi: dinh_danh.gioi_tuoi,
+                can_nang: dinh_danh.can_nang,
+                vao_vien: formatClinicalText(tom_tat.vao_vien_text),
+                nam_vien: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : null,
+                khoa: dinh_danh.khoa_loai,
+              }
+        }
+      />
     </div>
   )
 }
@@ -445,20 +339,15 @@ export function OrderDetailView({
     const items: InfoItem[] = pairs
       .filter((pair) => pair.label)
       .map((pair) => ({ label: pair.label, value: pair.value }))
-    items.push(
-      ...patientFieldItems(detail),
-      { label: 'Dị ứng', value: parseLeadingSymbolLabel(detail.dinh_danh.di_ung_text).text },
-      {
-        label: 'Kết quả thẩm định',
-        value:
-          allAttention.length > 0
-            ? `${allAttention.length} mục cần chú ý`
-            : 'Không có mục cần chú ý trong các luật đã chạy',
-      },
-      { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
-    )
+    items.push({
+      label: 'Kết quả thẩm định',
+      value:
+        allAttention.length > 0
+          ? `${allAttention.length} mục cần chú ý`
+          : 'Không có mục cần chú ý trong các luật đã chạy',
+    })
     return items
-  }, [detail, allAttention.length])
+  }, [detail.chi_tiet.y_lenh.thong_tin_text, allAttention.length])
 
   const handleOpenFinding = useCallback((findingId: string) => {
     setSelectedDrug(null)
@@ -498,9 +387,10 @@ export function OrderDetailView({
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="detail-sticky-host flex flex-col">
-      {/* 1. Thanh 7 thẻ dính ở mép trên cùng khi cuộn */}
+      {/* 1. Khung thông tin người bệnh cố định + thanh 7 thẻ tài liệu bên dưới */}
       <div className="detail-sticky-bar">
         <div className="detail-sticky-inner">
+          <PatientPinnedHeader detail={detail} onOpenEvidence={onOpenEvidence} />
           <div className="mx-auto w-full max-w-[1200px] px-5">
             <TabsList
               aria-label="Các thẻ hồ sơ bệnh án và thẩm định y lệnh"
@@ -582,7 +472,7 @@ export function OrderDetailView({
           </p>
         ) : null}
         <TabsContent value="ho_so_benh_an">
-          <MedicalRecordTabContent detail={detail} onOpenEvidence={onOpenEvidence} />
+          <MedicalRecordTabContent detail={detail} />
         </TabsContent>
 
         <TabsContent value="y_lenh" className="flex flex-col gap-7">
@@ -629,10 +519,6 @@ export function OrderDetailView({
         </TabsContent>
 
         <TabsContent value="phieu_dieu_tri" className="flex flex-col gap-7">
-          <section aria-label="Thông tin người bệnh" className="flex flex-col gap-2.5">
-            <SectionHeading title="Thông tin điều trị" />
-            <InfoRows items={patientInfoItems(detail)} />
-          </section>
           <section aria-label="Phiếu điều trị" className="flex flex-col gap-2.5">
             <SectionHeading title="Phiếu điều trị" aside={`${treatmentSheetCount} phiếu`} />
             {detail.phieu_dieu_tri?.length ? <TreatmentSheets detail={detail} onFollowOrder={clearSelectedDrug} /> : treatmentSheetNotes.length > 0 ? (

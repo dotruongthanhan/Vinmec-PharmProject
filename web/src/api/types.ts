@@ -35,12 +35,20 @@ export interface CheDo {
   thong_bao: string[]
 }
 
+export type TrangThaiNbMa = 'chua_duyet' | 'dang_cho' | 'da_huy' | 'da_xong'
+
 export interface DongHangDoi {
   ho_ten?: string | null
   ngay_sinh?: string | null
   chan_doan_chinh?: string | null
   vao_vien?: string | null
   so_y_lenh?: number | null
+  nguoi_benh_id?: string | null
+  thoi_diem_ke_xa_nhat?: string | null
+  thoi_diem_ke_gan_nhat?: string | null
+  so_don_cho?: number | null
+  chan_doan?: ChanDoanTomTat[] | null
+  trang_thai_nb?: TrangThaiNbMa | null
   ca_id: string
   ma_y_lenh?: string | null
   thoi_diem_ke?: string | null
@@ -73,6 +81,8 @@ export interface FullIdentity {
   nguoi_bao_tin?: { ho_ten?: string | null; quan_he?: string | null; dien_thoai?: string | null } | null
   bo_me?: { bo?: { ho_ten?: string | null; nghe_nghiep?: string | null } | null; me?: { ho_ten?: string | null; nghe_nghiep?: string | null } | null } | null
   nhom_mau?: string | null
+  cccd?: string | null
+  dien_thoai?: string | null
 }
 
 export interface PatientManagement {

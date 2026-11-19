@@ -202,7 +202,7 @@ export function AppShell({
 
         <main
           aria-label="Vùng làm việc chính"
-          className="flex flex-1 min-h-0 min-w-0 flex-col overflow-y-auto overscroll-contain scroll-pt-14"
+          className="flex flex-1 min-h-0 min-w-0 flex-col overflow-y-auto overscroll-contain scroll-pt-48"
         >
           <div className="flex-1">{children}</div>
 

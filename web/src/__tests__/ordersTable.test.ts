@@ -15,7 +15,7 @@ function renderRow(row: DongHangDoi, overrides: Partial<OrdersTableProps> = {}, 
       TooltipProvider,
       null,
       createElement(table, {
-        filterTitle: 'Tất cả y lệnh',
+        filterTitle: 'Tất cả người bệnh',
         orders: [row],
         totalCount: 1,
         loiNap: [],
@@ -43,11 +43,17 @@ function elements(node: ReactNode): ReactElement<TreeProps>[] {
     ? [item, ...elements(item.props.children)] : [])
 }
 
-describe('bảng danh sách y lệnh 8 cột (không có cột Thuốc, cảnh báo AI dạng icon)', () => {
-  it('giữ 8 ô dữ liệu và để trống trường tuỳ chọn null hoặc vắng, không thay bằng mã ca', () => {
+describe('bảng danh sách người bệnh chờ duyệt 10 cột', () => {
+  it('giữ 10 ô dữ liệu và hiển thị dấu gạch/Chưa ghi nhận khi trường tuỳ chọn null hoặc vắng', () => {
     const {
       ma_y_lenh: _code,
       thoi_diem_ke: _time,
+      thoi_diem_ke_xa_nhat: _oldest,
+      thoi_diem_ke_gan_nhat: _latest,
+      nguoi_benh_id: _pid,
+      ho_ten: _name,
+      chan_doan: _diags,
+      chan_doan_chinh: _mainDiag,
       nguoi_benh_tom_tat: _patient,
       thuoc: _drugs,
       ...legacy
@@ -55,29 +61,63 @@ describe('bảng danh sách y lệnh 8 cột (không có cột Thuốc, cảnh b
 
     for (const row of [
       legacy,
-      { ...legacy, ma_y_lenh: null, thoi_diem_ke: null, nguoi_benh_tom_tat: null, thuoc: null },
+      {
+        ...legacy,
+        ma_y_lenh: null,
+        thoi_diem_ke: null,
+        thoi_diem_ke_xa_nhat: null,
+        thoi_diem_ke_gan_nhat: null,
+        nguoi_benh_id: null,
+        ho_ten: null,
+        chan_doan: null,
+        chan_doan_chinh: null,
+        nguoi_benh_tom_tat: null,
+        thuoc: null,
+      },
     ]) {
       const html = renderRow(row)
       const body = /<tbody[^>]*>([\s\S]*?)<\/tbody>/.exec(html)?.[1] ?? ''
       const cells = [...body.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) =>
         m[1].replace(/<[^>]*>/g, ''),
       )
-      expect(cells).toHaveLength(8)
-      // Cột 2 (Thời điểm kê), 3 (Mã y lệnh), 4 (Mã BN), 5 (Người bệnh) để trống khi vắng dữ liệu
-      expect([cells[1], cells[2], cells[3], cells[4]]).toEqual(['', '', '', ''])
+      expect(cells).toHaveLength(10)
+      expect([cells[1], cells[2], cells[3], cells[4], cells[6]]).toEqual([
+        '—',
+        '—',
+        '—',
+        'Chưa ghi nhận',
+        'Chưa ghi nhận',
+      ])
     }
   })
 
-  it('hiện ưu tiên, thời điểm kê, mã y lệnh, mã BN, người bệnh, khoa, trạng thái và icon cảnh báo AI kèm chú giải', () => {
+  it('hiện đủ 10 cột: ưu tiên, kê xa nhất, kê gần nhất, mã BN, họ tên, khoa, chẩn đoán (kèm ICD-10 ngay bên phải khoa), số đơn chờ, trạng thái NB và icon AI', () => {
     const html = renderRow(MOCK_CASES.cases[0])
+    const headers = [...html.matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)].map((m) =>
+      m[1].replace(/<[^>]*>/g, '').trim(),
+    )
+    expect(headers).toEqual([
+      'Ưu tiên',
+      'Kê xa nhất',
+      'Kê gần nhất',
+      'Mã BN',
+      'Họ tên',
+      'Khoa',
+      'Chẩn đoán',
+      'Đơn chờ',
+      'Trạng thái NB',
+      'AI',
+    ])
     expect(html).toContain('Cao')
-    expect(html).toContain('YL-DEMO-02')
-    expect(html).toContain('NB-DEMO-02')
-    expect(html).toContain('Nữ, 75 tuổi')
-    expect(html).toContain('Hô hấp')
-    expect(html).toContain('Chưa duyệt')
     expect(html).toContain('05:50')
-    expect(html).toContain('10/11')
+    expect(html).toContain('06:15')
+    expect(html).toContain('NB-DEMO-02')
+    expect(html).toContain('NGUYỄN THỊ 62')
+    expect(html).toContain('Hô hấp')
+    expect(html).toContain('Viêm phổi (J18.9); Tổn thương thận cấp (N17.9)')
+    expect(html).toContain('>2<')
+    expect(html).toContain('Chưa duyệt')
+    expect(html).not.toContain('Nữ, 75 tuổi')
     expect(html).not.toContain('Meropenem 1 g')
     expect(html).toContain(`1 nghiêm trọng — ${MOCK_CASES.cases[0].mo_ta}`)
   })
