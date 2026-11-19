@@ -17,14 +17,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { VinmecLogo } from '@/components/VinmecLogo'
 import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
-import type {
-  OrderGroupCounts,
-  OrderSelectionFilter,
-} from '@/lib/orders'
-
 export interface SidebarNavProps {
-  counts: OrderGroupCounts
-  activeFilter: OrderSelectionFilter
   collapsed: boolean
   inDrawer?: boolean
   activeSection: 'orders' | 'records'
@@ -32,7 +25,6 @@ export interface SidebarNavProps {
   userEmail: string | null
   vaiTro?: AuthRole | null
   isDemoMode: boolean
-  onSelectFilter: (filter: OrderSelectionFilter) => void
   onToggleCollapse: () => void
   onOpenSettings: () => void
   onSignIn: () => void

@@ -71,6 +71,9 @@ def report(batches: list[Batch]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     args = parser().parse_args(argv)
     reset = args.command == "reset" or bool(getattr(args, "reset", False))
     if reset and not args.yes:

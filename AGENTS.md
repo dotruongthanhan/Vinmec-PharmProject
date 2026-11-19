@@ -16,6 +16,10 @@ Hệ thống gom bối cảnh bệnh án, tính chỉ số lâm sàng, rà y l�
 6. **Y khoa:** không tự bịa công thức, ngưỡng, liều. Chỉ dùng công thức và hằng số brief đưa. Thiếu thông tin thì dừng và ghi vào báo cáo, không đoán.
 7. **Thiếu dữ liệu đầu vào:** trả kết quả "thiếu" kèm tên trường thiếu. Không gán giá trị mặc định cho số liệu lâm sàng.
 8. **Không làm thừa:** không thêm tính năng, thư viện, lớp trừu tượng brief không yêu cầu.
+9. **Tài liệu dữ liệu:**
+   - Mỗi bộ dữ liệu có một tệp mô tả trong `docs/du-lieu/` (mục lục: `docs/du-lieu/README.md`).
+   - Cần biết dữ liệu có trường gì thì **đọc tệp mô tả trước**, không mở dữ liệu dò lại.
+   - Task nào tải, cào hay đổi cách xử lý dữ liệu thì **phải cập nhật tệp mô tả tương ứng**: trường, số dòng, lệnh, ngày. Được phép sửa tệp đó dù brief không nhắc, và ghi vào báo cáo.
 
 ## Quy ước code
 

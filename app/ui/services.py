@@ -85,7 +85,12 @@ class PipelineReviewService:
 
     def review(self, ca: CaBenh) -> KetQuaThamDinh:
         """Chạy pipeline thẩm định trên một ca bệnh."""
-        return run_case(ca, self._get_renal_rules())
+        from app.container import get_rule_context
+
+        ctx = get_rule_context()
+        return run_case(
+            ca, self._get_renal_rules(), resolver=ctx.resolver, interactions=ctx.interactions
+        )
 
 
 class NotReadyAskService:

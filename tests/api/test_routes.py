@@ -104,8 +104,15 @@ def test_demo02_detail(client: TestClient) -> None:
     assert body["tom_tat"]["bat_thuong"][0]["huong"] == "▲"
     assert "150" in body["tom_tat"]["bat_thuong"][0]["so_voi_truoc"]
     assert body["tom_tat"]["nam_vien_text"].startswith("3 ngày")
-    assert "4. Tương tác thuốc" in body["nhan_dinh"]["yeu_to_chua_kiem"]
-    assert body["nhan_dinh"]["so_luat_da_chay"] == 5
+    assert "4. Tương tác thuốc" not in body["nhan_dinh"]["yeu_to_chua_kiem"]
+    assert body["nhan_dinh"]["so_luat_da_chay"] == 6
+    matrix = body["ma_tran_tuong_tac"]
+    assert matrix is not None and len(matrix["thuoc"]) == 1 and matrix["cap"] == []
+    interaction = next(row for row in body["nhan_dinh"]["dat"] if row["yeu_to"].startswith("4."))
+    assert interaction["ket_luan_ma"] == "dat"
+    assert interaction["nhan_xet"] == (
+        "Y lệnh chỉ có một thuốc đang hiệu lực, không có cặp để đối chiếu tương tác."
+    )
 
 
 def test_missing_data_and_microbiology(client: TestClient) -> None:

@@ -1,0 +1,11 @@
+TRẠNG THÁI: **CHƯA XONG**
+
+FILE ĐÃ TẠO / SỬA: bảng DDInter, kho đọc, luật tương tác, registry/container, API, component web và test. Chi tiết tại [plan/reports/T55.md](/D:/create/Vinmec-PharmProject/plan/reports/T55.md).
+
+LỆNH ĐÃ CHẠY VÀ KẾT QUẢ: Dựng 291.876 cặp; kiểm 66 ca. Test mới: 22 qua; web: 291 qua. Ruff, TypeScript và build qua. Pytest toàn kho: **1.223 qua, 10 trượt**.
+
+ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO: Chưa nối backend/giao diện thực tế vì các điểm gọi nằm ngoài phạm vi file được sửa. Báo cáo liệt kê đầy đủ 10 test cũ cần cập nhật.
+
+VIỆC CHƯA LÀM / CÂU HỎI: Nối đường chạy thực tế, cập nhật test và đo lại GET sau khi nối. Đã làm ngoại tuyến, giữ nguyên dictionary.
+
+Cơ chế xét duyệt tự động chặn việc dọn `.pytest_t55*` với lý do `blocked by policy`; các tệp tạm được giữ lại và ghi trong báo cáo.

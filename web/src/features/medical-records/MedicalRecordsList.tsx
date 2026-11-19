@@ -37,9 +37,10 @@ export function MedicalRecordsList({
             <caption className="sr-only">Danh sách hồ sơ bệnh án</caption>
             <thead className="sticky top-0 z-10 bg-surface-muted text-2xs font-medium uppercase tracking-wide text-fg-subtle">
               <tr>
-                {['Mã BN', 'Người bệnh (giới, tuổi)', 'Ngày sinh', 'Khoa', 'Chẩn đoán chính', 'Thời điểm vào viện', 'Số y lệnh'].map((label) => (
-                  <th key={label} scope="col" className={`break-words px-2 py-3 ${label === 'Số y lệnh' ? 'text-right' : ''}`}>{label}</th>
+                {['Mã BN', 'Người bệnh (giới, tuổi)', 'Ngày sinh', 'Khoa', 'Chẩn đoán chính', 'Thời điểm vào viện'].map((label) => (
+                  <th key={label} scope="col" className="break-words px-2 py-3">{label}</th>
                 ))}
+                <th scope="col" className="break-words px-2 py-3 text-right">Y lệnh (lần cuối)</th>
               </tr>
             </thead>
             <tbody>

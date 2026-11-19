@@ -23,6 +23,7 @@ from app.orchestration.ask import (
 from app.pipeline import run_case
 from app.providers.fakes import FakeLLM
 from app.retrieval.query_builder import QueryBuilder
+from tests.deid_support import temp_id
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT_PATH = ROOT / "config/prompts/hoi_them.v1.md"
@@ -120,7 +121,7 @@ def test_ask_valid_with_document_and_case_citations_and_calc() -> None:
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     },
                     {
@@ -292,7 +293,7 @@ def test_ask_retries_format_once_and_handles_errors_timeout_and_missing_llm() ->
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -338,7 +339,7 @@ def test_ask_scrubs_question_and_six_history_messages_and_handles_deid_error() -
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -474,7 +475,7 @@ def test_ask_prioritizes_finding_caps_chunks_and_falls_back_on_retriever_error()
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -573,7 +574,7 @@ def test_ask_retries_unknown_deid_token_id_without_deid_error() -> None:
         "trich_dan": [{"so": 1, "loai": "du_lieu_ca", "ma": "[TEN_1]"}],
     }
     repaired = deepcopy(reply)
-    repaired["trich_dan"][0]["ma"] = "XN-DEMO02-01"
+    repaired["trich_dan"][0]["ma"] = temp_id("DEMO-02", "XN-DEMO02-01")
     llm = FakeLLM([reply, repaired])
     result = _make_asker(llm).ask(case, "Creatinin của ca này?")
     assert result.trang_thai == "ok"

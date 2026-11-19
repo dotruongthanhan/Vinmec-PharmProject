@@ -10,8 +10,8 @@ import {
   TriangleAlert,
   X,
 } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
-import type { KeyboardEvent } from 'react'
+import { useMemo, useRef } from 'react'
+import type { Dispatch, KeyboardEvent, SetStateAction } from 'react'
 import type { DongHangDoi, LoiNapCa } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -22,7 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { ErrorState } from '@/features/states/StateViews'
 import { cn } from '@/lib/cn'
-import { formatReadableDateTime } from '@/lib/displayFormat'
+import { formatReadableDateTime, VIETNAM_TIME_ZONE } from '@/lib/displayFormat'
 import {
   ORDER_AI_WARNING_LABELS,
   ORDER_PRIORITY_LABELS,
@@ -33,6 +33,7 @@ import {
   getOrderPatientCode,
   getOrderPriorityLevel,
   getOrderWorkflowStatus,
+  selectedFilterValues,
   stepOrderSelection,
 } from '@/lib/orders'
 import type {
@@ -55,13 +56,24 @@ export interface OrdersTableProps {
   searchQuery: string
   sortField: OrderSortField
   sortDirection: OrderSortDirection
+  columnFilters: OrderColumnFilters
+  onColumnFiltersChange: Dispatch<SetStateAction<OrderColumnFilters>>
   departments?: readonly string[]
+  updatedAt?: Date | null
   onToggleSort: (field: OrderSortField) => void
   onSelectSort?: (field: OrderSortField, direction: OrderSortDirection) => void
   onOpenOrder: (caId: string) => void
   onResetFilters: () => void
   onRetry: () => void
+  onRefresh: () => void
 }
+
+const UPDATE_TIME = new Intl.DateTimeFormat('vi-VN', {
+  timeZone: VIETNAM_TIME_ZONE, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+})
+const PRIORITY_OPTIONS = Object.keys(ORDER_PRIORITY_LABELS) as OrderPriorityLevel[]
+const STATUS_OPTIONS = Object.keys(ORDER_STATUS_LABELS) as OrderWorkflowStatus[]
+const WARNING_OPTIONS = Object.keys(ORDER_AI_WARNING_LABELS) as OrderAiWarningFilter[]
 
 const PRIORITY_DOT_CLASS: Record<OrderPriorityLevel, string> = {
   cao: 'bg-danger-solid',
@@ -177,28 +189,94 @@ function SortMenuItems({
       <PopoverClose asChild>
         <button
           type="button"
+          aria-pressed={isFieldActive && sortDirection === 'asc'}
           onClick={() => onApplySort(field, 'asc')}
           className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
         >
           <span>{ascLabel}</span>
           {isFieldActive && sortDirection === 'asc' ? (
-            <Check className="size-3.5 text-primary" />
+            <Check className="size-3.5 text-primary" aria-hidden="true" />
           ) : null}
         </button>
       </PopoverClose>
       <PopoverClose asChild>
         <button
           type="button"
+          aria-pressed={isFieldActive && sortDirection === 'desc'}
           onClick={() => onApplySort(field, 'desc')}
           className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
         >
           <span>{descLabel}</span>
           {isFieldActive && sortDirection === 'desc' ? (
-            <Check className="size-3.5 text-primary" />
+            <Check className="size-3.5 text-primary" aria-hidden="true" />
           ) : null}
         </button>
       </PopoverClose>
     </>
+  )
+}
+
+function FilterCheckbox({ checked, children, onCheck }: {
+  checked: boolean; children: string; onCheck: (checked: boolean) => void
+}) {
+  return (
+    <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-fg hover:bg-surface-hover">
+      <input type="checkbox" checked={checked}
+        className="size-3.5 shrink-0 cursor-pointer accent-primary"
+        onChange={(event) => onCheck(event.currentTarget.checked)} />
+      <span>{children}</span>
+    </label>
+  )
+}
+
+function ColumnFilterMenu<T extends string>({
+  label,
+  options,
+  selected,
+  onChange,
+  optionLabel = (value: T) => value,
+  align = 'start',
+  ...sortProps
+}: Parameters<typeof SortMenuItems>[0] & {
+  label: string
+  options: readonly T[]
+  selected: readonly T[]
+  onChange: (values: T[]) => void
+  optionLabel?: (value: T) => string
+  align?: 'start' | 'end'
+}) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button type="button" className={cn(
+          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
+          (selected.length > 0 || sortProps.sortField === sortProps.field || sortProps.sortField === sortProps.aliasField) && 'text-fg',
+        )}>
+          <span>{label}</span>
+          {selected.length > 0 ? (
+            <span className="rounded-full bg-primary-soft px-1.5 text-primary tabular-nums">
+              {selected.length}<span className="sr-only"> lựa chọn đang lọc</span>
+            </span>
+          ) : null}
+          <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent align={align} aria-label={label} className="w-56 p-1.5 text-xs">
+        <SortMenuItems {...sortProps} />
+        <fieldset className="mt-1 min-w-0 border-t border-line">
+          <legend className="px-2 py-1 font-semibold text-fg-subtle">Lọc</legend>
+          <div className="max-h-52 overflow-y-auto">
+            <FilterCheckbox checked={selected.length === 0} onCheck={() => onChange([])}>Tất cả</FilterCheckbox>
+            {options.map((value) => (
+              <FilterCheckbox key={value} checked={selected.includes(value)}
+                onCheck={(checked) => onChange(checked ? [...selected, value] : selected.filter((entry) => entry !== value))}>
+                {optionLabel(value)}
+              </FilterCheckbox>
+            ))}
+          </div>
+        </fieldset>
+      </PopoverContent>
+    </Popover>
   )
 }
 
@@ -213,23 +291,23 @@ export function OrdersTable({
   searchQuery,
   sortField,
   sortDirection,
+  columnFilters,
+  onColumnFiltersChange: setColumnFilters,
   departments,
+  updatedAt,
   onToggleSort,
   onSelectSort,
   onOpenOrder,
   onResetFilters,
   onRetry,
+  onRefresh,
 }: OrdersTableProps) {
   const rowRefs = useRef<Record<string, HTMLTableRowElement | null>>({})
   const dateInputRef = useRef<HTMLInputElement | null>(null)
-  const [columnFilters, setColumnFilters] = useState<OrderColumnFilters>({
-    priority: 'all',
-    khoa: 'all',
-    status: 'all',
-    aiWarning: 'all',
-    timeText: '',
-    dateExact: '',
-  })
+  const priorities = selectedFilterValues(columnFilters.priority)
+  const selectedDepartments = selectedFilterValues(columnFilters.khoa)
+  const statuses = selectedFilterValues(columnFilters.status)
+  const warnings = selectedFilterValues(columnFilters.aiWarning)
 
   const handleApplySort = (field: OrderSortField, direction: OrderSortDirection) => {
     if (onSelectSort) {
@@ -240,17 +318,10 @@ export function OrdersTable({
   }
 
   const availableDepartments = useMemo(() => {
-    if (departments && departments.length > 0) {
-      return [...departments]
-    }
-    const set = new Set<string>()
-    for (const item of orders) {
-      if (item.khoa) {
-        set.add(item.khoa)
-      }
-    }
+    const set = new Set(departments ?? orders.map((item) => item.khoa).filter(Boolean))
+    for (const khoa of selectedFilterValues(columnFilters.khoa)) set.add(khoa)
     return Array.from(set).sort((a, b) => a.localeCompare(b, 'vi'))
-  }, [departments, orders])
+  }, [departments, orders, columnFilters.khoa])
 
   const displayedOrders = useMemo(
     () => applyOrderColumnFilters(orders, columnFilters),
@@ -258,23 +329,13 @@ export function OrdersTable({
   )
 
   const hasActiveColumnFilter = Boolean(
-    (columnFilters.priority && columnFilters.priority !== 'all') ||
-      (columnFilters.khoa && columnFilters.khoa !== 'all') ||
-      (columnFilters.status && columnFilters.status !== 'all') ||
-      (columnFilters.aiWarning && columnFilters.aiWarning !== 'all') ||
+    priorities.length || selectedDepartments.length || statuses.length || warnings.length ||
       columnFilters.timeText?.trim() ||
       columnFilters.dateExact?.trim(),
   )
 
-  const handleClearAllFilters = () => {
-    setColumnFilters({
-      priority: 'all',
-      khoa: 'all',
-      status: 'all',
-      aiWarning: 'all',
-      timeText: '',
-      dateExact: '',
-    })
+  const clearAllFilters = () => {
+    setColumnFilters({})
     onResetFilters()
   }
 
@@ -331,8 +392,8 @@ export function OrdersTable({
 
         {(searchQuery.trim() || hasActiveColumnFilter || displayedOrders.length !== totalCount) &&
         !loading ? (
-          <Button variant="ghost" size="sm" onClick={handleClearAllFilters}>
-            Xoá bộ lọc ({totalCount})
+          <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+            Xóa tất cả bộ lọc
           </Button>
         ) : null}
       </div>
@@ -341,52 +402,52 @@ export function OrdersTable({
       {hasActiveColumnFilter ? (
         <div className="flex flex-wrap items-center gap-1.5 text-xs">
           <span className="text-fg-subtle">Đang lọc:</span>
-          {columnFilters.priority && columnFilters.priority !== 'all' ? (
+          {priorities.length > 0 ? (
             <Badge tone="neutral" variant="soft" className="gap-1">
-              <span>Ưu tiên: {ORDER_PRIORITY_LABELS[columnFilters.priority]}</span>
+              <span>Ưu tiên: {priorities.map((level) => ORDER_PRIORITY_LABELS[level]).join(', ')}</span>
               <button
                 type="button"
                 aria-label="Bỏ lọc ưu tiên"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, priority: 'all' }))}
+                onClick={() => setColumnFilters((prev) => ({ ...prev, priority: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
               </button>
             </Badge>
           ) : null}
-          {columnFilters.khoa && columnFilters.khoa !== 'all' ? (
+          {selectedDepartments.length > 0 ? (
             <Badge tone="neutral" variant="soft" className="gap-1">
-              <span>Khoa: {columnFilters.khoa}</span>
+              <span>Khoa: {selectedDepartments.join(', ')}</span>
               <button
                 type="button"
                 aria-label="Bỏ lọc khoa"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, khoa: 'all' }))}
+                onClick={() => setColumnFilters((prev) => ({ ...prev, khoa: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
               </button>
             </Badge>
           ) : null}
-          {columnFilters.status && columnFilters.status !== 'all' ? (
+          {statuses.length > 0 ? (
             <Badge tone="neutral" variant="soft" className="gap-1">
-              <span>Trạng thái: {ORDER_STATUS_LABELS[columnFilters.status]}</span>
+              <span>Trạng thái: {statuses.map((status) => ORDER_STATUS_LABELS[status]).join(', ')}</span>
               <button
                 type="button"
                 aria-label="Bỏ lọc trạng thái"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, status: 'all' }))}
+                onClick={() => setColumnFilters((prev) => ({ ...prev, status: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
               </button>
             </Badge>
           ) : null}
-          {columnFilters.aiWarning && columnFilters.aiWarning !== 'all' ? (
+          {warnings.length > 0 ? (
             <Badge tone="neutral" variant="soft" className="gap-1">
-              <span>Cảnh báo: {ORDER_AI_WARNING_LABELS[columnFilters.aiWarning]}</span>
+              <span>Cảnh báo: {warnings.map((warning) => ORDER_AI_WARNING_LABELS[warning]).join(', ')}</span>
               <button
                 type="button"
                 aria-label="Bỏ lọc cảnh báo AI"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, aiWarning: 'all' }))}
+                onClick={() => setColumnFilters((prev) => ({ ...prev, aiWarning: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -493,55 +554,14 @@ export function OrdersTable({
               <tr className="h-9 border-b border-line text-left text-xs font-medium text-fg-subtle">
                 {/* 1. Ưu tiên */}
                 <th scope="col" aria-sort={getAriaSort('uu_tien', 'ket_qua')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          (columnFilters.priority !== 'all' ||
-                            sortField === 'uu_tien' ||
-                            sortField === 'ket_qua') &&
-                            'text-fg',
-                        )}
-                      >
-                        <span>Ưu tiên</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-48 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="uu_tien"
-                        aliasField="ket_qua"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        descLabel="Cao → Thấp"
-                        ascLabel="Thấp → Cao"
-                        onApplySort={handleApplySort}
-                      />
-                      <hr className="my-1 border-line" />
-                      <div className="px-2 py-1 font-semibold text-fg-subtle">Lọc mức ưu tiên</div>
-                      {(['all', 'cao', 'trung_binh', 'thap'] as const).map((level) => {
-                        const selected = (columnFilters.priority ?? 'all') === level
-                        return (
-                          <PopoverClose key={level} asChild>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setColumnFilters((prev) => ({ ...prev, priority: level }))
-                              }
-                              className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
-                            >
-                              <span>
-                                {level === 'all' ? 'Tất cả mức độ' : ORDER_PRIORITY_LABELS[level]}
-                              </span>
-                              {selected ? <Check className="size-3.5 text-primary" /> : null}
-                            </button>
-                          </PopoverClose>
-                        )
-                      })}
-                    </PopoverContent>
-                  </Popover>
+                  <ColumnFilterMenu
+                    label="Ưu tiên" field="uu_tien" aliasField="ket_qua"
+                    sortField={sortField} sortDirection={sortDirection}
+                    ascLabel="Thấp → Cao" descLabel="Cao → Thấp" onApplySort={handleApplySort}
+                    options={PRIORITY_OPTIONS} selected={priorities}
+                    optionLabel={(value) => ORDER_PRIORITY_LABELS[value]}
+                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, priority: values }))}
+                  />
                 </th>
 
                 {/* 2. Thời điểm kê */}
@@ -740,174 +760,37 @@ export function OrdersTable({
 
                 {/* 6. Khoa */}
                 <th scope="col" aria-sort={getAriaSort('khoa')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          (columnFilters.khoa !== 'all' || sortField === 'khoa') && 'text-fg',
-                        )}
-                      >
-                        <span>Khoa</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-56 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="khoa"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        ascLabel="Khoa A → Z"
-                        descLabel="Khoa Z → A"
-                        onApplySort={handleApplySort}
-                      />
-                      <hr className="my-1 border-line" />
-                      <div className="px-2 py-1 font-semibold text-fg-subtle">Chọn khoa</div>
-                      <PopoverClose asChild>
-                        <button
-                          type="button"
-                          onClick={() => setColumnFilters((prev) => ({ ...prev, khoa: 'all' }))}
-                          className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
-                        >
-                          <span>Tất cả khoa</span>
-                          {(columnFilters.khoa ?? 'all') === 'all' ? (
-                            <Check className="size-3.5 text-primary" />
-                          ) : null}
-                        </button>
-                      </PopoverClose>
-                      {availableDepartments.map((dept) => {
-                        const selected = columnFilters.khoa === dept
-                        return (
-                          <PopoverClose key={dept} asChild>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setColumnFilters((prev) => ({ ...prev, khoa: dept }))
-                              }
-                              className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
-                            >
-                              <span className="truncate">{dept}</span>
-                              {selected ? <Check className="size-3.5 shrink-0 text-primary" /> : null}
-                            </button>
-                          </PopoverClose>
-                        )
-                      })}
-                    </PopoverContent>
-                  </Popover>
+                  <ColumnFilterMenu
+                    label="Khoa" field="khoa"
+                    sortField={sortField} sortDirection={sortDirection}
+                    ascLabel="Khoa A → Z" descLabel="Khoa Z → A" onApplySort={handleApplySort}
+                    options={availableDepartments} selected={selectedDepartments}
+                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, khoa: values }))}
+                  />
                 </th>
 
                 {/* 7. Trạng thái */}
                 <th scope="col" aria-sort={getAriaSort('trang_thai')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          (columnFilters.status !== 'all' || sortField === 'trang_thai') &&
-                            'text-fg',
-                        )}
-                      >
-                        <span>Trạng thái</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="end" className="w-56 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="trang_thai"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        ascLabel="Chưa duyệt → Đã duyệt"
-                        descLabel="Đã duyệt → Chưa duyệt"
-                        onApplySort={handleApplySort}
-                      />
-                      <hr className="my-1 border-line" />
-                      <div className="px-2 py-1 font-semibold text-fg-subtle">Lọc trạng thái</div>
-                      {(
-                        ['all', 'chua_duyet', 'da_duyet', 'dang_cho', 'da_huy'] as const
-                      ).map((st) => {
-                        const selected = (columnFilters.status ?? 'all') === st
-                        return (
-                          <PopoverClose key={st} asChild>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setColumnFilters((prev) => ({ ...prev, status: st }))
-                              }
-                              className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
-                            >
-                              <span>
-                                {st === 'all' ? 'Tất cả trạng thái' : ORDER_STATUS_LABELS[st]}
-                              </span>
-                              {selected ? <Check className="size-3.5 text-primary" /> : null}
-                            </button>
-                          </PopoverClose>
-                        )
-                      })}
-                    </PopoverContent>
-                  </Popover>
+                  <ColumnFilterMenu
+                    label="Trạng thái" field="trang_thai" align="end"
+                    sortField={sortField} sortDirection={sortDirection}
+                    ascLabel="Chưa duyệt → Đã duyệt" descLabel="Đã duyệt → Chưa duyệt" onApplySort={handleApplySort}
+                    options={STATUS_OPTIONS} selected={statuses}
+                    optionLabel={(value) => ORDER_STATUS_LABELS[value]}
+                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, status: values }))}
+                  />
                 </th>
 
                 {/* 8. Cảnh báo AI */}
                 <th scope="col" aria-sort={getAriaSort('ket_qua')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center justify-center gap-1 rounded-sm px-1 text-center font-medium transition-colors hover:text-fg',
-                          (columnFilters.aiWarning !== 'all' || sortField === 'ket_qua') &&
-                            'text-fg',
-                        )}
-                      >
-                        <span>Cảnh báo AI</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="end" className="w-52 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="ket_qua"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        descLabel="Nghiêm trọng trước"
-                        ascLabel="Đạt trước"
-                        onApplySort={handleApplySort}
-                      />
-                      <hr className="my-1 border-line" />
-                      <div className="px-2 py-1 font-semibold text-fg-subtle">Lọc cảnh báo AI</div>
-                      {(
-                        [
-                          'all',
-                          'nghiem_trong',
-                          'can_luu_y',
-                          'thieu_du_lieu',
-                          'ngoai_hdsd',
-                          'dat',
-                        ] as const
-                      ).map((warn) => {
-                        const selected = (columnFilters.aiWarning ?? 'all') === warn
-                        return (
-                          <PopoverClose key={warn} asChild>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setColumnFilters((prev) => ({ ...prev, aiWarning: warn }))
-                              }
-                              className="flex w-full cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-left text-fg hover:bg-surface-hover"
-                            >
-                              <span>
-                                {warn === 'all'
-                                  ? 'Tất cả cảnh báo'
-                                  : ORDER_AI_WARNING_LABELS[warn]}
-                              </span>
-                              {selected ? <Check className="size-3.5 text-primary" /> : null}
-                            </button>
-                          </PopoverClose>
-                        )
-                      })}
-                    </PopoverContent>
-                  </Popover>
+                  <ColumnFilterMenu
+                    label="Cảnh báo AI" field="ket_qua" aliasField="uu_tien" align="end"
+                    sortField={sortField} sortDirection={sortDirection}
+                    ascLabel="Đạt trước" descLabel="Nghiêm trọng trước" onApplySort={handleApplySort}
+                    options={WARNING_OPTIONS} selected={warnings}
+                    optionLabel={(value) => ORDER_AI_WARNING_LABELS[value]}
+                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, aiWarning: values }))}
+                  />
                 </th>
               </tr>
             </thead>
@@ -920,9 +803,6 @@ export function OrdersTable({
                       <p className="text-sm font-medium text-fg">
                         Không có y lệnh phù hợp bộ lọc hiện tại
                       </p>
-                      <Button variant="secondary" size="sm" onClick={handleClearAllFilters}>
-                        Xoá bộ lọc
-                      </Button>
                     </div>
                   </td>
                 </tr>
@@ -1028,6 +908,13 @@ export function OrdersTable({
           </table>
         </div>
       )}
+      {updatedAt ? (
+        <div className="flex justify-end">
+          <Button variant="ghost" size="sm" className="text-xs text-fg-subtle" onClick={onRefresh}>
+            Cập nhật lúc <time dateTime={updatedAt.toISOString()}>{UPDATE_TIME.format(updatedAt)}</time>
+          </Button>
+        </div>
+      ) : null}
     </div>
   )
 }

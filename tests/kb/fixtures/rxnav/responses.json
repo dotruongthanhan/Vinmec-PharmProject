@@ -1,0 +1,38 @@
+{
+  "sodium chloride": {"idGroup": {"rxnormId": ["1"]}},
+  "ceftriaxone": {"idGroup": {"rxnormId": ["2"]}},
+  "ceftriaxone sodium": {"idGroup": {"rxnormId": ["3"]}},
+  "insufficient pin": {"idGroup": {"rxnormId": ["4"]}},
+  "brand fixture": {"idGroup": {"rxnormId": ["5"]}},
+  "rxcui/3/related.json": {"relatedGroup": {"conceptGroup": [{
+    "tty": "IN", "conceptProperties": [{"rxcui": "2", "name": "ceftriaxone"}]
+  }]}},
+  "rxcui/4/related.json": {"relatedGroup": {"conceptGroup": [{"tty": "IN"}]}},
+  "rxclass/1": {"rxclassDrugInfoList": {"rxclassDrugInfo": [
+    {"minConcept": {"rxcui": "1", "name": "Sodium Chloride", "tty": "IN"},
+      "relaSource": "ATC", "rxclassMinConceptItem": {"classId": "B05XA03", "className": "Sodium chloride"}},
+    {"minConcept": {"rxcui": "1", "name": "Sodium Chloride", "tty": "IN"},
+      "relaSource": "ATC", "rxclassMinConceptItem": {"classId": "A12CA01", "className": "Sodium chloride"}},
+    {"minConcept": {"rxcui": "1", "name": "Sodium Chloride", "tty": "IN"},
+      "relaSource": "ATC", "rxclassMinConceptItem": {"classId": "A12CA01", "className": "Sodium chloride"}},
+    {"minConcept": {"rxcui": "1", "name": "Sodium Chloride", "tty": "IN"},
+      "relaSource": "OTHER", "rxclassMinConceptItem": {"classId": "A12CA02", "className": "Not ATC"}}
+  ]}},
+  "rxclass/2": {"rxclassDrugInfoList": {"rxclassDrugInfo": [
+    {"minConcept": {"rxcui": "2", "name": "ceftriaxone", "tty": "IN"},
+      "relaSource": "ATC", "rxclassMinConceptItem": {"classId": "J01DD04", "className": "Ceftriaxone"}}
+  ]}},
+  "rxclass/3": {"rxclassDrugInfoList": {"rxclassDrugInfo": [
+    {"minConcept": {"rxcui": "3", "name": "ceftriaxone sodium", "tty": "PIN"}}
+  ]}},
+  "rxclass/4": {"rxclassDrugInfoList": {"rxclassDrugInfo": [
+    {"minConcept": {"rxcui": "4", "name": "insufficient pin", "tty": "PIN"}}
+  ]}},
+  "rxclass/5": {"rxclassDrugInfoList": {"rxclassDrugInfo": [
+    {"minConcept": {"rxcui": "5", "name": "brand fixture", "tty": "BN"}}
+  ]}},
+  "approximateTerm.json": {"approximateGroup": {"candidate": [
+    {"rxcui": "1", "name": "Sodium Chloride", "score": "88"},
+    {"rxcui": "1", "name": "Sodium Chloride", "score": "86"}
+  ]}}
+}

@@ -1,0 +1,12 @@
+{"hoat_chat_id":"acetaminophen","ten_inn":"acetaminophen","ten_viet":"Paracetamol","ma_atc":["N02BE"],"loai":"thuoc","ngay_dung":"2026-11-18"}
+{"hoat_chat_id":"amoxicillin","ten_inn":"amoxicillin","ma_atc":["J01CA"],"loai":"thuoc"}
+{"hoat_chat_id":"clavulanic_acid","ten_inn":"clavulanic acid","ma_atc":[],"loai":"thuoc"}
+{"hoat_chat_id":"sodium_chloride","ten_inn":"sodium chloride","ma_atc":["B05XA"],"loai":"dich_truyen_dien_giai"}
+{"hoat_chat_id":"calcium_gluconate","ten_inn":"calcium gluconate","ma_atc":[],"loai":"vitamin_khoang"}
+{"hoat_chat_id":"valproic_acid","ten_inn":"valproic acid","ma_atc":["N03AG"],"loai":"thuoc"}
+{"hoat_chat_id":"sulfamethoxazole","ten_inn":"sulfamethoxazole","ma_atc":["J01EC"],"loai":"thuoc"}
+{"hoat_chat_id":"trimethoprim","ten_inn":"trimethoprim","ma_atc":[],"loai":"thuoc"}
+{"hoat_chat_id":"penicillin_g","ten_inn":"penicillin G","ma_atc":["J01CE"],"loai":"thuoc"}
+{"hoat_chat_id":"metoprolol","ten_inn":"metoprolol","ma_atc":[],"loai":"loai_moi_t52"}
+{"hoat_chat_id":"cotrimoxazole","ten_inn":"sulfamethoxazole + trimethoprim","ma_atc":[],"loai":"thuoc"}
+{"hoat_chat_id":"cao_mau","ten_inn":"cao mau","ma_atc":[],"loai":"duoc_lieu"}

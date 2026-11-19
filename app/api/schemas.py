@@ -5,6 +5,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.kb.interactions.models import MaTranTuongTac as MaTranTuongTac
+
 MucDoMa = Literal["nghiem_trong", "can_luu_y"] | None
 KetLuanMa = Literal["dat", "can_xem", "khong_du_du_lieu", "ngoai_hdsd"]
 DiUngMa = Literal["co_di_ung", "khong_di_ung_da_hoi", "chua_co_thong_tin"]
@@ -55,6 +57,7 @@ class DanhSachCa(ApiModel):
     cases: list[DongHangDoi]
     loi_nap: list[LoadError]
     che_do: CheDo
+    lam_moi_luc: datetime | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class FindingCounts(ApiModel):
@@ -363,8 +366,6 @@ class TreatmentSheet(ApiModel):
     che_do_an: str
     theo_doi: list[str]
     dan_do: str | None
-    nap_luc: datetime | None = None
-    nguon_tep: str | None = None
 
 
 class MedicalRecord(ApiModel):
@@ -374,6 +375,7 @@ class MedicalRecord(ApiModel):
 
 class ChiTietCa(ApiModel):
     ca_id: str
+    ma_tran_tuong_tac: MaTranTuongTac | None = None
     dinh_danh: DinhDanhCa
     tom_tat: TomTat
     chi_so: list[ChiSo]

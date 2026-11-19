@@ -1,17 +1,20 @@
-import { createElement } from 'react'
+import { Children, createElement, isValidElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { MOCK_CASES } from '../api/mockData'
 import type { DongHangDoi } from '../api/types'
 import { TooltipProvider } from '../components/ui/tooltip'
 import { OrdersTable } from '../features/orders/OrdersTable'
+import type { OrdersTableProps } from '../features/orders/OrdersTable'
+import type { OrderColumnFilters } from '../lib/orders'
 
-function renderRow(row: DongHangDoi): string {
+function renderRow(row: DongHangDoi, overrides: Partial<OrdersTableProps> = {}, table = OrdersTable): string {
   return renderToStaticMarkup(
     createElement(
       TooltipProvider,
       null,
-      createElement(OrdersTable, {
+      createElement(table, {
         filterTitle: 'Tất cả y lệnh',
         orders: [row],
         totalCount: 1,
@@ -21,13 +24,23 @@ function renderRow(row: DongHangDoi): string {
         searchQuery: '',
         sortField: 'ket_qua',
         sortDirection: 'desc',
+        columnFilters: {},
+        onColumnFiltersChange() {},
         onToggleSort() {},
         onOpenOrder() {},
         onResetFilters() {},
         onRetry() {},
+        onRefresh() {},
+        ...overrides,
       }),
     ),
   )
+}
+
+type TreeProps = { children?: ReactNode; onClick?: () => void }
+function elements(node: ReactNode): ReactElement<TreeProps>[] {
+  return Children.toArray(node).flatMap((item) => isValidElement<TreeProps>(item)
+    ? [item, ...elements(item.props.children)] : [])
 }
 
 describe('bảng danh sách y lệnh 8 cột (không có cột Thuốc, cảnh báo AI dạng icon)', () => {
@@ -67,5 +80,42 @@ describe('bảng danh sách y lệnh 8 cột (không có cột Thuốc, cảnh b
     expect(html).toContain('10/11')
     expect(html).not.toContain('Meropenem 1 g')
     expect(html).toContain(`1 nghiêm trọng — ${MOCK_CASES.cases[0].mo_ta}`)
+  })
+
+  it('hiện số lựa chọn trên đầu cột và xóa cả bộ lọc cột lẫn tìm kiếm', () => {
+    let tree: ReactNode
+    const probe = (props: OrdersTableProps) => {
+      tree = OrdersTable(props)
+      return tree
+    }
+    let columnFilters: OrderColumnFilters = { priority: ['cao', 'trung_binh'], khoa: ['Hô hấp', 'Tim mạch'] }
+    const onResetFilters = vi.fn()
+    const row = MOCK_CASES.cases[0]
+    const html = renderRow(row, {
+      columnFilters, searchQuery: 'giả lập', onResetFilters,
+      onColumnFiltersChange: (next) => {
+        columnFilters = typeof next === 'function' ? next(columnFilters) : next
+      },
+    }, probe)
+    expect(html).toContain('2<span class="sr-only"> lựa chọn đang lọc')
+    expect(html).toContain('Ưu tiên: Cao, Trung bình')
+    elements(tree).find((node) => node.props.children === 'Xóa tất cả bộ lọc')?.props.onClick?.()
+    expect(columnFilters).toEqual({})
+    expect(onResetFilters).toHaveBeenCalledOnce()
+    expect(renderRow(row, { columnFilters })).not.toContain('Xóa tất cả bộ lọc')
+  })
+
+  it('hiện giờ +07 ở chân danh sách và bấm được để làm mới', () => {
+    let tree: ReactNode
+    const onRefresh = vi.fn()
+    const html = renderRow(MOCK_CASES.cases[0], {
+      onRefresh, updatedAt: new Date('2026-11-17T17:08:09Z'),
+    }, (props) => {
+      tree = OrdersTable(props)
+      return tree
+    })
+    expect(html).toContain('Cập nhật lúc <time dateTime="2026-11-17T17:08:09.000Z">00:08:09</time>')
+    elements(tree).find((node) => node.props.onClick === onRefresh)?.props.onClick?.()
+    expect(onRefresh).toHaveBeenCalledOnce()
   })
 })

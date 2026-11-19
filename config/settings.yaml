@@ -1,4 +1,6 @@
 app:
+  tra_cuu: "data/kb_curated/tra_cuu/tra_cuu.sqlite"
+  tuong_tac: "data/kb_curated/tuong_tac/ddinter.sqlite"
   case_dir: "data/mock/demo"
   profile: "dev"                    # dev | test | demo
 
@@ -67,3 +69,6 @@ vector_store:
 prompts:
   tong_hop: "config/prompts/tong_hop.v1.md"
   hoi_them: "config/prompts/hoi_them.v1.md"
+
+orchestration:
+  engine: "langgraph"               # langgraph | tuan_tu (đồ thị LangGraph hoặc hàm tuần tự cũ)

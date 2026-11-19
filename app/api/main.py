@@ -25,6 +25,7 @@ from app.config.settings import (
     load_env_file,
     load_settings,
 )
+from app.db.read_pool import read_pool
 from app.db.reader import DatabaseReadError
 
 _ROOT = Path(__file__).resolve().parents[2]
@@ -56,7 +57,7 @@ def _error(request: Request, status: int, code: str, message: str) -> JSONRespon
 
 @asynccontextmanager
 async def _lifespan(application: FastAPI) -> AsyncIterator[None]:
-    """Đóng bộ chạy nền AI và kết nối HTTP khi ứng dụng kết thúc."""
+    """Đóng bộ chạy nền AI và các kết nối khi ứng dụng kết thúc."""
     application.state.access_log.cleanup()
     if application.state.auth_settings.auth_mode == "off":
         logging.getLogger(__name__).warning(
@@ -66,8 +67,11 @@ async def _lifespan(application: FastAPI) -> AsyncIterator[None]:
         yield
     finally:
         shutdown = getattr(application.state.service, "shutdown", None)
-        if callable(shutdown):
-            shutdown()
+        try:
+            if callable(shutdown):
+                shutdown()
+        finally:
+            read_pool.close()
 
 
 def create_app(

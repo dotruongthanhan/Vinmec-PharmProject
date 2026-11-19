@@ -1,15 +1,15 @@
 import { ChevronDown, ClipboardList } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import type { KeyboardEvent } from 'react'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import type { ChiTietCa, MedicalOrder } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { RadioGroup, RadioPillItem } from '@/components/ui/radio-group'
 import { administrativeDate } from '@/lib/displayFormat'
-import { groupEncounters, orderSelectionParams } from '@/lib/medicalRecord'
+import { countMedicalOrders, groupEncounters, medicalOrders, orderSelectionParams } from '@/lib/medicalRecord'
 import { InfoRows, OrderLinesTable, SectionHeading } from './DetailSections'
 
 const ROLES: Record<string, string> = {
@@ -40,25 +40,44 @@ function encounterLabel(detail: ChiTietCa, id: string, index: number | null): st
   return `Lần vào viện ${index ?? 'chưa ghi nhận'}${date ? ` · ${date}` : ''}`
 }
 
-/** Radio trong Popover dùng bàn phím và thứ tự nhóm theo lần vào viện. */
+/** Mũi tên đổi tiêu điểm; kích hoạt mục mới chọn y lệnh. */
 export function OrderChoices({ orders, selectedId, detail, onSelect }: {
   orders: readonly MedicalOrder[]; selectedId?: string; detail: ChiTietCa; onSelect: (id: string) => void
 }) {
-  return <RadioGroup value={selectedId} onValueChange={onSelect} aria-label="Chọn y lệnh">
-    {groupEncounters(orders).map((group) => <div key={group.id} role="group"
+  const [focusedId, setFocusedId] = useState<string>()
+  const groups = groupEncounters(orders)
+  const tabbableId = orders.some((order) => order.y_lenh_id === focusedId)
+    ? focusedId : selectedId ?? groups[0]?.items[0]?.y_lenh_id
+
+  const moveFocus = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return
+    const choices = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="option"]'))
+    const index = choices.indexOf(event.target as HTMLButtonElement)
+    if (index < 0) return
+    event.preventDefault()
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? choices.length - 1
+      : Math.min(choices.length - 1, Math.max(0, index + (event.key === 'ArrowDown' ? 1 : -1)))
+    choices[next]?.focus()
+  }
+
+  return <div role="listbox" aria-label="Chọn y lệnh" onKeyDown={moveFocus} className="grid gap-2">
+    {groups.map((group) => <div key={group.id} role="group"
       aria-label={encounterLabel(detail, group.id, group.thuTu)} className="flex flex-col gap-2">
       <p className="text-xs font-medium text-fg-subtle">{encounterLabel(detail, group.id, group.thuTu)}</p>
-      {group.items.map((order) => <RadioPillItem key={order.y_lenh_id} value={order.y_lenh_id}
-        aria-label={`${order.y_lenh_id} · ${STATUS[order.trang_thai ?? '']?.label ?? missing}`}
-        className="h-auto w-full flex-col items-start gap-1 rounded-md px-3 py-2 text-left">
+      {group.items.map((order) => <button key={order.y_lenh_id} type="button" role="option"
+        aria-selected={selectedId === order.y_lenh_id}
+        tabIndex={tabbableId === order.y_lenh_id ? 0 : -1}
+        onFocus={() => setFocusedId(order.y_lenh_id)}
+        onClick={() => onSelect(order.y_lenh_id)}
+        className="flex w-full cursor-pointer flex-col items-start gap-1 rounded-md border border-line-strong bg-surface px-3 py-2 text-left text-xs text-fg hover:bg-surface-hover aria-selected:border-primary-line aria-selected:bg-primary-soft">
         <span className="flex w-full items-center justify-between gap-2">
           <span className="font-mono">{order.y_lenh_id}</span><OrderStatus status={order.trang_thai} />
         </span>
         <span className="text-xs text-fg-subtle">{administrativeDate(order.thoi_diem_ke)}</span>
         <span className="text-xs">{order.dong.slice(0, 2).map((row) => row['Thuốc']).join(' · ') || 'Không có dòng thuốc'}</span>
-      </RadioPillItem>)}
+      </button>)}
     </div>)}
-  </RadioGroup>
+  </div>
 }
 
 export function OrderSelector({ orders, selected, detail, onSelect }: {
@@ -66,9 +85,9 @@ export function OrderSelector({ orders, selected, detail, onSelect }: {
 }) {
   const [open, setOpen] = useState(false)
   return <section className="flex flex-col gap-2.5" aria-label="Bộ chọn y lệnh">
-    <SectionHeading title="Chọn y lệnh" aside={`${orders.length} y lệnh`} />
+    <SectionHeading title="Chọn y lệnh" aside={`${countMedicalOrders(orders, detail.ca_id)} y lệnh`} />
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild><Button variant="secondary" className="justify-between" aria-label="Chọn y lệnh">
+      <PopoverTrigger asChild><Button variant="secondary" className="justify-between" disabled={!orders.length}>
         <span className="flex flex-wrap items-center gap-2"><span className="font-mono">{selected?.y_lenh_id ?? 'Chưa có y lệnh'}</span>
           {selected ? <OrderStatus status={selected.trang_thai} /> : null}</span>
         <ChevronDown className="size-4 shrink-0" aria-hidden="true" />
@@ -114,11 +133,13 @@ export function SelectedOrderDetails({ order }: { order: MedicalOrder }) {
 }
 
 /** Thẻ phiếu theo ngày và liên kết nội bộ sang đúng y lệnh. */
-export function TreatmentSheets({ detail }: { detail: ChiTietCa }) {
+export function TreatmentSheets({ detail, onFollowOrder }: { detail: ChiTietCa; onFollowOrder?: () => void }) {
   const [params] = useSearchParams()
+  const { state } = useLocation()
   const sheets = detail.phieu_dieu_tri ?? []
   if (!sheets.length) return <EmptyState icon={ClipboardList} title="Chưa có phiếu điều trị"
     description="Hồ sơ ngoại trú hoặc ca bệnh này chưa có bản ghi phiếu điều trị." />
+  const orderIds = new Set(medicalOrders(detail).map((order) => order.y_lenh_id))
   return <div className="flex flex-col gap-6">{groupEncounters(sheets).map((group) => <section key={group.id}
     aria-label={encounterLabel(detail, group.id, group.thuTu)} className="flex flex-col gap-3">
     <SectionHeading title={encounterLabel(detail, group.id, group.thuTu)} aside={`${group.items.length} phiếu`} />
@@ -135,8 +156,14 @@ export function TreatmentSheets({ detail }: { detail: ChiTietCa }) {
       <div><h5 className="text-sm font-medium text-fg">Theo dõi</h5>
         <ul className="list-disc pl-5 text-sm text-fg-muted">{sheet.theo_doi.map((item, index) => <li key={index}>{item}</li>)}</ul></div>
       <nav aria-label={`Y lệnh trong ngày ${sheet.ngay_dieu_tri}`} className="flex flex-wrap gap-3">
-        {sheet.y_lenh_trong_ngay.map((id) => <Link key={id} className="text-xs text-primary underline underline-offset-2"
-          to={{ search: `?${orderSelectionParams(params, id)}` }}>{id}</Link>)}
+        {sheet.y_lenh_trong_ngay.map((id) => orderIds.has(id)
+          ? <Link key={id} className="text-xs text-primary underline underline-offset-2"
+              to={{ search: `?${orderSelectionParams(params, id)}` }} state={state}
+              onClick={(event) => {
+                if (!event.defaultPrevented && event.button === 0 &&
+                    !event.metaKey && !event.altKey && !event.ctrlKey && !event.shiftKey) onFollowOrder?.()
+              }}>{id}</Link>
+          : <span key={id} className="text-xs text-fg-subtle">{`Y lệnh ${id} không có trong danh sách`}</span>)}
       </nav>
     </Card>)}
   </section>)}</div>

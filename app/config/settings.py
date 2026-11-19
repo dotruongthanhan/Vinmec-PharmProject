@@ -22,6 +22,15 @@ def load_case_source() -> Literal["db", "file"]:
     return value
 
 
+def load_case_cache_ttl() -> int:
+    """Đọc TTL của bộ đệm ca DB, giới hạn từ 10 đến 600 giây."""
+    try:
+        value = int(os.getenv("CASE_CACHE_TTL_SECONDS", "60"))
+    except ValueError:
+        value = 60
+    return max(10, min(600, value))
+
+
 def load_access_log_enabled() -> bool:
     """Nhật ký mặc định bật, chỉ tắt khi ACCESS_LOG=off."""
     return os.getenv("ACCESS_LOG", "on") != "off"
@@ -214,6 +223,14 @@ class PromptSettings(BaseModel):
     hoi_them: str
 
 
+class OrchestrationSettings(BaseModel):
+    """Chọn đường chạy bước AI: đồ thị LangGraph hoặc hàm tuần tự cũ."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    engine: Literal["langgraph", "tuan_tu"]
+
+
 class AppSettings(BaseModel):
     """Thư mục ca và tên hồ sơ chạy."""
 
@@ -221,6 +238,8 @@ class AppSettings(BaseModel):
 
     case_dir: str
     profile: str
+    tra_cuu: str = "data/kb_curated/tra_cuu/tra_cuu.sqlite"
+    tuong_tac: str = "data/kb_curated/tuong_tac/ddinter.sqlite"
 
 
 class Settings(BaseModel):
@@ -241,6 +260,7 @@ class Settings(BaseModel):
     database: DatabaseSettings
     vector_store: VectorStoreSettings
     prompts: PromptSettings
+    orchestration: OrchestrationSettings = OrchestrationSettings(engine="tuan_tu")
 
 
 def _read_yaml(path: Path) -> dict:

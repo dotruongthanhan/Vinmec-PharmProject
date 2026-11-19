@@ -11,12 +11,13 @@ from threading import RLock
 from typing import Any
 
 import psycopg
-from psycopg import IsolationLevel, sql
-from psycopg.rows import dict_row
+from psycopg import sql
 from pydantic import BaseModel, ValidationError
 
 from app.config.settings import get_secret
 from app.core.errors import ConfigError
+from app.db.mapping import TABLES
+from app.db.read_pool import read_pool
 from app.db.timezone import to_vn_time
 from app.domain import models as m
 from app.pipeline import KetQuaThamDinh, run_case
@@ -167,7 +168,10 @@ def build_case(order: Row, index: Index) -> m.CaBenh:
         ("xet_nghiem", "ket_qua_xet_nghiem", m.KetQuaXetNghiem),
         ("dien_bien", "dien_bien", m.DienBien),
     ):
-        view[field] = [_fields(model, row) for row in children(table)]
+        records = children(table)
+        if table == "chan_doan":
+            records = sorted(records, key=lambda row: row["chan_doan_id"])
+        view[field] = [_fields(model, row) for row in records]
     view["sinh_hieu"] = with_height_vital(
         view["sinh_hieu"],
         patient_id,
@@ -207,14 +211,7 @@ def read_case_rows() -> dict[str, list[Row]]:
             "Chưa cấu hình DATABASE_URL để đọc ca bệnh từ cơ sở dữ liệu."
         ) from None
     try:
-        with psycopg.connect(
-            url,
-            options="-c default_transaction_read_only=on",
-            row_factory=dict_row,
-            connect_timeout=10,
-        ) as connection:
-            connection.isolation_level = IsolationLevel.REPEATABLE_READ
-            connection.read_only = True
+        with read_pool.connection(url) as connection:
             rows: dict[str, list[Row]] = {
                 "nghiep_vu.y_lenh": to_vn_time(
                     connection.execute(
@@ -226,8 +223,10 @@ def read_case_rows() -> dict[str, list[Row]]:
             }
 
             def select(table: str, column: str, keys: Sequence[str]) -> list[Row]:
-                query = sql.SQL("SELECT * FROM {} WHERE {} = ANY(%s)").format(
-                    sql.Identifier(*table.split(".")), sql.Identifier(column)
+                query = sql.SQL("SELECT * FROM {} WHERE {} = ANY(%s) ORDER BY {}").format(
+                    sql.Identifier(*table.split(".")),
+                    sql.Identifier(column),
+                    sql.SQL(", ").join(map(sql.Identifier, TABLES[table].primary_key)),
                 )
                 result = to_vn_time(connection.execute(query, (sorted(set(keys)),)).fetchall())
                 rows[table] = result
@@ -300,7 +299,10 @@ class DbReviewService:
     def review(self, ca: m.CaBenh) -> KetQuaThamDinh:
         if self._renal_rules is None:
             self._renal_rules = load_renal_rules(self._renal_rules_path)
-        return run_case(ca, self._renal_rules)
+        from app.container import get_rule_context
+
+        ctx = get_rule_context()
+        return run_case(ca, self._renal_rules, resolver=ctx.resolver, interactions=ctx.interactions)
 
 
 def load_source_cases(root: Path) -> list[m.CaBenh]:

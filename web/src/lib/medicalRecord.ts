@@ -18,6 +18,11 @@ export function medicalOrders(detail: ChiTietCa): MedicalOrder[] {
   return result
 }
 
+/** Đếm y lệnh của mọi lần vào viện, bỏ mục thuốc nền giả lập. */
+export function countMedicalOrders(orders: readonly MedicalOrder[], caId: string): number {
+  return orders.filter((order) => order.la_trong_tam || order.y_lenh_id !== `YL-${caId}-NEN`).length
+}
+
 /** URL sai hoặc thuộc ca trước quay về y lệnh trọng tâm. */
 export function selectMedicalOrder(orders: readonly MedicalOrder[], requested: string | null): MedicalOrder | undefined {
   return orders.find((order) => order.y_lenh_id === requested)

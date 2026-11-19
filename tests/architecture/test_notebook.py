@@ -32,4 +32,4 @@ def test_notebook_valid_clean_and_runs_without_reading_dotenv(
     assert "OPENROUTER_API_KEY: thiếu" in output
     assert "DATABASE_URL: thiếu" in output
     assert "Số ca: 6" in output
-    assert "Số luật: 5" in output
+    assert "Số luật: 6" in output

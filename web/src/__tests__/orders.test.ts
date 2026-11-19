@@ -115,6 +115,35 @@ describe('sắp xếp danh sách y lệnh', () => {
 })
 
 describe('tìm kiếm y lệnh phía trình duyệt', () => {
+  const rows: OrderRowInput[] = [
+    { ...MOCK_CASES.cases[0], ca_id: 'CA-A', khoa: 'Khoa A', uu_tien: 0, trang_thai_y_lenh: 'chua_duyet' },
+    { ...MOCK_CASES.cases[0], ca_id: 'CA-B', khoa: 'Khoa B', uu_tien: 1, trang_thai_y_lenh: 'dang_cho' },
+    { ...MOCK_CASES.cases[0], ca_id: 'CA-C', khoa: 'Khoa C', uu_tien: 1, trang_thai_y_lenh: 'da_huy' },
+    { ...MOCK_CASES.cases[4], ca_id: 'CA-D', khoa: 'Khoa B', uu_tien: 4, trang_thai_y_lenh: 'da_duyet' },
+  ]
+  const all = { type: 'group', group: 'tat_ca' } as const
+
+  it('lấy hợp của hai mức ưu tiên hoặc hai khoa', () => {
+    expect(filterOrders(rows, all, '', { priority: ['cao', 'trung_binh'] })).toEqual(rows.slice(0, 3))
+    expect(filterOrders(rows, all, '', { khoa: ['Khoa A', 'Khoa B'] })).toEqual([rows[0], rows[1], rows[3]])
+  })
+
+  it('lấy giao giữa các cột, kể cả trạng thái và cảnh báo', () => {
+    expect(filterOrders(rows, all, '', {
+      priority: ['trung_binh', 'thap'], khoa: ['Khoa A', 'Khoa B'],
+      status: ['dang_cho', 'da_duyet'], aiWarning: ['nghiem_trong', 'can_luu_y'],
+    })).toEqual([rows[1]])
+    expect(countOrderGroups(rows, { khoa: ['Khoa A', 'Khoa C'] })).toMatchObject({
+      tat_ca: 2,
+      departments: [{ khoa: 'Khoa A', count: 1 }, { khoa: 'Khoa C', count: 1 }],
+    })
+  })
+
+  it('mảng rỗng và all không lọc, giá trị đơn vẫn lọc', () => {
+    expect(filterOrders(rows, all, '', { priority: [], khoa: [], status: [], aiWarning: [] })).toEqual(rows)
+    expect(filterOrders(rows, all, '', { priority: 'all', khoa: 'Khoa B' })).toEqual([rows[1], rows[3]])
+  })
+
   it('tìm thuốc trong danh sách v1.2 và chấp nhận trường tuỳ chọn null hoặc vắng', () => {
     const row = { ...MOCK_CASES.cases[0], thuoc: ['Thuốc thử A', 'Thuốc thử B'] }
     expect(filterOrders([row], { type: 'group', group: 'tat_ca' }, 'thuoc thu b')).toEqual([row])

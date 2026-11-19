@@ -15,6 +15,7 @@ from app.pipeline import run_case
 from app.providers.fakes import FakeLLM
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import load_renal_rules
+from tests.deid_support import temp_id
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT_PATH = ROOT / "config/prompts/tong_hop.v1.md"
@@ -70,12 +71,12 @@ def test_ai_reviewer_runs_collect_and_synthesizer_and_merges_warnings() -> None:
             {
                 "nhan_dinh": [
                     {
-                        "chi_tiet_y_lenh_id": ["CT-DEMO02-01"],
+                        "chi_tiet_y_lenh_id": [temp_id("DEMO-02", "CT-DEMO02-01")],
                         "yeu_to": 6,
                         "ket_luan": "can_xem",
                         "muc_do": "nghiem_trong",
                         "nhan_xet": "CrCl 16,0 mL/phút, cần xem xét giảm liều theo nhãn FDA.",
-                        "ban_ghi_ids": ["XN-DEMO02-01"],
+                        "ban_ghi_ids": [temp_id("DEMO-02", "XN-DEMO02-01")],
                         "trich_dan": [
                             {
                                 "doan_trich_id": "DT-MERO-01",

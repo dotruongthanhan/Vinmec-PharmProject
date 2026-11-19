@@ -9,6 +9,7 @@ from unittest.mock import MagicMock, Mock
 import psycopg
 import pytest
 
+from app.container import get_rule_context
 from app.core.errors import ConfigError
 from app.db import reader
 from app.db.mapping import TABLES
@@ -172,6 +173,9 @@ def test_read_queries_are_batched_and_read_only(
 
     def execute(query: object, params: tuple | None = None) -> Mock:
         statement = query if isinstance(query, str) else query.as_string()
+        if statement.startswith("SET LOCAL"):
+            assert statement == "SET LOCAL statement_timeout = 8000"
+            return Mock()
         statements.append(statement)
         assert statement.startswith("SELECT ")
         table_match = re.search(r'FROM ([a-z_]+\.[a-z_]+|"[a-z_]+"\."[a-z_]+")', statement)
@@ -192,14 +196,16 @@ def test_read_queries_are_batched_and_read_only(
     monkeypatch.setattr(reader, "get_secret", secret)
     rows = reader.read_case_rows()
     secret.assert_called_once_with("DATABASE_URL")
-    assert connect.call_args.kwargs["options"] == "-c default_transaction_read_only=on"
+    assert connect.call_args.kwargs["options"] == (
+        "-c default_transaction_read_only=on -c statement_timeout=8000"
+    )
     assert connection.read_only is True
     assert connection.isolation_level == psycopg.IsolationLevel.REPEATABLE_READ
     assert len(statements) == len(rows) == 15
     assert len(reader.build_cases(rows)[0]) == 66
     for table in rows:
         assert table in TABLES
-    connection.__exit__.assert_called_once()
+    connection.transaction.assert_called_once()
 
 
 @pytest.mark.parametrize("failure", [ConfigError("DATABASE_URL"), "", "   "])
@@ -231,13 +237,14 @@ def test_query_error_closes_connection_and_is_sanitized(monkeypatch: pytest.Monk
     connection = MagicMock()
     connection.__enter__.return_value = connection
     marker = "SECRET_DONNEES_FACTICES"
-    connection.execute.side_effect = psycopg.OperationalError(marker)
+    connection.execute.side_effect = [Mock(), psycopg.errors.QueryCanceled(marker)]
     monkeypatch.setattr(reader, "get_secret", Mock(return_value="connexion-factice"))
     monkeypatch.setattr(reader.psycopg, "connect", Mock(return_value=connection))
     with pytest.raises(reader.DatabaseReadError) as error:
         reader.read_case_rows()
     assert marker not in str(error.value)
-    connection.__exit__.assert_called_once()
+    connection.transaction.return_value.__exit__.assert_called_once()
+    connection.close.assert_called_once()
 
 
 def test_cache_refresh_and_review(batch: Batch, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -248,8 +255,22 @@ def test_cache_refresh_and_review(batch: Batch, monkeypatch: pytest.MonkeyPatch)
     service.list_cases()
     query.assert_called_once()
     actual = service.review(cases[0]).model_dump(exclude={"thoi_gian_ms"})
-    expected = run_case(cases[0], load_renal_rules(RULES)).model_dump(exclude={"thoi_gian_ms"})
+    context = get_rule_context()
+    assert context.resolver is not None and context.interactions is not None
+    expected = run_case(
+        cases[0],
+        load_renal_rules(RULES),
+        resolver=context.resolver,
+        interactions=context.interactions,
+    ).model_dump(exclude={"thoi_gian_ms"})
     assert actual == expected
+    matrix = actual["ma_tran_tuong_tac"]
+    assert matrix is not None and len(matrix["thuoc"]) == 1 and matrix["cap"] == []
+    interaction = next(row for row in actual["phat_hien"] if row["yeu_to"] == 4)
+    assert interaction["ket_luan"] == "dat"
+    assert interaction["mo_ta"] == (
+        "Y lệnh chỉ có một thuốc đang hiệu lực, không có cặp để đối chiếu tương tác."
+    )
     service.refresh()
     assert service.list_cases()[0] == cases
     assert query.call_count == 2

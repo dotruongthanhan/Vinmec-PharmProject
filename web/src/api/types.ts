@@ -109,6 +109,7 @@ export interface DanhSachCa {
   cases: DongHangDoi[]
   loi_nap: LoiNapCa[]
   che_do: CheDo
+  lam_moi_luc?: string | null
 }
 
 export interface DemNhanDinh {
@@ -311,11 +312,10 @@ export interface TreatmentSheet {
   che_do_an: string
   theo_doi: string[]
   dan_do: string | null
-  nap_luc?: string | null
-  nguon_tep?: string | null
 }
 
 export interface ChiTietCa {
+  ma_tran_tuong_tac?: MaTranTuongTac | null
   danh_sach_y_lenh?: MedicalOrder[]
   phieu_dieu_tri?: TreatmentSheet[]
   dinh_danh_day_du?: FullIdentity | null
@@ -345,6 +345,41 @@ export interface ChiTietCa {
   nhom_ly_do: string[]
   thoi_gian_ms: number
   che_do: CheDo
+}
+
+export interface ThuocMaTran {
+  chi_tiet_y_lenh_id: string
+  ten: string
+  nhom: 'cho_duyet' | 'dang_dung'
+  phan_giai: 'da_phan_giai' | 'mot_phan' | 'khong_nhan_dien' | 'khong_ap_dung'
+  hoat_chat: string[]
+  ly_do: string | null
+}
+
+export interface CapMaTran {
+  a: string
+  b: string
+  muc: 'nghiem_trong' | 'can_luu_y' | 'thieu_du_lieu' | 'khong_phat_hien' | 'khong_ap_dung'
+  nhan_dinh_id: string | null
+  tom_tat: string | null
+  ly_do: string | null
+}
+
+export interface TuongTacThucAn {
+  chi_tiet_y_lenh_id: string
+  hoat_chat: string
+  thuc_an: string
+  muc: 'nghiem_trong' | 'can_luu_y' | 'thong_tin' | 'chua_ro'
+  mo_ta: string | null
+  xu_tri: string | null
+}
+
+export interface MaTranTuongTac {
+  nguon: string
+  ghi_chu: string
+  thuoc: ThuocMaTran[]
+  cap: CapMaTran[]
+  thuc_an: TuongTacThucAn[]
 }
 
 export interface BanGhi {

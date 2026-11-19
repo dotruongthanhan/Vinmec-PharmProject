@@ -51,10 +51,10 @@ function elements(node: ReactNode): ReactElement<TreeProps>[] {
     ? [child, ...elements(child.props.children)] : [])
 }
 
-function renderRoute(path: string): string {
+function renderRoute(path: string, state?: object): string {
   return renderToStaticMarkup(
     <TooltipProvider>
-      <MemoryRouter initialEntries={[path]}>
+      <MemoryRouter initialEntries={[{ pathname: path.split('?')[0], search: path.split('?')[1], state }]}>
         <Routes>
           <Route path="/app" element={<WorkspacePage />} />
           <Route path="/app/ho-so" element={<WorkspacePage />} />
@@ -130,13 +130,19 @@ describe('điều hướng hồ sơ trong bàn làm việc', () => {
     const tree = MedicalRecordsList({ ...props, cases: [{ ...MOCK_CASES.cases[0], ca_id: caId }] })
     const row = elements(tree).find((item) => item.type === 'tr' && item.props.onClick)
     row!.props.onClick!({ stopPropagation() {} })
-    expect(captured.navigate).toHaveBeenCalledExactlyOnceWith('/app/y-lenh/CA%20GIA%2FLAP?tab=ho_so_benh_an')
+    expect(captured.navigate).toHaveBeenCalledExactlyOnceWith('/app/y-lenh/CA%20GIA%2FLAP?tab=ho_so_benh_an', { state: { fromRecords: true } })
     captured.navigate.mockClear()
     const stopPropagation = vi.fn()
     const button = elements(tree).find((item) => item.type === 'button')
     button!.props.onClick!({ stopPropagation })
     expect(stopPropagation).toHaveBeenCalledOnce()
-    expect(captured.navigate).toHaveBeenCalledExactlyOnceWith('/app/y-lenh/CA%20GIA%2FLAP?tab=ho_so_benh_an')
+    expect(captured.navigate).toHaveBeenCalledExactlyOnceWith('/app/y-lenh/CA%20GIA%2FLAP?tab=ho_so_benh_an', { state: { fromRecords: true } })
+  })
+
+  it('chi tiết mở từ danh sách hồ sơ giữ mục Hồ sơ bệnh án sáng', () => {
+    const html = renderRoute('/app/y-lenh/DEMO-02?tab=y_lenh', { fromRecords: true })
+    expect(html).toContain('aria-label="Hồ sơ bệnh án" aria-current="page"')
+    expect(html).not.toContain('aria-label="Y lệnh" aria-current="page"')
   })
 })
 
@@ -144,6 +150,7 @@ describe('bảng hồ sơ dùng dữ liệu danh sách ca hiện có', () => {
   it('hiện bảy cột, sáu ca và đánh dấu dữ liệu thiếu', () => {
     const html = renderToStaticMarkup(<MedicalRecordsList {...listProps()} />)
     expect(html.match(/scope="col"/g)).toHaveLength(7)
+    expect(html).toContain('Y lệnh (lần cuối)')
     expect(html.match(/<td\b/g)).toHaveLength(MOCK_CASES.cases.length * 7)
     expect(html).toContain('NB-DEMO-02')
     expect(html).toContain('Nữ, 75 tuổi')

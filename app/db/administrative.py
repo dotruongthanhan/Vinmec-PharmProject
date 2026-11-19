@@ -4,12 +4,12 @@ from collections.abc import Sequence
 from typing import Any
 
 import psycopg
-from psycopg import IsolationLevel, sql
-from psycopg.rows import dict_row
+from psycopg import sql
 
 from app.api import schemas as s
 from app.config.settings import get_secret
 from app.core.errors import ConfigError
+from app.db.read_pool import read_pool
 from app.db.reader import DatabaseReadError, Rows
 from app.db.timezone import to_vn_time
 
@@ -19,6 +19,7 @@ def build_administrative(
 ) -> dict[str, s.AdministrativeRecord]:
     """Chỉ chiếu trường hợp đồng, không truyền hàng DB sang mô hình lâm sàng."""
     result = {}
+    diagnoses = sorted(rows.get("nghiep_vu.chan_doan", []), key=lambda row: row["chan_doan_id"])
     for patient in rows.get("nghiep_vu.nguoi_benh", []):
         patient_id = patient["nguoi_benh_id"]
         if patient_id not in patient_ids:
@@ -43,7 +44,7 @@ def build_administrative(
             data["chan_doan_chinh"] = (
                 "; ".join(
                     row["noi_dung"]
-                    for row in rows.get("nghiep_vu.chan_doan", [])
+                    for row in diagnoses
                     if row["dot_dieu_tri_id"] == encounter_id and row["loai"] == "chinh"
                 )
                 or None
@@ -89,20 +90,15 @@ def read_administrative(patient_ids: Sequence[str]) -> dict[str, s.Administrativ
         url = get_secret("DATABASE_URL").strip()
         if not url:
             raise ConfigError("DATABASE_URL")
-        with psycopg.connect(
-            url,
-            options="-c default_transaction_read_only=on",
-            row_factory=dict_row,
-            connect_timeout=10,
-        ) as connection:
-            connection.isolation_level = IsolationLevel.REPEATABLE_READ
-            connection.read_only = True
+        with read_pool.connection(url) as connection:
             rows: dict[str, list[dict[str, Any]]] = {}
 
             def select(table: str, column: str, keys: Sequence[str]) -> list[dict[str, Any]]:
                 query = sql.SQL("SELECT * FROM {} WHERE {} = ANY(%s)").format(
                     sql.Identifier("nghiep_vu", table), sql.Identifier(column)
                 )
+                if table == "chan_doan":
+                    query += sql.SQL(" ORDER BY chan_doan_id")
                 selected = to_vn_time(connection.execute(query, (sorted(set(keys)),)).fetchall())
                 rows[f"nghiep_vu.{table}"] = selected
                 return selected

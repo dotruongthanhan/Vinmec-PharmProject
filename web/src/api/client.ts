@@ -38,8 +38,8 @@ export interface ReviewApiClient {
   signOut?(token: string): Promise<void>
   getMe(): Promise<MeResponse>
   getHealth(): Promise<HealthResponse>
-  getCases(): Promise<DanhSachCa>
-  getCase(caId: string): Promise<ChiTietCa>
+  getCases(options?: { signal?: AbortSignal }): Promise<DanhSachCa>
+  getCase(caId: string, options?: { signal?: AbortSignal }): Promise<ChiTietCa>
   getRecord(caId: string, banGhiId: string): Promise<BanGhi>
   sendFeedback(caId: string, payload: GuiPhanHoi): Promise<PhanHoiDaGhi>
   ask(caId: string, payload: GuiCauHoi, options?: { signal?: AbortSignal }): Promise<TraLoi>
@@ -251,12 +251,12 @@ export class ApiClient implements ReviewApiClient {
     return this.request<MeResponse>('/me')
   }
 
-  getCases(): Promise<DanhSachCa> {
-    return this.request<DanhSachCa>('/cases')
+  getCases(options?: { signal?: AbortSignal }): Promise<DanhSachCa> {
+    return this.request<DanhSachCa>('/cases', { signal: options?.signal })
   }
 
-  getCase(caId: string): Promise<ChiTietCa> {
-    return this.request<ChiTietCa>(`/cases/${encodeURIComponent(caId)}`)
+  getCase(caId: string, options?: { signal?: AbortSignal }): Promise<ChiTietCa> {
+    return this.request<ChiTietCa>(`/cases/${encodeURIComponent(caId)}`, { signal: options?.signal })
   }
 
   getRecord(caId: string, banGhiId: string): Promise<BanGhi> {

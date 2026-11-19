@@ -1,10 +1,12 @@
-"""Lớp bọc mỏng cho năm module luật hiện có."""
+"""Lớp bọc mỏng cho các module luật hiện có."""
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from app.domain.models import CaBenh
-from app.rules import allergy, antibiotic, duplicate, renal_dose, schedule
+from app.kb.interactions import InteractionStore
+from app.kb.resolver import DrugResolver
+from app.rules import allergy, antibiotic, duplicate, interaction, renal_dose, schedule
 from app.rules.engine import _priority_key
 from app.rules.renal_dose import RenalRuleBook
 from app.rules.types import PhatHien
@@ -18,6 +20,8 @@ class RuleContext:
     """Phụ thuộc dùng chung của các luật."""
 
     renal_rules: RenalRuleBook
+    resolver: DrugResolver | None = None
+    interactions: InteractionStore | None = None
 
 
 class AllergyRule:
@@ -37,7 +41,7 @@ class DuplicateRule:
     yeu_to: int = 2
 
     def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
-        return duplicate.check(ca)
+        return duplicate.check(ca, ctx.resolver)
 
 
 class AntibioticRule:
@@ -60,6 +64,16 @@ class RenalDoseRule:
         return renal_dose.check(ca, ctx.renal_rules)
 
 
+class InteractionRule:
+    """Bọc luật tương tác, cho phép thiếu chỉ mục khi chưa triển khai dữ liệu."""
+
+    ma_nhom: str = "interaction"
+    yeu_to: int = 4
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        return interaction.check(ca, ctx.resolver, ctx.interactions)
+
+
 class ScheduleRule:
     """Bọc luật lịch dùng thuốc."""
 
@@ -71,8 +85,15 @@ class ScheduleRule:
 
 
 def default_rules() -> list["Rule"]:
-    """Giữ nguyên thứ tự luật trong engine hiện có."""
-    return [AllergyRule(), DuplicateRule(), AntibioticRule(), RenalDoseRule(), ScheduleRule()]
+    """Đăng ký sáu luật theo thứ tự yếu tố trong engine."""
+    return [
+        AllergyRule(),
+        DuplicateRule(),
+        AntibioticRule(),
+        InteractionRule(),
+        RenalDoseRule(),
+        ScheduleRule(),
+    ]
 
 
 def run_registered(ca: CaBenh, ctx: RuleContext, rules: list["Rule"]) -> list[PhatHien]:

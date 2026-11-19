@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [main, vukhai248]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: backend (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      CDSS_PROFILE: test
+      CDSS_AI: "off"
+      CASE_SOURCE: file
+      AUTH_MODE: "off"
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version-file: .python-version
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run pytest -q -p no:cacheprovider
+
+  web:
+    name: web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npx tsc -b
+      - run: npx oxlint
+      - run: npx vitest run
+      - run: npm run build

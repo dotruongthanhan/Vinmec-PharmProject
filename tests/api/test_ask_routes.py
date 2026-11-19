@@ -19,6 +19,7 @@ from app.pipeline import KetQuaThamDinh
 from app.providers.fakes import FakeLLM
 from app.retrieval.query_builder import QueryBuilder
 from tests.api.test_contract import _check_display_strings
+from tests.deid_support import temp_id
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT_PATH = ROOT / "config/prompts/hoi_them.v1.md"
@@ -107,7 +108,7 @@ def test_ask_route_returns_ok_with_source_lookup_and_valid_contract(tmp_path: Pa
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     },
                     {
@@ -187,7 +188,7 @@ def test_ask_route_validation_422_404_not_ready_and_injection_preserves_findings
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "CT-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "CT-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -199,7 +200,7 @@ def test_ask_route_validation_422_404_not_ready_and_injection_preserves_findings
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],

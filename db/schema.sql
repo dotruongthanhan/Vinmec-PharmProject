@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.dot_dieu_tri (
     UNIQUE (nguoi_benh_id, thu_tu)
 );
 
--- T45: chỉ thêm cột; áp dụng lại an toàn với kho đã có dữ liệu.
+-- Chỉ khối thêm cột T45 dưới đây có thể áp dụng lại an toàn cho kho đã có dữ liệu.
+-- Tệp này không nâng cấp lược đồ cũ trước T40.
 ALTER TABLE nghiep_vu.nguoi_benh
     ADD COLUMN IF NOT EXISTS ho_ten text CHECK (ho_ten IS NULL OR length(trim(ho_ten)) > 0),
     ADD COLUMN IF NOT EXISTS ngay_sinh date,

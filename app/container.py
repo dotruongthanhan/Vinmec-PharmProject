@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import logging
+import sqlite3
 from collections.abc import Callable
 from functools import cached_property
 from pathlib import Path
+from threading import Lock
 from typing import TYPE_CHECKING, cast
 
 from app.config.settings import Settings, load_settings
@@ -18,10 +21,12 @@ from app.core.interfaces import (
     Rule,
     VectorStore,
 )
+from app.kb.interactions import InteractionStore
+from app.kb.resolver import DrugResolver
 from app.providers.bm25_index import Bm25Index
 from app.providers.fakes import FakeLLM, HashEmbedder, NoopReranker
 from app.providers.memory_store import InMemoryVectorStore
-from app.rules.registry import default_rules
+from app.rules.registry import RuleContext, default_rules
 from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 from app.storage.case_repo import JsonCaseRepository
 
@@ -29,6 +34,8 @@ if TYPE_CHECKING:
     from app.orchestration.ask import CaseAsker
 
 _ROOT = Path(__file__).resolve().parents[1]
+_RULE_CONTEXT_LOCK = Lock()
+_SHARED_RULE_CONTEXT: RuleContext | None = None
 
 
 class Container:
@@ -77,6 +84,45 @@ class Container:
     @cached_property
     def rules(self) -> list[Rule]:
         return default_rules()
+
+    @cached_property
+    def drug_resolver(self) -> DrugResolver | None:
+        """Chỉ mục vắng hoặc hỏng không ngăn các luật khác chạy."""
+        try:
+            return DrugResolver.from_index(_ROOT / self.settings.app.tra_cuu)
+        except (OSError, sqlite3.Error, ValueError) as exc:
+            logging.getLogger(__name__).debug(
+                "Không nạp được chỉ mục tra cứu: %s", type(exc).__name__
+            )
+            return None
+
+    @cached_property
+    def interaction_store(self) -> InteractionStore | None:
+        """Nạp kho chỉ đọc một lần trong vòng đời container."""
+        try:
+            return InteractionStore.from_path(_ROOT / self.settings.app.tuong_tac)
+        except (OSError, sqlite3.Error, ValueError) as exc:
+            logging.getLogger(__name__).debug(
+                "Không nạp được bảng tương tác: %s", type(exc).__name__
+            )
+            return None
+
+    @cached_property
+    def rule_context(self) -> RuleContext:
+        ctx = RuleContext(self.renal_rules, self.drug_resolver, self.interaction_store)
+        missing = [
+            name
+            for name, dependency in (
+                ("tra_cuu.sqlite", ctx.resolver),
+                ("ddinter.sqlite", ctx.interactions),
+            )
+            if dependency is None
+        ]
+        if missing:
+            logging.getLogger(__name__).warning(
+                "Không chạy yếu tố 4: chỉ mục thiếu hoặc hỏng: %s", ", ".join(missing)
+            )
+        return ctx
 
     @cached_property
     def case_asker(self) -> CaseAsker:
@@ -129,3 +175,12 @@ def register_provider(kind: str, name: str, factory: Callable[[Container], objec
 def build_container(profile: str | None = None) -> Container:
     """Nạp cấu hình và tạo nơi lắp ráp chưa khởi tạo các nhà cung cấp."""
     return Container(load_settings(profile))
+
+
+def get_rule_context() -> RuleContext:
+    """Giữ chỉ mục dùng chung cho API, DB và Streamlit trong tiến trình."""
+    global _SHARED_RULE_CONTEXT
+    with _RULE_CONTEXT_LOCK:
+        if _SHARED_RULE_CONTEXT is None:
+            _SHARED_RULE_CONTEXT = build_container().rule_context
+        return _SHARED_RULE_CONTEXT

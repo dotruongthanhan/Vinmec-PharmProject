@@ -15,6 +15,20 @@ export type DetailTabId =
   | 'dien_bien'
   | 'tham_dinh'
 
+export interface FeedbackDraft {
+  isEditing: boolean
+  pendingAction: 'bac_bo' | 'can_sua' | null
+  reasonGroup: string
+  note: string
+}
+
+export const EMPTY_FEEDBACK_DRAFT: FeedbackDraft = {
+  isEditing: false,
+  pendingAction: null,
+  reasonGroup: '',
+  note: '',
+}
+
 export type EvidenceTarget =
   | {
       kind: 'record'

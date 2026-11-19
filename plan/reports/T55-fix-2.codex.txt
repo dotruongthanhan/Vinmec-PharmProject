@@ -1,0 +1,12 @@
+TRẠNG THÁI: CHƯA XONG
+
+FILE ĐÃ TẠO / SỬA: Thêm mục T55-fix-2 vào [plan/reports/T55.md](D:/create/Vinmec-PharmProject/plan/reports/T55.md:330).
+
+LỆNH ĐÃ CHẠY VÀ KẾT QUẢ:
+
+- `uv run pytest -q --basetemp=.pytest_t55f2`: **2 failed, 1243 passed, 2 warnings**.
+- `uv run ruff check tests`: **All checks passed!**
+
+ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO: Chưa sửa hai test vì gặp điều kiện dừng của brief. Mô tả thực tế là “Không có cặp cần báo ở dòng chờ duyệt. Sàng lọc, cần đối chiếu nhãn.”, chưa nói rõ “không có cặp để đối chiếu”. Đã ghi nguyên văn và chi tiết hai lỗi vào báo cáo.
+
+VIỆC CHƯA LÀM / CÂU HỎI: Cần xử lý mô tả trong phạm vi cho phép sửa ứng dụng, rồi cập nhật hai test và nghiệm thu lại. Không dùng mạng.

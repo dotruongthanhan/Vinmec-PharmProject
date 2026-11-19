@@ -13,7 +13,7 @@ import {
   toneOfOrigin,
 } from '@/lib/severity'
 import type { SemanticTone } from '@/lib/severity'
-import type { EvidenceTarget } from '@/lib/uiTypes'
+import type { EvidenceTarget, FeedbackDraft } from '@/lib/uiTypes'
 import { AiNote } from './AiNote'
 import { EvidenceList } from './EvidenceList'
 import { FeedbackBar } from './FeedbackBar'
@@ -25,6 +25,8 @@ export interface FindingCardProps {
   nhomLyDo: readonly string[]
   submitting: boolean
   feedbackError: string | null
+  feedbackDraft: FeedbackDraft
+  onFeedbackDraftChange: (draft: FeedbackDraft) => void
   onSubmitFeedback: (caId: string, payload: GuiPhanHoi) => Promise<boolean>
   onClearFeedbackError: (caId: string, nhanDinhId: string) => void
   onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
@@ -49,6 +51,8 @@ export function FindingCard({
   nhomLyDo,
   submitting,
   feedbackError,
+  feedbackDraft,
+  onFeedbackDraftChange,
   onSubmitFeedback,
   onClearFeedbackError,
   onOpenEvidence,
@@ -170,6 +174,8 @@ export function FindingCard({
 
       <div className="rounded-b-md border-t border-line bg-surface-muted/40 px-4 py-2.5 pl-5">
         <FeedbackBar
+          draft={feedbackDraft}
+          onDraftChange={onFeedbackDraftChange}
           key={`fb-${caId}-${finding.nhan_dinh_id}`}
           caId={caId}
           finding={finding}

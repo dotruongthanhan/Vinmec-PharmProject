@@ -6,7 +6,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
-from threading import RLock
+from threading import Lock, RLock
 from typing import Any, Protocol
 
 from fastapi import HTTPException
@@ -27,11 +27,12 @@ from app.api.presenter import (
 )
 from app.auth.principal import Principal
 from app.auth.roles import ADMIN
-from app.config.settings import get_secret, load_case_source
+from app.config.settings import get_secret, load_case_cache_ttl, load_case_source
 from app.core.errors import ConfigError
 from app.core.types import Chunk
 from app.db import administrative, medical_record
 from app.db.reader import DatabaseReadError, DbReviewService
+from app.db.timezone import VN_TZ
 from app.domain.models import CaBenh
 from app.feedback import PhanHoi, load_feedback, save_feedback
 from app.kb.names import DrugNameIndex
@@ -74,6 +75,7 @@ class AskRunner(Protocol):
 
 
 _DB_READ_TTL_SECONDS = 60.0
+_CASE_REFRESH_RETRY_SECONDS = 15.0
 
 
 def _is_ai_disabled() -> bool:
@@ -85,7 +87,7 @@ def _is_ai_disabled() -> bool:
 
 
 class CaseService:
-    """Nạp danh sách cố định và chỉ tính kết quả mỗi ca một lần."""
+    """Giữ danh sách ca và kết quả thẩm định theo dữ liệu hiện có."""
 
     def __init__(
         self,
@@ -108,14 +110,20 @@ class CaseService:
             Path(corpus_path) if corpus_path is not None else _ROOT / "data/kb_curated/chunks.jsonl"
         )
         self._cases: dict[str, CaBenh] | None = None
+        self._case_cache_ttl = (
+            load_case_cache_ttl() if isinstance(self._loader, DbReviewService) else None
+        )
+        self._next_case_refresh_at = 0.0
+        self._cases_refreshed_at: datetime | None = None
+        self._refresh_lock = Lock()
         self._load_errors: list[s.LoadError] = []
         self._results: dict[str, KetQuaThamDinh] = {}
         self._renal_rules: RenalRuleBook | None = None
         self._ask = NotReadyAskService()
         self._lock = RLock()
-        self._db_cache: dict[tuple[str, ...], tuple[float, Any]] = {}
-        self._db_cache_lock = RLock()
+        self._db_cache: dict[str, tuple[float, CaBenh, s.MedicalRecord]] = {}
         self._jobs = AiJobManager()
+        self._ai_cases: set[str] = set()
         self._ask_sources: dict[str, dict[str, Chunk]] = {}
         self._container: container_mod.Container | None = None
         self._synthesizer: Synthesizer | None = None
@@ -203,12 +211,61 @@ class CaseService:
             if callable(close_asker):
                 close_asker()
 
+    def _ensure_cases(self) -> None:
+        """Nạp tệp một lần hoặc làm mới từ DB mà vẫn phục vụ dữ liệu cũ."""
+        loader = self._loader
+        ttl = self._case_cache_ttl
+        if not isinstance(loader, DbReviewService) or ttl is None:
+            with self._lock:
+                if self._cases is None:
+                    cases, errors = loader.list_cases()
+                    self._cases = {case.ca_id: case for case in cases}
+                    self._load_errors = [s.LoadError(tep=path, loi=error) for path, error in errors]
+            return
+
+        with self._lock:
+            has_cases = self._cases is not None
+            if has_cases and time.monotonic() < self._next_case_refresh_at:
+                return
+        if not self._refresh_lock.acquire(blocking=not has_cases):
+            return
+
+        try:
+            with self._lock:
+                has_cases = self._cases is not None
+                if has_cases and time.monotonic() < self._next_case_refresh_at:
+                    return
+            try:
+                loader.refresh()
+                cases, errors = loader.list_cases()
+            except DatabaseReadError:
+                if not has_cases:
+                    raise
+                with self._lock:
+                    self._next_case_refresh_at = time.monotonic() + _CASE_REFRESH_RETRY_SECONDS
+                _LOGGER.warning("Tiếp tục dùng danh sách ca đã nạp do làm mới thất bại.")
+                return
+            updated = {case.ca_id: case for case in cases}
+            with self._lock:
+                for case_id, old in (self._cases or {}).items():
+                    new = updated.get(case_id)
+                    if new is not None and old.model_dump() == new.model_dump():
+                        updated[case_id] = old
+                        continue
+                    self._results.pop(case_id, None)
+                    self._db_cache.pop(case_id, None)
+                    self._ai_cases.discard(case_id)
+                    self._ask_sources.pop(case_id, None)
+                self._cases = updated
+                self._load_errors = [s.LoadError(tep=path, loi=error) for path, error in errors]
+                self._next_case_refresh_at = time.monotonic() + ttl
+                self._cases_refreshed_at = datetime.now(VN_TZ)
+        finally:
+            self._refresh_lock.release()
+
     def _get_case(self, case_id: str) -> CaBenh:
-        """Tra mã trong danh sách đã nạp, không tạo đường dẫn từ mã."""
-        if self._cases is None:
-            cases, errors = self._loader.list_cases()
-            self._cases = {case.ca_id: case for case in cases}
-            self._load_errors = [s.LoadError(tep=path, loi=error) for path, error in errors]
+        """Tra mã trong danh sách đã nạp, dưới khóa chung."""
+        assert self._cases is not None
         case = self._cases.get(case_id)
         if case is None:
             raise HTTPException(404, "Không tìm thấy ca bệnh.")
@@ -219,74 +276,77 @@ class CaseService:
         if case.ca_id not in self._results:
             if self._renal_rules is None:
                 self._renal_rules = load_renal_rules(self._renal_rules_path)
-            self._results[case.ca_id] = run_case(case, self._renal_rules)
+            ctx = container_mod.get_rule_context()
+            self._results[case.ca_id] = run_case(
+                case, self._renal_rules, resolver=ctx.resolver, interactions=ctx.interactions
+            )
         return self._results[case.ca_id]
 
     def list_cases(self) -> s.DanhSachCa:
         """Trả hàng đợi đã sắp xếp, kèm lỗi nạp và phản hồi mới nhất."""
+        self._ensure_cases()
         with self._lock:
-            if self._cases is None:
-                cases, errors = self._loader.list_cases()
-                self._cases = {case.ca_id: case for case in cases}
-                self._load_errors = [s.LoadError(tep=path, loi=error) for path, error in errors]
+            assert self._cases is not None
             cases = list(self._cases.values())
             results = {case.ca_id: self._review(case) for case in cases}
             queue = present_queue(cases, results, load_feedback(self._feedback_path))
-            records = self._administrative(cases)
-            by_id = {case.ca_id: case for case in cases}
-            for row in queue:
-                case = by_id[row.ca_id]
-                row.chan_doan_chinh = (
-                    "; ".join(
-                        diagnosis.noi_dung
-                        for diagnosis in case.chan_doan
-                        if diagnosis.loai == "chinh"
-                    )
-                    or None
+            load_errors = self._load_errors
+            refreshed_at = self._cases_refreshed_at
+        records = self._administrative(cases)
+        by_id = {case.ca_id: case for case in cases}
+        for row in queue:
+            case = by_id[row.ca_id]
+            row.chan_doan_chinh = (
+                "; ".join(
+                    diagnosis.noi_dung for diagnosis in case.chan_doan if diagnosis.loai == "chinh"
                 )
-                row.vao_vien = case.dot_dieu_tri.thoi_diem_bat_dau
-                record = records.get(case.nguoi_benh.nguoi_benh_id)
-                if record is None:
-                    continue
-                row.ho_ten = record.dinh_danh_day_du.ho_ten
-                row.ngay_sinh = record.dinh_danh_day_du.ngay_sinh
-                encounter = next(
-                    (
-                        item
-                        for item in record.lich_su_vao_vien
-                        if item.dot_dieu_tri_id == case.dot_dieu_tri.dot_dieu_tri_id
-                    ),
-                    None,
-                )
-                if encounter:
-                    row.chan_doan_chinh = encounter.chan_doan_chinh
-                    row.vao_vien = encounter.thoi_diem_bat_dau
-                    row.so_y_lenh = len(encounter.y_lenh)
-            return s.DanhSachCa(
-                cases=queue,
-                loi_nap=self._load_errors,
-                che_do=self.mode(),
+                or None
             )
+            row.vao_vien = case.dot_dieu_tri.thoi_diem_bat_dau
+            record = records.get(case.nguoi_benh.nguoi_benh_id)
+            if record is None:
+                continue
+            row.ho_ten = record.dinh_danh_day_du.ho_ten
+            row.ngay_sinh = record.dinh_danh_day_du.ngay_sinh
+            encounter = next(
+                (
+                    item
+                    for item in record.lich_su_vao_vien
+                    if item.dot_dieu_tri_id == case.dot_dieu_tri.dot_dieu_tri_id
+                ),
+                None,
+            )
+            if encounter:
+                row.chan_doan_chinh = encounter.chan_doan_chinh
+                row.vao_vien = encounter.thoi_diem_bat_dau
+                row.so_y_lenh = len(encounter.y_lenh)
+        return s.DanhSachCa(
+            cases=queue,
+            loi_nap=load_errors,
+            che_do=self.mode(),
+            lam_moi_luc=refreshed_at,
+        )
 
     def get_case(self, case_id: str) -> s.ChiTietCa:
         """Đọc chi tiết cùng bộ đệm thẩm định hiện có, không bị bước AI chặn."""
+        self._ensure_cases()
         with self._lock:
             case = self._get_case(case_id)
             rule_result = self._review(case)
             feedbacks = load_feedback(self._feedback_path)
             mode = self.mode()
-        detail = present_case(case, rule_result, feedbacks, che_do=mode)
+        detail = present_case(
+            case,
+            rule_result,
+            feedbacks,
+            che_do=mode,
+            ma_tran_tuong_tac=rule_result.ma_tran_tuong_tac,
+        )
         medical_future = None
         if isinstance(self._loader, DbReviewService):
             # Hai lần đọc DB độc lập: chạy song song để không cộng dồn độ trễ mạng.
             medical_pool = ThreadPoolExecutor(max_workers=1)
-            medical_future = medical_pool.submit(
-                self._cached_read,
-                ("med", case.nguoi_benh.nguoi_benh_id, case.ca_id),
-                lambda: medical_record.read_medical_record(
-                    case.nguoi_benh.nguoi_benh_id, case.ca_id
-                ),
-            )
+            medical_future = medical_pool.submit(self._read_medical_record, case)
             medical_pool.shutdown(wait=False)
         record = self._administrative([case]).get(case.nguoi_benh.nguoi_benh_id)
         if record:
@@ -350,22 +410,24 @@ class CaseService:
         patient_ids = sorted({case.nguoi_benh.nguoi_benh_id for case in cases})
         return administrative.read_administrative(patient_ids)
 
-    def _cached_read(self, key: tuple[str, ...], loader: Any) -> Any:
-        """Bộ đệm 60 giây cho y lệnh và phiếu điều trị; dữ liệu hành chính không vào đây."""
+    def _read_medical_record(self, case: CaBenh) -> s.MedicalRecord:
+        """Giữ y lệnh và phiếu tối đa 60 giây cho đúng phiên bản ca."""
         now = time.monotonic()
-        with self._db_cache_lock:
-            hit = self._db_cache.get(key)
-            if hit is not None and now - hit[0] < _DB_READ_TTL_SECONDS:
-                return hit[1]
-        value = loader()
-        with self._db_cache_lock:
-            if len(self._db_cache) > 256:
-                self._db_cache.clear()
-            self._db_cache[key] = (time.monotonic(), value)
+        with self._lock:
+            hit = self._db_cache.get(case.ca_id)
+            if hit is not None and hit[1] is case and now - hit[0] < _DB_READ_TTL_SECONDS:
+                return hit[2]
+        value = medical_record.read_medical_record(case.nguoi_benh.nguoi_benh_id, case.ca_id)
+        with self._lock:
+            if self._cases is not None and self._cases.get(case.ca_id) is case:
+                if len(self._db_cache) > 256:
+                    self._db_cache.clear()
+                self._db_cache[case.ca_id] = (time.monotonic(), case, value)
         return value
 
     def get_record(self, case_id: str, record_id: str) -> s.BanGhi:
         """Tra bản ghi trong đúng ca mà không truy cập đường dẫn từ người gọi."""
+        self._ensure_cases()
         with self._lock:
             record = present_record(self._get_case(case_id), record_id)
             if record is None:
@@ -405,8 +467,13 @@ class CaseService:
         assert state.ket_qua is not None
         return present_ai_result(case, rule_result, state.ket_qua, feedbacks)
 
+    def _get_ai_state(self, case_id: str) -> AiJobState | None:
+        """Chỉ lấy tác vụ AI thuộc phiên bản hiện tại của ca."""
+        return self._jobs.get(case_id) if case_id in self._ai_cases else None
+
     def start_ai(self, case_id: str, *, restart: bool = False) -> s.KetQuaAI:
         """Khởi động phân tích AI nền cho một ca hoặc trả trạng thái hiện có."""
+        self._ensure_cases()
         with self._lock:
             case = self._get_case(case_id)
             if not self._ai_enabled or self._ai_runner is None:
@@ -422,13 +489,15 @@ class CaseService:
             state = self._jobs.start(
                 case_id,
                 lambda: runner.run(case, rule_result),
-                restart=restart,
+                restart=restart or case_id not in self._ai_cases,
             )
+            self._ai_cases.add(case_id)
             feedbacks = load_feedback(self._feedback_path) if state.trang_thai == "xong" else []
         return self._present_job_state(case, rule_result, state, feedbacks)
 
     def get_ai(self, case_id: str) -> s.KetQuaAI:
         """Chỉ đọc trạng thái phân tích AI hiện tại của ca."""
+        self._ensure_cases()
         with self._lock:
             case = self._get_case(case_id)
             if not self._ai_enabled or self._ai_runner is None:
@@ -439,7 +508,7 @@ class CaseService:
                     thoi_gian_ms=None,
                     mo_hinh=None,
                 )
-            state = self._jobs.get(case_id)
+            state = self._get_ai_state(case_id)
             if state is None:
                 raise HTTPException(
                     404,
@@ -454,11 +523,13 @@ class CaseService:
 
     def get_source(self, case_id: str, chunk_id: str) -> s.DoanNguon:
         """Tra đoạn nguồn đã cấp cho ca bệnh trong phân tích AI hoặc hỏi đáp."""
+        if case_id != "__global__":
+            self._ensure_cases()
         with self._lock:
             if case_id != "__global__":
                 self._get_case(case_id)
             chunk: Chunk | None = None
-            state = self._jobs.get(case_id) if case_id != "__global__" else None
+            state = self._get_ai_state(case_id)
             if state is not None and state.trang_thai == "xong" and state.ket_qua is None:
                 chunk = None
             elif state is not None and state.trang_thai == "xong" and state.ket_qua is not None:
@@ -479,7 +550,7 @@ class CaseService:
         target_id: str,
     ) -> tuple[str, int, list[str]] | None:
         """Tìm dòng AI hợp lệ trong kết quả xong gần nhất của ca để ghi nhận phản hồi."""
-        state = self._jobs.get(case.ca_id)
+        state = self._get_ai_state(case.ca_id)
         if state is None or state.trang_thai != "xong" or state.ket_qua is None:
             return None
         presented = present_ai_result(case, rule_result, state.ket_qua, ())
@@ -502,6 +573,7 @@ class CaseService:
 
     def feedback(self, case_id: str, request: s.GuiPhanHoi, principal: Principal) -> s.PhanHoiDaGhi:
         """Kiểm tra nhận định và lý do trước khi ghi phản hồi."""
+        self._ensure_cases()
         with self._lock:
             case = self._get_case(case_id)
             rule_result = self._review(case)
@@ -631,13 +703,11 @@ class CaseService:
 
     def ask(self, case_id: str, request: s.GuiCauHoi, principal: Principal) -> s.TraLoi:
         """Gọi CaseAsker khi có LLM; hỗ trợ cả hỏi đáp chung (__global__) và theo từng ca."""
+        self._ensure_cases()
         history_pairs = [(item.vai, item.noi_dung) for item in request.lich_su]
         if case_id == "__global__":
             with self._lock:
-                if self._cases is None:
-                    cases_list, errors = self._loader.list_cases()
-                    self._cases = {c.ca_id: c for c in cases_list}
-                    self._load_errors = [s.LoadError(tep=p, loi=e) for p, e in errors]
+                assert self._cases is not None
                 all_cases = list(self._cases.values())
                 all_results = {c.ca_id: self._review(c) for c in all_cases}
                 asker = self._asker_impl
@@ -682,7 +752,7 @@ class CaseService:
                     self._save_chat_log(case_id, request.cau_hoi, response, principal)
                     return response
                 rule_result = self._review(case)
-                state = self._jobs.get(case_id)
+                state = self._get_ai_state(case_id)
                 ai_result = (
                     state.ket_qua if state is not None and state.trang_thai == "xong" else None
                 )
@@ -699,9 +769,11 @@ class CaseService:
 
         if result.trang_thai == "ok" and result.doan:
             with self._lock:
-                case_sources = self._ask_sources.setdefault(case_id, {})
-                for chunk in result.doan:
-                    case_sources[chunk.doan_trich_id] = chunk
+                assert self._cases is not None
+                if case_id == "__global__" or self._cases.get(case_id) is case:
+                    case_sources = self._ask_sources.setdefault(case_id, {})
+                    for chunk in result.doan:
+                        case_sources[chunk.doan_trich_id] = chunk
 
         response = s.TraLoi(
             trang_thai=result.trang_thai,

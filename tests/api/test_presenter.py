@@ -33,6 +33,8 @@ def test_presenter_is_pure_and_uses_latest_feedback() -> None:
     before = (case.model_dump_json(), result.model_dump_json())
     body = present_case(case, result, [newer, feedback])
     assert body.nhan_dinh.can_chu_y[0].phan_hoi.phan_hoi == "dong_y"
+    assert body.nhan_dinh.can_chu_y[0].phan_hoi.thoi_diem_text == "17/11/2026 07:00"
+    assert newer.thoi_diem.tzinfo is UTC
     assert body.nhan_dinh.can_chu_y[0].dien_giai_ai is None
     assert body.nhan_dinh.can_chu_y[0].de_xuat_ai is None
     assert body.nhan_dinh.can_chu_y[0].trich_dan == []

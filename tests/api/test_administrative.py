@@ -86,8 +86,11 @@ def test_reader_uses_only_scoped_selects_in_read_only_snapshot(
     connection.__enter__.return_value = connection
     statements = []
 
-    def execute(query: object, params: tuple) -> MagicMock:
+    def execute(query: object, params: tuple | None = None) -> MagicMock:
         statement = query if isinstance(query, str) else query.as_string()
+        if statement.startswith("SET LOCAL"):
+            assert statement == "SET LOCAL statement_timeout = 8000"
+            return MagicMock()
         statements.append((statement, params))
         assert statement.startswith("SELECT ")
         if "thuoc_text" in statement:
@@ -115,6 +118,10 @@ def test_reader_uses_only_scoped_selects_in_read_only_snapshot(
     assert connection.isolation_level == psycopg.IsolationLevel.REPEATABLE_READ
     assert "default_transaction_read_only=on" in connect.call_args.kwargs["options"]
     assert all("ANY(%s)" in statement and params[0] for statement, params in statements)
+    assert any(
+        '"chan_doan"' in statement and statement.endswith("ORDER BY chan_doan_id")
+        for statement, _ in statements
+    )
     assert any(
         entry.phieu_dieu_tri for record in result.values() for entry in record.lich_su_vao_vien
     )

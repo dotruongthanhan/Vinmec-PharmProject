@@ -1,0 +1,9 @@
+**TRẠNG THÁI: CHƯA XONG**
+
+**FILE ĐÃ TẠO / SỬA:** Đã triển khai pipeline DAV/RxNav, bộ tách thành phần, sáu bảng từ điển, ba tệp độ phủ và bộ kiểm thử T50. Chi tiết tại [plan/reports/T50.md](D:/create/Vinmec-PharmProject/plan/reports/T50.md).
+
+**LỆNH ĐÃ CHẠY VÀ KẾT QUẢ:** `build` và `report` chạy thành công với 54 hoạt chất có sẵn. Cả 72 test T50 đều qua, Ruff trên các tệp T50 cũng qua. Kiểm tra toàn kho ghi nhận 2 lỗi lint và 6 test trượt, đều thuộc T51. Đã dọn `.pytest_t50*`.
+
+**ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO:** Cả hai lệnh tải dừng với `ConnectError` do môi trường chặn HTTPS. Chưa nhận được trang DAV hay phản hồi RxNav nào, nên thân POST thực tế, độ phủ và ATC chưa được xác minh.
+
+**VIỆC CHƯA LÀM / CÂU HỎI:** Còn lượt tải và nghiệm thu với dữ liệu thật, gồm đối chiếu Augmentin, Ceftriaxon 1 g và bốn hoạt chất ca giả lập còn thiếu trên trục.

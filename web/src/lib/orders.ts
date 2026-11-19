@@ -35,13 +35,21 @@ export type OrderRowInput = DongHangDoi & {
   trang_thai_y_lenh?: OrderWorkflowStatus | null
 }
 
+type OrderFilterValues<T extends string> = T | readonly T[] | 'all'
+
 export interface OrderColumnFilters {
-  priority?: OrderPriorityLevel | 'all'
-  khoa?: string | 'all'
-  status?: OrderWorkflowStatus | 'all'
-  aiWarning?: OrderAiWarningFilter | 'all'
+  priority?: OrderFilterValues<OrderPriorityLevel>
+  khoa?: OrderFilterValues<string>
+  status?: OrderFilterValues<OrderWorkflowStatus>
+  aiWarning?: OrderFilterValues<OrderAiWarningFilter>
   timeText?: string
   dateExact?: string
+}
+
+/** Chuẩn hoá bộ lọc cũ và mới; không có lựa chọn nghĩa là tất cả. */
+export function selectedFilterValues<T extends string>(value: OrderFilterValues<T> | undefined): readonly T[] {
+  if (value === undefined || value === 'all' || value === '') return []
+  return typeof value === 'string' ? [value] : value
 }
 
 export interface DepartmentCount {
@@ -203,14 +211,18 @@ export function isPassedOrder(item: DongHangDoi): boolean {
 }
 
 /** Tính số đếm thật cho các nhóm ở thanh bên và danh sách khoa từ dữ liệu /api/cases. */
-export function countOrderGroups(cases: readonly DongHangDoi[]): OrderGroupCounts {
+export function countOrderGroups(
+  cases: readonly OrderRowInput[],
+  columnFilters?: OrderColumnFilters,
+): OrderGroupCounts {
+  const matching = columnFilters ? applyOrderColumnFilters(cases, columnFilters) : cases
   let canXem = 0
   let thieuDuLieu = 0
   let dat = 0
   let daPhanHoi = 0
   const deptMap = new Map<string, number>()
 
-  for (const item of cases) {
+  for (const item of matching) {
     if (isNeedsReviewOrder(item)) {
       canXem += 1
     }
@@ -231,7 +243,7 @@ export function countOrderGroups(cases: readonly DongHangDoi[]): OrderGroupCount
     .sort((a, b) => VI_COLLATOR.compare(a.khoa, b.khoa))
 
   return {
-    tat_ca: cases.length,
+    tat_ca: matching.length,
     can_xem: canXem,
     thieu_du_lieu: thieuDuLieu,
     dat,
@@ -295,20 +307,24 @@ export function applyOrderColumnFilters<T extends OrderRowInput>(
     return [...cases]
   }
   const { priority, khoa, status, aiWarning, timeText, dateExact } = columnFilters
+  const priorities = selectedFilterValues(priority)
+  const departments = selectedFilterValues(khoa)
+  const statuses = selectedFilterValues(status)
+  const warnings = selectedFilterValues(aiWarning)
   const normTimeText = timeText ? timeText.trim().toLowerCase() : ''
   const normDateExact = dateExact ? dateExact.trim() : ''
 
   return cases.filter((item) => {
-    if (priority && priority !== 'all' && getOrderPriorityLevel(item) !== priority) {
+    if (priorities.length && !priorities.includes(getOrderPriorityLevel(item))) {
       return false
     }
-    if (khoa && khoa !== 'all' && item.khoa !== khoa) {
+    if (departments.length && !departments.includes(item.khoa)) {
       return false
     }
-    if (status && status !== 'all' && getOrderWorkflowStatus(item) !== status) {
+    if (statuses.length && !statuses.includes(getOrderWorkflowStatus(item))) {
       return false
     }
-    if (aiWarning && aiWarning !== 'all' && getOrderAiWarningKind(item) !== aiWarning) {
+    if (warnings.length && !warnings.includes(getOrderAiWarningKind(item))) {
       return false
     }
     if (normDateExact) {

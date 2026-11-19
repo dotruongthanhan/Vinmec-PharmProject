@@ -1,5 +1,36 @@
 # HANDOFF – bàn giao giữa các phiên Claude
 
+## CẬP NHẬT 19/11/2026 (rạng sáng) – ĐỌC PHẦN NÀY TRƯỚC
+
+Đang làm **plan 1.8** (`plan/plan-1.8-du-lieu-tham-dinh-7-yeu-to.md`): dữ liệu thật cho thẩm định 7 yếu tố. Tiến độ từng bước nằm ở **mục 5.0** của plan; tiến độ nguồn nằm ở cột "Tiến độ (19/11)" của mục 3.1.
+
+**Quyền người dùng giao (19/11, khi đi ngủ):**
+- Khi **D0 và D1 xong hết** các bước làm được, Claude làm **một vòng review tổng** (plan 1.8 mục 5.0.1). Đạt thì **tự sang D2, D3… không cần hỏi**. Mỗi đợt vẫn qua cổng review mục 6.
+- Vẫn phải hỏi trước: commit / push, ghi Supabase, xoá dữ liệu, việc ngoài plan.
+- **Nhúng tạm gác (19/11 đêm):** không chạy nhúng thật (T52 ứng viên ngữ nghĩa, hiệu chuẩn, nhúng nốt RAG) cho tới khi người dùng nạp credit OpenRouter hoặc đổi nhà cung cấp nhúng. Việc nào phụ thuộc nhúng thì đánh dấu ⏸️ và làm việc khác; không để nhúng chặn luật / bảng tương tác (các phần này không dùng nhúng).
+- **Quy tắc 3 lần** (từ 19/11, lượt trước không tính): việc giao / sửa 3 lượt liên tiếp không cải thiện chỉ số mục tiêu thì dừng, đánh dấu ⏸️ ở plan 1.8 mục 5.0 và TRACKING, chuyển việc khác.
+
+**Chọn agent** (người dùng chốt 19/11):
+- Không cần mạng: Codex `gpt-6.1-sol` xhigh (6.2 chỉ dự phòng).
+- Cần mạng: sub Claude Sonnet medium/high (Codex `-s workspace-write` bị chặn mạng).
+- Hết quota: `agy` `gemini-4-hydrogen-high/xhigh`.
+
+**Đang chạy lúc ghi:**
+- T52-fix-1 (Codex 6.2): lỗi lùi độ phủ do dạng muối.
+- T54 (sub Sonnet): tải TT20 / 15-VBHN / TT37, QĐ 5631, QĐ 5948, LiverTox, LactMed.
+- T55 (Codex 6.1): bảng tương tác + luật yếu tố 4 + ma trận, theo hợp đồng `plan/api-hop-dong-v1.6-ma-tran-tuong-tac.md`.
+
+**Việc còn của D0 / D1 sau khi các task trên xong:**
+- Chạy nhúng thật và hiệu chuẩn (T52).
+- D0.7: nối nhãn openFDA ↔ trục.
+- D0.8: lệnh ma trận độ phủ đa nguồn.
+- Sửa `app/kb/dictionary/publish.py` đọc biến môi trường ngoài config (test kiến trúc trượt).
+- Chạy lại `python -m app.kb.resolver build-index` sau T52.
+- D1.2 phần một bên (~25k trang, sub Sonnet chạy nền).
+- Vòng review tổng.
+
+---
+
 ## CẬP NHẬT PHIÊN 5 (17/11/2026, khoảng 10:35) – ĐỌC PHẦN NÀY TRƯỚC
 
 Khối "PHIÊN 4" bên dưới vẫn đúng về quyết định của người dùng, bẫy đã gặp và danh sách việc kế; riêng mục 2 và 3 của nó (bốn việc chạy nền) **đã xử lý xong**:

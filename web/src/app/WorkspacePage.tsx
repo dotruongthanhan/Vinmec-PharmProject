@@ -26,6 +26,7 @@ import {
   sortOrders,
 } from '@/lib/orders'
 import type {
+  OrderColumnFilters,
   OrderSelectionFilter,
   OrderSortDirection,
   OrderSortField,
@@ -50,6 +51,8 @@ interface DialogState {
   triggerEl: HTMLElement | null
 }
 
+const ALL_ORDERS: OrderSelectionFilter = { type: 'group', group: 'tat_ca' }
+
 /** Bàn làm việc ba cột cho danh sách y lệnh, hồ sơ và chi tiết ca. */
 export function WorkspacePage() {
   const { caId: routeCaId } = useParams<{ caId?: string }>()
@@ -60,6 +63,7 @@ export function WorkspacePage() {
   const activeCaseId = routeCaId ?? null
   const isListRoute = activeCaseId === null
   const isRecordsRoute = location.pathname.replace(/\/$/, '') === '/app/ho-so'
+  const isRecordsSection = isRecordsRoute || (activeCaseId !== null && location.state?.fromRecords === true)
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
     () => loadUiPrefs().queueCollapsed,
@@ -74,10 +78,7 @@ export function WorkspacePage() {
   const [drawerAssistantOpen, setDrawerAssistantOpen] = useState<boolean>(false)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
 
-  const [activeFilter, setActiveFilter] = useState<OrderSelectionFilter>({
-    type: 'group',
-    group: 'tat_ca',
-  })
+  const [columnFilters, setColumnFilters] = useState<OrderColumnFilters>({})
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortField, setSortField] = useState<OrderSortField>('ket_qua')
   const [sortDirection, setSortDirection] = useState<OrderSortDirection>('desc')
@@ -103,6 +104,8 @@ export function WorkspacePage() {
     loading: casesLoading,
     error: casesError,
     reload: reloadCases,
+    refresh: refreshCases,
+    updatedAt: casesUpdatedAt,
     markAllResponded,
   } = useCases(apiClient)
 
@@ -111,6 +114,7 @@ export function WorkspacePage() {
     loading: detailLoading,
     error: detailError,
     retry: retryDetail,
+    orderSelectionReady,
     applyFeedbackToCase,
   } = useCaseDetail(apiClient, activeCaseId)
 
@@ -156,20 +160,13 @@ export function WorkspacePage() {
   const counts = useMemo(() => countOrderGroups(allCases), [allCases])
 
   const filteredOrders = useMemo(
-    () => filterOrders(allCases, activeFilter, searchQuery),
-    [allCases, activeFilter, searchQuery],
+    () => filterOrders(allCases, ALL_ORDERS, searchQuery),
+    [allCases, searchQuery],
   )
   const sortedOrders = useMemo(
     () => sortOrders(filteredOrders, sortField, sortDirection),
     [filteredOrders, sortField, sortDirection],
   )
-
-  const recentCases = useMemo(() => {
-    const map = new Map(allCases.map((c) => [c.ca_id, c]))
-    return chat.askedCaseIds
-      .map((id) => map.get(id))
-      .filter((item): item is NonNullable<typeof item> => item !== undefined)
-  }, [allCases, chat.askedCaseIds])
 
   const assistantHistory = useMemo<AssistantHistoryEntry[]>(() => {
     const byId = new Map(allCases.map((c) => [c.ca_id, c]))
@@ -266,17 +263,6 @@ export function WorkspacePage() {
     saveAssistantWidth(nextWidth)
   }, [])
 
-  const handleSelectFilter = useCallback(
-    (nextFilter: OrderSelectionFilter) => {
-      setActiveFilter(nextFilter)
-      setDrawerSidebarOpen(false)
-      if (!isListRoute) {
-        navigate('/app')
-      }
-    },
-    [isListRoute, navigate],
-  )
-
   const handleOpenCase = useCallback(
     (caId: string) => {
       setDrawerSidebarOpen(false)
@@ -306,7 +292,6 @@ export function WorkspacePage() {
   )
 
   const handleResetFilters = useCallback(() => {
-    setActiveFilter({ type: 'group', group: 'tat_ca' })
     setSearchQuery('')
   }, [])
 
@@ -358,19 +343,11 @@ export function WorkspacePage() {
   const activeMode = detail?.che_do ?? casesData?.che_do ?? null
 
   const sidebarCommonProps = {
-    activeSection: isRecordsRoute ? 'records' as const : 'orders' as const,
+    activeSection: isRecordsSection ? 'records' as const : 'orders' as const,
     onNavigate: () => setDrawerSidebarOpen(false),
-    counts,
-    activeFilter,
-    isListRoute,
-    activeCaseId,
-    recentCases,
     userEmail,
     isDemoMode,
     vaiTro,
-    onSelectFilter: handleSelectFilter,
-    onOpenCase: handleOpenCase,
-    onFocusSearch: handleFocusSearch,
     onToggleCollapse: handleToggleSidebar,
     onOpenSettings: handleOpenSettings,
     onSignIn: handleSignIn,
@@ -442,7 +419,9 @@ export function WorkspacePage() {
             onRetry={reloadCases}
             onOpenRecord={(caId) => {
               setDrawerSidebarOpen(false)
-              navigate(`/app/y-lenh/${encodeURIComponent(caId)}?tab=ho_so_benh_an`)
+              navigate(`/app/y-lenh/${encodeURIComponent(caId)}?tab=ho_so_benh_an`, {
+                state: { fromRecords: true },
+              })
             }}
           />
         ) : isListRoute ? (
@@ -475,7 +454,7 @@ export function WorkspacePage() {
             </div>
 
             <OrdersTable
-              filterTitle={getOrderFilterTitle(activeFilter)}
+              filterTitle={getOrderFilterTitle(ALL_ORDERS)}
               orders={sortedOrders}
               totalCount={allCases.length}
               loiNap={casesData?.loi_nap ?? []}
@@ -484,17 +463,23 @@ export function WorkspacePage() {
               searchQuery={searchQuery}
               sortField={sortField}
               sortDirection={sortDirection}
+              columnFilters={columnFilters}
+              onColumnFiltersChange={setColumnFilters}
               departments={counts.departments.map((d) => d.khoa)}
+              updatedAt={casesUpdatedAt}
               onToggleSort={handleToggleSort}
               onSelectSort={handleSelectSort}
               onOpenOrder={handleOpenCase}
               onResetFilters={handleResetFilters}
               onRetry={reloadCases}
+              onRefresh={refreshCases}
             />
           </div>
         ) : detail && detail.ca_id === activeCaseId ? (
           <OrderDetailView
+            key={detail.ca_id}
             detail={detail}
+            orderSelectionReady={orderSelectionReady}
             aiTrangThai={ai.trangThai}
             aiKetQua={ai.ketQua}
             aiThoiGianMs={ai.thoiGianMs}

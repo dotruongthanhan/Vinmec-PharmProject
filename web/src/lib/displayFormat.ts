@@ -1,14 +1,25 @@
 import type { SemanticTone } from './severity.ts'
 
+export const VIETNAM_TIME_ZONE = 'Asia/Ho_Chi_Minh'
+
+/** Chuỗi ngày giờ không ghi múi được hiểu theo giờ Việt Nam. */
+export function parseVietnamDate(value: string): Date | null {
+  const normalized = value.trim().replace(/^(\d{4}-\d{2}-\d{2})\s+(?=\d{2}:)/, '$1T')
+  const withoutOffset = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?$/.test(normalized)
+  const date = new Date(withoutOffset ? `${normalized}+07:00` : normalized)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
 /** Ngày thuần lịch giữ nguyên; ngày giờ hiển thị theo giờ Việt Nam. */
 export function administrativeDate(value?: string | null): string {
-  if (!value) return 'Chưa ghi nhận'
-  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value.split('-').reverse().join('/')
-  const date = new Date(value)
-  if (Number.isNaN(date.valueOf())) return 'Chưa ghi nhận'
+  const raw = value?.trim()
+  if (!raw) return 'Chưa ghi nhận'
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw.split('-').reverse().join('/')
+  const date = parseVietnamDate(raw)
+  if (!date) return 'Chưa ghi nhận'
   return new Intl.DateTimeFormat('vi-VN', {
-    timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit', hour12: false,
+    timeZone: VIETNAM_TIME_ZONE, day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
   }).format(date)
 }
 

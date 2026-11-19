@@ -1,4 +1,6 @@
 app:
+  tra_cuu: "data/kb_curated/tra_cuu/tra_cuu.sqlite"
+  tuong_tac: "data/kb_curated/tuong_tac/ddinter.sqlite"
   profile: "test"
 llm:
   provider: "fake"

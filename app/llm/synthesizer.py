@@ -9,7 +9,7 @@ from app.core.errors import ProviderError
 from app.core.interfaces import LLMClient
 from app.core.types import ChatMessage, Chunk
 from app.domain.models import CaBenh
-from app.llm.case_context import build_case_context
+from app.llm.case_context import build_case_bundle
 from app.llm.prompt_loader import load_prompt, render_prompt
 from app.llm.schema import (
     KetQuaLLM,
@@ -149,7 +149,8 @@ class Synthesizer:
     ) -> KetQuaLLM:
         """Thực thi vòng gọi LLM, kiểm chứng và ghép kết quả."""
         assert self.llm is not None
-        goi, warnings = build_case_context(ca, ket_qua, self.case_settings)
+        bundle = build_case_bundle(ca, ket_qua, self.case_settings)
+        goi, warnings = bundle.goi, bundle.warnings
         selected_chunks, doan_nguon_text = _select_evidence(doan, self.evidence_max_chars)
         goi = goi.model_copy(update={"doan": selected_chunks})
 
@@ -211,17 +212,21 @@ class Synthesizer:
                 continue
 
             schema_failed_last = False
+            # Kiểm chứng chạy trên mã tạm; chỉ sau đó mới đổi về mã thật và khôi phục định danh.
             checked = verify_all(tong_hop, goi)
             current_failed: list[NhanDinhDaKiem] = []
             error_lines: list[str] = []
             for idx, item in enumerate(checked):
+                restored = item.model_copy(
+                    update={"de_xuat": bundle.khoi_phuc_de_xuat(item.de_xuat)}
+                )
                 if item.dat:
                     signature = item.de_xuat.model_dump_json()
                     if signature not in kept_signatures:
                         kept_signatures.add(signature)
-                        kept_passed.append(item)
+                        kept_passed.append(restored)
                 else:
-                    current_failed.append(item)
+                    current_failed.append(restored)
                     error_lines.append(f"Dòng {idx}: {', '.join(item.loi)}")
 
             last_failed = current_failed
