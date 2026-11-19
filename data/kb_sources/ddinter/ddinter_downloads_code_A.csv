@@ -1,5 +1,5 @@
-DDInter1263,Naltrexone,DDInter1,Abacavir,Moderate,28,Synergistic effect,,,
 DDInterID_A,Drug_A,DDInterID_B,Drug_B,Level,InteractionID,Mechanism,Interaction,Management,References
+DDInter1263,Naltrexone,DDInter1,Abacavir,Moderate,28,Synergistic effect,,,
 DDInter1,Abacavir,DDInter1348,Orlistat,Moderate,29,Absorption,,,
 DDInter58,Aluminum hydroxide,DDInter582,Dolutegravir,Major,39,Absorption,,,
 DDInter112,Aprepitant,DDInter582,Dolutegravir,Minor,44,Metabolism,,,

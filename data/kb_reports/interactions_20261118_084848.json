@@ -1,0 +1,32 @@
+{
+  "thoi_diem_tao": "2026-11-18T08:48:48.014837+00:00",
+  "raw_csv_files": 14,
+  "raw_csv_rows": 507655,
+  "unique_ddinter_drugs": 1971,
+  "unique_ddinter_pairs": 234981,
+  "matched_hoat_chat": 51,
+  "unmatched_hoat_chat": [
+    "cilastatin",
+    "dabigatran"
+  ],
+  "in_scope_ddinter_ids": 51,
+  "pairs_built": 789,
+  "by_severity": {
+    "chua_ro": 470,
+    "nghiem_trong": 88,
+    "nhe": 36,
+    "trung_binh": 195
+  },
+  "by_ddinter_level": {
+    "Major": 88,
+    "Minor": 36,
+    "Moderate": 195,
+    "Unknown": 470
+  },
+  "pairs_with_interaction_id": 789,
+  "pairs_with_clinical_text": 319,
+  "pairs_with_management": 283,
+  "pairs_with_references": 319,
+  "pairs_with_fda_citations": 100,
+  "out_path": "data/kb_curated/tuong_tac.jsonl"
+}
