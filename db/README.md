@@ -8,9 +8,11 @@ sẵn có, mặc định là `DATABASE_URL` trong `.env`; không đưa giá tr�
 
 Đặt `CASE_SOURCE=db` để API đọc Supabase qua `DATABASE_URL`; `CASE_SOURCE=file`
 (mặc định) giữ 6 ca demo từ thư mục JSON hiện tại. Nguồn DB dựng 66 ca theo y
-lệnh có `ca_id`, giữ đúng đợt điều trị, nạp lười và đệm trên thực thể dịch vụ;
-`DbReviewService.refresh()` xoá đệm để lượt đọc kế tiếp nạp lại. Kết nối bật
-`default_transaction_read_only`, chỉ SELECT theo lô trong cùng ảnh chụp.
+lệnh có `ca_id`, giữ đúng đợt điều trị và nạp lười. Yêu cầu đầu tiên sau khi
+hết TTL làm mới danh sách. `CASE_CACHE_TTL_SECONDS` mặc định 60 và được giới
+hạn trong 10–600 giây. Hành chính được đọc riêng cho từng yêu cầu.
+Ba đường đọc nghiệp vụ dùng chung tối đa ba kết nối mỗi tiến trình, với giao
+dịch chỉ đọc và giới hạn tám giây cho mỗi câu truy vấn trong giao dịch.
 Thiếu cấu hình hoặc lỗi DB: health vẫn 200, API ca trả lỗi 503 thống nhất.
 
 Kiểm nguồn DB với tệp, không ghi DB:
@@ -49,6 +51,14 @@ in số dòng duy nhất sau gộp trùng và các dòng bị loại, không m�
 | `load embeddings [--dry-run] [--replace]` | Chỉ đọc SQLite, cập nhật véc-tơ đã có trong cache |
 | `all [--dry-run] [--reset --yes]` | Schema → cases → kb → ddinter → embeddings → verify |
 | `verify` | Đối chiếu mọi bảng, view thuốc đang dùng, ca_id, khoá ngoại và độ phủ véc-tơ; lệch trả mã 1 |
+
+## Nâng cấp từ DB cũ
+
+Nếu DB còn lược đồ trước T40, phải chạy `uv run python -m app.db reset --yes`
+để tạo lại lược đồ rồi chạy `uv run python -m app.db all` để nạp nguồn. Lệnh
+reset xoá toàn bộ dữ liệu trong hai lược đồ `nghiep_vu` và `tri_thuc`. Chỉ
+khối thêm cột T45 trong `db/schema.sql` có thể áp dụng lại an toàn cho bảng
+đã có dữ liệu. `schema` không tự nâng cấp cấu trúc các bảng cũ.
 
 ## Quan hệ và thứ tự nạp
 

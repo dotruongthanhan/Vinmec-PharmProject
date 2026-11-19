@@ -8,7 +8,11 @@ from pydantic import BaseModel
 from app.calc import CalcResult, bmi, bsa_mosteller, cockcroft_gault, egfr_ckd_epi_2021
 from app.domain.loader import latest_lab, latest_vital
 from app.domain.models import CaBenh, KetQuaXetNghiem, SinhHieu
-from app.rules import PhatHien, RenalRuleBook, run_rules
+from app.kb.interactions import InteractionStore
+from app.kb.interactions.models import MaTranTuongTac
+from app.kb.resolver import DrugResolver
+from app.rules import PhatHien, RenalRuleBook
+from app.rules.engine import run_rules_with_matrix
 
 _CALC_VERSION = "1.0"
 
@@ -20,6 +24,7 @@ class KetQuaThamDinh(BaseModel):
     chi_so: list[CalcResult]
     phat_hien: list[PhatHien]
     thoi_gian_ms: float
+    ma_tran_tuong_tac: MaTranTuongTac | None = None
 
 
 def _safe_calc(
@@ -89,8 +94,13 @@ def _attach_provenance(
     return result.model_copy(update={"dau_vao": updated_inputs})
 
 
-def run_case(ca: CaBenh, renal_rules: RenalRuleBook) -> KetQuaThamDinh:
-    """Chạy tính 4 chỉ số lâm sàng và bộ luật v0 cho một ca bệnh."""
+def run_case(
+    ca: CaBenh,
+    renal_rules: RenalRuleBook,
+    resolver: DrugResolver | None = None,
+    interactions: InteractionStore | None = None,
+) -> KetQuaThamDinh:
+    """Tính chỉ số và chạy bộ luật, thêm tương tác khi có đủ chỉ mục."""
     start = time.perf_counter()
 
     weight_vital = latest_vital(ca, "can_nang")
@@ -146,7 +156,7 @@ def run_case(ca: CaBenh, renal_rules: RenalRuleBook) -> KetQuaThamDinh:
     chi_so = [
         _attach_provenance(res, weight_vital, height_vital, creatinin_lab) for res in raw_results
     ]
-    phat_hien = run_rules(ca, renal_rules)
+    phat_hien, matrix = run_rules_with_matrix(ca, renal_rules, resolver, interactions)
     elapsed_ms = (time.perf_counter() - start) * 1000.0
 
     return KetQuaThamDinh(
@@ -154,4 +164,5 @@ def run_case(ca: CaBenh, renal_rules: RenalRuleBook) -> KetQuaThamDinh:
         chi_so=chi_so,
         phat_hien=phat_hien,
         thoi_gian_ms=elapsed_ms,
+        ma_tran_tuong_tac=matrix,
     )

@@ -3,6 +3,7 @@
 import copy
 import json
 import sqlite3
+from collections import Counter
 from pathlib import Path
 from unittest.mock import patch
 
@@ -70,12 +71,14 @@ def test_links_require_existing_order_in_same_encounter(batch: sources.Batch) ->
     assert any(LINK in error and "y_lenh" in error for error in candidate.orphans())
 
 
-def test_sheet_only_load_is_idempotent_in_memory(batch: sources.Batch) -> None:
+def test_sheet_reload_replaces_old_rows_only_in_target_encounters(batch: sources.Batch) -> None:
+    from tests.db.test_loading import RecordingConnection
+
     assert SHEET in TABLES
     selected = sources.prepare_treatment_sheets(ROOT)
     assert selected.tables == {SHEET, LINK}
     assert len(selected.rows[SHEET]) == 333 and not selected.rejected
-    # Bảng trong bộ nhớ có FK kép tương đương, dùng câu upsert thật của engine.
+    # Chạy lệnh của engine trên bảng trong bộ nhớ có FK kép tương đương.
     with sqlite3.connect(":memory:") as connection:
         connection.execute("PRAGMA foreign_keys=ON")
         connection.execute("ATTACH DATABASE ':memory:' AS nghiep_vu")
@@ -104,21 +107,82 @@ def test_sheet_only_load_is_idempotent_in_memory(batch: sources.Batch) -> None:
             "INSERT INTO nghiep_vu.y_lenh VALUES (?, ?)",
             [(row["y_lenh_id"], row["dot_dieu_tri_id"]) for row in batch.rows["nghiep_vu.y_lenh"]],
         )
-        for _ in range(2):
-            for name in (SHEET, LINK):
-                table = TABLES[name]
-                statement = engine.upsert_statement(table).as_string().replace("%s", "?")
-                connection.executemany(
-                    statement,
-                    [
-                        tuple(
-                            json.dumps(row[key]) if isinstance(row[key], list) else row[key]
-                            for key in table.column_names
+
+        def apply(selected_batch: sources.Batch) -> None:
+            statements = RecordingConnection()
+            engine.load_treatment_sheets(statements, selected_batch)
+            with connection:
+                for statement, params in statements.committed:
+                    if statement.endswith("FOR NO KEY UPDATE"):
+                        continue
+                    if statement.startswith("DELETE"):
+                        params = params[0]
+                        placeholders = ", ".join("?" for _ in params)
+                        statement = statement.replace("= ANY(%s)", f"IN ({placeholders})")
+                    else:
+                        table = (
+                            TABLES[SHEET]
+                            if f'"{SHEET.split(".")[1]}"' in statement
+                            else TABLES[LINK]
                         )
-                        for row in selected.rows[name]
-                    ],
-                )
+                        params = tuple(
+                            json.dumps(value.obj)
+                            if key in table.json_columns and value is not None
+                            else value
+                            for key, value in zip(table.column_names, params, strict=True)
+                        )
+                    connection.execute(statement.replace("%s", "?"), params)
+
+        apply(selected)
+        apply(selected)
         assert connection.execute(f"SELECT count(*) FROM {SHEET}").fetchone()[0] == 333
+        sheet_counts = Counter(row["dot_dieu_tri_id"] for row in selected.rows[SHEET])
+        stale_link = next(
+            row for row in selected.rows[LINK] if sheet_counts[row["dot_dieu_tri_id"]] > 1
+        )
+        dot_id = stale_link["dot_dieu_tri_id"]
+        empty_dot_id = next(
+            row["dot_dieu_tri_id"]
+            for row in selected.rows[SHEET]
+            if row["dot_dieu_tri_id"] != dot_id
+        )
+        stale_sheet = next(
+            row
+            for row in selected.rows[SHEET]
+            if row["dot_dieu_tri_id"] == dot_id
+            and row["phieu_dieu_tri_id"] != stale_link["phieu_dieu_tri_id"]
+        )
+        reload = copy.deepcopy(selected)
+        reload.rows["nghiep_vu.dot_dieu_tri"] = [
+            row
+            for row in selected.rows["nghiep_vu.dot_dieu_tri"]
+            if row["dot_dieu_tri_id"] in {dot_id, empty_dot_id}
+        ]
+        reload.rows[SHEET] = [
+            row
+            for row in selected.rows[SHEET]
+            if row["dot_dieu_tri_id"] == dot_id and row != stale_sheet
+        ]
+        reload.rows[LINK] = [
+            row
+            for row in selected.rows[LINK]
+            if row["phieu_dieu_tri_id"]
+            in {sheet["phieu_dieu_tri_id"] for sheet in reload.rows[SHEET]}
+            and row != stale_link
+        ]
+        apply(reload)
+        for name in (SHEET, LINK):
+            keys = TABLES[name].primary_key
+            remaining = set(connection.execute(f"SELECT {', '.join(keys)} FROM {name}"))
+            expected_rows = [
+                *reload.rows[name],
+                *(
+                    row
+                    for row in selected.rows[name]
+                    if row["dot_dieu_tri_id"] not in {dot_id, empty_dot_id}
+                ),
+            ]
+            assert remaining == {tuple(row[key] for key in keys) for row in expected_rows}
         with pytest.raises(sqlite3.IntegrityError):
             connection.execute(f"UPDATE {LINK} SET y_lenh_id='KHONG_TON_TAI'")
         with pytest.raises(sqlite3.IntegrityError):
@@ -147,10 +211,15 @@ def test_sheet_loader_writes_only_sheet_tables_and_rolls_back() -> None:
     connection = RecordingConnection()
     engine.load_treatment_sheets(connection, selected)
     assert connection.committed
-    for statement, _ in connection.statements:
+    statements = [statement for statement, _ in connection.statements]
+    assert statements[0].endswith("FOR NO KEY UPDATE")
+    assert statements[1:3] == [
+        f'DELETE FROM "nghiep_vu"."{table}" WHERE dot_dieu_tri_id = ANY(%s)'
+        for table in ("phieu_y_lenh", "phieu_dieu_tri")
+    ]
+    for statement in statements[3:]:
         assert statement.startswith('INSERT INTO "nghiep_vu"."phieu_')
         assert "ON CONFLICT" in statement
-        assert not any(word in statement for word in ("DELETE", "TRUNCATE", "DROP"))
     failing = RecordingConnection('INSERT INTO "nghiep_vu"."phieu_y_lenh"')
     with pytest.raises(RuntimeError):
         engine.load_treatment_sheets(failing, selected)

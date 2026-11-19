@@ -120,7 +120,7 @@ def test_antibiotic_ksd_outcomes(
     assert len(findings) == 1
     finding = findings[0]
     assert finding.ma_luat == expected_code
-    assert finding.yeu_to == 3
+    assert finding.yeu_to == 6
     assert finding.ket_luan == expected_conclusion
     assert finding.muc_do == expected_severity
     assert finding.chi_tiet_y_lenh_id == ["CT-ABX"]

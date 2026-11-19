@@ -1,19 +1,23 @@
 """Đọc y lệnh và phiếu riêng cho giao diện, không dựng CaBenh."""
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Sequence
+from pathlib import Path
 
 import psycopg
-from psycopg import IsolationLevel, sql
-from psycopg.rows import dict_row
+from psycopg import sql
 
 from app.api import schemas as s
 from app.config.settings import get_secret
 from app.core.errors import ConfigError
+from app.db.read_pool import read_pool
 from app.db.reader import DatabaseReadError, Row, Rows
+from app.db.sources import SourceError, prepare_cases
 from app.db.timezone import to_vn_time
 from app.domain.models import ChiTietYLenh, LichDung
 from app.ui import view_model as vm
+
+_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _order_lines(rows: Rows) -> dict[str, list[dict[str, str]]]:
@@ -123,14 +127,7 @@ def read_medical_record_rows(patient_ids: Sequence[str] | None = None) -> dict[s
         url = get_secret("DATABASE_URL").strip()
         if not url:
             raise ConfigError("DATABASE_URL")
-        with psycopg.connect(
-            url,
-            options="-c default_transaction_read_only=on",
-            row_factory=dict_row,
-            connect_timeout=10,
-        ) as connection:
-            connection.isolation_level = IsolationLevel.REPEATABLE_READ
-            connection.read_only = True
+        with read_pool.connection(url) as connection:
             rows: dict[str, list[Row]] = {}
 
             def select(table: str, column: str, keys: Sequence[str]) -> list[Row]:
@@ -175,39 +172,58 @@ def read_medical_record(patient_id: str, case_id: str) -> s.MedicalRecord:
         raise DatabaseReadError("Dữ liệu y lệnh và phiếu điều trị không hợp lệ.") from None
 
 
-def verify_ho_so() -> int:
-    """Đối chiếu số lượng từng ca từ tập hàng DB, không dựng mô hình AI."""
+def verify_ho_so(root: Path = _ROOT) -> int:
+    """Đối chiếu số y lệnh từng ca với nguồn và số phiếu với hàng DB."""
     try:
         rows = read_medical_record_rows()
+        source = prepare_cases(root)
+        if source.rejected:
+            raise SourceError("Dữ liệu nguồn có dòng bị loại.")
+        source_encounters = {
+            row["dot_dieu_tri_id"]: row["nguoi_benh_id"]
+            for row in source.rows["nghiep_vu.dot_dieu_tri"]
+        }
+        source_orders = source.rows["nghiep_vu.y_lenh"]
+        source_counts = Counter(source_encounters[row["dot_dieu_tri_id"]] for row in source_orders)
+        expected = {
+            row["ca_id"]: source_counts[source_encounters[row["dot_dieu_tri_id"]]]
+            for row in source_orders
+            if row.get("ca_id")
+        }
         encounters = {
             row["dot_dieu_tri_id"]: row["nguoi_benh_id"] for row in rows["nghiep_vu.dot_dieu_tri"]
         }
-        focuses = [row for row in rows["nghiep_vu.y_lenh"] if row.get("ca_id")]
-        if not focuses:
+        focuses = {
+            row["ca_id"]: encounters[row["dot_dieu_tri_id"]]
+            for row in rows["nghiep_vu.y_lenh"]
+            if row.get("ca_id")
+        }
+        if not focuses and not expected:
             print("Không có ca để kiểm tra.")
             return 1
         matched = True
-        for focus in sorted(focuses, key=lambda row: row["ca_id"]):
-            pid = encounters[focus["dot_dieu_tri_id"]]
-            record = build_medical_record(rows, pid, focus["ca_id"])
-            order_count = sum(
-                encounters[row["dot_dieu_tri_id"]] == pid for row in rows["nghiep_vu.y_lenh"]
-            )
-            sheet_count = sum(
-                encounters[row["dot_dieu_tri_id"]] == pid
-                for row in rows["nghiep_vu.phieu_dieu_tri"]
-            )
+        sheet_counts = Counter(
+            encounters[row["dot_dieu_tri_id"]] for row in rows["nghiep_vu.phieu_dieu_tri"]
+        )
+        for case_id in sorted(expected.keys() | focuses.keys()):
+            if case_id not in focuses or case_id not in expected:
+                print(f"{case_id}: LỆCH (thiếu ca ở DB hoặc nguồn).")
+                matched = False
+                continue
+            pid = focuses[case_id]
+            record = build_medical_record(rows, pid, case_id)
+            order_count = expected[case_id]
+            sheet_count = sheet_counts[pid]
             ok = (
                 len(record.danh_sach_y_lenh) == order_count
                 and len(record.phieu_dieu_tri) == sheet_count
             )
-            ok = ok and (focus["ca_id"] != "HS-022" or order_count == 7)
             matched = matched and ok
             print(
-                f"{focus['ca_id']}: y_lệnh={len(record.danh_sach_y_lenh)}/{order_count}, "
+                f"{case_id}: y_lệnh={len(record.danh_sach_y_lenh)}/{order_count}, "
                 f"phiếu={len(record.phieu_dieu_tri)}/{sheet_count}, {'KHỚP' if ok else 'LỆCH'}"
             )
         return 0 if matched else 1
-    except (DatabaseReadError, ValueError, TypeError, KeyError):
-        print("Không thể kiểm tra hồ sơ từ cơ sở dữ liệu.")
+    except (DatabaseReadError, SourceError, ValueError, TypeError, KeyError, OSError):
+        print("Không thể đối chiếu hồ sơ từ cơ sở dữ liệu với dữ liệu nguồn.")
         return 1

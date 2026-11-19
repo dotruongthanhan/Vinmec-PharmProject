@@ -120,7 +120,7 @@ def test_demo_04_antibiotic_justified_by_microbiology() -> None:
 
     assert len(gold.phat_hien_ky_vong) == 1
     finding = gold.phat_hien_ky_vong[0]
-    assert finding.yeu_to == 3
+    assert finding.yeu_to == 6
     assert finding.ket_luan == "dat"
     assert finding.muc_do == "thong_tin"
 

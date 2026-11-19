@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.dot_dieu_tri (
     UNIQUE (nguoi_benh_id, thu_tu)
 );
 
--- T45: chỉ thêm cột; áp dụng lại an toàn với kho đã có dữ liệu.
+-- Chỉ khối thêm cột T45 dưới đây có thể áp dụng lại an toàn cho kho đã có dữ liệu.
+-- Tệp này không nâng cấp lược đồ cũ trước T40.
 ALTER TABLE nghiep_vu.nguoi_benh
     ADD COLUMN IF NOT EXISTS ho_ten text CHECK (ho_ten IS NULL OR length(trim(ho_ten)) > 0),
     ADD COLUMN IF NOT EXISTS ngay_sinh date,
@@ -243,7 +244,17 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.phieu_y_lenh (
 );
 CREATE INDEX IF NOT EXISTS phieu_dieu_tri_dot_idx ON nghiep_vu.phieu_dieu_tri(dot_dieu_tri_id);
 CREATE INDEX IF NOT EXISTS phieu_y_lenh_dot_idx ON nghiep_vu.phieu_y_lenh(dot_dieu_tri_id);
-REVOKE ALL ON nghiep_vu.phieu_dieu_tri, nghiep_vu.phieu_y_lenh FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON nghiep_vu.phieu_dieu_tri, nghiep_vu.phieu_y_lenh FROM PUBLIC;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.phieu_dieu_tri, nghiep_vu.phieu_y_lenh FROM anon';
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.phieu_dieu_tri, nghiep_vu.phieu_y_lenh FROM authenticated';
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.chi_tiet_y_lenh (
     chi_tiet_y_lenh_id text PRIMARY KEY,
@@ -275,7 +286,17 @@ FROM nghiep_vu.chi_tiet_y_lenh ct
 JOIN nghiep_vu.y_lenh yl ON yl.y_lenh_id = ct.y_lenh_id
 WHERE ct.trang_thai_dong = 'active'
   AND yl.trang_thai IN ('da_duyet', 'dang_thuc_hien');
-REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM PUBLIC;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM anon';
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM authenticated';
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS nghiep_vu.lich_dung (
     chi_tiet_y_lenh_id text NOT NULL REFERENCES nghiep_vu.chi_tiet_y_lenh,
@@ -288,7 +309,8 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.lich_dung (
     PRIMARY KEY (chi_tiet_y_lenh_id, thu_tu)
 );
 
--- Các dòng gold là đáp án kỳ vọng, không phải kết quả AI hay quyết định dược sĩ.
+-- Các bảng lan_tham_dinh, nhan_dinh, nhan_dinh_thuoc, can_cu là đáp án mẫu (gold) từ data/gold,
+-- không phải kết quả thẩm định của hệ thống hay quyết định dược sĩ; không ghi kết quả hệ thống vào đây.
 CREATE TABLE IF NOT EXISTS nghiep_vu.lan_tham_dinh (
     tham_dinh_id text PRIMARY KEY,
     y_lenh_id text NOT NULL REFERENCES nghiep_vu.y_lenh,
@@ -342,6 +364,78 @@ CREATE TABLE IF NOT EXISTS nghiep_vu.phan_hoi (
     nguon_tep text,
     PRIMARY KEY (ca_id, ma_luat, thoi_diem)
 );
+
+ALTER TABLE nghiep_vu.phan_hoi
+    ADD COLUMN IF NOT EXISTS nguoi_dung_id text;
+
+CREATE TABLE IF NOT EXISTS nghiep_vu.hoi_thoai (
+    id bigserial PRIMARY KEY,
+    thoi_diem timestamptz NOT NULL,
+    ca_id text NOT NULL,
+    cau_hoi text NOT NULL,
+    tra_loi jsonb NOT NULL,
+    nguoi_dung_id text,
+    phien_id text
+);
+CREATE INDEX IF NOT EXISTS hoi_thoai_nguoi_dung_ca_thoi_diem_idx
+    ON nghiep_vu.hoi_thoai (nguoi_dung_id, ca_id, thoi_diem);
+REVOKE ALL ON nghiep_vu.hoi_thoai FROM PUBLIC;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.hoi_thoai FROM anon';
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.hoi_thoai FROM authenticated';
+    END IF;
+END
+$$;
+
+-- Kết quả thẩm định của hệ thống khi chạy ở chế độ DB (tách biệt với các bảng đáp án mẫu gold).
+CREATE TABLE IF NOT EXISTS nghiep_vu.ket_qua_tham_dinh (
+    ket_qua_id text PRIMARY KEY,
+    ca_id text NOT NULL REFERENCES nghiep_vu.y_lenh(ca_id),
+    thoi_diem timestamptz NOT NULL,
+    phien_ban_luat text NOT NULL,
+    so_luat_da_chay integer NOT NULL CHECK (so_luat_da_chay >= 0),
+    che_do text NOT NULL CHECK (che_do IN ('file', 'db')),
+    tom_tat jsonb NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ket_qua_tham_dinh_ca_thoi_diem_idx
+    ON nghiep_vu.ket_qua_tham_dinh (ca_id, thoi_diem DESC, ket_qua_id DESC);
+
+CREATE TABLE IF NOT EXISTS nghiep_vu.ket_qua_nhan_dinh (
+    ket_qua_id text NOT NULL REFERENCES nghiep_vu.ket_qua_tham_dinh(ket_qua_id) ON DELETE CASCADE,
+    thu_tu integer NOT NULL CHECK (thu_tu >= 0),
+    nhom text NOT NULL CHECK (nhom IN ('can_chu_y', 'dat')),
+    nhan_dinh_id text NOT NULL,
+    thuoc text NOT NULL,
+    ma_luat text,
+    yeu_to integer NOT NULL CHECK (yeu_to BETWEEN 1 AND 7),
+    yeu_to_nhan text NOT NULL,
+    ket_luan text NOT NULL CHECK (ket_luan IN ('dat', 'can_xem', 'khong_du_du_lieu', 'ngoai_hdsd')),
+    ket_luan_nhan text NOT NULL,
+    muc_do text CHECK (muc_do IS NULL OR muc_do IN ('nghiem_trong', 'can_luu_y', 'thong_tin')),
+    muc_do_nhan text,
+    nguon_goc_ma text NOT NULL CHECK (nguon_goc_ma IN ('luat', 'ai_da_kiem_chung', 'ai_chua_kiem_chung')),
+    nguon_goc_nhan text NOT NULL,
+    chi_tiet_y_lenh_id jsonb NOT NULL,
+    nhan_xet text NOT NULL,
+    can_cu jsonb NOT NULL,
+    du_lieu_thieu jsonb NOT NULL,
+    PRIMARY KEY (ket_qua_id, thu_tu)
+);
+REVOKE ALL ON nghiep_vu.ket_qua_tham_dinh, nghiep_vu.ket_qua_nhan_dinh FROM PUBLIC;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.ket_qua_tham_dinh, nghiep_vu.ket_qua_nhan_dinh FROM anon';
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        EXECUTE 'REVOKE ALL ON nghiep_vu.ket_qua_tham_dinh, nghiep_vu.ket_qua_nhan_dinh FROM authenticated';
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS tri_thuc.ten_thuoc (
     ten_thuoc text NOT NULL,
@@ -425,6 +519,545 @@ CREATE TABLE IF NOT EXISTS tri_thuc.tuong_tac_sang_loc (
     CHECK (ddinter_id_a < ddinter_id_b)
 );
 
+-- Bản sao hai chỉ mục SQLite (ddinter.sqlite, tra_cuu.sqlite) phục vụ runtime đọc từ PostgreSQL.
+CREATE TABLE IF NOT EXISTS tri_thuc.ddinter_cap (
+    ddinter_id_a text NOT NULL,
+    ddinter_id_b text NOT NULL,
+    muc_do text NOT NULL,
+    muc_do_so integer NOT NULL,
+    co_che_json text NOT NULL,
+    co_lech_muc integer NOT NULL,
+    cac_muc_nguon_json text NOT NULL,
+    ma_trang_cap_json text NOT NULL,
+    hau_qua text,
+    xu_tri text,
+    tai_lieu_json text NOT NULL,
+    url_goc text,
+    PRIMARY KEY (ddinter_id_a, ddinter_id_b),
+    CHECK (ddinter_id_a < ddinter_id_b)
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.ddinter_thuoc (
+    ddinter_id text PRIMARY KEY,
+    ten text NOT NULL,
+    da_cao_du integer NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.ddinter_thuc_an (
+    id bigserial PRIMARY KEY,
+    ddinter_id text NOT NULL,
+    thuc_an text NOT NULL,
+    muc_do text NOT NULL,
+    mo_ta text,
+    xu_tri text,
+    co_che_json text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tra_cuu_hoat_chat (
+    hoat_chat_id text PRIMARY KEY,
+    ten_inn text NOT NULL,
+    ten_viet text,
+    rxcui text,
+    ma_atc_json text NOT NULL,
+    loai text NOT NULL,
+    ddinter_id text UNIQUE,
+    ddinter_cach_khop text
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tra_cuu_dong_nghia (
+    khoa_chuan_hoa text NOT NULL,
+    hoat_chat_id text NOT NULL REFERENCES tri_thuc.tra_cuu_hoat_chat,
+    loai text NOT NULL,
+    cach_khop text NOT NULL,
+    PRIMARY KEY (khoa_chuan_hoa, hoat_chat_id, loai, cach_khop)
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tra_cuu_thuoc (
+    khoa_ten_thuoc text NOT NULL,
+    thuoc_id text PRIMARY KEY,
+    ten_thuoc text NOT NULL,
+    so_dang_ky text,
+    dang_bao_che text
+);
+CREATE INDEX IF NOT EXISTS tra_cuu_thuoc_khoa_ten_idx
+    ON tri_thuc.tra_cuu_thuoc (khoa_ten_thuoc, thuoc_id);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tra_cuu_thuoc_thanh_phan (
+    thuoc_id text NOT NULL REFERENCES tri_thuc.tra_cuu_thuoc,
+    hoat_chat_id text NOT NULL REFERENCES tri_thuc.tra_cuu_hoat_chat,
+    ham_luong double precision,
+    don_vi text,
+    PRIMARY KEY (thuoc_id, hoat_chat_id)
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tra_cuu_chuyen_ma_ca (
+    ma_ca text PRIMARY KEY,
+    hoat_chat_id text NOT NULL REFERENCES tri_thuc.tra_cuu_hoat_chat,
+    cach_khop text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tra_cuu_meta (
+    phien_ban text,
+    ngay_dung text,
+    nguon_tep_json text,
+    sha256_json text
+);
+
+-- Bảng luật lâm sàng D1-D7 và từ điển hoạt chất phục vụ runtime đọc từ PostgreSQL.
+CREATE TABLE IF NOT EXISTS tri_thuc.bang_luat_meta (
+    ma text PRIMARY KEY,
+    ten text,
+    phien_ban text,
+    ngay text,
+    trang_thai text,
+    ghi_chu text,
+    nguon text,
+    phan_khac jsonb NOT NULL DEFAULT '{}'::jsonb,
+    sha256_tep text NOT NULL,
+    nap_luc timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.quy_tac_lieu_than_v2 (
+    id bigserial PRIMARY KEY,
+    danh_sach text NOT NULL CHECK (danh_sach IN ('quy_tac', 'quy_tac_cho_duyet')),
+    thu_tu integer NOT NULL,
+    ten_quoc_te text NOT NULL,
+    hoat_chat_ids jsonb NOT NULL DEFAULT '[]'::jsonb,
+    hoat_chat_id text,
+    chi_so text,
+    trang_thai text,
+    nguon text NOT NULL,
+    nguoi_duyet text,
+    muc jsonb NOT NULL,
+    nguon_chi_tiet jsonb,
+    phoi_hop text,
+    bi_danh jsonb,
+    phien_ban text NOT NULL,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS quy_tac_lieu_than_v2_hc_id_idx
+    ON tri_thuc.quy_tac_lieu_than_v2 (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS quy_tac_lieu_than_v2_hc_ids_gin
+    ON tri_thuc.quy_tac_lieu_than_v2 USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.quy_tac_lieu_than_khong_nguong (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    hoat_chat_id text NOT NULL,
+    loai text NOT NULL,
+    ly_do text NOT NULL,
+    set_id text,
+    url text,
+    phien_ban text NOT NULL,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS quy_tac_lieu_than_khong_nguong_hc_id_idx
+    ON tri_thuc.quy_tac_lieu_than_khong_nguong (hoat_chat_id);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.quy_tac_gan (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_quoc_te text NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    phan_loai_gan jsonb NOT NULL,
+    hanh_dong_nhan text NOT NULL,
+    khuyen_cao text NOT NULL,
+    trang_thai text,
+    nguon_chi_tiet jsonb NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS quy_tac_gan_hc_id_idx
+    ON tri_thuc.quy_tac_gan (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS quy_tac_gan_hc_ids_gin
+    ON tri_thuc.quy_tac_gan USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.nguong_xet_nghiem (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_quoc_te text,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    xet_nghiem text NOT NULL,
+    dieu_kien jsonb NOT NULL,
+    hanh_dong_nhan text NOT NULL,
+    don_vi_nhan text,
+    don_vi_trong_ca text,
+    trang_thai text,
+    kieu_dieu_kien text,
+    muc_do_de_xuat text,
+    dieu_kien_khac text,
+    ghi_chu text,
+    nguon_chi_tiet jsonb NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS nguong_xet_nghiem_hc_id_idx
+    ON tri_thuc.nguong_xet_nghiem (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS nguong_xet_nghiem_xn_idx
+    ON tri_thuc.nguong_xet_nghiem (xet_nghiem);
+CREATE INDEX IF NOT EXISTS nguong_xet_nghiem_hc_ids_gin
+    ON tri_thuc.nguong_xet_nghiem USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tuong_tac_benh (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    hoat_chat_id text NOT NULL,
+    ddinter_id text,
+    ten_benh text NOT NULL,
+    ma_icd10 jsonb NOT NULL,
+    muc_do text NOT NULL,
+    noi_dung text NOT NULL,
+    url text,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS tuong_tac_benh_hc_id_idx
+    ON tri_thuc.tuong_tac_benh (hoat_chat_id);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.anh_xa_benh_icd (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_benh text NOT NULL,
+    ma_icd10 jsonb NOT NULL,
+    ghi_chu text,
+    khong_anh_xa boolean NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    so_dong_ddinter integer,
+    muc_do_cao_nhat text,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS anh_xa_benh_icd_hc_id_idx
+    ON tri_thuc.anh_xa_benh_icd (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS anh_xa_benh_icd_hc_ids_gin
+    ON tri_thuc.anh_xa_benh_icd USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.tuong_tac_benh_khop_ca (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ca_id text NOT NULL,
+    hoat_chat_id text NOT NULL,
+    ten_benh text NOT NULL,
+    ma_icd10_ca text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS tuong_tac_benh_khop_ca_hc_id_idx
+    ON tri_thuc.tuong_tac_benh_khop_ca (hoat_chat_id);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.duong_dung_hop_le (
+    id bigserial PRIMARY KEY,
+    ma_dong text NOT NULL,
+    thu_tu integer NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    nhom_dang_bao_che text NOT NULL,
+    ten_nhom_dang text,
+    duong_dung_hop_le jsonb NOT NULL,
+    muc_chac_chan text,
+    nguon jsonb NOT NULL,
+    ghi_chu text,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS duong_dung_hop_le_ma_dong_idx
+    ON tri_thuc.duong_dung_hop_le (ma_dong);
+CREATE INDEX IF NOT EXISTS duong_dung_hop_le_hc_id_idx
+    ON tri_thuc.duong_dung_hop_le (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS duong_dung_hop_le_hc_ids_gin
+    ON tri_thuc.duong_dung_hop_le USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.chuan_hoa_duong_dung (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    loai text NOT NULL CHECK (loai IN ('ma_chuan', 'khoa_sang_ma', 'tu_mo_ho', 'cach_viet_trong_66_ca', 'ma_fda_sang_ma_chuan')),
+    khoa text NOT NULL,
+    duong_dung text,
+    gia_tri jsonb NOT NULL,
+    phien_ban text
+);
+CREATE INDEX IF NOT EXISTS chuan_hoa_duong_dung_loai_khoa_idx
+    ON tri_thuc.chuan_hoa_duong_dung (loai, khoa);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.lieu_toi_da (
+    id bigserial PRIMARY KEY,
+    ma_dong text NOT NULL,
+    thu_tu integer NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    duong_dung jsonb NOT NULL,
+    doi_tuong text NOT NULL,
+    dieu_kien text,
+    dieu_kien_khac text,
+    loai_gioi_han text NOT NULL,
+    lieu_toi_da_lan jsonb,
+    lieu_toi_da_ngay jsonb,
+    lieu_toi_da_tuan jsonb,
+    theo_kg jsonb,
+    thuoc_dung_cung_hoat_chat_ids jsonb,
+    quy_doi_don_vi jsonb,
+    ghi_chu text,
+    nguon jsonb,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS lieu_toi_da_ma_dong_idx
+    ON tri_thuc.lieu_toi_da (ma_dong);
+CREATE INDEX IF NOT EXISTS lieu_toi_da_hc_id_idx
+    ON tri_thuc.lieu_toi_da (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS lieu_toi_da_hc_ids_gin
+    ON tri_thuc.lieu_toi_da USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.doi_tuong_dinh_nghia (
+    ma text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    tuoi_tu double precision,
+    tuoi_den double precision,
+    tuoi_tren double precision,
+    tuoi_duoi double precision,
+    bao_gom_can_duoi boolean,
+    bao_gom_can_tren boolean,
+    tuoi_thang_tu double precision,
+    tuoi_thang_den double precision,
+    tuoi_ngay_tu double precision,
+    tuoi_ngay_den double precision,
+    can_nang_tu double precision,
+    can_nang_den double precision,
+    can_nang_tren double precision,
+    can_nang_duoi double precision,
+    dieu_kien_khac text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.lieu_toi_da_khong_ghi (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    hoat_chat_id text NOT NULL,
+    co_dong_theo_nhom_dac_biet jsonb,
+    ly_do text NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS lieu_toi_da_khong_ghi_hc_id_idx
+    ON tri_thuc.lieu_toi_da_khong_ghi (hoat_chat_id);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.lieu_toi_da_khong_ghi_duong_ca (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    duong_dung text NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS lieu_toi_da_khong_ghi_duong_ca_hc_id_idx
+    ON tri_thuc.lieu_toi_da_khong_ghi_duong_ca (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS lieu_toi_da_khong_ghi_duong_ca_hc_ids_gin
+    ON tri_thuc.lieu_toi_da_khong_ghi_duong_ca USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.canh_bao_doc_tinh (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    loai text NOT NULL CHECK (loai IN ('doc_than', 'keo_dai_qt', 'khoang_dieu_tri_hep', 'doc_gan_livertox', 'khong_co_nguon')),
+    hoat_chat_id text NOT NULL,
+    nhom text,
+    muc_nhan text,
+    ma_xet_nghiem_nong_do jsonb,
+    likelihood_score text,
+    danh_sach text,
+    ly_do text,
+    nguon jsonb,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS canh_bao_doc_tinh_hc_id_loai_idx
+    ON tri_thuc.canh_bao_doc_tinh (hoat_chat_id, loai);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.khang_sinh_han_che_nhom (
+    ma_nhom text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_nhom_van_ban text NOT NULL,
+    yeu_cau text NOT NULL,
+    trang_pdf integer NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.khang_sinh_han_che (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_trong_van_ban text NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    ma_nhom text NOT NULL REFERENCES tri_thuc.khang_sinh_han_che_nhom,
+    trang_pdf integer NOT NULL,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS khang_sinh_han_che_hc_id_idx
+    ON tri_thuc.khang_sinh_han_che (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS khang_sinh_han_che_hc_ids_gin
+    ON tri_thuc.khang_sinh_han_che USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.khang_sinh_khong_anh_xa (
+    id bigserial PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_trong_van_ban text NOT NULL,
+    ma_nhom text NOT NULL REFERENCES tri_thuc.khang_sinh_han_che_nhom,
+    trang_pdf integer NOT NULL,
+    ly_do text NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.nhom_di_ung_cheo (
+    ma_nhom text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_nhom text NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    hoat_chat_lien_quan jsonb NOT NULL,
+    huong text NOT NULL CHECK (huong IN ('hai_chieu', 'mot_chieu')),
+    co_so text,
+    nguon jsonb NOT NULL,
+    ghi_chu text,
+    trang_thai text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS nhom_di_ung_cheo_hc_id_idx
+    ON tri_thuc.nhom_di_ung_cheo (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS nhom_di_ung_cheo_hc_ids_gin
+    ON tri_thuc.nhom_di_ung_cheo USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.nhom_di_ung_anh_xa (
+    ten_alias text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    ma_nhom text NOT NULL,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+CREATE INDEX IF NOT EXISTS nhom_di_ung_anh_xa_hc_id_idx
+    ON tri_thuc.nhom_di_ung_anh_xa (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS nhom_di_ung_anh_xa_hc_ids_gin
+    ON tri_thuc.nhom_di_ung_anh_xa USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.danh_muc_hoat_chat_demo (
+    hoat_chat_id text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten_inn text NOT NULL,
+    ten_viet text,
+    dong_nghia jsonb NOT NULL DEFAULT '[]'::jsonb,
+    thanh_phan jsonb,
+    nhom text,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.danh_muc_hoat_chat_demo_nhan (
+    ten_goi text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    hoat_chat_ids jsonb NOT NULL,
+    hoat_chat_id text,
+    phien_ban text
+);
+CREATE INDEX IF NOT EXISTS danh_muc_hoat_chat_demo_nhan_hc_id_idx
+    ON tri_thuc.danh_muc_hoat_chat_demo_nhan (hoat_chat_id);
+CREATE INDEX IF NOT EXISTS danh_muc_hoat_chat_demo_nhan_hc_ids_gin
+    ON tri_thuc.danh_muc_hoat_chat_demo_nhan USING gin (hoat_chat_ids);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.nhom_dieu_tri_trung (
+    ma_nhom text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ten text NOT NULL,
+    tien_to_atc jsonb NOT NULL,
+    tien_to_atc_loai_tru jsonb,
+    muc_do text NOT NULL,
+    ly_do text NOT NULL,
+    nguon text NOT NULL,
+    ngoai_le jsonb NOT NULL DEFAULT '[]'::jsonb,
+    phien_ban text,
+    bo_sung jsonb NOT NULL DEFAULT '{}'::jsonb
+);
+
+CREATE TABLE IF NOT EXISTS tri_thuc.atc_bo_sung (
+    hoat_chat_id text PRIMARY KEY,
+    thu_tu integer NOT NULL,
+    ma_atc jsonb NOT NULL,
+    phien_ban text
+);
+
+REVOKE ALL ON
+    tri_thuc.ddinter_cap,
+    tri_thuc.ddinter_thuoc,
+    tri_thuc.ddinter_thuc_an,
+    tri_thuc.tra_cuu_hoat_chat,
+    tri_thuc.tra_cuu_dong_nghia,
+    tri_thuc.tra_cuu_thuoc,
+    tri_thuc.tra_cuu_thuoc_thanh_phan,
+    tri_thuc.tra_cuu_chuyen_ma_ca,
+    tri_thuc.tra_cuu_meta
+FROM PUBLIC;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+        EXECUTE 'REVOKE ALL ON tri_thuc.ddinter_cap, tri_thuc.ddinter_thuoc, tri_thuc.ddinter_thuc_an, tri_thuc.tra_cuu_hoat_chat, tri_thuc.tra_cuu_dong_nghia, tri_thuc.tra_cuu_thuoc, tri_thuc.tra_cuu_thuoc_thanh_phan, tri_thuc.tra_cuu_chuyen_ma_ca, tri_thuc.tra_cuu_meta FROM anon';
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        EXECUTE 'REVOKE ALL ON tri_thuc.ddinter_cap, tri_thuc.ddinter_thuoc, tri_thuc.ddinter_thuc_an, tri_thuc.tra_cuu_hoat_chat, tri_thuc.tra_cuu_dong_nghia, tri_thuc.tra_cuu_thuoc, tri_thuc.tra_cuu_thuoc_thanh_phan, tri_thuc.tra_cuu_chuyen_ma_ca, tri_thuc.tra_cuu_meta FROM authenticated';
+    END IF;
+END
+$$;
+
+REVOKE ALL ON
+    tri_thuc.bang_luat_meta,
+    tri_thuc.quy_tac_lieu_than_v2,
+    tri_thuc.quy_tac_lieu_than_khong_nguong,
+    tri_thuc.quy_tac_gan,
+    tri_thuc.nguong_xet_nghiem,
+    tri_thuc.tuong_tac_benh,
+    tri_thuc.anh_xa_benh_icd,
+    tri_thuc.tuong_tac_benh_khop_ca,
+    tri_thuc.duong_dung_hop_le,
+    tri_thuc.chuan_hoa_duong_dung,
+    tri_thuc.lieu_toi_da,
+    tri_thuc.doi_tuong_dinh_nghia,
+    tri_thuc.lieu_toi_da_khong_ghi,
+    tri_thuc.lieu_toi_da_khong_ghi_duong_ca,
+    tri_thuc.canh_bao_doc_tinh,
+    tri_thuc.khang_sinh_han_che_nhom,
+    tri_thuc.khang_sinh_han_che,
+    tri_thuc.khang_sinh_khong_anh_xa,
+    tri_thuc.nhom_di_ung_cheo,
+    tri_thuc.nhom_di_ung_anh_xa,
+    tri_thuc.danh_muc_hoat_chat_demo,
+    tri_thuc.danh_muc_hoat_chat_demo_nhan,
+    tri_thuc.nhom_dieu_tri_trung,
+    tri_thuc.atc_bo_sung
+FROM PUBLIC;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+        EXECUTE 'REVOKE ALL ON tri_thuc.bang_luat_meta, tri_thuc.quy_tac_lieu_than_v2, tri_thuc.quy_tac_lieu_than_khong_nguong, tri_thuc.quy_tac_gan, tri_thuc.nguong_xet_nghiem, tri_thuc.tuong_tac_benh, tri_thuc.anh_xa_benh_icd, tri_thuc.tuong_tac_benh_khop_ca, tri_thuc.duong_dung_hop_le, tri_thuc.chuan_hoa_duong_dung, tri_thuc.lieu_toi_da, tri_thuc.doi_tuong_dinh_nghia, tri_thuc.lieu_toi_da_khong_ghi, tri_thuc.lieu_toi_da_khong_ghi_duong_ca, tri_thuc.canh_bao_doc_tinh, tri_thuc.khang_sinh_han_che_nhom, tri_thuc.khang_sinh_han_che, tri_thuc.khang_sinh_khong_anh_xa, tri_thuc.nhom_di_ung_cheo, tri_thuc.nhom_di_ung_anh_xa, tri_thuc.danh_muc_hoat_chat_demo, tri_thuc.danh_muc_hoat_chat_demo_nhan, tri_thuc.nhom_dieu_tri_trung, tri_thuc.atc_bo_sung FROM anon';
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        EXECUTE 'REVOKE ALL ON tri_thuc.bang_luat_meta, tri_thuc.quy_tac_lieu_than_v2, tri_thuc.quy_tac_lieu_than_khong_nguong, tri_thuc.quy_tac_gan, tri_thuc.nguong_xet_nghiem, tri_thuc.tuong_tac_benh, tri_thuc.anh_xa_benh_icd, tri_thuc.tuong_tac_benh_khop_ca, tri_thuc.duong_dung_hop_le, tri_thuc.chuan_hoa_duong_dung, tri_thuc.lieu_toi_da, tri_thuc.doi_tuong_dinh_nghia, tri_thuc.lieu_toi_da_khong_ghi, tri_thuc.lieu_toi_da_khong_ghi_duong_ca, tri_thuc.canh_bao_doc_tinh, tri_thuc.khang_sinh_han_che_nhom, tri_thuc.khang_sinh_han_che, tri_thuc.khang_sinh_khong_anh_xa, tri_thuc.nhom_di_ung_cheo, tri_thuc.nhom_di_ung_anh_xa, tri_thuc.danh_muc_hoat_chat_demo, tri_thuc.danh_muc_hoat_chat_demo_nhan, tri_thuc.nhom_dieu_tri_trung, tri_thuc.atc_bo_sung FROM authenticated';
+    END IF;
+END
+$$;
+
 ALTER TABLE tri_thuc.hoat_chat ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.nguoi_benh ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.dot_dieu_tri ENABLE ROW LEVEL SECURITY;
@@ -447,8 +1080,44 @@ ALTER TABLE nghiep_vu.nhan_dinh ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.nhan_dinh_thuoc ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.can_cu ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nghiep_vu.phan_hoi ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nghiep_vu.hoi_thoai ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nghiep_vu.ket_qua_tham_dinh ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nghiep_vu.ket_qua_nhan_dinh ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tri_thuc.ten_thuoc ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tri_thuc.tai_lieu ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tri_thuc.doan_trich ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tri_thuc.quy_tac_lieu_than ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tri_thuc.tuong_tac_sang_loc ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.ddinter_cap ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.ddinter_thuoc ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.ddinter_thuc_an ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tra_cuu_hoat_chat ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tra_cuu_dong_nghia ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tra_cuu_thuoc ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tra_cuu_thuoc_thanh_phan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tra_cuu_chuyen_ma_ca ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tra_cuu_meta ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.bang_luat_meta ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.quy_tac_lieu_than_v2 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.quy_tac_lieu_than_khong_nguong ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.quy_tac_gan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.nguong_xet_nghiem ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tuong_tac_benh ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.anh_xa_benh_icd ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.tuong_tac_benh_khop_ca ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.duong_dung_hop_le ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.chuan_hoa_duong_dung ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.lieu_toi_da ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.doi_tuong_dinh_nghia ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.lieu_toi_da_khong_ghi ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.lieu_toi_da_khong_ghi_duong_ca ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.canh_bao_doc_tinh ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.khang_sinh_han_che_nhom ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.khang_sinh_han_che ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.khang_sinh_khong_anh_xa ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.nhom_di_ung_cheo ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.nhom_di_ung_anh_xa ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.danh_muc_hoat_chat_demo ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.danh_muc_hoat_chat_demo_nhan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.nhom_dieu_tri_trung ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tri_thuc.atc_bo_sung ENABLE ROW LEVEL SECURITY;

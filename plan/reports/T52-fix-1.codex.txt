@@ -1,0 +1,14 @@
+**TRẠNG THÁI: CHƯA XONG** — Đã triển khai T52-fix-1. Nghiệm thu còn vướng hai lỗi lint ngoài phạm vi brief.
+
+**FILE ĐÃ TẠO / SỬA:** Mã trong `app/kb/dictionary/`, cấu hình `config/kb/tu_dien.yaml`, test `tests/kb/test_dictionary_t52.py`, dữ liệu từ điển và báo cáo T52. Chi tiết trong [mục T52-fix-1](D:/create/Vinmec-PharmProject/plan/reports/T52.md:484).
+
+**LỆNH ĐÃ CHẠY VÀ KẾT QUẢ:**
+
+- `build`, `candidates --embedder fake` và `review` đều qua ngoại tuyến. Độ phủ tăng từ **36.099 lên 39.230** chế phẩm. **0** ca lùi, **0** ca đổi tập mã hoạt chất, **0** hoạt chất ca giả lập chưa khớp.
+- Kiểm 13.940 dòng ứng viên. Không phát hiện tên chứa hàm lượng hoặc bốn biệt dược nêu trong brief.
+- Pytest toàn bộ `tests/kb`: **218 test qua**. Ruff check phần T52 và format check cả 8 tệp Python đã sửa đều qua.
+- `ruff check app/kb tests/kb` trượt với hai lỗi `E501` ở dòng 82 và 142 của [app/kb/interactions/build.py](D:/create/Vinmec-PharmProject/app/kb/interactions/build.py:82).
+
+**ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO:** Mốc so sánh được tái lập bằng bộ tách và đường khớp T50 từ dữ liệu tại chỗ, vì CSV T50 chỉ thống kê theo hoạt chất. Hai lỗi lint toàn thư mục nằm ngoài phạm vi sửa.
+
+**VIỆC CHƯA LÀM / CÂU HỎI:** Còn nghiệm thu lint toàn thư mục. Thư mục tạm `.pytest_t52f1` vẫn còn vì môi trường chặn lệnh xóa đệ quy với thông báo `blocked by policy`.

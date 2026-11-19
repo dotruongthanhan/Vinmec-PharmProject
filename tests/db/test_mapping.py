@@ -11,11 +11,23 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_mapping_matches_schema_and_rls() -> None:
+    from app.db.bang_luat import RULE_TABLES
+    from app.db.chi_muc import INDEX_TABLES
     from app.db.mapping import TABLES
 
+    runtime_tables = (
+        {spec.pg_table for spec in INDEX_TABLES}
+        | set(RULE_TABLES)
+        | {
+            "nghiep_vu.hoi_thoai",
+            "nghiep_vu.ket_qua_tham_dinh",
+            "nghiep_vu.ket_qua_nhan_dinh",
+        }
+    )
+    runtime_columns = {"nghiep_vu.phan_hoi": {"nguoi_dung_id"}}
     sql = (ROOT / "db/schema.sql").read_text(encoding="utf-8")
     blocks = dict(re.findall(r"CREATE TABLE IF NOT EXISTS (\w+\.\w+) \(\n(.*?)\n\);", sql, re.S))
-    assert set(blocks) == set(TABLES)
+    assert set(blocks) - runtime_tables == set(TABLES)
     for name, table in TABLES.items():
         columns = set(
             re.findall(
@@ -27,8 +39,16 @@ def test_mapping_matches_schema_and_rls() -> None:
         additions = re.search(rf"ALTER TABLE {re.escape(name)}\n(.*?);", sql, re.S)
         if additions:
             columns.update(re.findall(r"ADD COLUMN IF NOT EXISTS (\w+) ", additions.group(1)))
-        assert columns == set(table.column_names) | set(table.generated_columns), name
+        expected_columns = (
+            set(table.column_names)
+            | set(table.generated_columns)
+            | runtime_columns.get(name, set())
+        )
+        assert columns == expected_columns, name
         assert f"ALTER TABLE {name} ENABLE ROW LEVEL SECURITY;" in sql
+    for name in sorted(runtime_tables):
+        assert name in blocks, name
+        assert f"ALTER TABLE {name} ENABLE ROW LEVEL SECURITY;" in sql, name
     assert "CREATE POLICY" not in sql
     assert "halfvec(2048)" in sql
     assert "halfvec_cosine_ops" in sql

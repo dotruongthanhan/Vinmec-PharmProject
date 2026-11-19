@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { BangYLenh, NhanDinh } from '../api/types.ts'
+import type { BangYLenh, MaTranTuongTac, NhanDinh } from '../api/types.ts'
 import {
   buildInteractionMatrix,
   buildLabPivot,
@@ -83,6 +83,35 @@ describe('bảng chi tiết y lệnh', () => {
 })
 
 describe('ma trận tương tác thuốc', () => {
+  it('dùng mã dòng của ma trận, giữ các dòng trùng tên và lý do thiếu', () => {
+    const matrix: MaTranTuongTac = {
+      nguon: 'DDInter 2.0', ghi_chu: 'Sàng lọc',
+      thuoc: [
+        { chi_tiet_y_lenh_id: 'P1', ten: 'Thuốc A', nhom: 'cho_duyet', phan_giai: 'da_phan_giai', hoat_chat: [], ly_do: null },
+        { chi_tiet_y_lenh_id: 'P2', ten: 'Thuốc A', nhom: 'cho_duyet', phan_giai: 'khong_nhan_dien', hoat_chat: [], ly_do: 'Chưa phân giải' },
+        { chi_tiet_y_lenh_id: 'A1', ten: 'Thuốc ABC', nhom: 'dang_dung', phan_giai: 'khong_ap_dung', hoat_chat: [], ly_do: null },
+      ],
+      cap: [
+        { a: 'P1', b: 'P2', muc: 'thieu_du_lieu', nhan_dinh_id: 'pair', tom_tat: null, ly_do: 'Chưa phân giải P2' },
+        { a: 'P1', b: 'A1', muc: 'khong_ap_dung', nhan_dinh_id: null, tom_tat: null, ly_do: 'Dịch truyền' },
+        { a: 'P2', b: 'A1', muc: 'khong_ap_dung', nhan_dinh_id: null, tom_tat: null, ly_do: 'Dịch truyền' },
+      ],
+      thuc_an: [{ chi_tiet_y_lenh_id: 'P1', hoat_chat: 'alpha', thuc_an: 'Fixture food', muc: 'thong_tin', mo_ta: 'Fixture description', xu_tri: null }],
+    }
+    const data = buildInteractionMatrix(table(['Tên khác']), null, {
+      can_chu_y: [finding({ nhan_dinh_id: 'pair', thuoc: 'Không trùng tên' })],
+      dat: [], yeu_to_chua_kiem: ['4. Tương tác thuốc'],
+    }, matrix)
+    expect(data.drugs.map((row) => row.key)).toEqual(['P1', 'P2', 'A1'])
+    expect(data.untested).toBe(false)
+    expect(data.pairs.map((row) => row.level)).toEqual(['thieu_du_lieu', 'khong_ap_dung', 'khong_ap_dung'])
+    expect(data.pairs[0].finding?.nhan_dinh_id).toBe('pair')
+    expect(data.pairs[0].reason).toBe('Chưa phân giải P2')
+    expect(data.foods).toEqual(matrix.thuc_an)
+    expect(data.source).toBe('DDInter 2.0')
+    expect(data.note).toBe('Sàng lọc')
+  })
+
   it('rút tên hoạt chất bỏ hàm lượng', () => {
     expect(drugKey('Metoprolol tartrat 50 mg')).toBe('metoprolol tartrat')
   })

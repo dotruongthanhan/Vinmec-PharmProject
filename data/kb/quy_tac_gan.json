@@ -1,0 +1,617 @@
+{
+  "phien_ban": "D4-v1",
+  "ngay": "2026-11-19",
+  "trang_thai": "cho_duoc_si_duyet",
+  "ghi_chu": "Chỉ ghi điều nhãn FDA nói về suy gan, kèm trích nguyên văn. Không cài công thức Child-Pugh (chờ MDCalc). phan_loai_gan: child_pugh_A/B/C khi nhãn ghi theo Child-Pugh; nhe_vua, nang khi nhãn ghi theo mô tả; khong_phan_loai khi nhãn chỉ nói suy gan chung.",
+  "quy_tac": [
+    {
+      "ten_quoc_te": "apixaban",
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "phan_loai_gan": [
+        "child_pugh_A"
+      ],
+      "hanh_dong_nhan": "khong_chinh_lieu",
+      "khuyen_cao": "Nhẹ (Child-Pugh A): không cần chỉnh liều",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ELIQUIS",
+          "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "phien_ban_nguon": "20260924",
+          "tep": "data/kb_sources/openfda/apixaban.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "No dose adjustment is required in patients with mild hepatic impairment (Child-Pugh class A).",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "apixaban",
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "phan_loai_gan": [
+        "child_pugh_B"
+      ],
+      "hanh_dong_nhan": "khong_co_khuyen_cao_cu_the",
+      "khuyen_cao": "Vừa (Child-Pugh B): ít kinh nghiệm lâm sàng, nhãn không đưa được khuyến cáo liều",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ELIQUIS",
+          "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "phien_ban_nguon": "20260924",
+          "tep": "data/kb_sources/openfda/apixaban.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Because patients with moderate hepatic impairment (Child-Pugh class B) may have intrinsic coagulation abnormalities and there is limited clinical experience with ELIQUIS in these patients, dosing recommendations cannot be provided",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "apixaban",
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "phan_loai_gan": [
+        "child_pugh_C"
+      ],
+      "hanh_dong_nhan": "tranh_khong_khuyen_cao",
+      "khuyen_cao": "Nặng (Child-Pugh C): không khuyến cáo",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ELIQUIS",
+          "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "phien_ban_nguon": "20260924",
+          "tep": "data/kb_sources/openfda/apixaban.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "is not recommended in patients with severe hepatic impairment (Child-Pugh class C)",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "rivaroxaban",
+      "hoat_chat_ids": [
+        "rivaroxaban"
+      ],
+      "phan_loai_gan": [
+        "child_pugh_B",
+        "child_pugh_C"
+      ],
+      "hanh_dong_nhan": "tranh_khong_khuyen_cao",
+      "khuyen_cao": "Vừa (B) và nặng (C), hoặc bệnh gan kèm rối loạn đông máu: tránh dùng",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Xarelto",
+          "set_id": "10db92f9-2300-4a80-836b-673e1ae91610",
+          "phien_ban_nguon": "20260910",
+          "tep": "data/kb_sources/t65/rivaroxaban_af.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Avoid the use of XARELTO in patients with moderate (Child-Pugh B) and severe (Child-Pugh C) hepatic impairment or with any hepatic disease associated with coagulopathy.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=10db92f9-2300-4a80-836b-673e1ae91610",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "esomeprazole",
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "phan_loai_gan": [
+        "child_pugh_C"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Suy gan nặng (Child-Pugh C): 20 mg 1 lần/ngày (một số chỉ định khởi đầu 20 mg 2 lần/ngày, xem nhãn)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Esomeprazole Magnesium",
+          "set_id": "fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+          "phien_ban_nguon": "20261102",
+          "tep": "data/kb_sources/openfda/esomeprazole.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "of 20 mg once daily is recommended for patients with severe liver impairment (Child-Pugh Class C)",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn còn một chú thích khởi đầu 20 mg 2 lần/ngày cho suy gan nặng ở chỉ định khác (mục 2.1, chú thích 4)."
+    },
+    {
+      "ten_quoc_te": "omeprazole",
+      "hoat_chat_ids": [
+        "omeprazole"
+      ],
+      "phan_loai_gan": [
+        "child_pugh_A",
+        "child_pugh_B",
+        "child_pugh_C"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Suy gan (Child-Pugh A, B hoặc C): giảm xuống 10 mg 1 lần/ngày khi dùng duy trì viêm thực quản trào ngược lành",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Omeprazole",
+          "set_id": "fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+          "phien_ban_nguon": "20261027",
+          "tep": "data/kb_sources/openfda/omeprazole.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Dosage reduction of omeprazole to 10 mg once daily is recommended for patients with hepatic impairment for maintenance of healing of EE",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "tramadol",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "phan_loai_gan": [
+        "nang"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Suy gan nặng: 50 mg mỗi 12 giờ",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Tramadol Hydrochloride",
+          "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+          "phien_ban_nguon": "20261103",
+          "tep": "data/kb_sources/openfda/tramadol.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "The recommended dose for adult patients with severe hepatic impairment is 50 mg every 12 hours.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "losartan",
+      "hoat_chat_ids": [
+        "losartan"
+      ],
+      "phan_loai_gan": [
+        "nhe_vua"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Suy gan nhẹ đến vừa: khởi đầu 25 mg 1 lần/ngày",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Losartan Potassium",
+          "set_id": "16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/losartan.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients with mild-to-moderate hepatic impairment the recommended starting dose of losartan potassium tablets is 25 mg once daily.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "losartan",
+      "hoat_chat_ids": [
+        "losartan"
+      ],
+      "phan_loai_gan": [
+        "nang"
+      ],
+      "hanh_dong_nhan": "khong_co_khuyen_cao_cu_the",
+      "khuyen_cao": "Suy gan nặng: chưa nghiên cứu",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Losartan Potassium",
+          "set_id": "16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/losartan.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Losartan potassium tablets have not been studied in patients with severe hepatic impairment",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "metformin",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "tranh_khong_khuyen_cao",
+      "khuyen_cao": "Suy gan: không khuyến cáo (nguy cơ nhiễm toan lactic)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Metformin Hydrochloride",
+          "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/metformin.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Metformin hydrochloride is not recommended in patients with hepatic impairment",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "methotrexate",
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "theo_doi",
+      "khuyen_cao": "Suy gan: theo dõi sát phản ứng có hại; giảm liều hoặc ngừng nếu thích hợp",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "JYLAMVO",
+          "set_id": "96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+          "phien_ban_nguon": "20261105",
+          "tep": "data/kb_sources/openfda/methotrexate.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Closely monitor patients with hepatic impairment for adverse reactions. Reduce the dosage or discontinue JYLAMVO as appropriate",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn là chế phẩm uống JYLAMVO."
+    },
+    {
+      "ten_quoc_te": "metoprolol",
+      "hoat_chat_ids": [
+        "metoprolol"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Suy gan: khởi đầu liều thấp hơn liều khuyến cáo theo chỉ định, tăng dần",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Metoprolol Succinate",
+          "set_id": "4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+          "phien_ban_nguon": "20261104",
+          "tep": "data/kb_sources/openfda/metoprolol_succinate.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "initiate therapy at doses lower than those recommended for a given indication",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4d8cdd8b-3896-4cd0-9570-a6f4e1d340d7",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn metoprolol succinate; nhãn metoprolol tartrate trong kho chưa rà."
+    },
+    {
+      "ten_quoc_te": "morphine",
+      "hoat_chat_ids": [
+        "morphine"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Xơ gan: khởi đầu liều thấp hơn bình thường, chuẩn liều chậm, theo dõi ức chế hô hấp, an thần, hạ huyết áp",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Morphine Sulfate",
+          "set_id": "be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+          "phien_ban_nguon": "20261014",
+          "tep": "data/kb_sources/openfda/morphine.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Morphine pharmacokinetics have been reported to be significantly altered in patients with cirrhosis. Start these patients with a lower than normal dosage of Morphine Sulfate Injection and titrate slowly",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "acetaminophen",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "phan_loai_gan": [
+        "nang"
+      ],
+      "hanh_dong_nhan": "chong_chi_dinh",
+      "khuyen_cao": "Suy gan nặng hoặc bệnh gan hoạt động nặng: chống chỉ định; suy gan khác: thận trọng, có thể cần giảm tổng liều ngày",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ACETAMINOPHEN",
+          "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+          "phien_ban_nguon": "20260924",
+          "tep": "data/kb_sources/openfda/acetaminophen.json",
+          "truong_nhan": "spl_unclassified_section",
+          "trich_nguyen_van": "Acetaminophen is contraindicated in patients with severe hepatic impairment or severe active liver disease and should be used with caution in patients with hepatic impairment or active liver disease",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn là dạng tiêm tĩnh mạch."
+    },
+    {
+      "ten_quoc_te": "amlodipine",
+      "hoat_chat_ids": [
+        "amlodipine"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "giam_lieu",
+      "khuyen_cao": "Suy gan: có thể khởi đầu 2,5 mg 1 lần/ngày",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Amlodipine Besylate",
+          "set_id": "ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/amlodipine.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Small, fragile, or elderly patients, or patients with hepatic insufficiency may be started on 2.5 mg once daily",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "simvastatin",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "chong_chi_dinh",
+      "khuyen_cao": "Suy gan cấp hoặc xơ gan mất bù: chống chỉ định",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Simvastatin",
+          "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+          "phien_ban_nguon": "20261103",
+          "tep": "data/kb_sources/openfda/simvastatin.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Simvastatin is contraindicated in patients with acute liver failure or decompensated cirrhosis",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "valproate",
+      "hoat_chat_ids": [
+        "valproic_acid"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "chong_chi_dinh",
+      "khuyen_cao": "Bệnh gan hoặc rối loạn chức năng gan đáng kể: không dùng (chống chỉ định)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Valproate Sodium",
+          "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "phien_ban_nguon": "20260312",
+          "tep": "data/kb_sources/openfda/valproate.json",
+          "truong_nhan": "contraindications",
+          "trich_nguyen_van": "should not be administered to patients with hepatic disease or significant hepatic dysfunction",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn là valproate sodium injection."
+    },
+    {
+      "ten_quoc_te": "clarithromycin",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "khong_chinh_lieu",
+      "khuyen_cao": "Suy gan, thận bình thường: không cần chỉnh liều",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Clarithromycin",
+          "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/clarithromycin.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Clarithromycin tablets may be administered without dosage adjustment to patients with hepatic impairment and normal renal function.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "warfarin",
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "theo_doi",
+      "khuyen_cao": "Suy gan làm tăng đáp ứng warfarin: theo dõi chảy máu thường xuyên hơn",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Warfarin Sodium",
+          "set_id": "61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/warfarin.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Hepatic impairment can potentiate the response to warfarin through impaired synthesis of clotting factors and decreased metabolism of warfarin. Conduct more frequent monitoring for bleeding when using warfarin sodium in these patients.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "piperacillin",
+      "hoat_chat_ids": [
+        "piperacillin",
+        "tazobactam"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "khong_chinh_lieu",
+      "khuyen_cao": "Xơ gan: không cần chỉnh liều",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "piperacillin and tazobactam",
+          "set_id": "24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "phien_ban_nguon": "20261022",
+          "tep": "data/kb_sources/openfda/piperacillin_and_tazobactam.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Dosage adjustment of piperacillin and tazobactam for injection is not warranted in patients with hepatic cirrhosis",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "spironolactone",
+      "hoat_chat_ids": [
+        "spironolactone"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "theo_doi",
+      "khuyen_cao": "Xơ gan, điều trị phù: khởi đầu trong bệnh viện và chuẩn liều chậm",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Spironolactone",
+          "set_id": "37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/spironolactone.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients with cirrhosis, initiate therapy in a hospital setting and titrate slowly",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "ciprofloxacin",
+      "hoat_chat_ids": [
+        "ciprofloxacin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "khong_chinh_lieu",
+      "khuyen_cao": "Xơ gan ổn định: dược động học không đổi đáng kể; suy gan cấp chưa nghiên cứu",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Ciprofloxacin",
+          "set_id": "f406e796-17d9-4465-b8a7-00d966a4ba74",
+          "phien_ban_nguon": "20260804",
+          "tep": "data/kb_sources/openfda/ciprofloxacin.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "In preliminary studies in patients with stable chronic liver cirrhosis, no significant changes in ciprofloxacin pharmacokinetics have been observed.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f406e796-17d9-4465-b8a7-00d966a4ba74",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "levofloxacin",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "khong_chinh_lieu",
+      "khuyen_cao": "Dược động học không dự kiến thay đổi do suy gan (levofloxacin ít chuyển hóa); nhãn chưa có nghiên cứu",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Levofloxacin",
+          "set_id": "699fbdb8-a6fd-476a-9b80-08197d869534",
+          "phien_ban_nguon": "20260721",
+          "tep": "data/kb_sources/openfda/levofloxacin.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "the pharmacokinetics of levofloxacin are not expected to be affected by hepatic impairment",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=699fbdb8-a6fd-476a-9b80-08197d869534",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "phenytoin",
+      "hoat_chat_ids": [
+        "phenytoin"
+      ],
+      "phan_loai_gan": [
+        "khong_phan_loai"
+      ],
+      "hanh_dong_nhan": "theo_doi",
+      "khuyen_cao": "Bệnh gan hoặc thận làm tăng phần phenytoin tự do: theo dõi nồng độ theo phần tự do",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Phenytoin Sodium",
+          "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+          "phien_ban_nguon": "20261106",
+          "tep": "data/kb_sources/openfda/phenytoin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Because the fraction of unbound phenytoin is increased in patients with renal or hepatic disease, or in those with hypoalbuminemia, the monitoring of phenytoin serum levels should be based on the unbound fraction in those patients.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    }
+  ]
+}

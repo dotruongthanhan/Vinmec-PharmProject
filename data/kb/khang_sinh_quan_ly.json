@@ -1,0 +1,397 @@
+{
+  "phien_ban": "D7-v1",
+  "ngay": "2026-11-19",
+  "trang_thai": "cho_duoc_si_duyet",
+  "nguon_van_ban": {
+    "so_hieu": "5631/QĐ-BYT",
+    "ngay": "2020-12-31",
+    "tep": "data/kb_sources/van_ban_byt/qd5631_2020/qd5631_duytan.pdf",
+    "ban_sao_thu_cap": true,
+    "url": "https://files01.duytan.edu.vn/svruploads/kdieuduong-duytan/upload/2021/11/17/20201231_QĐ 5631_Ban hành tài liệu Hướng dẫn thực hiện quản lý sử dụng kháng sinh trong bệnh viện_Thay thế QĐ 772.pdf"
+  },
+  "ghi_chu": "Danh mục kháng sinh của QĐ 5631/QĐ-BYT, Phụ lục 2 'Danh mục kháng sinh ưu tiên quản lý tại bệnh viện' (pdf tr.17-19) gồm 18 dòng Nhóm 1 và 2 dòng Nhóm 2; mỗi tên thuốc trong ngoặc của dòng nhóm (carbapenem, aminoglycosid, fluoroquinolon, thuốc mới) được tách thành một dòng khang_sinh. Bản sao thứ cấp của Trường ĐH Duy Tân, bản trình ký không có số và ngày (số 5631 ghi ở đầu văn bản). Cách sửa chữ: lớp chữ pdf (đọc bằng pdfplumber; pdftotext làm mất dấu) dùng ký tự 'ƣ'/'Ƣ' (U+01A3/U+01A2) thay cho 'ư'/'Ư'; đã đổi lại thành 'ư'/'Ư', gộp khoảng trắng và ngắt dòng, dấu gạch ngang '–' trong tên nhóm theo bảng, giữ nguyên các lỗi chính tả của bản gốc (ví dụ 'theo giõi'). Đối chiếu bằng trang_pdf. ma_nhom do người dựng đặt: phe_duyet_truoc = 'Nhóm 1' (văn bản mục D.II.4.2 nói quy định hội chẩn, phê duyệt trước khi sử dụng, và Chiến lược 1 'phê duyệt đơn trước khi sử dụng' áp dụng cho danh mục kháng sinh ưu tiên quản lý); theo_doi_giam_sat = 'Nhóm 2' (chỉ khuyến khích giám sát tiêu thụ, đề kháng; KHÔNG có yêu cầu phê duyệt trước). Lưu ý diễn giải: văn bản nêu 'tuỳ theo hạng bệnh viện và điều kiện từng bệnh viện' xây dựng danh mục và quy định phê duyệt; ba cột '+' / '-' theo hạng bệnh viện trong Phụ lục 2 là 'cần phải thực hiện' / 'không bắt buộc' của việc xây dựng hướng dẫn sử dụng, chưa trích theo từng thuốc vì không có chỗ trong lược đồ và chưa đối chiếu hạng của Vinmec. Cột ghi chú: dòng 1-10 'Có lộ trình xây dựng Hướng dẫn sử dụng và ban hành tại đơn vị'; dòng 11-18 'Khuyến khích xây dựng Hướng dẫn sử dụng tại đơn vị'. Chú thích *** của Phụ lục 2 (dòng carbapenem: meropenem, imipenem, doripenem): 'Các khoa truyền nhiễm, cấp cứu, hồi sức tích cực, gây mê hồi sức của bệnh viện tuyến trung ương (tuyến 1) theo quy định tại Điều 3, Thông tư 43/2013/TT-BYT ngày 11/12/2013 không cần phê duyệt trước khi sử dụng.' Luật cần đọc ngoại lệ này từ văn bản; dữ liệu chưa mã hoá theo khoa. Ánh xạ: 'Colistin' -> colistimethate (bộ phân giải); 'neltimicin' (văn bản viết sai) -> netilmicin; 'anidulafundin' -> anidulafungin; 'ceftolozan-tazobactam' chỉ gán ceftolozane (chỉ có trong thuốc phối hợp này) và 'ceftazidim-avibactam' chỉ gán avibactam, để ceftazidime hay tazobactam dùng riêng không bị gắn nhầm. Tên viết trong ngoặc ở dòng 10 là danh sách ví dụ 'thuốc chống nhiễm khuẩn/kháng nấm mới' (có thể cập nhật theo chú thích **). Điều kiện duyệt Nhóm 1 (thời gian duyệt, 14 ngày, người được ủy quyền) ở yeu_cau trích nguyên văn từ pdf tr.5-6; không có ngưỡng thời gian dùng nào khác trong văn bản cho kháng sinh Nhóm 2. Mọi dòng cho_duoc_si_duyet.",
+  "nhom": [
+    {
+      "ma_nhom": "phe_duyet_truoc",
+      "ten_nhom_van_ban": "Kháng sinh cần ưu tiên quản lý – Nhóm 1",
+      "yeu_cau": "Kháng sinh cần ưu tiên quản lý - Nhóm 1 là các kháng sinh dự trữ, thuộc một trong các trường hợp sau: lựa chọn cuối cùng trong điều trị các nhiễm trùng nặng khi đã thất bại hoặc kém đáp ứng với các phác đồ kháng sinh trước đó; lựa chọn điều trị các nhiễm khuẩn nghi ngờ hoặc có bằng chứng vi sinh xác định do vi sinh vật đa kháng; là kháng sinh để điều trị các nhiễm khuẩn nặng do vi sinh vật kháng thuốc, có nguy cơ bị đề kháng cao nếu sử dụng rộng rãi, cần cân nhắc chỉ định phù hợp; kháng sinh có độc tính cao cần giám sát nồng độ điều trị thông qua nồng độ thuốc trong máu (nếu có điều kiện triển khai tại cơ sở) hoặc giám sát chặt chẽ về lâm sàng và xét nghiệm để giảm thiểu các tác dụng không mong muốn và độc tính. | Quy định thời gian duyệt: trước khi sử dụng hoặc trong vòng 24 - 48 giờ với trường hợp cấp cứu/ngoài giờ hành chính. | Thời gian sử dụng kháng sinh không vượt quá 14 ngày cho mỗi lần duyệt, cần đánh giá lại đáp ứng của người bệnh để quyết định hướng xử trí tiếp theo khi vượt quá thời gian này; | Người được ủy quyền duyệt là nhân viên y tế được Ban quản lý sử dụng kháng sinh có quyết định phân công công việc, ưu tiên Dược sĩ làm công tác Dược lâm sàng/Bác sĩ chuyên khoa Hồi sức tích cực hoặc các bác sĩ có kinh nghiệm trong lĩnh vực điều trị các bệnh Nhiễm trùng và sử dụng kháng sinh hợp lý;",
+      "trang_pdf": 17
+    },
+    {
+      "ma_nhom": "theo_doi_giam_sat",
+      "ten_nhom_van_ban": "Kháng sinh cần theo dõi, giám sát sử dụng – Nhóm 2",
+      "yeu_cau": "Kháng sinh cần theo giõi, giám sát sử dụng - Nhóm 2 là kháng sinh được khuyến khích thực hiện chương trình giám sát sử dụng tại bệnh viện bao gồm giám sát tiêu thụ kháng sinh, giám sát tỷ lệ đề kháng của vi khuẩn với kháng sinh, thực hiện các nghiên cứu đánh giá sử dụng thuốc để có can thiệp phù hợp tùy theo điều kiện của bệnh viện.",
+      "trang_pdf": 18
+    }
+  ],
+  "khang_sinh": [
+    {
+      "ten_trong_van_ban": "Ceftolozan-tazobactam",
+      "hoat_chat_ids": [
+        "ceftolozane"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Tigecyclin",
+      "hoat_chat_ids": [
+        "tigecycline"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Colistin",
+      "hoat_chat_ids": [
+        "colistimethate"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Fosfomycin",
+      "hoat_chat_ids": [
+        "fosfomycin"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Linezolid",
+      "hoat_chat_ids": [
+        "linezolid"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Caspofungin",
+      "hoat_chat_ids": [
+        "caspofungin"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Micafungin",
+      "hoat_chat_ids": [
+        "micafungin"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Voriconazol",
+      "hoat_chat_ids": [
+        "voriconazole"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "ceftazidim-avibactam",
+      "hoat_chat_ids": [
+        "avibactam"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "anidulafundin",
+      "hoat_chat_ids": [
+        "anidulafungin"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "isavuconazol",
+      "hoat_chat_ids": [
+        "isavuconazole"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "meropenem",
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "imipenem",
+      "hoat_chat_ids": [
+        "imipenem"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "doripenem",
+      "hoat_chat_ids": [
+        "doripenem"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Ertapenem",
+      "hoat_chat_ids": [
+        "ertapenem"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Vancomycin",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Teicoplanin",
+      "hoat_chat_ids": [
+        "teicoplanin"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Aciclovir",
+      "hoat_chat_ids": [
+        "acyclovir"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Valganciclovir",
+      "hoat_chat_ids": [
+        "valganciclovir"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "Posaconazol",
+      "hoat_chat_ids": [
+        "posaconazole"
+      ],
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "amikacin",
+      "hoat_chat_ids": [
+        "amikacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "gentamicin",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "tobramycin",
+      "hoat_chat_ids": [
+        "tobramycin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 18,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "neltimicin",
+      "hoat_chat_ids": [
+        "netilmicin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "ciprofloxacin",
+      "hoat_chat_ids": [
+        "ciprofloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "levofloxacin",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "lomefloxacin",
+      "hoat_chat_ids": [
+        "lomefloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "moxifloxacin",
+      "hoat_chat_ids": [
+        "moxifloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "norfloxacin",
+      "hoat_chat_ids": [
+        "norfloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "ofloxacin",
+      "hoat_chat_ids": [
+        "ofloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "pefloxacin",
+      "hoat_chat_ids": [
+        "pefloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ten_trong_van_ban": "sparfloxacin",
+      "hoat_chat_ids": [
+        "sparfloxacin"
+      ],
+      "ma_nhom": "theo_doi_giam_sat",
+      "trang_pdf": 19,
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "khong_anh_xa": [
+    {
+      "ten_trong_van_ban": "Amphotericin B phức hợp lipid",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 17,
+      "ly_do": "trục hoạt chất chỉ có amphotericin_b chung, không tách dạng bào chế (phức hợp lipid / liposom / deoxycholat nằm ở hai dòng khác nhau của Phụ lục 2); không gán để tránh gắn nhầm dạng thường"
+    },
+    {
+      "ten_trong_van_ban": "ceftobiprol",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "cefiderocol",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "dalbavancin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "dalfopristin-quinupristin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "eravacyclin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "omadacyclin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "oritavancin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "plazomicin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "tedizolid",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "telavancin",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "bộ phân giải và trục không có hoạt chất này (thuốc mới, chưa có số đăng ký trong dữ liệu DAV đã nạp)"
+    },
+    {
+      "ten_trong_van_ban": "amphotericin B dạng liposom",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "trục hoạt chất chỉ có amphotericin_b chung, không tách dạng bào chế"
+    },
+    {
+      "ten_trong_van_ban": "Amphotericin B deoxycholat",
+      "ma_nhom": "phe_duyet_truoc",
+      "trang_pdf": 18,
+      "ly_do": "trục hoạt chất chỉ có amphotericin_b chung, không tách dạng bào chế"
+    }
+  ]
+}

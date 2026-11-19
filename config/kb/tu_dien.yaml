@@ -1,0 +1,24 @@
+﻿tu_nhan_ngu_nghia: false
+nguong_nhung: 0.94
+ly_do_lui_cho_phep: []
+nguong_ky_tu: 0.90
+chenh_toi_thieu: 0.08
+bang_vitamin:
+  B1: {ten_rxnorm: thiamine, rxcui: "10454"}
+  B2: {ten_rxnorm: riboflavin, rxcui: "9346"}
+  # Chọn niacinamide (nicotinamide), khác niacin.
+  B3: {ten_rxnorm: niacinamide, rxcui: "7405"}
+  PP: {ten_rxnorm: niacinamide, rxcui: "7405"}
+  B5: {ten_rxnorm: pantothenic acid, rxcui: "7891"}
+  B6: {ten_rxnorm: pyridoxine, rxcui: "684879"}
+  B9: {ten_rxnorm: folic acid, rxcui: "4511"}
+  # RxNorm IN ghi vitamin B12. Đệm tra chính xác xác nhận cyanocobalamin.
+  # Hydroxocobalamin có mã riêng 5514.
+  B12: {ten_rxnorm: vitamin B12, rxcui: "11248", ten_doi_chieu: cyanocobalamin}
+  C: {ten_rxnorm: ascorbic acid, rxcui: "1151"}
+  D3: {ten_rxnorm: cholecalciferol, rxcui: "2418"}
+  D2: {ten_rxnorm: ergocalciferol, rxcui: "4018"}
+  # Dạng IN chung tocopherol. Alpha tocopherol và các ester có mã riêng.
+  E: {ten_rxnorm: tocopherol, rxcui: "1236136"}
+  K1: {ten_rxnorm: vitamin K1, rxcui: "8308", ten_doi_chieu: phytonadione}
+

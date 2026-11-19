@@ -1,0 +1,1195 @@
+{
+  "phien_ban": "D6-v1",
+  "ngay": "2026-11-19",
+  "trang_thai": "cho_duoc_si_duyet",
+  "ghi_chu": "Bảng độc tính D6 (plan 1.8). Phạm vi: 43 hoạt chất (khoá trục tra_cuu.sqlite) có trong 66 ca. Chỉ ghi khi có câu nguyên văn trong nhãn FDA (openFDA/DailyMed, tầng 3) hoặc chuyên luận LiverTox (NXML); không suy từ kiến thức chung. Hoạt chất đã quét nhãn mà không có câu thuộc danh sách thì KHÔNG nằm trong danh sách đó và không ghi ở khong_co_nguon (khong_co_nguon chỉ ghi thiếu nhãn / thiếu chương, hoặc loại trừ có lý do). doc_than: chỉ nhãn nêu thuốc tự gây độc thận / tổn thương thận ở boxed warning hoặc warnings (7 thuốc). Thuốc có câu về thận nhưng cơ chế gián tiếp (huyết động, miễn dịch, tắc nghẽn, tương tác) KHÔNG đưa vào, liệt kê ở khong_co_nguon (danh_sach=doc_than) để dược sĩ quyết định. Thuốc phối hợp (piperacillin-tazobactam): câu ghi ở thành phần đầu; nhom của piperacillin do người dựng đặt, không phải phân loại của nguồn. keo_dai_qt: chỉ boxed warning / warnings_and_cautions; fluconazole nhãn dạng cũ (mục Precautions, không có Warnings and Precautions) nên muc_nhan=precautions. khoang_dieu_tri_hep: ma_xet_nghiem_nong_do là mã xét nghiệm dự kiến; trong 66 ca chỉ có digoxin và phenytoin; vancomycin, gentamicin, valproat là mã DỰ KIẾN (chưa có trong ca). Không ghi khoảng đích (đã ở nguong_xet_nghiem.json). Enoxaparin (anti-Xa) và amiodarone (đo nồng độ) có câu nhãn nhưng là gợi ý có điều kiện, không đưa vào. doc_gan_livertox: likelihood_score lấy dòng 'Likelihood score' của chuyên luận; điểm có hậu tố [H]/[HD] (insulin A[H], acetaminophen A[HD]) ghi chữ cái A, hậu tố nằm trong trich_nguyen_van. Chương nhóm: digoxin (CardiacGlycosides), enoxaparin (LMW-Heparins), furosemide (LoopDiuretics), cefoperazone (ParenteralCephalospo, điểm cho cả nhóm cephalosporin tiêm) là điểm của nhóm, không riêng thuốc. clavulanic_acid dùng chương Amoxicillin-Clavulanate, piperacillin dùng chương Piperacillin-Tazobactam, sulfamethoxazole dùng chương SMZ-TMP (chương phối hợp); amoxicillin dùng chương Amoxicillin riêng, nên y lệnh amoxicillin-clavulanate có hai dòng (lấy điểm cao nhất). url LiverTox: NXML không có mã NBK riêng cho từng chương nên dùng trang sách NBK547852 và ghi ma_chuyen_luan. Mọi dòng cho_duoc_si_duyet.",
+  "doc_than": [
+    {
+      "hoat_chat_id": "gentamicin",
+      "nhom": "aminoglycosid",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Gentamicin",
+          "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+          "phien_ban_nguon": "20261102",
+          "tep": "data/kb_sources/openfda/gentamicin.json",
+          "truong_nhan": "boxed_warning",
+          "trich_nguyen_van": "As with other aminoglycosides, gentamicin injection is potentially nephrotoxic.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "vancomycin",
+      "nhom": "glycopeptid",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Vancomycin Hydrochloride",
+          "set_id": "b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+          "phien_ban_nguon": "20261008",
+          "tep": "data/kb_sources/openfda/vancomycin.json",
+          "truong_nhan": "warnings",
+          "trich_nguyen_van": "Systemic vancomycin exposure may result in acute kidney injury (AKI).",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "colistimethate",
+      "nhom": "polymyxin",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "COLISTIMETHATE SODIUM",
+          "set_id": "6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+          "phien_ban_nguon": "20261104",
+          "tep": "data/kb_sources/openfda/colistimethate.json",
+          "truong_nhan": "warnings",
+          "trich_nguyen_van": "Nephrotoxicity can occur and is probably a dose-dependent effect of colistimethate sodium.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "ibuprofen",
+      "nhom": "nsaid",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Ibuprofen",
+          "set_id": "dc91a427-8214-484b-af72-52075b2286a1",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/ibuprofen.json",
+          "truong_nhan": "warnings",
+          "trich_nguyen_van": "Long-term administration of NSAIDs has resulted in renal papillary necrosis and other renal injury.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc91a427-8214-484b-af72-52075b2286a1",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "ketorolac",
+      "nhom": "nsaid",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "KETOROLAC TROMETHAMINE",
+          "set_id": "30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+          "phien_ban_nguon": "20260213",
+          "tep": "data/kb_sources/openfda/ketorolac.json",
+          "truong_nhan": "warnings",
+          "trich_nguyen_van": "With the use of ketorolac tromethamine, there have been reports of acute renal failure, interstitial nephritis and nephrotic syndrome.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "methotrexate",
+      "nhom": "khang_chuyen_hoa",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Methotrexate",
+          "set_id": "0d63ba29-b692-41b4-87e8-351265c8273f",
+          "phien_ban_nguon": "20261027",
+          "tep": "data/kb_sources/openfda_d5/methotrexate_injection.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Methotrexate can cause renal toxicity including irreversible acute renal failure.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0d63ba29-b692-41b4-87e8-351265c8273f",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "JYLAMVO",
+          "set_id": "96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+          "phien_ban_nguon": "20261105",
+          "tep": "data/kb_sources/openfda/methotrexate.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Methotrexate can cause renal toxicity, including irreversible acute renal failure [see Adverse Reactions (6.2) ] .",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "piperacillin",
+      "nhom": "penicillin_phoi_hop_chat_ucmc_beta_lactamase",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "piperacillin and tazobactam",
+          "set_id": "24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "phien_ban_nguon": "20261022",
+          "tep": "data/kb_sources/openfda/piperacillin_and_tazobactam.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "The use of piperacillin and tazobactam for injection was found to be an independent risk factor for renal failure and was associated with delayed recovery of renal function as compared to other beta-lactam antibacterial drugs in a randomized, multicenter, controlled trial in critically ill patients [ see Adverse Reactions (6.1) ].",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "keo_dai_qt": [
+    {
+      "hoat_chat_id": "amiodarone",
+      "muc_nhan": "warnings_and_cautions",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "AMIODARONE HYDROCHLORIDE",
+          "set_id": "0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+          "phien_ban_nguon": "20261026",
+          "tep": "data/kb_sources/openfda/amiodarone.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Proarrhythmia, primarily torsade de pointes (TdP), has been associated with prolongation, by intravenous amiodarone, of the QTc interval to 500 ms or greater.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Pacerone",
+          "set_id": "02f4a736-63ed-4ad4-a1f1-b21a71e928bd",
+          "phien_ban_nguon": "20240202",
+          "tep": "data/kb_sources/openfda_d5/amiodarone_oral.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Pacerone can exacerbate the presenting arrhythmia in about 2% to 5% of patients or cause new ventricular fibrillation, incessant ventricular tachycardia, increased resistance to cardioversion, and polymorphic ventricular tachycardia associated with QTc prolongation (Torsade de Pointes [TdP]).",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02f4a736-63ed-4ad4-a1f1-b21a71e928bd",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "clarithromycin",
+      "muc_nhan": "warnings_and_cautions",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Clarithromycin",
+          "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/clarithromycin.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Clarithromycin tablets have been associated with prolongation of the QT interval and infrequent cases of arrhythmia.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "fluconazole",
+      "muc_nhan": "precautions",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Fluconazole",
+          "set_id": "c041227b-dab6-4c29-ab59-d31993d524b2",
+          "phien_ban_nguon": "20260817",
+          "tep": "data/kb_sources/openfda/fluconazole.json",
+          "truong_nhan": "precautions",
+          "trich_nguyen_van": "Some azoles, including fluconazole, have been associated with prolongation of the QT interval on the electrocardiogram.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c041227b-dab6-4c29-ab59-d31993d524b2",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "levofloxacin",
+      "muc_nhan": "warnings_and_cautions",
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Levofloxacin",
+          "set_id": "699fbdb8-a6fd-476a-9b80-08197d869534",
+          "phien_ban_nguon": "20260721",
+          "tep": "data/kb_sources/openfda/levofloxacin.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Some fluoroquinolones, including levofloxacin, have been associated with prolongation of the QT interval on the electrocardiogram and infrequent cases of arrhythmia.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=699fbdb8-a6fd-476a-9b80-08197d869534",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Levofloxacin",
+          "set_id": "05d179f5-b200-8597-e063-6394a90a10cc",
+          "phien_ban_nguon": "20250304",
+          "tep": "data/kb_sources/openfda_d5/levofloxacin_oral.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Some fluoroquinolones, including levofloxacin, have been associated with prolongation of the QT interval on the electrocardiogram and infrequent cases of arrhythmia.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=05d179f5-b200-8597-e063-6394a90a10cc",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "khoang_dieu_tri_hep": [
+    {
+      "hoat_chat_id": "vancomycin",
+      "ma_xet_nghiem_nong_do": [
+        "vancomycin"
+      ],
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Vancomycin Hydrochloride",
+          "set_id": "b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+          "phien_ban_nguon": "20261008",
+          "tep": "data/kb_sources/openfda/vancomycin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Measurement of vancomycin serum concentrations can be helpful in optimizing therapy, especially in seriously ill patients with changing renal function.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "gentamicin",
+      "ma_xet_nghiem_nong_do": [
+        "gentamicin"
+      ],
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Gentamicin",
+          "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+          "phien_ban_nguon": "20261102",
+          "tep": "data/kb_sources/openfda/gentamicin.json",
+          "truong_nhan": "boxed_warning",
+          "trich_nguyen_van": "Serum concentrations of aminoglycosides should be monitored when feasible to assure adequate levels and to avoid potentially toxic levels.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "valproic_acid",
+      "ma_xet_nghiem_nong_do": [
+        "valproat"
+      ],
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Valproate Sodium",
+          "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "phien_ban_nguon": "20260312",
+          "tep": "data/kb_sources/openfda/valproate.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "periodic plasma concentration determinations of valproate and concomitant drugs are recommended during the early course of therapy [see Drug Interactions ( 7 )] .",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Valproate Sodium",
+          "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "phien_ban_nguon": "20260312",
+          "tep": "data/kb_sources/openfda/valproate.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "Serum valproate concentrations should be monitored frequently after initiating carbapenem therapy.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "digoxin",
+      "ma_xet_nghiem_nong_do": [
+        "digoxin"
+      ],
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Digoxin",
+          "set_id": "98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+          "phien_ban_nguon": "20261106",
+          "tep": "data/kb_sources/openfda/digoxin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Obtain serum digoxin concentrations just before the next scheduled digoxin dose or at least 6 hours after the last dose.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Digoxin",
+          "set_id": "1b7e5c6e-e052-41b0-a4ce-05dfe62faaaf",
+          "phien_ban_nguon": "20250410",
+          "tep": "data/kb_sources/t65/digoxin_tab.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "When the etiology of these signs and symptoms is not obvious, measurement of serum digoxin levels may be helpful.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1b7e5c6e-e052-41b0-a4ce-05dfe62faaaf",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "phenytoin",
+      "ma_xet_nghiem_nong_do": [
+        "phenytoin"
+      ],
+      "nguon": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Phenytoin Sodium",
+          "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+          "phien_ban_nguon": "20261106",
+          "tep": "data/kb_sources/openfda/phenytoin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Determination of phenytoin serum levels is advised when using phenytoin in the management of status epileptics and in the subsequent establishment of maintenance dosage.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "doc_gan_livertox": [
+    {
+      "hoat_chat_id": "acetaminophen",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Acetaminophen",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Acetaminophen.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Acetaminophen",
+          "trich_nguyen_van": "Likelihood score: A[HD] (well established cause of liver injury, but severe cases occur only with high doses).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "amiodarone",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Amiodarone",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Amiodarone.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Amiodarone",
+          "trich_nguyen_van": "Likelihood score: A (well established cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "amlodipine",
+      "likelihood_score": "C",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Amlodipine",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Amlodipine.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Amlodipine",
+          "trich_nguyen_van": "Likelihood score: C (probable but rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "amoxicillin",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Amoxicillin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Amoxicillin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Amoxicillin",
+          "trich_nguyen_van": "Likelihood score: B (highly likely but rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "apixaban",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Apixaban",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Apixaban.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Apixaban",
+          "trich_nguyen_van": "Likelihood score: B (possible rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "cefoperazone",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Cephalosporins, Parenteral",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/ParenteralCephalospo.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "ParenteralCephalospo",
+          "trich_nguyen_van": "Likelihood score: A (cephalosporins as a class are well known and characterized, although uncommon, causes of clinically apparent liver injury, the association having been made largely with the most frequently used agents, such as cefazolin, cephalexin and ceftriaxone).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "ceftriaxone",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Ceftriaxone",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Ceftriaxone.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Ceftriaxone",
+          "trich_nguyen_van": "Likelihood score: B (ceftriaxone is a very likely cause of clinically apparent liver injury and can also lead to biliary sludge and “pseudolithiasis” caused by crystallization of ceftriaxone in bile present in the gallbladder or biliary tree).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "clarithromycin",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Clarithromycin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Clarithromycin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Clarithromycin",
+          "trich_nguyen_van": "Likelihood score: B (highly likely cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Amoxicillin-Clavulanate",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/AmoxicillinClavulana.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "AmoxicillinClavulana",
+          "trich_nguyen_van": "Likelihood score: A (well established cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "digoxin",
+      "likelihood_score": "E",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Cardiac Glycosides",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/CardiacGlycosides.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "CardiacGlycosides",
+          "trich_nguyen_van": "Likelihood score: E (unlikely cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "enalapril",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Enalapril",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Enalapril.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Enalapril",
+          "trich_nguyen_van": "Likelihood score: B (likely but rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "enoxaparin",
+      "likelihood_score": "E",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Low Molecular Weight Heparins",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/LMW-Heparins.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "LMW-Heparins",
+          "trich_nguyen_van": "Likelihood score: E (although a frequent cause of asymptomatic serum enzyme elevations, the low molecular weight heparins are unlikely causes of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "fluconazole",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Fluconazole",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Fluconazole.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Fluconazole",
+          "trich_nguyen_van": "Likelihood score: B (likely cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "furosemide",
+      "likelihood_score": "E",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Loop Diuretics",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/LoopDiuretics.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "LoopDiuretics",
+          "trich_nguyen_van": "Likelihood score, all loop diuretics: E (unlikely causes of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "gabapentin",
+      "likelihood_score": "C",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Gabapentin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Gabapentin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Gabapentin",
+          "trich_nguyen_van": "Likelihood score: C (probable cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "gentamicin",
+      "likelihood_score": "E",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Gentamicin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Gentamicin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Gentamicin",
+          "trich_nguyen_van": "Likelihood score: E (unlikely cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "ibuprofen",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Ibuprofen",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Ibuprofen.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Ibuprofen",
+          "trich_nguyen_van": "Likelihood score: A (well defined but very rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "insulin_glargine",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Insulin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Insulin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Insulin",
+          "trich_nguyen_van": "Likelihood score: A[H] (known cause of liver injury, but only when administered in high or intermittent doses and in the presence of hyperglycemia).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "ketorolac",
+      "likelihood_score": "D",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Ketorolac",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Ketorolac.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Ketorolac",
+          "trich_nguyen_van": "Likelihood score: D (possible rare cause of clinically apparent liver injury, perhaps due to bleeding episodes).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "levetiracetam",
+      "likelihood_score": "C",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Levetiracetam",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Levetiracetam.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Levetiracetam",
+          "trich_nguyen_van": "Likelihood score: C (probable rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "levofloxacin",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Levofloxacin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Levofloxacin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Levofloxacin",
+          "trich_nguyen_van": "Likelihood score: A (well established cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "losartan",
+      "likelihood_score": "C",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Losartan",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Losartan.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Losartan",
+          "trich_nguyen_van": "Likelihood score: C (Probable cause of rare instances of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "meropenem",
+      "likelihood_score": "D",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Meropenem",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Meropenem.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Meropenem",
+          "trich_nguyen_van": "Likelihood score: D (possible rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "metformin",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Metformin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Metformin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Metformin",
+          "trich_nguyen_van": "Likelihood score: B (rare but well documented cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "methotrexate",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Methotrexate",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Methotrexate.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Methotrexate",
+          "trich_nguyen_van": "Likelihood score: A (well known cause of chronic, clinically significant liver injury, portal hypertension and cirrhosis).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "metoprolol",
+      "likelihood_score": "D",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Metoprolol",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Metoprolol.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Metoprolol",
+          "trich_nguyen_van": "Likelihood score: D (possible rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "morphine",
+      "likelihood_score": "E",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Morphine",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Morphine.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Morphine",
+          "trich_nguyen_van": "Likelihood score: E (unlikely cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "omeprazole",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Omeprazole",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Omeprazole.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Omeprazole",
+          "trich_nguyen_van": "Likelihood score: B (rare but likely cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "phenytoin",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Phenytoin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Phenytoin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Phenytoin",
+          "trich_nguyen_van": "Likelihood score: A (well known cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "piperacillin",
+      "likelihood_score": "B",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Piperacillin-Tazobactam",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/PiperacillinTazob.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "PiperacillinTazob",
+          "trich_nguyen_van": "Likelihood score: B (likely rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "rivaroxaban",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Rivaroxaban",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Rivaroxaban.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Rivaroxaban",
+          "trich_nguyen_van": "Likelihood score: A (well established cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "simvastatin",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Simvastatin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Simvastatin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Simvastatin",
+          "trich_nguyen_van": "Likelihood score: A (well known but rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "spironolactone",
+      "likelihood_score": "D",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Spironolactone",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Spironolactone.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Spironolactone",
+          "trich_nguyen_van": "Likelihood score: D (possible rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "sulfamethoxazole",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Trimethoprim-Sulfamethoxazole",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/SMZ-TMP.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "SMZ-TMP",
+          "trich_nguyen_van": "Likelihood score: A (well established cause of clinically apparent acute liver injury)",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "tramadol",
+      "likelihood_score": "E*",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Tramadol",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Tramadol.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Tramadol",
+          "trich_nguyen_van": "Likelihood score: E* (unproven cause of liver injury in therapeutic doses but reported to cause liver injury with overdose).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "valproic_acid",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Valproate",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Valproate.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Valproate",
+          "trich_nguyen_van": "Likelihood score: A (well known cause of several forms of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "vancomycin",
+      "likelihood_score": "A",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Vancomycin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Vancomycin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Vancomycin",
+          "trich_nguyen_van": "Likelihood score: A (well established cause of clinically apparent liver injury usually in association with prolonged intravenous therapy and presenting with DRESS syndrome).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "hoat_chat_id": "warfarin",
+      "likelihood_score": "C",
+      "nguon": [
+        {
+          "loai": "livertox",
+          "ten_nhan": "Warfarin",
+          "tep": "data/kb_sources/livertox/giai_nen/livertox_NBK547852/Warfarin.nxml",
+          "truong_nhan": "likelihood_score",
+          "ma_chuyen_luan": "Warfarin",
+          "trich_nguyen_van": "Likelihood score: C (probable rare cause of clinically apparent liver injury).",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547852/",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "khong_co_nguon": [
+    {
+      "hoat_chat_id": "cefoperazone",
+      "danh_sach": "doc_than",
+      "ly_do": "không có nhãn FDA trong kho"
+    },
+    {
+      "hoat_chat_id": "cefoperazone",
+      "danh_sach": "keo_dai_qt",
+      "ly_do": "không có nhãn FDA trong kho"
+    },
+    {
+      "hoat_chat_id": "cefoperazone",
+      "danh_sach": "khoang_dieu_tri_hep",
+      "ly_do": "không có nhãn FDA trong kho"
+    },
+    {
+      "hoat_chat_id": "sulbactam",
+      "danh_sach": "doc_than",
+      "ly_do": "không có nhãn đơn chất trong kho; chỉ có nhãn ampicillin-sulbactam (thuốc phối hợp khác cefoperazone-sulbactam), không suy chéo"
+    },
+    {
+      "hoat_chat_id": "sulbactam",
+      "danh_sach": "keo_dai_qt",
+      "ly_do": "không có nhãn đơn chất trong kho; chỉ có nhãn ampicillin-sulbactam (thuốc phối hợp khác cefoperazone-sulbactam), không suy chéo"
+    },
+    {
+      "hoat_chat_id": "sulbactam",
+      "danh_sach": "khoang_dieu_tri_hep",
+      "ly_do": "không có nhãn đơn chất trong kho; chỉ có nhãn ampicillin-sulbactam (thuốc phối hợp khác cefoperazone-sulbactam), không suy chéo"
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "danh_sach": "doc_than",
+      "ly_do": "chỉ có nhãn phối hợp amoxicillin-clavulanate, đã quét, không có câu thuộc danh sách này; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "danh_sach": "keo_dai_qt",
+      "ly_do": "chỉ có nhãn phối hợp amoxicillin-clavulanate, đã quét, không có câu thuộc danh sách này; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "danh_sach": "khoang_dieu_tri_hep",
+      "ly_do": "chỉ có nhãn phối hợp amoxicillin-clavulanate, đã quét, không có câu thuộc danh sách này; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "trimethoprim",
+      "danh_sach": "doc_than",
+      "ly_do": "chỉ có nhãn phối hợp sulfamethoxazole-trimethoprim, đã quét; không có câu thuộc danh sách này; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "trimethoprim",
+      "danh_sach": "keo_dai_qt",
+      "ly_do": "chỉ có nhãn phối hợp sulfamethoxazole-trimethoprim, đã quét; không có câu thuộc danh sách này; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "trimethoprim",
+      "danh_sach": "khoang_dieu_tri_hep",
+      "ly_do": "chỉ có nhãn phối hợp sulfamethoxazole-trimethoprim, đã quét; không có câu thuộc danh sách này; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "tazobactam",
+      "danh_sach": "doc_than",
+      "ly_do": "câu độc thận của nhãn phối hợp đã ghi ở piperacillin, không ghi lại để tránh đếm đôi một y lệnh"
+    },
+    {
+      "hoat_chat_id": "tazobactam",
+      "danh_sach": "keo_dai_qt",
+      "ly_do": "chỉ có nhãn phối hợp piperacillin-tazobactam; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "tazobactam",
+      "danh_sach": "khoang_dieu_tri_hep",
+      "ly_do": "chỉ có nhãn phối hợp piperacillin-tazobactam; không có nhãn đơn chất"
+    },
+    {
+      "hoat_chat_id": "esomeprazole",
+      "danh_sach": "doc_gan_livertox",
+      "ly_do": "chương LiverTox nhóm Proton Pump Inhibitors không có dòng \"Likelihood score\"; chỉ omeprazole có điểm riêng; không suy chéo"
+    },
+    {
+      "hoat_chat_id": "colistimethate",
+      "danh_sach": "doc_gan_livertox",
+      "ly_do": "không có chương colistin/colistimethate trong mục lục LiverTox đã tải"
+    },
+    {
+      "hoat_chat_id": "sulbactam",
+      "danh_sach": "doc_gan_livertox",
+      "ly_do": "chỉ có chương Ampicillin-Sulbactam (điểm C), không phải cefoperazone-sulbactam; không suy chéo"
+    },
+    {
+      "hoat_chat_id": "trimethoprim",
+      "danh_sach": "doc_gan_livertox",
+      "ly_do": "đã tính ở sulfamethoxazole (cùng chương SMZ-TMP), không ghi lại để tránh đếm đôi"
+    },
+    {
+      "hoat_chat_id": "tazobactam",
+      "danh_sach": "doc_gan_livertox",
+      "ly_do": "đã tính ở piperacillin (cùng chương Piperacillin-Tazobactam), không ghi lại để tránh đếm đôi"
+    },
+    {
+      "hoat_chat_id": "warfarin",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): mục 5.4: AKI \"may occur with warfarin sodium\" liên quan đợt chống đông quá mức và tiểu máu, cơ chế gián tiếp"
+    },
+    {
+      "hoat_chat_id": "simvastatin",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: AKI thứ phát sau tiêu cơ vân (rhabdomyolysis), cơ chế gián tiếp"
+    },
+    {
+      "hoat_chat_id": "omeprazole",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn mục 5.2: viêm thận kẽ ống thận cấp (TIN) do miễn dịch, không phải độc tính trực tiếp kiểu độc thận"
+    },
+    {
+      "hoat_chat_id": "esomeprazole",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn mục 5.2: viêm thận kẽ ống thận cấp (TIN) do miễn dịch, không phải độc tính trực tiếp kiểu độc thận"
+    },
+    {
+      "hoat_chat_id": "losartan",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn mục 5.3: suy giảm chức năng thận do ức chế hệ renin-angiotensin (huyết động), không phải độc thận trực tiếp"
+    },
+    {
+      "hoat_chat_id": "enalapril",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: suy thận cấp hiếm gặp do tụt huyết áp / phụ thuộc RAAS (huyết động), không phải độc thận trực tiếp"
+    },
+    {
+      "hoat_chat_id": "ceftriaxone",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: suy thận cấp sau thận do kết tủa ceftriaxone-canxi trong đường tiểu, cơ chế tắc nghẽn"
+    },
+    {
+      "hoat_chat_id": "levofloxacin",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: viêm thận kẽ trong phản ứng quá mẫn toàn thân, không phải độc thận trực tiếp"
+    },
+    {
+      "hoat_chat_id": "clarithromycin",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: AKI chỉ trong tương tác với chẹn kênh canxi chuyển hoá bởi CYP3A4"
+    },
+    {
+      "hoat_chat_id": "fluconazole",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: suy thận cấp chỉ trong tương tác (tolvaptan) hoặc báo cáo tự nguyện không xác lập nhân quả"
+    },
+    {
+      "hoat_chat_id": "spironolactone",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: chỉ nêu suy thận nặng thêm khi dùng cùng thuốc độc thận khác; suy thận liệt kê ở phản ứng có hại"
+    },
+    {
+      "hoat_chat_id": "furosemide",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: chỉ nêu tăng độc thận của thuốc khác (cephalosporin, cisplatin) và suy thận khi phối hợp ACEi/ARB"
+    },
+    {
+      "hoat_chat_id": "sulfamethoxazole",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: suy thận, viêm thận kẽ chỉ liệt kê ở phản ứng có hại; độc thận khi dùng cùng cyclosporin"
+    },
+    {
+      "hoat_chat_id": "amiodarone",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: suy thận cấp chỉ trong bối cảnh tiêm tĩnh mạch với nồng độ nạp rất cao và tốc độ truyền nhanh hơn khuyến cáo"
+    },
+    {
+      "hoat_chat_id": "rivaroxaban",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn: suy thận cấp là điều kiện để ngừng / chỉnh liều, không phải độc tính của thuốc"
+    },
+    {
+      "hoat_chat_id": "amoxicillin",
+      "danh_sach": "doc_than",
+      "ly_do": "Nhãn có nhắc thận nhưng không đưa vào doc_than (chờ dược sĩ quyết định có mở rộng không): nhãn amoxicillin-clavulanate: viêm thận kẽ, tinh thể niệu chỉ ở phản ứng có hại / quá liều"
+    }
+  ]
+}

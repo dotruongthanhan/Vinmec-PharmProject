@@ -162,12 +162,13 @@ def test_ai_endpoints_lifecycle_sources_and_ai_feedback(tmp_path: Path) -> None:
         _check_display_strings(finished)
 
         attention = finished["nhan_dinh"]["can_chu_y"]
-        assert len(attention) == 2
-        assert attention[0]["nguon_goc_ma"] == "luat"
-        assert attention[0]["dien_giai_ai"] is not None
-        assert attention[0]["trich_dan"][0]["nhan"].startswith("Nhãn FDA · ")
-        ai_row = attention[1]
-        assert ai_row["nhan_dinh_id"].startswith("ai|")
+        rule_rows = [row for row in attention if row["nguon_goc_ma"] == "luat"]
+        assert len(rule_rows) == len(attention) - 1
+        assert rule_rows[0]["dien_giai_ai"] is not None
+        assert rule_rows[0]["trich_dan"][0]["nhan"].startswith("Nhãn FDA · ")
+        ai_rows = [row for row in attention if row["nhan_dinh_id"].startswith("ai|")]
+        assert len(ai_rows) == 1
+        ai_row = ai_rows[0]
         assert ai_row["nguon_goc_ma"] == "ai_da_kiem_chung"
         assert ai_row["ma_luat"] is None
         assert runner.calls == 1
@@ -203,7 +204,14 @@ def test_ai_endpoints_lifecycle_sources_and_ai_feedback(tmp_path: Path) -> None:
         assert fb_resp.json()["phan_hoi_nhan"] == "Đồng ý"
 
         reread = client.get("/api/cases/DEMO-02/ai").json()
-        assert reread["nhan_dinh"]["can_chu_y"][1]["phan_hoi"]["phan_hoi"] == "dong_y"
+        assert (
+            next(
+                row
+                for row in reread["nhan_dinh"]["can_chu_y"]
+                if row["nhan_dinh_id"] == ai_row["nhan_dinh_id"]
+            )["phan_hoi"]["phan_hoi"]
+            == "dong_y"
+        )
 
         # Mã ai|... không tồn tại trong lần chạy của ca vẫn trả 404.
         bad_fb = client.post(

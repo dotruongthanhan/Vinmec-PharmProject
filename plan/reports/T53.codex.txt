@@ -1,0 +1,9 @@
+**TRẠNG THÁI: XONG phần triển khai T53.** Chuyển được 50/50 mã `HC-…`. Trong 167 dòng của 66 ca giả lập, 117 dòng đã phân giải, 47 dòng không áp dụng và 3 dòng chưa nhận diện. Có 49/51 hoạt chất của các ca nối được DDInter.
+
+**FILE ĐÃ TẠO / SỬA:** `app/kb/resolver/`, bộ test và fixture, chỉ mục SQLite 10,35 MiB, ba tệp kết quả `data/kb_reports/T53_*` và [báo cáo T53](D:/create/Vinmec-PharmProject/plan/reports/T53.md).
+
+**LỆNH ĐÃ CHẠY VÀ KẾT QUẢ:** `build-index`, `report`, `ruff check` và `ruff format --check` đều qua. `pytest -q tests/kb --basetemp=.pytest_t53` qua 212 test. Hai lần dựng chỉ mục cho cùng SHA-256. Đã dọn `.pytest_t53`.
+
+**ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO:** Mục tiêu chỉ còn dòng `khong_ap_dung` chưa đạt. Oxy qua gọng kính thiếu tên đối chiếu. Ringer lactat và Oresol có bản ghi DAV nhưng thiếu thành phần trên trục.
+
+**VIỆC CHƯA LÀM / CÂU HỎI:** Đã dựng chỉ mục từ bản xuất `T52-v1` hiện có. Mỗi lần T52 xuất lại từ điển, cần chạy lại `build-index` và `report` theo lệnh trong báo cáo.

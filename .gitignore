@@ -248,3 +248,23 @@ data/tham_khao/*
 
 # nhật ký chạy agent
 .t*.log
+
+# tệp tạm của pytest
+.pytest_*
+
+# Dữ liệu: không đưa lên git (nhóm tự quản lý riêng, xem docs/du-lieu/README.md).
+# Chỉ giữ README mô tả trong từng thư mục dữ liệu.
+data/kb_curated/*
+!data/kb_curated/README.md
+data/kb_reports/*
+!data/kb_reports/README.md
+data/kb_sources/*
+!data/kb_sources/README.md
+data/kb_staging/*
+!data/kb_staging/README.md
+data/cache/*
+!data/cache/README.md
+data/formulas/*
+!data/formulas/README.md
+data/runtime/
+data/_luu_tru/

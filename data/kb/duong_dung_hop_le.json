@@ -1,0 +1,5164 @@
+{
+  "ten": "Đường dùng hợp lệ theo hoạt chất và dạng bào chế (plan 1.8 đợt D5)",
+  "phien_ban": "D5-v1",
+  "ngay": "2026-11-19",
+  "trang_thai": "cho_duoc_si_duyet",
+  "huong_giai_thich": {
+    "khoa_tra": "hoat_chat_ids (khoá trục tra_cuu.sqlite; thuốc phối hợp là danh sách sắp theo chữ cái) + nhom_dang_bao_che",
+    "cach_dung": "Với dòng y lệnh: tìm hoạt chất của thuốc, xác định nhóm dạng của thuốc, rồi kiểm mã chuẩn của đường dùng nằm trong duong_dung_hop_le. Không nằm trong: khong_hop_le (mức can_xem). Dòng không có hàng hoặc duong_dung_hop_le rỗng: thieu_nguon, không được ghi \"đạt\".",
+    "nhom_dang": "Danh mục thuốc của ca chưa có dạng bào chế riêng; nhóm dạng của thuốc trong ca suy từ trường duong_dung của danh_muc_thuoc (uống hay tiêm/truyền).",
+    "tinh_mach": "tiem_tinh_mach và truyen_tinh_mach cùng một nhóm INTRAVENOUS của FDA; kiểm ở mức họ tĩnh mạch, không phân biệt bolus hay truyền.",
+    "muc_chac_chan": "dav_va_fda: DAV có dạng bào chế và FDA có route; chi_fda: chỉ FDA; chi_dav_chu_dang_bao_che: chỉ chữ trong dạng bào chế của DAV; khong_co_duong_dung_cu_the: chưa có đường tiêm cụ thể.",
+    "tang_tin_cay": "Thứ tự nguồn: (1) DAV dạng bào chế VN, (2) TT 20 (chưa lấy được bản gốc nên chưa dùng), (3) NDC/nhãn FDA route."
+  },
+  "bang_chuan_hoa_duong_dung": {
+    "quy_tac": "Chuẩn hoá khoá = bỏ dấu, chữ thường, gộp khoảng trắng; tra bảng khoa_sang_ma. Không có trong bảng: duong_dung_chuan = null, kết quả khong_chuan_hoa_duoc (hỏi dược sĩ), không đoán.",
+    "ma_chuan": [
+      {
+        "ma": "uong",
+        "ten_viet": "Uống"
+      },
+      {
+        "ma": "tiem_tinh_mach",
+        "ten_viet": "Tiêm tĩnh mạch (bolus/chậm)"
+      },
+      {
+        "ma": "truyen_tinh_mach",
+        "ten_viet": "Truyền tĩnh mạch"
+      },
+      {
+        "ma": "tiem_bap",
+        "ten_viet": "Tiêm bắp"
+      },
+      {
+        "ma": "tiem_duoi_da",
+        "ten_viet": "Tiêm dưới da"
+      },
+      {
+        "ma": "tiem_trong_ong_tuy",
+        "ten_viet": "Tiêm tuỷ sống (trong ống tuỷ)"
+      },
+      {
+        "ma": "tiem_ngoai_mang_cung",
+        "ten_viet": "Tiêm ngoài màng cứng"
+      },
+      {
+        "ma": "boi_ngoai_da",
+        "ten_viet": "Bôi ngoài da"
+      },
+      {
+        "ma": "nho_mat",
+        "ten_viet": "Nhỏ mắt, tra mắt"
+      },
+      {
+        "ma": "nho_tai",
+        "ten_viet": "Nhỏ tai"
+      },
+      {
+        "ma": "xit_mui",
+        "ten_viet": "Xịt/nhỏ mũi"
+      },
+      {
+        "ma": "hit",
+        "ten_viet": "Hít, khí dung"
+      },
+      {
+        "ma": "dat_truc_trang",
+        "ten_viet": "Đặt hậu môn/trực tràng"
+      },
+      {
+        "ma": "dat_am_dao",
+        "ten_viet": "Đặt âm đạo"
+      },
+      {
+        "ma": "ngam_duoi_luoi",
+        "ten_viet": "Ngậm dưới lưỡi"
+      }
+    ],
+    "khoa_sang_ma": {
+      "boi": "boi_ngoai_da",
+      "boi da": "boi_ngoai_da",
+      "boi ngoai da": "boi_ngoai_da",
+      "dat": null,
+      "dat am dao": "dat_am_dao",
+      "dat hau mon": "dat_truc_trang",
+      "dat truc trang": "dat_truc_trang",
+      "duong uong": "uong",
+      "epidural": "tiem_ngoai_mang_cung",
+      "hit": "hit",
+      "hit qua duong ho hap": "hit",
+      "im": "tiem_bap",
+      "intrathecal": "tiem_trong_ong_tuy",
+      "iv": "tiem_tinh_mach",
+      "iv infusion": "truyen_tinh_mach",
+      "iv push": "tiem_tinh_mach",
+      "ivpb": "truyen_tinh_mach",
+      "khi dung": "hit",
+      "ngam duoi luoi": "ngam_duoi_luoi",
+      "nho": "nho_mat",
+      "nho mat": "nho_mat",
+      "nho mui": "xit_mui",
+      "nho tai": "nho_tai",
+      "oral": "uong",
+      "per os": "uong",
+      "phun mu": "hit",
+      "po": "uong",
+      "sc": "tiem_duoi_da",
+      "sq": "tiem_duoi_da",
+      "sub q": "tiem_duoi_da",
+      "subcutaneous": "tiem_duoi_da",
+      "tb": "tiem_bap",
+      "tdd": "tiem_duoi_da",
+      "tiem bap": "tiem_bap",
+      "tiem bap sau": "tiem_bap",
+      "tiem duoi da": "tiem_duoi_da",
+      "tiem ngoai mang cung": "tiem_ngoai_mang_cung",
+      "tiem nhan mo": "tiem_trong_ong_tuy",
+      "tiem tinh mach": "tiem_tinh_mach",
+      "tiem tinh mach cham": "tiem_tinh_mach",
+      "tiem tinh mach truc tiep": "tiem_tinh_mach",
+      "tiem tm": "tiem_tinh_mach",
+      "tiem trong ong tuy": "tiem_trong_ong_tuy",
+      "tiem truyen": "truyen_tinh_mach",
+      "tiem truyen tinh mach": "truyen_tinh_mach",
+      "tiem tuy song": "tiem_trong_ong_tuy",
+      "tm": "tiem_tinh_mach",
+      "topical": "boi_ngoai_da",
+      "tra mat": "nho_mat",
+      "truyen": "truyen_tinh_mach",
+      "truyen nho giot tinh mach": "truyen_tinh_mach",
+      "truyen tinh mach": "truyen_tinh_mach",
+      "truyen tm": "truyen_tinh_mach",
+      "uong": "uong",
+      "uong sau an": "uong",
+      "uong truoc an": "uong",
+      "xit mui": "xit_mui"
+    },
+    "tu_mo_ho": {
+      "dat": "Phải hỏi: đặt trực tràng (dat_truc_trang) hay đặt âm đạo (dat_am_dao)"
+    },
+    "cach_viet_trong_66_ca": [
+      {
+        "viet_trong_ca": "uống",
+        "so_dong": 39,
+        "ma_chuan": "uong"
+      },
+      {
+        "viet_trong_ca": "truyền tĩnh mạch",
+        "so_dong": 13,
+        "ma_chuan": "truyen_tinh_mach"
+      },
+      {
+        "viet_trong_ca": "tiêm truyền tĩnh mạch",
+        "so_dong": 7,
+        "ma_chuan": "truyen_tinh_mach"
+      },
+      {
+        "viet_trong_ca": "tiêm dưới da",
+        "so_dong": 4,
+        "ma_chuan": "tiem_duoi_da"
+      },
+      {
+        "viet_trong_ca": "uong",
+        "so_dong": 3,
+        "ma_chuan": "uong"
+      },
+      {
+        "viet_trong_ca": "tiêm tĩnh mạch",
+        "so_dong": 2,
+        "ma_chuan": "tiem_tinh_mach"
+      }
+    ],
+    "ma_fda_sang_ma_chuan": {
+      "ORAL": [
+        "uong"
+      ],
+      "INTRAVENOUS": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "INTRAMUSCULAR": [
+        "tiem_bap"
+      ],
+      "SUBCUTANEOUS": [
+        "tiem_duoi_da"
+      ],
+      "INTRATHECAL": [
+        "tiem_trong_ong_tuy"
+      ],
+      "EPIDURAL": [
+        "tiem_ngoai_mang_cung"
+      ],
+      "RECTAL": [
+        "dat_truc_trang"
+      ],
+      "OPHTHALMIC": [
+        "nho_mat"
+      ],
+      "TOPICAL": [
+        "boi_ngoai_da"
+      ],
+      "NASAL": [
+        "xit_mui"
+      ],
+      "INTRAVITREAL": [
+        "tiem_noi_dich_kinh"
+      ],
+      "INTRAOCULAR": [
+        "tiem_noi_nhan_cau"
+      ],
+      "INFILTRATION": [
+        "tiem_tham_nhiem"
+      ],
+      "INTRA-ARTERIAL": [
+        "tiem_dong_mach"
+      ],
+      "PARENTERAL": []
+    }
+  },
+  "nhom": [
+    {
+      "ma_dong": "acetaminophen|dang_dat",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "nhom_dang_bao_che": "dang_dat",
+      "ten_nhom_dang": "Dạng đặt",
+      "duong_dung_hop_le": [
+        "dat_truc_trang",
+        "dat_am_dao"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 39,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên đạn đặt trực tràng",
+              "so_san_pham": 10
+            },
+            {
+              "dang_bao_che": "Thuốc đạn",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Viên đạn",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Viên đặt trực tràng",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Viên đặt hậu môn",
+              "so_san_pham": 4
+            }
+          ],
+          "vi_du_so_dang_ky": "893100037424",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['dat_am_dao', 'dat_truc_trang']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "RECTAL",
+              "so_san_pham": 11
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"acetaminophen\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "acetaminophen|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 66,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền",
+              "so_san_pham": 30
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền tĩnh mạch",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Dung dịch truyền tĩnh mạch",
+              "so_san_pham": 8
+            },
+            {
+              "dang_bao_che": "Dung dịch truyền",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Dung dịch đậm đặc để pha tiêm truyền",
+              "so_san_pham": 5
+            }
+          ],
+          "vi_du_so_dang_ky": "300110016425",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 27
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"acetaminophen\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/acetaminophen.json",
+          "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+          "phien_ban_nguon": "20260924",
+          "ten_nhan": "ACETAMINOPHEN",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc42ab17-cd30-4d1a-e053-2995a90a86ea\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "acetaminophen|dang_uong",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 715,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 152
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 114
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 60
+            },
+            {
+              "dang_bao_che": "Viên nén sủi bọt",
+              "so_san_pham": 52
+            },
+            {
+              "dang_bao_che": "Thuốc cốm sủi bọt",
+              "so_san_pham": 42
+            }
+          ],
+          "vi_du_so_dang_ky": "890100188926",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 3456
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"acetaminophen\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amiodarone|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "amiodarone"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 6,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Dung dịch pha tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch thuốc tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "800110429225",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 29
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"amiodarone\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/amiodarone.json",
+          "set_id": "0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+          "phien_ban_nguon": "20261026",
+          "ten_nhan": "AMIODARONE HYDROCHLORIDE",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0c9ee15a-5741-4aaa-8d80-c7bd2e45822e\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amiodarone|dang_uong",
+      "hoat_chat_ids": [
+        "amiodarone"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 24,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 20
+            },
+            {
+              "dang_bao_che": "Viên nén không bao",
+              "so_san_pham": 4
+            }
+          ],
+          "vi_du_so_dang_ky": "760110000825",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 43
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"amiodarone\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d5/amiodarone_oral.json",
+          "set_id": "02f4a736-63ed-4ad4-a1f1-b21a71e928bd",
+          "phien_ban_nguon": "20240202",
+          "ten_nhan": "Pacerone",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02f4a736-63ed-4ad4-a1f1-b21a71e928bd",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"02f4a736-63ed-4ad4-a1f1-b21a71e928bd\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amlodipine|dang_uong",
+      "hoat_chat_ids": [
+        "amlodipine"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 118,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 74
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 24
+            },
+            {
+              "dang_bao_che": "Viên nén không bao",
+              "so_san_pham": 8
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Viên nang",
+              "so_san_pham": 3
+            }
+          ],
+          "vi_du_so_dang_ky": "001110132724",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 564
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"amlodipine\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/amlodipine.json",
+          "set_id": "ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+          "phien_ban_nguon": "20261109",
+          "ten_nhan": "Amlodipine Besylate",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amoxicillin|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "amoxicillin"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [],
+      "muc_chac_chan": "khong_co_duong_dung_cu_the",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 6,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Bột thuốc pha tiêm",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "893110382725",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        }
+      ],
+      "ghi_chu": "Chữ dạng bào chế của DAV chỉ ghi chung \"tiêm\" hoặc \"truyền\", không nêu đường tiêm cụ thể, và không có sản phẩm FDA tương ứng; dược sĩ xác định đường tiêm hợp lệ",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amoxicillin|dang_uong",
+      "hoat_chat_ids": [
+        "amoxicillin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 185,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 84
+            },
+            {
+              "dang_bao_che": "Bột pha hỗn dịch uống",
+              "so_san_pham": 18
+            },
+            {
+              "dang_bao_che": "Viên nén phân tán",
+              "so_san_pham": 18
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 14
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha hỗn dịch uống",
+              "so_san_pham": 12
+            }
+          ],
+          "vi_du_so_dang_ky": "529110030523",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 486
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"amoxicillin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d3/amoxicillin.json",
+          "set_id": "00fbd46e-05fd-4f8a-9f59-a7a4d01c8e54",
+          "phien_ban_nguon": "20231218",
+          "ten_nhan": "Amoxicillin",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00fbd46e-05fd-4f8a-9f59-a7a4d01c8e54",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00fbd46e-05fd-4f8a-9f59-a7a4d01c8e54\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amoxicillin+clavulanic_acid|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "amoxicillin",
+        "clavulanic_acid"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "chi_dav_chu_dang_bao_che",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 24,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 11
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 8
+            },
+            {
+              "dang_bao_che": "Bột thuốc pha tiêm truyền tĩnh mạch",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Bột để pha dung dịch tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm / tiêm truyền",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "594110072523",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        }
+      ],
+      "ghi_chu": "Không có sản phẩm tiêm của FDA; đường dùng chỉ lấy từ chữ trong dạng bào chế của DAV, độ chắc thấp hơn; FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amoxicillin+clavulanic_acid|dang_uong",
+      "hoat_chat_ids": [
+        "amoxicillin",
+        "clavulanic_acid"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 206,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 111
+            },
+            {
+              "dang_bao_che": "Bột pha hỗn dịch uống",
+              "so_san_pham": 33
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha hỗn dịch uống",
+              "so_san_pham": 23
+            },
+            {
+              "dang_bao_che": "Viên nén phân tán",
+              "so_san_pham": 15
+            },
+            {
+              "dang_bao_che": "Thuốc cốm pha hỗn dịch uống",
+              "so_san_pham": 6
+            }
+          ],
+          "vi_du_so_dang_ky": "383110031623",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 203
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"amoxicillin_clavulanate\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/amoxicillin_and_clavulanate_potassium.json",
+          "set_id": "416fa58c-88fa-42aa-9195-74aeba641577",
+          "phien_ban_nguon": "20261105",
+          "ten_nhan": "Amoxicillin and Clavulanate Potassium",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=416fa58c-88fa-42aa-9195-74aeba641577",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"416fa58c-88fa-42aa-9195-74aeba641577\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "apixaban|dang_uong",
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 69,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 61
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim`",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim.",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "539110436323",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 18
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"apixaban\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/apixaban.json",
+          "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "phien_ban_nguon": "20260924",
+          "ten_nhan": "ELIQUIS",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"41a133ef-e461-48ad-8221-b735bdd0ec25\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "cefoperazone+sulbactam|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "cefoperazone",
+        "sulbactam"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_bap",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "chi_dav_chu_dang_bao_che",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 149,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 94
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 26
+            },
+            {
+              "dang_bao_che": "Bột vô khuẩn pha tiêm",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Thuốc tiêm",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm",
+              "so_san_pham": 4
+            }
+          ],
+          "vi_du_so_dang_ky": "880110038025",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_bap', 'tiem_tinh_mach', 'truyen_tinh_mach']"
+        }
+      ],
+      "ghi_chu": "Không có sản phẩm tiêm của FDA; đường dùng chỉ lấy từ chữ trong dạng bào chế của DAV, độ chắc thấp hơn; FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ceftriaxone|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 198,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 122
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 42
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm",
+              "so_san_pham": 12
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm (Tiêm bắp, tiêm tĩnh mạch)",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm truyền",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "590110413823",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_bap', 'tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 63
+            },
+            {
+              "route": "INTRAMUSCULAR",
+              "so_san_pham": 49
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"ceftriaxone\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/ceftriaxone.json",
+          "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+          "phien_ban_nguon": "20260930",
+          "ten_nhan": "Ceftriaxone",
+          "route_goc": [
+            "INTRAMUSCULAR",
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "clarithromycin|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [],
+      "muc_chac_chan": "khong_co_duong_dung_cu_the",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 3,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột pha tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha dung dịch tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "520110070423",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        }
+      ],
+      "ghi_chu": "Chữ dạng bào chế của DAV chỉ ghi chung \"tiêm\" hoặc \"truyền\", không nêu đường tiêm cụ thể, và không có sản phẩm FDA tương ứng; dược sĩ xác định đường tiêm hợp lệ",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "clarithromycin|dang_uong",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 91,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 71
+            },
+            {
+              "dang_bao_che": "Cốm pha hỗn dịch uống",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nén phóng thích kéo dài",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "viên nén bao phim",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Bột pha hỗn dịch",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "529110769724",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 54
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"clarithromycin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/clarithromycin.json",
+          "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "phien_ban_nguon": "20261109",
+          "ten_nhan": "Clarithromycin",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0be243c6-de02-45dd-8210-cab1bbc8dfa7\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "colistimethate|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "colistimethate"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_bap",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 15,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha dung dịch tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha dung dịch tiêm truyền hoặc hít qua đường hô hấp",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "893114099324",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['hit']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAMUSCULAR",
+              "so_san_pham": 6
+            },
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 6
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"colistimethate\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/colistimethate.json",
+          "set_id": "6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+          "phien_ban_nguon": "20261104",
+          "ten_nhan": "COLISTIMETHATE SODIUM",
+          "route_goc": [
+            "INTRAMUSCULAR",
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"6a335659-03b0-4a2d-9cd4-7dcf7da96fe6\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "enalapril|dang_uong",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 132,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 118
+            },
+            {
+              "dang_bao_che": "Viên nén không bao",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Thuốc bột uống",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "380110140723",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 108
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"enalapril\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/enalapril.json",
+          "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+          "phien_ban_nguon": "20261009",
+          "ten_nhan": "ENALAPRIL MALEATE",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"d6af58f2-4129-45fe-a510-03b7403495ac\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "enoxaparin|dang_boi_ngoai_da",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "nhom_dang_bao_che": "dang_boi_ngoai_da",
+      "ten_nhom_dang": "Dạng bôi ngoài da",
+      "duong_dung_hop_le": [
+        "boi_ngoai_da"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "TOPICAL",
+              "so_san_pham": 1
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"enoxaparin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "enoxaparin|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_duoi_da",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 7,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "dung dịch tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "690410441725",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "SUBCUTANEOUS",
+              "so_san_pham": 172
+            },
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 22
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"enoxaparin\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/enoxaparin.json",
+          "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "phien_ban_nguon": "20261015",
+          "ten_nhan": "Enoxaparin Sodium Injection,USP",
+          "route_goc": [
+            "SUBCUTANEOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"1e0ac5e2-329c-d0a8-e063-6394a90afba8\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "esomeprazole|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 40,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột đông khô pha tiêm",
+              "so_san_pham": 20
+            },
+            {
+              "dang_bao_che": "Thuốc bột đông khô pha tiêm",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha dung dịch tiêm/ truyền tĩnh mạch",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Thuốc bột đông khô pha dung dịch tiêm hoặc tiêm truyền",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "471110040225",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 4
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"esomeprazole\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "esomeprazole|dang_uong",
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 208,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao tan trong ruột",
+              "so_san_pham": 50
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim tan trong ruột",
+              "so_san_pham": 28
+            },
+            {
+              "dang_bao_che": "Viên nang cứng chứa vi hạt bao tan trong ruột",
+              "so_san_pham": 25
+            },
+            {
+              "dang_bao_che": "Viên nang cứng chứa pellet bao tan trong ruột",
+              "so_san_pham": 20
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 16
+            }
+          ],
+          "vi_du_so_dang_ky": "890110006400",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 268
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"esomeprazole\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/esomeprazole.json",
+          "set_id": "fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+          "phien_ban_nguon": "20261102",
+          "ten_nhan": "Esomeprazole Magnesium",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"fdea1f5f-b717-4d49-8d70-0b373c959bf0\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "fluconazole|dang_dat",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "nhom_dang_bao_che": "dang_dat",
+      "ten_nhom_dang": "Dạng đặt",
+      "duong_dung_hop_le": [
+        "dat_am_dao"
+      ],
+      "muc_chac_chan": "chi_dav_chu_dang_bao_che",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 1,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nang mềm đặt âm đạo",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "VN-10665-10",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['dat_am_dao']"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "fluconazole|dang_nho_mat",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "nhom_dang_bao_che": "dang_nho_mat",
+      "ten_nhom_dang": "Dạng nhỏ mắt, tra mắt",
+      "duong_dung_hop_le": [
+        "nho_mat"
+      ],
+      "muc_chac_chan": "chi_dav_chu_dang_bao_che",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 1,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "thuốc nhỏ mắt",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "VN-14597-12",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "fluconazole|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 14,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Dung dịch truyền tĩnh mạch",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Dung dịch thuốc tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Thuốc tiêm truyền",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "471110339625",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 11
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"fluconazole\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/fluconazole.json",
+          "set_id": "c041227b-dab6-4c29-ab59-d31993d524b2",
+          "phien_ban_nguon": "20260817",
+          "ten_nhan": "Fluconazole",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c041227b-dab6-4c29-ab59-d31993d524b2",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c041227b-dab6-4c29-ab59-d31993d524b2\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "fluconazole|dang_uong",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 95,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 68
+            },
+            {
+              "dang_bao_che": "Viên nang",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 7
+            },
+            {
+              "dang_bao_che": "viên nang cứng",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Bột pha hỗn dịch uống",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "300110024225",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 153
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"fluconazole\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "gabapentin|dang_uong",
+      "hoat_chat_ids": [
+        "gabapentin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 131,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 95
+            },
+            {
+              "dang_bao_che": "Viên nang",
+              "so_san_pham": 15
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 14
+            },
+            {
+              "dang_bao_che": "Dung dịch uống",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "viên nang cứng",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "529110021624",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 584
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"gabapentin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d5/gabapentin.json",
+          "set_id": "01b810b7-f4c8-4412-bbc5-b9220d8770d8",
+          "phien_ban_nguon": "20240402",
+          "ten_nhan": "Gabapentin",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=01b810b7-f4c8-4412-bbc5-b9220d8770d8",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"01b810b7-f4c8-4412-bbc5-b9220d8770d8\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "gentamicin|dang_boi_ngoai_da",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "nhom_dang_bao_che": "dang_boi_ngoai_da",
+      "ten_nhom_dang": "Dạng bôi ngoài da",
+      "duong_dung_hop_le": [
+        "boi_ngoai_da"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "TOPICAL",
+              "so_san_pham": 6
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"gentamicin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "gentamicin|dang_nho_mat",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "nhom_dang_bao_che": "dang_nho_mat",
+      "ten_nhom_dang": "Dạng nhỏ mắt, tra mắt",
+      "duong_dung_hop_le": [
+        "nho_mat",
+        "nho_tai"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 14,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch nhỏ mắt",
+              "so_san_pham": 8
+            },
+            {
+              "dang_bao_che": "Dung dịch nhỏ mắt, nhỏ tai",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Dung dịch nhỏ mắt, tai",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Dung dịch nhỏ mắt/nhỏ tai",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Mỡ tra mắt",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "499110195300",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['nho_tai']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "OPHTHALMIC",
+              "so_san_pham": 16
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"gentamicin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "gentamicin|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 28,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 26
+            },
+            {
+              "dang_bao_che": "Dung dịch  tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Thuốc tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "890110780424",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 26
+            },
+            {
+              "route": "INTRAMUSCULAR",
+              "so_san_pham": 21
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"gentamicin\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/gentamicin.json",
+          "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+          "phien_ban_nguon": "20261102",
+          "ten_nhan": "Gentamicin",
+          "route_goc": [
+            "INTRAMUSCULAR",
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"84f6eb1c-a287-489a-8c3e-aa5954cf1992\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "insulin_glargine|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "insulin_glargine"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_duoi_da"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 3,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Thuốc tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "300410180200",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "SUBCUTANEOUS",
+              "so_san_pham": 23
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"insulin_glargine\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/insulin_glargine.json",
+          "set_id": "0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae",
+          "phien_ban_nguon": "20260616",
+          "ten_nhan": "BASAGLAR KwikPen",
+          "route_goc": [
+            "SUBCUTANEOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|dang_boi_ngoai_da",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "nhom_dang_bao_che": "dang_boi_ngoai_da",
+      "ten_nhom_dang": "Dạng bôi ngoài da",
+      "duong_dung_hop_le": [
+        "boi_ngoai_da"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "TOPICAL",
+              "so_san_pham": 3
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"ketorolac\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|dang_nho_mat",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "nhom_dang_bao_che": "dang_nho_mat",
+      "ten_nhom_dang": "Dạng nhỏ mắt, tra mắt",
+      "duong_dung_hop_le": [
+        "nho_mat"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 2,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch nhỏ mắt",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "001110787224",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "OPHTHALMIC",
+              "so_san_pham": 30
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"ketorolac\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_bap",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_noi_nhan_cau"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 25,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 19
+            },
+            {
+              "dang_bao_che": "Dung dịch pha tiêm",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm bắp, tiêm tĩnh mạch",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Thuốc tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "dung dịch tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "594110446325",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_bap', 'tiem_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAMUSCULAR",
+              "so_san_pham": 104
+            },
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 72
+            },
+            {
+              "route": "INTRAOCULAR",
+              "so_san_pham": 2
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"ketorolac\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/ketorolac.json",
+          "set_id": "30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+          "phien_ban_nguon": "20260213",
+          "ten_nhan": "KETOROLAC TROMETHAMINE",
+          "route_goc": [
+            "INTRAMUSCULAR",
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"30a3ca20-8f98-478c-8a6b-aa617f0a17a3\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|dang_uong",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 10,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Viên nén phân tán",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "893110166024",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 55
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"ketorolac\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|dang_xit_mui",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "nhom_dang_bao_che": "dang_xit_mui",
+      "ten_nhom_dang": "Dạng xịt mũi",
+      "duong_dung_hop_le": [
+        "xit_mui"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "NASAL",
+              "so_san_pham": 1
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"ketorolac\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levetiracetam|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 9,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch đậm đặc để pha dung dịch tiêm truyền",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Dung dịch đậm đặc pha tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch pha tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch đậm đặc để pha dung dịch truyền tĩnh mạch",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "890110189926",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 68
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"levetiracetam\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levetiracetam|dang_uong",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 94,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 82
+            },
+            {
+              "dang_bao_che": "Dung dịch uống",
+              "so_san_pham": 8
+            },
+            {
+              "dang_bao_che": "Viên nén dài bao phim",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén bao  phim",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "383110790624",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 239
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"levetiracetam\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/levetiracetam.json",
+          "set_id": "46852061-e59a-4a8c-aba0-ce4c7887f366",
+          "phien_ban_nguon": "20261106",
+          "ten_nhan": "Levetiracetam",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46852061-e59a-4a8c-aba0-ce4c7887f366",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"46852061-e59a-4a8c-aba0-ce4c7887f366\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levofloxacin|dang_nho_mat",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "nhom_dang_bao_che": "dang_nho_mat",
+      "ten_nhom_dang": "Dạng nhỏ mắt, tra mắt",
+      "duong_dung_hop_le": [
+        "nho_mat"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 35,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch nhỏ mắt",
+              "so_san_pham": 27
+            },
+            {
+              "dang_bao_che": "Thuốc nhỏ mắt",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Dung dịch thuốc nhỏ mắt",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "dung dịch nhỏ mắt",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch nhỏ măt",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "380115772124",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "OPHTHALMIC",
+              "so_san_pham": 2
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"levofloxacin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levofloxacin|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 90,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền",
+              "so_san_pham": 50
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền tĩnh mạch",
+              "so_san_pham": 13
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Dung dịch truyền tĩnh mạch",
+              "so_san_pham": 7
+            },
+            {
+              "dang_bao_che": "Dung dịch đậm đặc để pha tiêm truyền",
+              "so_san_pham": 4
+            }
+          ],
+          "vi_du_so_dang_ky": "800115428123",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 25
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"levofloxacin\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/levofloxacin.json",
+          "set_id": "699fbdb8-a6fd-476a-9b80-08197d869534",
+          "phien_ban_nguon": "20260721",
+          "ten_nhan": "Levofloxacin",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=699fbdb8-a6fd-476a-9b80-08197d869534",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"699fbdb8-a6fd-476a-9b80-08197d869534\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levofloxacin|dang_uong",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 277,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 254
+            },
+            {
+              "dang_bao_che": "Viên nén bao  phim",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "viên nén bao phim",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Viên nén  bao phim",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "viên nén dài bao phim",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "383115031723",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 97
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"levofloxacin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d5/levofloxacin_oral.json",
+          "set_id": "05d179f5-b200-8597-e063-6394a90a10cc",
+          "phien_ban_nguon": "20250304",
+          "ten_nhan": "Levofloxacin",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=05d179f5-b200-8597-e063-6394a90a10cc",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"05d179f5-b200-8597-e063-6394a90a10cc\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "losartan|dang_uong",
+      "hoat_chat_ids": [
+        "losartan"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 169,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 160
+            },
+            {
+              "dang_bao_che": "viên nén bao phim",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Viên nén bao  phim",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "383110010624",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 320
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"losartan\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/losartan.json",
+          "set_id": "16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+          "phien_ban_nguon": "20261109",
+          "ten_nhan": "Losartan Potassium",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"16a6a582-eb4d-41bc-9d49-fc1d4117b29a\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "meropenem|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 120,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 69
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 15
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm hoặc tiêm truyền",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm truyền",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm truyền tĩnh mạch",
+              "so_san_pham": 3
+            }
+          ],
+          "vi_du_so_dang_ky": "499110015125",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 50
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"meropenem\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/meropenem.json",
+          "set_id": "31dd2160-7dbd-51fa-e054-00144ff88e88",
+          "phien_ban_nguon": "20261102",
+          "ten_nhan": "MEROPENEM",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=31dd2160-7dbd-51fa-e054-00144ff88e88",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"31dd2160-7dbd-51fa-e054-00144ff88e88\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "metformin|dang_uong",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 108,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 66
+            },
+            {
+              "dang_bao_che": "Viên nén phóng thích kéo dài",
+              "so_san_pham": 18
+            },
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Viên nén giải phóng kéo dài",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Viên nén phóng thích chậm",
+              "so_san_pham": 4
+            }
+          ],
+          "vi_du_so_dang_ky": "400110027025",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 631
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"metformin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/metformin.json",
+          "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "phien_ban_nguon": "20261109",
+          "ten_nhan": "Metformin Hydrochloride",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0230a3c3-34cf-478b-88c3-4d96e5300018\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "methotrexate|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_duoi_da",
+        "tiem_bap",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_trong_ong_tuy",
+        "tiem_dong_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 15,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm bắp, tiêm tĩnh mạch, truyền tĩnh mạch, tiêm trong ống tủy",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha dung dịch tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm hoặc tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch đậm đặc pha tiêm truyền",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "880114434023",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_bap', 'tiem_tinh_mach', 'tiem_trong_ong_tuy', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "SUBCUTANEOUS",
+              "so_san_pham": 30
+            },
+            {
+              "route": "INTRAMUSCULAR",
+              "so_san_pham": 22
+            },
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 22
+            },
+            {
+              "route": "INTRATHECAL",
+              "so_san_pham": 17
+            },
+            {
+              "route": "INTRA-ARTERIAL",
+              "so_san_pham": 8
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"methotrexate\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d5/methotrexate_injection.json",
+          "set_id": "0d63ba29-b692-41b4-87e8-351265c8273f",
+          "phien_ban_nguon": "20261027",
+          "ten_nhan": "Methotrexate",
+          "route_goc": [
+            "INTRAMUSCULAR",
+            "INTRAVENOUS",
+            "SUBCUTANEOUS",
+            "INTRATHECAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0d63ba29-b692-41b4-87e8-351265c8273f",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0d63ba29-b692-41b4-87e8-351265c8273f\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "methotrexate|dang_uong",
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 13,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 9
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "640114769624",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 36
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"methotrexate\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "metoprolol|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "metoprolol"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 19
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"metoprolol_tartrate\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/metoprolol_tartrate.json",
+          "set_id": "d6ae40f1-bc7d-4d3a-b2e9-8d4fc4d1d759",
+          "phien_ban_nguon": "20261008",
+          "ten_nhan": "Metoprolol",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6ae40f1-bc7d-4d3a-b2e9-8d4fc4d1d759",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"d6ae40f1-bc7d-4d3a-b2e9-8d4fc4d1d759\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "metoprolol|dang_uong",
+      "hoat_chat_ids": [
+        "metoprolol"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 9,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim phóng thích kéo dài",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén 2 lớp bao phim phóng thích kéo dài",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Viên nén hai lớp, bao phim phóng thích kéo dài",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "594110414025",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 207
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"metoprolol_tartrate\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d5/metoprolol_tartrate_oral.json",
+          "set_id": "00de1f16-f979-4dbf-aa60-246ffac8d410",
+          "phien_ban_nguon": "20261113",
+          "ten_nhan": "Metoprolol Tartrate",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00de1f16-f979-4dbf-aa60-246ffac8d410",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00de1f16-f979-4dbf-aa60-246ffac8d410\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "morphine|dang_dat",
+      "hoat_chat_ids": [
+        "morphine"
+      ],
+      "nhom_dang_bao_che": "dang_dat",
+      "ten_nhom_dang": "Dạng đặt",
+      "duong_dung_hop_le": [
+        "dat_truc_trang"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "RECTAL",
+              "so_san_pham": 8
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"morphine\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "morphine|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "morphine"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap",
+        "tiem_ngoai_mang_cung",
+        "tiem_trong_ong_tuy"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 4,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 4
+            }
+          ],
+          "vi_du_so_dang_ky": "400111072223",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 26
+            },
+            {
+              "route": "INTRAMUSCULAR",
+              "so_san_pham": 11
+            },
+            {
+              "route": "EPIDURAL",
+              "so_san_pham": 8
+            },
+            {
+              "route": "INTRATHECAL",
+              "so_san_pham": 8
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"morphine\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/morphine.json",
+          "set_id": "be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+          "phien_ban_nguon": "20261014",
+          "ten_nhan": "Morphine Sulfate",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"be420e8b-bcb0-49b5-bb4d-1df8b9959809\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn; Danh sách đường tiêm của FDA/NDC cho morphin tiêm không có tiêm dưới da (có IV, IM, ngoài màng cứng, tuỷ sống); nhãn FDA lưu trong kho chỉ nhắc \"repeated subcutaneous injection\" ở mục phản ứng bất lợi. Dược sĩ quyết định có thêm tiem_duoi_da từ nguồn VN (Dược thư) hay không. Đã tra lại 19/11/2026: (1) openFDA drug/ndc, generic_name:morphine AND route:SUBCUTANEOUS: 0 kết quả (NOT_FOUND); route các sản phẩm morphin tiêm: INTRAVENOUS 26, INTRAMUSCULAR 11, EPIDURAL 8, INTRATHECAL 8. (2) openFDA drug/label, morphine sulfate, openfda.route:SUBCUTANEOUS: 0 kết quả; nhãn trong kho chỉ nhắc tiêm dưới da ở mục phản ứng bất lợi và thí nghiệm trên động vật. (3) DAV: 4 sản phẩm morphin dạng dung dịch tiêm, trường đường dùng để trống, không có chữ tiêm dưới da. Kết luận: chưa thấy nguồn cho tiem_duoi_da nên giữ nguyên danh sách; HS-037 (tiêm dưới da) vẫn ra khong_hop_le ở mức can_xem, chờ dược sĩ đối chiếu Dược thư Quốc gia.",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "morphine|dang_uong",
+      "hoat_chat_ids": [
+        "morphine"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 4,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén phóng thích kéo dài",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "893111896724",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 116
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"morphine\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "piperacillin+tazobactam|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "piperacillin",
+        "tazobactam"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 55,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 31
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 12
+            },
+            {
+              "dang_bao_che": "Bột đông khô pha tiêm",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm truyền",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Bột pha tiêm truyền",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "840110008624",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 84
+            },
+            {
+              "route": "PARENTERAL",
+              "so_san_pham": 9
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"piperacillin_tazobactam\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/piperacillin_and_tazobactam.json",
+          "set_id": "24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "phien_ban_nguon": "20261022",
+          "ten_nhan": "piperacillin and tazobactam",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"24d9b4f1-109c-4db4-8a99-03afff045b47\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "simvastatin|dang_uong",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 128,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 119
+            },
+            {
+              "dang_bao_che": "viên nén bao phim",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha hỗn dịch uống",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Viên bao phim",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "880110415123",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 187
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"simvastatin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/simvastatin.json",
+          "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+          "phien_ban_nguon": "20261103",
+          "ten_nhan": "Simvastatin",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c85d6d02-6cf6-4995-a590-cfca302ea0c9\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "spironolactone|dang_uong",
+      "hoat_chat_ids": [
+        "spironolactone"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 31,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 20
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén.",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "640110123224",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 194
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"spironolactone\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/spironolactone.json",
+          "set_id": "37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "phien_ban_nguon": "20261109",
+          "ten_nhan": "Spironolactone",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"37066684-5b63-4d3e-ae6a-08c4b3edd7aa\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "sulfamethoxazole+trimethoprim|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 1,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dich đậm đặc pha tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "893110139800",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 9
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"sulfamethoxazole_trimethoprim\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "sulfamethoxazole+trimethoprim|dang_uong",
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 117,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 63
+            },
+            {
+              "dang_bao_che": "Hỗn dịch uống",
+              "so_san_pham": 19
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha hỗn dịch uống",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Bột pha hỗn dịch uống",
+              "so_san_pham": 6
+            }
+          ],
+          "vi_du_so_dang_ky": "890110012723",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 95
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"sulfamethoxazole_trimethoprim\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/sulfamethoxazole_and_trimethoprim.json",
+          "set_id": "3ef62512-0dc3-4821-9b60-6b375841c4c0",
+          "phien_ban_nguon": "20261014",
+          "ten_nhan": "Sulfamethoxazole and Trimethoprim",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef62512-0dc3-4821-9b60-6b375841c4c0",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"3ef62512-0dc3-4821-9b60-6b375841c4c0\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "tramadol|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [],
+      "muc_chac_chan": "khong_co_duong_dung_cu_the",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 15,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 13
+            },
+            {
+              "dang_bao_che": "Dung dịch thuốc tiêm",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Dung dịch tiêm truyền",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "400111072023",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        }
+      ],
+      "ghi_chu": "Chữ dạng bào chế của DAV chỉ ghi chung \"tiêm\" hoặc \"truyền\", không nêu đường tiêm cụ thể, và không có sản phẩm FDA tương ứng; dược sĩ xác định đường tiêm hợp lệ",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "tramadol|dang_uong",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 10,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nang cứng",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Viên nang",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nang cứng.",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "890111180700",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 142
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"tramadol\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/tramadol.json",
+          "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+          "phien_ban_nguon": "20261103",
+          "ten_nhan": "Tramadol Hydrochloride",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"ccb3e0f9-57db-40bc-84d2-b66a827a5b96\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "valproic_acid|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "valproic_acid"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 4,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Dung dịch tiêm",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Bột đông khô và dung môi pha tiêm/tiêm truyền",
+              "so_san_pham": 1
+            },
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "893114291725",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 5
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"valproic_acid\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/valproate.json",
+          "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "phien_ban_nguon": "20260312",
+          "ten_nhan": "Valproate Sodium",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "valproic_acid|dang_uong",
+      "hoat_chat_ids": [
+        "valproic_acid"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 13,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén bao tan trong ruột",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nén bao tan trong ruột",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nang mềm",
+              "so_san_pham": 3
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim phóng thích kéo dài",
+              "so_san_pham": 2
+            },
+            {
+              "dang_bao_che": "Viên nén phóng thích có kiểm soát",
+              "so_san_pham": 1
+            }
+          ],
+          "vi_du_so_dang_ky": "890114008500",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 30
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"valproic_acid\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda_d5/valproic_acid_oral.json",
+          "set_id": "1286ab49-fa34-488e-e063-6394a90ad582",
+          "phien_ban_nguon": "20240527",
+          "ten_nhan": "Valproic Acid",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1286ab49-fa34-488e-e063-6394a90ad582",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"1286ab49-fa34-488e-e063-6394a90ad582\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "vancomycin|dang_tiem_truyen",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "nhom_dang_bao_che": "dang_tiem_truyen",
+      "ten_nhom_dang": "Dạng tiêm và truyền (bột pha tiêm, dung dịch tiêm, dung dịch truyền, đông khô)",
+      "duong_dung_hop_le": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "uong",
+        "tiem_noi_dich_kinh"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 60,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Bột đông khô pha tiêm",
+              "so_san_pham": 18
+            },
+            {
+              "dang_bao_che": "Bột pha tiêm",
+              "so_san_pham": 17
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Thuốc bột pha tiêm truyền",
+              "so_san_pham": 5
+            },
+            {
+              "dang_bao_che": "Bột pha dung dịch tiêm/truyền",
+              "so_san_pham": 2
+            }
+          ],
+          "vi_du_so_dang_ky": "520115009624",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc; đường dùng ghi rõ trong chữ dạng bào chế: ['tiem_tinh_mach', 'truyen_tinh_mach']"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "INTRAVENOUS",
+              "so_san_pham": 126
+            },
+            {
+              "route": "ORAL",
+              "so_san_pham": 11
+            },
+            {
+              "route": "INTRAVITREAL",
+              "so_san_pham": 2
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"vancomycin\"+AND+dosage_form:injection&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/vancomycin.json",
+          "set_id": "b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+          "phien_ban_nguon": "20261008",
+          "ten_nhan": "Vancomycin Hydrochloride",
+          "route_goc": [
+            "INTRAVENOUS"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"b79d9671-02dd-40e2-97fb-a6c7be85cda1\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "FDA ghi chung INTRAVENOUS nên mở cả tiêm và truyền tĩnh mạch; tốc độ/cách truyền xem nhãn",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "vancomycin|dang_uong",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "chi_fda",
+      "nguon": [
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 38
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"vancomycin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Không có sản phẩm đường uống trong DAV; chỉ có chứng cứ FDA",
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "warfarin|dang_uong",
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "nhom_dang_bao_che": "dang_uong",
+      "ten_nhom_dang": "Dạng dùng đường uống (viên, nang, cốm, bột/hỗn dịch/dung dịch uống, viên sủi)",
+      "duong_dung_hop_le": [
+        "uong"
+      ],
+      "muc_chac_chan": "dav_va_fda",
+      "nguon": [
+        {
+          "loai": "dav_dang_bao_che",
+          "tang_tin_cay": "co_quan_quan_ly_vn",
+          "so_san_pham_dav": 13,
+          "dang_bao_che_goc_pho_bien": [
+            {
+              "dang_bao_che": "Viên nén",
+              "so_san_pham": 6
+            },
+            {
+              "dang_bao_che": "Viên nén không bao",
+              "so_san_pham": 4
+            },
+            {
+              "dang_bao_che": "Viên nén bao phim",
+              "so_san_pham": 3
+            }
+          ],
+          "vi_du_so_dang_ky": "893110232123",
+          "ngay_lay": "2026-11-18",
+          "ghi_chu": "DAV không ghi đường dùng (duong_dung_goc rỗng); nhóm dạng suy từ chữ dạng bào chế gốc"
+        },
+        {
+          "loai": "ndc_openfda",
+          "tang_tin_cay": "nhan_fda_ndc",
+          "truong_goc": "route (openFDA drug/ndc, đếm theo sản phẩm)",
+          "route_goc": [
+            {
+              "route": "ORAL",
+              "so_san_pham": 148
+            }
+          ],
+          "truy_van": "https://api.fda.gov/drug/ndc.json?search=generic_name:\"warfarin\"&count=route.exact",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "tang_tin_cay": "nhan_fda",
+          "truong_goc": "openfda.route",
+          "tep": "data/kb_sources/openfda/warfarin.json",
+          "set_id": "61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "phien_ban_nguon": "20261109",
+          "ten_nhan": "Warfarin Sodium",
+          "route_goc": [
+            "ORAL"
+          ],
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"61ab23a7-bc67-4777-854a-bf43c788a69a\"",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": null,
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "thuoc_trong_66_ca": [
+    {
+      "ca_id": "DEMO-01",
+      "chi_tiet_y_lenh_id": "CT-DEMO01-01",
+      "thuoc_id": "T-AMLODIPIN-5",
+      "hoat_chat_ids": [
+        "amlodipine"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "DEMO-02",
+      "chi_tiet_y_lenh_id": "CT-DEMO02-01",
+      "thuoc_id": "T-MEROPENEM-1G",
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "DEMO-03",
+      "chi_tiet_y_lenh_id": "CT-DEMO03-01",
+      "thuoc_id": "T-AMOX-CLAV-875-125",
+      "hoat_chat_ids": [
+        "amoxicillin",
+        "clavulanic_acid"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "DEMO-04",
+      "chi_tiet_y_lenh_id": "CT-DEMO04-01",
+      "thuoc_id": "T-CEFTRIAXON-2G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "DEMO-05",
+      "chi_tiet_y_lenh_id": "CT-DEMO05-01",
+      "thuoc_id": "T-METOPROLOL-50",
+      "hoat_chat_ids": [
+        "metoprolol"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "DEMO-06",
+      "chi_tiet_y_lenh_id": "CT-DEMO06-01",
+      "thuoc_id": "T-AMOXICILLIN-500",
+      "hoat_chat_ids": [
+        "amoxicillin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-001",
+      "chi_tiet_y_lenh_id": "CT-HS-001-01-01",
+      "thuoc_id": "T-LOSARTAN-50",
+      "hoat_chat_ids": [
+        "losartan"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-002",
+      "chi_tiet_y_lenh_id": "CT-HS-002-01-01",
+      "thuoc_id": "T-AMOXI-CLAV-875",
+      "hoat_chat_ids": [
+        "amoxicillin",
+        "clavulanic_acid"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-003",
+      "chi_tiet_y_lenh_id": "CT-HS-003-05-01",
+      "thuoc_id": "T-LEVETIRACETAM-500",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-004",
+      "chi_tiet_y_lenh_id": "CT-HS-004-01-01",
+      "thuoc_id": "T-METFORMIN-500",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-005",
+      "chi_tiet_y_lenh_id": "CT-HS-005-03-01",
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "tiêm tĩnh mạch",
+      "duong_dung_chuan": "tiem_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-005",
+      "chi_tiet_y_lenh_id": "CT-HS-005-03-02",
+      "thuoc_id": "T-PARACETAMOL-1G",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-006",
+      "chi_tiet_y_lenh_id": "CT-HS-006-06-01",
+      "thuoc_id": "T-APIXABAN-5",
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-007",
+      "chi_tiet_y_lenh_id": "CT-HS-007-01-01",
+      "thuoc_id": "T-AMOXICILLIN-400",
+      "hoat_chat_ids": [
+        "amoxicillin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-008",
+      "chi_tiet_y_lenh_id": "CT-HS-008-05-01",
+      "thuoc_id": "T-MEROPENEM-1G",
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-009",
+      "chi_tiet_y_lenh_id": "CT-HS-009-03-01",
+      "thuoc_id": "T-ESOMEPRAZOL-40",
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-009",
+      "chi_tiet_y_lenh_id": "CT-HS-009-03-02",
+      "thuoc_id": "T-PARACETAMOL-500",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-010",
+      "chi_tiet_y_lenh_id": "CT-HS-010-01-01",
+      "thuoc_id": "T-AMOXICILLIN-500",
+      "hoat_chat_ids": [
+        "amoxicillin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-011",
+      "chi_tiet_y_lenh_id": "CT-HS-011-04-01",
+      "thuoc_id": "T-SMX-TMP-800-160",
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-012",
+      "chi_tiet_y_lenh_id": "CT-HS-012-07-01",
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-013",
+      "chi_tiet_y_lenh_id": "CT-HS-013-04-01",
+      "thuoc_id": "T-PIP-TAZO-2250",
+      "hoat_chat_ids": [
+        "piperacillin",
+        "tazobactam"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-014",
+      "chi_tiet_y_lenh_id": "CT-HS-014-06-01",
+      "thuoc_id": "T-ENALAPRIL-10",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-015",
+      "chi_tiet_y_lenh_id": "CT-HS-015-03-01",
+      "thuoc_id": "T-ESOMEPRAZOL-40",
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-016",
+      "chi_tiet_y_lenh_id": "CT-HS-016-03-01",
+      "thuoc_id": "T-ENOXAPARIN-40",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "duong_dung_trong_ca": "tiêm dưới da",
+      "duong_dung_chuan": "tiem_duoi_da",
+      "duong_dung_danh_muc_thuoc": "tiêm dưới da",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-017",
+      "chi_tiet_y_lenh_id": "CT-HS-017-03-01",
+      "thuoc_id": "T-KETOROLAC-30",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "duong_dung_trong_ca": "tiêm tĩnh mạch",
+      "duong_dung_chuan": "tiem_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-018",
+      "chi_tiet_y_lenh_id": "CT-HS-018-03-01",
+      "thuoc_id": "T-LEVOFLOXACIN-750",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "tiêm truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-019",
+      "chi_tiet_y_lenh_id": "CT-HS-019-01-01",
+      "thuoc_id": "T-PARACETAMOL-500",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-020",
+      "chi_tiet_y_lenh_id": "CT-HS-020-03-01",
+      "thuoc_id": "T-PARACETAMOL-500",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-021",
+      "chi_tiet_y_lenh_id": "CT-HS-021-04-01",
+      "thuoc_id": "T-VANCOMYCIN-500",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-022",
+      "chi_tiet_y_lenh_id": "CT-HS-022-05-01",
+      "thuoc_id": "T-CLARITHROMYCIN-500",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-023",
+      "chi_tiet_y_lenh_id": "CT-HS-023-02-01",
+      "thuoc_id": "T-SIMVASTATIN-40",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-024",
+      "chi_tiet_y_lenh_id": "CT-HS-024-04-01",
+      "thuoc_id": "T-AMIODARON-200",
+      "hoat_chat_ids": [
+        "amiodarone"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-025",
+      "chi_tiet_y_lenh_id": "CT-HS-025-04-01",
+      "thuoc_id": "T-FLUCONAZOL-200",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-026",
+      "chi_tiet_y_lenh_id": "CT-HS-026-05-01",
+      "thuoc_id": "T-GENTAMICIN-80",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-027",
+      "chi_tiet_y_lenh_id": "CT-HS-027-04-01",
+      "thuoc_id": "T-METFORMIN-1000",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-028",
+      "chi_tiet_y_lenh_id": "CT-HS-028-04-01",
+      "thuoc_id": "T-METHOTREXATE-500",
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-029",
+      "chi_tiet_y_lenh_id": "CT-HS-029-06-01",
+      "thuoc_id": "T-VALPROAT-500",
+      "hoat_chat_ids": [
+        "valproic_acid"
+      ],
+      "duong_dung_trong_ca": "uong",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-030",
+      "chi_tiet_y_lenh_id": "CT-HS-030-03-01",
+      "thuoc_id": "T-ENALAPRIL-10",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "duong_dung_trong_ca": "uong",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-031",
+      "chi_tiet_y_lenh_id": "CT-HS-031-07-01",
+      "thuoc_id": "T-SPIRONOLACTON-50",
+      "hoat_chat_ids": [
+        "spironolactone"
+      ],
+      "duong_dung_trong_ca": "uong",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-032",
+      "chi_tiet_y_lenh_id": "CT-HS-032-03-01",
+      "thuoc_id": "T-WARFARIN-5",
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-033",
+      "chi_tiet_y_lenh_id": "CT-HS-033-04-01",
+      "thuoc_id": "T-TRAMADOL-50",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-034",
+      "chi_tiet_y_lenh_id": "CT-HS-034-03-01",
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-035",
+      "chi_tiet_y_lenh_id": "CT-HS-035-04-01",
+      "thuoc_id": "T-ENOXAPARIN-40MG",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "duong_dung_trong_ca": "tiêm dưới da",
+      "duong_dung_chuan": "tiem_duoi_da",
+      "duong_dung_danh_muc_thuoc": "tiêm dưới da",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-036",
+      "chi_tiet_y_lenh_id": "CT-HS-036-04-01",
+      "thuoc_id": "T-INSULIN-GLARGIN-100",
+      "hoat_chat_ids": [
+        "insulin_glargine"
+      ],
+      "duong_dung_trong_ca": "tiêm dưới da",
+      "duong_dung_chuan": "tiem_duoi_da",
+      "duong_dung_danh_muc_thuoc": "tiêm dưới da",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-037",
+      "chi_tiet_y_lenh_id": "CT-HS-037-04-01",
+      "thuoc_id": "T-MORPHIN-10MG",
+      "hoat_chat_ids": [
+        "morphine"
+      ],
+      "duong_dung_trong_ca": "tiêm dưới da",
+      "duong_dung_chuan": "tiem_duoi_da",
+      "duong_dung_danh_muc_thuoc": "tiêm dưới da, tiêm tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "khong_hop_le",
+      "ghi_chu": "Đường dùng không có trong tập đường dùng của nguồn đã lấy cho hoạt chất và nhóm dạng này; mức đề xuất can_xem kèm nguồn, không phải kết luận kê sai"
+    },
+    {
+      "ca_id": "HS-038",
+      "chi_tiet_y_lenh_id": "CT-HS-038-05-01",
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-039",
+      "chi_tiet_y_lenh_id": "CT-HS-039-03-01",
+      "thuoc_id": "T-GENTAMICIN-80",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-040",
+      "chi_tiet_y_lenh_id": "CT-HS-040-03-01",
+      "thuoc_id": "T-PARACETAMOL-SIRO-150",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-041",
+      "chi_tiet_y_lenh_id": "CT-HS-041-05-01",
+      "thuoc_id": "T-LEVOFLOXACIN-500",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-042",
+      "chi_tiet_y_lenh_id": "CT-HS-042-04-01",
+      "thuoc_id": "T-WARFARIN-5",
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-043",
+      "chi_tiet_y_lenh_id": "CT-HS-043-01-01",
+      "thuoc_id": "T-METFORMIN-1000",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-044",
+      "chi_tiet_y_lenh_id": "CT-HS-044-04-01",
+      "thuoc_id": "T-METOPROLOL-50",
+      "hoat_chat_ids": [
+        "metoprolol"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-045",
+      "chi_tiet_y_lenh_id": "CT-HS-045-03-01",
+      "thuoc_id": "T-CEFTRIAXONE-1G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-046",
+      "chi_tiet_y_lenh_id": "CT-HS-046-03-01",
+      "thuoc_id": "T-LEVETIRACETAM-500",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-047",
+      "chi_tiet_y_lenh_id": "CT-HS-047-06-01",
+      "thuoc_id": "T-VANCOMYCIN-1G",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-048",
+      "chi_tiet_y_lenh_id": "CT-HS-048-03-01",
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-049",
+      "chi_tiet_y_lenh_id": "CT-HS-049-04-01",
+      "thuoc_id": "T-MEROPENEM-1G",
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-050",
+      "chi_tiet_y_lenh_id": "CT-HS-050-06-01",
+      "thuoc_id": "T-VANCOMYCIN-1G",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-051",
+      "chi_tiet_y_lenh_id": "CT-HS-051-04-01",
+      "thuoc_id": "T-LEVOFLOXACIN-500",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-052",
+      "chi_tiet_y_lenh_id": "CT-HS-052-06-01",
+      "thuoc_id": "T-COLISTIMETHATE-4M5",
+      "hoat_chat_ids": [
+        "colistimethate"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-053",
+      "chi_tiet_y_lenh_id": "CT-HS-053-03-01",
+      "thuoc_id": "T-GABAPENTIN-300",
+      "hoat_chat_ids": [
+        "gabapentin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-054",
+      "chi_tiet_y_lenh_id": "CT-HS-054-04-01",
+      "thuoc_id": "T-CEFOPERAZON-SULBACTAM-2G",
+      "hoat_chat_ids": [
+        "cefoperazone",
+        "sulbactam"
+      ],
+      "duong_dung_trong_ca": "truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-055",
+      "chi_tiet_y_lenh_id": "CT-HS-055-01-01",
+      "thuoc_id": null,
+      "hoat_chat_ids": [],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": null,
+      "nhom_dang_suy_ra": null,
+      "ket_qua": "khong_co_hoat_chat",
+      "ghi_chu": "Sản phẩm không có hoạt chất trong danh mục (thực phẩm chức năng); không thuộc bảng đường dùng"
+    },
+    {
+      "ca_id": "HS-056",
+      "chi_tiet_y_lenh_id": "CT-HS-056-05-01",
+      "thuoc_id": "T-COTRIMOXAZOL-800-160",
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-057",
+      "chi_tiet_y_lenh_id": "CT-HS-057-04-01",
+      "thuoc_id": "T-CLARITHROMYCIN-500",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-058",
+      "chi_tiet_y_lenh_id": "CT-HS-058-04-01",
+      "thuoc_id": "T-METFORMIN-500",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-059",
+      "chi_tiet_y_lenh_id": "CT-HS-059-04-01",
+      "thuoc_id": "T-GENTAMICIN-80",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "duong_dung_trong_ca": "tiêm truyền tĩnh mạch",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "duong_dung_danh_muc_thuoc": "truyền tĩnh mạch",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    },
+    {
+      "ca_id": "HS-060",
+      "chi_tiet_y_lenh_id": "CT-HS-060-01-01",
+      "thuoc_id": "T-LOSARTAN-50",
+      "hoat_chat_ids": [
+        "losartan"
+      ],
+      "duong_dung_trong_ca": "uống",
+      "duong_dung_chuan": "uong",
+      "duong_dung_danh_muc_thuoc": "uống",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "ghi_chu": null
+    }
+  ],
+  "tinh_huong_kiem": [
+    {
+      "mo_ta": "Levofloxacin dạng uống (T-LEVOFLOXACIN-500, danh mục ghi đường uống) bị kê tiêm tĩnh mạch",
+      "duong_dung_chuan": "tiem_tinh_mach",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "khong_hop_le",
+      "duong_dung_hop_le_cua_dang": [
+        "uong"
+      ],
+      "loai": "ca_thu_tong_hop"
+    },
+    {
+      "mo_ta": "Levofloxacin dạng truyền (T-LEVOFLOXACIN-750) kê truyền tĩnh mạch, ca HS-018: hợp lệ",
+      "duong_dung_chuan": "truyen_tinh_mach",
+      "nhom_dang_suy_ra": "dang_tiem_truyen",
+      "ket_qua": "hop_le",
+      "duong_dung_hop_le_cua_dang": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "loai": "ca_that"
+    },
+    {
+      "mo_ta": "Levofloxacin dạng uống kê uống (HS-041, HS-051): hợp lệ",
+      "duong_dung_chuan": "uong",
+      "nhom_dang_suy_ra": "dang_uong",
+      "ket_qua": "hop_le",
+      "duong_dung_hop_le_cua_dang": [
+        "uong"
+      ],
+      "loai": "ca_that"
+    }
+  ],
+  "thong_ke": {
+    "so_hoat_chat_trong_ca": 37,
+    "so_hoat_chat_co_duong_dung": 37,
+    "hoat_chat_trong_ca_khong_co_duong_dung": [],
+    "so_dong_bang": 62,
+    "ket_qua_dong_y_lenh_ca": {
+      "hop_le": 66,
+      "khong_hop_le": 1,
+      "khong_co_hoat_chat": 1
+    },
+    "so_dong_y_lenh_ca": 68,
+    "dav_khong_ro_dang": {
+      "acetaminophen": {
+        "tong_dav": 1044,
+        "khong_ro_dang": 220
+      },
+      "amiodarone": {
+        "tong_dav": 32,
+        "khong_ro_dang": 2
+      },
+      "amlodipine": {
+        "tong_dav": 139,
+        "khong_ro_dang": 21
+      },
+      "amoxicillin": {
+        "tong_dav": 215,
+        "khong_ro_dang": 23
+      },
+      "amoxicillin+clavulanic_acid": {
+        "tong_dav": 236,
+        "khong_ro_dang": 6
+      },
+      "apixaban": {
+        "tong_dav": 69,
+        "khong_ro_dang": 0
+      },
+      "cefoperazone+sulbactam": {
+        "tong_dav": 156,
+        "khong_ro_dang": 7
+      },
+      "ceftriaxone": {
+        "tong_dav": 202,
+        "khong_ro_dang": 4
+      },
+      "clarithromycin": {
+        "tong_dav": 154,
+        "khong_ro_dang": 60
+      },
+      "colistimethate": {
+        "tong_dav": 15,
+        "khong_ro_dang": 0
+      },
+      "enalapril": {
+        "tong_dav": 162,
+        "khong_ro_dang": 30
+      },
+      "enoxaparin": {
+        "tong_dav": 7,
+        "khong_ro_dang": 0
+      },
+      "esomeprazole": {
+        "tong_dav": 261,
+        "khong_ro_dang": 13
+      },
+      "fluconazole": {
+        "tong_dav": 116,
+        "khong_ro_dang": 5
+      },
+      "gabapentin": {
+        "tong_dav": 140,
+        "khong_ro_dang": 9
+      },
+      "gentamicin": {
+        "tong_dav": 50,
+        "khong_ro_dang": 8
+      },
+      "insulin_glargine": {
+        "tong_dav": 3,
+        "khong_ro_dang": 0
+      },
+      "ketorolac": {
+        "tong_dav": 37,
+        "khong_ro_dang": 0
+      },
+      "levetiracetam": {
+        "tong_dav": 103,
+        "khong_ro_dang": 0
+      },
+      "levofloxacin": {
+        "tong_dav": 422,
+        "khong_ro_dang": 20
+      },
+      "losartan": {
+        "tong_dav": 180,
+        "khong_ro_dang": 11
+      },
+      "meropenem": {
+        "tong_dav": 121,
+        "khong_ro_dang": 1
+      },
+      "metformin": {
+        "tong_dav": 150,
+        "khong_ro_dang": 42
+      },
+      "methotrexate": {
+        "tong_dav": 28,
+        "khong_ro_dang": 0
+      },
+      "metoprolol": {
+        "tong_dav": 9,
+        "khong_ro_dang": 0
+      },
+      "morphine": {
+        "tong_dav": 9,
+        "khong_ro_dang": 1
+      },
+      "piperacillin+tazobactam": {
+        "tong_dav": 55,
+        "khong_ro_dang": 0
+      },
+      "simvastatin": {
+        "tong_dav": 144,
+        "khong_ro_dang": 16
+      },
+      "spironolactone": {
+        "tong_dav": 34,
+        "khong_ro_dang": 3
+      },
+      "sulfamethoxazole+trimethoprim": {
+        "tong_dav": 164,
+        "khong_ro_dang": 46
+      },
+      "tramadol": {
+        "tong_dav": 27,
+        "khong_ro_dang": 2
+      },
+      "valproic_acid": {
+        "tong_dav": 18,
+        "khong_ro_dang": 1
+      },
+      "vancomycin": {
+        "tong_dav": 62,
+        "khong_ro_dang": 2
+      },
+      "warfarin": {
+        "tong_dav": 13,
+        "khong_ro_dang": 0
+      }
+    }
+  }
+}

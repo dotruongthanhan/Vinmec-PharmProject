@@ -1,0 +1,17 @@
+{
+  "hoat_chat": [
+    {"hoat_chat_id": "amoxicillin", "ten_inn": "Amoxicillin", "ten_viet": "Amoxicilin", "loai": "thuoc", "rxcui": "723", "ma_atc": ["J01CA"], "ddinter_id": "D1", "ddinter_cach_khop": "ten_chinh_xac", "so_che_pham_dav": 2, "trong_ca_gia_lap": true},
+    {"hoat_chat_id": "clavulanic_acid", "ten_inn": "Clavulanic acid", "ten_viet": "Acid clavulanic", "loai": "thuoc", "rxcui": "19711", "ma_atc": [], "ddinter_id": "D2", "ddinter_cach_khop": "ten_chinh_xac", "so_che_pham_dav": 1, "trong_ca_gia_lap": true},
+    {"hoat_chat_id": "fixture_missing", "ten_inn": "Fixture missing", "loai": "thuoc", "rxcui": null, "ma_atc": [], "ddinter_id": null, "so_che_pham_dav": 0, "trong_ca_gia_lap": false}
+  ],
+  "doan_nhan": [
+    {"nguon": "openfda", "hoat_chat_ids": ["amoxicillin", "clavulanic_acid"], "tai_lieu_id": "openfda:combo-set"},
+    {"nguon": "openfda", "hoat_chat_ids": ["clavulanic_acid"], "tai_lieu_id": "openfda:combo-set"},
+    {"nguon": "khac", "hoat_chat_ids": ["fixture_missing"], "tai_lieu_id": "khac:ignored"}
+  ],
+  "tong_ddinter": {"D1": 1, "D2": 2},
+  "so_dong_ddinter": {"D1": 1, "D2": 1},
+  "ten_ndc": ["AMOXICILLIN TRIHYDRATE"],
+  "ten_livertox": null,
+  "ten_lactmed": ["Clavulanic Acid"]
+}

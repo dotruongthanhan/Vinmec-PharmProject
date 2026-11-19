@@ -74,6 +74,7 @@ def test_db_detail_adds_every_order_and_sheet_without_changing_old_fields(
     detail = response.json()
     assert len(detail["danh_sach_y_lenh"]) == 7
     assert detail["phieu_dieu_tri"]
+    assert all({"nguon_tep", "nap_luc"}.isdisjoint(sheet) for sheet in detail["phieu_dieu_tri"])
     assert len(detail["lich_su_vao_vien"]) == 2
     assert detail["dinh_danh_day_du"] and detail["quan_ly_nguoi_benh"]
     assert detail["chi_tiet"]["y_lenh"]["cho_duyet"]["dong"]
@@ -97,6 +98,7 @@ def test_file_background_order_is_inferred_from_active_lines(
 ) -> None:
     monkeypatch.setenv("CASE_SOURCE", "file")
     service = make_service(tmp_path)
+    service._ensure_cases()
     case = service._get_case("DEMO-01")
     active = case.y_lenh_cho_duyet.chi_tiet[0].model_copy(
         update={"chi_tiet_y_lenh_id": "CT-NEN-GIA-LAP", "trang_thai_dong": "active"}

@@ -3,9 +3,54 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 import unicodedata
+from functools import lru_cache
 from pathlib import Path
+
+from pydantic import BaseModel, ConfigDict, Field
+
+from app.db.bang_luat_store import load_rule_data, register_cache_clear
+
+_LOGGER = logging.getLogger(__name__)
+_DEFAULT_HOAT_CHAT_PATH = Path(__file__).resolve().parents[2] / "data" / "kb" / "hoat_chat.json"
+
+
+class IngredientCatalogEntry(BaseModel):
+    """Một hoạt chất hoặc phối hợp cố định trong bảng từ điển hoạt chất."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    hoat_chat_id: str
+    ten_inn: str
+    ten_viet: str | None = None
+    dong_nghia: list[str] = Field(default_factory=list)
+    thanh_phan: list[str] | None = None
+    nhom: str | None = None
+
+
+class DrugNameCatalog(BaseModel):
+    """Cấu trúc đầy đủ của bảng từ điển hoạt chất và nhãn openFDA."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    hoat_chat: list[IngredientCatalogEntry] = Field(default_factory=list)
+    nhan: dict[str, list[str]] = Field(default_factory=dict)
+
+
+@lru_cache(maxsize=1)
+def _load_default_drug_name_catalog() -> DrugNameCatalog | None:
+    """Nạp và giữ bộ đệm từ điển hoạt chất mặc định từ tệp hoặc DB."""
+    return load_rule_data(
+        "hoat_chat",
+        _DEFAULT_HOAT_CHAT_PATH,
+        DrugNameCatalog.model_validate,
+        logger=_LOGGER,
+    )
+
+
+register_cache_clear(_load_default_drug_name_catalog.cache_clear)
 
 _SALT_TOKENS: frozenset[str] = frozenset(
     {
@@ -121,12 +166,21 @@ class DrugNameIndex:
                 self._lookup[salt_less] = list(target_ids)
 
     @classmethod
-    def load(cls, path: Path) -> DrugNameIndex:
-        """Nap chi muc ten thuoc tu tep JSON."""
-        data = json.loads(path.read_text(encoding="utf-8"))
+    def load(cls, path: Path | None = None) -> DrugNameIndex:
+        """Nap chi muc ten thuoc tu tep mac dinh hoac DB theo KB_SOURCE."""
+        if path is None or Path(path).resolve() == _DEFAULT_HOAT_CHAT_PATH.resolve():
+            catalog = _load_default_drug_name_catalog()
+            if catalog is None:
+                return cls(entries=[], labels={})
+            return cls(
+                entries=[entry.model_dump() for entry in catalog.hoat_chat],
+                labels=dict(catalog.nhan),
+            )
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+        catalog = DrugNameCatalog.model_validate(data)
         return cls(
-            entries=list(data.get("hoat_chat", [])),
-            labels=dict(data.get("nhan", {})),
+            entries=[entry.model_dump() for entry in catalog.hoat_chat],
+            labels=dict(catalog.nhan),
         )
 
     def _resolve_single(self, fragment: str) -> list[str]:

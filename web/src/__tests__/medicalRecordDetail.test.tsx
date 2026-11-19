@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, expectTypeOf, it } from 'vitest'
 import { MOCK_CASE_DETAILS } from '../api/mockData'
 import type { ChiTietCa, MedicalOrder, TreatmentSheet } from '../api/types'
 import { TooltipProvider } from '../components/ui/tooltip'
@@ -67,15 +67,16 @@ describe('bộ chọn y lệnh trong hồ sơ', () => {
     expect(selectMedicalOrder([old, focus], 'khong-co')).toBe(focus)
     expect(selectMedicalOrder([{ ...focus, y_lenh_id: 'YL-CA-KHAC' }], 'YL-CU')?.y_lenh_id).toBe('YL-CA-KHAC')
   })
-  it('lựa chọn nhóm theo lần vào viện, có tên thuốc và radio dùng bàn phím', () => {
+  it('lựa chọn nhóm theo lần vào viện, có tên thuốc và mục được chọn', () => {
     const rendered = renderToStaticMarkup(<OrderChoices orders={[old, focus]} selectedId="YL-TT"
       detail={detail} onSelect={() => {}} />)
     expect(rendered).toContain('Lần vào viện 1')
     expect(rendered).toContain('Lần vào viện 2')
-    expect(rendered).toContain('role="radiogroup"')
+    expect(rendered).toContain('role="listbox"')
     expect(rendered).toContain('aria-label="Chọn y lệnh"')
     expect(rendered).toContain('Thuốc cũ giả lập')
-    expect(rendered).toContain('aria-checked="true"')
+    expect(rendered).toContain('aria-selected="true"')
+    expect(rendered).not.toContain('aria-label="YL-CU')
   })
   it('y lệnh nền trong mock cũ không hiện nhận định của y lệnh trọng tâm', () => {
     const value = { ...old, cot: [...old.cot, 'Nhận định'],
@@ -84,9 +85,31 @@ describe('bộ chọn y lệnh trong hồ sơ', () => {
     expect(rendered).not.toContain('CẢNH BÁO TRỌNG TÂM')
     expect(rendered).toContain('Chưa có thẩm định cho y lệnh này')
   })
+
+  it('không tính y lệnh nền giả lập vào nhãn chi tiết', () => {
+    const demo = { ...MOCK_CASE_DETAILS['DEMO-02'],
+      danh_sach_y_lenh: [focus, { ...old, y_lenh_id: 'YL-DEMO-02-NEN' }] }
+    const rendered = html('?tab=y_lenh', demo)
+    expect(rendered).toContain('Y lệnh (1)')
+    expect(rendered).not.toContain('aria-label="Chọn y lệnh"')
+  })
 })
 
 describe('phiếu điều trị', () => {
+  it('kiểu phiếu không cần metadata nạp tệp', () => {
+    expectTypeOf<TreatmentSheet>().not.toHaveProperty('nguon_tep')
+    expectTypeOf<TreatmentSheet>().not.toHaveProperty('nap_luc')
+  })
+
+  it('hiện chú thích thay cho liên kết đến mã y lệnh không tồn tại', () => {
+    const rendered = html('?tab=phieu_dieu_tri', { ...detail, phieu_dieu_tri: [
+      { ...sheet, y_lenh_trong_ngay: ['YL-CU', 'YL-THIEU'] },
+    ] })
+    expect(rendered).toContain('tab=y_lenh&amp;yl=YL-CU')
+    expect(rendered).toContain('Y lệnh YL-THIEU không có trong danh sách')
+    expect(rendered).not.toContain('yl=YL-THIEU')
+  })
+
   it('đếm và nhóm theo lần vào viện, đủ nội dung và liên kết chọn y lệnh', () => {
     const rendered = html('?tab=phieu_dieu_tri')
     expect(rendered).toContain('Phiếu điều trị (2)')

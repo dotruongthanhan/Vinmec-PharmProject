@@ -136,3 +136,16 @@ def test_all_reset_builds_and_loads_every_group_before_verify() -> None:
             Embeddings(),
         ),
     ]
+
+
+def test_bang_luat_dry_run_subprocess() -> None:
+    root = Path(__file__).resolve().parents[2]
+    result = subprocess.run(
+        [sys.executable, "-m", "app.db.cli", "load", "bang-luat", "--dry-run"],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert b"tri_thuc.bang_luat_meta: 12" in result.stdout
+    assert b"DRY-RUN" in result.stdout

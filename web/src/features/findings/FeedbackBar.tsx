@@ -1,10 +1,12 @@
 import { CircleCheck, PencilLine, ThumbsDown, ThumbsUp } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import type { GuiPhanHoi, NhanDinh } from '@/api/types'
 import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
 import { RadioPillGroup, RadioPillItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/toaster'
+import { EMPTY_FEEDBACK_DRAFT } from '@/lib/uiTypes'
+import type { FeedbackDraft } from '@/lib/uiTypes'
 
 export interface FeedbackBarProps {
   caId: string
@@ -12,11 +14,11 @@ export interface FeedbackBarProps {
   nhomLyDo: readonly string[]
   submitting: boolean
   error: string | null
+  draft: FeedbackDraft
+  onDraftChange: (draft: FeedbackDraft) => void
   onSubmit: (caId: string, payload: GuiPhanHoi) => Promise<boolean>
   onClearError: (caId: string, nhanDinhId: string) => void
 }
-
-type PendingAction = 'bac_bo' | 'can_sua' | null
 
 /** Thanh phản hồi trên từng thẻ nhận định: Đồng ý · Bác bỏ · Cần sửa. */
 export function FeedbackBar({
@@ -25,13 +27,12 @@ export function FeedbackBar({
   nhomLyDo,
   submitting,
   error,
+  draft,
+  onDraftChange,
   onSubmit,
   onClearError,
 }: FeedbackBarProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [pendingAction, setPendingAction] = useState<PendingAction>(null)
-  const [reasonGroup, setReasonGroup] = useState<string>('')
-  const [note, setNote] = useState<string>('')
+  const { isEditing, pendingAction, reasonGroup, note } = draft
   const lastToastedErrorRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export function FeedbackBar({
   const recorded = finding.phan_hoi
 
   const handleAgree = async () => {
-    setPendingAction(null)
+    onDraftChange({ ...draft, pendingAction: null })
     const ok = await onSubmit(caId, {
       nhan_dinh_id: finding.nhan_dinh_id,
       phan_hoi: 'dong_y',
@@ -55,9 +56,7 @@ export function FeedbackBar({
     })
     if (ok) {
       toast.success('Đã ghi nhận phản hồi')
-      setIsEditing(false)
-      setReasonGroup('')
-      setNote('')
+      onDraftChange(EMPTY_FEEDBACK_DRAFT)
     }
   }
 
@@ -74,22 +73,16 @@ export function FeedbackBar({
     })
     if (ok) {
       toast.success('Đã ghi nhận phản hồi')
-      setIsEditing(false)
-      setPendingAction(null)
-      setReasonGroup('')
-      setNote('')
+      onDraftChange(EMPTY_FEEDBACK_DRAFT)
     }
   }
 
   const handleCancel = () => {
-    setPendingAction(null)
-    setIsEditing(false)
-    setReasonGroup('')
-    setNote('')
+    onDraftChange(EMPTY_FEEDBACK_DRAFT)
     onClearError(caId, finding.nhan_dinh_id)
   }
 
-  if (recorded !== null && !isEditing) {
+  if (recorded !== null && !isEditing && pendingAction === null) {
     const details: string[] = []
     if (recorded.nhom_ly_do) {
       details.push(recorded.nhom_ly_do)
@@ -117,10 +110,7 @@ export function FeedbackBar({
           variant="ghost"
           size="sm"
           onClick={() => {
-            setIsEditing(true)
-            setPendingAction(null)
-            setReasonGroup('')
-            setNote('')
+            onDraftChange({ ...EMPTY_FEEDBACK_DRAFT, isEditing: true })
             onClearError(caId, finding.nhan_dinh_id)
           }}
         >
@@ -164,7 +154,7 @@ export function FeedbackBar({
           }
           iconLeft={<ThumbsDown className="size-3.5" strokeWidth={1.75} />}
           onClick={() => {
-            setPendingAction('bac_bo')
+            onDraftChange({ ...draft, pendingAction: 'bac_bo' })
             onClearError(caId, finding.nhan_dinh_id)
           }}
         >
@@ -183,7 +173,7 @@ export function FeedbackBar({
           }
           iconLeft={<PencilLine className="size-3.5" strokeWidth={1.75} />}
           onClick={() => {
-            setPendingAction('can_sua')
+            onDraftChange({ ...draft, pendingAction: 'can_sua' })
             onClearError(caId, finding.nhan_dinh_id)
           }}
         >
@@ -207,7 +197,7 @@ export function FeedbackBar({
               aria-labelledby={reasonLabelId}
               value={reasonGroup}
               disabled={submitting}
-              onValueChange={setReasonGroup}
+              onValueChange={(value) => onDraftChange({ ...draft, reasonGroup: value })}
             >
               {nhomLyDo.map((reason) => (
                 <RadioPillItem key={reason} value={reason}>
@@ -228,7 +218,7 @@ export function FeedbackBar({
               placeholder="Nhập ghi chú thêm nếu cần…"
               value={note}
               disabled={submitting}
-              onChange={(e) => setNote(e.target.value)}
+              onChange={(e) => onDraftChange({ ...draft, note: e.target.value })}
             />
           </div>
 

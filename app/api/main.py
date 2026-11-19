@@ -5,6 +5,7 @@ from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
+from threading import Thread
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -14,6 +15,7 @@ from starlette.responses import JSONResponse, Response
 from starlette.staticfiles import StaticFiles
 from starlette.types import Scope
 
+from app import container as container_mod
 from app.api.access_log import AccessLogger, AccessLogMiddleware, utc_now
 from app.api.routes import router
 from app.api.service import CaseService
@@ -23,9 +25,22 @@ from app.config.settings import (
     load_access_log_enabled,
     load_auth_settings,
     load_env_file,
+    load_kb_source,
     load_settings,
 )
+from app.core.errors import ConfigError
+from app.db.read_pool import read_pool
 from app.db.reader import DatabaseReadError
+from app.kb.names import DrugNameIndex
+from app.rules import (
+    allergy_config,
+    d4_config,
+    d5_config,
+    d6_config,
+    d7_config,
+    duplicate_config,
+    renal_dose,
+)
 
 _ROOT = Path(__file__).resolve().parents[2]
 # Chạy local (uvicorn app.api.main:app) cần SUPABASE_URL, SUPABASE_ANON_KEY... từ .env gốc.
@@ -54,20 +69,70 @@ def _error(request: Request, status: int, code: str, message: str) -> JSONRespon
     return JSONResponse(status_code=status, content={"loi": {"ma": code, "thong_bao": message}})
 
 
+def _should_warmup_db() -> bool:
+    """Chỉ làm nóng nền khi KB_SOURCE được cấu hình đọc từ DB."""
+    try:
+        return load_kb_source() == "db"
+    except ConfigError:
+        return False
+
+
+def _warmup_db_knowledge() -> None:
+    """Nạp trước chỉ mục tra cứu, DDInter và toàn bộ bảng luật ở luồng nền."""
+    logger = logging.getLogger(__name__)
+    try:
+        container_mod.get_rule_context()
+    except Exception as exc:
+        logger.warning("Lỗi làm nóng ngữ cảnh luật từ DB (%s)", type(exc).__name__)
+    loaders: tuple[Callable[[], object], ...] = (
+        renal_dose.load_renal_rules,
+        d4_config.try_load_default_hepatic_config,
+        d4_config.try_load_default_lab_threshold_config,
+        d4_config.try_load_default_drug_disease_config,
+        d5_config.try_load_default_route_config,
+        d5_config.try_load_default_max_dose_config,
+        d6_config.try_load_default_toxicity_config,
+        d7_config.try_load_default_stewardship_config,
+        allergy_config.try_load_default_allergy_config,
+        duplicate_config.try_load_default_duplicate_config,
+        DrugNameIndex.load,
+    )
+    for loader in loaders:
+        try:
+            loader()
+        except Exception as exc:
+            name = getattr(loader, "__qualname__", getattr(loader, "__name__", "loader"))
+            logger.warning("Lỗi làm nóng bảng luật %s từ DB (%s)", name, type(exc).__name__)
+
+
 @asynccontextmanager
 async def _lifespan(application: FastAPI) -> AsyncIterator[None]:
-    """Đóng bộ chạy nền AI và kết nối HTTP khi ứng dụng kết thúc."""
+    """Làm nóng tri thức nền khi dùng DB, dọn nhật ký và đóng tài nguyên khi tắt."""
     application.state.access_log.cleanup()
     if application.state.auth_settings.auth_mode == "off":
         logging.getLogger(__name__).warning(
             "AUTH_MODE=off: xác thực đã tắt; chỉ dùng cho phát triển cục bộ."
         )
+    warmup_thread: Thread | None = None
+    if _should_warmup_db():
+        warmup_thread = Thread(
+            target=_warmup_db_knowledge,
+            name="kb-warmup",
+            daemon=True,
+        )
+        warmup_thread.start()
+    application.state.warmup_thread = warmup_thread
     try:
         yield
     finally:
+        if warmup_thread is not None and warmup_thread.is_alive():
+            warmup_thread.join(timeout=2.0)
         shutdown = getattr(application.state.service, "shutdown", None)
-        if callable(shutdown):
-            shutdown()
+        try:
+            if callable(shutdown):
+                shutdown()
+        finally:
+            read_pool.close()
 
 
 def create_app(
@@ -87,7 +152,7 @@ def create_app(
         settings = load_settings()
         service = CaseService(
             _ROOT / settings.app.case_dir,
-            _ROOT / "data/kb/quy_tac_lieu_than.json",
+            None,
             _ROOT / "data/runtime/phan_hoi.jsonl",
         )
     application.state.service = service

@@ -18,8 +18,11 @@ def test_generator_is_deterministic_additive_and_preserves_originals() -> None:
     paths = source_paths(ROOT)
     assert len(paths) == 66
     originals = ROOT / "data/mock/_goc_truoc_T45"
-    digest = hashlib.sha256(b"".join((originals / p.name).read_bytes() for p in paths))
-    assert digest.hexdigest() == "212d30a2e538132da3ca70ea35f5fb69c36d35136a6fa947bee558373e05f22d"
+    content = b"".join((originals / p.name).read_bytes().replace(b"\r\n", b"\n") for p in paths)
+    digest = hashlib.sha256(content)
+    assert digest.hexdigest() == "24b6ad637a70b1b9cc3e77297948efb33aedeeeb839a63bc450bcfe9bda14d24"
+    modified_content = content.replace(b"HS-001", b"HS-002", 1)
+    assert hashlib.sha256(modified_content).digest() != digest.digest()
     for number, path in enumerate(paths, 1):
         original = json.loads((originals / path.name).read_text(encoding="utf-8"))
         untouched = copy.deepcopy(original)

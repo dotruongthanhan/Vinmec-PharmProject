@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp, ClipboardList, FileText, Pill, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import type {
   ChiTietCa,
   GuiPhanHoi,
@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/data-table'
 import { EmptyState } from '@/components/ui/empty-state'
 import { InlineAlert } from '@/components/ui/inline-alert'
+import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { LabTrendChart } from '@/features/charts/LabTrendChart'
 import { AiStatusBar } from '@/features/findings/AiStatusBar'
@@ -41,7 +42,8 @@ import {
 } from '@/lib/orderDetail'
 import type { SixFactorItem } from '@/lib/orderDetail'
 import { sortAttentionFindings } from '@/lib/presentation'
-import type { DetailTabId, EvidenceTarget } from '@/lib/uiTypes'
+import { EMPTY_FEEDBACK_DRAFT } from '@/lib/uiTypes'
+import type { DetailTabId, EvidenceTarget, FeedbackDraft } from '@/lib/uiTypes'
 import {
   InfoRows,
   LabPivotTable,
@@ -51,10 +53,10 @@ import {
   SectionHeading,
 } from './DetailSections'
 import type { InfoItem } from './DetailSections'
-import { InteractionMatrix } from './InteractionMatrix'
+import { InteractionSection } from './InteractionSection'
 import { SixFactorStrip } from './SixFactorStrip'
 import { AdministrativeSections } from './AdministrativeSections'
-import { medicalOrders, orderSelectionParams, selectMedicalOrder } from '@/lib/medicalRecord'
+import { countMedicalOrders, medicalOrders, orderSelectionParams, selectMedicalOrder } from '@/lib/medicalRecord'
 import { OrderExtraInfo, OrderSelector, SelectedOrderDetails, TreatmentSheets } from './MedicalRecordSections'
 
 export type OrderDetailTab = DetailTabId
@@ -73,6 +75,7 @@ const VALID_TABS = new Set<OrderDetailTab>(ORDERED_TABS)
 
 export interface OrderDetailViewProps {
   detail: ChiTietCa
+  orderSelectionReady?: boolean
   aiTrangThai: TrangThaiAI
   aiKetQua: KetQuaAI | null
   aiThoiGianMs: number | null
@@ -276,6 +279,7 @@ function MedicalRecordTabContent({
 /** Màn hình chi tiết một y lệnh: thanh 7 thẻ dính trên cùng, nội dung gọn phẳng bên dưới. */
 export function OrderDetailView({
   detail,
+  orderSelectionReady = true,
   aiTrangThai,
   aiKetQua,
   aiThoiGianMs,
@@ -290,50 +294,66 @@ export function OrderDetailView({
   onAskAboutFinding,
 }: OrderDetailViewProps) {
   const [searchParams, setSearchParams] = useSearchParams()
+  const { state: locationState } = useLocation()
   const [selectedDrug, setSelectedDrug] = useState<string | null>(null)
   const [passedOpen, setPassedOpen] = useState<boolean>(false)
+  const [interactionOpen, setInteractionOpen] = useState<boolean>(false)
   const [prevCaId, setPrevCaId] = useState<string>(detail.ca_id)
+  const [rejectedOrderId, setRejectedOrderId] = useState<string | null>(null)
+  const [feedbackDrafts, setFeedbackDrafts] = useState<Record<string, FeedbackDraft>>({})
   const tabTriggerRefs = useRef<Partial<Record<OrderDetailTab, HTMLButtonElement | null>>>({})
   const requestedOrderId = searchParams.get('yl')
-  const [orderLocation, setOrderLocation] = useState({
-    caseId: detail.ca_id, requested: requestedOrderId, selected: requestedOrderId,
-  })
-  const lastUrlCase = useRef(detail.ca_id)
   const orders = useMemo(() => medicalOrders(detail), [detail])
-  let selectedOrderId = orderLocation.selected
-  if (orderLocation.caseId !== detail.ca_id) {
-    selectedOrderId = null
-    setOrderLocation({ caseId: detail.ca_id, requested: requestedOrderId, selected: null })
-  } else if (orderLocation.requested !== requestedOrderId) {
-    selectedOrderId = requestedOrderId
-    setOrderLocation({ caseId: detail.ca_id, requested: requestedOrderId, selected: requestedOrderId })
-  }
-  const selectedOrder = selectMedicalOrder(orders, selectedOrderId)
+  const selectedOrder = selectMedicalOrder(orders, requestedOrderId)
+  const unmatchedOrderId = requestedOrderId !== null && selectedOrder?.y_lenh_id !== requestedOrderId
+    ? requestedOrderId : null
+  const invalidOrderId = orderSelectionReady ? unmatchedOrderId : null
+  const noticeOrderId = invalidOrderId ?? (requestedOrderId === null ? rejectedOrderId : null)
 
   useEffect(() => {
-    if (lastUrlCase.current === detail.ca_id) return
-    lastUrlCase.current = detail.ca_id
+    if (invalidOrderId === null) return
     setSearchParams((previous) => {
       const next = new URLSearchParams(previous)
       next.delete('yl')
       return next
-    }, { replace: true })
-  }, [detail.ca_id, setSearchParams])
+    }, { replace: true, state: locationState })
+  }, [invalidOrderId, locationState, setSearchParams])
+
+  const clearSelectedDrug = () => setSelectedDrug(null)
 
   const handleSelectOrder = (id: string) => {
-    setSelectedDrug(null)
-    setSearchParams((previous) => orderSelectionParams(previous, id), { replace: true })
+    clearSelectedDrug()
+    setRejectedOrderId(null)
+    setSearchParams((previous) => orderSelectionParams(previous, id), { replace: true, state: locationState })
   }
 
   if (prevCaId !== detail.ca_id) {
     setPrevCaId(detail.ca_id)
     setSelectedDrug(null)
     setPassedOpen(false)
+    setRejectedOrderId(invalidOrderId)
+    setFeedbackDrafts({})
+  } else if (invalidOrderId !== null && invalidOrderId !== rejectedOrderId) {
+    setRejectedOrderId(invalidOrderId)
+  } else if (invalidOrderId === null && requestedOrderId !== null && rejectedOrderId !== null) {
+    setRejectedOrderId(null)
   }
 
   const rawTab = searchParams.get('tab') as OrderDetailTab | null
   const activeTab: OrderDetailTab =
     rawTab && VALID_TABS.has(rawTab) ? rawTab : 'tham_dinh'
+
+  const updateFeedbackDraft = (id: string, draft: FeedbackDraft) => {
+    setFeedbackDrafts((previous) => {
+      if (draft.isEditing || draft.pendingAction !== null || draft.reasonGroup || draft.note) {
+        return { ...previous, [id]: draft }
+      }
+      if (!(id in previous)) return previous
+      const next = { ...previous }
+      delete next[id]
+      return next
+    })
+  }
 
   const handleTabChange = useCallback(
     (nextTab: string) => {
@@ -350,7 +370,7 @@ export function OrderDetailView({
           }
           return next
         },
-        { replace: true },
+        { replace: true, state: locationState },
       )
       requestAnimationFrame(() => {
         tabTriggerRefs.current[validTab]?.scrollIntoView({
@@ -359,7 +379,7 @@ export function OrderDetailView({
         })
       })
     },
-    [setSearchParams],
+    [locationState, setSearchParams],
   )
 
   const displayedFindings = useMemo(() => {
@@ -501,7 +521,7 @@ export function OrderDetailView({
                   tabTriggerRefs.current.y_lenh = el
                 }}
               >
-                Y lệnh ({orders.length})
+                Y lệnh ({countMedicalOrders(orders, detail.ca_id)})
               </TabsTrigger>
               <TabsTrigger
                 value="phieu_dieu_tri"
@@ -555,6 +575,13 @@ export function OrderDetailView({
 
       {/* 2. Nội dung từng thẻ đặt thẳng trên canvas rộng thoáng, không lồng khung dư thừa */}
       <div className="mx-auto w-full max-w-[1200px] px-5 py-5 flex flex-col gap-5">
+        {!orderSelectionReady && unmatchedOrderId !== null ? (
+          <p role="status" className="text-xs text-fg-muted">Đang đối chiếu y lệnh trong liên kết…</p>
+        ) : noticeOrderId !== null ? (
+          <p role="status" className="text-xs text-fg-muted">
+            {noticeOrderId ? `Y lệnh ${noticeOrderId} không có trong danh sách.` : 'Mã y lệnh trong liên kết bị trống.'}
+          </p>
+        ) : null}
         <TabsContent value="ho_so_benh_an">
           <MedicalRecordTabContent detail={detail} onOpenEvidence={onOpenEvidence} />
         </TabsContent>
@@ -609,7 +636,7 @@ export function OrderDetailView({
           </section>
           <section aria-label="Phiếu điều trị" className="flex flex-col gap-2.5">
             <SectionHeading title="Phiếu điều trị" aside={`${treatmentSheetCount} phiếu`} />
-            {detail.phieu_dieu_tri?.length ? <TreatmentSheets detail={detail} /> : treatmentSheetNotes.length > 0 ? (
+            {detail.phieu_dieu_tri?.length ? <TreatmentSheets detail={detail} onFollowOrder={clearSelectedDrug} /> : treatmentSheetNotes.length > 0 ? (
               <NotesTable notes={treatmentSheetNotes} />
             ) : (
               <EmptyBox
@@ -791,6 +818,20 @@ export function OrderDetailView({
               onRerun={onRerunAi}
             />
 
+            {Object.entries(feedbackDrafts).filter(([id]) =>
+              !allAttention.some((finding) => finding.nhan_dinh_id === id),
+            ).map(([id, draft]) => (
+              <InlineAlert key={id} tone="neutral" title="Bản nháp phản hồi">
+                <div className="flex flex-col gap-1.5">
+                  <p>Nhận định đã thay đổi. Bản nháp của bạn vẫn còn.</p>
+                  {draft.reasonGroup ? <p>{draft.reasonGroup}</p> : null}
+                  {draft.note ? <p className="whitespace-pre-wrap break-words">{draft.note}</p> : null}
+                  <Button variant="ghost" size="sm" className="self-start"
+                    onClick={() => updateFeedbackDraft(id, EMPTY_FEEDBACK_DRAFT)}>Xóa bản nháp</Button>
+                </div>
+              </InlineAlert>
+            ))}
+
             {filteredAttention.length === 0 ? (
               <InlineAlert tone="success">
                 {selectedDrug
@@ -808,6 +849,8 @@ export function OrderDetailView({
                     nhomLyDo={detail.nhom_ly_do}
                     submitting={isFeedbackSubmitting(detail.ca_id, finding.nhan_dinh_id)}
                     feedbackError={getFeedbackError(detail.ca_id, finding.nhan_dinh_id)}
+                    feedbackDraft={feedbackDrafts[finding.nhan_dinh_id] ?? EMPTY_FEEDBACK_DRAFT}
+                    onFeedbackDraftChange={(draft) => updateFeedbackDraft(finding.nhan_dinh_id, draft)}
                     onSubmitFeedback={onSubmitFeedback}
                     onClearFeedbackError={onClearFeedbackError}
                     onOpenEvidence={onOpenEvidence}
@@ -831,10 +874,12 @@ export function OrderDetailView({
             aria-label="Tương tác thuốc"
             className="flex flex-col gap-2.5"
           >
-            <SectionHeading title="Yếu tố 4 · Tương tác thuốc" aside="Đối chiếu từng cặp thuốc" />
-            <InteractionMatrix
+            <InteractionSection
+              open={interactionOpen}
+              onOpenChange={setInteractionOpen}
               choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
               dangDung={detail.chi_tiet.y_lenh.dang_dung}
+              maTranTuongTac={detail.ma_tran_tuong_tac}
               nhanDinh={{
                 can_chu_y: allAttention,
                 dat: allPassed,

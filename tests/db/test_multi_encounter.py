@@ -320,7 +320,9 @@ def test_schema_has_new_constraints_and_view_without_legacy_flags() -> None:
     )
     assert "REFERENCES nghiep_vu.y_lenh(ca_id)" in blocks["nghiep_vu.phan_hoi"]
     assert "security_invoker = true" in schema
-    assert "REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM PUBLIC, anon, authenticated" in schema
+    assert "REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM PUBLIC;" in schema
+    assert "REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM anon" in schema
+    assert "REVOKE ALL ON nghiep_vu.v_thuoc_dang_dung FROM authenticated" in schema
     assert "ct.trang_thai_dong = 'active'" in schema
     assert "yl.trang_thai IN ('da_duyet', 'dang_thuc_hien')" in schema
 

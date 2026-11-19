@@ -1,0 +1,9 @@
+**TRẠNG THÁI: CHƯA XONG** — Đã hoàn tất triển khai và nghiệm thu T52 ngoại tuyến. Chế phẩm đủ thành phần tăng từ **36.099 lên 36.841/54.910** (67,09%). Hàng duyệt còn **3.045 tên**. Ca giả lập vẫn có **0 hoạt chất chưa khớp**.
+
+**FILE ĐÃ TẠO / SỬA:** Mã từ điển, cấu hình, DDL, kiểm thử, dữ liệu tầng 2 và các đầu ra T52. Chi tiết và đầu ra `publish` nằm trong [báo cáo T52](D:/create/Vinmec-PharmProject/plan/reports/T52.md).
+
+**LỆNH ĐÃ CHẠY VÀ KẾT QUẢ:** `build`, `candidates --embedder fake`, `review`, `calibrate --embedder fake`, nhập duyệt fixture và `publish` dry-run đều qua. Ruff check và format check qua. Pytest **196 passed**. Kết quả nhúng giả chỉ dùng để kiểm luồng.
+
+**ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO:** Cơ chế kiểm duyệt lệnh chặn xóa bốn thư mục `.pytest_t52*` với thông báo `blocked by policy`.
+
+**VIỆC CHƯA LÀM / CÂU HỎI:** Còn dọn bốn thư mục kiểm thử. Lệnh nhúng thật, hiệu chuẩn thật và nạp Supabase dành cho Claude sau khi duyệt, đã ghi trong báo cáo.

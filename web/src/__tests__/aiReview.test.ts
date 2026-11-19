@@ -6,6 +6,7 @@ import { MOCK_CASE_DETAILS } from '../api/mockData.ts'
 import type { DoanNguon, KetQuaAI } from '../api/types.ts'
 import {
   countAiSummary,
+  formatAiDoneMessage,
   getSafeHttpsUrl,
   mergeFindingsFeedback,
   selectFindingsSource,
@@ -164,7 +165,7 @@ describe('các hàm thuần cho luồng AI nền', () => {
     expect(merged.can_chu_y[0].phan_hoi).toEqual(recorded)
   })
 
-  it('countAiSummary đếm đúng 1 nhận định có diễn giải và 1 nhận định do AI thêm cho DEMO-02', async () => {
+  it('countAiSummary đếm đúng nhận định có diễn giải theo nhóm và nhận định do AI thêm cho DEMO-02', async () => {
     vi.useFakeTimers()
     try {
       const client = new MockClient({ delayMs: 0 })
@@ -173,10 +174,91 @@ describe('các hàm thuần cho luồng AI nền', () => {
       const done = await client.getAi('DEMO-02')
 
       expect(done?.trang_thai).toBe('xong')
-      expect(countAiSummary(done)).toEqual({ coDienGiai: 1, doAiThem: 1 })
+      expect(countAiSummary(done)).toEqual({
+        coDienGiai: 1,
+        coDienGiaiCanChuY: 1,
+        coDienGiaiDat: 0,
+        doAiThem: 1,
+      })
     } finally {
       vi.useRealTimers()
     }
+  })
+
+  it('countAiSummary và formatAiDoneMessage tách số theo nhóm và bỏ nhóm bằng 0', () => {
+    const base = MOCK_CASE_DETAILS['DEMO-02'].nhan_dinh
+    const mixed: KetQuaAI = {
+      trang_thai: 'xong',
+      nhan_dinh: {
+        can_chu_y: [
+          { ...base.can_chu_y[0], dien_giai_ai: 'Diễn giải 1' },
+          { ...base.can_chu_y[0], nhan_dinh_id: 'ccy-2', de_xuat_ai: 'Đề xuất 2' },
+          { ...base.can_chu_y[0], nhan_dinh_id: 'ccy-3', dien_giai_ai: '   ', de_xuat_ai: null },
+        ],
+        dat: [
+          { ...base.dat[0], dien_giai_ai: 'Diễn giải đạt 1' },
+          { ...base.dat[1], dien_giai_ai: null, de_xuat_ai: null },
+        ],
+      },
+      canh_bao: [],
+      thoi_gian_ms: 53600,
+      mo_hinh: 'mock-ai',
+    }
+
+    expect(countAiSummary(null)).toEqual({
+      coDienGiai: 0,
+      coDienGiaiCanChuY: 0,
+      coDienGiaiDat: 0,
+      doAiThem: 0,
+    })
+    expect(countAiSummary(mixed)).toEqual({
+      coDienGiai: 3,
+      coDienGiaiCanChuY: 2,
+      coDienGiaiDat: 1,
+      doAiThem: 0,
+    })
+
+    expect(
+      formatAiDoneMessage(53600, {
+        coDienGiai: 9,
+        coDienGiaiCanChuY: 3,
+        coDienGiaiDat: 6,
+        doAiThem: 1,
+      }),
+    ).toBe(
+      'AI đã phân tích xong (53,6 giây). 9 nhận định có diễn giải (3 cần chú ý, 6 đạt), 1 nhận định do AI thêm.',
+    )
+
+    expect(
+      formatAiDoneMessage(3000, {
+        coDienGiai: 3,
+        coDienGiaiCanChuY: 3,
+        coDienGiaiDat: 0,
+        doAiThem: 0,
+      }),
+    ).toBe(
+      'AI đã phân tích xong (3 giây). 3 nhận định có diễn giải (3 cần chú ý), 0 nhận định do AI thêm.',
+    )
+
+    expect(
+      formatAiDoneMessage(null, {
+        coDienGiai: 6,
+        coDienGiaiCanChuY: 0,
+        coDienGiaiDat: 6,
+        doAiThem: 2,
+      }),
+    ).toBe(
+      'AI đã phân tích xong. 6 nhận định có diễn giải (6 đạt), 2 nhận định do AI thêm.',
+    )
+
+    expect(
+      formatAiDoneMessage(2500, {
+        coDienGiai: 0,
+        coDienGiaiCanChuY: 0,
+        coDienGiaiDat: 0,
+        doAiThem: 0,
+      }),
+    ).toBe('AI đã phân tích xong (2,5 giây). 0 nhận định có diễn giải, 0 nhận định do AI thêm.')
   })
 
   it('splitHighlightSegments tách đúng 3 phần khi tìm thấy và 1 phần khi không thấy hoặc rỗng', () => {

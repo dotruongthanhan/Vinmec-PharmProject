@@ -7,6 +7,8 @@ export interface BangNhanDinh {
 
 export interface AiSummaryCounts {
   coDienGiai: number
+  coDienGiaiCanChuY: number
+  coDienGiaiDat: number
   doAiThem: number
 }
 
@@ -69,25 +71,67 @@ export function mergeFindingsFeedback(
   }
 }
 
-/** Đếm số nhận định có diễn giải/đề xuất AI và số nhận định mới do AI thêm. */
+function hasAiExplanation(item: NhanDinh): boolean {
+  return hasNonEmptyText(item.dien_giai_ai) || hasNonEmptyText(item.de_xuat_ai)
+}
+
+function isAddedByAi(item: NhanDinh): boolean {
+  return item.nguon_goc_ma !== 'luat' || item.nhan_dinh_id.startsWith('ai|')
+}
+
+/** Đếm số nhận định có diễn giải/đề xuất AI (tổng và theo nhóm) cùng số nhận định mới do AI thêm. */
 export function countAiSummary(ketQua: KetQuaAI | null): AiSummaryCounts {
   if (!ketQua?.nhan_dinh) {
-    return { coDienGiai: 0, doAiThem: 0 }
+    return { coDienGiai: 0, coDienGiaiCanChuY: 0, coDienGiaiDat: 0, doAiThem: 0 }
   }
-  const all = [...ketQua.nhan_dinh.can_chu_y, ...ketQua.nhan_dinh.dat]
-  let coDienGiai = 0
+  let coDienGiaiCanChuY = 0
+  let coDienGiaiDat = 0
   let doAiThem = 0
 
-  for (const item of all) {
-    if (hasNonEmptyText(item.dien_giai_ai) || hasNonEmptyText(item.de_xuat_ai)) {
-      coDienGiai += 1
+  for (const item of ketQua.nhan_dinh.can_chu_y) {
+    if (hasAiExplanation(item)) {
+      coDienGiaiCanChuY += 1
     }
-    if (item.nguon_goc_ma !== 'luat' || item.nhan_dinh_id.startsWith('ai|')) {
+    if (isAddedByAi(item)) {
       doAiThem += 1
     }
   }
 
-  return { coDienGiai, doAiThem }
+  for (const item of ketQua.nhan_dinh.dat) {
+    if (hasAiExplanation(item)) {
+      coDienGiaiDat += 1
+    }
+    if (isAddedByAi(item)) {
+      doAiThem += 1
+    }
+  }
+
+  return {
+    coDienGiai: coDienGiaiCanChuY + coDienGiaiDat,
+    coDienGiaiCanChuY,
+    coDienGiaiDat,
+    doAiThem,
+  }
+}
+
+/** Tạo câu tóm tắt trên thanh trạng thái AI khi hoàn tất, ghi rõ số diễn giải theo nhóm (bỏ nhóm bằng 0). */
+export function formatAiDoneMessage(
+  thoiGianMs: number | null,
+  summary: Pick<AiSummaryCounts, 'coDienGiai' | 'doAiThem'> & {
+    coDienGiaiCanChuY?: number
+    coDienGiaiDat?: number
+  },
+): string {
+  const timeText = thoiGianMs !== null ? ` (${formatAiSeconds(thoiGianMs)} giây)` : ''
+  const parts: string[] = []
+  if ((summary.coDienGiaiCanChuY ?? 0) > 0) {
+    parts.push(`${summary.coDienGiaiCanChuY} cần chú ý`)
+  }
+  if ((summary.coDienGiaiDat ?? 0) > 0) {
+    parts.push(`${summary.coDienGiaiDat} đạt`)
+  }
+  const breakdown = parts.length > 0 ? ` (${parts.join(', ')})` : ''
+  return `AI đã phân tích xong${timeText}. ${summary.coDienGiai} nhận định có diễn giải${breakdown}, ${summary.doAiThem} nhận định do AI thêm.`
 }
 
 /** Tách văn bản nguồn bằng indexOf để tô nền đoạn trùng khớp trích dẫn. */

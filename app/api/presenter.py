@@ -8,6 +8,7 @@ from typing import Literal, cast
 from app.api import schemas as s
 from app.calc.types import CalcResult
 from app.core.types import Chunk
+from app.db.timezone import VN_TZ
 from app.domain.models import CaBenh, ChiTietYLenh
 from app.feedback import PhanHoi
 from app.llm.schema import KetQuaLLM, NhanDinhDeXuat, TrichDanNguon
@@ -94,7 +95,12 @@ def present_source(chunk: Chunk) -> s.DoanNguon:
 
 def finding_id(finding: PhatHien) -> str:
     """Tạo mã nhận định ổn định theo luật và các dòng y lệnh."""
-    return finding.ma_luat + "|" + ",".join(sorted(finding.chi_tiet_y_lenh_id))
+    return vm.finding_base_id(finding)
+
+
+def finding_ids(findings: Sequence[PhatHien]) -> list[str]:
+    """Tạo danh sách mã nhận định duy nhất và ổn định cho toàn bộ phát hiện trong một ca."""
+    return vm.finding_ids(findings)
 
 
 def present_feedback(feedback: PhanHoi) -> s.PhanHoiDaGhi:
@@ -105,7 +111,7 @@ def present_feedback(feedback: PhanHoi) -> s.PhanHoiDaGhi:
         phan_hoi_nhan=vm.label_of(labels.NHAN_PHAN_HOI, feedback.phan_hoi),
         nhom_ly_do=vm.label_of(labels.NHOM_LY_DO, reason) if reason is not None else None,
         ly_do=feedback.ly_do,
-        thoi_diem_text=vm.format_dt(feedback.thoi_diem),
+        thoi_diem_text=vm.format_dt(feedback.thoi_diem.astimezone(VN_TZ)),
     )
 
 
@@ -190,6 +196,8 @@ def _present_finding(
     finding: PhatHien,
     row: Mapping[str, object],
     feedbacks: Sequence[PhanHoi],
+    *,
+    nhan_dinh_id: str | None = None,
 ) -> s.NhanDinh:
     """Đổi nhãn nhận định, thứ tự căn cứ và phản hồi mới nhất."""
     evidence = []
@@ -216,8 +224,9 @@ def _present_finding(
         )
     feedback = vm.feedback_status(case.ca_id, row, feedbacks)
     level = finding.muc_do if finding.muc_do in ("nghiem_trong", "can_luu_y") else None
+    resolved_id = nhan_dinh_id if nhan_dinh_id is not None else finding_id(finding)
     return s.NhanDinh(
-        nhan_dinh_id=finding_id(finding),
+        nhan_dinh_id=resolved_id,
         thuoc=str(row["thuoc"]),
         yeu_to=str(row["yeu_to"]),
         nhan_xet=str(row["nhan_xet"]),
@@ -334,6 +343,8 @@ def present_case(
     result: KetQuaThamDinh,
     feedbacks: Sequence[PhanHoi],
     che_do: s.CheDo | None = None,
+    *,
+    ma_tran_tuong_tac: s.MaTranTuongTac | None = None,
 ) -> s.ChiTietCa:
     """Lắp dữ liệu hiển thị của ca mà không thực hiện thao tác vào/ra."""
     header = vm.header_info(case, result)
@@ -348,12 +359,13 @@ def present_case(
     ]
     rows = vm.finding_rows(case, result.phat_hien)
     attention, passed = vm.split_findings(rows)
-    by_key = {(item.ma_luat, tuple(item.chi_tiet_y_lenh_id)): item for item in result.phat_hien}
+    rule_nids = [str(row["nhan_dinh_id"]) for row in rows]
+    by_nid = dict(zip(rule_nids, result.phat_hien, strict=True))
 
     def convert(row: Mapping[str, object]) -> s.NhanDinh:
-        """Tìm phát hiện gốc cho dòng đã sắp xếp."""
-        key = (str(row["ma_luat"]), tuple(cast(list[str], row["chi_tiet_y_lenh_id"])))
-        return _present_finding(case, by_key[key], row, feedbacks)
+        """Tìm phát hiện gốc theo mã nhận định duy nhất cho dòng đã sắp xếp."""
+        nid = str(row["nhan_dinh_id"])
+        return _present_finding(case, by_nid[nid], row, feedbacks, nhan_dinh_id=nid)
 
     attention_ids = {
         line_id for row in attention for line_id in cast(list[str], row["chi_tiet_y_lenh_id"])
@@ -361,8 +373,20 @@ def present_case(
     order = case.y_lenh_cho_duyet
     prescribed = vm.prescribed_active_ingredient_ids(case)
     ingredients = {item.hoat_chat_id: item.ten_hoat_chat for item in case.danh_muc_hoat_chat}
+    source_matrix = ma_tran_tuong_tac if ma_tran_tuong_tac is not None else result.ma_tran_tuong_tac
+    matrix = source_matrix.model_copy(deep=True) if source_matrix is not None else None
+    interaction_ran = any(item.yeu_to == 4 for item in result.phat_hien)
+    if matrix is not None:
+        ids_by_pair = {
+            frozenset(item.chi_tiet_y_lenh_id): nid
+            for item, nid in zip(result.phat_hien, rule_nids, strict=True)
+            if item.yeu_to == 4 and item.ma_luat in {"tuong_tac_thuoc", "tuong_tac_thieu_du_lieu"}
+        }
+        for pair in matrix.cap:
+            pair.nhan_dinh_id = ids_by_pair.get(frozenset((pair.a, pair.b)))
     return s.ChiTietCa(
         ca_id=case.ca_id,
+        ma_tran_tuong_tac=matrix if interaction_ran else None,
         dinh_danh=s.DinhDanhCa.model_validate(
             {
                 **header,
@@ -376,7 +400,7 @@ def present_case(
             can_chu_y=[convert(row) for row in vm.sort_attention_rows(attention)],
             dat=[convert(row) for row in passed],
             yeu_to_chua_kiem=vm.unchecked_factors(result.phat_hien),
-            so_luat_da_chay=len(default_rules()),
+            so_luat_da_chay=len(default_rules()) - (0 if interaction_ran else 1),
         ),
         chi_tiet=s.CaseDetails(
             y_lenh=s.Orders(
@@ -482,6 +506,7 @@ def _present_ai_finding(
         )
 
     row_key: dict[str, object] = {
+        "nhan_dinh_id": finding_code,
         "ma_luat": finding_code,
         "chi_tiet_y_lenh_id": list(de_xuat.chi_tiet_y_lenh_id),
     }
@@ -539,7 +564,9 @@ def present_ai_result(
             mo_hinh=llm.mo_hinh,
         )
 
-    base_case = present_case(case, rule_result, feedbacks)
+    base_case = present_case(
+        case, rule_result, feedbacks, ma_tran_tuong_tac=rule_result.ma_tran_tuong_tac
+    )
     expected_rules = {
         row.nhan_dinh_id: row for row in (*base_case.nhan_dinh.can_chu_y, *base_case.nhan_dinh.dat)
     }
@@ -548,6 +575,12 @@ def present_ai_result(
     seen_rule_ids: set[str] = set()
     rule_mismatch = False
     presented_items: list[s.NhanDinh] = []
+    llm_rule_findings = [
+        item.phat_hien
+        for item in llm.nhan_dinh
+        if item.nguon_goc == "luat" and item.phat_hien is not None
+    ]
+    llm_rule_nids = iter(finding_ids(llm_rule_findings))
 
     for item in llm.nhan_dinh:
         if item.nguon_goc == "ai_chua_kiem_chung":
@@ -556,7 +589,7 @@ def present_ai_result(
             if item.phat_hien is None:
                 rule_mismatch = True
                 continue
-            fid = finding_id(item.phat_hien)
+            fid = next(llm_rule_nids)
             expected = expected_rules.get(fid)
             if expected is None or fid in seen_rule_ids:
                 rule_mismatch = True

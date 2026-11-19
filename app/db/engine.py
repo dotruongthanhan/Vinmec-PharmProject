@@ -74,7 +74,7 @@ def apply_schema(connection: psycopg.Connection[Any], root: Path, reset: bool = 
                 connection.execute(
                     sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(sql.Identifier(schema))
                 )
-        connection.execute((root / "db/schema.sql").read_text(encoding="utf-8"))
+        connection.execute((root / "db/schema.sql").read_text(encoding="utf-8-sig"))
 
 
 def replace_group(cursor: psycopg.Cursor[Any], batch: Batch, group: str) -> None:
@@ -119,12 +119,40 @@ def load_batch(
 
 
 def load_treatment_sheets(connection: psycopg.Connection[Any], batch: Batch) -> None:
-    """Chỉ upsert phiếu/liên kết; khoá cha phải có sẵn, không xoá dữ liệu."""
+    """Thay toàn bộ phiếu và liên kết trong các đợt thuộc lô."""
     if batch.rejected or batch.orphans():
         raise SourceError("Phiếu có dòng bị loại hoặc thiếu khoá cha; dừng trước giao dịch")
-    if batch.tables != {"nghiep_vu.phieu_dieu_tri", "nghiep_vu.phieu_y_lenh"}:
+    sheets = "nghiep_vu.phieu_dieu_tri"
+    links = "nghiep_vu.phieu_y_lenh"
+    if batch.tables != {sheets, links}:
         raise SourceError("Lượt nạp phiếu chứa bảng ngoài phạm vi")
-    load_batch(connection, batch, "phieu-dieu-tri")
+    encounter_ids = sorted(
+        {
+            row["dot_dieu_tri_id"]
+            for name in ("nghiep_vu.dot_dieu_tri", sheets, links)
+            for row in batch.rows[name]
+        }
+    )
+    if not encounter_ids:
+        return
+    with connection.transaction(), connection.cursor() as cursor:
+        # Khoá cùng thứ tự để hai lượt nạp trùng đợt không xen kẽ.
+        cursor.execute(
+            "SELECT dot_dieu_tri_id FROM nghiep_vu.dot_dieu_tri "
+            "WHERE dot_dieu_tri_id = ANY(%s) ORDER BY dot_dieu_tri_id FOR NO KEY UPDATE",
+            (encounter_ids,),
+        )
+        for name in (links, sheets):
+            cursor.execute(
+                sql.SQL("DELETE FROM {} WHERE dot_dieu_tri_id = ANY(%s)").format(identifier(name)),
+                (encounter_ids,),
+            )
+        for name in (sheets, links):
+            if batch.rows[name]:
+                table = TABLES[name]
+                cursor.executemany(
+                    upsert_statement(table), (row_values(table, row) for row in batch.rows[name])
+                )
 
 
 def load_embeddings(

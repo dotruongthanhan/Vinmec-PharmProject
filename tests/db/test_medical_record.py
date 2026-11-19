@@ -1,6 +1,7 @@
 """Đọc đủ lịch sử, tách khỏi CaBenh và kiểm truy vấn gộp chỉ đọc."""
 
 import copy
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock, Mock, patch
 
@@ -81,13 +82,21 @@ def test_grouped_reader_is_readonly_and_filters_to_patient(
 
     def execute(query: object, params: object = None) -> Mock:
         statement = query if isinstance(query, str) else query.as_string()
+        if statement.startswith("SET LOCAL"):
+            assert statement == "SET LOCAL statement_timeout = 8000"
+            return Mock()
         statements.append((statement, params))
         table = next(name for name in batch.rows if name in statement.replace('"', ""))
-        return Mock(fetchall=lambda: batch.rows[table])
+        rows = copy.deepcopy(batch.rows[table])
+        if table == "nghiep_vu.dot_dieu_tri":
+            for row in rows:
+                row["thoi_diem_bat_dau"] = datetime.fromisoformat(
+                    row["thoi_diem_bat_dau"]
+                ).astimezone(UTC)
+        return Mock(fetchall=lambda: rows)
 
     connection.execute.side_effect = execute
-    connect = MagicMock()
-    connect.return_value.__enter__.return_value = connection
+    connect = Mock(return_value=connection)
     monkeypatch.setattr(medical_record.psycopg, "connect", connect)
     monkeypatch.setattr(medical_record, "get_secret", lambda key: "test-dsn")
     record = medical_record.read_medical_record("NB-HS-022", "HS-022")
@@ -99,6 +108,8 @@ def test_grouped_reader_is_readonly_and_filters_to_patient(
     assert all(
         statement.startswith("SELECT") and "ANY(%s)" in statement for statement, _ in statements
     )
+    rows = medical_record.read_medical_record_rows()
+    assert rows["nghiep_vu.dot_dieu_tri"][0]["thoi_diem_bat_dau"].utcoffset() == timedelta(hours=7)
 
 
 def test_reader_sanitizes_database_errors(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -123,6 +134,14 @@ def test_verify_ho_so_matches_all_rows_and_detects_missing_orders(
     output = capsys.readouterr().out
     assert "HS-022: y_lệnh=7/7" in output
     assert output.count("KHỚP") == 66
+    missing = copy.deepcopy(batch.rows)
+    missing["nghiep_vu.y_lenh"] = [
+        row for row in missing["nghiep_vu.y_lenh"] if row["y_lenh_id"] != "YL-HS-022-01"
+    ]
+    monkeypatch.setattr(medical_record, "read_medical_record_rows", lambda: missing)
+    assert medical_record.verify_ho_so() == 1
+    assert "HS-022: y_lệnh=6/7" in capsys.readouterr().out
+    monkeypatch.setattr(medical_record, "read_medical_record_rows", lambda: batch.rows)
     original = medical_record.build_medical_record
 
     def omit_order(rows: reader.Rows, pid: str, cid: str) -> object:

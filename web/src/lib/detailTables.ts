@@ -1,4 +1,4 @@
-import type { BangYLenh, ChiTietXetNghiemDong, NhanDinh } from '../api/types.ts'
+import type { BangYLenh, ChiTietXetNghiemDong, MaTranTuongTac, NhanDinh, TuongTacThucAn } from '../api/types.ts'
 import { formatClinicalText, parseTrendValue } from './displayFormat.ts'
 import type { TrendDirection } from './displayFormat.ts'
 
@@ -131,11 +131,12 @@ export type InteractionLevel =
   | 'can_luu_y'
   | 'thieu_du_lieu'
   | 'khong_phat_hien'
+  | 'khong_ap_dung'
   | 'chua_kiem'
 
 export interface InteractionDrug {
   name: string
-  /** Tên hoạt chất rút từ tên thuốc (bỏ hàm lượng) để dò trong nhận định. */
+  /** Mã dòng khi có ma trận, tên rút gọn khi dùng hợp đồng cũ. */
   key: string
   group: 'cho_duyet' | 'dang_dung'
 }
@@ -145,6 +146,9 @@ export interface InteractionPair {
   b: number
   level: InteractionLevel
   finding: NhanDinh | null
+  findingId: string | null
+  reason: string | null
+  summary: string | null
 }
 
 export interface InteractionMatrixData {
@@ -152,6 +156,9 @@ export interface InteractionMatrixData {
   pairs: InteractionPair[]
   /** Yếu tố tương tác chưa có luật chạy cho ca này. */
   untested: boolean
+  foods: TuongTacThucAn[]
+  source: string | null
+  note: string | null
 }
 
 export const INTERACTION_LEVEL_META: Record<
@@ -162,6 +169,7 @@ export const INTERACTION_LEVEL_META: Record<
   can_luu_y: { code: 'L', label: 'Cần lưu ý', hint: 'Theo dõi khi phối hợp' },
   thieu_du_lieu: { code: 'T', label: 'Thiếu dữ liệu', hint: 'Chưa đủ dữ liệu để kết luận' },
   khong_phat_hien: { code: 'K', label: 'Không phát hiện', hint: 'Luật đã chạy, không ghi nhận' },
+  khong_ap_dung: { code: '–', label: 'Không áp dụng', hint: 'Dịch truyền, điện giải hoặc dược liệu' },
   chua_kiem: { code: '?', label: 'Chưa kiểm', hint: 'Chưa có luật cho cặp này' },
 }
 
@@ -192,7 +200,24 @@ export function buildInteractionMatrix(
     dat: readonly NhanDinh[]
     yeu_to_chua_kiem: readonly string[]
   },
+  matrix?: MaTranTuongTac | null,
 ): InteractionMatrixData {
+  if (matrix != null) {
+    const indexById = new Map(matrix.thuoc.map((drug, i) => [drug.chi_tiet_y_lenh_id, i]))
+    const findings = new Map([...nhanDinh.can_chu_y, ...nhanDinh.dat].map((row) => [row.nhan_dinh_id, row]))
+    const pairs: InteractionPair[] = matrix.cap.flatMap((pair) => {
+      const a = indexById.get(pair.a)
+      const b = indexById.get(pair.b)
+      if (a === undefined || b === undefined || a === b) return []
+      return [{ a, b, level: pair.muc,
+        finding: pair.nhan_dinh_id ? findings.get(pair.nhan_dinh_id) ?? null : null,
+        findingId: pair.nhan_dinh_id, reason: pair.ly_do, summary: pair.tom_tat }]
+    })
+    return {
+      drugs: matrix.thuoc.map((drug) => ({ name: drug.ten, key: drug.chi_tiet_y_lenh_id, group: drug.nhom })),
+      pairs, untested: false, foods: matrix.thuc_an, source: matrix.nguon, note: matrix.ghi_chu,
+    }
+  }
   const drugs: InteractionDrug[] = []
   const seen = new Set<string>()
   const addRows = (table: BangYLenh | null, group: InteractionDrug['group']) => {
@@ -233,8 +258,32 @@ export function buildInteractionMatrix(
       } else {
         level = untested ? 'chua_kiem' : 'khong_phat_hien'
       }
-      pairs.push({ a, b, level, finding })
+      pairs.push({ a, b, level, finding, findingId: finding?.nhan_dinh_id ?? null, reason: null, summary: null })
     }
   }
-  return { drugs, pairs, untested }
+  return { drugs, pairs, untested, foods: [], source: null, note: null }
+}
+
+/** Tóm tắt một dòng cho tiêu đề ma trận khi đang thu gọn, ví dụ "3 thuốc · 1 cặp nghiêm trọng". */
+export function summarizeInteraction(data: InteractionMatrixData): string {
+  const drugs = `${data.drugs.length} thuốc`
+  if (data.drugs.length < 2) {
+    return `${drugs} · không có cặp để đối chiếu`
+  }
+  if (data.untested) {
+    return `${drugs} · chưa kiểm tương tác`
+  }
+  const count = (level: string) => data.pairs.filter((pair) => pair.level === level).length
+  const parts: string[] = []
+  const severe = count('nghiem_trong')
+  const caution = count('can_luu_y')
+  const missing = count('thieu_du_lieu')
+  if (severe > 0) parts.push(`${severe} cặp nghiêm trọng`)
+  if (caution > 0) parts.push(`${caution} cặp cần lưu ý`)
+  if (missing > 0) parts.push(`${missing} cặp thiếu dữ liệu`)
+  if (parts.length === 0) {
+    const applicable = data.pairs.filter((pair) => pair.level !== 'khong_ap_dung').length
+    parts.push(applicable === 0 ? 'không có cặp áp dụng' : 'không ghi nhận cặp cần lưu ý')
+  }
+  return `${drugs} · ${parts.join(' · ')}`
 }

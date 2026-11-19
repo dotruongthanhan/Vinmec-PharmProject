@@ -1,5 +1,5 @@
 import type { DongHangDoi } from '../api/types.ts'
-import { formatIsoTimestamp } from './displayFormat.ts'
+import { administrativeDate, formatIsoTimestamp } from './displayFormat.ts'
 
 export type OrderFilterGroup = 'tat_ca' | 'can_xem' | 'thieu_du_lieu' | 'dat' | 'da_phan_hoi'
 
@@ -15,7 +15,9 @@ export type OrderSortField =
   | 'ca_id'
   | 'ma_bn'
   | 'nguoi_benh'
+  | 'ngay_sinh'
   | 'khoa'
+  | 'chan_doan_chinh'
   | 'trang_thai'
 
 export type OrderSortDirection = 'asc' | 'desc'
@@ -35,13 +37,21 @@ export type OrderRowInput = DongHangDoi & {
   trang_thai_y_lenh?: OrderWorkflowStatus | null
 }
 
+type OrderFilterValues<T extends string> = T | readonly T[] | 'all'
+
 export interface OrderColumnFilters {
-  priority?: OrderPriorityLevel | 'all'
-  khoa?: string | 'all'
-  status?: OrderWorkflowStatus | 'all'
-  aiWarning?: OrderAiWarningFilter | 'all'
+  priority?: OrderFilterValues<OrderPriorityLevel>
+  khoa?: OrderFilterValues<string>
+  status?: OrderFilterValues<OrderWorkflowStatus>
+  aiWarning?: OrderFilterValues<OrderAiWarningFilter>
   timeText?: string
   dateExact?: string
+}
+
+/** Chuẩn hoá bộ lọc cũ và mới; không có lựa chọn nghĩa là tất cả. */
+export function selectedFilterValues<T extends string>(value: OrderFilterValues<T> | undefined): readonly T[] {
+  if (value === undefined || value === 'all' || value === '') return []
+  return typeof value === 'string' ? [value] : value
 }
 
 export interface DepartmentCount {
@@ -59,7 +69,7 @@ export interface OrderGroupCounts {
 }
 
 export const ORDER_FILTER_LABELS: Record<OrderFilterGroup, string> = {
-  tat_ca: 'Tất cả y lệnh',
+  tat_ca: 'Hồ sơ cần duyệt',
   can_xem: 'Cần xem',
   thieu_du_lieu: 'Thiếu dữ liệu',
   dat: 'Đạt',
@@ -203,14 +213,18 @@ export function isPassedOrder(item: DongHangDoi): boolean {
 }
 
 /** Tính số đếm thật cho các nhóm ở thanh bên và danh sách khoa từ dữ liệu /api/cases. */
-export function countOrderGroups(cases: readonly DongHangDoi[]): OrderGroupCounts {
+export function countOrderGroups(
+  cases: readonly OrderRowInput[],
+  columnFilters?: OrderColumnFilters,
+): OrderGroupCounts {
+  const matching = columnFilters ? applyOrderColumnFilters(cases, columnFilters) : cases
   let canXem = 0
   let thieuDuLieu = 0
   let dat = 0
   let daPhanHoi = 0
   const deptMap = new Map<string, number>()
 
-  for (const item of cases) {
+  for (const item of matching) {
     if (isNeedsReviewOrder(item)) {
       canXem += 1
     }
@@ -231,7 +245,7 @@ export function countOrderGroups(cases: readonly DongHangDoi[]): OrderGroupCount
     .sort((a, b) => VI_COLLATOR.compare(a.khoa, b.khoa))
 
   return {
-    tat_ca: cases.length,
+    tat_ca: matching.length,
     can_xem: canXem,
     thieu_du_lieu: thieuDuLieu,
     dat,
@@ -272,6 +286,7 @@ function matchesSearchQuery(item: OrderRowInput, normalizedQuery: string): boole
     item.nguoi_benh_tom_tat ?? '',
     item.ho_ten ?? '',
     item.ngay_sinh ?? '',
+    item.ngay_sinh ? administrativeDate(item.ngay_sinh) : '',
     item.chan_doan_chinh ?? '',
     item.khoa,
     ...(item.thuoc ?? []),
@@ -295,20 +310,24 @@ export function applyOrderColumnFilters<T extends OrderRowInput>(
     return [...cases]
   }
   const { priority, khoa, status, aiWarning, timeText, dateExact } = columnFilters
+  const priorities = selectedFilterValues(priority)
+  const departments = selectedFilterValues(khoa)
+  const statuses = selectedFilterValues(status)
+  const warnings = selectedFilterValues(aiWarning)
   const normTimeText = timeText ? timeText.trim().toLowerCase() : ''
   const normDateExact = dateExact ? dateExact.trim() : ''
 
   return cases.filter((item) => {
-    if (priority && priority !== 'all' && getOrderPriorityLevel(item) !== priority) {
+    if (priorities.length && !priorities.includes(getOrderPriorityLevel(item))) {
       return false
     }
-    if (khoa && khoa !== 'all' && item.khoa !== khoa) {
+    if (departments.length && !departments.includes(item.khoa)) {
       return false
     }
-    if (status && status !== 'all' && getOrderWorkflowStatus(item) !== status) {
+    if (statuses.length && !statuses.includes(getOrderWorkflowStatus(item))) {
       return false
     }
-    if (aiWarning && aiWarning !== 'all' && getOrderAiWarningKind(item) !== aiWarning) {
+    if (warnings.length && !warnings.includes(getOrderAiWarningKind(item))) {
       return false
     }
     if (normDateExact) {
@@ -355,6 +374,11 @@ function parseSortableTimeMs(raw: string | null | undefined): number | null {
   const isoMs = Date.parse(trimmed)
   if (Number.isFinite(isoMs)) {
     return isoMs
+  }
+  const dmyDateMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(trimmed)
+  if (dmyDateMatch) {
+    const [, dd, mm, yyyy] = dmyDateMatch
+    return Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd))
   }
   const dmyMatch = /^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})$/.exec(trimmed)
   if (dmyMatch) {
@@ -424,14 +448,45 @@ export function sortOrders<T extends OrderRowInput>(
       const diff = VI_COLLATOR.compare(getOrderPatientCode(a.item), getOrderPatientCode(b.item))
       cmp = sortDirection === 'asc' ? diff : -diff
     } else if (sortField === 'nguoi_benh') {
-      const diff = VI_COLLATOR.compare(
-        a.item.nguoi_benh_tom_tat ?? '',
-        b.item.nguoi_benh_tom_tat ?? '',
-      )
+      const aLabel = a.item.ho_ten?.trim() || a.item.nguoi_benh_tom_tat?.trim() || ''
+      const bLabel = b.item.ho_ten?.trim() || b.item.nguoi_benh_tom_tat?.trim() || ''
+      const diff = VI_COLLATOR.compare(aLabel, bLabel)
       cmp = sortDirection === 'asc' ? diff : -diff
+      if (cmp === 0) {
+        const subDiff = VI_COLLATOR.compare(
+          a.item.nguoi_benh_tom_tat ?? '',
+          b.item.nguoi_benh_tom_tat ?? '',
+        )
+        cmp = sortDirection === 'asc' ? subDiff : -subDiff
+      }
+    } else if (sortField === 'ngay_sinh') {
+      const aMs = parseSortableTimeMs(a.item.ngay_sinh)
+      const bMs = parseSortableTimeMs(b.item.ngay_sinh)
+      if (aMs === null && bMs === null) {
+        cmp = 0
+      } else if (aMs === null) {
+        cmp = 1
+      } else if (bMs === null) {
+        cmp = -1
+      } else {
+        cmp = sortDirection === 'asc' ? aMs - bMs : bMs - aMs
+      }
     } else if (sortField === 'khoa') {
       const diff = VI_COLLATOR.compare(a.item.khoa, b.item.khoa)
       cmp = sortDirection === 'asc' ? diff : -diff
+    } else if (sortField === 'chan_doan_chinh') {
+      const aDiag = a.item.chan_doan_chinh?.trim() ?? ''
+      const bDiag = b.item.chan_doan_chinh?.trim() ?? ''
+      if (!aDiag && !bDiag) {
+        cmp = 0
+      } else if (!aDiag) {
+        cmp = 1
+      } else if (!bDiag) {
+        cmp = -1
+      } else {
+        const diff = VI_COLLATOR.compare(aDiag, bDiag)
+        cmp = sortDirection === 'asc' ? diff : -diff
+      }
     } else if (sortField === 'trang_thai') {
       const diff =
         STATUS_SORT_RANK[getOrderWorkflowStatus(a.item)] -

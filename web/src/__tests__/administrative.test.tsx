@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { AdministrativeSections } from '../features/order-detail/AdministrativeSections'
 import type { FullIdentity, PatientManagement } from '../api/types'
 import { administrativeDate } from '../lib/displayFormat'
+import { formatHistoryTime } from '../lib/historyTime'
 
 describe('hành chính bệnh án', () => {
   it('hiện từng ô riêng và họ tên viết hoa, không gộp cân nặng', () => {
@@ -75,5 +76,27 @@ describe('hành chính bệnh án', () => {
     expect(value).toContain('13/11/2026')
     expect(value).toContain('06:30')
     expect(administrativeDate('khong-phai-ngay')).toBe('Chưa ghi nhận')
+  })
+
+  it.each(['2026-11-13T00:05+07:00', '2026-11-12T17:05Z', '2026-11-13T00:05', '2026-11-13 00:05'])(
+    'hai định dạng cùng hiểu %s theo giờ Việt Nam',
+    (value) => {
+      expect(administrativeDate(value)).toMatch(/00:05.*13\/11\/2026/)
+      expect(formatHistoryTime(value)).toMatch(/00:05.*13[-/]11/)
+    },
+  )
+
+  it('hiện đang điều trị cho lần chưa kết thúc và giữ dữ liệu lần đã ra viện', () => {
+    const current: PatientManagement = { dot_dieu_tri_id: 'DT-HIEN-TAI', so_ngay_dieu_tri: 2 }
+    const html = renderToStaticMarkup(<AdministrativeSections management={current} history={[
+      { ...current, thu_tu: 2 },
+      { dot_dieu_tri_id: 'DT-CU', thu_tu: 1, thoi_diem_ket_thuc: '2026-11-13T00:05+07:00',
+        ra_vien: { hinh_thuc: 'chuyen_vien' }, so_ngay_dieu_tri: 5 },
+    ]} />)
+    expect(html.match(/Đang điều trị/g)).toHaveLength(6)
+    expect(html.match(/Đang điều trị · 2 ngày/g)).toHaveLength(2)
+    expect(html.match(/Không áp dụng/g)).toHaveLength(2)
+    expect(html).toContain('Chuyển viện')
+    expect(html).toContain('00:05')
   })
 })

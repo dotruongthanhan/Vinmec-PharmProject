@@ -2,8 +2,9 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends, Request, Response
+from fastapi import APIRouter, Body, Depends, Query, Request, Response
 
+from app.api import formulas, lookup
 from app.api import schemas as s
 from app.api.auth_schemas import NguoiDung
 from app.api.service import CaseService
@@ -63,6 +64,15 @@ def get_case(ca_id: str, request: Request, response: Response, principal: Caller
     """Trả chi tiết ca bệnh đã nạp."""
     response.headers["Cache-Control"] = "private, no-store"
     return _service(request).get_case(ca_id)
+
+
+@router.get("/cases/{ca_id}/lich-su-tham-dinh", response_model=s.LichSuThamDinh)
+def get_review_history(
+    ca_id: str, request: Request, response: Response, principal: Caller
+) -> s.LichSuThamDinh:
+    """Trả danh sách các lần hệ thống đã thẩm định và lưu cho ca bệnh."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return _service(request).list_review_history(ca_id)
 
 
 @router.get("/cases/{ca_id}/records/{ban_ghi_id}", response_model=s.BanGhi)
@@ -126,3 +136,48 @@ def get_ai(ca_id: str, request: Request, principal: Caller) -> s.KetQuaAI:
 def get_source(ca_id: str, doan_trich_id: str, request: Request, principal: Caller) -> s.DoanNguon:
     """Trả nguyên văn đoạn nguồn đã cấp cho ca bệnh trong lần phân tích gần nhất."""
     return _service(request).get_source(ca_id, doan_trich_id)
+
+
+@router.get("/thuoc", response_model=s.DanhSachThuoc)
+def search_drugs(
+    response: Response,
+    principal: Caller,
+    q: Annotated[str | None, Query(max_length=100)] = None,
+    trang: Annotated[int, Query(ge=1, le=10000)] = 1,
+    so_dong: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> s.DanhSachThuoc:
+    """Tìm hoạt chất theo tên thuốc, hoạt chất hoặc đồng nghĩa (không dấu)."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return lookup.search_drugs(q, trang, so_dong)
+
+
+@router.get("/thuoc/{hoat_chat_id}", response_model=s.ChiTietThuoc)
+def drug_detail(hoat_chat_id: str, response: Response, principal: Caller) -> s.ChiTietThuoc:
+    """Toàn bộ thông tin tra cứu của một hoạt chất, mỗi phần ghi nguồn."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return lookup.drug_detail(hoat_chat_id)
+
+
+@router.post("/tuong-tac", response_model=s.KetQuaTraTuongTac)
+def lookup_interactions(
+    body: s.TraTuongTacYeuCau, response: Response, principal: Caller
+) -> s.KetQuaTraTuongTac:
+    """Tra tương tác thủ công giữa các tên thuốc tự do; chỉ đọc, không lưu."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return lookup.lookup_interactions(body.thuoc)
+
+
+@router.get("/cong-thuc", response_model=s.DanhMucCongThuc)
+def list_formulas(response: Response, principal: Caller) -> s.DanhMucCongThuc:
+    """Danh mục công thức lâm sàng đã cài."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return formulas.list_formulas()
+
+
+@router.post("/cong-thuc/{ma}", response_model=s.KetQuaCongThuc)
+def calculate_formula(
+    ma: str, body: s.TinhCongThucYeuCau, response: Response, principal: Caller
+) -> s.KetQuaCongThuc:
+    """Tính một công thức bằng hàm đã cài và kiểm; không dùng LLM."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return formulas.calculate(ma, body.dau_vao)
