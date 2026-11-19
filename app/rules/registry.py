@@ -31,6 +31,8 @@ class AllergyRule:
     yeu_to: int = 1
 
     def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        if ctx.resolver is not None:
+            return allergy.check(ca, ctx.resolver)
         return allergy.check(ca)
 
 

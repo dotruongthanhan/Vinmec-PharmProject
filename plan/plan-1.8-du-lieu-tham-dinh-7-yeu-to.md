@@ -319,7 +319,7 @@ Ký hiệu: ✅ xong và đã qua review · 🔄 đang làm · ⚠️ xong một
 | D0.1 | Cào Cục Quản lý Dược | T50 | ✅ 55.030 bản ghi, 54.910 số đăng ký |
 | D0.2 | Tách thành phần | T50 | ✅ 87,3% tách được; kiểm tay 50 mẫu, 0 khớp sai |
 | D0.3 | RxNav / ATC, trục hoạt chất | T50 | ✅ 1.219 hoạt chất, 980 có ATC mức 4 |
-| D0.3b | Nâng độ phủ (thêm "e", vitamin, dược liệu, ứng viên ngữ nghĩa offline, hàng duyệt) | T52 | ⚠️ fix-1 đạt: 36.099 → 39.230 (71,4%), 0 lùi; ⏸️ nhúng thật + hiệu chuẩn tạm gác tới khi người dùng nạp credit / đổi nhà cung cấp nhúng |
+| D0.3b | Nâng độ phủ (thêm "e", vitamin, dược liệu, ứng viên ngữ nghĩa offline, hàng duyệt) | T52 | ⚠️ fix-1 đạt: 36.099 → 39.230 (71,4%), 0 lùi; nhúng thật `gemini-embedding-2` + hiệu chuẩn xong (T62): 0 nhận sai chỉ ở ngưỡng 0,99 (6 tên) → không tự nhận, 2.788 tên vào hàng duyệt tay |
 | D0.4 | Bảng chuyển mã `HC-…` → trục | T53 | ✅ 50/50 mã |
 | D0.5 | Phân loại dịch truyền / dược liệu / vitamin | T52, T53 | ⚠️ Đã có loại `dich_truyen_dien_giai`, `duoc_lieu`; Oresol, Ringer lactat, Oxy chưa nhận diện |
 | D0.6 | Bộ phân giải tên | T53 | ✅ 117/167 dòng ca phân giải, 47 không áp dụng, 3 chưa nhận diện; API HTTP tra thuốc để sau |
@@ -336,7 +336,10 @@ Ký hiệu: ✅ xong và đã qua review · 🔄 đang làm · ⚠️ xong một
 | D1.8 | Nối ma trận giao diện (hợp đồng API v1.6) | T55 | ✅ Endpoint thật trả `ma_tran_tuong_tac`; toàn kho 1.254 test qua; chưa xem bằng mắt trên trình duyệt; T55-fix-4 ✅ bỏ 'Hậu quả: None', ngoặc lồng (1.262 test qua) |
 | R01 | **Review tổng D0 + D1** | — | ✅ 19/11 sáng: backend 1.254 qua, web 293 qua, tsc, ruff; endpoint thật 3 ca; bất biến 'không phát hiện' 0 vi phạm |
 | D2 | Trùng hoạt chất qua bộ phân giải + trùng nhóm điều trị theo ATC | T57 | ✅ API 66 ca: chỉ HS-014…017 trùng nhóm, đúng mức; Oxy/Ringer/Oresol → không đủ dữ liệu; 1.301 test qua; [DS] chờ duyệt bảng nhóm |
-| D3–D7 | Dị ứng chéo, thận / gan / xét nghiệm, liều, độc tính, lịch dùng | — | ⏳ Chưa bắt đầu |
+| D3 | Dị ứng, dị ứng chéo | T60, T63 | ✅ Dữ liệu (T60: 26 nhóm, 57 nguồn) + luật (T63): API 66 ca → 5 ca dị ứng đều báo, 3 ca chưa khai thác → không đủ dữ liệu; sửa bộ phân giải Cephalexin/Paracetamol; [DS] chờ duyệt bảng chéo |
+| D4 | Thận, gan, xét nghiệm, thuốc–bệnh | T65 | 🔄 Dữ liệu đang làm (sub Sonnet); ⏸️ Child-Pugh chờ công thức MDCalc |
+| D5 | Đường dùng, liều tối đa | T66 | 🔄 Dữ liệu đang làm (sub Sonnet); kiểm chỉ định dời sang plan 1.9 |
+| D6–D7 | Độc tính, lịch dùng | — | ⏳ Chưa bắt đầu |
 
 #### 5.0.1. Quy tắc chuyển đợt (người dùng chốt 19/11)
 

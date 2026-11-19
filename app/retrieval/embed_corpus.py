@@ -83,7 +83,8 @@ def _count_cached_texts(
         for key in keys:
             with closing(
                 connection.execute(
-                    "SELECT dims, length(vec) FROM embeddings WHERE key = ?", (key,)
+                    "SELECT dims, length(vec) FROM embeddings WHERE key = ?",
+                    (key,),
                 )
             ) as cursor:
                 row = cursor.fetchone()

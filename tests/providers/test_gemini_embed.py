@@ -238,7 +238,7 @@ def test_gemini_network_error_retries_and_does_not_leak_secret() -> None:
 def test_build_embedder_uses_get_secret_and_selects_provider(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    base = load_settings()
+    base = load_settings("dev")
     assert base.embedding.provider == "gemini"
     assert base.embedding.active == "gemini-embedding-2"
     assert base.embedding.dimensions == 2048

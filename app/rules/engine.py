@@ -61,7 +61,11 @@ def run_rules_with_matrix(
         return findings
 
     steps: list[tuple[str, int, Callable[[], list[PhatHien]]]] = [
-        ("allergy", 1, lambda: allergy.check(ca)),
+        (
+            "allergy",
+            1,
+            lambda: allergy.check(ca, resolver) if resolver is not None else allergy.check(ca),
+        ),
         (
             "duplicate",
             2,

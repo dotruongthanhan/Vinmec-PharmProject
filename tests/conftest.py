@@ -78,9 +78,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
         relative = Path(str(item.path)).resolve().relative_to(_ROOT).as_posix()
         original_name = getattr(item, "originalname", None) or item.name
         for file, names, paths in _CAN_DU_LIEU:
-            if relative == file and (
-                names is None or item.name in names or original_name in names
-            ):
+            if relative == file and (names is None or item.name in names or original_name in names):
                 item.add_marker(pytest.mark.can_du_lieu(*paths))
         marker = item.get_closest_marker("can_du_lieu")
         if marker is None:

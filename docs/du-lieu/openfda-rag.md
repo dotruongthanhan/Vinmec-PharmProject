@@ -274,6 +274,13 @@ Cả hai SQLite trên đều có bảng `embeddings`; đã chạy `PRAGMA table_
 
 Với mô hình cũ `nvidia/nemotron-3.5-embed-1b:free` (đo trước T61), khóa `doc` theo `noi_dung_nhung` khớp **819/3.730 đoạn**, còn **2.911 đoạn không có khóa tương ứng**. Đây chỉ là kiểm hiện diện khóa, chưa xác minh chất lượng ngữ nghĩa hoặc tính hữu hạn của từng véc-tơ. Các hàng cache còn lại chưa được phân loại theo nguồn/mô hình; không kết luận toàn corpus đã nhúng.
 
+### 4.2b. Kết quả nhúng thật (T62, 19/11/2026)
+
+- Đã xoá 1.042 hàng nemotron (cache cũ, 2048 chiều) trong `data/cache/embeddings.sqlite`. Lệnh `--xoa-cache-cu` báo số dòng nhưng không xoá được tệp (WinError 32: tiến trình uvicorn của người dùng đang giữ tệp), nên dùng `DELETE` SQL rồi `VACUUM`.
+- Nhúng `data/kb_curated/chunks.jsonl` bằng `gemini-embedding-2`: **3.730/3.730 đoạn có vector, 0 lỗi**. Cache sau nhúng: 3.730 hàng, tất cả `dims = 2048`, `vec` đúng 8.192 byte.
+- `embeddings_tu_dien.sqlite` cũ (0 hàng) chuyển sang `data/_luu_tru/embeddings_tu_dien_nemotron_2026-11-19.sqlite`; cache từ điển mới do `dictionary candidates --embedder that` tạo: 22.058 hàng.
+- Rerank qua OpenRouter đang lỗi HTTP 402 (hết credit); RAG lùi về thứ tự RRF. Xem plan/reports/T62.md.
+
 ### 4.3. Mô hình nhúng hiện hành và lệnh nhúng cache (T61, 19/11/2026)
 
 Từ T61, cấu hình `config/settings.yaml` chuyển `embedding.provider` từ `openrouter` (`nvidia/nemotron-3.5-embed-1b:free`) sang **`gemini`** với mô hình **`gemini-embedding-2`** (`dimensions: 2048`, `batch_size: 100`, giữ nguyên `cache_path: "data/cache/embeddings.sqlite"`).
@@ -287,6 +294,20 @@ Từ T61, cấu hình `config/settings.yaml` chuyển `embedding.provider` từ 
     `uv run python -m app.retrieval.embed_corpus --limit 20`
   - Nhúng toàn bộ `data/kb_curated/chunks.jsonl` qua `CachedEmbedder` (chạy tiếp được sau khi dừng vì đoạn đã có trong cache sẽ được bỏ qua; in tiến độ và tổng số đoạn / số đoạn đã có vector / số đoạn lỗi):
     `uv run python -m app.retrieval.embed_corpus`
+
+### 4.4. Kết quả đo tìm kiếm (T64, 19/11/2026)
+
+Bộ 50 câu hỏi dược sĩ (Việt và Anh, 41 hoạt chất, 9 mục, 9 câu khó) ở `data/kb_reports/T64_bo_cau_hoi.json`; báo cáo đầy đủ `plan/reports/T64.md`. Đo trên 3.730 đoạn, không lọc, véc-tơ `gemini-embedding-2` (RETRIEVAL_QUERY, 2048 chiều).
+
+| Cấu hình | recall@5 Việt / Anh | top-1 Việt / Anh | MRR Việt / Anh |
+|:--|:-:|:-:|:-:|
+| Chỉ vector (cosine) | 0,96 / 1,00 | 0,68 / 0,76 | 0,81 / 0,86 |
+| Đường lai của app (BM25 + vector + RRF; rerank app lỗi 402 nên chỉ là RRF) | 0,86 / 0,92 | 0,28 / 0,62 | 0,52 / 0,74 |
+| Lai, BM25 chỉ chạy với câu Anh | 0,96 / 0,92 | 0,68 / 0,62 | 0,81 / 0,74 |
+| Vector + rerank nemotron (chỉ 29 câu đầu: hết hạn mức ngày) | 1,00 / 1,00 | 0,83 / 0,79 | 0,90 / 0,88 |
+| Lai + rerank nemotron (chỉ 29 câu đầu) | 1,00 / 1,00 | 0,83 / 0,79 | 0,91 / 0,88 |
+
+Kết luận: vector một mình tốt hơn đường lai hiện tại, nhất là câu Việt (BM25 kéo đoạn của thuốc/mục khác lên); rerank chỉ nâng hạng đầu nhẹ trên mẫu nhỏ và chạm hạn mức ngày của gói miễn phí OpenRouter. Đề xuất mặc định: vector trong bộ lọc hoạt chất, BM25 chỉ làm đường lui khi nhúng lỗi. Nhãn `muc` còn nhiễu (362 đoạn `khac`) nên nhiều câu sai là "đúng thuốc, sai mục".
 
 ## 5. Kết quả kiểm đã có
 

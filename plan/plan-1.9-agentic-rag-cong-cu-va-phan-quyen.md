@@ -178,3 +178,56 @@ Mặc định **từ chối**; thêm vai trò mới chỉ cần sửa chính sá
 7. **Chuyển chính sách quyền vào DB có RLS** khi có thêm vai trò (bác sĩ, học viên, dược sĩ trưởng).
 8. **Bộ ca tấn công riêng cho agent:** chèn lệnh trong đầu ra công cụ, yêu cầu gọi công cụ bị cấm, cố đọc hồ sơ người bệnh khác.
 9. **Theo dõi khi vận hành:** tỷ lệ bị từ chối quyền, số vòng trung bình, tỷ lệ trượt kiểm chứng, chi phí mỗi ca; chỉ ghi số liệu, không ghi nội dung.
+
+## 14. Phần RAG: chính xác tìm kiếm và xếp hạng lại (thêm 19/11/2026)
+
+Người dùng chốt ngày 19/11: **plan 1.8 chưa làm phần xếp hạng lại.** Plan 1.8 chỉ cần nhúng xong (`gemini-embedding-2`, 3.730 đoạn, T62) để đẩy lên pgvector. Mọi việc chỉnh độ chính xác RAG dồn về đây.
+
+### 14.1. Hiện trạng đo được
+
+**T61 / T62 / T64**, chi tiết ở `docs/du-lieu/openfda-rag.md`, `plan/reports/T62.md`, `plan/reports/T64.md`:
+- Chỉ dùng vector `gemini-embedding-2` trên toàn kho: recall@5 = 1,00, cả câu Việt và Anh (bộ 20 câu).
+- Rerank `nvidia/nemotron-3.5-rerank-8b:free` (OpenRouter, miễn phí) không cải thiện: MRR 0,85 → 0,83 (Việt), thêm 3–4 giây mỗi câu.
+- Rerank `cohere/rerank-v3.5` qua OpenRouter lỗi 402 (hết credit).
+- Đường lai của app (vector + từ khoá BM25 + RRF) làm sai câu "ceftriaxon chống chỉ định trẻ sơ sinh dùng canxi". Từ khoá tiếng Việt khớp kém với nhãn tiếng Anh.
+
+**T64 (50 câu, 19/11):**
+
+| Cấu hình | recall@5 (Việt / Anh) | top-1 (Việt / Anh) |
+|:--|:-:|:-:|
+| Chỉ vector | 0,96 / 1,00 | 0,68 / 0,76 |
+| Lai của app (RRF, rerank lỗi) | 0,86 / 0,92 | 0,28 / 0,62 |
+
+- Rerank Nemotron, chỉ đo được 29 câu: top-1 Việt 0,69 → 0,83; recall@5 không đổi.
+- Hai câu vector sai đều đúng thuốc nhưng sai mục (tác dụng phụ). Kho có 362 đoạn mục `khac`, nhãn mục còn nhiễu.
+- Đề xuất của T64: mặc định vector trong bộ lọc hoạt chất, không BM25, không rerank. BM25 chỉ làm đường lui.
+
+### 14.2. Thứ tự làm (rẻ và an toàn trước)
+
+1. **Lọc theo siêu dữ liệu trước khi tìm.**
+   - Câu hỏi do luật sinh ra đã biết `hoat_chat_id` và `muc` (ví dụ meropenem + `lieu_than`) → chỉ tìm trong các đoạn khớp.
+   - Câu hỏi tự do của dược sĩ thì tìm toàn kho.
+2. **Sửa đường lai:**
+   - giảm hoặc tắt phần từ khoá khi câu tiếng Việt;
+   - hoặc dịch tên hoạt chất sang INN tiếng Anh trước khi tìm từ khoá.
+
+   Đo lại bằng bộ 50 câu của T64.
+3. **Ngưỡng "không có nguồn".** Dưới ngưỡng thì báo dược sĩ "không tìm thấy căn cứ", không trích.
+4. **Bộ câu hỏi có dược sĩ duyệt** (khoảng 100 câu thật của khoa). Đây là điều kiện để khẳng định độ chính xác.
+5. **Xếp hạng lại, chỉ khi bước 1–3 vẫn còn câu sai.** Ứng viên, so trên cùng bộ câu:
+
+| Loại | Mô hình | Ghi chú |
+|:--|:--|:--|
+| Chạy trên máy | `BAAI/bge-reranker-v2-m3` (~570M) | Đa ngôn ngữ, có tiếng Việt, CPU 1–3 s / 20 đoạn. Máy API hiện `t3.small` 2 GB không đủ; cần `t3.large` (8 GB) hoặc máy riêng |
+| Chạy trên máy | `Qwen3-Reranker-0.6B` / `4B` | Đa ngôn ngữ mạnh; bản 4B nên có GPU |
+| Chạy trên máy | `jina-reranker-v2-base-multilingual` (~280M) | Nhẹ |
+| API | Cohere `rerank-v3.5` (gọi thẳng, không qua OpenRouter) | Mốc so sánh |
+| API | Voyage `rerank-2.5`, Jina reranker | Có gói dùng thử |
+| Thử nghiệm | Jev (typesafe.ai) | Mô hình phân loại có xác suất, $0,042 / 1M token đầu vào; dùng làm bộ chấm "có liên quan / không" cho từng đoạn. Chưa rõ có hỗ trợ tiếng Việt; người dùng có 5 USD |
+| LLM | DeepSeek (đã có khoá) | Chấm 20 đoạn theo danh sách; chậm hơn nhưng hiểu câu dài, nhiều thuốc |
+
+6. **Khoá OpenRouter:** người dùng đặt tên `_1` → `_4`, muốn tự chuyển khoá khi hết hạn mức. Code hiện chỉ đọc `OPENROUTER_API_KEY` và `_2`; sửa cùng lượt code RAG.
+
+### 14.3. Chưa làm ở plan 1.8
+
+Phần "kiểm chỉ định" của D5 (yếu tố 3) dùng RAG và LLM. Phần này dời sang plan này, sau khi có các bước 14.2.

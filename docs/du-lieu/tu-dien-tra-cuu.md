@@ -255,6 +255,21 @@ Số dòng và khai báo cột lấy từ `count(*)` và `PRAGMA table_info` cho
 - T50/T53 trong `plan/reports/` có số đếm của snapshot cũ. T56 đã ghi nhận số trục tại chỗ khác mốc T53; số đo ở đây dùng tệp hiện có và khớp chữ ký T56. README nguồn ngày 16–17/11 chưa mô tả pipeline từ điển mới.
 - Các báo cáo T52-fix-1/T53 ghi kiểm thử phần liên quan đã qua; đây là kết quả lịch sử, không phải kiểm thử được chạy lại trong nhiệm vụ tài liệu.
 
+### 5b. Kết quả nhúng thật (T62, 19/11/2026, `gemini-embedding-2`)
+
+- `candidates --embedder that`: 2.788 tên, kho 19.305 khóa. `review`: 2.788 tên chờ duyệt, 2.788 có ứng viên.
+- `calibrate --embedder that`: 1.751 tên có nhãn, 125 cấu hình (`data/kb_reports/T52_hieu_chuan.json`). Với `nguong_ky_tu=0.65`, `chenh_toi_thieu=0.03`:
+
+| nguong_nhung | tên nhận | nhận sai |
+|---:|---:|---:|
+| 0.60 | 548 | 56 |
+| 0.85 | 539 | 47 |
+| 0.94 | 288 | 17 |
+| 0.95 | 205 | 12 |
+| 0.99 | 6 | 0 |
+
+- Bộ 0 nhận sai nhiều nhất: nhúng 0.99, ký tự 0.65, chênh 0.03, chỉ nhận 6 tên (độ phủ 0,3%). Chưa đủ để bật tự nhận; mọi tên vẫn qua dược sĩ duyệt. Chưa chạy `build` tự nhận hay `publish`.
+
 ## 6. Việc còn mở
 
 - Giấy phép tổng hợp chưa được chốt; cần giữ nguồn riêng và bổ sung điều kiện sử dụng DAV/RxNav.

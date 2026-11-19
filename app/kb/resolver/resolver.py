@@ -1,6 +1,7 @@
 """Phân giải dòng thuốc bằng chỉ mục SQLite nạp vào bộ nhớ."""
 
 import json
+import re
 import sqlite3
 from collections import defaultdict
 from contextlib import closing
@@ -11,6 +12,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.domain.models import CaBenh, ChiTietYLenh, HoatChat, Thuoc
+from app.kb.names import normalize_key
 from app.kb.resolver.matching import (
     CaseMatch,
     IngredientNames,
@@ -21,6 +23,11 @@ from app.kb.resolver.matching import (
 
 NguonKhop = Literal["danh_muc_ca", "ten_thuoc_dav", "dong_nghia", "tach_phoi_hop"]
 _EXCLUDED_KINDS = {"dich_truyen_dien_giai", "duoc_lieu"}
+_MULTI_STRENGTH_RE = re.compile(
+    r"\d+(?:[.,]\d+)?\s*(?:mg|mcg|g|ui|iu)?\s*/\s*"
+    r"\d+(?:[.,]\d+)?\s*(?:$|mg\b|mcg\b|g\b|ui\b|iu\b)",
+    re.IGNORECASE,
+)
 
 
 class ThanhPhanPhanGiai(BaseModel):
@@ -261,11 +268,38 @@ class DrugResolver:
             return self._resolve_parts(parts) if expand else None
         return self._result([self._component(identifier)], "dong_nghia", [], warnings)
 
+    def _canonical_inn_fallback(self, name: str, key: str) -> KetQuaPhanGiai | None:
+        """Phân giải theo INN chuẩn khi tên chung khớp nhiều công thức DAV do thiếu phần sau."""
+        if _MULTI_STRENGTH_RE.search(name):
+            return None
+        candidates = [
+            identifier
+            for identifier, item in self._axis.items()
+            if len(combination_parts(item.ten_inn)) == 1
+            and key in {normalize_key(item.ten_inn), normalize_key(identifier)}
+        ]
+        if len(candidates) != 1:
+            return None
+        return self._result([self._component(candidates[0])], "dong_nghia", [], [])
+
+    def _resolve_single(
+        self, raw_text: str, key: str, *, expand: bool = True
+    ) -> KetQuaPhanGiai | None:
+        """Phân giải một tên đơn theo DAV, INN chuẩn khi đa công thức và đồng nghĩa."""
+        product = self._by_product(key)
+        if product is not None:
+            if product.trang_thai == "khong_nhan_dien":
+                fallback = self._canonical_inn_fallback(raw_text, key)
+                if fallback is not None:
+                    return fallback
+            return product
+        return self._by_synonym(key, expand=expand)
+
     def _resolve_exact(self, name: str) -> KetQuaPhanGiai | None:
         key = product_key(name)
         if not key:
             return None
-        return self._by_product(key) or self._by_synonym(key)
+        return self._resolve_single(name, key)
 
     def _resolve_parts(self, parts: list[str]) -> KetQuaPhanGiai:
         components: dict[str, ThanhPhanPhanGiai] = {}
@@ -273,7 +307,7 @@ class DrugResolver:
         warnings = []
         for part in parts:
             key = product_key(part)
-            match = self._by_product(key) or self._by_synonym(key, expand=False)
+            match = self._resolve_single(part, key, expand=False) if key else None
             if match is None or not match.thanh_phan:
                 reason = match.ly_do if match else "không khớp từ điển"
                 reasons.append(f"{part.strip() or '(trống)'}: {reason}")
