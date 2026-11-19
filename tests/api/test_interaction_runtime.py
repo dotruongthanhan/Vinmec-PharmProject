@@ -26,7 +26,7 @@ from app.providers.fakes import FakeLLM
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import interaction
 from app.rules.engine import _priority_key
-from app.rules.registry import RuleContext
+from app.rules.registry import RuleContext, default_rules
 from app.ui.services import PipelineReviewService
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -86,7 +86,7 @@ def test_get_hs024_links_major_pair_and_reuses_evaluation(
             assert matrix is not None
             assert len(matrix["thuoc"]) == 4
             assert len(matrix["cap"]) == 6
-            assert body["nhan_dinh"]["so_luat_da_chay"] == 6
+            assert body["nhan_dinh"]["so_luat_da_chay"] == len(default_rules())
             pair = next(pair for pair in matrix["cap"] if pair["muc"] == "nghiem_trong")
             finding = next(
                 row
@@ -165,8 +165,20 @@ def test_missing_index_keeps_five_rules_and_warns_once(
             assert response.status_code == 200
             body = response.json()
             assert body["ma_tran_tuong_tac"] is None
-            assert body["nhan_dinh"]["so_luat_da_chay"] == 5
-            assert "4. Tương tác thuốc" in body["nhan_dinh"]["yeu_to_chua_kiem"]
+            assert body["nhan_dinh"]["so_luat_da_chay"] == len(default_rules()) - 1
+            unchecked = body["nhan_dinh"]["yeu_to_chua_kiem"]
+            assert "4. Tương tác thuốc" in unchecked
+            all_rows = [*body["nhan_dinh"]["can_chu_y"], *body["nhan_dinh"]["dat"]]
+            codes = {row["ma_luat"] for row in all_rows}
+            base_codes = {"di_ung_khong_co", "trung_hoat_chat_khong_co", "lich_dung_phu_hop"}
+            assert base_codes <= codes
+            if missing in {"tra_cuu", "both"}:
+                assert "3. Chỉ định, liều, đường dùng" in unchecked
+                assert "thuoc_benh_ddinter" not in codes
+                assert "lieu_toi_da_khong_co_nguon" not in codes
+            else:
+                assert "thuoc_benh_ddinter" in codes
+                assert "lieu_toi_da_khong_co_nguon" in codes
             service._results.clear()
         warnings = [row for row in caplog.records if row.name.startswith("app.")]
         assert len(warnings) == 1
@@ -240,9 +252,11 @@ def test_pipeline_retains_old_rules_and_refreshes_matrix(
         resolver=runtime_context.resolver,
         interactions=runtime_context.interactions,
     )
-    assert [row for row in result.phat_hien if row.yeu_to not in {2, 4}] == [
-        row for row in old.phat_hien if row.yeu_to != 2
-    ]
+    expected_legacy = [row for row in old.phat_hien if row.yeu_to != 2]
+    assert expected_legacy
+    for expected in expected_legacy:
+        assert expected in result.phat_hien
+    assert any(row.ma_luat == "thuoc_benh_ddinter" for row in result.phat_hien)
     duplicates = [row for row in result.phat_hien if row.yeu_to == 2]
     assert len(duplicates) == 1
     assert duplicates[0].ma_luat == "trung_hoat_chat_khong_co"
@@ -281,9 +295,11 @@ def test_interaction_failure_keeps_old_findings(
         resolver=runtime_context.resolver,
         interactions=runtime_context.interactions,
     )
-    assert [row for row in result.phat_hien if row.yeu_to not in {2, 4}] == [
-        row for row in old.phat_hien if row.yeu_to != 2
-    ]
+    expected_legacy = [row for row in old.phat_hien if row.yeu_to != 2]
+    assert expected_legacy
+    for expected in expected_legacy:
+        assert expected in result.phat_hien
+    assert any(row.ma_luat == "thuoc_benh_ddinter" for row in result.phat_hien)
     duplicates = [row for row in result.phat_hien if row.yeu_to == 2]
     assert len(duplicates) == 1
     assert duplicates[0].ma_luat == "trung_hoat_chat_khong_co"

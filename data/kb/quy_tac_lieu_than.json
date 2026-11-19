@@ -1,17 +1,1197 @@
 {
-  "phien_ban": "0.1",
-  "ghi_chu": "Bản MVP. Chưa được dược sĩ duyệt.",
+  "phien_ban": "0.3",
+  "ghi_chu": "Bản MVP. Chưa được dược sĩ duyệt. 0.2 (T65, D4, 19/11/2026): thêm 17 hoạt chất từ nhãn FDA vào khoá quy_tac_cho_duyet (cùng lược đồ với quy_tac, app và DB chưa đọc khoá này cho tới khi dược sĩ duyệt và có task chuyển sang quy_tac); quy tắc meropenem ở quy_tac giữ nguyên. Khoá nối tiếp: hoat_chat_ids theo trục tra_cuu.sqlite; mỗi mức có nhan_ghi (khoảng nguyên văn của nhãn). 0.3 (T65 hoàn thiện, 19/11/2026): thêm bao_gom_can_tren (bool, tuỳ chọn) cho mức CrCl: true thì crcl <= crcl_den, false thì crcl < crcl_den; không ghi thì <= (trừ mức crcl_tu = null và bao_gom_can_duoi = false thì <). Thêm khoá khong_co_nguong: hoạt chất của 66 ca không có ngưỡng CrCl trong quy_tac hoặc quy_tac_cho_duyet, kèm loại (chi_noi_chung, khong_can_chinh, bang_hoac_cong_thuc, co_nguong_o_tep_khac, chua_co_nhan).",
   "quy_tac": [
     {
       "ten_quoc_te": "meropenem",
       "nguon": "Nhãn thuốc FDA: MERREM IV (meropenem for injection), mục Dosage and Administration - Use in Adult Patients with Renal Impairment",
       "nguoi_duyet": null,
       "muc": [
-        {"crcl_tu": 50, "crcl_den": null, "bao_gom_can_duoi": false, "can_chinh": false, "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"},
-        {"crcl_tu": 26, "crcl_den": 50, "bao_gom_can_duoi": true, "can_chinh": true, "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"},
-        {"crcl_tu": 10, "crcl_den": 25, "bao_gom_can_duoi": true, "can_chinh": true, "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"},
-        {"crcl_tu": null, "crcl_den": 10, "bao_gom_can_duoi": false, "can_chinh": true, "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"}
+        {
+          "crcl_tu": 50,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "crcl_tu": 26,
+          "crcl_den": 50,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "crcl_tu": 10,
+          "crcl_den": 25,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 10,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        }
       ]
+    }
+  ],
+  "quy_tac_cho_duyet": [
+    {
+      "ten_quoc_te": "cefepime",
+      "hoat_chat_ids": [
+        "cefepime"
+      ],
+      "nguon": "Nhãn thuốc FDA: cefepime, mục Dosage and Administration 2.3 – Dosage Adjustments in Patients with Renal Impairment (Table 2)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 60,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều thường theo chỉ định (500 mg q12h / 1 g q12h / 2 g q12h / 2 g q8h tùy mức liều thường dùng)",
+          "nhan_ghi": "Greater than 60"
+        },
+        {
+          "crcl_tu": 30,
+          "crcl_den": 60,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Tương ứng 4 mức liều thường: 500 mg q24h / 1 g q24h / 2 g q24h / 2 g q12h",
+          "nhan_ghi": "30–60"
+        },
+        {
+          "crcl_tu": 11,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "Tương ứng 4 mức liều thường: 500 mg q24h / 500 mg q24h / 1 g q24h / 2 g q24h",
+          "nhan_ghi": "11–29",
+          "ghi_khoang": "nối liền khoảng nguyên 29→30"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 11,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Tương ứng 4 mức liều thường: 250 mg q24h / 250 mg q24h / 500 mg q24h / 1 g q24h",
+          "nhan_ghi": "Less than 11"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Cefepime",
+          "set_id": "be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+          "phien_ban_nguon": "20260625",
+          "tep": "data/kb_sources/openfda/cefepime.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Adjust the dose of Cefepime Injection in patients with creatinine clearance less than or equal to 60 mL/min to compensate for the slower rate of renal elimination.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Cefepime",
+          "set_id": "be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+          "phien_ban_nguon": "20260625",
+          "tep": "data/kb_sources/openfda/cefepime.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Creatinine Clearance (mL/min) Recommended Maintenance Schedule Greater than 60 500 mg every 12 hours 1 g every 12 hours 2 g every 12 hours 2 g every 8 hours 30–60 500 mg every 24 hours 1 g every 24 hours 2 g every 24 hours 2 g every 12 hours 11–29 500 mg every 24 hours 500 mg every 24 hours 1 g every 24 hours 2 g every 24 hours Less than 11 250 mg every 24 hours 250 mg every 24 hours 500 mg every 24 hours 1 g every 24 hours",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Bảng nhãn có 4 cột theo mức liều thường dùng; cột chọn theo liều chỉ định của y lệnh. CrCl ≤ 60 mL/min cần chỉnh."
+    },
+    {
+      "ten_quoc_te": "levofloxacin",
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "nguon": "Nhãn thuốc FDA: levofloxacin, mục Dosage and Administration 2.3 – Dosage Adjustment in Adults with Renal Impairment (Table 3)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 50,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Không cần chỉnh liều",
+          "nhan_ghi": "≥ 50"
+        },
+        {
+          "crcl_tu": 20,
+          "crcl_den": 50,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "Liều thường 750 mg → 750 mg q48h; 500 mg → liều đầu 500 mg rồi 250 mg q24h; 250 mg → không chỉnh",
+          "nhan_ghi": "20 to 49"
+        },
+        {
+          "crcl_tu": 10,
+          "crcl_den": 20,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "Liều thường 750 mg → liều đầu 750 mg rồi 500 mg q48h; 500 mg → liều đầu 500 mg rồi 250 mg q48h; 250 mg → 250 mg q48h (viêm đường tiểu không biến chứng thì không chỉnh)",
+          "nhan_ghi": "10 to 19",
+          "ghi_khoang": "nối liền khoảng nguyên 19→20"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 10,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Nhãn không nêu liều cho CrCl < 10 mL/min ngoài chạy thận/CAPD; dược sĩ quyết định",
+          "nhan_ghi": "(không có)",
+          "khong_co_so_lieu_nhan": true
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Levofloxacin",
+          "set_id": "699fbdb8-a6fd-476a-9b80-08197d869534",
+          "phien_ban_nguon": "20260721",
+          "tep": "data/kb_sources/openfda/levofloxacin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "No adjustment is necessary for patients with a creatinine clearance ≥ 50 mL/min.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=699fbdb8-a6fd-476a-9b80-08197d869534",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Levofloxacin",
+          "set_id": "699fbdb8-a6fd-476a-9b80-08197d869534",
+          "phien_ban_nguon": "20260721",
+          "tep": "data/kb_sources/openfda/levofloxacin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Creatinine Clearance 20 to 49 mL/min Creatinine Clearance 10 to 19 mL/min Hemodialysis or Chronic Ambulatory Peritoneal Dialysis (CAPD) 750 mg 750 mg every 48 hours 750 mg initial dose, then 500 mg every 48 hours 750 mg initial dose, then 500 mg every 48 hours 500 mg 500 mg initial dose, then 250 mg every 24 hours 500 mg initial dose, then 250 mg every 48 hours 500 mg initial dose, then 250 mg every 48 hours 250 mg No dosage adjustment required 250 mg every 48 hours.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=699fbdb8-a6fd-476a-9b80-08197d869534",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "ciprofloxacin",
+      "hoat_chat_ids": [
+        "ciprofloxacin"
+      ],
+      "nguon": "Nhãn thuốc FDA: ciprofloxacin, mục Dosage and Administration 2.3 – Dosage Modifications in Patients with Renal Impairment (Table 4)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều thường",
+          "nhan_ghi": ">30"
+        },
+        {
+          "crcl_tu": 5,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "200–400 mg mỗi 18–24 giờ",
+          "nhan_ghi": "5 to 29",
+          "ghi_khoang": "nhãn không nêu CrCl đúng 30; xếp vào mức dưới (nối liền)"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 5,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Nhãn không nêu liều cho CrCl < 5 mL/min; dược sĩ quyết định",
+          "nhan_ghi": "(không có)",
+          "khong_co_so_lieu_nhan": true
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Ciprofloxacin",
+          "set_id": "f406e796-17d9-4465-b8a7-00d966a4ba74",
+          "phien_ban_nguon": "20260804",
+          "tep": "data/kb_sources/openfda/ciprofloxacin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Creatinine Clearance (mL/min) Dose >30 See Usual Dosage. 5 to 29 200 to 400 mg every 18 to 24 hours",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f406e796-17d9-4465-b8a7-00d966a4ba74",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "enoxaparin",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "nguon": "Nhãn thuốc FDA: enoxaparin sodium, mục Dosage and Administration 2.3 – Dose Reduction for Patients with Severe Renal Impairment (Table 1)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Nhãn không chỉnh liều khi CrCl 30–80 mL/min nhưng theo dõi chảy máu thường xuyên",
+          "nhan_ghi": "≥ 30 (30 to 50; 50 to 80)"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Dự phòng (mổ bụng, thay khớp háng/gối, bệnh nội khoa cấp): 30 mg tiêm dưới da 1 lần/ngày; điều trị DVT, đau thắt ngực không ổn định/NSTEMI: 1 mg/kg tiêm dưới da 1 lần/ngày; STEMI < 75 tuổi: 30 mg tiêm tĩnh mạch một lần rồi 1 mg/kg dưới da, sau đó 1 mg/kg 1 lần/ngày; STEMI ≥ 75 tuổi: 1 mg/kg 1 lần/ngày, không bolus",
+          "nhan_ghi": "<30"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Enoxaparin Sodium Injection,USP",
+          "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "phien_ban_nguon": "20261015",
+          "tep": "data/kb_sources/openfda/enoxaparin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "The recommended prophylaxis and treatment dosage regimens for patients with severe renal impairment (creatinine clearance <30 mL/min)",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Enoxaparin Sodium Injection,USP",
+          "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "phien_ban_nguon": "20261015",
+          "tep": "data/kb_sources/openfda/enoxaparin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Prophylaxis in abdominal surgery 30 mg administered subcutaneously once daily Prophylaxis in hip or knee replacement surgery 30 mg administered subcutaneously once daily Prophylaxis in medical patients during acute illness 30 mg administered subcutaneously once daily Inpatient treatment of acute deep vein thrombosis with or without pulmonary embolism, when administered in conjunction with warfarin sodium 1 mg/kg administered subcutaneously once daily",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Enoxaparin Sodium Injection,USP",
+          "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "phien_ban_nguon": "20261015",
+          "tep": "data/kb_sources/openfda/enoxaparin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Although no dose adjustment is recommended in patients with creatinine clearance 30 to 50 mL/min and creatinine clearance 50 to 80 mL/min, observe these patients frequently for signs and symptoms of bleeding.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "piperacillin",
+      "hoat_chat_ids": [
+        "piperacillin",
+        "tazobactam"
+      ],
+      "nguon": "Nhãn thuốc FDA: piperacillin and tazobactam for injection, mục Dosage and Administration 2.3 – Dosage in Adult Patients With Renal Impairment (Table 1)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 40,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều thường: 3,375 g q6h (mọi chỉ định trừ viêm phổi bệnh viện); 4,5 g q6h (viêm phổi bệnh viện)",
+          "nhan_ghi": "Greater than 40"
+        },
+        {
+          "crcl_tu": 20,
+          "crcl_den": 40,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "2,25 g q6h (mọi chỉ định trừ viêm phổi bệnh viện); 3,375 g q6h (viêm phổi bệnh viện); tổng gam piperacillin+tazobactam",
+          "nhan_ghi": "20 to 40"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 20,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "2,25 g q8h (mọi chỉ định trừ viêm phổi bệnh viện); 2,25 g q6h (viêm phổi bệnh viện); tổng gam piperacillin+tazobactam",
+          "nhan_ghi": "Less than 20"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "piperacillin and tazobactam",
+          "set_id": "24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "phien_ban_nguon": "20261022",
+          "tep": "data/kb_sources/openfda/piperacillin_and_tazobactam.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In adult patients with renal impairment (creatinine clearance ≤ 40 mL/min) and dialysis patients (hemodialysis and CAPD), the intravenous dose of piperacillin and tazobactam for injection should be reduced based on the degree of renal impairment.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "piperacillin and tazobactam",
+          "set_id": "24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "phien_ban_nguon": "20261022",
+          "tep": "data/kb_sources/openfda/piperacillin_and_tazobactam.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Creatinine clearance, mL/min All Indications (except nosocomial pneumonia) Nosocomial Pneumonia Greater than 40 mL/min 3.375 every 6 hours 4.5 every 6 hours 20 to 40 mL/min* 2.25 every 6 hours 3.375 every 6 hours Less than 20 mL/min* 2.25 every 8 hours 2.25 every 6 hours",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24d9b4f1-109c-4db4-8a99-03afff045b47",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "phoi_hop": "piperacillin + tazobactam (một bảng cho phối hợp; khoá luật là piperacillin để không phát hiện đôi)"
+    },
+    {
+      "ten_quoc_te": "sulfamethoxazole",
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "nguon": "Nhãn thuốc FDA: sulfamethoxazole and trimethoprim, mục Dosage and Administration – Patients with Renal Impairment",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều chuẩn thường dùng",
+          "nhan_ghi": "Above 30"
+        },
+        {
+          "crcl_tu": 15,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều thường dùng",
+          "nhan_ghi": "15–30"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 15,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Không khuyến cáo dùng",
+          "nhan_ghi": "Below 15"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Sulfamethoxazole and Trimethoprim",
+          "set_id": "3ef62512-0dc3-4821-9b60-6b375841c4c0",
+          "phien_ban_nguon": "20261014",
+          "tep": "data/kb_sources/openfda/sulfamethoxazole_and_trimethoprim.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "When renal function is impaired, a reduced dosage should be employed using the following table: Creatinine Clearance (mL/min) Recommended Dosage Regimen Above 30 Usual standard regimen 15–30 ½ the usual regimen Below 15 Use not recommended",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef62512-0dc3-4821-9b60-6b375841c4c0",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "phoi_hop": "sulfamethoxazole + trimethoprim (khoá luật là sulfamethoxazole để không phát hiện đôi)"
+    },
+    {
+      "ten_quoc_te": "gabapentin",
+      "hoat_chat_ids": [
+        "gabapentin"
+      ],
+      "nguon": "Nhãn thuốc FDA: gabapentin, mục Dosage and Administration 2.3 – Dosage Adjustment in Patients with Renal Impairment (Table 1)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 60,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Tổng liều ngày 900–3600 mg (300–1200 mg x 3 lần/ngày)",
+          "nhan_ghi": "≥60"
+        },
+        {
+          "crcl_tu": 30,
+          "crcl_den": 60,
+          "bao_gom_can_duoi": false,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "Tổng liều ngày 400–1400 mg (200–700 mg x 2 lần/ngày)",
+          "nhan_ghi": ">30 to 59",
+          "ghi_khoang": "nối liền khoảng nguyên 59→60"
+        },
+        {
+          "crcl_tu": 15,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Tổng liều ngày 200–700 mg (200–700 mg x 1 lần/ngày)",
+          "nhan_ghi": ">15 to 29",
+          "ghi_khoang": "nối liền khoảng nguyên 29→30; CrCl đúng 30 xếp vào mức này vì nhãn ghi \">30\""
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 15,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Hàng \"15\": tổng liều ngày 100–300 mg (100–300 mg x 1 lần/ngày); CrCl < 15 giảm liều theo tỷ lệ với CrCl",
+          "nhan_ghi": "15 (và < 15)"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Gabapentin",
+          "set_id": "01b810b7-f4c8-4412-bbc5-b9220d8770d8",
+          "phien_ban_nguon": "20240402",
+          "tep": "data/kb_sources/t65/gabapentin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Renal Function Creatinine Clearance (mL/min) Total Daily Dose Range (mg/day) Dose Regimen (mg) ≥60 900 to 3600 300 TID 400 TID 600 TID 800 TID 1200 TID >30 to 59 400 to 1400 200 BID 300 BID 400 BID 500 BID 700 BID >15 to 29 200 to 700 200 QD 300 QD 400 QD 500 QD 700 QD 15 For patients with creatinine clearance <15 mL/min, reduce daily dose in proportion to creatinine clearance",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=01b810b7-f4c8-4412-bbc5-b9220d8770d8",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn dùng cho người ≥ 12 tuổi; chưa nghiên cứu ở < 12 tuổi có suy thận."
+    },
+    {
+      "ten_quoc_te": "levetiracetam",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "nguon": "Nhãn thuốc FDA: levetiracetam tablets, mục Dosage and Administration 2.5 – Dosage Adjustments in Adult Patients with Renal Impairment (Table 1)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault) hiệu chỉnh theo diện tích da, mL/min/1.73 m2",
+      "muc": [
+        {
+          "crcl_tu": 80,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "500–1.500 mg mỗi 12 giờ",
+          "nhan_ghi": "Normal >80"
+        },
+        {
+          "crcl_tu": 50,
+          "crcl_den": 80,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "500–1.000 mg mỗi 12 giờ",
+          "nhan_ghi": "Mild 50 to 80"
+        },
+        {
+          "crcl_tu": 30,
+          "crcl_den": 50,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "250–750 mg mỗi 12 giờ",
+          "nhan_ghi": "Moderate 30 to 50",
+          "ghi_khoang": "Nhãn tự chồng ở CrCl 50 (Mild 50 to 80 và Moderate 30 to 50); đã xếp CrCl đúng 50 vào mức nhẹ (Mild), chờ dược sĩ xác nhận."
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "250–500 mg mỗi 12 giờ",
+          "nhan_ghi": "Severe <30"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Levetiracetam",
+          "set_id": "02e237ff-a3e0-40fe-a3d0-9d8802855c71",
+          "phien_ban_nguon": "20260323",
+          "tep": "data/kb_sources/t65/levetiracetam_tab.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Group Creatinine Clearance (mL/min/1.73 m 2 ) Dosage (mg) Frequency Normal >80 500 to 1,500 Every 12 hours Mild 50 to 80 500 to 1,000 Every 12 hours Moderate 30 to 50 250 to 750 Every 12 hours Severe <30 250 to 500 Every 12 hours",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02e237ff-a3e0-40fe-a3d0-9d8802855c71",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn yêu cầu hiệu chỉnh CrCl theo BSA (CrCl / BSA x 1,73) trước khi tra bảng; luật hiện tại tính CrCl chưa hiệu chỉnh BSA nên cần xử lý khi cài. Nhãn levetiracetam có sẵn trong kho (openfda/levetiracetam.json) bị mất nội dung bảng, nên lấy nhãn khác (set_id ghi ở nguon_chi_tiet)."
+    },
+    {
+      "ten_quoc_te": "colistimethate",
+      "hoat_chat_ids": [
+        "colistimethate"
+      ],
+      "nguon": "Nhãn thuốc FDA: colistimethate for injection, mục Dosage and Administration – Table 1 (Suggested Modification of Dosage Schedules for Adults with Impaired Renal Function)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 80,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "2,5–5 mg/kg/ngày chia 2–4 lần (tính theo colistin base)",
+          "nhan_ghi": "Normal ≥80"
+        },
+        {
+          "crcl_tu": 50,
+          "crcl_den": 80,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "2,5–3,8 mg/kg/ngày chia 2 lần",
+          "nhan_ghi": "Mild 50 to 79",
+          "ghi_khoang": "nối liền khoảng nguyên 79→80"
+        },
+        {
+          "crcl_tu": 30,
+          "crcl_den": 50,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "2,5 mg/kg 1 lần/ngày hoặc chia 2 lần/ngày",
+          "nhan_ghi": "Moderate 30 to 49",
+          "ghi_khoang": "nối liền khoảng nguyên 49→50"
+        },
+        {
+          "crcl_tu": 10,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "1,5 mg/kg mỗi 36 giờ",
+          "nhan_ghi": "Severe 10 to 29",
+          "ghi_khoang": "nối liền khoảng nguyên 29→30"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 10,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Nhãn không nêu liều cho CrCl < 10 mL/min; dược sĩ quyết định",
+          "nhan_ghi": "(không có)",
+          "khong_co_so_lieu_nhan": true
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "COLISTIMETHATE SODIUM",
+          "set_id": "6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+          "phien_ban_nguon": "20261104",
+          "tep": "data/kb_sources/openfda/colistimethate.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Creatinine Clearance (mL/min) ≥80 50 to 79 30 to 49 10 to 29 Dosage Schedule 2.5 to 5 mg/kg, divided into 2 to 4 doses per day 2.5 to 3.8 mg/kg, divided into 2 doses per day 2.5 mg/kg, once daily or divided into 2 doses per day 1.5 mg/kg every 36 hours",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn: liều ngày tính theo hoạt tính colistin base; dùng cân nặng lý tưởng."
+    },
+    {
+      "ten_quoc_te": "fluconazole",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "nguon": "Nhãn thuốc FDA: fluconazole in sodium chloride injection, mục Dosage and Administration – Use in Patients with Impaired Renal Function",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 50,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "100% liều khuyến cáo",
+          "nhan_ghi": ">50"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 50,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "50% liều khuyến cáo (không lọc máu); lọc máu: 100% sau mỗi lần lọc",
+          "nhan_ghi": "≤50 (no dialysis)"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Fluconazole",
+          "set_id": "c041227b-dab6-4c29-ab59-d31993d524b2",
+          "phien_ban_nguon": "20260817",
+          "tep": "data/kb_sources/openfda/fluconazole.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Creatinine Clearance (mL/min) Recommended Dose (%) >50 100 ≤50 (no dialysis) 50 Hemodialysis 100% after each hemodialysis",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c041227b-dab6-4c29-ab59-d31993d524b2",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Áp dụng sau liều tải đầu (nhãn: sau liều tải, liều ngày theo chỉ định)."
+    },
+    {
+      "ten_quoc_te": "clarithromycin",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "nguon": "Nhãn thuốc FDA: clarithromycin tablets, mục Dosage and Administration 2.6 – Dosage Adjustment in Patients with Renal Impairment (Table 2)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CLcr (nhãn ghi CL cr, không nêu công thức; dùng Cockcroft-Gault của dự án)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Không chỉnh liều theo thận; riêng CrCl 30–60 mL/min dùng cùng atazanavir/ritonavir: giảm 50% liều",
+          "nhan_ghi": "≥ 30 (nhãn nêu 30 to 60 kèm atazanavir/ritonavir)",
+          "ghi_khoang": "mức 30–60 có điều kiện đi kèm thuốc: cần luật tương tác để áp dụng"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Giảm 50% liều; nếu dùng cùng atazanavir/ritonavir: giảm 75%",
+          "nhan_ghi": "<30"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Clarithromycin",
+          "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/clarithromycin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Patients with severe renal impairment (CL cr of <30 mL/min) Reduce the dosage of clarithromycin tablets by 50% Patients with moderate renal impairment (CL cr of 30 to 60 mL/min) taking concomitant atazanavir or ritonavir-containing regimens Reduce the dosage of clarithromycin tablets by 50% Patients with severe renal impairment (CL cr of <30 mL/min) taking concomitant atazanavir or ritonavir-containing regimens Reduce the dosage of clarithromycin tablets by 75%",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+          "ngay_lay": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "ten_quoc_te": "enalapril",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "nguon": "Nhãn thuốc FDA: enalapril maleate tablets, mục Dosage and Administration – Dosage Adjustment in Hypertensive Patients with Renal Impairment",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 80,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khởi đầu 5 mg/ngày",
+          "nhan_ghi": "Normal >80"
+        },
+        {
+          "crcl_tu": 30,
+          "crcl_den": 80,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khởi đầu 5 mg/ngày",
+          "nhan_ghi": "Mild ≤80 >30"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khởi đầu 2,5 mg/ngày",
+          "nhan_ghi": "Moderate to Severe ≤30"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ENALAPRIL MALEATE",
+          "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+          "phien_ban_nguon": "20261009",
+          "tep": "data/kb_sources/openfda/enalapril.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Renal Status Creatinine Clearance mL/min Initial Dose mg/day Normal Renal Function >80 mL/min 5 mg Mild Impairment ≤80 >30 mL/min 5 mg Moderate to Severe Impairment ≤30 mL/min 2.5 mg",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ENALAPRIL MALEATE",
+          "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+          "phien_ban_nguon": "20261009",
+          "tep": "data/kb_sources/openfda/enalapril.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "For patients with creatinine clearance less than or equal to 30 mL/min (serum creatinine more than or equal to 3 mg/dL), the first dose is 2.5 mg once daily.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Chỉ cho bệnh nhân tăng huyết áp. Suy tim: khởi đầu 2,5 mg/ngày khi natri máu < 130 mEq/L hoặc creatinin huyết thanh > 1,6 mg/dL (xem nguong_xet_nghiem.json)."
+    },
+    {
+      "ten_quoc_te": "tramadol",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "nguon": "Nhãn thuốc FDA: tramadol hydrochloride tablets, mục Dosage and Administration 2.3 – Dosage Modification in Patients with Renal Impairment",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Không chỉnh theo thận",
+          "nhan_ghi": "≥ 30 (nhãn không nêu)",
+          "khong_co_so_lieu_nhan": true
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Giãn khoảng cách liều lên 12 giờ; tối đa 200 mg/ngày",
+          "nhan_ghi": "<30"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Tramadol Hydrochloride",
+          "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+          "phien_ban_nguon": "20261103",
+          "tep": "data/kb_sources/openfda/tramadol.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In all patients with creatinine clearance less than 30 mL/min, it is recommended that the dosing interval of tramadol hydrochloride tablets be increased to 12 hours, with a maximum daily dose of 200 mg.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Mức ≥ 30 là hệ quả của câu \"tất cả bệnh nhân CrCl < 30\"; nhãn không có bảng nhiều mức."
+    },
+    {
+      "ten_quoc_te": "rivaroxaban",
+      "hoat_chat_ids": [
+        "rivaroxaban"
+      ],
+      "nguon": "Nhãn thuốc FDA: rivaroxaban tablets, mục Dosage and Administration 2.1 – Recommended Dosage in Adults (Table 1)",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 50,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Rung nhĩ không do bệnh van tim: 20 mg 1 lần/ngày; điều trị DVT/PE: 15 mg x 2 lần/ngày 21 ngày rồi 20 mg 1 lần/ngày",
+          "nhan_ghi": ">50"
+        },
+        {
+          "crcl_tu": 15,
+          "crcl_den": 50,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Rung nhĩ không do bệnh van tim (CrCl ≤ 50): 15 mg 1 lần/ngày, chưa nghiên cứu CrCl < 30; DVT/PE và dự phòng (CrCl ≥ 15): giữ liều như mức trên",
+          "nhan_ghi": "15 to 50 (AF: ≤50; VTE: ≥15)"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 15,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Điều trị/dự phòng DVT và PE, dự phòng sau thay khớp, dự phòng VTE nội khoa: tránh dùng (Avoid Use); rung nhĩ: nhãn không nêu riêng cho < 15",
+          "nhan_ghi": "<15 (VTE: Avoid Use)"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Xarelto",
+          "set_id": "10db92f9-2300-4a80-836b-673e1ae91610",
+          "phien_ban_nguon": "20260910",
+          "tep": "data/kb_sources/t65/rivaroxaban_af.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Reduction in Risk of Stroke in Nonvalvular Atrial Fibrillation CrCl >50 mL/min 20 mg once daily Take with evening meal CrCl ≤50 mL/min Patients with CrCl <30 mL/min were not studied, but administration of XARELTO is expected to result in serum concentrations of rivaroxaban similar to those in patients with moderate renal impairment (CrCl 30 to <50 mL/min) [see Use in Specific Populations (8.6) ] . 15 mg once daily Take with evening meal",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=10db92f9-2300-4a80-836b-673e1ae91610",
+          "ngay_lay": "2026-11-19"
+        },
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Xarelto",
+          "set_id": "10db92f9-2300-4a80-836b-673e1ae91610",
+          "phien_ban_nguon": "20260910",
+          "tep": "data/kb_sources/t65/rivaroxaban_af.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Treatment of DVT and/or PE CrCl ≥15 mL/min 15 mg twice daily ▼ after 21 days, transition to ▼ 20 mg once daily Take with food, at the same time each day CrCl <15 mL/min Avoid Use",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=10db92f9-2300-4a80-836b-673e1ae91610",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Bảng nhãn khác nhau theo chỉ định; tier 15–50 gộp rung nhĩ (ngưỡng 50) và VTE (ngưỡng 15). Khi cài luật cần phân theo chỉ định. CrCl tính theo cân nặng thực tế (nhãn: tính CrCl theo cân nặng thực). Nhãn rivaroxaban 2,5 mg trong kho (CAD/PAD) chỉ ghi không chỉnh theo CrCl nên lấy nhãn khác."
+    },
+    {
+      "ten_quoc_te": "simvastatin",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "nguon": "Nhãn thuốc FDA: simvastatin tablets, mục Dosage and Administration 2.4 – Recommended Dosage in Patients with Renal Impairment",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Nhãn không nêu chỉnh liều theo thận",
+          "nhan_ghi": "≥ 30 (nhãn không nêu)",
+          "khong_co_so_lieu_nhan": true
+        },
+        {
+          "crcl_tu": 15,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "bao_gom_can_tren": false,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khởi đầu 5 mg 1 lần/ngày (dùng chế phẩm khác, vì không có viên 5 mg)",
+          "nhan_ghi": "15 – 29",
+          "ghi_khoang": "nối liền khoảng nguyên 29→30"
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 15,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Nhãn không nêu cho CrCl < 15 mL/min; dược sĩ quyết định",
+          "nhan_ghi": "(không có)",
+          "khong_co_so_lieu_nhan": true
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Simvastatin",
+          "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+          "phien_ban_nguon": "20261103",
+          "tep": "data/kb_sources/openfda/simvastatin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "For patients with severe renal impairment [creatinine clearance (CLcr) 15 – 29 mL/min], the recommended starting dosage of simvastatin is 5 mg once daily",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Chỉ mức 15–29 có số trong nhãn. Hai mức còn lại đánh dấu khong_co_so_lieu_nhan để phủ kín khoảng, không phải khuyến cáo."
+    },
+    {
+      "ten_quoc_te": "acetaminophen",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "nguon": "Nhãn thuốc FDA: acetaminophen injection, mục Use in Specific Populations 8.7 – Patients with Renal Impairment",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 30,
+          "crcl_den": null,
+          "bao_gom_can_duoi": false,
+          "can_chinh": false,
+          "khuyen_cao": "Nhãn không nêu chỉnh",
+          "nhan_ghi": ">30 (nhãn không nêu)",
+          "khong_co_so_lieu_nhan": true
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 30,
+          "bao_gom_can_duoi": true,
+          "can_chinh": true,
+          "khuyen_cao": "Có thể cần giãn khoảng cách liều và giảm tổng liều ngày (nhãn không nêu số cụ thể)",
+          "nhan_ghi": "≤ 30"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ACETAMINOPHEN",
+          "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+          "phien_ban_nguon": "20260924",
+          "tep": "data/kb_sources/openfda/acetaminophen.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "In cases of severe renal impairment (creatinine clearance ≤ 30 mL/min), longer dosing intervals and a reduced total daily dose of acetaminophen may be warranted.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn chỉ nói định tính (may be warranted), không có liều hay khoảng cách cụ thể. Nhãn là dạng tiêm tĩnh mạch.",
+      "bi_danh": [
+        "paracetamol"
+      ]
+    },
+    {
+      "ten_quoc_te": "methotrexate",
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "nguon": "Nhãn thuốc FDA: methotrexate oral solution (JYLAMVO), mục Use in Specific Populations 8.6 – Renal Impairment",
+      "nguoi_duyet": null,
+      "trang_thai": "cho_duoc_si_duyet",
+      "chi_so": "CrCl (Cockcroft-Gault)",
+      "muc": [
+        {
+          "crcl_tu": 90,
+          "crcl_den": null,
+          "bao_gom_can_duoi": true,
+          "can_chinh": false,
+          "khuyen_cao": "Nhãn không nêu theo dõi đặc biệt",
+          "nhan_ghi": "≥ 90 (nhãn không nêu)",
+          "khong_co_so_lieu_nhan": true
+        },
+        {
+          "crcl_tu": null,
+          "crcl_den": 90,
+          "bao_gom_can_duoi": false,
+          "can_chinh": true,
+          "khuyen_cao": "Theo dõi sát phản ứng có hại; giảm liều hoặc ngừng thuốc nếu thích hợp (nhãn không nêu mức giảm cụ thể)",
+          "nhan_ghi": "<90"
+        }
+      ],
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "JYLAMVO",
+          "set_id": "96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+          "phien_ban_nguon": "20261105",
+          "tep": "data/kb_sources/openfda/methotrexate.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "Closely monitor patients with renal impairment [creatinine clearance (CLcr) less than 90 mL/min, Cockcroft-Gault] for adverse reactions. Reduce the dosage or discontinue JYLAMVO as appropriate",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=96e931f5-51ae-4bdf-a441-bb0dd26d4c0e",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn là một chế phẩm uống (JYLAMVO); chưa có nhãn methotrexate tiêm trong kho. Nhãn chỉ định tính, không có bảng liều."
+    }
+  ],
+  "khong_co_nguong": [
+    {
+      "hoat_chat_id": "amikacin",
+      "loai": "bang_hoac_cong_thuc",
+      "ly_do": "Nhãn: giảm liều tỷ lệ theo CrCl hoặc kéo dài khoảng cách (creatinin huyết thanh x 9 giờ); không có ngưỡng CrCl cắt rõ. Chưa cài; dược sĩ xem tay.",
+      "set_id": "f260ff2a-76a0-4672-9516-91c344b67890",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f260ff2a-76a0-4672-9516-91c344b67890"
+    },
+    {
+      "hoat_chat_id": "amiodarone",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn không nêu chỉnh liều theo chức năng thận; chỉ cảnh báo suy thận cấp khi truyền tĩnh mạch quá nhanh, quá đặc.",
+      "set_id": "0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0c9ee15a-5741-4aaa-8d80-c7bd2e45822e"
+    },
+    {
+      "hoat_chat_id": "amlodipine",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn không nêu chỉnh liều theo suy thận; chỉ nói chung về người cao tuổi giảm chức năng thận.",
+      "set_id": "ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608"
+    },
+    {
+      "hoat_chat_id": "amoxicillin",
+      "loai": "co_nguong_o_tep_khac",
+      "ly_do": "Nhãn amoxicillin/clavulanate có ngưỡng GFR < 30 mL/phút (không dùng viên 875 mg; GFR 10-30 và < 10 có phác đồ riêng). Ngưỡng xét nghiệm ghi ở nguong_xet_nghiem.json; chưa đưa vào quy_tac_cho_duyet (bảng liều theo tình huống nhiễm trùng).",
+      "set_id": "416fa58c-88fa-42aa-9195-74aeba641577",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=416fa58c-88fa-42aa-9195-74aeba641577"
+    },
+    {
+      "hoat_chat_id": "apixaban",
+      "loai": "co_nguong_o_tep_khac",
+      "ly_do": "Nhãn gộp creatinin >= 1,5 mg/dL với tuổi >= 80 và cân nặng <= 60 kg (cần 2 trong 3). Ghi ở nguong_xet_nghiem.json kèm dieu_kien_khac; không phải ngưỡng CrCl độc lập. Chỉ định DVT/PE và phòng huyết khối sau mổ: nhãn không khuyến cáo chỉnh liều theo suy thận.",
+      "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25"
+    },
+    {
+      "hoat_chat_id": "cefoperazone",
+      "loai": "chua_co_nhan",
+      "ly_do": "Không có nhãn FDA (không lưu hành ở Mỹ); chưa có nguồn để lập ngưỡng.",
+      "set_id": null,
+      "url": null
+    },
+    {
+      "hoat_chat_id": "ceftriaxone",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn: không cần chỉnh liều khi suy thận hoặc suy gan riêng lẻ; chỉ thận trọng, liều không quá 2 g/ngày khi suy cả thận và gan.",
+      "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29"
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "loai": "co_nguong_o_tep_khac",
+      "ly_do": "Cùng nhãn amoxicillin/clavulanate: GFR < 30 mL/phút (xem amoxicillin); ngưỡng ở nguong_xet_nghiem.json.",
+      "set_id": "416fa58c-88fa-42aa-9195-74aeba641577",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=416fa58c-88fa-42aa-9195-74aeba641577"
+    },
+    {
+      "hoat_chat_id": "digoxin",
+      "loai": "bang_hoac_cong_thuc",
+      "ly_do": "Nhãn có Table 3 liều duy trì theo CrCl và cân nặng nạc, không có ngưỡng cắt đơn. Chưa cài; dược sĩ xem tay.",
+      "set_id": "98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98d2ad5b-9ffa-4456-9a01-567636c3a4d2"
+    },
+    {
+      "hoat_chat_id": "esomeprazole",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn không nêu chỉnh liều theo suy thận; chỉ dẫn sang nhãn amoxicillin và clarithromycin khi phối hợp diệt H. pylori.",
+      "set_id": "fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fdea1f5f-b717-4d49-8d70-0b373c959bf0"
+    },
+    {
+      "hoat_chat_id": "furosemide",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn chỉ nói chung: thận trọng khi suy thận, theo dõi chức năng thận; không có ngưỡng số.",
+      "set_id": "2f547f7c-0322-465c-9764-43f955d98ab2",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2f547f7c-0322-465c-9764-43f955d98ab2"
+    },
+    {
+      "hoat_chat_id": "gentamicin",
+      "loai": "bang_hoac_cong_thuc",
+      "ly_do": "Nhãn: khoảng cách liều (giờ) bằng creatinin huyết thanh (mg/100 mL) x 8, hoặc chia liều cho creatinin; không có ngưỡng CrCl cắt. Chưa cài.",
+      "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992"
+    },
+    {
+      "hoat_chat_id": "ibuprofen",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn: không có thông tin trên bệnh thận tiến triển; theo dõi chức năng thận. Không có ngưỡng số.",
+      "set_id": "dc91a427-8214-484b-af72-52075b2286a1",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc91a427-8214-484b-af72-52075b2286a1"
+    },
+    {
+      "hoat_chat_id": "insulin_glargine",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn chỉ nói chung: theo dõi đường huyết và chỉnh liều khi suy thận; không có ngưỡng số.",
+      "set_id": "0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae"
+    },
+    {
+      "hoat_chat_id": "ketorolac",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn: người suy thận, >= 65 tuổi hoặc < 50 kg dùng liều thấp (15 mg); không định nghĩa suy thận bằng CrCl. Không tự đặt ngưỡng.",
+      "set_id": "30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=30a3ca20-8f98-478c-8a6b-aa617f0a17a3"
+    },
+    {
+      "hoat_chat_id": "linezolid",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn không nêu chỉnh liều theo suy thận; chỉ cảnh báo giảm tiểu cầu hay gặp hơn ở suy thận nặng, theo dõi công thức máu hằng tuần.",
+      "set_id": "6e70e63b-bfd5-478d-a8ee-8ba22c9efabd",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6e70e63b-bfd5-478d-a8ee-8ba22c9efabd"
+    },
+    {
+      "hoat_chat_id": "losartan",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn: không cần chỉnh liều khi suy thận trừ khi kèm mất dịch (volume depleted).",
+      "set_id": "16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16a6a582-eb4d-41bc-9d49-fc1d4117b29a"
+    },
+    {
+      "hoat_chat_id": "metformin",
+      "loai": "co_nguong_o_tep_khac",
+      "ly_do": "Nhãn: chống chỉ định khi eGFR < 30 mL/phút/1,73 m2; không khởi đầu khi eGFR 30-45. Ghi ở nguong_xet_nghiem.json (ngưỡng theo eGFR, không theo CrCl).",
+      "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018"
+    },
+    {
+      "hoat_chat_id": "metoprolol",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn không có mục chỉnh liều theo suy thận.",
+      "set_id": "d6ae40f1-bc7d-4d3a-b2e9-8d4fc4d1d759",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6ae40f1-bc7d-4d3a-b2e9-8d4fc4d1d759"
+    },
+    {
+      "hoat_chat_id": "morphine",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn mục 8.7 chỉ nói dược động học thay đổi khi suy thận; không có ngưỡng số.",
+      "set_id": "be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be420e8b-bcb0-49b5-bb4d-1df8b9959809"
+    },
+    {
+      "hoat_chat_id": "omeprazole",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn không có mục chỉnh liều theo suy thận.",
+      "set_id": "fbd71fd8-3f36-46a1-bc76-53f6820d42a2",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fbd71fd8-3f36-46a1-bc76-53f6820d42a2"
+    },
+    {
+      "hoat_chat_id": "penicillin_g",
+      "loai": "chua_co_nhan",
+      "ly_do": "Chưa tải nhãn FDA penicillin G vào kho; chưa có nguồn để lập ngưỡng.",
+      "set_id": null,
+      "url": null
+    },
+    {
+      "hoat_chat_id": "phenytoin",
+      "loai": "chi_noi_chung",
+      "ly_do": "Nhãn: suy thận làm tăng phần phenytoin tự do; theo dõi nồng độ tự do, không có ngưỡng chỉnh liều.",
+      "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653"
+    },
+    {
+      "hoat_chat_id": "spironolactone",
+      "loai": "co_nguong_o_tep_khac",
+      "ly_do": "Nhãn: ngưỡng K+ và eGFR để khởi đầu; ghi ở nguong_xet_nghiem.json. Không có bảng liều theo CrCl.",
+      "set_id": "37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37066684-5b63-4d3e-ae6a-08c4b3edd7aa"
+    },
+    {
+      "hoat_chat_id": "sulbactam",
+      "loai": "bang_hoac_cong_thuc",
+      "ly_do": "Nhãn ampicillin/sulbactam có Table 3 theo CrCl (>= 30; 15-29; 5-14) chỉnh khoảng cách liều; CHƯA cài vào quy_tac_cho_duyet (ngoài phạm vi T65); cần task bổ sung. Cefoperazone/sulbactam chưa có nhãn FDA.",
+      "set_id": "35606b43-5914-423c-9bc7-fa3957eb2563",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=35606b43-5914-423c-9bc7-fa3957eb2563"
+    },
+    {
+      "hoat_chat_id": "valproic_acid",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn không có mục chỉnh liều theo suy thận.",
+      "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad"
+    },
+    {
+      "hoat_chat_id": "vancomycin",
+      "loai": "bang_hoac_cong_thuc",
+      "ly_do": "Nhãn: bảng liều mg/24 h theo CrCl từ 100 đến 10 (bước 10), không phải ngưỡng cắt. Chưa cài.",
+      "set_id": "b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b79d9671-02dd-40e2-97fb-a6c7be85cda1"
+    },
+    {
+      "hoat_chat_id": "warfarin",
+      "loai": "khong_can_chinh",
+      "ly_do": "Nhãn: không cần chỉnh liều khi suy thận; theo dõi INR thường xuyên hơn.",
+      "set_id": "61ab23a7-bc67-4777-854a-bf43c788a69a",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61ab23a7-bc67-4777-854a-bf43c788a69a"
     }
   ]
 }

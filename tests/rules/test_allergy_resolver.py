@@ -33,9 +33,7 @@ class StubResolver(DrugResolver):
         self._line_results = line_results or {}
         self._name_results = name_results or {}
         self._case_codes = case_codes or {}
-        self._axis: dict[str, Any] = {
-            identifier: object() for identifier in (axis_ids or set())
-        }
+        self._axis: dict[str, Any] = {identifier: object() for identifier in (axis_ids or set())}
 
     def resolve_line(self, ca: CaBenh, line: ChiTietYLenh) -> KetQuaPhanGiai:
         return self._line_results[line.chi_tiet_y_lenh_id]
@@ -151,9 +149,7 @@ def test_penicillin_group_vs_ceftriaxone_cites_all_bl05_sources() -> None:
 
 def test_penicillin_vs_cefazolin_uses_very_low_risk_phrase() -> None:
     ca = _pending_case(
-        di_ung=[
-            DiUng(di_ung_id="DU-1", tac_nhan="Penicillin", loai_tac_nhan="thuoc")
-        ],
+        di_ung=[DiUng(di_ung_id="DU-1", tac_nhan="Penicillin", loai_tac_nhan="thuoc")],
         line_names=["Cefazolin 1 g"],
     )
     resolver = StubResolver(line_results={"CT-1": _resolved("cefazolin")})
@@ -197,8 +193,7 @@ def test_parenthetical_strip_sulfamethoxazol_direct_and_cross_furosemide() -> No
     assert furo_finding.muc_do == "can_luu_y"
     assert "nguy cơ chéo rất thấp theo nguồn" in furo_finding.mo_ta
     assert any(
-        cc.loai == "tai_lieu" and "10.1056/nejmoa022963" in cc.mo_ta
-        for cc in furo_finding.can_cu
+        cc.loai == "tai_lieu" and "10.1056/nejmoa022963" in cc.mo_ta for cc in furo_finding.can_cu
     )
 
 
@@ -216,9 +211,7 @@ def test_one_way_cross_rule_does_not_fire_in_reverse(
     order_ids: tuple[str, ...],
 ) -> None:
     ca = _pending_case(
-        di_ung=[
-            DiUng(di_ung_id="DU-1", tac_nhan=allergen_name, loai_tac_nhan="thuoc")
-        ],
+        di_ung=[DiUng(di_ung_id="DU-1", tac_nhan=allergen_name, loai_tac_nhan="thuoc")],
         line_names=[order_name],
     )
     resolver = StubResolver(
@@ -248,9 +241,7 @@ def test_multiple_matching_groups_take_highest_risk_and_merge_once() -> None:
     assert len(expected_groups) >= 2
 
     ca = _pending_case(
-        di_ung=[
-            DiUng(di_ung_id="DU-1", tac_nhan="Amoxicillin", loai_tac_nhan="thuoc")
-        ],
+        di_ung=[DiUng(di_ung_id="DU-1", tac_nhan="Amoxicillin", loai_tac_nhan="thuoc")],
         line_names=["Cefadroxil 500 mg"],
     )
     resolver = StubResolver(
@@ -283,17 +274,12 @@ def test_unresolved_drug_allergy_never_passes_as_dat() -> None:
     assert finding.muc_do is None
     assert finding.chi_tiet_y_lenh_id == ["CT-1"]
     assert finding.thong_tin_con_thieu == ["hoat_chat_tac_nhan_di_ung"]
-    assert (
-        finding.mo_ta
-        == 'Chưa nhận diện được hoạt chất của tác nhân dị ứng "Thuốc bí ẩn"'
-    )
+    assert finding.mo_ta == 'Chưa nhận diện được hoạt chất của tác nhân dị ứng "Thuốc bí ẩn"'
 
 
 def test_unresolved_and_excluded_pending_lines() -> None:
     ca = _pending_case(
-        di_ung=[
-            DiUng(di_ung_id="DU-1", tac_nhan="Penicillin", loai_tac_nhan="thuoc")
-        ],
+        di_ung=[DiUng(di_ung_id="DU-1", tac_nhan="Penicillin", loai_tac_nhan="thuoc")],
         line_names=[
             "Thuốc gõ tay chưa rõ",
             "Phối hợp nhận diện một phần",
@@ -328,14 +314,10 @@ def test_unresolved_and_excluded_pending_lines() -> None:
 
 def test_all_excluded_lines_with_unresolved_allergy_returns_empty() -> None:
     ca = _pending_case(
-        di_ung=[
-            DiUng(di_ung_id="DU-1", tac_nhan="Thuốc bí ẩn", loai_tac_nhan="thuoc")
-        ],
+        di_ung=[DiUng(di_ung_id="DU-1", tac_nhan="Thuốc bí ẩn", loai_tac_nhan="thuoc")],
         line_names=["Natri clorid 0,9% 500 mL"],
     )
-    resolver = StubResolver(
-        line_results={"CT-1": KetQuaPhanGiai(trang_thai="khong_ap_dung")}
-    )
+    resolver = StubResolver(line_results={"CT-1": KetQuaPhanGiai(trang_thai="khong_ap_dung")})
     assert check(ca, resolver) == []
 
 

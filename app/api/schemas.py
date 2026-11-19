@@ -467,3 +467,33 @@ class DoanNguon(ApiModel):
 
 class ChayAI(ApiModel):
     chay_lai: bool = False
+
+
+class KetLuanCounts(ApiModel):
+    dat: int
+    can_xem: int
+    khong_du_du_lieu: int
+    ngoai_hdsd: int
+
+
+class TomTatThamDinh(ApiModel):
+    tong_nhan_dinh: int
+    dem: FindingCounts
+    theo_ket_luan: KetLuanCounts
+    theo_yeu_to: dict[str, int]
+
+
+class LanThamDinhLichSu(ApiModel):
+    ket_qua_id: str
+    ca_id: str
+    thoi_diem: datetime
+    thoi_diem_text: str
+    phien_ban_luat: str
+    so_luat_da_chay: int
+    che_do: Literal["file", "db"]
+    tom_tat: TomTatThamDinh
+
+
+class LichSuThamDinh(ApiModel):
+    ca_id: str
+    lich_su: list[LanThamDinhLichSu]

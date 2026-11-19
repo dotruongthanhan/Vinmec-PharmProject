@@ -165,6 +165,25 @@ def _evaluate(
         )
         for line, result in zip(lines, resolved, strict=True)
     ]
+    needed_pairs: list[tuple[str, str]] = []
+    for i, j in combinations(range(len(drugs)), 2):
+        ra, rb = resolved[i], resolved[j]
+        if "khong_ap_dung" in {ra.trang_thai, rb.trang_thai}:
+            continue
+        ca_comp = [row for row in ra.thanh_phan if row.loai not in _EXCLUDED]
+        cb_comp = [row for row in rb.thanh_phan if row.loai not in _EXCLUDED]
+        if (
+            ra.trang_thai == rb.trang_thai == "da_phan_giai"
+            and ca_comp
+            and cb_comp
+            and {row.hoat_chat_id for row in ca_comp} == {row.hoat_chat_id for row in cb_comp}
+        ):
+            continue
+        for ia, ib in product(ca_comp, cb_comp):
+            if ia.hoat_chat_id != ib.hoat_chat_id and ia.ddinter_id and ib.ddinter_id:
+                needed_pairs.append((ia.ddinter_id, ib.ddinter_id))
+    if needed_pairs and hasattr(store, "pairs"):
+        store.pairs(needed_pairs)
     assessments = [
         _assess_pair(drugs[i], drugs[j], resolved[i], resolved[j], store)
         for i, j in combinations(range(len(drugs)), 2)

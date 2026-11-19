@@ -6,7 +6,7 @@ from app.domain.loader import ingredients_of
 from app.domain.models import CaBenh, KhangSinhDo, ViSinh
 from app.rules.types import CanCu, PhatHien, pending_lines
 
-_YEU_TO = 3
+_YEU_TO = 6
 
 _KSD_STATUS: dict[
     Literal["S", "I", "R"],

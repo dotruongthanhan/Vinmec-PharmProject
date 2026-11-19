@@ -8,7 +8,8 @@ from pydantic import BaseModel, Field
 from app.domain.loader import load_case
 from app.domain.models import CaBenh
 from app.pipeline import KetQuaThamDinh, run_case
-from app.rules import RenalRuleBook, load_renal_rules
+from app.rules import renal_dose as renal_dose_mod
+from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 
 _NOT_READY_MESSAGE = (
     "Chức năng hỏi thêm chưa được nối với hệ thống. Bảng nhận định bên trái vẫn dùng được."
@@ -56,9 +57,12 @@ class AskService(Protocol):
 class PipelineReviewService:
     """Dịch vụ thẩm định dùng bộ nạp ca bệnh JSON và pipeline run_case."""
 
-    def __init__(self, case_dir: Path, renal_rules_path: Path) -> None:
+    def __init__(self, case_dir: Path, renal_rules_path: Path | None = None) -> None:
         self._case_dir = Path(case_dir)
-        self._renal_rules_path = Path(renal_rules_path)
+        if renal_rules_path is None:
+            self._renal_rules_path = renal_dose_mod.DEFAULT_RENAL_RULES_PATH
+        else:
+            self._renal_rules_path = Path(renal_rules_path)
         self._renal_rules: RenalRuleBook | None = None
 
     def _get_renal_rules(self) -> RenalRuleBook:

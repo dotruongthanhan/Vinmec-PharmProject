@@ -1,9 +1,10 @@
 """Cấu hình bất biến, trộn sâu theo hồ sơ và đọc bí mật tập trung."""
 
+import io
 import os
 from copy import deepcopy
 from pathlib import Path
-from typing import Literal, Self
+from typing import Literal, Self, cast
 
 import yaml
 from dotenv import load_dotenv
@@ -20,6 +21,14 @@ def load_case_source() -> Literal["db", "file"]:
     if value not in ("db", "file"):
         raise ConfigError("CASE_SOURCE phải là db hoặc file")
     return value
+
+
+def load_kb_source() -> Literal["auto", "file", "db"]:
+    """Chọn nguồn kho tri thức; mặc định auto (tệp có dùng tệp, thiếu thì DB)."""
+    value = os.getenv("KB_SOURCE", "auto").strip().lower()
+    if value not in ("auto", "file", "db"):
+        raise ConfigError("KB_SOURCE phải là auto, file hoặc db")
+    return cast(Literal["auto", "file", "db"], value)
 
 
 def load_case_cache_ttl() -> int:
@@ -240,6 +249,7 @@ class AppSettings(BaseModel):
     profile: str
     tra_cuu: str = "data/kb_curated/tra_cuu/tra_cuu.sqlite"
     tuong_tac: str = "data/kb_curated/tuong_tac/ddinter.sqlite"
+    kb_source: Literal["auto", "file", "db"] = "auto"
 
 
 class Settings(BaseModel):
@@ -293,6 +303,10 @@ def load_settings(profile: str | None = None, config_dir: Path | None = None) ->
     overlay = folder / f"settings.{selected}.yaml"
     if overlay.is_file():
         raw = _deep_merge(raw, _read_yaml(overlay))
+    if "KB_SOURCE" in os.environ:
+        app_raw = raw.get("app")
+        if isinstance(app_raw, dict):
+            app_raw["kb_source"] = load_kb_source()
     try:
         return Settings.model_validate(raw)
     except ValidationError as exc:
@@ -305,12 +319,17 @@ def load_settings(profile: str | None = None, config_dir: Path | None = None) ->
 
 def load_env_file() -> None:
     """Nạp `.env` gốc vào môi trường khi chạy local; biến đã có sẵn luôn được ưu tiên."""
+    if os.getenv("PYTHON_DOTENV_DISABLED") == "1":
+        return
     load_dotenv(dotenv_path=_ROOT / ".env", override=False)
 
 
 def get_secret(name: str) -> str:
     """Đọc bí mật, không ghi đè môi trường và không đưa giá trị vào lỗi."""
-    load_dotenv(dotenv_path=_ROOT / ".env", override=False)
+    if os.getenv("PYTHON_DOTENV_DISABLED") == "1":
+        load_dotenv(stream=io.StringIO(""), override=False)
+    else:
+        load_dotenv(dotenv_path=_ROOT / ".env", override=False)
     value = os.getenv(name)
     if not value:
         raise ConfigError(name)

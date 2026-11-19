@@ -113,6 +113,11 @@ def test_interface_field_sets_match_contract() -> None:
     assert "ma_tran_tuong_tac: MaTranTuongTac | null" in v16_doc
     contract_fields["ChiTietCa"].add("ma_tran_tuong_tac")
 
+    for name, fields in _parse_contract_interfaces(
+        ROOT / "plan/api-hop-dong-v1.7-lich-su-tham-dinh.md"
+    ).items():
+        contract_fields.setdefault(name, set()).update(fields)
+
     for name, fields in contract_fields.items():
         model = getattr(schemas, name)
         assert set(model.model_fields) == fields, name

@@ -229,9 +229,7 @@ def _is_line_excluded(result: KetQuaPhanGiai) -> bool:
     """Kiểm tra dòng thuốc thuộc nhóm dịch truyền, điện giải hoặc dược liệu."""
     if result.trang_thai == "khong_ap_dung":
         return True
-    return bool(result.thanh_phan) and all(
-        tp.loai in _EXCLUDED_KINDS for tp in result.thanh_phan
-    )
+    return bool(result.thanh_phan) and all(tp.loai in _EXCLUDED_KINDS for tp in result.thanh_phan)
 
 
 def _resolve_allergen(
@@ -289,8 +287,7 @@ def _build_cross_source_evidence(group: AllergyCrossGroup, src: CrossSource) -> 
         loai="tai_lieu",
         ban_ghi_id=group.ma_nhom,
         mo_ta=(
-            f'[{group.ma_nhom}] {ref}: "{src.trich_nguyen_van}" — {src.url} '
-            "(chờ dược sĩ duyệt)"
+            f'[{group.ma_nhom}] {ref}: "{src.trich_nguyen_van}" — {src.url} (chờ dược sĩ duyệt)'
         ),
     )
 
@@ -330,10 +327,7 @@ def _build_line_unknown_finding(
             CanCu(
                 loai="du_lieu",
                 ban_ghi_id=line.chi_tiet_y_lenh_id,
-                mo_ta=(
-                    f"Bộ phân giải trả trạng thái {result.trang_thai} "
-                    f"cho '{label}'{reason}"
-                ),
+                mo_ta=(f"Bộ phân giải trả trạng thái {result.trang_thai} cho '{label}'{reason}"),
             ),
         ],
         thong_tin_con_thieu=["thanh_phan_san_pham"],
@@ -356,10 +350,7 @@ def _build_direct_overlap_finding(
         ket_luan="can_xem",
         muc_do="nghiem_trong",
         chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
-        mo_ta=(
-            f"Dị ứng {du.tac_nhan} trùng trực tiếp hoạt chất {overlap_text} "
-            f"với y lệnh {label}"
-        ),
+        mo_ta=(f"Dị ứng {du.tac_nhan} trùng trực tiếp hoạt chất {overlap_text} với y lệnh {label}"),
         can_cu=[
             _build_allergy_evidence(du),
             CanCu(
@@ -432,15 +423,12 @@ def _store_finding(
 
     chosen_muc_do = existing.muc_do
     if finding.muc_do is not None and (
-        existing.muc_do is None
-        or _MUC_DO_ORDER[finding.muc_do] > _MUC_DO_ORDER[existing.muc_do]
+        existing.muc_do is None or _MUC_DO_ORDER[finding.muc_do] > _MUC_DO_ORDER[existing.muc_do]
     ):
         chosen_muc_do = finding.muc_do
 
     mo_ta = (
-        existing.mo_ta
-        if finding.mo_ta in existing.mo_ta
-        else f"{existing.mo_ta}; {finding.mo_ta}"
+        existing.mo_ta if finding.mo_ta in existing.mo_ta else f"{existing.mo_ta}; {finding.mo_ta}"
     )
     by_key[key] = existing.model_copy(
         update={

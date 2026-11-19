@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from functools import lru_cache
 from pathlib import Path
@@ -9,8 +10,10 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from app.db.bang_luat_store import BangLuatReadError, load_rule_data, register_cache_clear
 from app.kb.names import normalize_key
 
+_LOGGER = logging.getLogger(__name__)
 CROSS_RISK_LEVEL = Literal["cao", "thap", "rat_thap"]
 CROSS_RISK_ORDER: dict[CROSS_RISK_LEVEL, int] = {
     "cao": 3,
@@ -18,9 +21,7 @@ CROSS_RISK_ORDER: dict[CROSS_RISK_LEVEL, int] = {
     "rat_thap": 1,
 }
 
-_DEFAULT_CONFIG_PATH = (
-    Path(__file__).resolve().parents[2] / "data" / "kb" / "di_ung_cheo.json"
-)
+_DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "data" / "kb" / "di_ung_cheo.json"
 _PAREN_RE = re.compile(r"\([^)]*\)")
 
 
@@ -185,23 +186,29 @@ class AllergyCrossConfig(BaseModel):
 
 
 @lru_cache(maxsize=1)
-def _load_default_allergy_config() -> AllergyCrossConfig:
-    """Đọc và cache bảng dị ứng chéo mặc định trong dữ liệu KB."""
-    return AllergyCrossConfig.model_validate_json(
-        _DEFAULT_CONFIG_PATH.read_text(encoding="utf-8")
+def _load_default_allergy_config() -> AllergyCrossConfig | None:
+    """Đọc và cache bảng dị ứng chéo mặc định từ tệp hoặc PostgreSQL."""
+    return load_rule_data(
+        "di_ung_cheo",
+        _DEFAULT_CONFIG_PATH,
+        AllergyCrossConfig.model_validate,
+        logger=_LOGGER,
     )
 
 
+register_cache_clear(_load_default_allergy_config.cache_clear)
+
+
 def load_allergy_config(path: Path | None = None) -> AllergyCrossConfig:
-    """Nạp bảng dị ứng chéo từ tệp mặc định hoặc đường dẫn chỉ định."""
-    if path is None:
-        return _load_default_allergy_config()
-    return AllergyCrossConfig.model_validate_json(path.read_text(encoding="utf-8"))
+    """Nạp bảng dị ứng chéo mặc định theo KB_SOURCE hoặc đường dẫn chỉ định."""
+    if path is None or Path(path).resolve() == _DEFAULT_CONFIG_PATH.resolve():
+        loaded = _load_default_allergy_config()
+        if loaded is None:
+            raise BangLuatReadError("Không nạp được bảng dị ứng chéo mặc định.")
+        return loaded
+    return AllergyCrossConfig.model_validate_json(Path(path).read_text(encoding="utf-8"))
 
 
 def try_load_default_allergy_config() -> AllergyCrossConfig | None:
-    """Thử nạp bảng dị ứng chéo mặc định; trả None nếu tệp chưa tồn tại."""
-    try:
-        return load_allergy_config()
-    except OSError:
-        return None
+    """Thử nạp bảng dị ứng chéo mặc định; trả None nếu thiếu tệp hoặc lỗi DB."""
+    return _load_default_allergy_config()

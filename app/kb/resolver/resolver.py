@@ -4,10 +4,11 @@ import json
 import re
 import sqlite3
 from collections import defaultdict
+from collections.abc import Iterable, Mapping
 from contextlib import closing
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -67,41 +68,123 @@ class AxisIngredient:
     ddinter_id: str | None
 
 
+_AXIS_COLUMNS = ("hoat_chat_id", "ten_inn", "ten_viet", "ma_atc_json", "loai", "ddinter_id")
+_SYNONYM_COLUMNS = ("khoa_chuan_hoa", "hoat_chat_id", "loai")
+_CASE_CODE_COLUMNS = ("ma_ca", "hoat_chat_id")
+_PRODUCT_COLUMNS = ("khoa_ten_thuoc", "thuoc_id")
+_FORMULA_COLUMNS = ("thuoc_id", "hoat_chat_id", "ham_luong", "don_vi")
+
+
+def _row_to_tuple(row: Any, columns: tuple[str, ...]) -> tuple[Any, ...]:
+    """Chuyển hàng tuple hoặc dict (dict_row) thành tuple đúng thứ tự cột."""
+    if isinstance(row, Mapping):
+        return tuple(row[col] for col in columns)
+    if isinstance(row, sqlite3.Row):
+        return tuple(row[col] for col in columns)
+    return tuple(row)
+
+
+def _fetch_rows(cursor: Any) -> Iterable[Any]:
+    """Lấy toàn bộ hàng từ con trỏ psycopg hoặc đối tượng giả tương đương."""
+    if hasattr(cursor, "fetchall") and callable(cursor.fetchall):
+        return cursor.fetchall()
+    return cursor
+
+
 class DrugResolver:
     """Tra cứu thuần trong bộ nhớ sau khi mở chỉ mục một lần."""
 
     @classmethod
+    def _build(
+        cls,
+        axis_rows: Iterable[Any],
+        synonym_rows: Iterable[Any],
+        case_code_rows: Iterable[Any],
+        product_rows: Iterable[Any],
+        formula_rows: Iterable[Any],
+    ) -> "DrugResolver":
+        """Dựng cấu trúc phân giải trong bộ nhớ từ các luồng hàng nguồn."""
+        resolver = cls()
+        resolver._axis: dict[str, AxisIngredient] = {}
+        for row in axis_rows:
+            identifier, inn, viet, atc, kind, ddinter = _row_to_tuple(row, _AXIS_COLUMNS)
+            parsed_atc = json.loads(atc) if isinstance(atc, str) else atc
+            entry = AxisIngredient(inn, viet, tuple(parsed_atc), kind, ddinter)
+            resolver._axis[identifier] = entry
+
+        resolver._names = IngredientNames(
+            {identifier: row.ten_inn for identifier, row in resolver._axis.items()},
+            (_row_to_tuple(row, _SYNONYM_COLUMNS) for row in synonym_rows),
+        )
+        resolver._case_codes: dict[str, str] = {
+            ma_ca: hoat_chat_id
+            for ma_ca, hoat_chat_id in (
+                _row_to_tuple(row, _CASE_CODE_COLUMNS) for row in case_code_rows
+            )
+        }
+        resolver._products: dict[str, list[str]] = defaultdict(list)
+        for row in product_rows:
+            key, identifier = _row_to_tuple(row, _PRODUCT_COLUMNS)
+            resolver._products[key].append(identifier)
+
+        resolver._formulas: dict[str, dict[str, tuple[float | None, str | None]]] = defaultdict(
+            dict
+        )
+        for row in formula_rows:
+            product, ingredient, amount, unit = _row_to_tuple(row, _FORMULA_COLUMNS)
+            resolver._formulas[product][ingredient] = (amount, unit)
+        return resolver
+
+    @classmethod
     def from_index(cls, path: Path) -> "DrugResolver":
         """Đọc chỉ mục ở chế độ chỉ đọc và đóng kết nối trước khi trả về."""
-        resolver = cls()
         with closing(sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)) as db:
-            resolver._axis: dict[str, AxisIngredient] = {
-                identifier: AxisIngredient(inn, viet, tuple(json.loads(atc)), kind, ddinter)
-                for identifier, inn, viet, atc, kind, ddinter in db.execute(
+            return cls._build(
+                db.execute(
                     "SELECT hoat_chat_id, ten_inn, ten_viet, ma_atc_json, loai, ddinter_id "
                     "FROM hoat_chat"
-                )
-            }
-            resolver._names = IngredientNames(
-                {identifier: row.ten_inn for identifier, row in resolver._axis.items()},
+                ),
                 db.execute("SELECT khoa_chuan_hoa, hoat_chat_id, loai FROM dong_nghia"),
+                db.execute("SELECT ma_ca, hoat_chat_id FROM chuyen_ma_ca"),
+                db.execute(
+                    "SELECT khoa_ten_thuoc, thuoc_id FROM thuoc ORDER BY khoa_ten_thuoc, thuoc_id"
+                ),
+                db.execute(
+                    "SELECT thuoc_id, hoat_chat_id, ham_luong, don_vi FROM thuoc_thanh_phan"
+                ),
             )
-            resolver._case_codes: dict[str, str] = dict(
-                db.execute("SELECT ma_ca, hoat_chat_id FROM chuyen_ma_ca")
-            )
-            resolver._products: dict[str, list[str]] = defaultdict(list)
-            for key, identifier in db.execute(
-                "SELECT khoa_ten_thuoc, thuoc_id FROM thuoc ORDER BY khoa_ten_thuoc, thuoc_id"
-            ):
-                resolver._products[key].append(identifier)
-            resolver._formulas: dict[str, dict[str, tuple[float | None, str | None]]] = defaultdict(
-                dict
-            )
-            for product, ingredient, amount, unit in db.execute(
-                "SELECT thuoc_id, hoat_chat_id, ham_luong, don_vi FROM thuoc_thanh_phan"
-            ):
-                resolver._formulas[product][ingredient] = (amount, unit)
-        return resolver
+
+    @classmethod
+    def from_db(cls, conn: Any) -> "DrugResolver":
+        """Đọc chỉ mục tra cứu từ các bảng tri_thuc.tra_cuu_* trên PostgreSQL."""
+        return cls._build(
+            _fetch_rows(
+                conn.execute(
+                    "SELECT hoat_chat_id, ten_inn, ten_viet, ma_atc_json, loai, ddinter_id "
+                    "FROM tri_thuc.tra_cuu_hoat_chat"
+                )
+            ),
+            _fetch_rows(
+                conn.execute(
+                    "SELECT khoa_chuan_hoa, hoat_chat_id, loai FROM tri_thuc.tra_cuu_dong_nghia"
+                )
+            ),
+            _fetch_rows(
+                conn.execute("SELECT ma_ca, hoat_chat_id FROM tri_thuc.tra_cuu_chuyen_ma_ca")
+            ),
+            _fetch_rows(
+                conn.execute(
+                    "SELECT khoa_ten_thuoc, thuoc_id FROM tri_thuc.tra_cuu_thuoc "
+                    "ORDER BY khoa_ten_thuoc, thuoc_id"
+                )
+            ),
+            _fetch_rows(
+                conn.execute(
+                    "SELECT thuoc_id, hoat_chat_id, ham_luong, don_vi "
+                    "FROM tri_thuc.tra_cuu_thuoc_thanh_phan"
+                )
+            ),
+        )
 
     def _component(
         self,

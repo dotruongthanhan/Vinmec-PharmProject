@@ -1,5 +1,7 @@
 """Kho véc-tơ trong bộ nhớ, tìm cosine sau khi lọc."""
 
+from collections.abc import Sequence
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -14,7 +16,13 @@ class InMemoryVectorStore:
         self._chunks: list[Chunk] = []
         self._vectors: NDArray[np.float64] = np.empty((0, 0), dtype=float)
 
-    def upsert(self, chunks: list[Chunk], vectors: list[list[float]]) -> None:
+    def upsert(
+        self,
+        chunks: list[Chunk],
+        vectors: list[list[float]],
+        *,
+        expected_dimensions: int | None = None,
+    ) -> None:
         """Thêm hoặc thay thế theo mã đoạn, kiểm tra toàn bộ trước khi ghi."""
         if len(chunks) != len(vectors):
             raise RetrievalError("Số đoạn và số véc-tơ không khớp")
@@ -26,6 +34,10 @@ class InMemoryVectorStore:
             raise RetrievalError("Số chiều véc-tơ không khớp") from exc
         if matrix.ndim != 2 or matrix.shape[1] == 0:
             raise RetrievalError("Số chiều véc-tơ không hợp lệ")
+        if not np.isfinite(matrix).all():
+            raise RetrievalError("Véc-tơ chứa giá trị không hữu hạn")
+        if expected_dimensions is not None and matrix.shape[1] != expected_dimensions:
+            raise RetrievalError("Số chiều véc-tơ không khớp cấu hình")
         if self._chunks and matrix.shape[1] != self._vectors.shape[1]:
             raise RetrievalError("Số chiều véc-tơ không khớp")
         positions = {chunk.doan_trich_id: index for index, chunk in enumerate(self._chunks)}
@@ -42,6 +54,20 @@ class InMemoryVectorStore:
                 rows[index] = row
         self._chunks = updated_chunks
         self._vectors = np.asarray(rows, dtype=float)
+
+    def load_precomputed(
+        self,
+        chunks: Sequence[Chunk],
+        vectors: Sequence[Sequence[float]],
+        *,
+        expected_dimensions: int | None = None,
+    ) -> None:
+        """Nạp thẳng các đoạn và véc-tơ đã tính sẵn vào kho."""
+        self.upsert(
+            list(chunks),
+            [list(vector) for vector in vectors],
+            expected_dimensions=expected_dimensions,
+        )
 
     def search(self, vector: list[float], k: int, bo_loc: SearchFilter) -> list[ScoredChunk]:
         """Lọc trước, rồi lấy k đoạn có cosine cao nhất; véc-tơ 0 có điểm 0."""

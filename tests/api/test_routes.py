@@ -88,7 +88,14 @@ def test_demo02_detail(client: TestClient) -> None:
     assert body["chi_so"][0]["gia_tri_text"] == "16,0"
     assert body["chi_so"][-1]["gia_tri_text"] == "1,47"
     findings = body["nhan_dinh"]["can_chu_y"]
-    assert len(findings) == 1
+    assert len(findings) == 3
+    assert [row["ma_luat"] for row in findings] == [
+        "lieu_than_can_chinh",
+        "khang_sinh_can_phe_duyet",
+        "lieu_toi_da_khong_co_nguon",
+    ]
+    assert findings[1]["yeu_to"].startswith("7.")
+    assert findings[2]["yeu_to"].startswith("3.")
     finding = findings[0]
     assert finding["yeu_to"].startswith("6.")
     assert finding["muc_do_ma"] == "nghiem_trong"
@@ -105,7 +112,7 @@ def test_demo02_detail(client: TestClient) -> None:
     assert "150" in body["tom_tat"]["bat_thuong"][0]["so_voi_truoc"]
     assert body["tom_tat"]["nam_vien_text"].startswith("3 ngày")
     assert "4. Tương tác thuốc" not in body["nhan_dinh"]["yeu_to_chua_kiem"]
-    assert body["nhan_dinh"]["so_luat_da_chay"] == 6
+    assert body["nhan_dinh"]["so_luat_da_chay"] == 14
     matrix = body["ma_tran_tuong_tac"]
     assert matrix is not None and len(matrix["thuoc"]) == 1 and matrix["cap"] == []
     interaction = next(row for row in body["nhan_dinh"]["dat"] if row["yeu_to"].startswith("4."))
@@ -165,7 +172,8 @@ def test_feedback_persists_latest_without_rerunning(
 
     monkeypatch.setattr(service_module, "run_case", counted)
     detail = client.get("/api/cases/DEMO-02").json()
-    finding = detail["nhan_dinh"]["can_chu_y"][0]
+    findings = detail["nhan_dinh"]["can_chu_y"]
+    finding = findings[0]
     assert finding["nhan_dinh_id"] == (
         finding["ma_luat"] + "|" + ",".join(sorted(finding["chi_tiet_y_lenh_id"]))
     )
@@ -173,6 +181,11 @@ def test_feedback_persists_latest_without_rerunning(
     response = client.post("/api/cases/DEMO-02/feedback", json=payload)
     assert response.status_code == 200
     assert response.json()["phan_hoi_nhan"] == "Đồng ý"
+    assert calls == 1
+    for extra in findings[1:]:
+        extra_payload = {"nhan_dinh_id": extra["nhan_dinh_id"], "phan_hoi": "dong_y"}
+        extra_resp = client.post("/api/cases/DEMO-02/feedback", json=extra_payload)
+        assert extra_resp.status_code == 200
     assert calls == 1
     reread = client.get("/api/cases/DEMO-02").json()
     assert reread["nhan_dinh"]["can_chu_y"][0]["phan_hoi"]["phan_hoi"] == "dong_y"
@@ -187,7 +200,7 @@ def test_feedback_persists_latest_without_rerunning(
     assert latest["phan_hoi"] == "can_sua"
     assert calls == before
     text = (tmp_path / "phan_hoi.jsonl").read_text(encoding="utf-8")
-    assert len(text.splitlines()) == 2
+    assert len(text.splitlines()) == len(findings) + 1
     assert "Cần kiểm tra lại" in text
 
 

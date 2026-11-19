@@ -43,7 +43,7 @@ def test_matrix_links_to_presented_findings_without_mutating_inputs(dependencies
         detail.ma_tran_tuong_tac.thuoc[0].ten == detail.chi_tiet.y_lenh.cho_duyet.dong[0]["Thuốc"]
     )
     assert detail.ma_tran_tuong_tac.nguon == "DDInter 2.0 (sàng lọc, CC BY-NC-SA 4.0)"
-    assert detail.nhan_dinh.so_luat_da_chay == 6
+    assert detail.nhan_dinh.so_luat_da_chay == len(default_rules())
     assert before == (ca.model_dump_json(), result.model_dump_json(), matrix.model_dump_json())
     assert (
         MaTranTuongTac.model_validate(detail.model_dump()["ma_tran_tuong_tac"])
@@ -57,7 +57,7 @@ def test_matrix_is_null_without_running_factor_four(dependencies: tuple) -> None
     result = run_case(ca, load_renal_rules(Path("data/kb/quy_tac_lieu_than.json")))
     detail = present_case(ca, result, [])
     assert detail.ma_tran_tuong_tac is None
-    assert detail.nhan_dinh.so_luat_da_chay == 5
+    assert detail.nhan_dinh.so_luat_da_chay == len(default_rules()) - 1
     assert "4. Tương tác thuốc" in detail.nhan_dinh.yeu_to_chua_kiem
 
 

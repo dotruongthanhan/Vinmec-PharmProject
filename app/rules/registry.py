@@ -6,7 +6,22 @@ from typing import TYPE_CHECKING
 from app.domain.models import CaBenh
 from app.kb.interactions import InteractionStore
 from app.kb.resolver import DrugResolver
-from app.rules import allergy, antibiotic, duplicate, interaction, renal_dose, schedule
+from app.rules import (
+    allergy,
+    antibiotic,
+    drug_disease,
+    duplicate,
+    hepatic,
+    interaction,
+    lab_threshold,
+    max_dose,
+    renal_dose,
+    required_fields,
+    route,
+    schedule,
+    stewardship,
+    toxicity,
+)
 from app.rules.engine import _priority_key
 from app.rules.renal_dose import RenalRuleBook
 from app.rules.types import PhatHien
@@ -46,24 +61,28 @@ class DuplicateRule:
         return duplicate.check(ca, ctx.resolver)
 
 
-class AntibioticRule:
-    """Bọc luật kháng sinh."""
+class RouteRule:
+    """Bọc luật đường dùng thuốc."""
 
-    ma_nhom: str = "antibiotic"
+    ma_nhom: str = "route"
     yeu_to: int = 3
 
     def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
-        return antibiotic.check(ca)
+        if ctx.resolver is None:
+            return []
+        return route.check(ca, ctx.resolver)
 
 
-class RenalDoseRule:
-    """Bọc luật liều theo chức năng thận."""
+class MaxDoseRule:
+    """Bọc luật liều tối đa."""
 
-    ma_nhom: str = "renal_dose"
-    yeu_to: int = 6
+    ma_nhom: str = "max_dose"
+    yeu_to: int = 3
 
     def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
-        return renal_dose.check(ca, ctx.renal_rules)
+        if ctx.resolver is None:
+            return []
+        return max_dose.check(ca, ctx.resolver)
 
 
 class InteractionRule:
@@ -76,6 +95,74 @@ class InteractionRule:
         return interaction.check(ca, ctx.resolver, ctx.interactions)
 
 
+class ToxicityRule:
+    """Bọc luật độc tính cộng dồn và khoảng QT."""
+
+    ma_nhom: str = "toxicity"
+    yeu_to: int = 5
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        if ctx.resolver is None:
+            return []
+        return toxicity.check(ca, ctx.resolver, renal_rules=ctx.renal_rules)
+
+
+class AntibioticRule:
+    """Bọc luật kháng sinh."""
+
+    ma_nhom: str = "antibiotic"
+    yeu_to: int = 6
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        return antibiotic.check(ca)
+
+
+class RenalDoseRule:
+    """Bọc luật liều theo chức năng thận."""
+
+    ma_nhom: str = "renal_dose"
+    yeu_to: int = 6
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        return renal_dose.check(ca, ctx.renal_rules, ctx.resolver)
+
+
+class HepaticRule:
+    """Bọc luật chỉnh liều suy gan."""
+
+    ma_nhom: str = "hepatic"
+    yeu_to: int = 6
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        if ctx.resolver is None:
+            return []
+        return hepatic.check(ca, ctx.resolver)
+
+
+class LabThresholdRule:
+    """Bọc luật ngưỡng xét nghiệm an toàn."""
+
+    ma_nhom: str = "lab_threshold"
+    yeu_to: int = 6
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        if ctx.resolver is None:
+            return []
+        return lab_threshold.check(ca, ctx.resolver)
+
+
+class DrugDiseaseRule:
+    """Bọc luật chống chỉ định thuốc theo bệnh."""
+
+    ma_nhom: str = "drug_disease"
+    yeu_to: int = 6
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        if ctx.resolver is None:
+            return []
+        return drug_disease.check(ca, ctx.resolver)
+
+
 class ScheduleRule:
     """Bọc luật lịch dùng thuốc."""
 
@@ -86,15 +173,45 @@ class ScheduleRule:
         return schedule.check(ca)
 
 
+class RequiredFieldsRule:
+    """Bọc luật kiểm tra đủ trường y lệnh bắt buộc."""
+
+    ma_nhom: str = "required_fields"
+    yeu_to: int = 7
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        return required_fields.check(ca)
+
+
+class StewardshipRule:
+    """Bọc luật quản lý kháng sinh và thuốc cần phê duyệt."""
+
+    ma_nhom: str = "stewardship"
+    yeu_to: int = 7
+
+    def check(self, ca: CaBenh, ctx: RuleContext) -> list[PhatHien]:
+        if ctx.resolver is None:
+            return []
+        return stewardship.check(ca, ctx.resolver)
+
+
 def default_rules() -> list["Rule"]:
-    """Đăng ký sáu luật theo thứ tự yếu tố trong engine."""
+    """Đăng ký 14 luật theo thứ tự yếu tố trong engine."""
     return [
         AllergyRule(),
         DuplicateRule(),
-        AntibioticRule(),
+        RouteRule(),
+        MaxDoseRule(),
         InteractionRule(),
+        ToxicityRule(),
+        AntibioticRule(),
         RenalDoseRule(),
+        HepaticRule(),
+        LabThresholdRule(),
+        DrugDiseaseRule(),
         ScheduleRule(),
+        RequiredFieldsRule(),
+        StewardshipRule(),
     ]
 
 

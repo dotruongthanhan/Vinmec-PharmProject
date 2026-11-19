@@ -7,10 +7,12 @@ import sqlite3
 from collections.abc import Callable
 from functools import cached_property
 from pathlib import Path
-from threading import Lock
-from typing import TYPE_CHECKING, cast
+from threading import Lock, RLock
+from typing import TYPE_CHECKING, Any, cast
 
-from app.config.settings import Settings, load_settings
+import psycopg
+
+from app.config.settings import Settings, get_secret, load_settings
 from app.core.errors import ConfigError
 from app.core.interfaces import (
     CaseRepository,
@@ -21,6 +23,7 @@ from app.core.interfaces import (
     Rule,
     VectorStore,
 )
+from app.db.read_pool import read_pool
 from app.kb.interactions import InteractionStore
 from app.kb.resolver import DrugResolver
 from app.providers.bm25_index import Bm25Index
@@ -36,6 +39,31 @@ if TYPE_CHECKING:
 _ROOT = Path(__file__).resolve().parents[1]
 _RULE_CONTEXT_LOCK = Lock()
 _SHARED_RULE_CONTEXT: RuleContext | None = None
+_NOT_FOUND = object()
+
+
+class _LockedCachedProperty(cached_property):
+    """Biến thể cached_property an toàn luồng dựa trên RLock của thực thể."""
+
+    def __get__(self, instance: Any, owner: type[Any] | None = None) -> Any:
+        if instance is None:
+            return self
+        if self.attrname is None:
+            raise TypeError("Thuộc tính đệm chưa được gắn tên trên lớp.")
+        cache = instance.__dict__
+        val = cache.get(self.attrname, _NOT_FOUND)
+        if val is not _NOT_FOUND:
+            return val
+        lock = getattr(instance, "_lock", None)
+        if lock is None:
+            return super().__get__(instance, owner)
+        with lock:
+            val = cache.get(self.attrname, _NOT_FOUND)
+            if val is not _NOT_FOUND:
+                return val
+            val = self.func(instance)
+            cache[self.attrname] = val
+            return val
 
 
 class Container:
@@ -45,6 +73,7 @@ class Container:
 
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
+        self._lock = RLock()
 
     def _resolve(self, kind: str, name: str) -> object:
         """Tra bảng đăng ký mà không rẽ nhánh theo tên nhà cung cấp."""
@@ -53,68 +82,135 @@ class Container:
             raise ConfigError(f"Chưa có cài đặt cho {kind}.provider={name}")
         return factory(self)
 
-    @cached_property
+    @_LockedCachedProperty
     def llm(self) -> LLMClient:
         return cast(LLMClient, self._resolve("llm", self.settings.llm.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def embedder(self) -> Embedder:
         return cast(Embedder, self._resolve("embedding", self.settings.embedding.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def reranker(self) -> Reranker:
         return cast(Reranker, self._resolve("rerank", self.settings.rerank.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def vector_store(self) -> VectorStore:
         return cast(VectorStore, self._resolve("vector_store", self.settings.vector_store.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def keyword_index(self) -> KeywordIndex:
         return Bm25Index()
 
-    @cached_property
+    @_LockedCachedProperty
     def case_repo(self) -> CaseRepository:
         return JsonCaseRepository(_ROOT / self.settings.app.case_dir)
 
-    @cached_property
+    @_LockedCachedProperty
     def renal_rules(self) -> RenalRuleBook:
-        return load_renal_rules(_ROOT / "data/kb/quy_tac_lieu_than.json")
+        return load_renal_rules()
 
-    @cached_property
+    @_LockedCachedProperty
     def rules(self) -> list[Rule]:
         return default_rules()
 
-    @cached_property
+    def _resolve_path(self, raw_path: str) -> Path:
+        raw = Path(raw_path)
+        return raw if raw.is_absolute() else _ROOT / raw
+
+    def _database_url(self) -> str | None:
+        """Đọc chuỗi kết nối từ môi trường cấu hình, trả None nếu thiếu hoặc rỗng."""
+        try:
+            url = get_secret(self.settings.database.url_env).strip()
+        except ConfigError:
+            return None
+        return url or None
+
+    def _use_db(self, path: Path) -> bool:
+        """Chọn đọc DB hay tệp cho một kho theo app.kb_source."""
+        kb_source = self.settings.app.kb_source
+        if kb_source == "db":
+            return True
+        if kb_source == "file":
+            return False
+        if path.is_file():
+            return False
+        return self._database_url() is not None
+
+    @_LockedCachedProperty
     def drug_resolver(self) -> DrugResolver | None:
         """Chỉ mục vắng hoặc hỏng không ngăn các luật khác chạy."""
+        path = self._resolve_path(self.settings.app.tra_cuu)
+        if self._use_db(path):
+            url = self._database_url()
+            if url is None:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được chỉ mục tra cứu từ DB: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                return None
+            try:
+                with read_pool.connection(url) as conn:
+                    return DrugResolver.from_db(conn)
+            except (OSError, psycopg.Error, sqlite3.Error, ValueError, ConfigError) as exc:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được chỉ mục tra cứu từ DB: %s", type(exc).__name__
+                )
+                return None
         try:
-            return DrugResolver.from_index(_ROOT / self.settings.app.tra_cuu)
+            return DrugResolver.from_index(path)
         except (OSError, sqlite3.Error, ValueError) as exc:
             logging.getLogger(__name__).debug(
                 "Không nạp được chỉ mục tra cứu: %s", type(exc).__name__
             )
             return None
 
-    @cached_property
+    @_LockedCachedProperty
     def interaction_store(self) -> InteractionStore | None:
         """Nạp kho chỉ đọc một lần trong vòng đời container."""
+        path = self._resolve_path(self.settings.app.tuong_tac)
+        if self._use_db(path):
+            url = self._database_url()
+            if url is None:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được bảng tương tác từ DB: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                return None
+            try:
+                with read_pool.connection(url) as conn:
+                    return InteractionStore.from_db(conn, db_url=url)
+            except (OSError, psycopg.Error, sqlite3.Error, ValueError, ConfigError) as exc:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được bảng tương tác từ DB: %s", type(exc).__name__
+                )
+                return None
         try:
-            return InteractionStore.from_path(_ROOT / self.settings.app.tuong_tac)
+            return InteractionStore.from_path(path)
         except (OSError, sqlite3.Error, ValueError) as exc:
             logging.getLogger(__name__).debug(
                 "Không nạp được bảng tương tác: %s", type(exc).__name__
             )
             return None
 
-    @cached_property
+    @_LockedCachedProperty
     def rule_context(self) -> RuleContext:
         ctx = RuleContext(self.renal_rules, self.drug_resolver, self.interaction_store)
+        tra_cuu_source = (
+            "tri_thuc.tra_cuu_*"
+            if self._use_db(self._resolve_path(self.settings.app.tra_cuu))
+            else "tra_cuu.sqlite"
+        )
+        tuong_tac_source = (
+            "tri_thuc.ddinter_*"
+            if self._use_db(self._resolve_path(self.settings.app.tuong_tac))
+            else "ddinter.sqlite"
+        )
         missing = [
             name
             for name, dependency in (
-                ("tra_cuu.sqlite", ctx.resolver),
-                ("ddinter.sqlite", ctx.interactions),
+                (tra_cuu_source, ctx.resolver),
+                (tuong_tac_source, ctx.interactions),
             )
             if dependency is None
         ]
@@ -124,7 +220,7 @@ class Container:
             )
         return ctx
 
-    @cached_property
+    @_LockedCachedProperty
     def case_asker(self) -> CaseAsker:
         """Dựng bộ hỏi đáp theo ca từ cấu hình, máy khách LLM, bộ truy xuất và prompt."""
         from app.kb.names import DrugNameIndex
@@ -142,8 +238,21 @@ class Container:
                 raise
 
         corpus_path = _ROOT / "data/kb_curated/chunks.jsonl"
-        retriever = LazyRetrieverFactory(self, corpus_path) if corpus_path.is_file() else None
-        names = DrugNameIndex.load(_ROOT / "data/kb/hoat_chat.json")
+        retriever: LazyRetrieverFactory | None
+        if self._use_db(corpus_path):
+            if self._database_url() is None:
+                logging.getLogger(__name__).warning(
+                    "Không nạp được kho đoạn từ tri_thuc.doan_trich: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                retriever = None
+            else:
+                retriever = LazyRetrieverFactory(self, use_db=True)
+        elif corpus_path.is_file():
+            retriever = LazyRetrieverFactory(self, corpus_path, use_db=False)
+        else:
+            retriever = None
+        names = DrugNameIndex.load()
         raw_prompt = Path(self.settings.prompts.hoi_them)
         prompt_path = raw_prompt if raw_prompt.is_absolute() else _ROOT / raw_prompt
         return CaseAsker(

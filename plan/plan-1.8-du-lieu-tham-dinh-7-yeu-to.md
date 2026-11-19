@@ -310,7 +310,7 @@ Theo plan 1.3 mục 7.3, nhắc lại vì là chỗ dễ sai nhất:
 
 Ký hiệu nghiệm thu: **[L]** = lệnh chạy được, **[K]** = Claude kiểm độc lập (tự tính lại / so trang gốc), **[DS]** = cần dược sĩ.
 
-### 5.0. Bảng tiến độ (cập nhật 19/11, 8 giờ sáng)
+### 5.0. Bảng tiến độ (cập nhật 19/11 tối)
 
 Ký hiệu: ✅ xong và đã qua review · 🔄 đang làm · ⚠️ xong một phần · ⏳ chưa bắt đầu.
 
@@ -325,7 +325,7 @@ Ký hiệu: ✅ xong và đã qua review · 🔄 đang làm · ⚠️ xong một
 | D0.6 | Bộ phân giải tên | T53 | ✅ 117/167 dòng ca phân giải, 47 không áp dụng, 3 chưa nhận diện; API HTTP tra thuốc để sau |
 | D0.7 | Nối nhãn openFDA ↔ trục | — | ✅ Đã có sẵn qua `hoat_chat_ids` của đoạn RAG (53/53 khoá có trên trục); lần kiểm đầu báo nhầm |
 | D0.8 | **Ma trận độ phủ đa nguồn** cho mọi hoạt chất (mục 3.2.3, 3.2.7) | T56 | ✅ `python -m app.kb.coverage report`; ca 42/48 đủ nguồn; toàn trục: nhãn FDA 53/1.255, DDInter 776, ATC 980 |
-| D0.9 | Đẩy bộ tra cuối lên Supabase | T52 | ⏳ Chờ người dùng đồng ý ghi DB |
+| D0.9 | Đẩy bộ tra cuối lên DB (AWS RDS) | T75 | ✅ 19/11: `tri_thuc.tra_cuu_*` (54.910 thuốc, 1.255 hoạt chất) khớp 100%; app đọc từ DB |
 | D1.1 | Cào DDInter cấp thuốc | T51 | ✅ 1.971 thuốc, 0 lỗi |
 | D1.2 | Chi tiết cặp ưu tiên | T51 | ✅ 27.936 trang (hai bên + một bên ưu tiên), 0 lỗi phân tích, lệch đếm / đối xứng 0; bảng dựng lại có 27.644 cặp kèm hậu quả, xử trí |
 | D1.3 | Cào toàn bộ cặp | — | ⏳ ~235k trang, chạy nền nhiều ngày |
@@ -337,9 +337,13 @@ Ký hiệu: ✅ xong và đã qua review · 🔄 đang làm · ⚠️ xong một
 | R01 | **Review tổng D0 + D1** | — | ✅ 19/11 sáng: backend 1.254 qua, web 293 qua, tsc, ruff; endpoint thật 3 ca; bất biến 'không phát hiện' 0 vi phạm |
 | D2 | Trùng hoạt chất qua bộ phân giải + trùng nhóm điều trị theo ATC | T57 | ✅ API 66 ca: chỉ HS-014…017 trùng nhóm, đúng mức; Oxy/Ringer/Oresol → không đủ dữ liệu; 1.301 test qua; [DS] chờ duyệt bảng nhóm |
 | D3 | Dị ứng, dị ứng chéo | T60, T63 | ✅ Dữ liệu (T60: 26 nhóm, 57 nguồn) + luật (T63): API 66 ca → 5 ca dị ứng đều báo, 3 ca chưa khai thác → không đủ dữ liệu; sửa bộ phân giải Cephalexin/Paracetamol; [DS] chờ duyệt bảng chéo |
-| D4 | Thận, gan, xét nghiệm, thuốc–bệnh | T65 | 🔄 Dữ liệu đang làm (sub Sonnet); ⏸️ Child-Pugh chờ công thức MDCalc |
-| D5 | Đường dùng, liều tối đa | T66 | 🔄 Dữ liệu đang làm (sub Sonnet); kiểm chỉ định dời sang plan 1.9 |
-| D6–D7 | Độc tính, lịch dùng | — | ⏳ Chưa bắt đầu |
+| D4 | Thận, gan, xét nghiệm, thuốc–bệnh | T65, T65-T66-ht, T67, T67-T68-fix-1 | ✅ (chờ [DS]) **Dữ liệu**: thận 1 quy tắc duyệt + 17 chờ duyệt (CrCl phủ kín, 0 chồng / 0 hở), gan 24, xét nghiệm 15, thuốc–bệnh 300 cặp → ICD-10; 103/103 trích khớp nhãn. **Luật** đã nối engine (T69): DEMO-02 meropenem CrCl 16 `nghiem_trong`, HS-027/058 metformin eGFR < 30, thuốc–bệnh DDInter 7 ca. ⏸️ Child-Pugh: công thức đã cài (T73) nhưng ca chưa có cổ trướng, bệnh não gan, albumin |
+| D5 | Đường dùng, liều tối đa | T66, T65-T66-ht, T68, T67-T68-fix-1 | ✅ (chờ [DS]) **Dữ liệu**: đường dùng 62 dòng / 37 hoạt chất, liều tối đa 40 dòng + 21 định nghĩa đối tượng. **Luật** đã nối: đủ 3 tình huống plan (levofloxacin uống kê tiêm `nghiem_trong`; HS-019 paracetamol 6.000 > 4.000 mg/ngày, xem được trên web; gentamicin chỉ có trần theo điều kiện + thiếu cân nặng → `khong_du_du_lieu` có `can_nang`). Kiểm chỉ định dời sang plan 1.9 |
+| D6 | Độc tính | T70, T71, T71-fix-1 | ✅ (chờ [DS]) **Dữ liệu** (T70): độc thận 7, kéo dài QT 4, khoảng điều trị hẹp 5, LiverTox 38; 59/59 trích khớp. **Luật** đã nối: HS-028 methotrexat + ibuprofen `nghiem_trong`, HS-029 valproat ALT 280, 7 dòng chưa theo dõi nồng độ; gentamicin + vancomycin và 2 thuốc QT có ca tổng hợp trong test (66 ca không có) |
+| D7 | Lịch dùng, kháng sinh quản lý, trường bắt buộc | T70, T72 | ✅ (chờ [DS]) **Dữ liệu**: QĐ 5631 (bản sao thứ cấp) Nhóm 1 phê duyệt trước 20, Nhóm 2 giám sát 12, 13 tên chưa ánh xạ. **Luật** đã nối: 7 kháng sinh Nhóm 1 chưa thấy hội chẩn (DEMO-02 meropenem…); thiếu trường bắt HS-040. Chưa có ngưỡng thời gian kháng sinh (chưa nguồn); ngoại lệ carbapenem (***) chưa mã hoá |
+| T69 | Nối luật D4–D7 vào `engine.py` / `registry.py`, kháng sinh đồ → yếu tố 6 | T69 | ✅ API thật 66 ca: 0 lỗi luật, 0 "đạt" khi thiếu dữ liệu, đủ 7 yếu tố có luật; web 5173 (backend 8000 mới) HS-019 hiện "14 luật đã chạy", yếu tố 3 "Có vấn đề" vượt liều paracetamol. Gold đổi 3 dòng kháng sinh đồ (DEMO-04, HS-048, HS-051) sang yếu tố 6 |
+| CT1 | Công thức đợt 1 (MDCalc làm danh mục, bài gốc làm nguồn) | T73 | ✅ Child-Pugh, QTc ×5, canxi hiệu chỉnh; 6 công thức cũ khớp MDCalc; danh mục `config/kb/cong_thuc.yaml` 14 mục. Chưa nối luật (ca thiếu albumin, canxi, QT, cổ trướng, não gan). Cào đầy đủ chờ MDCalc cho phép |
+| DB1 | **Toàn bộ dữ liệu plan 1.8 lên AWS RDS; app chạy chỉ bằng DB** | T75–T78 | ✅ 19/11: D0 `tra_cuu_*`, D1 `ddinter_*` (tra theo cặp), D1–D7 bảng luật quan hệ (24 bảng, dựng lại == tệp), đoạn nguồn + vector, hồ sơ/y lệnh, phản hồi, hỏi đáp, kết quả thẩm định. Ẩn mọi thư mục dữ liệu: 66 ca 577 nhận định khớp 100%. Còn: metformin cần tự tính eGFR; bảng cũ plan 1.6 chưa dọn |
 
 #### 5.0.1. Quy tắc chuyển đợt (người dùng chốt 19/11)
 

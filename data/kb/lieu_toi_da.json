@@ -1,0 +1,3374 @@
+{
+  "ten": "Liều tối đa theo nhãn FDA cho hoạt chất trong 66 ca (plan 1.8 đợt D5)",
+  "phien_ban": "D5-v2",
+  "ngay": "2026-11-19",
+  "trang_thai": "cho_duoc_si_duyet",
+  "huong_giai_thich": {
+    "nguyen_tac": "Chỉ lấy số nhãn ghi rõ. Không suy từ liều thường dùng. Hoạt chất nhãn không ghi tối đa nằm ở khong_ghi_toi_da kèm lý do, không để số mặc định.",
+    "loai_gioi_han": "toi_da_ro: nhãn dùng \"maximum\", \"not to exceed\", \"should not exceed\"; tran_up_to: nhãn viết \"up to X\" (trần mềm, nên xử lý mức can_xem); gioi_han_thiet_bi: giới hạn của bút tiêm, không dùng để cảnh báo lâm sàng.",
+    "theo_kg": "theo_kg có lan_mg_kg và/hoặc ngay_mg_kg; liều theo kg cần cân nặng, thiếu cân nặng thì khong_du_du_lieu. lieu_toi_da_lan/ngay là trần tuyệt đối khi nhãn có ghi.",
+    "dieu_kien": "doi_tuong và dieu_kien là điều kiện áp dụng (tuổi, cân nặng, thận, thuốc dùng cùng); luật chỉ so khi biết đủ điều kiện, không thì dùng mức tối đa chung nếu có.",
+    "so_voi_ca": "lieu_ngay = lieu_moi_lan × so_lan_moi_ngay (cần đủ hai trường). Dòng thuốc theo nhu cầu hoặc không có so_lan_moi_ngay: khong_du_du_lieu."
+  },
+  "nhom": [
+    {
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach+uong|nguoi_lon_va_thieu_nien_tu_50kg",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_va_thieu_nien_tu_50kg",
+      "dieu_kien": "Người lớn và thiếu niên từ 50 kg trở lên; nhãn ghi 4.000 mg/ngày tính cho mọi đường dùng và mọi thuốc chứa paracetamol",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 1000,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 4000,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": "Nhãn là dạng tiêm truyền; câu nhãn nêu rõ mức 4 g/ngày gồm mọi đường dùng, nên dùng cả cho đường uống",
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "ACETAMINOPHEN",
+        "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "phien_ban_nguon": "20260924",
+        "tep": "data/kb_sources/openfda/acetaminophen.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "1,000 mg every 6 hours or 650 mg every 4 hours, with a maximum single-dose of Acetaminophen Injection of 1,000 mg, a minimum dosing interval of 4 hours, and a maximum daily dose of acetaminophen of 4,000 mg per day (includes all routes of administration and all acetaminophen-containing products including combination products).",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc42ab17-cd30-4d1a-e053-2995a90a86ea\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach+uong|nguoi_lon_va_thieu_nien_duoi_50kg",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_va_thieu_nien_duoi_50kg",
+      "dieu_kien": "Người lớn và thiếu niên dưới 50 kg; nhãn ghi 75 mg/kg/ngày cho mọi đường dùng",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 15,
+        "ngay_mg_kg": 75
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            },
+            {
+              "don_vi_ca": "mg/kg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": "Nhãn là dạng tiêm truyền; câu nhãn nêu rõ mức này gồm mọi đường dùng, nên dùng cả cho đường uống",
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "ACETAMINOPHEN",
+        "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "phien_ban_nguon": "20260924",
+        "tep": "data/kb_sources/openfda/acetaminophen.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Adults and adolescents weighing under 50 kg: the recommended dosage of Acetaminophen Injection is 15 mg/kg every 6 hours or 12.5 mg/kg every 4 hours, with a maximum single-dose of Acetaminophen Injection of 15 mg/kg, a minimum dosing interval of 4 hours, and a maximum daily dose of acetaminophen of 75 mg/kg per day (includes all routes of administration and all acetaminophen-containing products including combination products).",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc42ab17-cd30-4d1a-e053-2995a90a86ea\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach|tre_em_2_12_tuoi",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "tre_em_2_12_tuoi",
+      "dieu_kien": "Trẻ 2 đến 12 tuổi",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 15,
+        "ngay_mg_kg": 75
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            },
+            {
+              "don_vi_ca": "mg/kg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "ACETAMINOPHEN",
+        "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "phien_ban_nguon": "20260924",
+        "tep": "data/kb_sources/openfda/acetaminophen.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Children Children 2 to 12 years of age: the recommended dosage of Acetaminophen Injection is 15 mg/kg every 6 hours or 12.5 mg/kg every 4 hours, with a maximum single-dose of Acetaminophen Injection of 15 mg/kg, a minimum dosing interval of 4 hours, and a maximum daily dose of acetaminophen of 75 mg/kg per day.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc42ab17-cd30-4d1a-e053-2995a90a86ea\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach|so_sinh_tu_32_tuan",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "so_sinh_tu_32_tuan",
+      "dieu_kien": "Sơ sinh (kể cả non tháng từ 32 tuần) đến 28 ngày tuổi",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 12.5,
+        "ngay_mg_kg": 50
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            },
+            {
+              "don_vi_ca": "mg/kg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "ACETAMINOPHEN",
+        "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "phien_ban_nguon": "20260924",
+        "tep": "data/kb_sources/openfda/acetaminophen.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Neonates, including premature neonates born at ≥ 32 weeks gestational age, up to 28 days chronological age: the recommended dosage of acetaminophen is 12.5 mg/kg every 6 hours, to a maximum daily dose of acetaminophen of 50 mg/kg per day, with a minimum dosing interval of 6 hours.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc42ab17-cd30-4d1a-e053-2995a90a86ea\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach|tre_nhu_nhi_29_ngay_2_tuoi",
+      "hoat_chat_ids": [
+        "acetaminophen"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "tre_nhu_nhi_29_ngay_2_tuoi",
+      "dieu_kien": "Trẻ 29 ngày đến 2 tuổi",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 15,
+        "ngay_mg_kg": 60
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            },
+            {
+              "don_vi_ca": "mg/kg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "ACETAMINOPHEN",
+        "set_id": "dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "phien_ban_nguon": "20260924",
+        "tep": "data/kb_sources/openfda/acetaminophen.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Infants 29 days to 2 years of age: the recommended dosage of acetaminophen is 15 mg/kg every 6 hours, to a maximum daily dose of acetaminophen of 60 mg/kg per day, with a minimum dosing interval of 6 hours.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc42ab17-cd30-4d1a-e053-2995a90a86ea",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc42ab17-cd30-4d1a-e053-2995a90a86ea\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "amlodipine|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "amlodipine"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Tăng huyết áp",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 10,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 10,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Amlodipine Besylate",
+        "set_id": "ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+        "phien_ban_nguon": "20261109",
+        "tep": "data/kb_sources/openfda/amlodipine.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "The usual initial antihypertensive oral dose of Amlodipine besylate tablets is 5 mg once daily, and the maximum dose is 10 mg once daily.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"ac0dd8fb-ebe1-4d02-bd0d-4f979c6e3608\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "meropenem|tiem_tinh_mach+truyen_tinh_mach|tre_em_tu_3_thang",
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "tre_em_tu_3_thang",
+      "dieu_kien": "Trẻ từ 3 tháng; 2 g mỗi 8 giờ là trần theo nhãn (viêm màng não 40 mg/kg)",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 2,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": [
+          10,
+          20,
+          40
+        ]
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "MEROPENEM",
+        "set_id": "31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "phien_ban_nguon": "20261102",
+        "tep": "data/kb_sources/openfda/meropenem.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "For pediatric patients 3 months of age and older, the Meropenem for Injection dose is 10 mg/kg, 20 mg/kg or 40 mg/kg every 8 hours (maximum dose is 2 grams every 8 hours)",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=31dd2160-7dbd-51fa-e054-00144ff88e88",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"31dd2160-7dbd-51fa-e054-00144ff88e88\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": null,
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 4,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Ceftriaxone",
+        "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+        "phien_ban_nguon": "20260930",
+        "tep": "data/kb_sources/openfda/ceftriaxone.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "The usual adult daily dose is 1 to 2 grams given once a day (or in equally divided doses twice a day) depending on the type and severity of infection. The total daily dose should not exceed 4 grams.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|tre_em",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "tre_em",
+      "dieu_kien": "Nhiễm khuẩn da và cấu trúc da",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 2,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Ceftriaxone",
+        "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+        "phien_ban_nguon": "20260930",
+        "tep": "data/kb_sources/openfda/ceftriaxone.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "For the treatment of skin and skin structure infections, the recommended total daily dose is 50 to 75 mg/kg given once a day (or in equally divided doses twice a day). The total daily dose should not exceed 2 grams.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|tre_em",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "tre_em",
+      "dieu_kien": "Nhiễm khuẩn nặng khác ngoài viêm màng não",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 2,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Ceftriaxone",
+        "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+        "phien_ban_nguon": "20260930",
+        "tep": "data/kb_sources/openfda/ceftriaxone.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "For the treatment of serious miscellaneous infections other than meningitis, the recommended total daily dose is 50 to 75 mg/kg, given in divided doses every 12 hours. The total daily dose should not exceed 2 grams.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|tre_em",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "tre_em",
+      "dieu_kien": "Viêm màng não: liều đầu 100 mg/kg tối đa 4 g, sau đó 100 mg/kg/ngày tối đa 4 g/ngày",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 4,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 4,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 100,
+        "ngay_mg_kg": 100
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Ceftriaxone",
+        "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+        "phien_ban_nguon": "20260930",
+        "tep": "data/kb_sources/openfda/ceftriaxone.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "In the treatment of meningitis, it is recommended that the initial therapeutic dose be 100 mg/kg (not to exceed 4 grams). Thereafter, a total daily dose of 100 mg/‌kg/‌day (not to exceed 4 grams daily) is recommended.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ceftriaxone|tiem_bap|tre_em",
+      "hoat_chat_ids": [
+        "ceftriaxone"
+      ],
+      "duong_dung": [
+        "tiem_bap"
+      ],
+      "doi_tuong": "tre_em",
+      "dieu_kien": "Viêm tai giữa cấp, liều duy nhất tiêm bắp",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 1,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 50
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Ceftriaxone",
+        "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+        "phien_ban_nguon": "20260930",
+        "tep": "data/kb_sources/openfda/ceftriaxone.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "For the treatment of acute bacterial otitis media, a single intramuscular dose of 50 mg/kg (not to exceed 1 gram) is recommended",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "losartan|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "losartan"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": null,
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 100,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 100,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Losartan Potassium",
+        "set_id": "16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "phien_ban_nguon": "20261109",
+        "tep": "data/kb_sources/openfda/losartan.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "The dosage can be increased to a maximum dose of 100 mg once daily as needed to control blood pressure",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16a6a582-eb4d-41bc-9d49-fc1d4117b29a",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"16a6a582-eb4d-41bc-9d49-fc1d4117b29a\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levetiracetam|uong|nguoi_lon_tu_16_tuoi",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_tu_16_tuoi",
+      "dieu_kien": "Động kinh cục bộ",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 3000,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Levetiracetam",
+        "set_id": "46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "phien_ban_nguon": "20261106",
+        "tep": "data/kb_sources/openfda/levetiracetam.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Adults 16 Years of Age and Older Initiate treatment with a daily dose of 1000 mg/day, given as twice-daily dosing (500 mg twice daily). Additional dosing increments may be given (1000 mg/day additional every 2 weeks) to a maximum recommended daily dose of 3000 mg.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"46852061-e59a-4a8c-aba0-ce4c7887f366\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "levetiracetam|uong|tre_em_tren_40kg",
+      "hoat_chat_ids": [
+        "levetiracetam"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "tre_em_tren_40kg",
+      "dieu_kien": "Trẻ trên 40 kg dùng viên",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 3000,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Levetiracetam",
+        "set_id": "46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "phien_ban_nguon": "20261106",
+        "tep": "data/kb_sources/openfda/levetiracetam.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "For levetiracetam tablet dosing in pediatric patients weighing more than 40 kg, initiate treatment with a daily dose of 1000 mg/day given as twice daily dosing (500 mg twice daily). Increase the daily dose every 2 weeks by increments of 1000 mg/day to a maximum recommended daily dose of 3000 mg (1500 mg twice daily).",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46852061-e59a-4a8c-aba0-ce4c7887f366",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"46852061-e59a-4a8c-aba0-ce4c7887f366\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "metformin|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Viên metformin thường (nhãn trong kho); dạng phóng thích kéo dài có mức riêng, chưa có nhãn",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 2550,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Metformin Hydrochloride",
+        "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+        "phien_ban_nguon": "20261109",
+        "tep": "data/kb_sources/openfda/metformin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Increase the dose in increments of 500 mg weekly or 850 mg every 2 weeks on the basis of glycemic control and tolerability, up to a maximum dose of 2,550 mg per day, given in divided doses.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0230a3c3-34cf-478b-88c3-4d96e5300018\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "metformin|uong|tre_em_tu_10_tuoi",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "tre_em_tu_10_tuoi",
+      "dieu_kien": null,
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 2000,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Metformin Hydrochloride",
+        "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+        "phien_ban_nguon": "20261109",
+        "tep": "data/kb_sources/openfda/metformin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Increase dosage in increments of 500 mg weekly on the basis of glycemic control and tolerability, up to a maximum of 2,000 mg per day, given in divided doses twice daily.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0230a3c3-34cf-478b-88c3-4d96e5300018\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "enalapril|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Tăng huyết áp",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 40,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "ENALAPRIL MALEATE",
+        "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+        "phien_ban_nguon": "20261009",
+        "tep": "data/kb_sources/openfda/enalapril.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "The dosage may be titrated upward until blood pressure is controlled or to a maximum of 40 mg daily.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"d6af58f2-4129-45fe-a510-03b7403495ac\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "enoxaparin|tiem_duoi_da|nguoi_lon_duoi_75_tuoi",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "duong_dung": [
+        "tiem_duoi_da"
+      ],
+      "doi_tuong": "nguoi_lon_duoi_75_tuoi",
+      "dieu_kien": "NMCT cấp ST chênh lên; trần 100 mg chỉ cho hai liều tiêm dưới da đầu",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 100,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 1
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Enoxaparin Sodium Injection,USP",
+        "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "phien_ban_nguon": "20261015",
+        "tep": "data/kb_sources/openfda/enoxaparin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "SUBCUTANEOUS"
+        ],
+        "trich_nguyen_van": "The recommended dose of enoxaparin sodium injection is a single intravenous bolus of 30 mg plus a 1 mg/kg subcutaneous dose followed by 1 mg/kg administered subcutaneously every 12 hours (maximum 100 mg for the first two doses only",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"1e0ac5e2-329c-d0a8-e063-6394a90afba8\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "enoxaparin|tiem_duoi_da|nguoi_lon_tu_75_tuoi",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "duong_dung": [
+        "tiem_duoi_da"
+      ],
+      "doi_tuong": "nguoi_lon_tu_75_tuoi",
+      "dieu_kien": "NMCT cấp ST chênh lên, từ 75 tuổi; trần 75 mg chỉ cho hai liều đầu",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 75,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 0.75
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Enoxaparin Sodium Injection,USP",
+        "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "phien_ban_nguon": "20261015",
+        "tep": "data/kb_sources/openfda/enoxaparin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "SUBCUTANEOUS"
+        ],
+        "trich_nguyen_van": "Initiate dosing with 0.75 mg/kg subcutaneously every 12 hours (maximum 75 mg for the first two doses only",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"1e0ac5e2-329c-d0a8-e063-6394a90afba8\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_duoi_65_tuoi",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "nguoi_lon_duoi_65_tuoi",
+      "dieu_kien": "Dưới 65 tuổi, chức năng thận bình thường, từ 50 kg",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 120,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "KETOROLAC TROMETHAMINE",
+        "set_id": "30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+        "phien_ban_nguon": "20260213",
+        "tep": "data/kb_sources/openfda/ketorolac.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Patients <65 years of age: The recommended dose is 30 mg ketorolac tromethamine injection every 6 hours. The maximum daily dose for these populations should not exceed 120 mg.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"30a3ca20-8f98-478c-8a6b-aa617f0a17a3\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "ketorolac|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_tu_65_tuoi_suy_than_duoi_50kg",
+      "hoat_chat_ids": [
+        "ketorolac"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "nguoi_lon_tu_65_tuoi_suy_than_duoi_50kg",
+      "dieu_kien": "Từ 65 tuổi, suy thận hoặc dưới 50 kg",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 60,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "KETOROLAC TROMETHAMINE",
+        "set_id": "30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+        "phien_ban_nguon": "20260213",
+        "tep": "data/kb_sources/openfda/ketorolac.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "For patients ≥65 years of age, renally impaired patients (see WARNINGS ), and patients less than 50 kg (110 lbs): The recommended dose is 15 mg ketorolac tromethamine injection every 6 hours. The maximum daily dose for these populations should not exceed 60 mg.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"30a3ca20-8f98-478c-8a6b-aa617f0a17a3\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "sulfamethoxazole+trimethoprim|uong|tre_em",
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "tre_em",
+      "dieu_kien": "Trẻ em, dự phòng theo nhãn (3 ngày liên tiếp mỗi tuần): 1600 mg sulfamethoxazole và 320 mg trimethoprim mỗi ngày",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 1600,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": false,
+          "ly_do": "đơn vị trong ca (viên) khác loại với đơn vị nhãn; không tự quy đổi"
+        }
+      ],
+      "ghi_chu": "Trần theo nhãn là cặp hai thành phần; số ghi ở lieu_toi_da_ngay là của sulfamethoxazole, trimethoprim là 320 mg",
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Sulfamethoxazole and Trimethoprim",
+        "set_id": "3ef62512-0dc3-4821-9b60-6b375841c4c0",
+        "phien_ban_nguon": "20261014",
+        "tep": "data/kb_sources/openfda/sulfamethoxazole_and_trimethoprim.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Children: For children, the recommended dose is 750 mg/m 2 /day sulfamethoxazole with 150 mg/m 2 /day trimethoprim given orally in equally divided doses twice a day, on 3 consecutive days per week. The total daily dose should not exceed 1600 mg sulfamethoxazole and 320 mg trimethoprim.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef62512-0dc3-4821-9b60-6b375841c4c0",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"3ef62512-0dc3-4821-9b60-6b375841c4c0\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "vancomycin|uong|nguoi_lon_va_tre_em",
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_va_tre_em",
+      "dieu_kien": "Đường uống (viêm đại tràng do C. difficile theo nhãn); trẻ em 40 mg/kg/ngày và cũng không quá 2 g/ngày",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 2,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "ngay_mg_kg": 40
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi": 1.0
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "g",
+              "nhan_voi_can_nang_kg": 0.001
+            },
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Vancomycin Hydrochloride",
+        "set_id": "b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+        "phien_ban_nguon": "20261008",
+        "tep": "data/kb_sources/openfda/vancomycin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "The usual adult total daily dosage is 500 mg to 2 g given in 3 or 4 divided doses for 7 to 10 days. The total daily dose in children is 40 mg/kg of body weight in 3 or 4 divided doses for 7 to 10 days. The total daily dosage should not exceed 2 g.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b79d9671-02dd-40e2-97fb-a6c7be85cda1",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"b79d9671-02dd-40e2-97fb-a6c7be85cda1\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "clarithromycin|uong|tre_em",
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "tre_em",
+      "dieu_kien": "Trẻ em, nhiễm và dự phòng nhiễm mycobacteria",
+      "loai_gioi_han": "tran_up_to",
+      "lieu_toi_da_lan": {
+        "gia_tri": 500,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "lan_mg_kg": 7.5
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Clarithromycin",
+        "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "phien_ban_nguon": "20261109",
+        "tep": "data/kb_sources/openfda/clarithromycin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "For treatment and prophylaxis of mycobacterial infections in pediatric patients, the recommended dose is 7.5 mg/kg every 12 hours up to 500 mg every 12 hours.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0be243c6-de02-45dd-8210-cab1bbc8dfa7\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "simvastatin|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": null,
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 40,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 40,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Simvastatin",
+        "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "phien_ban_nguon": "20261103",
+        "tep": "data/kb_sources/openfda/simvastatin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Maximum recommended dosage is simvastatin 40 mg once daily.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c85d6d02-6cf6-4995-a590-cfca302ea0c9\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "simvastatin|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Dùng cùng amiodaron, amlodipin hoặc ranolazin",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 20,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 20,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": [
+        "amiodarone",
+        "amlodipine",
+        "ranolazine"
+      ],
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Simvastatin",
+        "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "phien_ban_nguon": "20261103",
+        "tep": "data/kb_sources/openfda/simvastatin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Patients taking Amiodarone, Amlodipine, or Ranolazine Do not exceed simvastatin 20 mg once daily.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c85d6d02-6cf6-4995-a590-cfca302ea0c9\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "simvastatin|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "simvastatin"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Dùng cùng verapamil, diltiazem hoặc dronedaron",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 10,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 10,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": [
+        "verapamil",
+        "diltiazem",
+        "dronedarone"
+      ],
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Simvastatin",
+        "set_id": "c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "phien_ban_nguon": "20261103",
+        "tep": "data/kb_sources/openfda/simvastatin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Patients taking Verapamil, Diltiazem, or Dronedarone Do not exceed simvastatin 10 mg once daily.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c85d6d02-6cf6-4995-a590-cfca302ea0c9",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c85d6d02-6cf6-4995-a590-cfca302ea0c9\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "fluconazole|uong+tiem_tinh_mach+truyen_tinh_mach|nguoi_lon",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "duong_dung": [
+        "uong",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Nhãn viết \"up to 400 mg/day may be used\"; chưa phải câu \"tối đa\"",
+      "loai_gioi_han": "tran_up_to",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 400,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Fluconazole",
+        "set_id": "c041227b-dab6-4c29-ab59-d31993d524b2",
+        "phien_ban_nguon": "20260817",
+        "tep": "data/kb_sources/openfda/fluconazole.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Doses up to 400 mg/day may be used, based on medical judgment of the patient's response to therapy.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c041227b-dab6-4c29-ab59-d31993d524b2",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c041227b-dab6-4c29-ab59-d31993d524b2\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "fluconazole|uong+tiem_tinh_mach+truyen_tinh_mach|tre_em_tu_3_thang",
+      "hoat_chat_ids": [
+        "fluconazole"
+      ],
+      "duong_dung": [
+        "uong",
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "tre_em_tu_3_thang",
+      "dieu_kien": "Trẻ từ 3 tháng, nhiễm Candida hệ thống: 12 mg/kg mỗi ngày, không quá 400 mg",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 400,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "ngay_mg_kg": 12
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        },
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Fluconazole",
+        "set_id": "c041227b-dab6-4c29-ab59-d31993d524b2",
+        "phien_ban_nguon": "20260817",
+        "tep": "data/kb_sources/openfda/fluconazole.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "followed by 12-mg/kg once daily (not to exceed 400 mg).",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c041227b-dab6-4c29-ab59-d31993d524b2",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"c041227b-dab6-4c29-ab59-d31993d524b2\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "gentamicin|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_nhiem_trung_de_doa_tinh_mang",
+      "hoat_chat_ids": [
+        "gentamicin"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "nguoi_lon_nhiem_trung_de_doa_tinh_mang",
+      "dieu_kien": "Nhiễm khuẩn đe dọa tính mạng; chia 3 hoặc 4 liều bằng nhau. Cần cân nặng để so sánh",
+      "loai_gioi_han": "tran_up_to",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "ngay_mg_kg": 5
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Gentamicin",
+        "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+        "phien_ban_nguon": "20261102",
+        "tep": "data/kb_sources/openfda/gentamicin.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "For patients with life-threatening infections, dosages up to 5 mg/kg/day may be administered in three or four equal doses.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"84f6eb1c-a287-489a-8c3e-aa5954cf1992\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "methotrexate|tiem_tinh_mach+truyen_tinh_mach|sarcoma_xuong_nguoi_lon_va_tre_em",
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "sarcoma_xuong_nguoi_lon_va_tre_em",
+      "dieu_kien": "Sarcoma xương: 12 g/m² truyền tĩnh mạch trong 4 giờ, tối đa 20 g mỗi liều",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 20,
+        "don_vi": "g"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "g",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1000.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Methotrexate",
+        "set_id": "0d63ba29-b692-41b4-87e8-351265c8273f",
+        "phien_ban_nguon": "20261027",
+        "tep": "data/kb_sources/openfda_d5/methotrexate_injection.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS",
+          "SUBCUTANEOUS",
+          "INTRATHECAL"
+        ],
+        "trich_nguyen_van": "The recommended dosage of Methotrexate Injection is typically 12 g/m 2 (maximum 20 g/dose)",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0d63ba29-b692-41b4-87e8-351265c8273f",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0d63ba29-b692-41b4-87e8-351265c8273f\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "valproic_acid|uong|nguoi_lon_va_tre_em",
+      "hoat_chat_ids": [
+        "valproic_acid"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_va_tre_em",
+      "dieu_kien": "Động kinh (dạng uống)",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "ngay_mg_kg": 60
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Valproic Acid",
+        "set_id": "1286ab49-fa34-488e-e063-6394a90ad582",
+        "phien_ban_nguon": "20240527",
+        "tep": "data/kb_sources/openfda_d5/valproic_acid_oral.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "The maximum recommended dosage is 60 mg/kg/day.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1286ab49-fa34-488e-e063-6394a90ad582",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"1286ab49-fa34-488e-e063-6394a90ad582\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "valproic_acid|tiem_tinh_mach+truyen_tinh_mach|nguoi_lon_va_tre_em",
+      "hoat_chat_ids": [
+        "valproic_acid"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach"
+      ],
+      "doi_tuong": "nguoi_lon_va_tre_em",
+      "dieu_kien": "Động kinh (dạng tiêm truyền)",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "ngay_mg_kg": 60
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": true,
+          "can_can_nang": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi_can_nang_kg": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Valproate Sodium",
+        "set_id": "8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "phien_ban_nguon": "20260312",
+        "tep": "data/kb_sources/openfda/valproate.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "The maximum recommended dosage is 60 mg/kg/day.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8d5fc1c1-d3c0-497e-971b-6c4dba9a3fad\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "tramadol|uong|nguoi_lon",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": null,
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 400,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Tramadol Hydrochloride",
+        "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "phien_ban_nguon": "20261103",
+        "tep": "data/kb_sources/openfda/tramadol.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Do not administer tramadol hydrochloride tablets at a dose exceeding 400 mg per day.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"ccb3e0f9-57db-40bc-84d2-b66a827a5b96\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "tramadol|uong|nguoi_lon_clcr_duoi_30",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_clcr_duoi_30",
+      "dieu_kien": "CrCl dưới 30 mL/phút; giãn khoảng cách liều 12 giờ",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 200,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Tramadol Hydrochloride",
+        "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "phien_ban_nguon": "20261103",
+        "tep": "data/kb_sources/openfda/tramadol.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "In all patients with creatinine clearance less than 30 mL/min, it is recommended that the dosing interval of tramadol hydrochloride tablets be increased to 12 hours, with a maximum daily dose of 200 mg.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"ccb3e0f9-57db-40bc-84d2-b66a827a5b96\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "tramadol|uong|nguoi_lon_tren_75_tuoi",
+      "hoat_chat_ids": [
+        "tramadol"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_tren_75_tuoi",
+      "dieu_kien": null,
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": {
+        "gia_tri": 300,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Tramadol Hydrochloride",
+        "set_id": "ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "phien_ban_nguon": "20261103",
+        "tep": "data/kb_sources/openfda/tramadol.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "Do not exceed a total dose of 300 mg/day in patients over 75 years old.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ccb3e0f9-57db-40bc-84d2-b66a827a5b96",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"ccb3e0f9-57db-40bc-84d2-b66a827a5b96\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "insulin_glargine|tiem_duoi_da|nguoi_lon",
+      "hoat_chat_ids": [
+        "insulin_glargine"
+      ],
+      "duong_dung": [
+        "tiem_duoi_da"
+      ],
+      "doi_tuong": "nguoi_lon",
+      "dieu_kien": "Giới hạn một lần bấm của bút tiêm, không phải liều tối đa lâm sàng",
+      "loai_gioi_han": "gioi_han_thiet_bi",
+      "lieu_toi_da_lan": {
+        "gia_tri": 80,
+        "don_vi": "units"
+      },
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "units",
+          "quy_doi_duoc": false,
+          "ly_do": "đơn vị trong ca (mg) khác loại với đơn vị nhãn; không tự quy đổi"
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "BASAGLAR KwikPen",
+        "set_id": "0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae",
+        "phien_ban_nguon": "20260616",
+        "tep": "data/kb_sources/openfda/insulin_glargine.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "SUBCUTANEOUS"
+        ],
+        "trich_nguyen_van": "The BASAGLAR prefilled pens each dials in 1 unit increments and delivers a maximum dose of 80 units per injection.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0ad21db3-2b1c-4ed9-a687-bdd6a74d0aae\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "colistimethate|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_va_tre_em",
+      "hoat_chat_ids": [
+        "colistimethate"
+      ],
+      "duong_dung": [
+        "tiem_tinh_mach",
+        "truyen_tinh_mach",
+        "tiem_bap"
+      ],
+      "doi_tuong": "nguoi_lon_va_tre_em",
+      "dieu_kien": "Chức năng thận bình thường; tính theo hoạt tính colistin base (CBA)",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": null,
+      "lieu_toi_da_ngay": null,
+      "lieu_toi_da_tuan": null,
+      "theo_kg": {
+        "ngay_mg_kg": 5
+      },
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": false,
+          "ly_do": "đơn vị trong ca (triệu đơn vị) khác loại với đơn vị nhãn; không tự quy đổi"
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "COLISTIMETHATE SODIUM",
+        "set_id": "6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+        "phien_ban_nguon": "20261104",
+        "tep": "data/kb_sources/openfda/colistimethate.json",
+        "muc_nhan": "warnings",
+        "route_goc_cua_nhan": [
+          "INTRAMUSCULAR",
+          "INTRAVENOUS"
+        ],
+        "trich_nguyen_van": "Maximum daily dose calculated from colistin base activity should not exceed 5 mg/kg/day with normal renal function.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6a335659-03b0-4a2d-9cd4-7dcf7da96fe6",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"6a335659-03b0-4a2d-9cd4-7dcf7da96fe6\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    },
+    {
+      "ma_dong": "esomeprazole|uong|nguoi_lon_child_pugh_c",
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "duong_dung": [
+        "uong"
+      ],
+      "doi_tuong": "nguoi_lon_child_pugh_c",
+      "dieu_kien": "Suy gan nặng Child-Pugh C",
+      "loai_gioi_han": "toi_da_ro",
+      "lieu_toi_da_lan": {
+        "gia_tri": 20,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_ngay": {
+        "gia_tri": 20,
+        "don_vi": "mg"
+      },
+      "lieu_toi_da_tuan": null,
+      "theo_kg": null,
+      "thuoc_dung_cung_hoat_chat_ids": null,
+      "quy_doi_don_vi": [
+        {
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": true,
+          "sang_don_vi_ca": [
+            {
+              "don_vi_ca": "mg",
+              "nhan_voi": 1.0
+            }
+          ]
+        }
+      ],
+      "ghi_chu": null,
+      "nguon": {
+        "loai": "nhan_fda",
+        "ten_nhan": "Esomeprazole Magnesium",
+        "set_id": "fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+        "phien_ban_nguon": "20261102",
+        "tep": "data/kb_sources/openfda/esomeprazole.json",
+        "muc_nhan": "dosage_and_administration",
+        "route_goc_cua_nhan": [
+          "ORAL"
+        ],
+        "trich_nguyen_van": "A maximum dosage of 20 mg once daily is recommended for patients with severe liver impairment (Child-Pugh Class C).",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+        "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"fdea1f5f-b717-4d49-8d70-0b373c959bf0\"",
+        "ngay_lay": "2026-11-19"
+      },
+      "trang_thai": "cho_duoc_si_duyet"
+    }
+  ],
+  "khong_ghi_toi_da": [
+    {
+      "hoat_chat_id": "amiodarone",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Nhãn tiêm chỉ giới hạn tốc độ truyền (30 mg/phút) và nồng độ; nhãn uống không có câu liều ngày tối đa."
+    },
+    {
+      "hoat_chat_id": "amoxicillin",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Nhãn amoxicillin lưu trong kho (D3) không có câu nêu liều tối đa mỗi lần hay mỗi ngày."
+    },
+    {
+      "hoat_chat_id": "apixaban",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Nhãn chỉ nêu liều khuyến cáo theo chỉ định; không có câu tối đa (số liều cao nhất chỉ xuất hiện ở mục quá liều nên không dùng)."
+    },
+    {
+      "hoat_chat_id": "cefoperazone",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Quét nhãn không thấy câu tối đa cho người lớn thông thường"
+    },
+    {
+      "hoat_chat_id": "clarithromycin",
+      "co_dong_theo_nhom_dac_biet": [
+        "tre_em"
+      ],
+      "ly_do": "Người lớn: nhãn không ghi liều tối đa mỗi ngày; chỉ trần 500 mg mỗi liều cho trẻ em (nhiễm mycobacteria)."
+    },
+    {
+      "hoat_chat_id": "clavulanic_acid",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Thành phần của amoxicillin + acid clavulanic; mức tối đa chỉ xét theo cặp."
+    },
+    {
+      "hoat_chat_id": "enoxaparin",
+      "co_dong_theo_nhom_dac_biet": [
+        "nguoi_lon_duoi_75_tuoi",
+        "nguoi_lon_tu_75_tuoi"
+      ],
+      "ly_do": "Không có liều tối đa ngày chung; chỉ trần 100 mg và 75 mg cho hai liều đầu của NMCT cấp."
+    },
+    {
+      "hoat_chat_id": "esomeprazole",
+      "co_dong_theo_nhom_dac_biet": [
+        "nguoi_lon_child_pugh_c"
+      ],
+      "ly_do": "Chỉ có trần cho Child-Pugh C; nhãn không ghi tối đa chung."
+    },
+    {
+      "hoat_chat_id": "gabapentin",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Nhãn nêu \"có thể chuẩn độ đến 1800 mg/ngày\" và thử nghiệm đến 3600 mg/ngày nhưng không có câu liều tối đa; không suy."
+    },
+    {
+      "hoat_chat_id": "insulin_glargine",
+      "co_dong_theo_nhom_dac_biet": [
+        "nguoi_lon"
+      ],
+      "ly_do": "Liều insulin cá thể hoá; nhãn không có liều tối đa lâm sàng (chỉ có giới hạn bút tiêm)."
+    },
+    {
+      "hoat_chat_id": "levofloxacin",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Người lớn: nhãn chỉ ghi liều khuyến cáo theo chỉ định, không có câu \"tối đa\". Số 500 mg/ngày trong nhãn mô tả thử nghiệm trẻ em, không phải khuyến cáo nên không lấy."
+    },
+    {
+      "hoat_chat_id": "meropenem",
+      "co_dong_theo_nhom_dac_biet": [
+        "tre_em_tu_3_thang"
+      ],
+      "ly_do": "Người lớn: nhãn không ghi liều tối đa; chỉ trần 2 g mỗi liều cho trẻ em."
+    },
+    {
+      "hoat_chat_id": "methotrexate",
+      "co_dong_theo_nhom_dac_biet": [
+        "sarcoma_xuong_nguoi_lon_va_tre_em"
+      ],
+      "ly_do": "Chỉ có trần theo ngữ cảnh (sarcoma xương); không có liều tối đa ngày chung. Dạng uống và liều hàng tuần theo nhãn chưa thêm vì ngữ cảnh chỉ định khác với ca."
+    },
+    {
+      "hoat_chat_id": "metoprolol",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Nhãn tiêm và nhãn uống metoprolol tartrat lưu trong kho đều không ghi liều tối đa."
+    },
+    {
+      "hoat_chat_id": "morphine",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Nhãn morphin tiêm lưu trong kho không ghi liều tối đa (liều theo đáp ứng)."
+    },
+    {
+      "hoat_chat_id": "piperacillin",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Quét nhãn không thấy câu tối đa cho người lớn thông thường"
+    },
+    {
+      "hoat_chat_id": "spironolactone",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Quét nhãn theo từ khoá maximum, not to exceed, up to không thấy câu liều tối đa."
+    },
+    {
+      "hoat_chat_id": "sulbactam",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Là thành phần của cefoperazone + sulbactam, không có nhãn FDA riêng trong kho."
+    },
+    {
+      "hoat_chat_id": "sulfamethoxazole",
+      "co_dong_theo_nhom_dac_biet": [
+        "tre_em"
+      ],
+      "ly_do": "Thành phần của sulfamethoxazole + trimethoprim; trần theo nhãn chỉ có cho trẻ em (dự phòng)."
+    },
+    {
+      "hoat_chat_id": "tazobactam",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Thành phần của piperacillin + tazobactam; mức tối đa chỉ xét theo cặp."
+    },
+    {
+      "hoat_chat_id": "trimethoprim",
+      "co_dong_theo_nhom_dac_biet": [
+        "tre_em"
+      ],
+      "ly_do": "Thành phần của sulfamethoxazole + trimethoprim; trần theo nhãn chỉ có cho trẻ em (dự phòng)."
+    },
+    {
+      "hoat_chat_id": "warfarin",
+      "co_dong_theo_nhom_dac_biet": [],
+      "ly_do": "Liều warfarin cá thể hoá theo INR; nhãn không ghi liều tối đa."
+    }
+  ],
+  "khong_ghi_toi_da_theo_duong_trong_ca": [
+    {
+      "hoat_chat_ids": [
+        "meropenem"
+      ],
+      "duong_dung": "truyen_tinh_mach",
+      "ca": [
+        "DEMO-02",
+        "HS-008",
+        "HS-049"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "amoxicillin",
+        "clavulanic_acid"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "DEMO-03",
+        "HS-002"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "metoprolol"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "DEMO-05",
+        "HS-044"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "amoxicillin"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "DEMO-06",
+        "HS-007",
+        "HS-010"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-006"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "esomeprazole"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-009",
+        "HS-015"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "sulfamethoxazole",
+        "trimethoprim"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-011",
+        "HS-056"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "piperacillin",
+        "tazobactam"
+      ],
+      "duong_dung": "truyen_tinh_mach",
+      "ca": [
+        "HS-013"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "duong_dung": "tiem_duoi_da",
+      "ca": [
+        "HS-016",
+        "HS-035"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "duong_dung": "truyen_tinh_mach",
+      "ca": [
+        "HS-018"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "clarithromycin"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-022",
+        "HS-057"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "amiodarone"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-024"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "methotrexate"
+      ],
+      "duong_dung": "truyen_tinh_mach",
+      "ca": [
+        "HS-028"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "spironolactone"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-031"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-032",
+        "HS-042"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "insulin_glargine"
+      ],
+      "duong_dung": "tiem_duoi_da",
+      "ca": [
+        "HS-036"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "morphine"
+      ],
+      "duong_dung": "tiem_duoi_da",
+      "ca": [
+        "HS-037"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "levofloxacin"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-041",
+        "HS-051"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "vancomycin"
+      ],
+      "duong_dung": "truyen_tinh_mach",
+      "ca": [
+        "HS-047",
+        "HS-050"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "gabapentin"
+      ],
+      "duong_dung": "uong",
+      "ca": [
+        "HS-053"
+      ]
+    },
+    {
+      "hoat_chat_ids": [
+        "cefoperazone",
+        "sulbactam"
+      ],
+      "duong_dung": "truyen_tinh_mach",
+      "ca": [
+        "HS-054"
+      ]
+    }
+  ],
+  "thong_ke": {
+    "so_dong": 40,
+    "so_hoat_chat_trong_ca": 37,
+    "so_hoat_chat_co_dong_toi_da": 23,
+    "hoat_chat_co_dong": [
+      "acetaminophen",
+      "amlodipine",
+      "ceftriaxone",
+      "clarithromycin",
+      "colistimethate",
+      "enalapril",
+      "enoxaparin",
+      "esomeprazole",
+      "fluconazole",
+      "gentamicin",
+      "insulin_glargine",
+      "ketorolac",
+      "levetiracetam",
+      "losartan",
+      "meropenem",
+      "metformin",
+      "methotrexate",
+      "simvastatin",
+      "sulfamethoxazole",
+      "tramadol",
+      "trimethoprim",
+      "valproic_acid",
+      "vancomycin"
+    ],
+    "loi_dung_trich": [],
+    "kiem": {
+      "trich_la_chuoi_con_nguyen_van": 40,
+      "trich_sai": [],
+      "don_vi_quy_doi_duoc": 45,
+      "don_vi_khong_quy_doi": [
+        {
+          "ma_dong": "sulfamethoxazole+trimethoprim|uong|tre_em",
+          "don_vi_nhan": "mg",
+          "quy_doi_duoc": false,
+          "ly_do": "đơn vị trong ca (viên) khác loại với đơn vị nhãn; không tự quy đổi"
+        },
+        {
+          "ma_dong": "insulin_glargine|tiem_duoi_da|nguoi_lon",
+          "don_vi_nhan": "units",
+          "quy_doi_duoc": false,
+          "ly_do": "đơn vị trong ca (mg) khác loại với đơn vị nhãn; không tự quy đổi"
+        },
+        {
+          "ma_dong": "colistimethate|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_va_tre_em",
+          "don_vi_nhan": "mg/kg",
+          "quy_doi_duoc": false,
+          "ly_do": "đơn vị trong ca (triệu đơn vị) khác loại với đơn vị nhãn; không tự quy đổi"
+        }
+      ]
+    },
+    "so_hoat_chat_khong_ghi_toi_da_chung": 22,
+    "so_hoat_chat_co_tran_nguoi_lon_chung": 15,
+    "doi_chieu_66_ca": {
+      "trong_gioi_han": 31,
+      "khong_so_sanh": 35,
+      "vuot_tran": 1
+    }
+  },
+  "tinh_huong_kiem": [
+    {
+      "mo_ta": "Paracetamol 1 g (1000 mg) x 6 lần/ngày (HS-019, uống, 60 kg) so với 4000 mg/ngày",
+      "ca_id": "HS-019",
+      "lieu_ngay_mg": 6000.0,
+      "tran_ngay_mg": 4000,
+      "ket_qua": "vuot_tran",
+      "dong_nhan": "acetaminophen, người lớn từ 50 kg"
+    },
+    {
+      "mo_ta": "Gentamicin 320 mg x 1 lần/ngày (HS-026) so với 5 mg/kg/ngày; cân nặng trong ca 64.0 kg",
+      "ca_id": "HS-026",
+      "lieu_ngay_mg_kg": 5.0,
+      "tran_ngay_mg_kg": 5,
+      "ket_qua": "trong_gioi_han"
+    },
+    {
+      "mo_ta": "Gentamicin 350 mg x 1 lần/ngày (HS-039) so với 5 mg/kg/ngày; cân nặng trong ca 70.0 kg",
+      "ca_id": "HS-039",
+      "lieu_ngay_mg_kg": 5.0,
+      "tran_ngay_mg_kg": 5,
+      "ket_qua": "trong_gioi_han"
+    },
+    {
+      "mo_ta": "Gentamicin 330 mg x 1 lần/ngày (HS-059) so với 5 mg/kg/ngày; cân nặng trong ca 66.0 kg",
+      "ca_id": "HS-059",
+      "lieu_ngay_mg_kg": 5.0,
+      "tran_ngay_mg_kg": 5,
+      "ket_qua": "trong_gioi_han"
+    },
+    {
+      "mo_ta": "Gentamicin 320 mg x 1 lần/ngày khi không có cân nặng (ca thử: bỏ cân nặng khỏi HS-026): không so được với trần theo kg",
+      "ca_id": "HS-026 (bỏ can_nang)",
+      "ket_qua": "khong_du_du_lieu",
+      "thieu": [
+        "can_nang"
+      ],
+      "loai": "ca_thu_tong_hop"
+    },
+    {
+      "mo_ta": "Paracetamol siro 15 mg/kg mỗi 6 giờ khi sốt, trẻ 4 tuổi, HS-040 không có cân nặng: dòng kê theo kg nên so từng liều với 15 mg/kg được; đổi ra mg hoặc mL cần cân nặng; số lần mỗi ngày không ghi (chỉ có khoảng cách 6 giờ)",
+      "ca_id": "HS-040",
+      "ket_qua": "tung_lieu_theo_kg_dat_nhung_thieu_can_nang_de_doi_mg",
+      "thieu": [
+        "can_nang",
+        "so_lan_moi_ngay"
+      ],
+      "loai": "ca_that"
+    }
+  ],
+  "doi_chieu_66_ca": [
+    {
+      "ca_id": "DEMO-01",
+      "thuoc_id": "T-AMLODIPIN-5",
+      "ma_dong": "amlodipine|uong|nguoi_lon",
+      "lieu_ngay_mg": 5.0,
+      "tran_ngay_mg": 10.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 45,
+      "can_nang_kg": 70.0
+    },
+    {
+      "ca_id": "DEMO-02",
+      "thuoc_id": "T-MEROPENEM-1G",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "DEMO-03",
+      "thuoc_id": "T-AMOX-CLAV-875-125",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "DEMO-04",
+      "thuoc_id": "T-CEFTRIAXON-2G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 68,
+      "can_nang_kg": 55.0
+    },
+    {
+      "ca_id": "DEMO-05",
+      "thuoc_id": "T-METOPROLOL-50",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "DEMO-06",
+      "thuoc_id": "T-AMOXICILLIN-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-001",
+      "thuoc_id": "T-LOSARTAN-50",
+      "ma_dong": "losartan|uong|nguoi_lon",
+      "lieu_ngay_mg": 50.0,
+      "tran_ngay_mg": 100.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 58,
+      "can_nang_kg": 72.0
+    },
+    {
+      "ca_id": "HS-002",
+      "thuoc_id": "T-AMOXI-CLAV-875",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-003",
+      "thuoc_id": "T-LEVETIRACETAM-500",
+      "ma_dong": "levetiracetam|uong|nguoi_lon_tu_16_tuoi",
+      "lieu_ngay_mg": 1000.0,
+      "tran_ngay_mg": 3000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 70,
+      "can_nang_kg": 66.0
+    },
+    {
+      "ca_id": "HS-004",
+      "thuoc_id": "T-METFORMIN-500",
+      "ma_dong": "metformin|uong|nguoi_lon",
+      "lieu_ngay_mg": 1000.0,
+      "tran_ngay_mg": 2550.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 62,
+      "can_nang_kg": 64.0
+    },
+    {
+      "ca_id": "HS-005",
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 1000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 45,
+      "can_nang_kg": 75.0
+    },
+    {
+      "ca_id": "HS-005",
+      "thuoc_id": "T-PARACETAMOL-1G",
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach+uong|nguoi_lon_va_thieu_nien_tu_50kg",
+      "lieu_ngay_mg": 3000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 45,
+      "can_nang_kg": 75.0
+    },
+    {
+      "ca_id": "HS-006",
+      "thuoc_id": "T-APIXABAN-5",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-007",
+      "thuoc_id": "T-AMOXICILLIN-400",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "tre_em"
+    },
+    {
+      "ca_id": "HS-008",
+      "thuoc_id": "T-MEROPENEM-1G",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-009",
+      "thuoc_id": "T-ESOMEPRAZOL-40",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_ro_dieu_kien_hoac_don_vi"
+    },
+    {
+      "ca_id": "HS-009",
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach+uong|nguoi_lon_va_thieu_nien_tu_50kg",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 50,
+      "can_nang_kg": 55.0
+    },
+    {
+      "ca_id": "HS-010",
+      "thuoc_id": "T-AMOXICILLIN-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-011",
+      "thuoc_id": "T-SMX-TMP-800-160",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_ro_dieu_kien_hoac_don_vi"
+    },
+    {
+      "ca_id": "HS-012",
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 63,
+      "can_nang_kg": 68.0
+    },
+    {
+      "ca_id": "HS-013",
+      "thuoc_id": "T-PIP-TAZO-2250",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "tre_em"
+    },
+    {
+      "ca_id": "HS-014",
+      "thuoc_id": "T-ENALAPRIL-10",
+      "ma_dong": "enalapril|uong|nguoi_lon",
+      "lieu_ngay_mg": 10.0,
+      "tran_ngay_mg": 40.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 71,
+      "can_nang_kg": 74.0
+    },
+    {
+      "ca_id": "HS-015",
+      "thuoc_id": "T-ESOMEPRAZOL-40",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_ro_dieu_kien_hoac_don_vi"
+    },
+    {
+      "ca_id": "HS-016",
+      "thuoc_id": "T-ENOXAPARIN-40",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-017",
+      "thuoc_id": "T-KETOROLAC-30",
+      "ma_dong": "ketorolac|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_duoi_65_tuoi",
+      "lieu_ngay_mg": 90.0,
+      "tran_ngay_mg": 120.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 45,
+      "can_nang_kg": 62.0
+    },
+    {
+      "ca_id": "HS-018",
+      "thuoc_id": "T-LEVOFLOXACIN-750",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-019",
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ma_dong": "acetaminophen|tiem_tinh_mach+truyen_tinh_mach+uong|nguoi_lon_va_thieu_nien_tu_50kg",
+      "lieu_ngay_mg": 6000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "vuot_tran",
+      "tuoi": 55,
+      "can_nang_kg": 60.0
+    },
+    {
+      "ca_id": "HS-020",
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "tre_em"
+    },
+    {
+      "ca_id": "HS-021",
+      "thuoc_id": "T-VANCOMYCIN-500",
+      "ma_dong": "vancomycin|uong|nguoi_lon_va_tre_em",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 2000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 40,
+      "can_nang_kg": 72.0
+    },
+    {
+      "ca_id": "HS-022",
+      "thuoc_id": "T-CLARITHROMYCIN-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-023",
+      "thuoc_id": "T-SIMVASTATIN-40",
+      "ma_dong": "simvastatin|uong|nguoi_lon",
+      "lieu_ngay_mg": 40.0,
+      "tran_ngay_mg": 40.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 65,
+      "can_nang_kg": 64.0
+    },
+    {
+      "ca_id": "HS-024",
+      "thuoc_id": "T-AMIODARON-200",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-025",
+      "thuoc_id": "T-FLUCONAZOL-200",
+      "ma_dong": "fluconazole|uong+tiem_tinh_mach+truyen_tinh_mach|nguoi_lon",
+      "lieu_ngay_mg": 200.0,
+      "tran_ngay_mg": 400.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 48,
+      "can_nang_kg": 58.0
+    },
+    {
+      "ca_id": "HS-026",
+      "thuoc_id": "T-GENTAMICIN-80",
+      "ma_dong": "gentamicin|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_nhiem_trung_de_doa_tinh_mang",
+      "lieu_ngay_mg_kg": 5.0,
+      "tran_ngay_mg_kg": 5,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 80,
+      "can_nang_kg": 64.0
+    },
+    {
+      "ca_id": "HS-027",
+      "thuoc_id": "T-METFORMIN-1000",
+      "ma_dong": "metformin|uong|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 2550.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 72,
+      "can_nang_kg": 58.0
+    },
+    {
+      "ca_id": "HS-028",
+      "thuoc_id": "T-METHOTREXATE-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-029",
+      "thuoc_id": "T-VALPROAT-500",
+      "ma_dong": "valproic_acid|uong|nguoi_lon_va_tre_em",
+      "lieu_ngay_mg_kg": 14.286,
+      "tran_ngay_mg_kg": 60,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 62,
+      "can_nang_kg": 70.0
+    },
+    {
+      "ca_id": "HS-030",
+      "thuoc_id": "T-ENALAPRIL-10",
+      "ma_dong": "enalapril|uong|nguoi_lon",
+      "lieu_ngay_mg": 10.0,
+      "tran_ngay_mg": 40.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 30,
+      "can_nang_kg": 68.0
+    },
+    {
+      "ca_id": "HS-031",
+      "thuoc_id": "T-SPIRONOLACTON-50",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-032",
+      "thuoc_id": "T-WARFARIN-5",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-033",
+      "thuoc_id": "T-TRAMADOL-50",
+      "ma_dong": "tramadol|uong|nguoi_lon",
+      "lieu_ngay_mg": 200.0,
+      "tran_ngay_mg": 400.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 33,
+      "can_nang_kg": 70.0
+    },
+    {
+      "ca_id": "HS-034",
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 50,
+      "can_nang_kg": 72.0
+    },
+    {
+      "ca_id": "HS-035",
+      "thuoc_id": "T-ENOXAPARIN-40MG",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-036",
+      "thuoc_id": "T-INSULIN-GLARGIN-100",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-037",
+      "thuoc_id": "T-MORPHIN-10MG",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-038",
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 55,
+      "can_nang_kg": 70.0
+    },
+    {
+      "ca_id": "HS-039",
+      "thuoc_id": "T-GENTAMICIN-80",
+      "ma_dong": "gentamicin|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_nhiem_trung_de_doa_tinh_mang",
+      "lieu_ngay_mg_kg": 5.0,
+      "tran_ngay_mg_kg": 5,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 75,
+      "can_nang_kg": 70.0
+    },
+    {
+      "ca_id": "HS-040",
+      "thuoc_id": "T-PARACETAMOL-SIRO-150",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "tre_em"
+    },
+    {
+      "ca_id": "HS-041",
+      "thuoc_id": "T-LEVOFLOXACIN-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-042",
+      "thuoc_id": "T-WARFARIN-5",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-043",
+      "thuoc_id": "T-METFORMIN-1000",
+      "ma_dong": "metformin|uong|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 2550.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 68,
+      "can_nang_kg": 80.0
+    },
+    {
+      "ca_id": "HS-044",
+      "thuoc_id": "T-METOPROLOL-50",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-045",
+      "thuoc_id": "T-CEFTRIAXONE-1G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 70,
+      "can_nang_kg": 58.0
+    },
+    {
+      "ca_id": "HS-046",
+      "thuoc_id": "T-LEVETIRACETAM-500",
+      "ma_dong": "levetiracetam|uong|nguoi_lon_tu_16_tuoi",
+      "lieu_ngay_mg": 1000.0,
+      "tran_ngay_mg": 3000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 64,
+      "can_nang_kg": 68.0
+    },
+    {
+      "ca_id": "HS-047",
+      "thuoc_id": "T-VANCOMYCIN-1G",
+      "ma_dong": "vancomycin|uong|nguoi_lon_va_tre_em",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 2000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 60,
+      "can_nang_kg": 75.0
+    },
+    {
+      "ca_id": "HS-048",
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "ma_dong": "ceftriaxone|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 4000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 68,
+      "can_nang_kg": 55.0
+    },
+    {
+      "ca_id": "HS-049",
+      "thuoc_id": "T-MEROPENEM-1G",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-050",
+      "thuoc_id": "T-VANCOMYCIN-1G",
+      "ma_dong": "vancomycin|uong|nguoi_lon_va_tre_em",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 2000.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 62,
+      "can_nang_kg": 78.0
+    },
+    {
+      "ca_id": "HS-051",
+      "thuoc_id": "T-LEVOFLOXACIN-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-052",
+      "thuoc_id": "T-COLISTIMETHATE-4M5",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_ro_dieu_kien_hoac_don_vi"
+    },
+    {
+      "ca_id": "HS-053",
+      "thuoc_id": "T-GABAPENTIN-300",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-054",
+      "thuoc_id": "T-CEFOPERAZON-SULBACTAM-2G",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-056",
+      "thuoc_id": "T-COTRIMOXAZOL-800-160",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_ro_dieu_kien_hoac_don_vi"
+    },
+    {
+      "ca_id": "HS-057",
+      "thuoc_id": "T-CLARITHROMYCIN-500",
+      "ket_qua": "khong_so_sanh",
+      "ly_do": "khong_co_tran_ngay_cho_hoat_chat_nay"
+    },
+    {
+      "ca_id": "HS-058",
+      "thuoc_id": "T-METFORMIN-500",
+      "ma_dong": "metformin|uong|nguoi_lon",
+      "lieu_ngay_mg": 2000.0,
+      "tran_ngay_mg": 2550.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 73,
+      "can_nang_kg": 57.0
+    },
+    {
+      "ca_id": "HS-059",
+      "thuoc_id": "T-GENTAMICIN-80",
+      "ma_dong": "gentamicin|tiem_tinh_mach+truyen_tinh_mach+tiem_bap|nguoi_lon_nhiem_trung_de_doa_tinh_mang",
+      "lieu_ngay_mg_kg": 5.0,
+      "tran_ngay_mg_kg": 5,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 77,
+      "can_nang_kg": 66.0
+    },
+    {
+      "ca_id": "HS-060",
+      "thuoc_id": "T-LOSARTAN-50",
+      "ma_dong": "losartan|uong|nguoi_lon",
+      "lieu_ngay_mg": 50.0,
+      "tran_ngay_mg": 100.0,
+      "ket_qua": "trong_gioi_han",
+      "tuoi": 52,
+      "can_nang_kg": 64.0
+    }
+  ],
+  "doi_tuong_dinh_nghia": {
+    "nguoi_lon": {
+      "tuoi_tu": 18,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "nguoi_lon_child_pugh_c": {
+      "tuoi_tu": 18,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Suy gan nặng Child-Pugh C"
+    },
+    "nguoi_lon_clcr_duoi_30": {
+      "tuoi_tu": 18,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "CrCl dưới 30 mL/phút"
+    },
+    "nguoi_lon_duoi_65_tuoi": {
+      "tuoi_tu": 18,
+      "tuoi_den": 65,
+      "can_nang_tu": 50,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Chức năng thận bình thường"
+    },
+    "nguoi_lon_duoi_75_tuoi": {
+      "tuoi_tu": 18,
+      "tuoi_den": 75,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Nhồi máu cơ tim cấp ST chênh lên"
+    },
+    "nguoi_lon_nhiem_trung_de_doa_tinh_mang": {
+      "tuoi_tu": 18,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Nhiễm khuẩn đe dọa tính mạng"
+    },
+    "nguoi_lon_tren_75_tuoi": {
+      "tuoi_tu": 75,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "nguoi_lon_tu_16_tuoi": {
+      "tuoi_tu": 16,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "nguoi_lon_tu_65_tuoi_suy_than_duoi_50kg": {
+      "tuoi_tu": null,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Một trong ba điều kiện (HOẶC): tuổi từ 65, suy thận, hoặc cân nặng dưới 50 kg"
+    },
+    "nguoi_lon_tu_75_tuoi": {
+      "tuoi_tu": 75,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Nhồi máu cơ tim cấp ST chênh lên"
+    },
+    "nguoi_lon_va_thieu_nien_duoi_50kg": {
+      "tuoi_tu": null,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": 50,
+      "dieu_kien_khac": null
+    },
+    "nguoi_lon_va_thieu_nien_tu_50kg": {
+      "tuoi_tu": null,
+      "tuoi_den": null,
+      "can_nang_tu": 50,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "nguoi_lon_va_tre_em": {
+      "tuoi_tu": null,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Nhãn gộp người lớn và trẻ em, không giới hạn tuổi riêng"
+    },
+    "sarcoma_xuong_nguoi_lon_va_tre_em": {
+      "tuoi_tu": null,
+      "tuoi_den": null,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Sarcoma xương (osteosarcoma)"
+    },
+    "so_sinh_tu_32_tuan": {
+      "tuoi_tu": null,
+      "tuoi_den": 0.079,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": "Tuổi thai khi sinh từ 32 tuần trở lên (kể cả sinh non)"
+    },
+    "tre_em": {
+      "tuoi_tu": null,
+      "tuoi_den": 18,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "tre_em_2_12_tuoi": {
+      "tuoi_tu": 2,
+      "tuoi_den": 13,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "tre_em_tren_40kg": {
+      "tuoi_tu": null,
+      "tuoi_den": 16,
+      "can_nang_tu": 40,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "tre_em_tu_10_tuoi": {
+      "tuoi_tu": 10,
+      "tuoi_den": 18,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "tre_em_tu_3_thang": {
+      "tuoi_tu": 0.25,
+      "tuoi_den": 18,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    },
+    "tre_nhu_nhi_29_ngay_2_tuoi": {
+      "tuoi_tu": 0.079,
+      "tuoi_den": 2,
+      "can_nang_tu": null,
+      "can_nang_den": null,
+      "dieu_kien_khac": null
+    }
+  },
+  "doi_tuong_dinh_nghia_ghi_chu": {
+    "_quy_uoc": "Cận dưới gồm, cận trên không gồm; null là không giới hạn. Tuổi tính bằng năm, dưới 1 năm ghi số thập phân (29 ngày = 29/365 = 0.079; 3 tháng = 0.25). Nhãn không nói rõ người lớn từ bao nhiêu tuổi thì tuoi_tu = 18; trẻ em nhãn không nêu cận trên thì tuoi_den = 18. Tiêu chí không phải tuổi hay cân nặng ghi ở dieu_kien_khac. Giá trị doi_tuong ở từng dòng nhóm giữ nguyên.",
+    "nguoi_lon": "Nhãn ghi 'adults' không nêu bao nhiêu tuổi; tuoi_tu 18 theo quy ước. Tiêu chí bệnh/thuốc dùng cùng nằm ở trường dieu_kien của từng dòng nhóm.",
+    "nguoi_lon_child_pugh_c": "Nhãn esomeprazole; tuoi_tu 18 theo quy ước.",
+    "nguoi_lon_clcr_duoi_30": "Nhãn tramadol; tuoi_tu 18 theo quy ước.",
+    "nguoi_lon_duoi_65_tuoi": "Nhãn ketorolac: 'Patients <65 years of age'; tuoi_tu 18 theo quy ước. Điều kiện cân nặng từ 50 kg và thận bình thường lấy theo dòng đối ứng (nhóm tuổi từ 65, suy thận, hoặc dưới 50 kg dùng liều thấp hơn).",
+    "nguoi_lon_duoi_75_tuoi": "Nhãn: bệnh nhân dưới 75 tuổi (STEMI); tuoi_tu 18 theo quy ước.",
+    "nguoi_lon_nhiem_trung_de_doa_tinh_mang": "Nhãn: 'patients with life-threatening infections', không nêu tuổi; tuoi_tu 18 theo quy ước. Liều theo kg nên cần cân nặng.",
+    "nguoi_lon_tren_75_tuoi": "Nhãn ghi 'over 75 years old' (lớn hơn 75); mô hình cận dưới gồm nên tuoi_tu = 75, người đúng 75 tuổi bị tính vào nhóm (thận trọng hơn), cần dược sĩ xem.",
+    "nguoi_lon_tu_16_tuoi": "Nhãn levetiracetam: 'Adults 16 Years of Age and Older'.",
+    "nguoi_lon_tu_65_tuoi_suy_than_duoi_50kg": "Điều kiện HOẶC không biểu diễn được bằng một khoảng tuổi/cân nặng nên để null; luật xét từng điều kiện riêng.",
+    "nguoi_lon_tu_75_tuoi": "Nhãn: bệnh nhân từ 75 tuổi trở lên (STEMI).",
+    "nguoi_lon_va_thieu_nien_duoi_50kg": "Nhãn ghi 'adults and adolescents weighing under 50 kg'; không nêu tuổi, chỉ lọc theo cân nặng. Cùng ngưỡng 50 kg với dòng từ 50 kg nên hai dòng không chồng nhau (cận dưới gồm, cận trên không gồm).",
+    "nguoi_lon_va_thieu_nien_tu_50kg": "Nhãn ghi 'adults and adolescents weighing 50 kg and over'; không nêu tuổi thiếu niên nên để tuoi_tu null, chỉ lọc theo cân nặng.",
+    "nguoi_lon_va_tre_em": "Nhãn không tách tuổi; để null. Điều kiện riêng (đường uống, tiêm truyền, chức năng thận bình thường) nằm ở trường dieu_kien của dòng nhóm.",
+    "sarcoma_xuong_nguoi_lon_va_tre_em": "Nhãn không giới hạn tuổi riêng; để null.",
+    "so_sinh_tu_32_tuan": "'Up to 28 days chronological age': 28 ngày gồm, 29 ngày không gồm nên tuoi_den = 29/365 = 0.079. tuoi_tu null (từ lúc sinh).",
+    "tre_em": "Nhãn ghi 'pediatric patients'/'children' không nêu cận tuổi dưới (khác nhau theo thuốc); tuoi_tu null, tuoi_den 18 theo quy ước. Chi tiết tuổi từng thuốc xem câu nhãn của dòng.",
+    "tre_em_2_12_tuoi": "Nhãn 'Children 2 to 12 years of age'; hiểu đến hết 12 tuổi nên tuoi_den = 13 (không gồm). Số liều (15 mg/kg/lần, 75 mg/kg/ngày) trùng dòng dưới 50 kg, chồng nhau không gây mâu thuẫn.",
+    "tre_em_tren_40kg": "Nhãn: 'pediatric patients weighing more than 40 kg'. Nhãn ghi > 40 (không gồm 40); mô hình cận dưới gồm nên can_nang_tu = 40, cân đúng 40 kg là biên cần dược sĩ xem. tuoi_den 16 theo ranh giới 'Adults 16 Years and Older' của cùng nhãn.",
+    "tre_em_tu_10_tuoi": "Nhãn metformin: 'pediatric patients 10 years of age and older'; thử lâm sàng 10 đến 16 tuổi. tuoi_den 18 theo quy ước.",
+    "tre_em_tu_3_thang": "'3 months of age and older' = 3/12 = 0.25 năm. Nhãn không nêu cận trên; tuoi_den 18 theo quy ước trẻ em.",
+    "tre_nhu_nhi_29_ngay_2_tuoi": "'Infants 29 days to 2 years of age': 29/365 = 0.079; hết 2 tuổi thì sang dòng 2 đến 12 tuổi."
+  }
+}

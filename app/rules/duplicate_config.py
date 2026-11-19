@@ -1,5 +1,8 @@
 """Nạp bảng nhóm và ATC bổ sung qua bộ đọc cấu hình chung."""
 
+from __future__ import annotations
+
+import logging
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -7,7 +10,9 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.config.settings import _read_yaml
+from app.db.bang_luat_store import load_rule_data, register_cache_clear
 
+_LOGGER = logging.getLogger(__name__)
 _CONFIG = Path(__file__).resolve().parents[2] / "config/kb"
 
 
@@ -65,12 +70,51 @@ class DuplicateConfig(BaseModel):
     atc_bo_sung: AtcSupplement
 
 
+_EMPTY_DUPLICATE_CONFIG = DuplicateConfig.model_construct(
+    nhom_dieu_tri=TreatmentGroups.model_construct(trang_thai="cho_duoc_si_duyet", nhom=[]),
+    atc_bo_sung=AtcSupplement(trang_thai="cho_claude_kiem", nguon="", ma_atc={}),
+)
+
+
 @lru_cache(maxsize=1)
-def load_duplicate_config(config_dir: Path = _CONFIG) -> DuplicateConfig:
-    """Đọc một lần, không đọc biến môi trường."""
+def _load_default_duplicate_config() -> DuplicateConfig | None:
+    """Nạp một lần hai bảng cấu hình yếu tố 2 từ YAML mặc định hoặc PostgreSQL."""
+    groups = load_rule_data(
+        "nhom_dieu_tri_trung",
+        _CONFIG / "nhom_dieu_tri_trung.yaml",
+        TreatmentGroups.model_validate,
+        logger=_LOGGER,
+        fmt="yaml",
+    )
+    supplement = load_rule_data(
+        "atc_bo_sung",
+        _CONFIG / "atc_bo_sung.yaml",
+        AtcSupplement.model_validate,
+        logger=_LOGGER,
+        fmt="yaml",
+    )
+    if groups is None or supplement is None:
+        return None
+    return DuplicateConfig(nhom_dieu_tri=groups, atc_bo_sung=supplement)
+
+
+register_cache_clear(_load_default_duplicate_config.cache_clear)
+
+
+def try_load_default_duplicate_config() -> DuplicateConfig | None:
+    """Thử nạp cấu hình yếu tố 2 mặc định; trả None nếu thiếu tệp hoặc lỗi DB."""
+    return _load_default_duplicate_config()
+
+
+def load_duplicate_config(config_dir: Path | None = _CONFIG) -> DuplicateConfig:
+    """Nạp một lần từ YAML mặc định hoặc DB theo KB_SOURCE; lỗi trả bảng rỗng an toàn."""
+    if config_dir is None or Path(config_dir).resolve() == _CONFIG.resolve():
+        loaded = _load_default_duplicate_config()
+        return loaded if loaded is not None else _EMPTY_DUPLICATE_CONFIG
+    resolved = Path(config_dir)
     return DuplicateConfig(
         nhom_dieu_tri=TreatmentGroups.model_validate(
-            _read_yaml(config_dir / "nhom_dieu_tri_trung.yaml")
+            _read_yaml(resolved / "nhom_dieu_tri_trung.yaml")
         ),
-        atc_bo_sung=AtcSupplement.model_validate(_read_yaml(config_dir / "atc_bo_sung.yaml")),
+        atc_bo_sung=AtcSupplement.model_validate(_read_yaml(resolved / "atc_bo_sung.yaml")),
     )

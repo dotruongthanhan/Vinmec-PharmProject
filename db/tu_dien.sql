@@ -1,4 +1,4 @@
-﻿-- DDL cho phiên bản từ điển có bằng chứng nguồn.
+-- DDL cho phiên bản từ điển có bằng chứng nguồn.
 CREATE SCHEMA IF NOT EXISTS tri_thuc;
 
 CREATE TABLE IF NOT EXISTS tri_thuc.tu_dien_hoat_chat (

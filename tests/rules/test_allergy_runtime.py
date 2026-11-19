@@ -48,9 +48,7 @@ def test_five_allergy_cases_with_real_resolver(
     runtime_context: RuleContext,
 ) -> None:
     ca = next(case for case in source_cases if case.ca_id == ca_id)
-    assert [line.chi_tiet_y_lenh_id for line in ca.y_lenh_cho_duyet.chi_tiet] == [
-        expected_line_id
-    ]
+    assert [line.chi_tiet_y_lenh_id for line in ca.y_lenh_cho_duyet.chi_tiet] == [expected_line_id]
     (finding,) = AllergyRule().check(ca, runtime_context)
 
     assert finding.ma_luat == expected_rule
@@ -59,8 +57,7 @@ def test_five_allergy_cases_with_real_resolver(
     assert finding.chi_tiet_y_lenh_id == [expected_line_id]
     if expected_group is not None:
         assert any(
-            cc.loai == "tai_lieu" and cc.ban_ghi_id == expected_group
-            for cc in finding.can_cu
+            cc.loai == "tai_lieu" and cc.ban_ghi_id == expected_group for cc in finding.can_cu
         )
 
 

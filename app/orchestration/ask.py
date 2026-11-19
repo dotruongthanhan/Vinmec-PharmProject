@@ -22,7 +22,7 @@ from app.deid.known import GiaTriDinhDanh
 from app.deid.scrubber import TOKEN_PATTERN, DeidError, restore_text, scrub_text
 from app.deid.session import DeidSession
 from app.domain.loader import ingredients_of
-from app.domain.models import CaBenh
+from app.domain.models import CaBenh, ChiTietYLenh
 from app.llm.case_context import (
     RecordIdMap,
     build_case_bundle,
@@ -537,6 +537,22 @@ def _build_messages(
     ]
 
 
+def _format_global_order_line(line: ChiTietYLenh) -> str:
+    """Định dạng một dòng y lệnh cho bảng tóm tắt chung, chịu được trường None."""
+    name = line.ten_tu_do or line.thuoc_id or line.chi_tiet_y_lenh_id
+    unit = (line.don_vi_lieu or "").strip()
+    if line.lieu_moi_lan is not None:
+        dose_num = f"{line.lieu_moi_lan:g}"
+        dose_part = f"{dose_num} {unit}" if unit else f"{dose_num} (đơn vị chưa ghi)"
+    elif unit:
+        dose_part = f"liều chưa ghi ({unit})"
+    else:
+        dose_part = "liều chưa ghi"
+    freq_part = (line.tan_suat or "").strip() or "tần suất chưa ghi"
+    route_part = (line.duong_dung or "").strip() or "đường dùng chưa ghi"
+    return f"{name} {dose_part} ({freq_part}, {route_part})"
+
+
 class CaseAsker:
     """Xử lý câu hỏi của dược sĩ về ca bệnh đang mở qua che định danh, RAG và kiểm chứng."""
 
@@ -578,7 +594,7 @@ class CaseAsker:
     def _get_renal_rules(self) -> RenalRuleBook:
         """Nạp bảng quy tắc chỉnh liều thận khi người gọi không truyền sẵn kết quả luật."""
         if self._renal_rules is None:
-            self._renal_rules = load_renal_rules(_ROOT / "data/kb/quy_tac_lieu_than.json")
+            self._renal_rules = load_renal_rules()
         return self._renal_rules
 
     def _run_with_deadline(self, fn: Callable[[], object], deadline: float) -> object:
@@ -1113,6 +1129,51 @@ class CaseAsker:
                         matched_kb.append(kb_id)
         return matched_kb
 
+    def _build_global_summary(
+        self,
+        cases: Sequence[CaBenh],
+        results: dict[str, KetQuaThamDinh],
+    ) -> str:
+        """Dựng bảng tóm tắt các ca bệnh cho chế độ hỏi đáp chung."""
+        summary_lines = [f"TỔNG QUAN HÀNG ĐỢI Y LỆNH ({len(cases)} ca bệnh đang có trên hệ thống):"]
+        for ca in cases:
+            kq = results.get(ca.ca_id) or run_case(ca, self._get_renal_rules())
+            if ca.nguoi_benh.gioi_tinh == "nam":
+                gioi = "Nam"
+            elif ca.nguoi_benh.gioi_tinh == "nu":
+                gioi = "Nữ"
+            else:
+                gioi = "Chưa rõ giới"
+            tuoi_text = (
+                f"{ca.nguoi_benh.tuoi} tuổi" if ca.nguoi_benh.tuoi is not None else "chưa rõ tuổi"
+            )
+            cd_chinh = next(
+                (cd.noi_dung for cd in ca.chan_doan if cd.loai == "chinh"),
+                "Chưa rõ",
+            )
+            drugs_str = ", ".join(
+                _format_global_order_line(line) for line in ca.y_lenh_cho_duyet.chi_tiet
+            )
+            metrics_str = ", ".join(
+                f"{cs.cong_thuc}={cs.ket_qua:.1f} {cs.don_vi}"
+                for cs in kq.chi_so
+                if cs.ket_qua is not None
+            )
+            attention = [ph for ph in kq.phat_hien if ph.ket_luan != "dat"]
+            if attention:
+                findings_str = "; ".join(
+                    f"[{ph.muc_do}/{ph.ket_luan}] {ph.mo_ta}" for ph in attention
+                )
+            else:
+                findings_str = "Đạt (không có cảnh báo cần xem)"
+            summary_lines.append(
+                f"- Ca {ca.ca_id} (Mã y lệnh {ca.y_lenh_cho_duyet.y_lenh_id}): "
+                f"{gioi} {tuoi_text}, Khoa {ca.y_lenh_cho_duyet.khoa_ke_don}, "
+                f"Chẩn đoán: {cd_chinh} | Thuốc kê: {drugs_str} | "
+                f"Chỉ số: {metrics_str or 'chưa đủ'} | Kết quả bộ luật: {findings_str}"
+            )
+        return "\n".join(summary_lines)
+
     def ask_global(
         self,
         cases: Sequence[CaBenh],
@@ -1168,39 +1229,9 @@ class CaseAsker:
         anh_xa = session.anh_xa
 
         tools_called = ["danh_sach_y_lenh", "bo_luat"]
-        summary_lines = [f"TỔNG QUAN HÀNG ĐỢI Y LỆNH ({len(cases)} ca bệnh đang có trên hệ thống):"]
-        for ca in cases:
-            kq = results.get(ca.ca_id) or run_case(ca, self._get_renal_rules())
-            gioi = "Nam" if ca.nguoi_benh.gioi_tinh == "nam" else "Nữ"
-            cd_chinh = next(
-                (cd.noi_dung for cd in ca.chan_doan if cd.loai == "chinh"),
-                "Chưa rõ",
-            )
-            drugs_str = ", ".join(
-                f"{line.ten_tu_do or line.thuoc_id} {line.lieu_moi_lan:g} "
-                f"{line.don_vi_lieu} ({line.tan_suat}, {line.duong_dung})"
-                for line in ca.y_lenh_cho_duyet.chi_tiet
-            )
-            metrics_str = ", ".join(
-                f"{cs.cong_thuc}={cs.ket_qua:.1f} {cs.don_vi}"
-                for cs in kq.chi_so
-                if cs.ket_qua is not None
-            )
-            attention = [ph for ph in kq.phat_hien if ph.ket_luan != "dat"]
-            if attention:
-                findings_str = "; ".join(
-                    f"[{ph.muc_do}/{ph.ket_luan}] {ph.mo_ta}" for ph in attention
-                )
-            else:
-                findings_str = "Đạt (không có cảnh báo cần xem)"
-            summary_lines.append(
-                f"- Ca {ca.ca_id} (Mã y lệnh {ca.y_lenh_cho_duyet.y_lenh_id}): "
-                f"{gioi} {ca.nguoi_benh.tuoi} tuổi, Khoa {ca.y_lenh_cho_duyet.khoa_ke_don}, "
-                f"Chẩn đoán: {cd_chinh} | Thuốc kê: {drugs_str} | "
-                f"Chỉ số: {metrics_str or 'chưa đủ'} | Kết quả bộ luật: {findings_str}"
-            )
+        summary_text = self._build_global_summary(cases, results)
         try:
-            van_ban_ca = _sanitize_markers(session.mask_known("\n".join(summary_lines)))
+            van_ban_ca = _sanitize_markers(session.mask_known(summary_text))
         except DeidError:
             return AskResult(
                 trang_thai="loi",

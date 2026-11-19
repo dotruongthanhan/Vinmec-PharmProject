@@ -74,7 +74,7 @@ def apply_schema(connection: psycopg.Connection[Any], root: Path, reset: bool = 
                 connection.execute(
                     sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(sql.Identifier(schema))
                 )
-        connection.execute((root / "db/schema.sql").read_text(encoding="utf-8"))
+        connection.execute((root / "db/schema.sql").read_text(encoding="utf-8-sig"))
 
 
 def replace_group(cursor: psycopg.Cursor[Any], batch: Batch, group: str) -> None:

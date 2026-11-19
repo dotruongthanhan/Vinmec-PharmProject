@@ -13,6 +13,24 @@ from app.core.interfaces import (
     VectorStore,
 )
 from app.providers.fakes import FakeLLM
+from app.rules.registry import default_rules
+
+_EXPECTED_RULE_GROUPS = [
+    "allergy",
+    "duplicate",
+    "route",
+    "max_dose",
+    "interaction",
+    "toxicity",
+    "antibiotic",
+    "renal_dose",
+    "hepatic",
+    "lab_threshold",
+    "drug_disease",
+    "schedule",
+    "required_fields",
+    "stewardship",
+]
 
 
 def test_test_container_protocols_and_caching() -> None:
@@ -28,7 +46,8 @@ def test_test_container_protocols_and_caching() -> None:
         assert isinstance(getattr(container, name), protocol)
         assert getattr(container, name) is getattr(container, name)
     assert container.embedder.dimensions == container.settings.embedding.dimensions
-    assert len(container.rules) == 6
+    assert len(container.rules) == len(default_rules())
+    assert [rule.ma_nhom for rule in container.rules] == _EXPECTED_RULE_GROUPS
     assert len(container.case_repo.list_ids()) == 6
     assert container.renal_rules is container.renal_rules
     assert container.rules is container.rules
@@ -40,7 +59,8 @@ def test_dev_container_is_lazy_and_independent_of_cwd(
     monkeypatch.chdir(tmp_path)
     container = build_container("dev")
     assert len(container.case_repo.list_ids()) == 6
-    assert len(container.rules) == 6
+    assert len(container.rules) == len(default_rules())
+    assert [rule.ma_nhom for rule in container.rules] == _EXPECTED_RULE_GROUPS
     for name, block, provider in [
         ("llm", "llm", "deepseek"),
         ("embedder", "embedding", "gemini"),

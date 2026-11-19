@@ -20,9 +20,17 @@ def test_registered_matches_existing_engine(number: int) -> None:
     assert [(rule.ma_nhom, rule.yeu_to) for rule in rules] == [
         ("allergy", 1),
         ("duplicate", 2),
-        ("antibiotic", 3),
+        ("route", 3),
+        ("max_dose", 3),
         ("interaction", 4),
+        ("toxicity", 5),
+        ("antibiotic", 6),
         ("renal_dose", 6),
+        ("hepatic", 6),
+        ("lab_threshold", 6),
+        ("drug_disease", 6),
         ("schedule", 7),
+        ("required_fields", 7),
+        ("stewardship", 7),
     ]
     assert run_registered(ca, RuleContext(renal), rules) == run_rules(ca, renal)

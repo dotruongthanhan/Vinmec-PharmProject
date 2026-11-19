@@ -65,6 +65,15 @@ def get_case(ca_id: str, request: Request, response: Response, principal: Caller
     return _service(request).get_case(ca_id)
 
 
+@router.get("/cases/{ca_id}/lich-su-tham-dinh", response_model=s.LichSuThamDinh)
+def get_review_history(
+    ca_id: str, request: Request, response: Response, principal: Caller
+) -> s.LichSuThamDinh:
+    """Trả danh sách các lần hệ thống đã thẩm định và lưu cho ca bệnh."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return _service(request).list_review_history(ca_id)
+
+
 @router.get("/cases/{ca_id}/records/{ban_ghi_id}", response_model=s.BanGhi)
 def get_record(ca_id: str, ban_ghi_id: str, request: Request, principal: Caller) -> s.BanGhi:
     """Trả bản ghi thuộc ca đang mở."""

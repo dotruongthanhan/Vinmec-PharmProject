@@ -1,46 +1,122 @@
 """Luật yếu tố 6: kiểm tra chỉnh liều theo chức năng thận (CrCl Cockcroft-Gault)."""
 
-from pathlib import Path
+from __future__ import annotations
 
-from pydantic import BaseModel
+import logging
+from functools import lru_cache
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Literal
+
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.calc.renal import cockcroft_gault
+from app.db.bang_luat_store import load_rule_data, register_cache_clear
 from app.domain.loader import ingredients_of, latest_lab, latest_vital
-from app.domain.models import CaBenh, KetQuaXetNghiem, SinhHieu
+from app.domain.models import CaBenh, ChiTietYLenh, KetQuaXetNghiem, SinhHieu
 from app.rules.types import CanCu, PhatHien, normalize_text, pending_lines
 
+if TYPE_CHECKING:
+    from app.kb.resolver import DrugResolver
+    from app.kb.resolver.resolver import KetQuaPhanGiai
+
+_LOGGER = logging.getLogger(__name__)
 _YEU_TO = 6
+_EXCLUDED_KINDS = {"dich_truyen_dien_giai", "duoc_lieu"}
+_PENDING_REVIEW_SUFFIX = " (quy tắc từ nhãn FDA, chờ dược sĩ duyệt)"
+DEFAULT_RENAL_RULES_PATH = (
+    Path(__file__).resolve().parents[2] / "data" / "kb" / "quy_tac_lieu_than.json"
+)
+
+
+class RenalSourceDetail(BaseModel):
+    """Nguồn trích dẫn chi tiết từ nhãn cho quy tắc chỉnh liều thận."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    loai: str | None = None
+    ten_nhan: str | None = None
+    set_id: str | None = None
+    trich_nguyen_van: str = ""
+    url: str | None = None
 
 
 class RenalDoseTier(BaseModel):
     """Một mức CrCl và khuyến cáo chỉnh liều trong bảng luật thận."""
 
+    model_config = ConfigDict(extra="ignore")
+
     crcl_tu: float | None = None
     crcl_den: float | None = None
     bao_gom_can_duoi: bool
+    bao_gom_can_tren: bool | None = None
     can_chinh: bool
     khuyen_cao: str
+    khong_co_so_lieu_nhan: bool = False
+    nhan_ghi: str | None = None
+    ghi_khoang: str | None = None
 
 
 class RenalDrugRule(BaseModel):
     """Quy tắc chỉnh liều thận của một hoạt chất theo tên quốc tế."""
 
+    model_config = ConfigDict(extra="ignore")
+
     ten_quoc_te: str
+    hoat_chat_ids: list[str] = Field(default_factory=list)
+    chi_so: str | None = None
+    trang_thai: str | None = None
     nguon: str
     nguoi_duyet: str | None = None
     muc: list[RenalDoseTier]
+    nguon_chi_tiet: list[RenalSourceDetail] = Field(default_factory=list)
+    phoi_hop: str | None = None
+    bi_danh: list[str] = Field(default_factory=list)
 
 
 class RenalRuleBook(BaseModel):
     """Tập quy tắc chỉnh liều theo chức năng thận nạp từ JSON."""
 
+    model_config = ConfigDict(extra="ignore")
+
     phien_ban: str
     ghi_chu: str | None = None
     quy_tac: list[RenalDrugRule]
+    quy_tac_cho_duyet: list[RenalDrugRule] = Field(default_factory=list)
+    khong_co_nguong: list[dict[str, Any]] = Field(default_factory=list)
 
 
-def load_renal_rules(path: Path) -> RenalRuleBook:
-    """Đọc tệp JSON bảng quy tắc chỉnh liều theo chức năng thận."""
+_EMPTY_RENAL_RULE_BOOK = RenalRuleBook(
+    phien_ban="",
+    quy_tac=[],
+    quy_tac_cho_duyet=[],
+    khong_co_nguong=[],
+)
+
+
+@lru_cache(maxsize=1)
+def _load_default_renal_rules() -> RenalRuleBook | None:
+    """Nạp một lần bảng quy tắc chỉnh liều thận mặc định từ tệp hoặc DB."""
+    return load_rule_data(
+        "quy_tac_lieu_than",
+        DEFAULT_RENAL_RULES_PATH,
+        RenalRuleBook.model_validate,
+        logger=_LOGGER,
+    )
+
+
+register_cache_clear(_load_default_renal_rules.cache_clear)
+
+
+def try_load_default_renal_rules() -> RenalRuleBook | None:
+    """Thử nạp bảng quy tắc chỉnh liều thận mặc định; trả None nếu lỗi."""
+    return _load_default_renal_rules()
+
+
+def load_renal_rules(path: Path | None = None) -> RenalRuleBook:
+    """Nạp bảng quy tắc chỉnh liều thận mặc định theo KB_SOURCE hoặc từ tệp chỉ định."""
+    if path is None or Path(path).resolve() == DEFAULT_RENAL_RULES_PATH.resolve():
+        loaded = _load_default_renal_rules()
+        return loaded if loaded is not None else _EMPTY_RENAL_RULE_BOOK
     raw = Path(path).read_text(encoding="utf-8")
     return RenalRuleBook.model_validate_json(raw)
 
@@ -62,7 +138,9 @@ def select_renal_tier(crcl: float, rule: RenalDrugRule) -> RenalDoseTier:
             lower_ok = crcl >= tier.crcl_tu if tier.bao_gom_can_duoi else crcl > tier.crcl_tu
         upper_ok = True
         if tier.crcl_den is not None:
-            if tier.crcl_tu is None and not tier.bao_gom_can_duoi:
+            if tier.bao_gom_can_tren is not None:
+                upper_ok = crcl <= tier.crcl_den if tier.bao_gom_can_tren else crcl < tier.crcl_den
+            elif tier.crcl_tu is None and not tier.bao_gom_can_duoi:
                 upper_ok = crcl < tier.crcl_den
             else:
                 upper_ok = crcl <= tier.crcl_den
@@ -70,6 +148,50 @@ def select_renal_tier(crcl: float, rule: RenalDrugRule) -> RenalDoseTier:
             return tier
 
     raise ValueError(f"Không tìm thấy mức CrCl phù hợp cho {rule.ten_quoc_te} (CrCl={crcl})")
+
+
+def _extract_resolved_ids(result: KetQuaPhanGiai) -> set[str]:
+    """Lấy tập mã hoạt chất trên trục từ kết quả phân giải đã hoặc một phần nhận diện."""
+    if result.trang_thai not in {"da_phan_giai", "mot_phan"}:
+        return set()
+    return {tp.hoat_chat_id for tp in result.thanh_phan if tp.hoat_chat_id}
+
+
+def _is_line_excluded(result: KetQuaPhanGiai) -> bool:
+    """Kiểm tra dòng thuốc thuộc nhóm dịch truyền, điện giải hoặc dược liệu."""
+    if result.trang_thai == "khong_ap_dung":
+        return True
+    return bool(result.thanh_phan) and all(tp.loai in _EXCLUDED_KINDS for tp in result.thanh_phan)
+
+
+def _rule_ingredient_ids(rule: RenalDrugRule) -> set[str]:
+    """Lấy tập mã hoạt chất chuẩn hoá của một quy tắc chỉnh liều thận."""
+    if rule.hoat_chat_ids:
+        return {normalize_text(item) for item in rule.hoat_chat_ids if normalize_text(item)}
+    inn = normalize_text(rule.ten_quoc_te)
+    return {inn} if inn else set()
+
+
+def _format_source_evidence(src: RenalSourceDetail) -> CanCu:
+    """Tạo căn cứ tài liệu theo chuẩn trích dẫn nhãn FDA."""
+    ref = f"Nhãn FDA {src.ten_nhan or ''}".strip()
+    if src.set_id:
+        ref = f"{ref} (set_id={src.set_id})"
+    url_part = f" — {src.url}" if src.url else ""
+    return CanCu(
+        loai="tai_lieu",
+        ban_ghi_id=src.set_id,
+        mo_ta=f'{ref}: "{src.trich_nguyen_van}"{url_part} (chờ dược sĩ duyệt)',
+    )
+
+
+def _doc_evidences(rule: RenalDrugRule, *, is_pending_review: bool) -> list[CanCu]:
+    """Tạo danh sách căn cứ tài liệu cho quy tắc đã duyệt hoặc chờ duyệt."""
+    if is_pending_review:
+        if rule.nguon_chi_tiet:
+            return [_format_source_evidence(src) for src in rule.nguon_chi_tiet]
+        return [CanCu(loai="tai_lieu", ban_ghi_id=None, mo_ta=f"{rule.nguon} (chờ dược sĩ duyệt)")]
+    return [CanCu(loai="tai_lieu", ban_ghi_id=None, mo_ta=rule.nguon)]
 
 
 def _available_data_evidence(
@@ -104,133 +226,245 @@ def _available_data_evidence(
     return evidences
 
 
-def check(ca: CaBenh, rules: RenalRuleBook) -> list[PhatHien]:
-    """Kiểm tra nhu cầu chỉnh liều theo CrCl cho các hoạt chất nằm trong bảng luật."""
-    rule_by_inn = {normalize_text(rule.ten_quoc_te): rule for rule in rules.quy_tac}
-    weight_vital = latest_vital(ca, "can_nang")
-    creatinin_lab = latest_lab(ca, "creatinin")
+def _evaluate_renal_rule(
+    ca: CaBenh,
+    line: ChiTietYLenh,
+    drug_name: str,
+    rule: RenalDrugRule,
+    creatinin_lab: KetQuaXetNghiem | None,
+    weight_vital: SinhHieu | None,
+    *,
+    is_pending_review: bool,
+    check_extended: bool,
+) -> PhatHien:
+    """Đánh giá một cặp (dòng y lệnh, quy tắc thận) và trả về đúng một phát hiện."""
+    doc_evidences = _doc_evidences(rule, is_pending_review=is_pending_review)
+
+    if check_extended and rule.chi_so is not None and "1.73" in rule.chi_so:
+        evidences = [*_available_data_evidence(creatinin_lab, weight_vital), *doc_evidences]
+        return PhatHien(
+            ma_luat="lieu_than_can_crcl_hieu_chinh_bsa",
+            yeu_to=_YEU_TO,
+            ket_luan="khong_du_du_lieu",
+            muc_do=None,
+            chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
+            mo_ta=(
+                f"{drug_name}: nhãn chia mức theo mL/min/1,73 m², "
+                "công thức diện tích da chưa được duyệt nên chưa so"
+            ),
+            can_cu=evidences,
+            thong_tin_con_thieu=["crcl_hieu_chinh_dien_tich_da"],
+        )
 
     can_nang_kg = weight_vital.gia_tri if weight_vital is not None else None
     creatinin_val = creatinin_lab.gia_tri_so if creatinin_lab is not None else None
     creatinin_unit = creatinin_lab.don_vi if creatinin_lab is not None else None
 
+    try:
+        calc_res = cockcroft_gault(
+            tuoi=ca.nguoi_benh.tuoi,
+            gioi_tinh=ca.nguoi_benh.gioi_tinh,
+            can_nang_kg=can_nang_kg,
+            creatinin=creatinin_val,
+            creatinin_don_vi=creatinin_unit,
+            loai_can_nang="thuc_te",
+        )
+    except ValueError as exc:
+        evidences = _available_data_evidence(creatinin_lab, weight_vital)
+        evidences.append(
+            CanCu(loai="tinh_toan", ban_ghi_id="cockcroft_gault", mo_ta=str(exc)),
+        )
+        err_desc = f"Số liệu bất thường khi tính CrCl cho {drug_name}: {exc}"
+        return PhatHien(
+            ma_luat="lieu_than_so_lieu_bat_thuong",
+            yeu_to=_YEU_TO,
+            ket_luan="khong_du_du_lieu",
+            muc_do=None,
+            chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
+            mo_ta=err_desc,
+            can_cu=evidences,
+            thong_tin_con_thieu=["so_lieu_hop_le"],
+        )
+
+    if calc_res.ket_qua is None:
+        evidences = _available_data_evidence(creatinin_lab, weight_vital)
+        missing_text = ", ".join(calc_res.thieu_dau_vao)
+        evidences.append(
+            CanCu(
+                loai="tinh_toan",
+                ban_ghi_id="cockcroft_gault",
+                mo_ta=f"Thiếu đầu vào: {missing_text}",
+            ),
+        )
+        missing_desc = f"Thiếu dữ liệu tính CrCl cho {drug_name}: {missing_text}"
+        return PhatHien(
+            ma_luat="lieu_than_thieu_du_lieu",
+            yeu_to=_YEU_TO,
+            ket_luan="khong_du_du_lieu",
+            muc_do=None,
+            chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
+            mo_ta=missing_desc,
+            can_cu=evidences,
+            thong_tin_con_thieu=list(calc_res.thieu_dau_vao),
+        )
+
+    assert creatinin_lab is not None
+    assert weight_vital is not None
+    crcl = calc_res.ket_qua
+    tier = select_renal_tier(crcl, rule)
+    crcl_display = f"{crcl:.1f}"
+
+    can_cu = [
+        CanCu(
+            loai="du_lieu",
+            ban_ghi_id=creatinin_lab.xet_nghiem_id,
+            mo_ta=(
+                f"Creatinin máu: {creatinin_lab.gia_tri_so} {creatinin_lab.don_vi} "
+                f"lúc {creatinin_lab.thoi_diem_ket_qua.isoformat()}"
+            ),
+        ),
+        CanCu(
+            loai="tinh_toan",
+            ban_ghi_id="cockcroft_gault",
+            mo_ta=(
+                f"CrCl = {crcl_display} mL/min "
+                f"(cân nặng thuc_te: {weight_vital.gia_tri} {weight_vital.don_vi})"
+            ),
+        ),
+        *doc_evidences,
+    ]
+    suffix = _PENDING_REVIEW_SUFFIX if is_pending_review else ""
+
+    if check_extended and tier.khong_co_so_lieu_nhan and tier.can_chinh:
+        return PhatHien(
+            ma_luat="lieu_than_ngoai_nhan",
+            yeu_to=_YEU_TO,
+            ket_luan="ngoai_hdsd",
+            muc_do="can_luu_y",
+            chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
+            mo_ta=(
+                f"{drug_name}: CrCl = {crcl_display} mL/min, "
+                f"nhãn không có khuyến cáo cho mức CrCl này ({tier.khuyen_cao}){suffix}"
+            ),
+            can_cu=can_cu,
+        )
+
+    if tier.can_chinh:
+        muc_do: Literal["nghiem_trong", "can_luu_y"] = (
+            "can_luu_y" if is_pending_review else "nghiem_trong"
+        )
+        return PhatHien(
+            ma_luat="lieu_than_can_chinh",
+            yeu_to=_YEU_TO,
+            ket_luan="can_xem",
+            muc_do=muc_do,
+            chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
+            mo_ta=(
+                f"{drug_name}: CrCl = {crcl_display} mL/min, "
+                f"cần xem xét chỉnh liều thận ({tier.khuyen_cao}){suffix}"
+            ),
+            can_cu=can_cu,
+        )
+
+    no_adjust_text = (
+        "nhãn không nêu chỉnh liều ở mức CrCl này"
+        if check_extended and tier.khong_co_so_lieu_nhan
+        else "không cần chỉnh liều thận"
+    )
+    return PhatHien(
+        ma_luat="lieu_than_khong_can_chinh",
+        yeu_to=_YEU_TO,
+        ket_luan="dat",
+        muc_do="thong_tin",
+        chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
+        mo_ta=(
+            f"{drug_name}: CrCl = {crcl_display} mL/min, "
+            f"{no_adjust_text} ({tier.khuyen_cao}){suffix}"
+        ),
+        can_cu=can_cu,
+    )
+
+
+def _display_name_for_rule(resolved: KetQuaPhanGiai, rule: RenalDrugRule) -> str:
+    """Lấy tên hoạt chất hiển thị từ kết quả phân giải, giữ đúng thứ tự thành phần."""
+    rule_ids = _rule_ingredient_ids(rule)
+    names = [
+        tp.ten_inn
+        for tp in resolved.thanh_phan
+        if normalize_text(tp.hoat_chat_id) in rule_ids and tp.ten_inn
+    ]
+    if names:
+        return " + ".join(dict.fromkeys(names))
+    return rule.ten_quoc_te
+
+
+def check(
+    ca: CaBenh,
+    rules: RenalRuleBook,
+    resolver: DrugResolver | None = None,
+) -> list[PhatHien]:
+    """Kiểm tra nhu cầu chỉnh liều theo CrCl cho các hoạt chất nằm trong bảng luật."""
+    weight_vital = latest_vital(ca, "can_nang")
+    creatinin_lab = latest_lab(ca, "creatinin")
+
     findings: list[PhatHien] = []
+    if resolver is None:
+        rule_by_inn = {normalize_text(rule.ten_quoc_te): rule for rule in rules.quy_tac}
+        for line in pending_lines(ca):
+            for hc in ingredients_of(ca, line):
+                inn = normalize_text(hc.ten_quoc_te)
+                if not inn or inn not in rule_by_inn:
+                    continue
+                findings.append(
+                    _evaluate_renal_rule(
+                        ca,
+                        line,
+                        hc.ten_hoat_chat,
+                        rule_by_inn[inn],
+                        creatinin_lab,
+                        weight_vital,
+                        is_pending_review=False,
+                        check_extended=False,
+                    )
+                )
+        return findings
+
     for line in pending_lines(ca):
-        for hc in ingredients_of(ca, line):
-            inn = normalize_text(hc.ten_quoc_te)
-            if not inn or inn not in rule_by_inn:
-                continue
-            rule = rule_by_inn[inn]
+        resolved = resolver.resolve_line(ca, line)
+        if _is_line_excluded(resolved):
+            continue
+        line_ids = {normalize_text(item) for item in _extract_resolved_ids(resolved)}
+        if not line_ids:
+            continue
 
-            try:
-                calc_res = cockcroft_gault(
-                    tuoi=ca.nguoi_benh.tuoi,
-                    gioi_tinh=ca.nguoi_benh.gioi_tinh,
-                    can_nang_kg=can_nang_kg,
-                    creatinin=creatinin_val,
-                    creatinin_don_vi=creatinin_unit,
-                    loai_can_nang="thuc_te",
-                )
-            except ValueError as exc:
-                evidences = _available_data_evidence(creatinin_lab, weight_vital)
-                evidences.append(
-                    CanCu(loai="tinh_toan", ban_ghi_id="cockcroft_gault", mo_ta=str(exc)),
-                )
-                err_desc = f"Số liệu bất thường khi tính CrCl cho {hc.ten_hoat_chat}: {exc}"
-                findings.append(
-                    PhatHien(
-                        ma_luat="lieu_than_so_lieu_bat_thuong",
-                        yeu_to=_YEU_TO,
-                        ket_luan="khong_du_du_lieu",
-                        muc_do=None,
-                        chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
-                        mo_ta=err_desc,
-                        can_cu=evidences,
-                        thong_tin_con_thieu=["so_lieu_hop_le"],
-                    ),
-                )
-                continue
+        matched_approved_ids: set[str] = set()
+        matched_rules: list[tuple[RenalDrugRule, bool]] = []
+        for rule in rules.quy_tac:
+            rule_ids = _rule_ingredient_ids(rule)
+            overlap = rule_ids & line_ids
+            if overlap:
+                matched_rules.append((rule, False))
+                matched_approved_ids |= overlap
 
-            if calc_res.ket_qua is None:
-                evidences = _available_data_evidence(creatinin_lab, weight_vital)
-                missing_text = ", ".join(calc_res.thieu_dau_vao)
-                evidences.append(
-                    CanCu(
-                        loai="tinh_toan",
-                        ban_ghi_id="cockcroft_gault",
-                        mo_ta=f"Thiếu đầu vào: {missing_text}",
-                    ),
-                )
-                missing_desc = f"Thiếu dữ liệu tính CrCl cho {hc.ten_hoat_chat}: {missing_text}"
-                findings.append(
-                    PhatHien(
-                        ma_luat="lieu_than_thieu_du_lieu",
-                        yeu_to=_YEU_TO,
-                        ket_luan="khong_du_du_lieu",
-                        muc_do=None,
-                        chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
-                        mo_ta=missing_desc,
-                        can_cu=evidences,
-                        thong_tin_con_thieu=list(calc_res.thieu_dau_vao),
-                    ),
-                )
-                continue
+        remaining_ids = line_ids - matched_approved_ids
+        for rule in rules.quy_tac_cho_duyet:
+            rule_ids = _rule_ingredient_ids(rule)
+            if rule_ids & remaining_ids:
+                matched_rules.append((rule, True))
 
-            assert creatinin_lab is not None
-            assert weight_vital is not None
-            crcl = calc_res.ket_qua
-            tier = select_renal_tier(crcl, rule)
-            crcl_display = f"{crcl:.1f}"
-
-            can_cu = [
-                CanCu(
-                    loai="du_lieu",
-                    ban_ghi_id=creatinin_lab.xet_nghiem_id,
-                    mo_ta=(
-                        f"Creatinin máu: {creatinin_lab.gia_tri_so} {creatinin_lab.don_vi} "
-                        f"lúc {creatinin_lab.thoi_diem_ket_qua.isoformat()}"
-                    ),
-                ),
-                CanCu(
-                    loai="tinh_toan",
-                    ban_ghi_id="cockcroft_gault",
-                    mo_ta=(
-                        f"CrCl = {crcl_display} mL/min "
-                        f"(cân nặng thuc_te: {weight_vital.gia_tri} {weight_vital.don_vi})"
-                    ),
-                ),
-                CanCu(loai="tai_lieu", ban_ghi_id=None, mo_ta=rule.nguon),
-            ]
-
-            if tier.can_chinh:
-                findings.append(
-                    PhatHien(
-                        ma_luat="lieu_than_can_chinh",
-                        yeu_to=_YEU_TO,
-                        ket_luan="can_xem",
-                        muc_do="nghiem_trong",
-                        chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
-                        mo_ta=(
-                            f"{hc.ten_hoat_chat}: CrCl = {crcl_display} mL/min, "
-                            f"cần xem xét chỉnh liều thận ({tier.khuyen_cao})"
-                        ),
-                        can_cu=can_cu,
-                    ),
+        for rule, is_pending_review in matched_rules:
+            drug_name = _display_name_for_rule(resolved, rule)
+            findings.append(
+                _evaluate_renal_rule(
+                    ca,
+                    line,
+                    drug_name,
+                    rule,
+                    creatinin_lab,
+                    weight_vital,
+                    is_pending_review=is_pending_review,
+                    check_extended=True,
                 )
-            else:
-                findings.append(
-                    PhatHien(
-                        ma_luat="lieu_than_khong_can_chinh",
-                        yeu_to=_YEU_TO,
-                        ket_luan="dat",
-                        muc_do="thong_tin",
-                        chi_tiet_y_lenh_id=[line.chi_tiet_y_lenh_id],
-                        mo_ta=(
-                            f"{hc.ten_hoat_chat}: CrCl = {crcl_display} mL/min, "
-                            f"không cần chỉnh liều thận ({tier.khuyen_cao})"
-                        ),
-                        can_cu=can_cu,
-                    ),
-                )
+            )
 
     return findings

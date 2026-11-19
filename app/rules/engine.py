@@ -6,7 +6,21 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 from app.domain.models import CaBenh
-from app.rules import allergy, antibiotic, duplicate, renal_dose, schedule
+from app.rules import (
+    allergy,
+    antibiotic,
+    drug_disease,
+    duplicate,
+    hepatic,
+    lab_threshold,
+    max_dose,
+    renal_dose,
+    required_fields,
+    route,
+    schedule,
+    stewardship,
+    toxicity,
+)
 from app.rules.renal_dose import RenalRuleBook
 from app.rules.types import CanCu, PhatHien, pending_lines
 
@@ -71,12 +85,24 @@ def run_rules_with_matrix(
             2,
             lambda: duplicate.check(ca, resolver) if resolver is not None else duplicate.check(ca),
         ),
-        ("antibiotic", 3, lambda: antibiotic.check(ca)),
-        ("renal_dose", 6, lambda: renal_dose.check(ca, renal_rules)),
-        ("schedule", 7, lambda: schedule.check(ca)),
     ]
+    if resolver is not None:
+        steps.append(("route", 3, lambda: route.check(ca, resolver)))
+        steps.append(("max_dose", 3, lambda: max_dose.check(ca, resolver)))
     if resolver is not None and interactions is not None:
-        steps.insert(3, ("interaction", 4, run_interaction))
+        steps.append(("interaction", 4, run_interaction))
+    if resolver is not None:
+        steps.append(("toxicity", 5, lambda: toxicity.check(ca, resolver, renal_rules=renal_rules)))
+    steps.append(("antibiotic", 6, lambda: antibiotic.check(ca)))
+    steps.append(("renal_dose", 6, lambda: renal_dose.check(ca, renal_rules, resolver)))
+    if resolver is not None:
+        steps.append(("hepatic", 6, lambda: hepatic.check(ca, resolver)))
+        steps.append(("lab_threshold", 6, lambda: lab_threshold.check(ca, resolver)))
+        steps.append(("drug_disease", 6, lambda: drug_disease.check(ca, resolver)))
+    steps.append(("schedule", 7, lambda: schedule.check(ca)))
+    steps.append(("required_fields", 7, lambda: required_fields.check(ca)))
+    if resolver is not None:
+        steps.append(("stewardship", 7, lambda: stewardship.check(ca, resolver)))
 
     all_line_ids = [line.chi_tiet_y_lenh_id for line in pending_lines(ca)]
     findings: list[PhatHien] = []

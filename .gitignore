@@ -264,5 +264,7 @@ data/kb_staging/*
 !data/kb_staging/README.md
 data/cache/*
 !data/cache/README.md
+data/formulas/*
+!data/formulas/README.md
 data/runtime/
 data/_luu_tru/
