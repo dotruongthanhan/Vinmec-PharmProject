@@ -117,3 +117,132 @@ def test_all_66_cases_no_dat_with_missing_info(case_details_by_id: CaseBodyMap) 
         for row in all_rows:
             if row["ket_luan_ma"] == "dat":
                 assert row["thong_tin_con_thieu"] == [], f"{ca_id}:{row['ma_luat']}"
+
+
+def test_demo02_and_demo06_factor_5_has_dat_finding(case_details_by_id: CaseBodyMap) -> None:
+    """DEMO-02 và DEMO-06 phải có nhận định đạt yếu tố 5, không nằm trong yeu_to_chua_kiem."""
+    for ca_id in ("DEMO-02", "DEMO-06"):
+        body = case_details_by_id[ca_id]
+        assert "5. Độc tính" not in body["nhan_dinh"]["yeu_to_chua_kiem"]
+        factor5 = [row for row in body["nhan_dinh"]["dat"] if row["yeu_to"].startswith("5.")]
+        assert [row["ma_luat"] for row in factor5] == ["doc_tinh_khong_thuoc_danh_sach"]
+
+
+def test_all_66_cases_have_unique_nhan_dinh_ids(case_details_by_id: CaseBodyMap) -> None:
+    """Mọi nhận định trong cùng một ca đều có nhan_dinh_id duy nhất across 66 ca."""
+    assert len(case_details_by_id) == 66
+    for ca_id, body in case_details_by_id.items():
+        all_rows = [*body["nhan_dinh"]["can_chu_y"], *body["nhan_dinh"]["dat"]]
+        ids = [row["nhan_dinh_id"] for row in all_rows]
+        assert len(ids) == len(set(ids)), f"Ca {ca_id} bị trùng nhan_dinh_id"
+
+
+def test_hs056_combination_drug_ids_distinct_and_stable(
+    tmp_path: Path,
+    runtime_context: RuleContext,
+    case_details_by_id: CaseBodyMap,
+) -> None:
+    """HS-056 hai nhận định thuốc phối hợp phải có 2 mã khác nhau, ổn định giữa 2 lần chạy."""
+    hs056 = case_details_by_id["HS-056"]
+    all_rows = [*hs056["nhan_dinh"]["can_chu_y"], *hs056["nhan_dinh"]["dat"]]
+    combo_rows = [
+        row
+        for row in all_rows
+        if row["ma_luat"] == "lieu_toi_da_khong_co_nguon"
+        and row["chi_tiet_y_lenh_id"] == ["CT-HS-056-05-01"]
+    ]
+    assert len(combo_rows) == 2
+    first_run_ids = [row["nhan_dinh_id"] for row in combo_rows]
+    assert len(set(first_run_ids)) == 2
+    prefix = "lieu_toi_da_khong_co_nguon|CT-HS-056-05-01|"
+    assert all(nid.startswith(prefix) for nid in first_run_ids)
+
+    source_cases = [case for case in load_source_cases(ROOT) if case.ca_id == "HS-056"]
+    assert len(source_cases) == 1
+    case_dir = tmp_path / "hs056_only"
+    case_dir.mkdir()
+    (case_dir / "HS-056.json").write_text(source_cases[0].model_dump_json(), encoding="utf-8")
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setenv("AUTH_MODE", "off")
+        mp.setenv("CASE_SOURCE", "file")
+        mp.setenv("CDSS_AI", "off")
+        mp.setattr(container_mod, "get_rule_context", lambda: runtime_context, raising=False)
+        service = CaseService(
+            case_dir,
+            _RENAL_PATH,
+            tmp_path / "phan_hoi_stable.jsonl",
+            ai_runner=None,
+            asker=None,
+        )
+        with TestClient(create_app(service)) as client:
+            second = client.get("/api/cases/HS-056").json()
+            second_rows = [
+                row
+                for row in (*second["nhan_dinh"]["can_chu_y"], *second["nhan_dinh"]["dat"])
+                if row["ma_luat"] == "lieu_toi_da_khong_co_nguon"
+                and row["chi_tiet_y_lenh_id"] == ["CT-HS-056-05-01"]
+            ]
+            assert [row["nhan_dinh_id"] for row in second_rows] == first_run_ids
+
+
+def test_hs056_feedback_distinguishes_duplicate_findings(
+    tmp_path: Path,
+    runtime_context: RuleContext,
+) -> None:
+    """Phản hồi một trong hai nhận định trùng khóa của HS-056 không đè lên nhận định còn lại."""
+    hs056_case = next(case for case in load_source_cases(ROOT) if case.ca_id == "HS-056")
+    case_dir = tmp_path / "hs056_fb"
+    case_dir.mkdir()
+    (case_dir / "HS-056.json").write_text(hs056_case.model_dump_json(), encoding="utf-8")
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setenv("AUTH_MODE", "off")
+        mp.setenv("CASE_SOURCE", "file")
+        mp.setenv("CDSS_AI", "off")
+        mp.setattr(container_mod, "get_rule_context", lambda: runtime_context, raising=False)
+        service = CaseService(
+            case_dir,
+            _RENAL_PATH,
+            tmp_path / "phan_hoi_fb.jsonl",
+            ai_runner=None,
+            asker=None,
+        )
+        with TestClient(create_app(service)) as client:
+            detail = client.get("/api/cases/HS-056").json()
+            targets = [
+                row
+                for row in (*detail["nhan_dinh"]["can_chu_y"], *detail["nhan_dinh"]["dat"])
+                if row["ma_luat"] == "lieu_toi_da_khong_co_nguon"
+                and row["chi_tiet_y_lenh_id"] == ["CT-HS-056-05-01"]
+            ]
+            assert len(targets) == 2
+            id_a, id_b = targets[0]["nhan_dinh_id"], targets[1]["nhan_dinh_id"]
+            assert id_a != id_b
+
+            resp1 = client.post(
+                "/api/cases/HS-056/feedback",
+                json={"nhan_dinh_id": id_a, "phan_hoi": "dong_y", "ly_do": "Đồng ý thành phần 1"},
+            )
+            assert resp1.status_code == 200
+
+            after1 = client.get("/api/cases/HS-056").json()
+            by_id1 = {
+                row["nhan_dinh_id"]: row
+                for row in (*after1["nhan_dinh"]["can_chu_y"], *after1["nhan_dinh"]["dat"])
+            }
+            assert by_id1[id_a]["phan_hoi"]["phan_hoi"] == "dong_y"
+            assert by_id1[id_b]["phan_hoi"] is None
+
+            all_rows = [*detail["nhan_dinh"]["can_chu_y"], *detail["nhan_dinh"]["dat"]]
+            for row in all_rows:
+                if row["nhan_dinh_id"] == id_a:
+                    continue
+                resp_other = client.post(
+                    "/api/cases/HS-056/feedback",
+                    json={"nhan_dinh_id": row["nhan_dinh_id"], "phan_hoi": "dong_y"},
+                )
+                assert resp_other.status_code == 200
+
+            queue_done = client.get("/api/cases").json()["cases"]
+            assert queue_done[0]["da_phan_hoi_het"] is True

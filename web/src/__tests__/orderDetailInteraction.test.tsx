@@ -45,3 +45,22 @@ describe('ma trận trong màn hình chi tiết', () => {
     expect(html).toContain('Yếu tố 4 · Tương tác thuốc')
   })
 })
+
+describe('lưới ma trận thu gọn mặc định trong chi tiết ca', () => {
+  it('mục luôn hiện, nút Ma trận tương tác aria-expanded=false, lưới ẩn', () => {
+    const html = renderDetail({
+      nguon: 'DDInter', ghi_chu: 'ghi chú',
+      thuoc: ['P1', 'P2'].map((id) => ({
+        chi_tiet_y_lenh_id: id, ten: `Thuốc giả lập ${id}`, nhom: 'cho_duyet' as const,
+        phan_giai: 'da_phan_giai' as const, hoat_chat: [], ly_do: null,
+      })),
+      cap: [{ a: 'P1', b: 'P2', muc: 'nghiem_trong', nhan_dinh_id: null, tom_tat: 'Cặp nặng', ly_do: null }],
+      thuc_an: [],
+    })
+    expect(html).toContain('Yếu tố 4 · Tương tác thuốc')
+    expect(html).toContain('aria-expanded="false"')
+    expect(html).toContain('Ma trận tương tác')
+    expect(html).toContain('Cặp nặng')
+    expect(html).toContain('hidden=""')
+  })
+})

@@ -53,7 +53,7 @@ import {
   SectionHeading,
 } from './DetailSections'
 import type { InfoItem } from './DetailSections'
-import { InteractionMatrix } from './InteractionMatrix'
+import { InteractionSection } from './InteractionSection'
 import { SixFactorStrip } from './SixFactorStrip'
 import { AdministrativeSections } from './AdministrativeSections'
 import { countMedicalOrders, medicalOrders, orderSelectionParams, selectMedicalOrder } from '@/lib/medicalRecord'
@@ -297,6 +297,7 @@ export function OrderDetailView({
   const { state: locationState } = useLocation()
   const [selectedDrug, setSelectedDrug] = useState<string | null>(null)
   const [passedOpen, setPassedOpen] = useState<boolean>(false)
+  const [interactionOpen, setInteractionOpen] = useState<boolean>(false)
   const [prevCaId, setPrevCaId] = useState<string>(detail.ca_id)
   const [rejectedOrderId, setRejectedOrderId] = useState<string | null>(null)
   const [feedbackDrafts, setFeedbackDrafts] = useState<Record<string, FeedbackDraft>>({})
@@ -873,8 +874,9 @@ export function OrderDetailView({
             aria-label="Tương tác thuốc"
             className="flex flex-col gap-2.5"
           >
-            <SectionHeading title="Yếu tố 4 · Tương tác thuốc" aside="Đối chiếu từng cặp thuốc" />
-            <InteractionMatrix
+            <InteractionSection
+              open={interactionOpen}
+              onOpenChange={setInteractionOpen}
               choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
               dangDung={detail.chi_tiet.y_lenh.dang_dung}
               maTranTuongTac={detail.ma_tran_tuong_tac}

@@ -758,6 +758,31 @@ def thuoc_nguy_co_cao(ca: CaBenh) -> list[PhatHien]:
     return findings
 
 
+def _build_no_toxicity_finding(
+    resolved_line_ids: list[str],
+    config: ToxicityConfig,
+) -> PhatHien:
+    """Tạo nhận định đạt khi có thuốc đã phân giải và không dòng nào phát sinh độc tính."""
+    return PhatHien(
+        ma_luat="doc_tinh_khong_thuoc_danh_sach",
+        yeu_to=_YEU_TO,
+        ket_luan="dat",
+        muc_do="thong_tin",
+        chi_tiet_y_lenh_id=resolved_line_ids,
+        mo_ta=(
+            "Không thuốc nào thuộc danh sách theo dõi độc tính "
+            "(độc thận, kéo dài QT, khoảng điều trị hẹp, độc gan LiverTox) trong nguồn đã lấy"
+        ),
+        can_cu=[
+            CanCu(
+                loai="tai_lieu",
+                ban_ghi_id="doc_tinh",
+                mo_ta=f"Bảng doc_tinh (phiên bản {config.phien_ban})",
+            )
+        ],
+    )
+
+
 def check(
     ca: CaBenh,
     resolver: DrugResolver | None = None,
@@ -774,10 +799,17 @@ def check(
         return thuoc_nguy_co_cao(ca)
 
     resolved_items = _resolve_effective_lines(ca, resolver)
-    return [
+    findings = [
         *_doc_than_cong_don(ca, resolved_items, active_config),
         *_keo_dai_qt_cong_don(resolved_items, active_config),
         *_khoang_dieu_tri_hep(ca, resolved_items, active_config),
         *_doc_gan_livertox(ca, resolved_items, active_config),
         *thuoc_nguy_co_cao(ca),
     ]
+    if not findings:
+        resolved_line_ids = [
+            item.line.chi_tiet_y_lenh_id for item in resolved_items if not item.is_unresolved
+        ]
+        if resolved_line_ids:
+            findings.append(_build_no_toxicity_finding(resolved_line_ids, active_config))
+    return findings

@@ -2,12 +2,14 @@ import { LoaderCircle, RotateCw, Info } from 'lucide-react'
 import type { TrangThaiAI } from '@/api/types'
 import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
-import { formatAiSeconds } from '@/lib/aiReview'
+import { formatAiDoneMessage } from '@/lib/aiReview'
 
 export interface AiStatusBarProps {
   trangThai: TrangThaiAI
   thoiGianMs: number | null
   coDienGiai: number
+  coDienGiaiCanChuY?: number
+  coDienGiaiDat?: number
   doAiThem: number
   canhBao: readonly string[]
   onRerun: () => void
@@ -18,6 +20,8 @@ export function AiStatusBar({
   trangThai,
   thoiGianMs,
   coDienGiai,
+  coDienGiaiCanChuY,
+  coDienGiaiDat,
   doAiThem,
   canhBao,
   onRerun,
@@ -92,7 +96,12 @@ export function AiStatusBar({
     )
   }
 
-  const timeText = thoiGianMs !== null ? ` (${formatAiSeconds(thoiGianMs)} giây)` : ''
+  const summaryText = formatAiDoneMessage(thoiGianMs, {
+    coDienGiai,
+    coDienGiaiCanChuY,
+    coDienGiaiDat,
+    doAiThem,
+  })
 
   return (
     <InlineAlert
@@ -110,10 +119,7 @@ export function AiStatusBar({
         </Button>
       }
     >
-      <p className="font-medium tabular-nums">
-        AI đã phân tích xong{timeText}. {coDienGiai} nhận định có diễn giải, {doAiThem} nhận định do
-        AI thêm.
-      </p>
+      <p className="font-medium tabular-nums">{summaryText}</p>
       {canhBao.length > 0 ? (
         <ul className="mt-1.5 flex list-disc flex-col gap-0.5 pl-4 text-xs text-fg-muted">
           {canhBao.map((msg, idx) => (

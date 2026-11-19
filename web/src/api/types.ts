@@ -434,3 +434,195 @@ export interface ApiErrorBody {
     thong_bao: string
   }
 }
+
+// ---- Hợp đồng v1.8: tra cứu thuốc, tra tương tác thủ công, máy tính công thức (chỉ đọc) ----
+
+export interface KetQuaThuoc {
+  hoat_chat_id: string
+  ten_inn: string
+  ten_viet: string | null
+  ma_atc: string[]
+  so_che_pham: number
+  co_nhan_fda: boolean
+  so_quy_tac: number
+}
+
+export interface DanhSachThuoc {
+  tong: number
+  trang: number
+  so_dong: number
+  ket_qua: KetQuaThuoc[]
+}
+
+export interface DinhDanhThuoc {
+  hoat_chat_id: string
+  ten_inn: string
+  ten_viet: string | null
+  rxcui: string | null
+  ma_atc: string[]
+  ddinter_id: string | null
+  loai: string
+  nguon: string
+  trang_thai: string | null
+}
+
+export interface ChePham {
+  ten_thuoc: string
+  so_dang_ky: string | null
+  dang_bao_che: string | null
+  ham_luong: number | null
+  don_vi: string | null
+}
+
+export interface DanhSachChePham {
+  nguon: string
+  trang_thai: string | null
+  tong: number
+  danh_sach: ChePham[]
+}
+
+export interface DoanNhanFda {
+  doan_trich_id: string
+  duong_dan_muc: string
+  noi_dung_goc: string
+  url_goc: string | null
+  tai_lieu_id: string
+  set_id: string | null
+  nguon: string
+  phien_ban_nguon: string | null
+  tang_tin_cay: number
+}
+
+export interface NhomNhanFda {
+  muc: string
+  doan: DoanNhanFda[]
+}
+
+export interface NhanFda {
+  nguon: string
+  trang_thai: string | null
+  tong_doan: number
+  nhom: NhomNhanFda[]
+}
+
+export interface QuyTacDong {
+  nhom: string
+  bang_luat: string
+  phan: string
+  phien_ban: string | null
+  trang_thai: string | null
+  du_lieu: Record<string, unknown>
+}
+
+export interface SoCapTuongTac {
+  major: number
+  moderate: number
+  minor: number
+  unknown: number
+}
+
+export interface CapMajor {
+  ddinter_id: string
+  ten_thuoc_khac: string
+  co_che: string[]
+}
+
+export interface TuongTacTomTat {
+  nguon: string
+  trang_thai: string | null
+  ddinter_id: string | null
+  co_du_lieu: boolean
+  so_cap: SoCapTuongTac
+  major: CapMajor[]
+  ghi_chu: string
+}
+
+export interface ChiTietThuoc {
+  dinh_danh: DinhDanhThuoc
+  che_pham: DanhSachChePham
+  nhan_fda: NhanFda
+  quy_tac: QuyTacDong[]
+  tuong_tac_tom_tat: TuongTacTomTat
+}
+
+export interface TraTuongTacYeuCau {
+  thuoc: string[]
+}
+
+export interface PhanGiaiTen {
+  ten_nhap: string
+  chi_tiet_y_lenh_id: string
+  trang_thai: 'da_phan_giai' | 'mot_phan' | 'khong_nhan_dien' | 'khong_ap_dung'
+  hoat_chat: string[]
+  ly_do: string | null
+}
+
+export interface CapChiTiet {
+  a: string
+  b: string
+  muc: string
+  mo_ta: string
+  can_cu: string[]
+  thong_tin_con_thieu: string[]
+}
+
+export interface KetQuaTraTuongTac {
+  ma_tran: MaTranTuongTac
+  phan_giai: PhanGiaiTen[]
+  chi_tiet: CapChiTiet[]
+}
+
+export interface DauVaoCongThuc {
+  ten: string
+  nhan: string
+  kieu: 'so' | 'lua_chon'
+  don_vi: string[]
+  lua_chon: string[]
+  nhan_lua_chon: Record<string, string>
+  truong_don_vi: string | null
+  bat_buoc: boolean
+  mac_dinh: string | number | null
+}
+
+export interface DauRaCongThuc {
+  don_vi: string[]
+  phan_hang: string[]
+}
+
+export interface CongThucMuc {
+  ma: string
+  ten: string
+  loai: string
+  dau_vao: DauVaoCongThuc[]
+  dau_ra: DauRaCongThuc
+  tham_khao_goc: string[]
+  tham_chieu_mdcalc: string | null
+  trang_thai: string
+}
+
+export interface DanhMucCongThuc {
+  cong_thuc: CongThucMuc[]
+}
+
+export interface TinhCongThucYeuCau {
+  dau_vao: Record<string, string | number | null>
+}
+
+export interface DauVaoDaDung {
+  ten: string
+  gia_tri: number
+  don_vi: string
+}
+
+export interface KetQuaCongThuc {
+  ma: string
+  cong_thuc: string
+  phien_ban: string
+  ket_qua: number | null
+  don_vi: string
+  dau_vao_da_dung: DauVaoDaDung[]
+  thieu_dau_vao: string[]
+  ghi_chu: string[]
+  tham_khao: string
+  trang_thai: string
+}

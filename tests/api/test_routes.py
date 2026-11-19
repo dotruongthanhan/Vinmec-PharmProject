@@ -120,6 +120,10 @@ def test_demo02_detail(client: TestClient) -> None:
     assert interaction["nhan_xet"] == (
         "Y lệnh chỉ có một thuốc đang hiệu lực, không có cặp để đối chiếu tương tác."
     )
+    assert "5. Độc tính" not in body["nhan_dinh"]["yeu_to_chua_kiem"]
+    toxicity = next(row for row in body["nhan_dinh"]["dat"] if row["yeu_to"].startswith("5."))
+    assert toxicity["ma_luat"] == "doc_tinh_khong_thuoc_danh_sach"
+    assert toxicity["ket_luan_ma"] == "dat"
 
 
 def test_missing_data_and_microbiology(client: TestClient) -> None:

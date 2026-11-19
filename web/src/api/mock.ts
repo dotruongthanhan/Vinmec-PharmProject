@@ -1,4 +1,5 @@
 import { ApiError } from './client.ts'
+import { MOCK_DRUGS, MOCK_FORMULAS, buildMockDrugDetail } from './mockLookup.ts'
 import type { ReviewApiClient } from './client.ts'
 import {
   MOCK_AI_ADDED_FINDINGS,
@@ -11,16 +12,23 @@ import {
 import type {
   BanGhi,
   ChiTietCa,
+  ChiTietThuoc,
+  DanhMucCongThuc,
+  DanhSachThuoc,
   DanhSachCa,
   DoanNguon,
   GuiCauHoi,
   GuiPhanHoi,
   HealthResponse,
   KetQuaAI,
+  KetQuaCongThuc,
+  KetQuaTraTuongTac,
   MeResponse,
   NhanDinh,
   PhanHoiDaGhi,
   PhanHoiMa,
+  TinhCongThucYeuCau,
+  TraTuongTacYeuCau,
   TraLoi,
 } from './types.ts'
 
@@ -434,5 +442,76 @@ export class MockClient implements ReviewApiClient {
       )
     }
     return cloneData(source)
+  }
+
+  async searchDrugs(params: { q?: string; trang?: number; soDong?: number }): Promise<DanhSachThuoc> {
+    await this.waitDelay()
+    const q = (params.q ?? '').trim().toLowerCase()
+    const found = MOCK_DRUGS.filter(
+      (d) => !q || d.ten_inn.includes(q) || (d.ten_viet ?? '').toLowerCase().includes(q),
+    )
+    return { tong: found.length, trang: params.trang ?? 1, so_dong: params.soDong ?? 30, ket_qua: cloneData(found) }
+  }
+
+  async getDrug(hoatChatId: string): Promise<ChiTietThuoc> {
+    await this.waitDelay()
+    const detail = buildMockDrugDetail(hoatChatId)
+    if (!detail) {
+      throw new ApiError('khong_tim_thay', `Không tìm thấy hoạt chất ${hoatChatId}.`, 404)
+    }
+    return detail
+  }
+
+  async checkInteractions(payload: TraTuongTacYeuCau): Promise<KetQuaTraTuongTac> {
+    await this.waitDelay()
+    if (payload.thuoc.length < 2 || payload.thuoc.length > 12) {
+      throw new ApiError('du_lieu_khong_hop_le', 'Cần nhập từ 2 đến 12 tên thuốc.', 422)
+    }
+    const ids = payload.thuoc.map((_, i) => `T${i + 1}`)
+    const cap = ids.flatMap((a, i) =>
+      ids.slice(i + 1).map((b) => ({
+        a, b, muc: 'khong_phat_hien' as const, nhan_dinh_id: null, tom_tat: null, ly_do: null,
+      })),
+    )
+    return {
+      ma_tran: {
+        nguon: 'DDInter (mock)',
+        ghi_chu: 'Dữ liệu mock.',
+        thuoc: payload.thuoc.map((ten, i) => ({
+          chi_tiet_y_lenh_id: ids[i], ten, nhom: 'cho_duyet' as const,
+          phan_giai: 'da_phan_giai' as const, hoat_chat: [ten.toLowerCase()], ly_do: null,
+        })),
+        cap,
+        thuc_an: [],
+      },
+      phan_giai: payload.thuoc.map((ten, i) => ({
+        ten_nhap: ten, chi_tiet_y_lenh_id: ids[i], trang_thai: 'da_phan_giai' as const,
+        hoat_chat: [ten.toLowerCase()], ly_do: null,
+      })),
+      chi_tiet: [],
+    }
+  }
+
+  async getFormulas(): Promise<DanhMucCongThuc> {
+    await this.waitDelay()
+    return cloneData(MOCK_FORMULAS)
+  }
+
+  async calculateFormula(ma: string, payload: TinhCongThucYeuCau): Promise<KetQuaCongThuc> {
+    await this.waitDelay()
+    const spec = MOCK_FORMULAS.cong_thuc.find((f) => f.ma === ma)
+    if (!spec) {
+      throw new ApiError('khong_tim_thay', `Không tìm thấy công thức ${ma}.`, 404)
+    }
+    const empty = (v: unknown) => v === undefined || v === null || v === ''
+    const missing = spec.dau_vao.filter((d) => d.bat_buoc && empty(payload.dau_vao[d.ten])).map((d) => d.ten)
+    const w = Number(payload.dau_vao['can_nang_kg'])
+    const h = Number(payload.dau_vao['chieu_cao_cm'])
+    const value = ma === 'bmi' && missing.length === 0 ? w / (h / 100) ** 2 : null
+    return {
+      ma, cong_thuc: spec.ten, phien_ban: 'mock', ket_qua: value, don_vi: spec.dau_ra.don_vi[0] ?? '',
+      dau_vao_da_dung: [], thieu_dau_vao: missing, ghi_chu: [], tham_khao: spec.tham_khao_goc[0] ?? '',
+      trang_thai: spec.trang_thai,
+    }
   }
 }

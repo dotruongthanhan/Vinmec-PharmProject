@@ -19,6 +19,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 export interface TopBarProps {
   cheDo: CheDo | null
   activeOrderCode: string | null
+  breadcrumbLabel?: string
+  backTo?: string
+  showAssistantToggle?: boolean
+  showSearch?: boolean
   searchQuery: string
   searchInputRef: RefObject<HTMLInputElement | null>
   isDemoMode: boolean
@@ -35,6 +39,10 @@ export interface TopBarProps {
 export function TopBar({
   cheDo,
   activeOrderCode,
+  breadcrumbLabel = 'Hồ sơ cần duyệt',
+  backTo = '/app',
+  showAssistantToggle = true,
+  showSearch = true,
   searchQuery,
   searchInputRef,
   isDemoMode,
@@ -67,8 +75,8 @@ export function TopBar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                to="/app"
-                aria-label="Quay lại danh sách y lệnh"
+                to={backTo}
+                aria-label={`Quay lại ${breadcrumbLabel.toLowerCase()}`}
                 className="inline-flex size-7 items-center justify-center rounded-sm text-fg-muted transition-colors duration-120 hover:bg-surface-hover hover:text-fg"
               >
                 <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden="true" />
@@ -80,14 +88,14 @@ export function TopBar({
 
         <nav aria-label="Đường dẫn" className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-sm">
           <Link
-            to="/app"
+            to={backTo}
             className={
               activeOrderCode
                 ? 'text-fg-muted hover:text-fg transition-colors duration-120'
                 : 'font-medium text-fg'
             }
           >
-            Y lệnh
+            {breadcrumbLabel}
           </Link>
           {activeOrderCode ? (
             <>
@@ -105,6 +113,7 @@ export function TopBar({
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        {showSearch ? (
         <div className="toolbar-search relative items-center">
           <Search
             className="pointer-events-none absolute left-2.5 size-3.5 text-fg-subtle"
@@ -137,6 +146,7 @@ export function TopBar({
             <Kbd className="pointer-events-none absolute right-2">Ctrl K</Kbd>
           )}
         </div>
+        ) : null}
 
         <Badge tone="neutral" variant="soft" className="toolbar-mode border-transparent text-fg-subtle">
           Dữ liệu giả lập
@@ -157,6 +167,7 @@ export function TopBar({
           </Badge>
         ) : null}
 
+        {showAssistantToggle ? (
         <IconButton
           icon={
             assistantOpen ? (
@@ -169,6 +180,7 @@ export function TopBar({
           aria-expanded={assistantOpen}
           onClick={onToggleAssistant}
         />
+        ) : null}
       </div>
     </header>
   )

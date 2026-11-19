@@ -4,13 +4,13 @@ import {
   ChevronDown,
   CircleCheck,
   CircleHelp,
-  ClipboardList,
+  FileCheck,
   FileQuestion,
   OctagonAlert,
   TriangleAlert,
   X,
 } from 'lucide-react'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { Dispatch, KeyboardEvent, SetStateAction } from 'react'
 import type { DongHangDoi, LoiNapCa } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
@@ -22,7 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { ErrorState } from '@/features/states/StateViews'
 import { cn } from '@/lib/cn'
-import { formatReadableDateTime, VIETNAM_TIME_ZONE } from '@/lib/displayFormat'
+import { administrativeDate, formatReadableDateTime, VIETNAM_TIME_ZONE } from '@/lib/displayFormat'
 import {
   ORDER_AI_WARNING_LABELS,
   ORDER_PRIORITY_LABELS,
@@ -34,6 +34,7 @@ import {
   getOrderPriorityLevel,
   getOrderWorkflowStatus,
   selectedFilterValues,
+  sortOrders,
   stepOrderSelection,
 } from '@/lib/orders'
 import type {
@@ -45,6 +46,8 @@ import type {
   OrderSortField,
   OrderWorkflowStatus,
 } from '@/lib/orders'
+import { DEFAULT_PAGE_SIZE, paginateItems } from '@/lib/pagination'
+import { TablePagination } from './TablePagination'
 
 export interface OrdersTableProps {
   filterTitle: string
@@ -60,6 +63,9 @@ export interface OrdersTableProps {
   onColumnFiltersChange: Dispatch<SetStateAction<OrderColumnFilters>>
   departments?: readonly string[]
   updatedAt?: Date | null
+  page?: number
+  pageSize?: number
+  onPageChange?: (page: number) => void
   onToggleSort: (field: OrderSortField) => void
   onSelectSort?: (field: OrderSortField, direction: OrderSortDirection) => void
   onOpenOrder: (caId: string) => void
@@ -132,6 +138,9 @@ const AI_WARNING_ICON_STYLE: Record<
     label: 'Đạt',
   },
 }
+
+const HEADER_TRIGGER_CLASS =
+  'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left text-2xs font-medium uppercase tracking-wide transition-colors hover:text-fg'
 
 function AiWarningIconCell({ item }: { item: DongHangDoi }) {
   const kind = getOrderAiWarningKind(item)
@@ -249,7 +258,7 @@ function ColumnFilterMenu<T extends string>({
     <Popover>
       <PopoverTrigger asChild>
         <button type="button" className={cn(
-          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
+          HEADER_TRIGGER_CLASS,
           (selected.length > 0 || sortProps.sortField === sortProps.field || sortProps.sortField === sortProps.aliasField) && 'text-fg',
         )}>
           <span>{label}</span>
@@ -261,7 +270,7 @@ function ColumnFilterMenu<T extends string>({
           <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
         </button>
       </PopoverTrigger>
-      <PopoverContent align={align} aria-label={label} className="w-56 p-1.5 text-xs">
+      <PopoverContent align={align} aria-label={label} className="w-56 p-1.5 text-xs normal-case tracking-normal">
         <SortMenuItems {...sortProps} />
         <fieldset className="mt-1 min-w-0 border-t border-line">
           <legend className="px-2 py-1 font-semibold text-fg-subtle">Lọc</legend>
@@ -280,7 +289,7 @@ function ColumnFilterMenu<T extends string>({
   )
 }
 
-/** Danh sách y lệnh 8 cột gọn phẳng: mỗi cột chỉ có 1 mũi tên hướng xuống mở menu sắp xếp & lọc. */
+/** Bảng danh sách hồ sơ cần duyệt 9 cột: giữ sắp xếp, lọc từng cột, tìm kiếm và phân trang 30 dòng. */
 export function OrdersTable({
   filterTitle,
   orders,
@@ -295,6 +304,9 @@ export function OrdersTable({
   onColumnFiltersChange: setColumnFilters,
   departments,
   updatedAt,
+  page,
+  pageSize = DEFAULT_PAGE_SIZE,
+  onPageChange,
   onToggleSort,
   onSelectSort,
   onOpenOrder,
@@ -304,17 +316,60 @@ export function OrdersTable({
 }: OrdersTableProps) {
   const rowRefs = useRef<Record<string, HTMLTableRowElement | null>>({})
   const dateInputRef = useRef<HTMLInputElement | null>(null)
+  const [internalPage, setInternalPage] = useState<number>(1)
+  const isPageControlled = page !== undefined
+  const activePageInput = isPageControlled ? page : internalPage
+
+  const [prevSearchQuery, setPrevSearchQuery] = useState<string>(searchQuery)
+  const [prevSortField, setPrevSortField] = useState<OrderSortField>(sortField)
+  const [prevSortDirection, setPrevSortDirection] = useState<OrderSortDirection>(sortDirection)
+  const [prevColumnFilters, setPrevColumnFilters] = useState<OrderColumnFilters>(columnFilters)
+
+  if (
+    prevSearchQuery !== searchQuery ||
+    prevSortField !== sortField ||
+    prevSortDirection !== sortDirection ||
+    prevColumnFilters !== columnFilters
+  ) {
+    setPrevSearchQuery(searchQuery)
+    setPrevSortField(sortField)
+    setPrevSortDirection(sortDirection)
+    setPrevColumnFilters(columnFilters)
+    if (!isPageControlled && internalPage !== 1) {
+      setInternalPage(1)
+    }
+  }
+
   const priorities = selectedFilterValues(columnFilters.priority)
   const selectedDepartments = selectedFilterValues(columnFilters.khoa)
   const statuses = selectedFilterValues(columnFilters.status)
   const warnings = selectedFilterValues(columnFilters.aiWarning)
 
+  const updateColumnFilters: Dispatch<SetStateAction<OrderColumnFilters>> = (nextAction) => {
+    setColumnFilters(nextAction)
+    if (!isPageControlled) {
+      setInternalPage(1)
+    }
+    onPageChange?.(1)
+  }
+
   const handleApplySort = (field: OrderSortField, direction: OrderSortDirection) => {
     if (onSelectSort) {
       onSelectSort(field, direction)
-      return
+    } else {
+      onToggleSort(field)
     }
-    onToggleSort(field)
+    if (!isPageControlled) {
+      setInternalPage(1)
+    }
+    onPageChange?.(1)
+  }
+
+  const handlePageChange = (nextPage: number) => {
+    if (!isPageControlled) {
+      setInternalPage(nextPage)
+    }
+    onPageChange?.(nextPage)
   }
 
   const availableDepartments = useMemo(() => {
@@ -323,10 +378,16 @@ export function OrdersTable({
     return Array.from(set).sort((a, b) => a.localeCompare(b, 'vi'))
   }, [departments, orders, columnFilters.khoa])
 
-  const displayedOrders = useMemo(
-    () => applyOrderColumnFilters(orders, columnFilters),
-    [orders, columnFilters],
+  const displayedOrders = useMemo(() => {
+    const filtered = applyOrderColumnFilters(orders, columnFilters)
+    return sortOrders(filtered, sortField, sortDirection)
+  }, [orders, columnFilters, sortField, sortDirection])
+
+  const pagination = useMemo(
+    () => paginateItems(displayedOrders, activePageInput, pageSize),
+    [displayedOrders, activePageInput, pageSize],
   )
+  const pagedOrders = pagination.items
 
   const hasActiveColumnFilter = Boolean(
     priorities.length || selectedDepartments.length || statuses.length || warnings.length ||
@@ -337,6 +398,10 @@ export function OrdersTable({
   const clearAllFilters = () => {
     setColumnFilters({})
     onResetFilters()
+    if (!isPageControlled) {
+      setInternalPage(1)
+    }
+    onPageChange?.(1)
   }
 
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, caId: string) => {
@@ -349,7 +414,7 @@ export function OrdersTable({
       return
     }
     const direction = event.key === 'ArrowDown' ? 'down' : 'up'
-    const nextId = stepOrderSelection(displayedOrders, caId, direction)
+    const nextId = stepOrderSelection(pagedOrders, caId, direction)
     if (!nextId) {
       return
     }
@@ -374,14 +439,14 @@ export function OrdersTable({
 
   return (
     <div className="orders-panel flex min-w-0 flex-col gap-3">
-      {/* Đầu trang danh sách: đồng bộ font chữ hệ thống Plus Jakarta Sans */}
+      {/* Đầu trang danh sách */}
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div className="flex flex-wrap items-baseline gap-2.5">
           <h1 className="text-lg font-semibold tracking-tight text-fg">
             {filterTitle}
           </h1>
           <span className="font-mono text-xs text-fg-subtle tabular-nums">
-            {loading ? 'Đang tải…' : `${displayedOrders.length} y lệnh`}
+            {loading ? 'Đang tải…' : `${displayedOrders.length} hồ sơ`}
           </span>
           {searchQuery.trim() ? (
             <span className="text-xs text-fg-muted">
@@ -408,7 +473,7 @@ export function OrdersTable({
               <button
                 type="button"
                 aria-label="Bỏ lọc ưu tiên"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, priority: [] }))}
+                onClick={() => updateColumnFilters((prev) => ({ ...prev, priority: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -421,7 +486,7 @@ export function OrdersTable({
               <button
                 type="button"
                 aria-label="Bỏ lọc khoa"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, khoa: [] }))}
+                onClick={() => updateColumnFilters((prev) => ({ ...prev, khoa: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -434,7 +499,7 @@ export function OrdersTable({
               <button
                 type="button"
                 aria-label="Bỏ lọc trạng thái"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, status: [] }))}
+                onClick={() => updateColumnFilters((prev) => ({ ...prev, status: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -447,7 +512,7 @@ export function OrdersTable({
               <button
                 type="button"
                 aria-label="Bỏ lọc cảnh báo AI"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, aiWarning: [] }))}
+                onClick={() => updateColumnFilters((prev) => ({ ...prev, aiWarning: [] }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -460,7 +525,7 @@ export function OrdersTable({
               <button
                 type="button"
                 aria-label="Bỏ lọc ngày kê"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, dateExact: '' }))}
+                onClick={() => updateColumnFilters((prev) => ({ ...prev, dateExact: '' }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -473,7 +538,7 @@ export function OrdersTable({
               <button
                 type="button"
                 aria-label="Bỏ lọc chuỗi thời điểm"
-                onClick={() => setColumnFilters((prev) => ({ ...prev, timeText: '' }))}
+                onClick={() => updateColumnFilters((prev) => ({ ...prev, timeText: '' }))}
                 className="cursor-pointer hover:text-fg"
               >
                 <X className="size-3" />
@@ -499,9 +564,9 @@ export function OrdersTable({
 
       {loading ? (
         <div
-          className="overflow-hidden rounded-md border border-line bg-surface"
+          className="overflow-hidden rounded-md border border-line bg-surface shadow-xs"
           aria-busy="true"
-          aria-label="Đang tải danh sách y lệnh"
+          aria-label="Đang tải danh sách hồ sơ cần duyệt"
         >
           <div className="h-9 border-b border-line bg-surface-muted px-3 flex items-center">
             <Skeleton className="h-3 w-48" />
@@ -520,393 +585,474 @@ export function OrdersTable({
           ))}
         </div>
       ) : error ? (
-        <ErrorState title="Không tải được danh sách y lệnh" message={error} onRetry={onRetry} />
+        <ErrorState title="Không tải được danh sách hồ sơ cần duyệt" message={error} onRetry={onRetry} />
       ) : totalCount === 0 ? (
-        <div className="rounded-md border border-line bg-surface">
+        <div className="rounded-md border border-line bg-surface shadow-xs">
           <EmptyState
             role="status"
-            icon={ClipboardList}
-            title="Không có y lệnh chờ thẩm định"
+            icon={FileCheck}
+            title="Không có hồ sơ cần duyệt"
           />
         </div>
       ) : (
-        <div
-          role="region"
-          aria-label="Bảng danh sách y lệnh"
-          tabIndex={0}
-          className="relative w-full overflow-x-auto rounded-md border border-line bg-surface"
-        >
-          <table
-            className="orders-table w-full table-fixed border-collapse text-xs"
-            aria-label="Danh sách y lệnh"
+        <>
+          <div
+            role="region"
+            aria-label="Bảng danh sách hồ sơ cần duyệt"
+            tabIndex={0}
+            className="relative w-full overflow-x-auto rounded-md border border-line bg-surface shadow-xs"
           >
-            <colgroup>
-              <col className="order-priority" />
-              <col className="order-time" />
-              <col className="order-code" />
-              <col className="order-patient-id" />
-              <col className="order-patient" />
-              <col className="order-dept" />
-              <col className="order-status" />
-              <col className="order-ai-warn" />
-            </colgroup>
-            <thead className="sticky top-0 z-10 bg-surface-muted">
-              <tr className="h-9 border-b border-line text-left text-xs font-medium text-fg-subtle">
-                {/* 1. Ưu tiên */}
-                <th scope="col" aria-sort={getAriaSort('uu_tien', 'ket_qua')}>
-                  <ColumnFilterMenu
-                    label="Ưu tiên" field="uu_tien" aliasField="ket_qua"
-                    sortField={sortField} sortDirection={sortDirection}
-                    ascLabel="Thấp → Cao" descLabel="Cao → Thấp" onApplySort={handleApplySort}
-                    options={PRIORITY_OPTIONS} selected={priorities}
-                    optionLabel={(value) => ORDER_PRIORITY_LABELS[value]}
-                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, priority: values }))}
-                  />
-                </th>
+            <table
+              className="orders-table w-full min-w-[920px] table-fixed border-collapse text-left text-sm"
+              aria-label="Danh sách hồ sơ cần duyệt"
+            >
+              <colgroup>
+                <col className="order-priority" />
+                <col className="order-time" />
+                <col className="order-patient-id" />
+                <col className="order-patient" />
+                <col className="order-dob" />
+                <col className="order-dept" />
+                <col className="order-diagnosis" />
+                <col className="order-status" />
+                <col className="order-ai-warn" />
+              </colgroup>
+              <thead className="sticky top-0 z-10 bg-surface-muted text-2xs font-medium uppercase tracking-wide text-fg-subtle">
+                <tr className="h-9 border-b border-line">
+                  {/* 1. Ưu tiên */}
+                  <th scope="col" aria-sort={getAriaSort('uu_tien', 'ket_qua')}>
+                    <ColumnFilterMenu
+                      label="Ưu tiên" field="uu_tien" aliasField="ket_qua"
+                      sortField={sortField} sortDirection={sortDirection}
+                      ascLabel="Thấp → Cao" descLabel="Cao → Thấp" onApplySort={handleApplySort}
+                      options={PRIORITY_OPTIONS} selected={priorities}
+                      optionLabel={(value) => ORDER_PRIORITY_LABELS[value]}
+                      onChange={(values) => updateColumnFilters((prev) => ({ ...prev, priority: values }))}
+                    />
+                  </th>
 
-                {/* 2. Thời điểm kê */}
-                <th scope="col" aria-sort={getAriaSort('thoi_diem_ke')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          (columnFilters.dateExact ||
-                            columnFilters.timeText?.trim() ||
-                            sortField === 'thoi_diem_ke') &&
-                            'text-fg',
-                        )}
-                      >
-                        <span>Thời điểm kê</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-64 p-2 text-xs">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex flex-col">
-                          <SortMenuItems
-                            field="thoi_diem_ke"
-                            sortField={sortField}
-                            sortDirection={sortDirection}
-                            descLabel="Mới nhất trước"
-                            ascLabel="Cũ nhất trước"
-                            onApplySort={handleApplySort}
-                          />
-                        </div>
+                  {/* 2. Thời điểm kê */}
+                  <th scope="col" aria-sort={getAriaSort('thoi_diem_ke')}>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            HEADER_TRIGGER_CLASS,
+                            (columnFilters.dateExact ||
+                              columnFilters.timeText?.trim() ||
+                              sortField === 'thoi_diem_ke') &&
+                              'text-fg',
+                          )}
+                        >
+                          <span>Thời điểm kê</span>
+                          <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-64 p-2 text-xs normal-case tracking-normal">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex flex-col">
+                            <SortMenuItems
+                              field="thoi_diem_ke"
+                              sortField={sortField}
+                              sortDirection={sortDirection}
+                              descLabel="Mới nhất trước"
+                              ascLabel="Cũ nhất trước"
+                              onApplySort={handleApplySort}
+                            />
+                          </div>
 
-                        <hr className="border-line" />
+                          <hr className="border-line" />
 
-                        <div className="flex flex-col gap-1 px-1">
-                          <label
-                            htmlFor="order-time-text-filter"
-                            className="font-medium text-fg-muted"
-                          >
-                            Tự nhập giờ hoặc ngày
-                          </label>
-                          <input
-                            id="order-time-text-filter"
-                            type="text"
-                            value={columnFilters.timeText ?? ''}
-                            onChange={(e) =>
-                              setColumnFilters((prev) => ({ ...prev, timeText: e.target.value }))
-                            }
-                            placeholder="VD: 07:55 hoặc 10/11/2026"
-                            className="h-7 w-full rounded-sm border border-line-strong bg-surface px-2 font-mono text-xs text-fg placeholder:font-sans placeholder:text-fg-subtle focus:border-primary"
-                          />
-                        </div>
-
-                        <div className="flex flex-col gap-1 px-1">
-                          <div className="flex items-center justify-between">
+                          <div className="flex flex-col gap-1 px-1">
                             <label
-                              htmlFor="order-date-picker-filter"
+                              htmlFor="order-time-text-filter"
                               className="font-medium text-fg-muted"
                             >
-                              Chọn ngày từ lịch
+                              Tự nhập giờ hoặc ngày
                             </label>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const inputEl = dateInputRef.current
-                                if (!inputEl) return
-                                if (typeof inputEl.showPicker === 'function') {
-                                  inputEl.showPicker()
-                                } else {
-                                  inputEl.focus()
-                                }
-                              }}
-                              className="inline-flex cursor-pointer items-center gap-1 text-2xs font-medium text-primary hover:underline"
-                            >
-                              <Calendar className="size-3" aria-hidden="true" />
-                              <span>Mở lịch</span>
-                            </button>
+                            <input
+                              id="order-time-text-filter"
+                              type="text"
+                              value={columnFilters.timeText ?? ''}
+                              onChange={(e) =>
+                                updateColumnFilters((prev) => ({ ...prev, timeText: e.target.value }))
+                              }
+                              placeholder="VD: 07:55 hoặc 10/11/2026"
+                              className="h-7 w-full rounded-sm border border-line-strong bg-surface px-2 font-mono text-xs text-fg placeholder:font-sans placeholder:text-fg-subtle focus:border-primary"
+                            />
                           </div>
-                          <input
-                            ref={dateInputRef}
-                            id="order-date-picker-filter"
-                            type="date"
-                            value={columnFilters.dateExact ?? ''}
-                            onChange={(e) =>
-                              setColumnFilters((prev) => ({ ...prev, dateExact: e.target.value }))
-                            }
-                            className="h-7 w-full cursor-pointer rounded-sm border border-line-strong bg-surface px-2 font-mono text-xs text-fg focus:border-primary"
-                          />
+
+                          <div className="flex flex-col gap-1 px-1">
+                            <div className="flex items-center justify-between">
+                              <label
+                                htmlFor="order-date-picker-filter"
+                                className="font-medium text-fg-muted"
+                              >
+                                Chọn ngày từ lịch
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const inputEl = dateInputRef.current
+                                  if (!inputEl) return
+                                  if (typeof inputEl.showPicker === 'function') {
+                                    inputEl.showPicker()
+                                  } else {
+                                    inputEl.focus()
+                                  }
+                                }}
+                                className="inline-flex cursor-pointer items-center gap-1 text-2xs font-medium text-primary hover:underline"
+                              >
+                                <Calendar className="size-3" aria-hidden="true" />
+                                <span>Mở lịch</span>
+                              </button>
+                            </div>
+                            <input
+                              ref={dateInputRef}
+                              id="order-date-picker-filter"
+                              type="date"
+                              value={columnFilters.dateExact ?? ''}
+                              onChange={(e) =>
+                                updateColumnFilters((prev) => ({ ...prev, dateExact: e.target.value }))
+                              }
+                              className="h-7 w-full cursor-pointer rounded-sm border border-line-strong bg-surface px-2 font-mono text-xs text-fg focus:border-primary"
+                            />
+                          </div>
+
+                          {columnFilters.timeText?.trim() || columnFilters.dateExact ? (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() =>
+                                updateColumnFilters((prev) => ({
+                                  ...prev,
+                                  timeText: '',
+                                  dateExact: '',
+                                }))
+                              }
+                              className="w-full justify-center"
+                            >
+                              Xoá lọc thời điểm
+                            </Button>
+                          ) : null}
                         </div>
+                      </PopoverContent>
+                    </Popover>
+                  </th>
 
-                        {columnFilters.timeText?.trim() || columnFilters.dateExact ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() =>
-                              setColumnFilters((prev) => ({
-                                ...prev,
-                                timeText: '',
-                                dateExact: '',
-                              }))
-                            }
-                            className="w-full justify-center"
-                          >
-                            Xoá lọc thời điểm
-                          </Button>
-                        ) : null}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </th>
+                  {/* 3. Mã BN */}
+                  <th scope="col" aria-sort={getAriaSort('ma_bn')}>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            HEADER_TRIGGER_CLASS,
+                            sortField === 'ma_bn' && 'text-fg',
+                          )}
+                        >
+                          <span>Mã BN</span>
+                          <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-44 p-1.5 text-xs normal-case tracking-normal">
+                        <SortMenuItems
+                          field="ma_bn"
+                          sortField={sortField}
+                          sortDirection={sortDirection}
+                          ascLabel="Mã BN A → Z"
+                          descLabel="Mã BN Z → A"
+                          onApplySort={handleApplySort}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </th>
 
-                {/* 3. Mã y lệnh */}
-                <th scope="col" aria-sort={getAriaSort('ma_y_lenh')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          sortField === 'ma_y_lenh' && 'text-fg',
-                        )}
-                      >
-                        <span>Mã y lệnh</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-44 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="ma_y_lenh"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        ascLabel="Mã A → Z"
-                        descLabel="Mã Z → A"
-                        onApplySort={handleApplySort}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </th>
+                  {/* 4. Người bệnh */}
+                  <th scope="col" aria-sort={getAriaSort('nguoi_benh')}>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            HEADER_TRIGGER_CLASS,
+                            sortField === 'nguoi_benh' && 'text-fg',
+                          )}
+                        >
+                          <span>Người bệnh</span>
+                          <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-48 p-1.5 text-xs normal-case tracking-normal">
+                        <SortMenuItems
+                          field="nguoi_benh"
+                          sortField={sortField}
+                          sortDirection={sortDirection}
+                          ascLabel="Tăng dần (A → Z)"
+                          descLabel="Giảm dần (Z → A)"
+                          onApplySort={handleApplySort}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </th>
 
-                {/* 4. Mã BN */}
-                <th scope="col" aria-sort={getAriaSort('ma_bn')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          sortField === 'ma_bn' && 'text-fg',
-                        )}
-                      >
-                        <span>Mã BN</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-44 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="ma_bn"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        ascLabel="Mã BN A → Z"
-                        descLabel="Mã BN Z → A"
-                        onApplySort={handleApplySort}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </th>
+                  {/* 5. Ngày sinh */}
+                  <th scope="col" aria-sort={getAriaSort('ngay_sinh')}>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            HEADER_TRIGGER_CLASS,
+                            sortField === 'ngay_sinh' && 'text-fg',
+                          )}
+                        >
+                          <span>Ngày sinh</span>
+                          <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-48 p-1.5 text-xs normal-case tracking-normal">
+                        <SortMenuItems
+                          field="ngay_sinh"
+                          sortField={sortField}
+                          sortDirection={sortDirection}
+                          ascLabel="Cũ nhất trước"
+                          descLabel="Mới nhất trước"
+                          onApplySort={handleApplySort}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </th>
 
-                {/* 5. Người bệnh */}
-                <th scope="col" aria-sort={getAriaSort('nguoi_benh')}>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex min-h-7 w-full cursor-pointer items-center gap-1 rounded-sm px-1 text-left font-medium transition-colors hover:text-fg',
-                          sortField === 'nguoi_benh' && 'text-fg',
-                        )}
-                      >
-                        <span>Người bệnh</span>
-                        <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-48 p-1.5 text-xs">
-                      <SortMenuItems
-                        field="nguoi_benh"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        ascLabel="Tăng dần (A → Z)"
-                        descLabel="Giảm dần (Z → A)"
-                        onApplySort={handleApplySort}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </th>
+                  {/* 6. Khoa */}
+                  <th scope="col" aria-sort={getAriaSort('khoa')}>
+                    <ColumnFilterMenu
+                      label="Khoa" field="khoa"
+                      sortField={sortField} sortDirection={sortDirection}
+                      ascLabel="Khoa A → Z" descLabel="Khoa Z → A" onApplySort={handleApplySort}
+                      options={availableDepartments} selected={selectedDepartments}
+                      onChange={(values) => updateColumnFilters((prev) => ({ ...prev, khoa: values }))}
+                    />
+                  </th>
 
-                {/* 6. Khoa */}
-                <th scope="col" aria-sort={getAriaSort('khoa')}>
-                  <ColumnFilterMenu
-                    label="Khoa" field="khoa"
-                    sortField={sortField} sortDirection={sortDirection}
-                    ascLabel="Khoa A → Z" descLabel="Khoa Z → A" onApplySort={handleApplySort}
-                    options={availableDepartments} selected={selectedDepartments}
-                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, khoa: values }))}
-                  />
-                </th>
+                  {/* 7. Chẩn đoán chính */}
+                  <th scope="col" aria-sort={getAriaSort('chan_doan_chinh')}>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            HEADER_TRIGGER_CLASS,
+                            sortField === 'chan_doan_chinh' && 'text-fg',
+                          )}
+                        >
+                          <span>Chẩn đoán chính</span>
+                          <ChevronDown className="size-3 shrink-0 opacity-70" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-48 p-1.5 text-xs normal-case tracking-normal">
+                        <SortMenuItems
+                          field="chan_doan_chinh"
+                          sortField={sortField}
+                          sortDirection={sortDirection}
+                          ascLabel="Chẩn đoán A → Z"
+                          descLabel="Chẩn đoán Z → A"
+                          onApplySort={handleApplySort}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </th>
 
-                {/* 7. Trạng thái */}
-                <th scope="col" aria-sort={getAriaSort('trang_thai')}>
-                  <ColumnFilterMenu
-                    label="Trạng thái" field="trang_thai" align="end"
-                    sortField={sortField} sortDirection={sortDirection}
-                    ascLabel="Chưa duyệt → Đã duyệt" descLabel="Đã duyệt → Chưa duyệt" onApplySort={handleApplySort}
-                    options={STATUS_OPTIONS} selected={statuses}
-                    optionLabel={(value) => ORDER_STATUS_LABELS[value]}
-                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, status: values }))}
-                  />
-                </th>
+                  {/* 8. Trạng thái */}
+                  <th scope="col" aria-sort={getAriaSort('trang_thai')}>
+                    <ColumnFilterMenu
+                      label="Trạng thái" field="trang_thai" align="end"
+                      sortField={sortField} sortDirection={sortDirection}
+                      ascLabel="Chưa duyệt → Đã duyệt" descLabel="Đã duyệt → Chưa duyệt" onApplySort={handleApplySort}
+                      options={STATUS_OPTIONS} selected={statuses}
+                      optionLabel={(value) => ORDER_STATUS_LABELS[value]}
+                      onChange={(values) => updateColumnFilters((prev) => ({ ...prev, status: values }))}
+                    />
+                  </th>
 
-                {/* 8. Cảnh báo AI */}
-                <th scope="col" aria-sort={getAriaSort('ket_qua')}>
-                  <ColumnFilterMenu
-                    label="Cảnh báo AI" field="ket_qua" aliasField="uu_tien" align="end"
-                    sortField={sortField} sortDirection={sortDirection}
-                    ascLabel="Đạt trước" descLabel="Nghiêm trọng trước" onApplySort={handleApplySort}
-                    options={WARNING_OPTIONS} selected={warnings}
-                    optionLabel={(value) => ORDER_AI_WARNING_LABELS[value]}
-                    onChange={(values) => setColumnFilters((prev) => ({ ...prev, aiWarning: values }))}
-                  />
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-line bg-surface">
-              {displayedOrders.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="py-8 text-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-sm font-medium text-fg">
-                        Không có y lệnh phù hợp bộ lọc hiện tại
-                      </p>
-                    </div>
-                  </td>
+                  {/* 9. Cảnh báo AI */}
+                  <th scope="col" aria-sort={getAriaSort('ket_qua')}>
+                    <ColumnFilterMenu
+                      label="Cảnh báo AI" field="ket_qua" aliasField="uu_tien" align="end"
+                      sortField={sortField} sortDirection={sortDirection}
+                      ascLabel="Đạt trước" descLabel="Nghiêm trọng trước" onApplySort={handleApplySort}
+                      options={WARNING_OPTIONS} selected={warnings}
+                      optionLabel={(value) => ORDER_AI_WARNING_LABELS[value]}
+                      onChange={(values) => updateColumnFilters((prev) => ({ ...prev, aiWarning: values }))}
+                    />
+                  </th>
                 </tr>
-              ) : (
-                displayedOrders.map((item) => {
-                  const priorityLevel = getOrderPriorityLevel(item)
-                  const priorityLabel = ORDER_PRIORITY_LABELS[priorityLevel]
-                  const patientCode = getOrderPatientCode(item)
-                  const workflowStatus = getOrderWorkflowStatus(item)
-                  const statusShortLabel = STATUS_SHORT_LABELS[workflowStatus]
-                  const statusFullLabel = ORDER_STATUS_LABELS[workflowStatus]
+              </thead>
 
-                  return (
-                    <tr
-                      key={item.ca_id}
-                      title={item.mo_ta}
-                      ref={(el) => {
-                        rowRefs.current[item.ca_id] = el
-                      }}
-                      tabIndex={0}
-                      onClick={() => onOpenOrder(item.ca_id)}
-                      onKeyDown={(e) => handleRowKeyDown(e, item.ca_id)}
-                      className="h-[44px] cursor-pointer transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-primary-soft/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
-                    >
-                      {/* 1. Ưu tiên */}
-                      <td className="whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg">
-                          <span
-                            className={cn(
-                              'inline-block size-2 rounded-full shrink-0',
-                              PRIORITY_DOT_CLASS[priorityLevel],
-                            )}
-                            aria-hidden="true"
-                          />
-                          <span className="truncate">{priorityLabel}</span>
-                        </span>
-                      </td>
+              <tbody className="divide-y divide-line bg-surface">
+                {pagedOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="py-8 text-center">
+                      <div className="flex flex-col items-center gap-2">
+                        <p className="text-sm font-medium text-fg">
+                          Không có hồ sơ phù hợp bộ lọc hiện tại
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  pagedOrders.map((item) => {
+                    const priorityLevel = getOrderPriorityLevel(item)
+                    const priorityLabel = ORDER_PRIORITY_LABELS[priorityLevel]
+                    const orderTime = item.thoi_diem_ke?.trim() || ''
+                    const patientCode = getOrderPatientCode(item)
+                    const hoTen = item.ho_ten?.trim() || ''
+                    const patientSummary = item.nguoi_benh_tom_tat?.trim() || ''
+                    const dobText = administrativeDate(item.ngay_sinh)
+                    const department = item.khoa.trim()
+                    const diagnosis = item.chan_doan_chinh?.trim() || ''
+                    const workflowStatus = getOrderWorkflowStatus(item)
+                    const statusShortLabel = STATUS_SHORT_LABELS[workflowStatus]
+                    const statusFullLabel = ORDER_STATUS_LABELS[workflowStatus]
 
-                      {/* 2. Thời điểm kê */}
-                      <td className="font-mono text-xs tabular-nums whitespace-nowrap text-fg-muted">
-                        {item.thoi_diem_ke ? (
-                          <time
-                            dateTime={item.thoi_diem_ke}
-                            title={formatReadableDateTime(item.thoi_diem_ke)}
+                    return (
+                      <tr
+                        key={item.ca_id}
+                        title={item.mo_ta}
+                        ref={(el) => {
+                          rowRefs.current[item.ca_id] = el
+                        }}
+                        tabIndex={0}
+                        onClick={() => onOpenOrder(item.ca_id)}
+                        onKeyDown={(e) => handleRowKeyDown(e, item.ca_id)}
+                        className="h-[44px] cursor-pointer transition-colors duration-120 hover:bg-surface-hover focus-within:bg-surface-hover focus-visible:bg-primary-soft/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+                      >
+                        {/* 1. Ưu tiên */}
+                        <td className="whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg">
+                            <span
+                              className={cn(
+                                'inline-block size-2 rounded-full shrink-0',
+                                PRIORITY_DOT_CLASS[priorityLevel],
+                              )}
+                              aria-hidden="true"
+                            />
+                            <span className="truncate">{priorityLabel}</span>
+                          </span>
+                        </td>
+
+                        {/* 2. Thời điểm kê */}
+                        <td className="font-mono text-xs tabular-nums whitespace-nowrap text-fg-muted">
+                          {orderTime ? (
+                            <time
+                              dateTime={orderTime}
+                              title={formatReadableDateTime(orderTime)}
+                            >
+                              {formatReadableDateTime(orderTime)
+                                .replace(/\/\d{4}$/, '')
+                                .split(' · ')
+                                .map((part, index) => (
+                                  <span key={index} className="block leading-tight">
+                                    {part}
+                                  </span>
+                                ))}
+                            </time>
+                          ) : (
+                            <span className="font-sans text-fg-subtle">Chưa ghi nhận</span>
+                          )}
+                        </td>
+
+                        {/* 3. Mã BN */}
+                        <td
+                          className="break-words font-mono text-xs whitespace-nowrap"
+                          title={patientCode || undefined}
+                        >
+                          <button
+                            type="button"
+                            aria-label={`Mở hồ sơ ${patientCode || item.ca_id}`}
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              onOpenOrder(item.ca_id)
+                            }}
+                            className="cursor-pointer rounded-sm text-left text-primary underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                           >
-                            {formatReadableDateTime(item.thoi_diem_ke)
-                              .replace(/\/\d{4}$/, '')
-                              .split(' · ')
-                              .map((part, index) => (
-                                <span key={index} className="block leading-tight">
-                                  {part}
-                                </span>
-                              ))}
-                          </time>
-                        ) : null}
-                      </td>
+                            {patientCode || '—'}
+                          </button>
+                        </td>
 
-                      {/* 3. Mã y lệnh */}
-                      <td
-                        className="font-mono text-xs font-semibold text-fg whitespace-nowrap"
-                        title={item.ma_y_lenh ?? undefined}
-                      >
-                        <span className="block truncate">{item.ma_y_lenh ?? ''}</span>
-                      </td>
+                        {/* 4. Người bệnh */}
+                        <td
+                          className="break-words text-sm text-fg"
+                          title={patientSummary || hoTen || undefined}
+                        >
+                          {hoTen ? (
+                            <>
+                              <span className="block font-medium text-fg">
+                                {hoTen.toLocaleUpperCase('vi-VN')}
+                              </span>
+                              {' '}
+                            </>
+                          ) : null}
+                          <span className={hoTen ? 'block text-xs text-fg-muted' : patientSummary ? 'block' : 'block text-fg-subtle'}>
+                            {patientSummary || 'Chưa ghi nhận'}
+                          </span>
+                        </td>
 
-                      {/* 4. Mã BN */}
-                      <td
-                        className="font-mono text-xs text-fg-muted whitespace-nowrap"
-                        title={patientCode || undefined}
-                      >
-                        <span className="block truncate">{patientCode}</span>
-                      </td>
+                        {/* 5. Ngày sinh */}
+                        <td
+                          className={cn(
+                            'break-words text-sm tabular-nums',
+                            dobText === 'Chưa ghi nhận' ? 'text-fg-subtle' : 'text-fg-muted',
+                          )}
+                        >
+                          {dobText}
+                        </td>
 
-                      {/* 5. Người bệnh */}
-                      <td
-                        className="text-xs text-fg whitespace-nowrap"
-                        title={item.nguoi_benh_tom_tat ?? undefined}
-                      >
-                        <span className="block truncate">{item.nguoi_benh_tom_tat ?? ''}</span>
-                      </td>
+                        {/* 6. Khoa */}
+                        <td className="break-words text-sm text-fg-muted" title={department || undefined}>
+                          {department || '—'}
+                        </td>
 
-                      {/* 6. Khoa */}
-                      <td className="text-xs text-fg-muted whitespace-nowrap" title={item.khoa}>
-                        <span className="block truncate">{item.khoa}</span>
-                      </td>
+                        {/* 7. Chẩn đoán chính */}
+                        <td
+                          className={cn(
+                            'break-words text-sm',
+                            diagnosis ? 'text-fg' : 'text-fg-subtle',
+                          )}
+                          title={diagnosis || undefined}
+                        >
+                          {diagnosis || 'Chưa ghi nhận'}
+                        </td>
 
-                      {/* 7. Trạng thái */}
-                      <td className="whitespace-nowrap" title={statusFullLabel}>
-                        <Badge tone={STATUS_BADGE_TONE[workflowStatus]} variant="soft">
-                          {statusShortLabel}
-                        </Badge>
-                      </td>
+                        {/* 8. Trạng thái */}
+                        <td className="whitespace-nowrap" title={statusFullLabel}>
+                          <Badge tone={STATUS_BADGE_TONE[workflowStatus]} variant="soft">
+                            {statusShortLabel}
+                          </Badge>
+                        </td>
 
-                      {/* 8. Cảnh báo AI (chỉ icon + tooltip khi hover) */}
-                      <td className="text-center">
-                        <AiWarningIconCell item={item} />
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                        {/* 9. Cảnh báo AI (chỉ icon + tooltip khi hover) */}
+                        <td className="text-center">
+                          <AiWarningIconCell item={item} />
+                        </td>
+                      </tr>
+                    )
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <TablePagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            totalItems={pagination.totalItems}
+            startIndex={pagination.startIndex}
+            endIndex={pagination.endIndex}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
       {updatedAt ? (
         <div className="flex justify-end">

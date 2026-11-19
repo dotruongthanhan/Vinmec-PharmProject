@@ -1,15 +1,22 @@
 import type {
   BanGhi,
   ChiTietCa,
+  ChiTietThuoc,
+  DanhMucCongThuc,
   DanhSachCa,
+  DanhSachThuoc,
   DoanNguon,
   GuiCauHoi,
   GuiPhanHoi,
   HealthResponse,
   KetQuaAI,
+  KetQuaCongThuc,
+  KetQuaTraTuongTac,
   MeResponse,
   PhanHoiDaGhi,
+  TinhCongThucYeuCau,
   TraLoi,
+  TraTuongTacYeuCau,
 } from './types.ts'
 
 /** Lỗi chuẩn hoá từ API backend hoặc lỗi kết nối / định dạng. */
@@ -46,6 +53,12 @@ export interface ReviewApiClient {
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI>
   getAi(caId: string): Promise<KetQuaAI | null>
   getSource(caId: string, doanTrichId: string): Promise<DoanNguon>
+  /** Tra cứu thuốc (hợp đồng v1.8). `trang` bắt đầu từ 1. */
+  searchDrugs(params: { q?: string; trang?: number; soDong?: number }, options?: { signal?: AbortSignal }): Promise<DanhSachThuoc>
+  getDrug(hoatChatId: string, options?: { signal?: AbortSignal }): Promise<ChiTietThuoc>
+  checkInteractions(payload: TraTuongTacYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaTraTuongTac>
+  getFormulas(options?: { signal?: AbortSignal }): Promise<DanhMucCongThuc>
+  calculateFormula(ma: string, payload: TinhCongThucYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaCongThuc>
   getConversations?(): Promise<Record<string, SavedConversationTurn[]>>
   clearConversation?(caId: string): Promise<void>
 }
@@ -311,6 +324,40 @@ export class ApiClient implements ReviewApiClient {
     return this.request<DoanNguon>(
       `/cases/${encodeURIComponent(caId)}/sources/${encodeURIComponent(doanTrichId)}`,
     )
+  }
+
+  searchDrugs(params: { q?: string; trang?: number; soDong?: number }, options?: { signal?: AbortSignal }): Promise<DanhSachThuoc> {
+    const query = new URLSearchParams()
+    if (params.q) query.set('q', params.q)
+    query.set('trang', String(params.trang ?? 1))
+    query.set('so_dong', String(params.soDong ?? 30))
+    return this.request<DanhSachThuoc>(`/thuoc?${query.toString()}`, { signal: options?.signal })
+  }
+
+  getDrug(hoatChatId: string, options?: { signal?: AbortSignal }): Promise<ChiTietThuoc> {
+    return this.request<ChiTietThuoc>(`/thuoc/${encodeURIComponent(hoatChatId)}`, { signal: options?.signal })
+  }
+
+  checkInteractions(payload: TraTuongTacYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaTraTuongTac> {
+    return this.request<KetQuaTraTuongTac>('/tuong-tac', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: options?.signal,
+    })
+  }
+
+  getFormulas(options?: { signal?: AbortSignal }): Promise<DanhMucCongThuc> {
+    return this.request<DanhMucCongThuc>('/cong-thuc', { signal: options?.signal })
+  }
+
+  calculateFormula(ma: string, payload: TinhCongThucYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaCongThuc> {
+    return this.request<KetQuaCongThuc>(`/cong-thuc/${encodeURIComponent(ma)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: options?.signal,
+    })
   }
 
   getConversations(): Promise<Record<string, SavedConversationTurn[]>> {

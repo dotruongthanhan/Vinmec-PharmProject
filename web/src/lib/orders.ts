@@ -1,5 +1,5 @@
 import type { DongHangDoi } from '../api/types.ts'
-import { formatIsoTimestamp } from './displayFormat.ts'
+import { administrativeDate, formatIsoTimestamp } from './displayFormat.ts'
 
 export type OrderFilterGroup = 'tat_ca' | 'can_xem' | 'thieu_du_lieu' | 'dat' | 'da_phan_hoi'
 
@@ -15,7 +15,9 @@ export type OrderSortField =
   | 'ca_id'
   | 'ma_bn'
   | 'nguoi_benh'
+  | 'ngay_sinh'
   | 'khoa'
+  | 'chan_doan_chinh'
   | 'trang_thai'
 
 export type OrderSortDirection = 'asc' | 'desc'
@@ -67,7 +69,7 @@ export interface OrderGroupCounts {
 }
 
 export const ORDER_FILTER_LABELS: Record<OrderFilterGroup, string> = {
-  tat_ca: 'Tất cả y lệnh',
+  tat_ca: 'Hồ sơ cần duyệt',
   can_xem: 'Cần xem',
   thieu_du_lieu: 'Thiếu dữ liệu',
   dat: 'Đạt',
@@ -284,6 +286,7 @@ function matchesSearchQuery(item: OrderRowInput, normalizedQuery: string): boole
     item.nguoi_benh_tom_tat ?? '',
     item.ho_ten ?? '',
     item.ngay_sinh ?? '',
+    item.ngay_sinh ? administrativeDate(item.ngay_sinh) : '',
     item.chan_doan_chinh ?? '',
     item.khoa,
     ...(item.thuoc ?? []),
@@ -372,6 +375,11 @@ function parseSortableTimeMs(raw: string | null | undefined): number | null {
   if (Number.isFinite(isoMs)) {
     return isoMs
   }
+  const dmyDateMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(trimmed)
+  if (dmyDateMatch) {
+    const [, dd, mm, yyyy] = dmyDateMatch
+    return Date.UTC(Number(yyyy), Number(mm) - 1, Number(dd))
+  }
   const dmyMatch = /^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})$/.exec(trimmed)
   if (dmyMatch) {
     const [, dd, mm, yyyy, hh, min] = dmyMatch
@@ -440,14 +448,45 @@ export function sortOrders<T extends OrderRowInput>(
       const diff = VI_COLLATOR.compare(getOrderPatientCode(a.item), getOrderPatientCode(b.item))
       cmp = sortDirection === 'asc' ? diff : -diff
     } else if (sortField === 'nguoi_benh') {
-      const diff = VI_COLLATOR.compare(
-        a.item.nguoi_benh_tom_tat ?? '',
-        b.item.nguoi_benh_tom_tat ?? '',
-      )
+      const aLabel = a.item.ho_ten?.trim() || a.item.nguoi_benh_tom_tat?.trim() || ''
+      const bLabel = b.item.ho_ten?.trim() || b.item.nguoi_benh_tom_tat?.trim() || ''
+      const diff = VI_COLLATOR.compare(aLabel, bLabel)
       cmp = sortDirection === 'asc' ? diff : -diff
+      if (cmp === 0) {
+        const subDiff = VI_COLLATOR.compare(
+          a.item.nguoi_benh_tom_tat ?? '',
+          b.item.nguoi_benh_tom_tat ?? '',
+        )
+        cmp = sortDirection === 'asc' ? subDiff : -subDiff
+      }
+    } else if (sortField === 'ngay_sinh') {
+      const aMs = parseSortableTimeMs(a.item.ngay_sinh)
+      const bMs = parseSortableTimeMs(b.item.ngay_sinh)
+      if (aMs === null && bMs === null) {
+        cmp = 0
+      } else if (aMs === null) {
+        cmp = 1
+      } else if (bMs === null) {
+        cmp = -1
+      } else {
+        cmp = sortDirection === 'asc' ? aMs - bMs : bMs - aMs
+      }
     } else if (sortField === 'khoa') {
       const diff = VI_COLLATOR.compare(a.item.khoa, b.item.khoa)
       cmp = sortDirection === 'asc' ? diff : -diff
+    } else if (sortField === 'chan_doan_chinh') {
+      const aDiag = a.item.chan_doan_chinh?.trim() ?? ''
+      const bDiag = b.item.chan_doan_chinh?.trim() ?? ''
+      if (!aDiag && !bDiag) {
+        cmp = 0
+      } else if (!aDiag) {
+        cmp = 1
+      } else if (!bDiag) {
+        cmp = -1
+      } else {
+        const diff = VI_COLLATOR.compare(aDiag, bDiag)
+        cmp = sortDirection === 'asc' ? diff : -diff
+      }
     } else if (sortField === 'trang_thai') {
       const diff =
         STATUS_SORT_RANK[getOrderWorkflowStatus(a.item)] -

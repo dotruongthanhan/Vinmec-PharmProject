@@ -812,7 +812,177 @@ def test_excluded_electrolyte_line_ignored() -> None:
             }
         ),
     )
-    assert check(ca, resolver, _sample_config()) == []
+    findings = check(ca, resolver, _sample_config())
+    assert [item.ma_luat for item in findings] == ["doc_tinh_khong_thuoc_danh_sach"]
+    assert findings[0].ket_luan == "dat"
+    assert findings[0].chi_tiet_y_lenh_id == ["CT-GENT"]
+    assert all("CT-NACL" not in item.chi_tiet_y_lenh_id for item in findings)
+
+
+def test_no_toxicity_match_returns_dat_for_meropenem() -> None:
+    """Ca chỉ có meropenem không thuộc danh sách trả về đúng 1 nhận định đạt."""
+    hc_mero = HoatChat(hoat_chat_id="meropenem", ten_hoat_chat="Meropenem")
+    t_mero = Thuoc(
+        thuoc_id="T-MERO",
+        ten_thuoc="Meropenem 1 g",
+        thanh_phan=[ThanhPhan(hoat_chat_id="meropenem")],
+    )
+    ca = make_minimal_case(
+        chi_tiet=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-MERO",
+                thuoc_id="T-MERO",
+                bat_dau=NOW,
+                trang_thai_dong="pending",
+            )
+        ],
+        danh_muc_thuoc=[t_mero],
+        danh_muc_hoat_chat=[hc_mero],
+    )
+    resolver = cast(DrugResolver, _FakeResolver({"T-MERO": _resolved("meropenem", "Meropenem")}))
+
+    findings = check(ca, resolver, _sample_config())
+    assert len(findings) == 1
+    finding = findings[0]
+    assert finding.ma_luat == "doc_tinh_khong_thuoc_danh_sach"
+    assert finding.yeu_to == 5
+    assert finding.ket_luan == "dat"
+    assert finding.muc_do == "thong_tin"
+    assert finding.chi_tiet_y_lenh_id == ["CT-MERO"]
+    assert finding.thong_tin_con_thieu == []
+    assert finding.mo_ta == (
+        "Không thuốc nào thuộc danh sách theo dõi độc tính "
+        "(độc thận, kéo dài QT, khoảng điều trị hẹp, độc gan LiverTox) trong nguồn đã lấy"
+    )
+    assert len(finding.can_cu) == 1
+    assert finding.can_cu[0].loai == "tai_lieu"
+    assert "doc_tinh" in finding.can_cu[0].mo_ta
+    assert "D6-test" in finding.can_cu[0].mo_ta
+
+
+def test_gentamicin_in_toxicity_list_does_not_emit_not_in_list_finding() -> None:
+    """Ca có gentamicin sinh nhận định độc tính, không sinh doc_tinh_khong_thuoc_danh_sach."""
+    hc_gent = HoatChat(hoat_chat_id="gentamicin", ten_hoat_chat="Gentamicin")
+    t_gent = Thuoc(
+        thuoc_id="T-GENT",
+        ten_thuoc="Gentamicin 80 mg",
+        thanh_phan=[ThanhPhan(hoat_chat_id="gentamicin")],
+    )
+    ca = make_minimal_case(
+        chi_tiet=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-GENT",
+                thuoc_id="T-GENT",
+                bat_dau=NOW,
+                trang_thai_dong="pending",
+            )
+        ],
+        danh_muc_thuoc=[t_gent],
+        danh_muc_hoat_chat=[hc_gent],
+    )
+    resolver = cast(DrugResolver, _FakeResolver({"T-GENT": _resolved("gentamicin", "Gentamicin")}))
+    base = _sample_config()
+    cfg_with_gent_narrow = base.model_copy(
+        update={
+            "khoang_dieu_tri_hep": (
+                *base.khoang_dieu_tri_hep,
+                NarrowTherapeuticEntry(
+                    hoat_chat_id="gentamicin",
+                    ma_xet_nghiem_nong_do=("gentamicin",),
+                    nguon=(
+                        _fda_src(
+                            "GENTAMICIN SULFATE",
+                            "set-gent",
+                            "Serum concentrations of aminoglycosides should be monitored.",
+                        ),
+                    ),
+                ),
+            )
+        }
+    )
+
+    findings = check(ca, resolver, cfg_with_gent_narrow)
+    assert [item.ma_luat for item in findings] == ["nong_do_chua_theo_doi"]
+    assert all(item.ma_luat != "doc_tinh_khong_thuoc_danh_sach" for item in findings)
+
+    ca_combo, combo_resolver = _nephro_case(with_renal_comorbidity=False)
+    combo_findings = check(ca_combo, combo_resolver, base)
+    assert any(item.ma_luat == "doc_than_cong_don" for item in combo_findings)
+    assert all(item.ma_luat != "doc_tinh_khong_thuoc_danh_sach" for item in combo_findings)
+
+
+def test_all_unresolved_lines_do_not_emit_dat_and_partial_excludes_unresolved() -> None:
+    """Mọi dòng chưa phân giải thì không sinh nhận định đạt; dòng lạ không tính đạt."""
+    ca_all_pending_unknown = make_minimal_case(
+        chi_tiet=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-UNK-1",
+                ten_tu_do="Thuốc chưa mã hoá 1",
+                bat_dau=NOW,
+                trang_thai_dong="pending",
+            )
+        ]
+    )
+    resolver_unknown = cast(DrugResolver, _FakeResolver({}))
+    pending_findings = check(ca_all_pending_unknown, resolver_unknown, _sample_config())
+    assert all(item.ma_luat != "doc_tinh_khong_thuoc_danh_sach" for item in pending_findings)
+    assert all(item.ket_luan != "dat" for item in pending_findings)
+
+    ca_all_active_unknown = make_minimal_case(
+        chi_tiet=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-UNK-2",
+                ten_tu_do="Thuốc chưa mã hoá 2",
+                bat_dau=NOW,
+                trang_thai_dong="pending",
+            )
+        ],
+        thuoc_dang_dung=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-UNK-ACT",
+                ten_tu_do="Thuốc đang dùng chưa rõ",
+                bat_dau=NOW,
+                trang_thai_dong="active",
+            )
+        ],
+    )
+    active_findings = check(ca_all_active_unknown, resolver_unknown, _sample_config())
+    assert all(item.ma_luat != "doc_tinh_khong_thuoc_danh_sach" for item in active_findings)
+    assert all(item.ket_luan != "dat" for item in active_findings)
+
+    hc_mero = HoatChat(hoat_chat_id="meropenem", ten_hoat_chat="Meropenem")
+    t_mero = Thuoc(
+        thuoc_id="T-MERO",
+        ten_thuoc="Meropenem 1 g",
+        thanh_phan=[ThanhPhan(hoat_chat_id="meropenem")],
+    )
+    ca_mixed = make_minimal_case(
+        chi_tiet=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-MERO",
+                thuoc_id="T-MERO",
+                bat_dau=NOW,
+                trang_thai_dong="pending",
+            )
+        ],
+        thuoc_dang_dung=[
+            ChiTietYLenh(
+                chi_tiet_y_lenh_id="CT-UNK-ACT",
+                ten_tu_do="Thuốc đang dùng chưa rõ",
+                bat_dau=NOW,
+                trang_thai_dong="active",
+            )
+        ],
+        danh_muc_thuoc=[t_mero],
+        danh_muc_hoat_chat=[hc_mero],
+    )
+    mixed_resolver = cast(
+        DrugResolver,
+        _FakeResolver({"T-MERO": _resolved("meropenem", "Meropenem")}),
+    )
+    mixed_findings = check(ca_mixed, mixed_resolver, _sample_config())
+    assert [item.ma_luat for item in mixed_findings] == ["doc_tinh_khong_thuoc_danh_sach"]
+    assert mixed_findings[0].chi_tiet_y_lenh_id == ["CT-MERO"]
 
 
 def test_load_real_doc_tinh_config_or_skip() -> None:

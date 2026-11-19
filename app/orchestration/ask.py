@@ -34,7 +34,6 @@ from app.orchestration.evidence import LazyRetrieverFactory
 from app.pipeline import KetQuaThamDinh, run_case
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import RenalRuleBook, load_renal_rules
-from app.rules.types import PhatHien
 from app.ui import labels
 from app.ui import view_model as vm
 from app.verify.citation import quote_matches_source
@@ -190,11 +189,6 @@ class AskResult(BaseModel):
 def _source_label(nguon: str) -> str:
     """Đổi mã nguồn đoạn trích sang nhãn tiếng Việt."""
     return _SOURCE_LABELS.get(nguon, nguon.replace("_", " "))
-
-
-def _rule_finding_id(finding: PhatHien) -> str:
-    """Tạo mã nhận định ổn định cho phát hiện của bộ luật."""
-    return finding.ma_luat + "|" + ",".join(sorted(finding.chi_tiet_y_lenh_id))
 
 
 def _ai_finding_id(yeu_to: int, nhan_xet: str, chi_tiet_y_lenh_id: Sequence[str]) -> str:
@@ -353,21 +347,28 @@ def _format_ai_section(
     """Định dạng phần nhận định AI đã kiểm chứng; mã bản ghi thành mã tạm, định danh được che."""
     if ai_result is None or ai_result.llm.trang_thai != "ok":
         return ""
+    ai_rule_findings = [
+        item.phat_hien
+        for item in ai_result.llm.nhan_dinh
+        if item.nguon_goc == "luat" and item.phat_hien is not None
+    ]
+    ai_rule_nids = iter(vm.finding_ids(ai_rule_findings))
     lines: list[str] = []
     for item in ai_result.llm.nhan_dinh:
-        if item.nguon_goc == "luat" and item.phat_hien is not None and item.dien_giai is not None:
-            fid = _rule_finding_id(item.phat_hien)
-            cites = ", ".join(td.doan_trich_id for td in item.dien_giai.trich_dan) or "không có"
-            explanation = _scrub_free_text(session, item.dien_giai.nhan_xet)
-            lines.append(
-                f"- Diễn giải AI cho {fid}: {explanation}"
-                + (
-                    f" | Đề xuất: {_scrub_free_text(session, item.dien_giai.de_xuat)}"
-                    if item.dien_giai.de_xuat
-                    else ""
+        if item.nguon_goc == "luat" and item.phat_hien is not None:
+            fid = next(ai_rule_nids)
+            if item.dien_giai is not None:
+                cites = ", ".join(td.doan_trich_id for td in item.dien_giai.trich_dan) or "không có"
+                explanation = _scrub_free_text(session, item.dien_giai.nhan_xet)
+                lines.append(
+                    f"- Diễn giải AI cho {fid}: {explanation}"
+                    + (
+                        f" | Đề xuất: {_scrub_free_text(session, item.dien_giai.de_xuat)}"
+                        if item.dien_giai.de_xuat
+                        else ""
+                    )
+                    + f" | Nguồn: {cites}"
                 )
-                + f" | Nguồn: {cites}"
-            )
         elif item.nguon_goc == "ai_da_kiem_chung" and item.de_xuat is not None:
             dx = item.de_xuat
             aid = _ai_finding_id(dx.yeu_to, dx.nhan_xet, dx.chi_tiet_y_lenh_id)
@@ -411,8 +412,9 @@ def _priority_finding_raw(
     if not nhan_dinh_id:
         return "", set()
 
-    for ph in ket_qua.phat_hien:
-        if _rule_finding_id(ph) == nhan_dinh_id:
+    rule_nids = vm.finding_ids(ket_qua.phat_hien)
+    for ph, fid in zip(ket_qua.phat_hien, rule_nids, strict=True):
+        if fid == nhan_dinh_id:
             for line_id in ph.chi_tiet_y_lenh_id:
                 ids.tam(line_id)
             lines = [
@@ -429,26 +431,31 @@ def _priority_finding_raw(
                 lines.append(f"  + Căn cứ [{cc.loai}] ma={ref}: {cc.mo_ta}")
             cited_chunk_ids: set[str] = set()
             if ai_result is not None and ai_result.llm.trang_thai == "ok":
+                ai_rule_findings = [
+                    item.phat_hien
+                    for item in ai_result.llm.nhan_dinh
+                    if item.nguon_goc == "luat" and item.phat_hien is not None
+                ]
+                ai_rule_nids = iter(vm.finding_ids(ai_rule_findings))
                 for item in ai_result.llm.nhan_dinh:
-                    if (
-                        item.nguon_goc == "luat"
-                        and item.phat_hien is not None
-                        and _rule_finding_id(item.phat_hien) == nhan_dinh_id
-                        and item.dien_giai is not None
-                    ):
-                        lines.append(
-                            f"- Diễn giải AI: {_scrub_free_text(session, item.dien_giai.nhan_xet)}"
-                        )
-                        if item.dien_giai.de_xuat:
+                    if item.nguon_goc == "luat" and item.phat_hien is not None:
+                        ai_fid = next(ai_rule_nids)
+                        if ai_fid == nhan_dinh_id and item.dien_giai is not None:
                             lines.append(
-                                f"- Đề xuất AI: {_scrub_free_text(session, item.dien_giai.de_xuat)}"
+                                "- Diễn giải AI: "
+                                f"{_scrub_free_text(session, item.dien_giai.nhan_xet)}"
                             )
-                        for td in item.dien_giai.trich_dan:
-                            cited_chunk_ids.add(td.doan_trich_id)
-                            lines.append(
-                                f"  + Trích dẫn tài liệu [{td.doan_trich_id}]: "
-                                f"{td.trich_nguyen_van}"
-                            )
+                            if item.dien_giai.de_xuat:
+                                lines.append(
+                                    "- Đề xuất AI: "
+                                    f"{_scrub_free_text(session, item.dien_giai.de_xuat)}"
+                                )
+                            for td in item.dien_giai.trich_dan:
+                                cited_chunk_ids.add(td.doan_trich_id)
+                                lines.append(
+                                    f"  + Trích dẫn tài liệu [{td.doan_trich_id}]: "
+                                    f"{td.trich_nguyen_van}"
+                                )
             return "\n".join(lines), cited_chunk_ids
 
     if ai_result is not None and ai_result.llm.trang_thai == "ok":

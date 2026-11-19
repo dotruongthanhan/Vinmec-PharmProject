@@ -263,3 +263,27 @@ export function buildInteractionMatrix(
   }
   return { drugs, pairs, untested, foods: [], source: null, note: null }
 }
+
+/** Tóm tắt một dòng cho tiêu đề ma trận khi đang thu gọn, ví dụ "3 thuốc · 1 cặp nghiêm trọng". */
+export function summarizeInteraction(data: InteractionMatrixData): string {
+  const drugs = `${data.drugs.length} thuốc`
+  if (data.drugs.length < 2) {
+    return `${drugs} · không có cặp để đối chiếu`
+  }
+  if (data.untested) {
+    return `${drugs} · chưa kiểm tương tác`
+  }
+  const count = (level: string) => data.pairs.filter((pair) => pair.level === level).length
+  const parts: string[] = []
+  const severe = count('nghiem_trong')
+  const caution = count('can_luu_y')
+  const missing = count('thieu_du_lieu')
+  if (severe > 0) parts.push(`${severe} cặp nghiêm trọng`)
+  if (caution > 0) parts.push(`${caution} cặp cần lưu ý`)
+  if (missing > 0) parts.push(`${missing} cặp thiếu dữ liệu`)
+  if (parts.length === 0) {
+    const applicable = data.pairs.filter((pair) => pair.level !== 'khong_ap_dung').length
+    parts.push(applicable === 0 ? 'không có cặp áp dụng' : 'không ghi nhận cặp cần lưu ý')
+  }
+  return `${drugs} · ${parts.join(' · ')}`
+}

@@ -118,6 +118,11 @@ def test_interface_field_sets_match_contract() -> None:
     ).items():
         contract_fields.setdefault(name, set()).update(fields)
 
+    v18_fields = _parse_contract_interfaces(ROOT / "plan/api-hop-dong-v1.8-tra-cuu.md")
+    assert len(v18_fields) == 24
+    for name, fields in v18_fields.items():
+        contract_fields.setdefault(name, set()).update(fields)
+
     for name, fields in contract_fields.items():
         model = getattr(schemas, name)
         assert set(model.model_fields) == fields, name
@@ -159,10 +164,18 @@ def test_all_demo_cases_validate_without_internal_display_codes(
     body = response.json()
     ChiTietCa.model_validate(body, extra="forbid")
     _check_display_strings(body)
-    for finding in body["nhan_dinh"]["can_chu_y"] + body["nhan_dinh"]["dat"]:
-        assert finding["nhan_dinh_id"] == (
-            finding["ma_luat"] + "|" + ",".join(sorted(finding["chi_tiet_y_lenh_id"]))
-        )
+    all_findings = body["nhan_dinh"]["can_chu_y"] + body["nhan_dinh"]["dat"]
+    base_counts: dict[str, int] = {}
+    for finding in all_findings:
+        base = finding["ma_luat"] + "|" + ",".join(sorted(finding["chi_tiet_y_lenh_id"]))
+        base_counts[base] = base_counts.get(base, 0) + 1
+    assert len({f["nhan_dinh_id"] for f in all_findings}) == len(all_findings)
+    for finding in all_findings:
+        base = finding["ma_luat"] + "|" + ",".join(sorted(finding["chi_tiet_y_lenh_id"]))
+        if base_counts[base] == 1:
+            assert finding["nhan_dinh_id"] == base
+        else:
+            assert finding["nhan_dinh_id"].startswith(base + "|")
         assert finding["dien_giai_ai"] is None
         assert finding["de_xuat_ai"] is None
         assert finding["trich_dan"] == []

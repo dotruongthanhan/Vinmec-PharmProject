@@ -1,12 +1,14 @@
 ﻿import {
+  ArrowLeftRight,
+  Calculator,
   ChevronsUpDown,
   CircleHelp,
-  ClipboardList,
-  FileText,
+  FileCheck,
   LogIn,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
+  Pill,
   Settings,
 } from 'lucide-react'
 import { useState } from 'react'
@@ -17,10 +19,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { VinmecLogo } from '@/components/VinmecLogo'
 import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
+export type SidebarSection = 'orders' | 'thuoc' | 'tuong_tac' | 'cong_thuc'
+
 export interface SidebarNavProps {
   collapsed: boolean
   inDrawer?: boolean
-  activeSection: 'orders' | 'records'
+  activeSection: SidebarSection
   onNavigate: () => void
   userEmail: string | null
   vaiTro?: AuthRole | null
@@ -129,11 +133,13 @@ export function SidebarNav({
         ) : null}
       </div>
 
-      {/* 2. Hai mục điều hướng chính */}
+      {/* 2. Mục điều hướng chính: hồ sơ cần duyệt, rồi 3 mục tra cứu (thuốc, tương tác, công thức). */}
       <div className="flex shrink-0 flex-col gap-1 p-2">
         {([
-          { section: 'orders', to: '/app', label: 'Y lệnh', icon: ClipboardList },
-          { section: 'records', to: '/app/ho-so', label: 'Hồ sơ bệnh án', icon: FileText },
+          { section: 'orders', to: '/app', label: 'Hồ sơ cần duyệt', icon: FileCheck },
+          { section: 'thuoc', to: '/app/thuoc', label: 'Tra cứu thuốc', icon: Pill },
+          { section: 'tuong_tac', to: '/app/tuong-tac', label: 'Tra tương tác', icon: ArrowLeftRight },
+          { section: 'cong_thuc', to: '/app/cong-thuc', label: 'Tính toán', icon: Calculator },
         ] as const).map(({ section, to, label, icon: Icon }) => {
           const link = (
             <Link

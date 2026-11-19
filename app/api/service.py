@@ -18,6 +18,7 @@ from app.api.presenter import (
     ai_finding_id,
     current_mode,
     finding_id,
+    finding_ids,
     present_ai_result,
     present_case,
     present_feedback,
@@ -792,26 +793,29 @@ class CaseService:
         with self._lock:
             case = self._get_case(case_id)
             rule_result = self._review(case)
-            finding = next(
+            rule_nids = finding_ids(rule_result.phat_hien)
+            matched = next(
                 (
-                    item
-                    for item in rule_result.phat_hien
-                    if finding_id(item) == request.nhan_dinh_id
+                    (item, nid)
+                    for item, nid in zip(rule_result.phat_hien, rule_nids, strict=True)
+                    if nid == request.nhan_dinh_id
                 ),
                 None,
             )
             ai_line: tuple[str, int, list[str]] | None = None
-            if finding is None:
+            if matched is None:
                 ai_line = self._find_ai_feedback_target(case, rule_result, request.nhan_dinh_id)
-            if finding is None and ai_line is None:
+            if matched is None and ai_line is None:
                 raise HTTPException(404, "Không tìm thấy nhận định trong ca bệnh.")
             reasons = {label: code for code, label in NHOM_LY_DO.items()}
             if request.phan_hoi in ("bac_bo", "can_sua") and not request.nhom_ly_do:
                 raise HTTPException(422, "Cần chọn nhóm lý do.")
             if request.nhom_ly_do is not None and request.nhom_ly_do not in reasons:
                 raise HTTPException(422, "Nhóm lý do không hợp lệ.")
-            if finding is not None:
-                ma_luat = finding.ma_luat
+            if matched is not None:
+                finding, nid = matched
+                base_id = finding_id(finding)
+                ma_luat = finding.ma_luat if nid == base_id else nid
                 yeu_to = finding.yeu_to
                 line_ids = list(finding.chi_tiet_y_lenh_id)
             else:

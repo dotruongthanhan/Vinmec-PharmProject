@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react'
-import type { BangYLenh, MaTranTuongTac, NhanDinh } from '@/api/types'
+import { ChevronRight } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
+import type { BangYLenh, CapChiTiet, MaTranTuongTac, NhanDinh } from '@/api/types'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/cn'
-import { INTERACTION_LEVEL_META, buildInteractionMatrix } from '@/lib/detailTables'
+import { INTERACTION_LEVEL_META, buildInteractionMatrix, summarizeInteraction } from '@/lib/detailTables'
 import type { InteractionLevel, InteractionPair } from '@/lib/detailTables'
 
 const LEVEL_ORDER: readonly InteractionLevel[] = [
@@ -38,6 +39,53 @@ function LevelChip({ level, className }: { level: InteractionLevel; className?: 
   )
 }
 
+/** Biến chuỗi có URL thành liên kết an toàn; phần còn lại giữ nguyên văn. */
+function LinkifiedText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(https?:\/\/[^\s)]+)/g).map((part, index) =>
+        /^https?:\/\//.test(part) ? (
+          <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="break-all text-primary underline">
+            {part}
+          </a>
+        ) : (
+          <span key={index}>{part}</span>
+        ),
+      )}
+    </>
+  )
+}
+
+/** Thẻ chi tiết một cặp: mô tả, căn cứ DDInter nguyên văn và thông tin còn thiếu. */
+function PairDetailCard({ detail, defaultOpen }: { detail: CapChiTiet; defaultOpen: boolean }) {
+  return (
+    <details open={defaultOpen} className="mt-1.5 rounded-sm border border-line bg-surface-muted/50 px-3 py-2 text-sm">
+      <summary className="cursor-pointer text-xs font-semibold text-fg-muted">Chi tiết cặp và căn cứ</summary>
+      <div className="mt-2 flex flex-col gap-2">
+        {detail.mo_ta ? <p className="text-fg">{detail.mo_ta}</p> : null}
+        {detail.can_cu.length > 0 ? (
+          <div>
+            <p className="text-2xs font-semibold tracking-wide text-fg-subtle">CĂN CỨ</p>
+            <ul className="mt-1 flex list-disc flex-col gap-1 pl-4 text-fg-muted">
+              {detail.can_cu.map((line, index) => (
+                <li key={index}><LinkifiedText text={line} /></li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {detail.thong_tin_con_thieu.length > 0 ? (
+          <div>
+            <p className="text-2xs font-semibold tracking-wide text-missing-fg">THÔNG TIN CÒN THIẾU</p>
+            <ul className="mt-1 flex list-disc flex-col gap-1 pl-4 text-fg-muted">
+              {detail.thong_tin_con_thieu.map((line, index) => <li key={index}>{line}</li>)}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+    </details>
+  )
+}
+
 export interface InteractionMatrixProps {
   choDuyet: BangYLenh
   dangDung: BangYLenh | null
@@ -48,6 +96,14 @@ export interface InteractionMatrixProps {
   }
   onOpenFinding: (findingId: string) => void
   maTranTuongTac?: MaTranTuongTac | null
+  /** Trang tra tương tác thủ công: đổi nhãn cột trái, bỏ nhãn "Y lệnh chờ duyệt". */
+  manual?: boolean
+  /** Chi tiết từng cặp (`chi_tiet[]` của POST /api/tuong-tac); khớp cặp theo chi_tiet_y_lenh_id. */
+  pairDetails?: readonly CapChiTiet[]
+  /** Mở sẵn thẻ chi tiết cặp (tra tay); mặc định thu gọn. */
+  detailsOpen?: boolean
+  /** Có nút thu gọn/mở riêng cho lưới ma trận (chú giải, thẻ cặp luôn hiện) (tab Thẩm định). Bỏ qua = luôn mở. */
+  matrixToggle?: { open: boolean; onOpenChange: (open: boolean) => void }
 }
 
 /**
@@ -60,7 +116,12 @@ export function InteractionMatrix({
   nhanDinh,
   onOpenFinding,
   maTranTuongTac,
+  manual = false,
+  pairDetails = [],
+  detailsOpen = false,
+  matrixToggle,
 }: InteractionMatrixProps) {
+  const matrixPanelId = useId()
   const data = useMemo(
     () => buildInteractionMatrix(choDuyet, dangDung, nhanDinh, maTranTuongTac),
     [choDuyet, dangDung, nhanDinh, maTranTuongTac],
@@ -88,7 +149,7 @@ export function InteractionMatrix({
       {/* Cột trái: danh sách thuốc */}
       <div className="flex flex-col border-b border-line bg-surface-muted/60 @3xl:border-b-0 @3xl:border-r">
         <div className="border-b border-line px-4 py-2.5 text-xs font-semibold tracking-wide text-fg-muted">
-          THUỐC TRONG Y LỆNH ({data.drugs.length})
+          {manual ? 'THUỐC ĐÃ NHẬP' : 'THUỐC TRONG Y LỆNH'} ({data.drugs.length})
         </div>
         <ul className="flex flex-col">
           {data.drugs.map((drug, idx) => {
@@ -111,9 +172,11 @@ export function InteractionMatrix({
                     <span className={cn('block font-medium', selected ? 'text-primary' : 'text-fg')}>
                       {drug.name}
                     </span>
-                    <span className="block text-2xs text-fg-subtle">
-                      {drug.group === 'cho_duyet' ? 'Y lệnh chờ duyệt' : 'Thuốc đang dùng'}
-                    </span>
+                    {manual ? null : (
+                      <span className="block text-2xs text-fg-subtle">
+                        {drug.group === 'cho_duyet' ? 'Y lệnh chờ duyệt' : 'Thuốc đang dùng'}
+                      </span>
+                    )}
                   </span>
                 </button>
               </li>
@@ -143,8 +206,33 @@ export function InteractionMatrix({
           ))}
         </ul>
 
+        {matrixToggle && hasMatrix ? (
+          <button
+            type="button"
+            aria-expanded={matrixToggle.open}
+            aria-controls={matrixPanelId}
+            onClick={() => matrixToggle.onOpenChange(!matrixToggle.open)}
+            className="flex w-full cursor-pointer items-center gap-2 rounded-sm text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <ChevronRight
+              className={cn('size-4 shrink-0 text-fg-muted transition-transform duration-120', matrixToggle.open && 'rotate-90')}
+              strokeWidth={1.75}
+              aria-hidden="true"
+            />
+            <span className="flex min-w-0 flex-1 flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+              <span className="text-sm font-semibold text-fg">Ma trận tương tác</span>
+              <span className="text-xs text-fg-subtle tabular-nums">
+                {matrixToggle.open ? 'Lưới các cặp thuốc' : summarizeInteraction(data)}
+              </span>
+            </span>
+          </button>
+        ) : null}
         {hasMatrix ? (
-          <div className="overflow-x-auto">
+          <div
+            id={matrixPanelId}
+            hidden={matrixToggle ? !matrixToggle.open : false}
+            className="overflow-x-auto"
+          >
             <table className="border-separate border-spacing-1 text-sm">
               <thead>
                 <tr>
@@ -257,6 +345,12 @@ export function InteractionMatrix({
                       {data.drugs[pair.a].name} + {data.drugs[pair.b].name}
                     </span>
                     <span className="block text-sm text-fg-muted">{pair.finding?.nhan_xet ?? pair.summary ?? pair.reason}</span>
+                    {(() => {
+                      const keyA = data.drugs[pair.a].key
+                      const keyB = data.drugs[pair.b].key
+                      const detail = pairDetails.find((item) => (item.a === keyA && item.b === keyB) || (item.a === keyB && item.b === keyA))
+                      return detail ? <PairDetailCard detail={detail} defaultOpen={detailsOpen} /> : null
+                    })()}
                     {pair.findingId ? (
                       <button type="button" className="mt-1 cursor-pointer text-sm text-primary underline"
                         onClick={() => onOpenFinding(pair.findingId!)}>Mở nhận định</button>

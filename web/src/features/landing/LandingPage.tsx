@@ -31,10 +31,10 @@ const FACTORS: readonly { index: number; name: string; note: string; ready: bool
   { index: 1, name: 'Dị ứng, quá mẫn', note: 'Tiền sử dị ứng và dị ứng chéo cùng nhóm', ready: true },
   { index: 2, name: 'Trùng lặp thuốc', note: 'Trùng hoạt chất giữa các dòng đang hiệu lực', ready: true },
   { index: 3, name: 'Chỉ định, liều, đường dùng', note: 'Đối chiếu kháng sinh với kết quả vi sinh', ready: true },
-  { index: 4, name: 'Tương tác thuốc', note: 'Ma trận từng cặp thuốc trong y lệnh', ready: false },
-  { index: 5, name: 'Độc tính', note: 'Chưa có luật trong bản thử nghiệm', ready: false },
-  { index: 6, name: 'Cơ địa và xét nghiệm', note: 'Chỉnh liều theo chức năng thận', ready: true },
-  { index: 7, name: 'Lịch dùng và yếu tố khác', note: 'Thiếu liều, lệch giờ so với tần suất kê', ready: true },
+  { index: 4, name: 'Tương tác thuốc', note: 'Sàng lọc từng cặp thuốc theo DDInter', ready: true },
+  { index: 5, name: 'Độc tính', note: 'Độc thận, kéo dài QT, khoảng điều trị hẹp, độc gan', ready: true },
+  { index: 6, name: 'Cơ địa và xét nghiệm', note: 'Thận, gan, ngưỡng xét nghiệm, thuốc–bệnh', ready: true },
+  { index: 7, name: 'Lịch dùng và yếu tố khác', note: 'Lịch dùng, kháng sinh quản lý, trường bắt buộc', ready: true },
 ]
 
 const STATS: readonly { value: string; label: string }[] = [

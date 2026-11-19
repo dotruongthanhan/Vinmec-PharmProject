@@ -1,7 +1,7 @@
 """Mô hình trao đổi JSON theo hợp đồng API v1, v1.1 và hỏi đáp v1.2."""
 
 from datetime import date, datetime
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -497,3 +497,193 @@ class LanThamDinhLichSu(ApiModel):
 class LichSuThamDinh(ApiModel):
     ca_id: str
     lich_su: list[LanThamDinhLichSu]
+
+
+class KetQuaThuoc(ApiModel):
+    hoat_chat_id: str
+    ten_inn: str
+    ten_viet: str | None
+    ma_atc: list[str]
+    so_che_pham: int
+    co_nhan_fda: bool
+    so_quy_tac: int
+
+
+class DanhSachThuoc(ApiModel):
+    tong: int
+    trang: int
+    so_dong: int
+    ket_qua: list[KetQuaThuoc]
+
+
+class DinhDanhThuoc(ApiModel):
+    hoat_chat_id: str
+    ten_inn: str
+    ten_viet: str | None
+    rxcui: str | None
+    ma_atc: list[str]
+    ddinter_id: str | None
+    loai: str
+    nguon: str
+    trang_thai: str | None
+
+
+class ChePham(ApiModel):
+    ten_thuoc: str
+    so_dang_ky: str | None
+    dang_bao_che: str | None
+    ham_luong: float | None
+    don_vi: str | None
+
+
+class DanhSachChePham(ApiModel):
+    nguon: str
+    trang_thai: str | None
+    tong: int
+    danh_sach: list[ChePham]
+
+
+class DoanNhanFda(ApiModel):
+    doan_trich_id: str
+    duong_dan_muc: str
+    noi_dung_goc: str
+    url_goc: str | None
+    tai_lieu_id: str
+    set_id: str | None
+    nguon: str
+    phien_ban_nguon: str | None
+    tang_tin_cay: int
+
+
+class NhomNhanFda(ApiModel):
+    muc: str
+    doan: list[DoanNhanFda]
+
+
+class NhanFda(ApiModel):
+    nguon: str
+    trang_thai: str | None
+    tong_doan: int
+    nhom: list[NhomNhanFda]
+
+
+class QuyTacDong(ApiModel):
+    nhom: str
+    bang_luat: str
+    phan: str
+    phien_ban: str | None
+    trang_thai: str | None
+    du_lieu: dict[str, Any]
+
+
+class SoCapTuongTac(ApiModel):
+    major: int
+    moderate: int
+    minor: int
+    unknown: int
+
+
+class CapMajor(ApiModel):
+    ddinter_id: str
+    ten_thuoc_khac: str
+    co_che: list[str]
+
+
+class TuongTacTomTat(ApiModel):
+    nguon: str
+    trang_thai: str | None
+    ddinter_id: str | None
+    co_du_lieu: bool
+    so_cap: SoCapTuongTac
+    major: list[CapMajor]
+    ghi_chu: str
+
+
+class ChiTietThuoc(ApiModel):
+    dinh_danh: DinhDanhThuoc
+    che_pham: DanhSachChePham
+    nhan_fda: NhanFda
+    quy_tac: list[QuyTacDong]
+    tuong_tac_tom_tat: TuongTacTomTat
+
+
+class TraTuongTacYeuCau(ApiModel):
+    thuoc: list[str]
+
+
+class PhanGiaiTen(ApiModel):
+    ten_nhap: str
+    chi_tiet_y_lenh_id: str
+    trang_thai: Literal["da_phan_giai", "mot_phan", "khong_nhan_dien", "khong_ap_dung"]
+    hoat_chat: list[str]
+    ly_do: str | None
+
+
+class CapChiTiet(ApiModel):
+    a: str
+    b: str
+    muc: str
+    mo_ta: str
+    can_cu: list[str]
+    thong_tin_con_thieu: list[str]
+
+
+class KetQuaTraTuongTac(ApiModel):
+    ma_tran: MaTranTuongTac
+    phan_giai: list[PhanGiaiTen]
+    chi_tiet: list[CapChiTiet]
+
+
+class DauVaoCongThuc(ApiModel):
+    ten: str
+    nhan: str
+    kieu: Literal["so", "lua_chon"]
+    don_vi: list[str]
+    lua_chon: list[str]
+    nhan_lua_chon: dict[str, str] = Field(default_factory=dict)
+    truong_don_vi: str | None
+    bat_buoc: bool
+    mac_dinh: str | float | None
+
+
+class DauRaCongThuc(ApiModel):
+    don_vi: list[str]
+    phan_hang: list[str]
+
+
+class CongThucMuc(ApiModel):
+    ma: str
+    ten: str
+    loai: str
+    dau_vao: list[DauVaoCongThuc]
+    dau_ra: DauRaCongThuc
+    tham_khao_goc: list[str]
+    tham_chieu_mdcalc: str | None
+    trang_thai: str
+
+
+class DanhMucCongThuc(ApiModel):
+    cong_thuc: list[CongThucMuc]
+
+
+class TinhCongThucYeuCau(ApiModel):
+    dau_vao: dict[str, Any]
+
+
+class DauVaoDaDung(ApiModel):
+    ten: str
+    gia_tri: float
+    don_vi: str
+
+
+class KetQuaCongThuc(ApiModel):
+    ma: str
+    cong_thuc: str
+    phien_ban: str
+    ket_qua: float | None
+    don_vi: str
+    dau_vao_da_dung: list[DauVaoDaDung]
+    thieu_dau_vao: list[str]
+    ghi_chu: list[str]
+    tham_khao: str
+    trang_thai: str
