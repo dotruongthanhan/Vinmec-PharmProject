@@ -43,7 +43,7 @@ def test_dev_container_is_lazy_and_independent_of_cwd(
     assert len(container.rules) == 6
     for name, block, provider in [
         ("llm", "llm", "deepseek"),
-        ("embedder", "embedding", "openrouter"),
+        ("embedder", "embedding", "gemini"),
         ("reranker", "rerank", "openrouter"),
         ("vector_store", "vector_store", "pgvector"),
     ]:

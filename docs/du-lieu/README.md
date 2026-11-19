@@ -26,5 +26,6 @@ Từ 19/11/2026, thư mục `data/` không còn trên git, trừ `data/mock`, `d
 | LactMed | [lactmed.md](lactmed.md) | Yếu tố 6 (hoãn) | ✅ cập nhật 19/11 (T59) |
 | Văn bản Bộ Y tế (VBHN 15, TT 37, QĐ 5631) | [van-ban-byt.md](van-ban-byt.md) | Yếu tố 2, 3, 7 | ✅ cập nhật 19/11 (T59) |
 | Ca giả lập, hồ sơ, đáp án | [ca-gia-lap.md](ca-gia-lap.md) | Toàn bộ | ✅ cập nhật 19/11 (T59) |
+| Dị ứng chéo theo nhóm `data/kb/di_ung_cheo.json` (T60, D3) | [di-ung-cheo.md](di-ung-cheo.md) | Yếu tố 1 (dị ứng) | ⏳ chờ dược sĩ duyệt, cập nhật 19/11 |
 
 Tài liệu cũ `data/kb_sources/README.md` (16–17/11) đã lỗi thời và không còn trên git; nội dung còn đúng được chuyển sang các tệp trên.

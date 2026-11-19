@@ -50,10 +50,10 @@ llm:
     reasoning_effort: "low"
 
 embedding:
-  provider: "openrouter"
-  active: "nvidia/nemotron-3.5-embed-1b:free"
+  provider: "gemini"
+  active: "gemini-embedding-2"
   dimensions: 2048
-  batch_size: 16
+  batch_size: 100
   cache_path: "data/cache/embeddings.sqlite"
 
 rerank:

@@ -6,18 +6,15 @@ from threading import RLock
 
 from app.config.settings import get_secret
 from app.container import Container
-from app.core.errors import ConfigError
 from app.core.interfaces import Embedder, Reranker, Retriever
 from app.core.types import Chunk, RetrievalQuery, ScoredChunk
 from app.domain.loader import ingredients_of
 from app.domain.models import CaBenh
 from app.pipeline import KetQuaThamDinh
 from app.providers.bm25_index import Bm25Index
-from app.providers.cached_embedder import CachedEmbedder
+from app.providers.embedder_factory import resolve_rag_providers
 from app.providers.http import create_client
 from app.providers.memory_store import InMemoryVectorStore
-from app.providers.openrouter_embed import OpenRouterEmbedder
-from app.providers.openrouter_rerank import OpenRouterReranker
 from app.retrieval.corpus import index_corpus, load_corpus
 from app.retrieval.hybrid import HybridRetriever
 from app.retrieval.query_builder import QueryBuilder
@@ -25,6 +22,7 @@ from app.retrieval.query_builder import QueryBuilder
 MAX_EVIDENCE_CHUNKS = 8
 
 _ROOT = Path(__file__).resolve().parents[2]
+_DEFAULT_GET_SECRET = get_secret
 _RETRIEVAL_ERROR_WARNING = "Không lấy được đoạn nguồn, AI chỉ dùng dữ liệu ca"
 
 IngredientResolver = Callable[[str], Sequence[str] | str | None]
@@ -84,56 +82,17 @@ class LazyRetrieverFactory:
             return self._embedder, self._reranker
 
         settings = self._container.settings
-        embedding, rerank = settings.embedding, settings.rerank
-        if embedding.provider not in ("openrouter", "fake"):
-            raise ConfigError("Nhà cung cấp nhúng chưa được hỗ trợ")
-        if rerank.provider not in ("openrouter", "noop"):
-            raise ConfigError("Nhà cung cấp xếp hạng lại chưa được hỗ trợ")
-
-        client = None
-        keys: list[str] = []
-        if "openrouter" in (embedding.provider, rerank.provider):
-            keys.append(get_secret("OPENROUTER_API_KEY"))
-            try:
-                keys.append(get_secret("OPENROUTER_API_KEY_2"))
-            except ConfigError:
-                pass
-            client = create_client()
-
-        try:
-            if embedding.provider == "fake":
-                embedder: Embedder = self._container.embedder
-            else:
-                assert client is not None
-                raw_cache = Path(embedding.cache_path)
-                cache_path = raw_cache if raw_cache.is_absolute() else _ROOT / raw_cache
-                embedder = CachedEmbedder(
-                    OpenRouterEmbedder(
-                        embedding.active,
-                        embedding.dimensions,
-                        embedding.batch_size,
-                        keys,
-                        client,
-                        settings.agent.max_attempts,
-                    ),
-                    cache_path,
-                    model_id=embedding.active,
-                )
-
-            if rerank.provider == "noop":
-                reranker: Reranker = self._container.reranker
-            else:
-                assert client is not None
-                reranker = OpenRouterReranker(
-                    rerank.active,
-                    keys,
-                    client,
-                    settings.agent.max_attempts,
-                )
-        except Exception:
-            if client is not None:
-                client.close()
-            raise
+        raw_cache = Path(settings.embedding.cache_path)
+        cache_path = raw_cache if raw_cache.is_absolute() else _ROOT / raw_cache
+        secret_fn = get_secret if get_secret is not _DEFAULT_GET_SECRET else None
+        embedder, reranker, client = resolve_rag_providers(
+            settings,
+            cache_path=cache_path,
+            get_fake_embedder=lambda: self._container.embedder,
+            get_noop_reranker=lambda: self._container.reranker,
+            create_client_fn=create_client,
+            get_secret_fn=secret_fn,
+        )
 
         self._client = client
         self._embedder = embedder

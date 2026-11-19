@@ -1,0 +1,1688 @@
+{
+ "ten": "Bảng dị ứng chéo theo nhóm",
+ "phien_ban": "D3-v1",
+ "ngay": "2026-11-19",
+ "trang_thai": "cho_duoc_si_duyet",
+ "y_nghia_muc_cheo": {
+  "cao": "cùng khung hoặc cùng chuỗi bên quyết định kháng nguyên, hoặc nhãn FDA nêu tỷ lệ chéo đáng kể",
+  "thap": "có ghi nhận chéo hoặc nhãn cảnh báo thận trọng, xác suất vừa hoặc chưa định lượng",
+  "rat_thap": "tổng quan cho thấy chéo hiếm hoặc không do cấu trúc; vẫn có thể có cảnh báo nhãn"
+ },
+ "y_nghia_muc_canh_bao_nhan": {
+  "chong_chi_dinh": "mục chống chỉ định của nhãn FDA nêu điều này",
+  "than_trong": "nhãn FDA nêu trong cảnh báo hoặc thận trọng",
+  "khong_neu": "nhãn không nêu"
+ },
+ "huong_giai_thich": "hai_chieu: dị ứng bất kỳ hoạt chất nào trong hoat_chat_ids thì cảnh báo với các hoạt chất trong hoat_chat_lien_quan (các dòng hai chiều có hoat_chat_lien_quan trùng hoat_chat_ids). mot_chieu: chỉ từ hoat_chat_ids sang hoat_chat_lien_quan. Một cặp có thể trùng nhiều dòng; lấy muc_cheo cao nhất.",
+ "ten_nhom_di_ung_sang_hoat_chat": {
+  "penicillin": {
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "ma_nhom": "BL01_PENICILLIN_NOI_NHOM"
+  },
+  "sulfonamid": {
+   "hoat_chat_ids": [
+    "sulfamethoxazole",
+    "sulfasalazine"
+   ],
+   "ma_nhom": "SU01_SULFONAMID_KHANG_KHUAN"
+  },
+  "sulfonamide": {
+   "hoat_chat_ids": [
+    "sulfamethoxazole",
+    "sulfasalazine"
+   ],
+   "ma_nhom": "SU01_SULFONAMID_KHANG_KHUAN"
+  },
+  "cephalosporin": {
+   "hoat_chat_ids": [
+    "cefadroxil",
+    "cefprozil",
+    "cephalexin",
+    "cefaclor",
+    "cefuroxime",
+    "ceftriaxone",
+    "cefotaxime",
+    "ceftazidime",
+    "cefepime",
+    "cefixime",
+    "cefpodoxime",
+    "cefdinir",
+    "cefditoren",
+    "cefpirome",
+    "cefodizime",
+    "cefazolin",
+    "cefoxitin",
+    "cefotetan",
+    "cephalothin",
+    "cephradine",
+    "cefamandole",
+    "cefotiam",
+    "cefoperazone",
+    "ceftizoxime",
+    "ceftibuten",
+    "ceftaroline_fosamil",
+    "cefmetazole"
+   ],
+   "ma_nhom": "BL08_CEPH_NOI_LOP"
+  },
+  "nsaid": {
+   "hoat_chat_ids": [
+    "aspirin",
+    "ibuprofen",
+    "naproxen",
+    "ketorolac",
+    "diclofenac",
+    "meloxicam",
+    "ketoprofen",
+    "indomethacin",
+    "piroxicam",
+    "dexketoprofen",
+    "flurbiprofen"
+   ],
+   "ma_nhom": "NS01_NSAID_COX1"
+  },
+  "aminoglycosid": {
+   "hoat_chat_ids": [
+    "amikacin",
+    "gentamicin",
+    "tobramycin",
+    "streptomycin",
+    "kanamycin",
+    "netilmicin"
+   ],
+   "ma_nhom": "AG01_AMINOGLYCOSID"
+  },
+  "macrolid": {
+   "hoat_chat_ids": [
+    "clarithromycin",
+    "azithromycin",
+    "erythromycin",
+    "roxithromycin"
+   ],
+   "ma_nhom": "MAC01_MACROLID"
+  },
+  "quinolon": {
+   "hoat_chat_ids": [
+    "ciprofloxacin",
+    "levofloxacin",
+    "moxifloxacin",
+    "ofloxacin",
+    "norfloxacin"
+   ],
+   "ma_nhom": "FQ01_QUINOLON"
+  }
+ },
+ "nhom": [
+  {
+   "ma_nhom": "BL01_PENICILLIN_NOI_NHOM",
+   "ten_nhom": "Penicillin: dị ứng một penicillin thì tránh cả nhóm penicillin",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "amoxicillin",
+      "ampicillin",
+      "penicillin_g",
+      "penicillin_v",
+      "piperacillin",
+      "oxacillin",
+      "cloxacillin",
+      "ticarcillin"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Cùng nhân penicillin; nhãn FDA chống chỉ định khi từng quá mẫn với bất kỳ penicillin nào"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Cùng khung penicillin (nhân beta-lactam gắn vòng thiazolidine).",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "PENICILLIN V POTASSIUM",
+     "set_id": "0151c742-7525-4707-af03-bd48d50cd586",
+     "phien_ban_nguon": "20261110",
+     "tep": "data/kb_sources/openfda_d3/penicillin_v.json",
+     "trich_nguyen_van": "A previous hypersensitivity reaction to any penicillin is a contraindication.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0151c742-7525-4707-af03-bd48d50cd586",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0151c742-7525-4707-af03-bd48d50cd586\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "AMPICILLIN SODIUM",
+     "set_id": "06ca924c-5f3a-4924-90f4-5ba623daaa0e",
+     "phien_ban_nguon": "20260430",
+     "tep": "data/kb_sources/openfda_d3/ampicillin.json",
+     "trich_nguyen_van": "A history of a previous hypersensitivity reaction to any of the penicillins is a contraindication.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=06ca924c-5f3a-4924-90f4-5ba623daaa0e",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"06ca924c-5f3a-4924-90f4-5ba623daaa0e\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL02_AMINOPEN_AMINOCEPH_AMOX",
+   "ten_nhom": "Amoxicillin ↔ cephalosporin cùng chuỗi bên R1 (cefadroxil, cefprozil)",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "cefadroxil",
+    "cefprozil"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "amoxicillin",
+      "cefadroxil",
+      "cefprozil"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "R1 giống hệt (Chaudhry 2019, bảng 1)"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Chuỗi bên R1 giống hệt: amoxicillin, cefadroxil, cefprozil. Bảng 1 Chaudhry 2019 ghi cefadroxil có R1 giống hệt amoxicillin và cefprozil.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cephalosporins: A Focus on Side Chains and β-Lactam Cross-Reactivity",
+     "nam": 2019,
+     "pmid": "31362351",
+     "doi": "10.3390/pharmacy7030103",
+     "trich_nguyen_van": "Amoxicillin shares the same side chain as ampicillin, cephalexin, cefadroxil, cefprozil, and cefaclor, cefatrizine.",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6789778/",
+     "doi_url": "https://doi.org/10.3390/pharmacy7030103",
+     "cach_mo": "Europe PMC REST (tóm tắt, toàn văn PMC)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "β-Lactam Allergy and Cross-Reactivity: A Clinician's Guide to Selecting an Alternative Antibiotic",
+     "nam": 2021,
+     "pmid": "33500632",
+     "doi": "10.2147/jaa.s242061",
+     "trich_nguyen_van": "For example, in aminopenicillin-allergic subjects, cross-reactivity with aminocephalosporins could possibly be over 30%.",
+     "url": "https://doi.org/10.2147/jaa.s242061",
+     "doi_url": "https://doi.org/10.2147/jaa.s242061",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CEFADROXIL",
+     "set_id": "02566385-46f3-255a-e063-6294a90a1d1c",
+     "phien_ban_nguon": "20240626",
+     "tep": "data/kb_sources/openfda_d3/cefadroxil.json",
+     "trich_nguyen_van": "IF THIS PRODUCT IS TO BE GIVEN TO PENICILLIN-SENSITIVE PATIENTS, CAUTION SHOULD BE EXERCISED BECAUSE CROSS-SENSITIVITY AMONG BETA-LACTAM ANTIBIOTICS HAS BEEN CLEARLY DOCUMENTED AND MAY OCCUR IN UP TO 10% OF PATIENTS WITH A HISTORY OF PENICILLIN ALLERGY.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02566385-46f3-255a-e063-6294a90a1d1c",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"02566385-46f3-255a-e063-6294a90a1d1c\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Câu Chaudhry nêu amoxicillin chung chuỗi bên với cả nhóm amino; bảng 1 của bài chia: R1 giống hệt (amoxicillin, cefadroxil, cefprozil) và R1 tương tự (amoxicillin với cephalexin, cefaclor).",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL03_AMINOPEN_AMINOCEPH_AMP",
+   "ten_nhom": "Ampicillin ↔ cephalosporin cùng chuỗi bên R1 (cephalexin, cefaclor)",
+   "hoat_chat_ids": [
+    "ampicillin",
+    "cephalexin",
+    "cefaclor"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "ampicillin",
+      "cephalexin",
+      "cefaclor"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "R1 giống hệt (Chaudhry 2019, bảng 1)"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Chuỗi bên R1 giống hệt: ampicillin, cephalexin, cefaclor (bảng 1 Chaudhry 2019: cefaclor và cephalexin cùng liệt kê ampicillin ở cột R1 giống hệt).",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cephalosporins: A Focus on Side Chains and β-Lactam Cross-Reactivity",
+     "nam": 2019,
+     "pmid": "31362351",
+     "doi": "10.3390/pharmacy7030103",
+     "trich_nguyen_van": "Amoxicillin shares the same side chain as ampicillin, cephalexin, cefadroxil, cefprozil, and cefaclor, cefatrizine.",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6789778/",
+     "doi_url": "https://doi.org/10.3390/pharmacy7030103",
+     "cach_mo": "Europe PMC REST (tóm tắt, toàn văn PMC)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Guideline on diagnostic procedures for suspected hypersensitivity to beta-lactam antibiotics (DGAKI)",
+     "nam": 2020,
+     "pmid": "32568254",
+     "doi": "10.5414/alx02104e",
+     "trich_nguyen_van": "Whereas allergy to the common beta-lactam ring occurs in only a small percentage of all BLA allergic patients, cross-reactivity due to side chain similarities, such as aminopenicillins and aminocephalosporins, and even methoxyimino cephalosporins, are more common.",
+     "url": "https://doi.org/10.5414/alx02104e",
+     "doi_url": "https://doi.org/10.5414/alx02104e",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CEPHALEXIN",
+     "set_id": "02b5cd6f-3df8-43c1-879d-217fcf55231a",
+     "phien_ban_nguon": "20250211",
+     "tep": "data/kb_sources/openfda_d3/cephalexin.json",
+     "trich_nguyen_van": "Cross-hypersensitivity among beta-lactam antibacterial drugs may occur in up to 10% of patients with a history of penicillin allergy.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02b5cd6f-3df8-43c1-879d-217fcf55231a",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"02b5cd6f-3df8-43c1-879d-217fcf55231a\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL04_PEN_CEPH_R1_TUONG_TU",
+   "ten_nhom": "Penicillin ↔ aminocephalosporin có R1 tương tự (không giống hệt)",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "cefadroxil",
+      "cefprozil",
+      "cephalexin",
+      "cefaclor"
+     ],
+     "muc_cheo": "thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "R1 tương tự theo bảng 1 Chaudhry 2019; mức cao áp dụng ở dòng BL02, BL03"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Penicillin G, penicillin V, piperacillin và các cặp aminopenicillin khác cặp R1 giống hệt có R1 tương tự cephalosporin amino.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "PENICILLIN V POTASSIUM",
+     "set_id": "0151c742-7525-4707-af03-bd48d50cd586",
+     "phien_ban_nguon": "20261110",
+     "tep": "data/kb_sources/openfda_d3/penicillin_v.json",
+     "trich_nguyen_van": "THERE HAVE BEEN REPORTS OF INDIVIDUALS WITH A HISTORY OF PENICILLIN HYPERSENSITIVITY WHO HAVE EXPERIENCED SEVERE REACTIONS WHEN TREATED WITH CEPHALOSPORINS.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0151c742-7525-4707-af03-bd48d50cd586",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0151c742-7525-4707-af03-bd48d50cd586\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "AMPICILLIN SODIUM",
+     "set_id": "06ca924c-5f3a-4924-90f4-5ba623daaa0e",
+     "phien_ban_nguon": "20260430",
+     "tep": "data/kb_sources/openfda_d3/ampicillin.json",
+     "trich_nguyen_van": "There have been well-documented reports of individuals with a history of penicillin hypersensitivity reactions who have experienced severe hypersensitivity reactions when treated with a cephalosporin.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=06ca924c-5f3a-4924-90f4-5ba623daaa0e",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"06ca924c-5f3a-4924-90f4-5ba623daaa0e\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cross-reactivity in β-Lactam Allergy",
+     "nam": 2018,
+     "pmid": "29017833",
+     "doi": "10.1016/j.jaip.2017.08.027",
+     "trich_nguyen_van": "Skin tests predict IgE-mediated reactions and showed cross-reactivity between penicillins and early generation cephalosporins that shared side chains, but confirmatory challenge data are lacking.",
+     "url": "https://doi.org/10.1016/j.jaip.2017.08.027",
+     "doi_url": "https://doi.org/10.1016/j.jaip.2017.08.027",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    }
+   ],
+   "ghi_chu": "Dòng này chồng với BL02 và BL03; luật lấy mức cao nhất.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL05_PEN_CEPH_R1_KHAC",
+   "ten_nhom": "Penicillin ↔ cephalosporin có R1 khác penicillin (ceftriaxone, cefuroxime, cefepime...)",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "cefuroxime",
+      "ceftriaxone",
+      "cefotaxime",
+      "ceftazidime",
+      "cefepime",
+      "cefixime",
+      "cefpodoxime",
+      "cefdinir",
+      "cefditoren",
+      "cefpirome",
+      "cefodizime",
+      "cefoxitin",
+      "cefotetan",
+      "cefoperazone",
+      "ceftizoxime",
+      "ceftibuten",
+      "ceftaroline_fosamil",
+      "cefmetazole",
+      "cefamandole",
+      "cefotiam",
+      "cephalothin",
+      "cephradine"
+     ],
+     "muc_cheo": "thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Nhãn FDA ghi nguy cơ chéo beta-lactam; bằng chứng nghiên cứu cho thấy thấp khi R1 khác"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "R1 khác penicillin nên nguy cơ chéo thấp hơn cặp R1 giống; nhãn FDA vẫn ghi thận trọng.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CEFTRIAXONE",
+     "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+     "phien_ban_nguon": "20260930",
+     "tep": "data/kb_sources/openfda/ceftriaxone.json",
+     "trich_nguyen_van": "Patients with previous hypersensitivity reactions to penicillin and other beta lactam antibacterial agents may be at greater risk of hypersensitivity to ceftriaxone (see WARNINGS – Hypersensitivity ).",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CEFEPIME",
+     "set_id": "be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+     "phien_ban_nguon": "20260625",
+     "tep": "data/kb_sources/openfda/cefepime.json",
+     "trich_nguyen_van": "Exercise caution if this product is to be given to penicillin-sensitive patients because cross-hypersensitivity among beta-lactam antibacterial drugs has been clearly documented and may occur in up to 10% of patients with a history of penicillin allergy.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be5f8ca6-7232-423a-a2d5-cccb7abe7921",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"be5f8ca6-7232-423a-a2d5-cccb7abe7921\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cross-reactivity in β-Lactam Allergy",
+     "nam": 2018,
+     "pmid": "29017833",
+     "doi": "10.1016/j.jaip.2017.08.027",
+     "trich_nguyen_van": "Later-generation cephalosporins, which have distinct side chains, do not have any skin test cross-reactivity with penicillin/amoxicillin.",
+     "url": "https://doi.org/10.1016/j.jaip.2017.08.027",
+     "doi_url": "https://doi.org/10.1016/j.jaip.2017.08.027",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL06_PEN_CEFAZOLIN",
+   "ten_nhom": "Penicillin ↔ cefazolin (R1 riêng, không trùng beta-lactam nào)",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "cefazolin"
+     ],
+     "muc_cheo": "rat_thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "R1 riêng; nhãn FDA vẫn ghi thận trọng người dị ứng penicillin"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Cefazolin có chuỗi bên R1 không giống beta-lactam nào đang lưu hành theo Chaudhry 2019.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cephalosporins: A Focus on Side Chains and β-Lactam Cross-Reactivity",
+     "nam": 2019,
+     "pmid": "31362351",
+     "doi": "10.3390/pharmacy7030103",
+     "trich_nguyen_van": "Distinctly, cefazolin does not share a similar side chain with any of the current FDA-approved β-lactams",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6789778/",
+     "doi_url": "https://doi.org/10.3390/pharmacy7030103",
+     "cach_mo": "Europe PMC REST (tóm tắt, toàn văn PMC)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CEFAZOLIN",
+     "set_id": "00dd6da7-50a8-44c9-b2dc-7948973df392",
+     "phien_ban_nguon": "20260107",
+     "tep": "data/kb_sources/openfda_d3/cefazolin.json",
+     "trich_nguyen_van": "IF THIS PRODUCT IS GIVEN TO PENICILLIN‑SENSITIVE PATIENTS, CAUTION SHOULD BE EXERCISED BECAUSE CROSS‑HYPERSENSITIVITY AMONG BETA‑LACTAM ANTIBIOTICS HAS BEEN CLEARLY DOCUMENTED AND MAY OCCUR IN UP TO 10% OF PATIENTS WITH A HISTORY OF PENICILLIN ALLERGY.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00dd6da7-50a8-44c9-b2dc-7948973df392",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00dd6da7-50a8-44c9-b2dc-7948973df392\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Mức rat_thap theo tổng quan; dược sĩ cần quyết định có nâng mức theo nhãn không.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL07_CEPH_R1_OXIM",
+   "ten_nhom": "Cephalosporin cùng chuỗi bên methoxyimino (ceftriaxone, cefotaxime, cefepime, cefpodoxime...)",
+   "hoat_chat_ids": [
+    "ceftriaxone",
+    "cefotaxime",
+    "cefepime",
+    "cefpodoxime",
+    "cefditoren",
+    "cefpirome",
+    "cefodizime"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "ceftriaxone",
+      "cefotaxime",
+      "cefepime",
+      "cefpodoxime",
+      "cefditoren",
+      "cefpirome",
+      "cefodizime"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "R1 giống hệt giữa các hoạt chất này (Chaudhry 2019, bảng 1)"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Ceftriaxone, cefotaxime, cefepime, cefpodoxime, cefditoren, cefpirome, cefodizime cùng liệt kê R1 giống hệt trong bảng 1 Chaudhry 2019.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Testing Strategies and Predictors for Evaluating Immediate and Delayed Reactions to Cephalosporins",
+     "nam": 2021,
+     "pmid": "32822918",
+     "doi": "10.1016/j.jaip.2020.07.056",
+     "trich_nguyen_van": "Seven of 15 ceftriaxone STP patients demonstrated cross-reactivity with R1-similar cephalosporins.",
+     "url": "https://doi.org/10.1016/j.jaip.2020.07.056",
+     "doi_url": "https://doi.org/10.1016/j.jaip.2020.07.056",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Guideline on diagnostic procedures for suspected hypersensitivity to beta-lactam antibiotics (DGAKI)",
+     "nam": 2020,
+     "pmid": "32568254",
+     "doi": "10.5414/alx02104e",
+     "trich_nguyen_van": "Whereas allergy to the common beta-lactam ring occurs in only a small percentage of all BLA allergic patients, cross-reactivity due to side chain similarities, such as aminopenicillins and aminocephalosporins, and even methoxyimino cephalosporins, are more common.",
+     "url": "https://doi.org/10.5414/alx02104e",
+     "doi_url": "https://doi.org/10.5414/alx02104e",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CEFTRIAXONE",
+     "set_id": "8351aa37-552d-471d-b293-c564dcb6ec29",
+     "phien_ban_nguon": "20260930",
+     "tep": "data/kb_sources/openfda/ceftriaxone.json",
+     "trich_nguyen_van": "Ceftriaxone is contraindicated in patients with known hypersensitivity to ceftriaxone, any of its excipients or to any other cephalosporin.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8351aa37-552d-471d-b293-c564dcb6ec29",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"8351aa37-552d-471d-b293-c564dcb6ec29\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL08_CEPH_NOI_LOP",
+   "ten_nhom": "Cephalosporin: dị ứng một cephalosporin thì thận trọng với cephalosporin khác",
+   "hoat_chat_ids": [
+    "cefadroxil",
+    "cefprozil",
+    "cephalexin",
+    "cefaclor",
+    "cefuroxime",
+    "ceftriaxone",
+    "cefotaxime",
+    "ceftazidime",
+    "cefepime",
+    "cefixime",
+    "cefpodoxime",
+    "cefdinir",
+    "cefditoren",
+    "cefpirome",
+    "cefodizime",
+    "cefazolin",
+    "cefoxitin",
+    "cefotetan",
+    "cephalothin",
+    "cephradine",
+    "cefamandole",
+    "cefotiam",
+    "cefoperazone",
+    "ceftizoxime",
+    "ceftibuten",
+    "ceftaroline_fosamil",
+    "cefmetazole"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "cefadroxil",
+      "cefprozil",
+      "cephalexin",
+      "cefaclor",
+      "cefuroxime",
+      "ceftriaxone",
+      "cefotaxime",
+      "ceftazidime",
+      "cefepime",
+      "cefixime",
+      "cefpodoxime",
+      "cefdinir",
+      "cefditoren",
+      "cefpirome",
+      "cefodizime",
+      "cefazolin",
+      "cefoxitin",
+      "cefotetan",
+      "cephalothin",
+      "cephradine",
+      "cefamandole",
+      "cefotiam",
+      "cefoperazone",
+      "ceftizoxime",
+      "ceftibuten",
+      "ceftaroline_fosamil",
+      "cefmetazole"
+     ],
+     "muc_cheo": "thap",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn FDA nhiều cephalosporin chống chỉ định khi dị ứng nhóm cephalosporin; nguy cơ thực tế phụ thuộc R1"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhãn dùng ngôn ngữ cả lớp; bằng chứng tổng quan cho thấy nguy cơ chéo do R1 (BL02, BL03, BL07), không phải do lớp.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CEFAZOLIN",
+     "set_id": "00dd6da7-50a8-44c9-b2dc-7948973df392",
+     "phien_ban_nguon": "20260107",
+     "tep": "data/kb_sources/openfda_d3/cefazolin.json",
+     "trich_nguyen_van": "CEFAZOLIN FOR INJECTION IS CONTRAINDICATED IN PATIENTS WITH KNOWN ALLERGY TO THE CEPHALOSPORIN GROUP OF ANTIBIOTICS.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00dd6da7-50a8-44c9-b2dc-7948973df392",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00dd6da7-50a8-44c9-b2dc-7948973df392\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CEPHALEXIN",
+     "set_id": "02b5cd6f-3df8-43c1-879d-217fcf55231a",
+     "phien_ban_nguon": "20250211",
+     "tep": "data/kb_sources/openfda_d3/cephalexin.json",
+     "trich_nguyen_van": "Cephalexin capsules are contraindicated in patients with known hypersensitivity to cephalexin or other members of the cephalosporin class of antibacterial drugs.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02b5cd6f-3df8-43c1-879d-217fcf55231a",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"02b5cd6f-3df8-43c1-879d-217fcf55231a\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cephalosporins: A Focus on Side Chains and β-Lactam Cross-Reactivity",
+     "nam": 2019,
+     "pmid": "31362351",
+     "doi": "10.3390/pharmacy7030103",
+     "trich_nguyen_van": "In patients with true IgE-mediated β-lactam reactions, clinicians should avoid prescribing agents with exact or similar R1 side chains as assessed through chemical structures.",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6789778/",
+     "doi_url": "https://doi.org/10.3390/pharmacy7030103",
+     "cach_mo": "Europe PMC REST (tóm tắt, toàn văn PMC)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL09_PEN_CARBAPENEM",
+   "ten_nhom": "Penicillin ↔ carbapenem",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "imipenem",
+      "meropenem",
+      "ertapenem",
+      "doripenem"
+     ],
+     "muc_cheo": "rat_thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Dưới 1% ở người dị ứng penicillin theo tổng quan; nhãn carbapenem vẫn ghi thận trọng"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Carbapenem có nhân hai vòng khác penicillin; phản ứng chéo hiếm.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "β-Lactam Allergy and Cross-Reactivity: A Clinician's Guide to Selecting an Alternative Antibiotic",
+     "nam": 2021,
+     "pmid": "33500632",
+     "doi": "10.2147/jaa.s242061",
+     "trich_nguyen_van": "On the other hand, in a few prospective studies of penicillin-allergic individuals, less than 1% of cases show a cross-reactivity between penicillins and both aztreonam and carbapenems.",
+     "url": "https://doi.org/10.2147/jaa.s242061",
+     "doi_url": "https://doi.org/10.2147/jaa.s242061",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "MEROPENEM",
+     "set_id": "31dd2160-7dbd-51fa-e054-00144ff88e88",
+     "phien_ban_nguon": "20261102",
+     "tep": "data/kb_sources/openfda/meropenem.json",
+     "trich_nguyen_van": "There have been reports of individuals with a history of penicillin hypersensitivity who have experienced severe hypersensitivity reactions when treated with another β-lactam.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=31dd2160-7dbd-51fa-e054-00144ff88e88",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"31dd2160-7dbd-51fa-e054-00144ff88e88\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "ERTAPENEM SODIUM",
+     "set_id": "124775ed-1271-4581-be52-b7a08c91283d",
+     "phien_ban_nguon": "20260109",
+     "tep": "data/kb_sources/openfda_d3/ertapenem.json",
+     "trich_nguyen_van": "Known hypersensitivity to product components or anaphylactic reactions to β-lactams.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=124775ed-1271-4581-be52-b7a08c91283d",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"124775ed-1271-4581-be52-b7a08c91283d\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL10_CEPH_CARBAPENEM",
+   "ten_nhom": "Cephalosporin ↔ carbapenem, monobactam",
+   "hoat_chat_ids": [
+    "cefadroxil",
+    "cefprozil",
+    "cephalexin",
+    "cefaclor",
+    "cefuroxime",
+    "ceftriaxone",
+    "cefotaxime",
+    "ceftazidime",
+    "cefepime",
+    "cefixime",
+    "cefpodoxime",
+    "cefdinir",
+    "cefditoren",
+    "cefpirome",
+    "cefodizime",
+    "cefazolin",
+    "cefoxitin",
+    "cefotetan",
+    "cephalothin",
+    "cephradine",
+    "cefamandole",
+    "cefotiam",
+    "cefoperazone",
+    "ceftizoxime",
+    "ceftibuten",
+    "ceftaroline_fosamil",
+    "cefmetazole"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "imipenem",
+      "meropenem",
+      "ertapenem",
+      "doripenem",
+      "aztreonam"
+     ],
+     "muc_cheo": "rat_thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Chéo tối thiểu giữa cephalosporin với carbapenem và monobactam theo tổng quan, dữ liệu ít"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Dữ liệu hạn chế.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cephalosporins: A Focus on Side Chains and β-Lactam Cross-Reactivity",
+     "nam": 2019,
+     "pmid": "31362351",
+     "doi": "10.3390/pharmacy7030103",
+     "trich_nguyen_van": "Overall, the literature suggests that there is minimal cross-reactivity between cephalosporins and monobactams and carbapenems, however, there is limited data in investigating these cross-reactivities.",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6789778/",
+     "doi_url": "https://doi.org/10.3390/pharmacy7030103",
+     "cach_mo": "Europe PMC REST (tóm tắt, toàn văn PMC)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "IMIPENEM AND CILASTATIN",
+     "set_id": "46f54df9-5afe-430c-aa19-0d84c2044b0b",
+     "phien_ban_nguon": "20250116",
+     "tep": "data/kb_sources/openfda/imipenem_and_cilastatin.json",
+     "trich_nguyen_van": "There have been reports of individuals with a history of penicillin hypersensitivity who have experienced severe hypersensitivity reactions when treated with another beta-lactam.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46f54df9-5afe-430c-aa19-0d84c2044b0b",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"46f54df9-5afe-430c-aa19-0d84c2044b0b\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL11_PEN_AZTREONAM",
+   "ten_nhom": "Penicillin ↔ aztreonam (monobactam)",
+   "hoat_chat_ids": [
+    "amoxicillin",
+    "ampicillin",
+    "penicillin_g",
+    "penicillin_v",
+    "piperacillin",
+    "oxacillin",
+    "cloxacillin",
+    "ticarcillin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "aztreonam"
+     ],
+     "muc_cheo": "rat_thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Aztreonam hiếm chéo với beta-lactam khác"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Monobactam có nhân đơn vòng, khác penicillin.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "AZTREONAM",
+     "set_id": "302fd27d-0a22-44ea-91fb-1b1ffcf17a1f",
+     "phien_ban_nguon": "20220430",
+     "tep": "data/kb_sources/openfda_d3/aztreonam.json",
+     "trich_nguyen_van": "Both animal and human data suggest that aztreonam for injection, USP is rarely cross-reactive with other beta-lactam antibiotics and weakly immunogenic.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=302fd27d-0a22-44ea-91fb-1b1ffcf17a1f",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"302fd27d-0a22-44ea-91fb-1b1ffcf17a1f\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "β-Lactam Allergy and Cross-Reactivity: A Clinician's Guide to Selecting an Alternative Antibiotic",
+     "nam": 2021,
+     "pmid": "33500632",
+     "doi": "10.2147/jaa.s242061",
+     "trich_nguyen_van": "On the other hand, in a few prospective studies of penicillin-allergic individuals, less than 1% of cases show a cross-reactivity between penicillins and both aztreonam and carbapenems.",
+     "url": "https://doi.org/10.2147/jaa.s242061",
+     "doi_url": "https://doi.org/10.2147/jaa.s242061",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "BL12_CEFTAZIDIME_AZTREONAM",
+   "ten_nhom": "Ceftazidime ↔ aztreonam (cùng chuỗi bên R1)",
+   "hoat_chat_ids": [
+    "ceftazidime",
+    "aztreonam"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "ceftazidime",
+      "aztreonam"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "R1 giống hệt"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Ngoại lệ của dòng BL11: aztreonam và ceftazidime có chuỗi bên giống hệt.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cephalosporins: A Focus on Side Chains and β-Lactam Cross-Reactivity",
+     "nam": 2019,
+     "pmid": "31362351",
+     "doi": "10.3390/pharmacy7030103",
+     "trich_nguyen_van": "One patient had a positive result to aztreonam, and one patient had two anaphylactic reactions to both aztreonam and ceftazidime (which share identical side chains).",
+     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6789778/",
+     "doi_url": "https://doi.org/10.3390/pharmacy7030103",
+     "cach_mo": "Europe PMC REST (tóm tắt, toàn văn PMC)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "khong_neu",
+     "ten_nhan": "AZTREONAM",
+     "set_id": "302fd27d-0a22-44ea-91fb-1b1ffcf17a1f",
+     "phien_ban_nguon": "20220430",
+     "tep": "data/kb_sources/openfda_d3/aztreonam.json",
+     "trich_nguyen_van": "an aminothiazolyl oxime side chain in the 3-position and a methyl group in the 4-position confer the specific antibacterial spectrum and beta-lactamase stability.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=302fd27d-0a22-44ea-91fb-1b1ffcf17a1f",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"302fd27d-0a22-44ea-91fb-1b1ffcf17a1f\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Nguồn chính là câu của Chaudhry 2019 và bảng 1 của bài (liệt kê aztreonam trong cột R1 giống hệt của ceftazidime).",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "SU01_SULFONAMID_KHANG_KHUAN",
+   "ten_nhom": "Sulfonamid kháng khuẩn (sulfamethoxazole, sulfasalazine)",
+   "hoat_chat_ids": [
+    "sulfamethoxazole",
+    "sulfasalazine"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "sulfamethoxazole",
+      "sulfasalazine"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Cùng nhóm sulfonamid; nhãn chống chỉ định"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhóm sulfonamid kháng khuẩn (nhóm arylamine N4). Sulfasalazine chứa sulfapyridine. Thuốc không kháng khuẩn ở SU02, SU03.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "SULFAMETHOXAZOLE AND TRIMETHOPRIM",
+     "set_id": "3ef62512-0dc3-4821-9b60-6b375841c4c0",
+     "phien_ban_nguon": "20261014",
+     "tep": "data/kb_sources/openfda/sulfamethoxazole_and_trimethoprim.json",
+     "trich_nguyen_van": "known hypersensitivity to trimethoprim or sulfonamides",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef62512-0dc3-4821-9b60-6b375841c4c0",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"3ef62512-0dc3-4821-9b60-6b375841c4c0\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "SULFASALAZINE",
+     "set_id": "029716bd-ee1a-484c-bf1f-ec8d02d5281b",
+     "phien_ban_nguon": "20221212",
+     "tep": "data/kb_sources/openfda_d3/sulfasalazine.json",
+     "trich_nguyen_van": "Patients hypersensitive to sulfasalazine, its metabolites, sulfonamides, or salicylates.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=029716bd-ee1a-484c-bf1f-ec8d02d5281b",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"029716bd-ee1a-484c-bf1f-ec8d02d5281b\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Trimethoprim không thuộc sulfonamid nhưng nhãn co-trimoxazole gộp trong cùng câu chống chỉ định. Tổng quan về nhóm arylamine chưa có nguồn mở được, xem mục thiếu nguồn.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "SU02_SULFONAMID_KHONG_KHANG_KHUAN",
+   "ten_nhom": "Sulfonamid kháng khuẩn ↔ sulfonamid không kháng khuẩn (furosemide, thiazide): chéo hiếm, không do cấu trúc",
+   "hoat_chat_ids": [
+    "sulfamethoxazole",
+    "sulfasalazine"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "furosemide",
+      "hydrochlorothiazide"
+     ],
+     "muc_cheo": "rat_thap",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Liên quan do cơ địa dị ứng, không do cấu trúc sulfonamid (Strom 2003); nhãn furosemide vẫn ghi thận trọng"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Không gộp với SU01: nhóm không kháng khuẩn thiếu nhóm arylamine; tổng quan cho thấy liên quan do cơ địa dị ứng.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Absence of cross-reactivity between sulfonamide antibiotics and sulfonamide nonantibiotics",
+     "nam": 2003,
+     "pmid": "14573734",
+     "doi": "10.1056/nejmoa022963",
+     "trich_nguyen_van": "There is an association between hypersensitivity after the receipt of sulfonamide antibiotics and a subsequent allergic reaction after the receipt of a sulfonamide nonantibiotic, but this association appears to be due to a predisposition to allergic reactions rather than to cross-reactivity with sulfonamide-based drugs.",
+     "url": "https://doi.org/10.1056/nejmoa022963",
+     "doi_url": "https://doi.org/10.1056/nejmoa022963",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "FUROSEMIDE",
+     "set_id": "2f547f7c-0322-465c-9764-43f955d98ab2",
+     "phien_ban_nguon": "20261102",
+     "tep": "data/kb_sources/openfda/furosemide.json",
+     "trich_nguyen_van": "Patients allergic to sulfonamides may also be allergic to furosemide.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2f547f7c-0322-465c-9764-43f955d98ab2",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"2f547f7c-0322-465c-9764-43f955d98ab2\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": "Nhãn hydrochlorothiazide dạng đơn chất chưa có trong kho; hydrochlorothiazide chỉ dựa vào tổng quan.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "SU03_SULFONAMID_CELECOXIB",
+   "ten_nhom": "Sulfonamid kháng khuẩn ↔ celecoxib (nhãn chống chỉ định)",
+   "hoat_chat_ids": [
+    "sulfamethoxazole",
+    "sulfasalazine"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "celecoxib"
+     ],
+     "muc_cheo": "rat_thap",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Bằng chứng chéo cấu trúc yếu (Strom 2003) nhưng nhãn celecoxib chống chỉ định khi từng phản ứng kiểu dị ứng với sulfonamid"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Celecoxib chứa nhóm sulfonamid không kháng khuẩn; nhãn chống chỉ định theo tiền sử phản ứng kiểu dị ứng với sulfonamid.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CELECOXIB",
+     "set_id": "00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "phien_ban_nguon": "20230824",
+     "tep": "data/kb_sources/openfda_d3/celecoxib.json",
+     "trich_nguyen_van": "In patients who have demonstrated allergic-type reactions to sulfonamides [see Warnings and Precautions (5.7) ].",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00e67d5e-df6f-4dfd-8c2d-a001c8a99af0\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CELECOXIB",
+     "set_id": "00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "phien_ban_nguon": "20230824",
+     "tep": "data/kb_sources/openfda_d3/celecoxib.json",
+     "trich_nguyen_van": "Celecoxib is a sulfonamide and both NSAIDs and sulfonamides may cause allergic type reactions including anaphylactic symptoms and life-threatening or less severe asthmatic episodes in certain susceptible people [see Contraindications (4) and Warnings and Precautions (5.8) ].",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00e67d5e-df6f-4dfd-8c2d-a001c8a99af0\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Absence of cross-reactivity between sulfonamide antibiotics and sulfonamide nonantibiotics",
+     "nam": 2003,
+     "pmid": "14573734",
+     "doi": "10.1056/nejmoa022963",
+     "trich_nguyen_van": "There is an association between hypersensitivity after the receipt of sulfonamide antibiotics and a subsequent allergic reaction after the receipt of a sulfonamide nonantibiotic, but this association appears to be due to a predisposition to allergic reactions rather than to cross-reactivity with sulfonamide-based drugs.",
+     "url": "https://doi.org/10.1056/nejmoa022963",
+     "doi_url": "https://doi.org/10.1056/nejmoa022963",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    }
+   ],
+   "ghi_chu": "Nhãn và tổng quan không khớp nhau: để dược sĩ quyết định mức cảnh báo.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "NS01_NSAID_COX1",
+   "ten_nhom": "NSAID không chọn lọc: phản ứng chéo do ức chế COX-1 (hen, mày đay sau aspirin hoặc NSAID)",
+   "hoat_chat_ids": [
+    "aspirin",
+    "ibuprofen",
+    "naproxen",
+    "ketorolac",
+    "diclofenac",
+    "meloxicam",
+    "ketoprofen",
+    "indomethacin",
+    "piroxicam",
+    "dexketoprofen",
+    "flurbiprofen"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "aspirin",
+      "ibuprofen",
+      "naproxen",
+      "ketorolac",
+      "diclofenac",
+      "meloxicam",
+      "ketoprofen",
+      "indomethacin",
+      "piroxicam",
+      "dexketoprofen",
+      "flurbiprofen"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Chéo do ức chế COX-1; nhãn chống chỉ định khi từng hen, mày đay, phản ứng kiểu dị ứng sau aspirin hoặc NSAID"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Phản ứng chéo kiểu hô hấp / mày đay do ức chế COX-1, không do cấu trúc hóa học. Dị ứng chọn lọc một NSAID duy nhất chưa có trong bảng.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "NAPROXEN",
+     "set_id": "000155a8-709c-44e5-a75f-cd890f3a7caf",
+     "phien_ban_nguon": "20260129",
+     "tep": "data/kb_sources/openfda_d3/naproxen.json",
+     "trich_nguyen_van": "Because cross-reactivity between aspirin and other NSAIDs has been reported in such aspirin-sensitive patients, naproxen tablets and naproxen sodium tablets are contraindicated in patients with this form of aspirin sensitivity [ see Contraindications ( 4 ) ].",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=000155a8-709c-44e5-a75f-cd890f3a7caf",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"000155a8-709c-44e5-a75f-cd890f3a7caf\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "IBUPROFEN",
+     "set_id": "dc91a427-8214-484b-af72-52075b2286a1",
+     "phien_ban_nguon": "20261109",
+     "tep": "data/kb_sources/openfda/ibuprofen.json",
+     "trich_nguyen_van": "Ibuprofen tablets should not be given to patients who have experienced asthma, urticaria, or allergic-type reactions after taking aspirin or other NSAIDs.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dc91a427-8214-484b-af72-52075b2286a1",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"dc91a427-8214-484b-af72-52075b2286a1\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "KETOROLAC TROMETHAMINE",
+     "set_id": "30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+     "phien_ban_nguon": "20260213",
+     "tep": "data/kb_sources/openfda/ketorolac.json",
+     "trich_nguyen_van": "Ketorolac tromethamine should not be given to patients who have experienced asthma, urticaria, or allergic-type reactions after taking aspirin or other NSAIDs.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=30a3ca20-8f98-478c-8a6b-aa617f0a17a3",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"30a3ca20-8f98-478c-8a6b-aa617f0a17a3\"",
+     "ngay_lay": "2026-11-17"
+    }
+   ],
+   "ghi_chu": "Nhãn aspirin đơn chất chưa lấy được (nhãn openFDA tìm được là thuốc phối hợp), nên aspirin chỉ gắn qua câu \"aspirin or other NSAIDs\" của nhãn các NSAID khác.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "NS02_NSAID_COX2",
+   "ten_nhom": "NSAID không chọn lọc ↔ celecoxib",
+   "hoat_chat_ids": [
+    "aspirin",
+    "ibuprofen",
+    "naproxen",
+    "ketorolac",
+    "diclofenac",
+    "meloxicam",
+    "ketoprofen",
+    "indomethacin",
+    "piroxicam",
+    "dexketoprofen",
+    "flurbiprofen"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "celecoxib"
+     ],
+     "muc_cheo": "thap",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn celecoxib chống chỉ định theo tiền sử phản ứng với aspirin hoặc NSAID; chéo của thuốc ức chế COX-2 chọn lọc thường thấp hơn"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Ức chế COX-2 chọn lọc ít gây phản ứng chéo COX-1, nhưng nhãn vẫn chống chỉ định.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CELECOXIB",
+     "set_id": "00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "phien_ban_nguon": "20230824",
+     "tep": "data/kb_sources/openfda_d3/celecoxib.json",
+     "trich_nguyen_van": "History of asthma, urticaria, or other allergic-type reactions after taking aspirin or other NSAIDs.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00e67d5e-df6f-4dfd-8c2d-a001c8a99af0\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CELECOXIB",
+     "set_id": "00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "phien_ban_nguon": "20230824",
+     "tep": "data/kb_sources/openfda_d3/celecoxib.json",
+     "trich_nguyen_van": "Because cross-reactivity between aspirin and other NSAIDs has been reported in such aspirin-sensitive patients, celecoxib is contraindicated in patients with this form of aspirin sensitivity [ see Contraindications (4) ].",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=00e67d5e-df6f-4dfd-8c2d-a001c8a99af0",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"00e67d5e-df6f-4dfd-8c2d-a001c8a99af0\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Chưa có tổng quan mở được về dung nạp thuốc ức chế COX-2 chọn lọc: xem mục thiếu nguồn.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "AED01_CBZ_OXC",
+   "ten_nhom": "Carbamazepine ↔ oxcarbazepine",
+   "hoat_chat_ids": [
+    "carbamazepine",
+    "oxcarbazepine"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "carbamazepine",
+      "oxcarbazepine"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Khoảng 25 đến 30% người quá mẫn carbamazepine cũng quá mẫn oxcarbazepine (nhãn)"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Oxcarbazepine là dẫn xuất keto của carbamazepine (cùng khung carboxamide).",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "OXCARBAZEPINE",
+     "set_id": "03bec567-a9c3-4d82-9679-fec5324d0df6",
+     "phien_ban_nguon": "20241118",
+     "tep": "data/kb_sources/openfda_d3/oxcarbazepine.json",
+     "trich_nguyen_van": "Approximately 25% to 30% of patients who have had hypersensitivity reactions to carbamazepine will experience hypersensitivity reactions with oxcarbazepine.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03bec567-a9c3-4d82-9679-fec5324d0df6",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"03bec567-a9c3-4d82-9679-fec5324d0df6\"",
+     "ngay_lay": "2026-11-19"
+    },
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cross-sensitivity of skin rashes with antiepileptic drug use",
+     "nam": 2008,
+     "pmid": "18981374",
+     "doi": "10.1212/01.wnl.0000334295.50403.4c",
+     "trich_nguyen_van": "Cross-sensitivity rates between certain antiepileptic drugs (AEDs) are high, especially when involving carbamazepine and phenytoin.",
+     "url": "https://doi.org/10.1212/01.wnl.0000334295.50403.4c",
+     "doi_url": "https://doi.org/10.1212/01.wnl.0000334295.50403.4c",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "AED02_CBZ_PHT_PB",
+   "ten_nhom": "Carbamazepine ↔ phenytoin, phenobarbital",
+   "hoat_chat_ids": [
+    "carbamazepine",
+    "phenytoin",
+    "phenobarbital"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "carbamazepine",
+      "phenytoin",
+      "phenobarbital"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Quan sát có chéo đặc hiệu CBZ-PHT và CBZ-PB (Hirsch 2008); nhãn phenytoin khuyên cân nhắc thuốc thay thế khác nhóm cấu trúc"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Thuốc chống động kinh nhân thơm hoặc liên quan cấu trúc. Phenytoin ↔ phenobarbital cũng gộp ở đây nhưng Hirsch 2008 chỉ ghi chéo đặc hiệu cho cặp có carbamazepine.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cross-sensitivity of skin rashes with antiepileptic drug use",
+     "nam": 2008,
+     "pmid": "18981374",
+     "doi": "10.1212/01.wnl.0000334295.50403.4c",
+     "trich_nguyen_van": "There was evidence of specific cross-sensitivity between CBZ and PHT, and between CBZ and PB.",
+     "url": "https://doi.org/10.1212/01.wnl.0000334295.50403.4c",
+     "doi_url": "https://doi.org/10.1212/01.wnl.0000334295.50403.4c",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "PHENYTOIN SODIUM",
+     "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+     "phien_ban_nguon": "20261106",
+     "tep": "data/kb_sources/openfda/phenytoin.json",
+     "trich_nguyen_van": "Additionally, consider alternatives to structurally similar drugs such as carboxamides (e.g., carbamazepine), barbiturates, succinimides, and oxazolidinediones (e.g., trimethadione) in these same patients.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"889dd22c-46f0-48d0-b18e-a3783c5fa653\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "PHENYTOIN SODIUM",
+     "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+     "phien_ban_nguon": "20261106",
+     "tep": "data/kb_sources/openfda/phenytoin.json",
+     "trich_nguyen_van": "Phenytoin and other hydantoins are contraindicated in patients who have experience phenytoin hypersensitivity [see Contraindications (4)] .",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"889dd22c-46f0-48d0-b18e-a3783c5fa653\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "AED03_LTG",
+   "ten_nhom": "Lamotrigine ↔ thuốc chống động kinh nhân thơm khác",
+   "hoat_chat_ids": [
+    "carbamazepine",
+    "phenytoin",
+    "phenobarbital",
+    "oxcarbazepine",
+    "lamotrigine"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "lamotrigine"
+     ],
+     "muc_cheo": "thap",
+     "muc_canh_bao_nhan": "khong_neu",
+     "ly_do": "Phát ban chéo có ghi nhận nhưng không phải chéo đặc hiệu trong Hirsch 2008"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Lamotrigine liên quan nguy cơ SJS/TEN và HLA-B*1502; chéo với thuốc khác thấp hơn cặp carbamazepine-phenytoin.",
+   "nguon": [
+    {
+     "loai": "tong_quan",
+     "tieu_de": "Cross-sensitivity of skin rashes with antiepileptic drug use",
+     "nam": 2008,
+     "pmid": "18981374",
+     "doi": "10.1212/01.wnl.0000334295.50403.4c",
+     "trich_nguyen_van": "Cross-sensitivity rates between certain antiepileptic drugs (AEDs) are high, especially when involving carbamazepine and phenytoin.",
+     "url": "https://doi.org/10.1212/01.wnl.0000334295.50403.4c",
+     "doi_url": "https://doi.org/10.1212/01.wnl.0000334295.50403.4c",
+     "cach_mo": "Europe PMC REST (tóm tắt)",
+     "ngay_lay": "2026-11-19",
+     "ghi_chu": null
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "LAMOTRIGINE",
+     "set_id": "003663e5-c0c7-4fc1-a64d-313f2a5b10d2",
+     "phien_ban_nguon": "20260422",
+     "tep": "data/kb_sources/openfda_d3/lamotrigine.json",
+     "trich_nguyen_van": "The finding of increased risk with AEDs of varying mechanism of action and across a range of indications suggests that the risk applies to all AEDs used for any indication.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=003663e5-c0c7-4fc1-a64d-313f2a5b10d2",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"003663e5-c0c7-4fc1-a64d-313f2a5b10d2\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Số liệu từng cặp (ví dụ carbamazepine sang lamotrigine) nằm trong tóm tắt Hirsch 2008 nhưng chưa trích nguyên câu dài vào bảng.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "AED04_CBZ_TRICYCLIC",
+   "ten_nhom": "Carbamazepine ↔ thuốc chống trầm cảm ba vòng",
+   "hoat_chat_ids": [
+    "carbamazepine"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "amitriptyline"
+     ],
+     "muc_cheo": "thap",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn carbamazepine chống chỉ định khi nhạy cảm với hợp chất ba vòng"
+    }
+   ],
+   "huong": "mot_chieu",
+   "co_so": "Cấu trúc ba vòng tương tự.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CARBAMAZEPINE",
+     "set_id": "047bc284-060a-4db9-bf37-75d10f95a0a6",
+     "phien_ban_nguon": "20250218",
+     "tep": "data/kb_sources/openfda_d3/carbamazepine.json",
+     "trich_nguyen_van": "Carbamazepine should not be used in patients with a history of previous bone marrow depression, hypersensitivity to the drug, or known sensitivity to any of the tricyclic compounds, such as amitriptyline, desipramine, imipramine, protriptyline, nortriptyline, etc.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=047bc284-060a-4db9-bf37-75d10f95a0a6",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"047bc284-060a-4db9-bf37-75d10f95a0a6\"",
+     "ngay_lay": "2026-11-19"
+    }
+   ],
+   "ghi_chu": "Chỉ amitriptyline có trong từ điển; imipramine, nortriptyline chưa có hoạt chất trên trục.",
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "AG01_AMINOGLYCOSID",
+   "ten_nhom": "Aminoglycoside: dị ứng một thuốc thì tránh cả nhóm",
+   "hoat_chat_ids": [
+    "amikacin",
+    "gentamicin",
+    "tobramycin",
+    "streptomycin",
+    "kanamycin",
+    "netilmicin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "amikacin",
+      "gentamicin",
+      "tobramycin",
+      "streptomycin",
+      "kanamycin",
+      "netilmicin"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn ghi nhạy cảm chéo trong nhóm"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhóm đã có nhãn trong kho.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "GENTAMICIN SULFATE",
+     "set_id": "84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+     "phien_ban_nguon": "20261102",
+     "tep": "data/kb_sources/openfda/gentamicin.json",
+     "trich_nguyen_van": "A history of hypersensitivity or serious toxic reactions to other aminoglycosides may contraindicate use of gentamicin because of the known cross-sensitivity of patients to drugs in this class.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=84f6eb1c-a287-489a-8c3e-aa5954cf1992",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"84f6eb1c-a287-489a-8c3e-aa5954cf1992\"",
+     "ngay_lay": "2026-11-16"
+    },
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "AMIKACIN SULFATE",
+     "set_id": "f260ff2a-76a0-4672-9516-91c344b67890",
+     "phien_ban_nguon": "20260727",
+     "tep": "data/kb_sources/openfda/amikacin.json",
+     "trich_nguyen_van": "A history of hypersensitivity or serious toxic reactions to aminoglycosides may contraindicate the use of any other aminoglycoside because of the known cross-sensitivities of patients to drugs in this class.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f260ff2a-76a0-4672-9516-91c344b67890",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"f260ff2a-76a0-4672-9516-91c344b67890\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "FQ01_QUINOLON",
+   "ten_nhom": "Fluoroquinolone: dị ứng một thuốc thì tránh cả nhóm",
+   "hoat_chat_ids": [
+    "ciprofloxacin",
+    "levofloxacin",
+    "moxifloxacin",
+    "ofloxacin",
+    "norfloxacin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "ciprofloxacin",
+      "levofloxacin",
+      "moxifloxacin",
+      "ofloxacin",
+      "norfloxacin"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn chống chỉ định theo quá mẫn với thành viên bất kỳ của nhóm quinolone"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhóm đã có nhãn trong kho.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CIPROFLOXACIN",
+     "set_id": "f406e796-17d9-4465-b8a7-00d966a4ba74",
+     "phien_ban_nguon": "20260804",
+     "tep": "data/kb_sources/openfda/ciprofloxacin.json",
+     "trich_nguyen_van": "Ciprofloxacin is contraindicated in persons with a history of hypersensitivity to ciprofloxacin, any member of the quinolone class of antibacterials, or any of the product components [see Warnings and Precautions ( 5.7 )] .",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f406e796-17d9-4465-b8a7-00d966a4ba74",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"f406e796-17d9-4465-b8a7-00d966a4ba74\"",
+     "ngay_lay": "2026-11-17"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "MAC01_MACROLID",
+   "ten_nhom": "Macrolid: dị ứng một thuốc thì tránh cả nhóm",
+   "hoat_chat_ids": [
+    "clarithromycin",
+    "azithromycin",
+    "erythromycin",
+    "roxithromycin"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "clarithromycin",
+      "azithromycin",
+      "erythromycin",
+      "roxithromycin"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn chống chỉ định theo quá mẫn với erythromycin hoặc macrolid khác"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhóm đã có nhãn trong kho.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "CLARITHROMYCIN",
+     "set_id": "0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+     "phien_ban_nguon": "20261109",
+     "tep": "data/kb_sources/openfda/clarithromycin.json",
+     "trich_nguyen_van": "Clarithromycin tablets are contraindicated in patients with a known hypersensitivity to clarithromycin, erythromycin, or any of the macrolide antibacterial drugs [see Warnings and Precautions ( 5.1 )] .",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0be243c6-de02-45dd-8210-cab1bbc8dfa7",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"0be243c6-de02-45dd-8210-cab1bbc8dfa7\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "TP01_THIENOPYRIDIN",
+   "ten_nhom": "Thienopyridine (clopidogrel, ticlopidine, prasugrel)",
+   "hoat_chat_ids": [
+    "clopidogrel",
+    "ticlopidine",
+    "prasugrel"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "clopidogrel",
+      "ticlopidine",
+      "prasugrel"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "than_trong",
+     "ly_do": "Nhãn ghi quá mẫn chéo giữa các thienopyridine"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhóm đã có nhãn clopidogrel trong kho.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "than_trong",
+     "ten_nhan": "CLOPIDOGREL BISULFATE",
+     "set_id": "03bec9ad-cd22-44d3-9b82-2796157de1d1",
+     "phien_ban_nguon": "20261105",
+     "tep": "data/kb_sources/openfda/clopidogrel.json",
+     "trich_nguyen_van": "Hypersensitivity including rash, angioedema or hematologic reaction has been reported in patients receiving clopidogrel tablets, including patients with a history of hypersensitivity or hematologic reaction to other thienopyridines [see Contraindications ( 4.2 ) and Adverse Reactions ( 6.2 )] .",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03bec9ad-cd22-44d3-9b82-2796157de1d1",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"03bec9ad-cd22-44d3-9b82-2796157de1d1\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": null,
+   "trang_thai": "cho_duoc_si_duyet"
+  },
+  {
+   "ma_nhom": "PPI01_BENZIMIDAZOL",
+   "ten_nhom": "Thuốc ức chế bơm proton (benzimidazole thế)",
+   "hoat_chat_ids": [
+    "omeprazole",
+    "esomeprazole",
+    "pantoprazole",
+    "lansoprazole",
+    "rabeprazole"
+   ],
+   "hoat_chat_lien_quan": [
+    {
+     "hoat_chat_ids": [
+      "omeprazole",
+      "esomeprazole",
+      "pantoprazole",
+      "lansoprazole",
+      "rabeprazole"
+     ],
+     "muc_cheo": "cao",
+     "muc_canh_bao_nhan": "chong_chi_dinh",
+     "ly_do": "Nhãn esomeprazole chống chỉ định khi quá mẫn benzimidazole thế"
+    }
+   ],
+   "huong": "hai_chieu",
+   "co_so": "Nhóm đã có nhãn esomeprazole trong kho.",
+   "nguon": [
+    {
+     "loai": "nhan_fda",
+     "muc_nhan": "chong_chi_dinh",
+     "ten_nhan": "ESOMEPRAZOLE MAGNESIUM",
+     "set_id": "fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+     "phien_ban_nguon": "20261102",
+     "tep": "data/kb_sources/openfda/esomeprazole.json",
+     "trich_nguyen_van": "Esomeprazole magnesium is contraindicated in patients with known hypersensitivity to substituted benzimidazoles or to any component of the formulation.",
+     "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fdea1f5f-b717-4d49-8d70-0b373c959bf0",
+     "url_api": "https://api.fda.gov/drug/label.json?search=set_id:\"fdea1f5f-b717-4d49-8d70-0b373c959bf0\"",
+     "ngay_lay": "2026-11-16"
+    }
+   ],
+   "ghi_chu": "Chỉ có nhãn esomeprazole; các PPI khác kế thừa theo cùng nhóm hóa học, dược sĩ cần xác nhận.",
+   "trang_thai": "cho_duoc_si_duyet"
+  }
+ ]
+}

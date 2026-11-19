@@ -12,6 +12,7 @@ _TRA_CUU = "data/kb_curated/tra_cuu/tra_cuu.sqlite"
 _DDINTER = "data/kb_curated/tuong_tac/ddinter.sqlite"
 _CHUNKS = "data/kb_curated/chunks.jsonl"
 _NGUON = "data/kb_sources/manifest.json"
+_DDINTER_CSV = "data/kb_sources/ddinter/*.csv"
 _API_MAU = "data/kb_sources/openfda_api_mau"
 _NDC = "data/kb_sources/openfda_ndc"
 
@@ -22,10 +23,19 @@ _CAN_DU_LIEU: list[tuple[str, frozenset[str] | None, tuple[str, ...]]] = [
     ("tests/api/test_routes.py", frozenset({"test_demo02_detail"}), (_TRA_CUU, _DDINTER)),
     (
         "tests/db/test_cli.py",
-        frozenset({"test_dry_run_never_connects"}),
-        (_NGUON, _CHUNKS, _DDINTER),
+        frozenset({"test_dry_run_never_connects[kb]", "test_dry_run_never_connects[embeddings]"}),
+        (_NGUON, _CHUNKS),
     ),
-    ("tests/db/test_loading.py", frozenset({"test_ddinter_counts_copy_and_upsert"}), (_NGUON,)),
+    (
+        "tests/db/test_cli.py",
+        frozenset({"test_dry_run_never_connects[ddinter]"}),
+        (_NGUON, _DDINTER_CSV),
+    ),
+    (
+        "tests/db/test_loading.py",
+        frozenset({"test_ddinter_counts_copy_and_upsert"}),
+        (_NGUON, _DDINTER_CSV),
+    ),
     (
         "tests/db/test_loading.py",
         frozenset({"test_bad_catalog_row_is_logged_without_aborting_below_limit"}),
@@ -55,18 +65,27 @@ _CAN_DU_LIEU: list[tuple[str, frozenset[str] | None, tuple[str, ...]]] = [
 ]
 
 
+def _has_data(path: str) -> bool:
+    """Kiểm tra đường dẫn tồn tại hoặc mẫu glob có ít nhất một tệp khớp."""
+    if "*" in path:
+        return any(candidate.is_file() for candidate in _ROOT.glob(path))
+    return (_ROOT / path).exists()
+
+
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     """Gắn marker can_du_lieu theo bảng trên rồi bỏ qua test nếu thiếu tệp cần."""
     for item in items:
         relative = Path(str(item.path)).resolve().relative_to(_ROOT).as_posix()
-        name = getattr(item, "originalname", None) or item.name
+        original_name = getattr(item, "originalname", None) or item.name
         for file, names, paths in _CAN_DU_LIEU:
-            if relative == file and (names is None or name in names):
+            if relative == file and (
+                names is None or item.name in names or original_name in names
+            ):
                 item.add_marker(pytest.mark.can_du_lieu(*paths))
         marker = item.get_closest_marker("can_du_lieu")
         if marker is None:
             continue
-        missing = [path for path in marker.args if not (_ROOT / path).exists()]
+        missing = [path for path in marker.args if not _has_data(path)]
         if missing:
             reason = f"thiếu {', '.join(missing)}, xem docs/chay-tren-may-moi.md"
             item.add_marker(pytest.mark.skip(reason=reason))

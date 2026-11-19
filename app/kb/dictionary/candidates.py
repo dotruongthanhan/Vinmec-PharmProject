@@ -9,8 +9,7 @@ from pathlib import Path
 import numpy as np
 from numpy.typing import NDArray
 
-from app.config.settings import get_secret, load_settings
-from app.core.errors import ConfigError
+from app.config.settings import load_settings
 from app.core.interfaces import Embedder
 from app.kb.dictionary.accept import RankedCandidate, Ranking, can_accept, candidate_path, eligible
 from app.kb.dictionary.catalog import CandidateName, Catalog, baseline
@@ -19,9 +18,9 @@ from app.kb.dictionary.rules_extra import RulesConfig, load_rules
 from app.kb.dictionary.split import has_strength
 from app.kb.dictionary.storage import Row, write_json, write_jsonl
 from app.providers.cached_embedder import CachedEmbedder
+from app.providers.embedder_factory import build_embedder
 from app.providers.fakes import HashEmbedder
 from app.providers.http import create_client
-from app.providers.openrouter_embed import OpenRouterEmbedder
 
 BATCH_SIZE = 128
 
@@ -33,24 +32,12 @@ def open_embedder(root: Path, mode: str) -> Iterator[tuple[Embedder, str]]:
         return
     settings = load_settings()
     embedding = settings.embedding
-    if embedding.provider != "openrouter":
-        raise ValueError("Che do that can settings.embedding.provider=openrouter")
-    keys = [get_secret("OPENROUTER_API_KEY")]
-    try:
-        keys.append(get_secret("OPENROUTER_API_KEY_2"))
-    except ConfigError:
-        pass
+    if embedding.provider not in ("gemini", "openrouter"):
+        raise ValueError("Che do that can settings.embedding.provider=gemini hoac openrouter")
     with create_client() as client:
         yield (
             CachedEmbedder(
-                OpenRouterEmbedder(
-                    embedding.active,
-                    embedding.dimensions,
-                    embedding.batch_size,
-                    keys,
-                    client,
-                    settings.agent.max_attempts,
-                ),
+                build_embedder(settings, client),
                 root / "cache/embeddings_tu_dien.sqlite",
                 model_id=embedding.active,
             ),

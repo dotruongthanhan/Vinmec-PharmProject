@@ -32,8 +32,8 @@ Kích thước byte đo bằng `stat().st_size`, tổng các tệp thường khi
 | Siêu dữ liệu chung | `data/kb_sources/manifest.json` | 81.847 | Có; gồm cả mục nguồn khác |
 | Trung gian | `LabelDocument`, `LabelSection`, `LabelTable` trong bộ nhớ khi build | Không có tệp nhãn trung gian được pipeline này xuất ra `kb_staging`; không gán byte 0 | Dựng lại từ nguồn |
 | Bộ tra RAG | `data/kb_curated/chunks.jsonl` | 3.730 dòng; 9.246.537 | Có, app nạp trực tiếp |
-| Bộ đệm nhúng RAG | `data/cache/embeddings.sqlite` | 1.022 hàng; 8.994.816 | Có thể dựng lại; tái dùng phụ thuộc đúng mô hình/nội dung |
-| Cache từ điển riêng | `data/cache/embeddings_tu_dien.sqlite` | 0 hàng; 12.288 | Đường riêng của `dictionary/candidates.py`, không phải cache RAG |
+| Bộ đệm nhúng RAG | `data/cache/embeddings.sqlite` | Đo trước T61: 1.022 hàng (mô hình cũ `nvidia/nemotron-3.5-embed-1b:free`); sau T61 dùng `gemini-embedding-2` | Có thể dựng lại; tái dùng phụ thuộc đúng mô hình/nội dung |
+| Cache từ điển riêng | `data/cache/embeddings_tu_dien.sqlite` | 0 hàng; 12.288 | Đường riêng của `dictionary/candidates.py`, dùng cùng `build_embedder` |
 
 `data/kb_sources/openfda_api_mau/` là các phản hồi mẫu thăm dò API/fixture kiểm thử, không phải đầu vào build nhãn hoặc corpus đang chạy; không nhập các endpoint sự kiện, thu hồi, thiếu thuốc từ thư mục này vào RAG.
 
@@ -272,7 +272,21 @@ Cả hai SQLite trên đều có bảng `embeddings`; đã chạy `PRAGMA table_
 | `embeddings.sqlite` | 1.022 | 2.048 | 8.192 |
 | `embeddings_tu_dien.sqlite` | 0 | Không có hàng | Không có hàng |
 
-Với mô hình đang cấu hình `nvidia/nemotron-3.5-embed-1b:free`, đo khóa `doc` theo `noi_dung_nhung` khớp **819/3.730 đoạn**, còn **2.911 đoạn không có khóa tương ứng**. Đây chỉ là kiểm hiện diện khóa, chưa xác minh chất lượng ngữ nghĩa hoặc tính hữu hạn của từng véc-tơ. Các hàng cache còn lại chưa được phân loại theo nguồn/mô hình; không kết luận toàn corpus đã nhúng.
+Với mô hình cũ `nvidia/nemotron-3.5-embed-1b:free` (đo trước T61), khóa `doc` theo `noi_dung_nhung` khớp **819/3.730 đoạn**, còn **2.911 đoạn không có khóa tương ứng**. Đây chỉ là kiểm hiện diện khóa, chưa xác minh chất lượng ngữ nghĩa hoặc tính hữu hạn của từng véc-tơ. Các hàng cache còn lại chưa được phân loại theo nguồn/mô hình; không kết luận toàn corpus đã nhúng.
+
+### 4.3. Mô hình nhúng hiện hành và lệnh nhúng cache (T61, 19/11/2026)
+
+Từ T61, cấu hình `config/settings.yaml` chuyển `embedding.provider` từ `openrouter` (`nvidia/nemotron-3.5-embed-1b:free`) sang **`gemini`** với mô hình **`gemini-embedding-2`** (`dimensions: 2048`, `batch_size: 100`, giữ nguyên `cache_path: "data/cache/embeddings.sqlite"`).
+
+- Giao diện gọi API: `POST https://generativelanguage.googleapis.com/v1beta/models/{model}:batchEmbedContents` với header `x-goog-api-key` đọc qua `get_secret("GEMINI_API_KEY")`. Tài liệu dùng `taskType: "RETRIEVAL_DOCUMENT"`, truy vấn dùng `taskType: "RETRIEVAL_QUERY"`.
+- Khoá băm trong `CachedEmbedder` gắn theo `model_id` (`sha256("{model_id}\n{kind}\n{text}")`), nên khoá của `gemini-embedding-2` tách biệt hoàn toàn với `nvidia/nemotron-3.5-embed-1b:free`. Thiếu `GEMINI_API_KEY` khi chạy RAG vẫn lùi về tìm theo từ khoá BM25 mà không lỗi.
+- **Lệnh nhúng kho đoạn và dọn cache cũ** (`app/retrieval/embed_corpus.py`, T61 chưa chạy nhúng thật nên chưa ghi số hàng mới trên đĩa):
+  - Xoá tệp cache cũ khi các khoá cũ không thuộc mô hình hiện tại (chỉ xoá khi có cờ này, in số dòng trước khi xoá):
+    `uv run python -m app.retrieval.embed_corpus --xoa-cache-cu`
+  - Nhúng thử ít đoạn (ví dụ 20 đoạn đầu):
+    `uv run python -m app.retrieval.embed_corpus --limit 20`
+  - Nhúng toàn bộ `data/kb_curated/chunks.jsonl` qua `CachedEmbedder` (chạy tiếp được sau khi dừng vì đoạn đã có trong cache sẽ được bỏ qua; in tiến độ và tổng số đoạn / số đoạn đã có vector / số đoạn lỗi):
+    `uv run python -m app.retrieval.embed_corpus`
 
 ## 5. Kết quả kiểm đã có
 
@@ -348,3 +362,7 @@ for name in ('openfda_fetch_openfda.json', 'openfda_fetch_ndc.json', 'openfda_bu
 '@ | .venv/Scripts/python.exe -
 ```
 
+
+## Phụ lục: nhãn bổ sung cho dị ứng chéo (T60, 19/11/2026)
+
+26 nhãn được tải thêm vào `data/kb_sources/openfda_d3/` (kèm `manifest.json`: truy vấn, `set_id`, `effective_time`, sha256, kích thước, ngày lấy), gồm penicillin, cephalosporin, carbapenem, aztreonam, NSAID, thuốc chống động kinh, sulfasalazine. Khác nhãn trong `openfda/`: **không** đưa vào `chunks.jsonl`, không nhúng; chỉ dùng làm câu trích nguyên văn cho `data/kb/di_ung_cheo.json`. Chi tiết và danh sách ở [di-ung-cheo.md](di-ung-cheo.md).
