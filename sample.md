@@ -48,7 +48,7 @@ Dưới đây là bảng tách bạch chi tiết những gì bạn **tự nhìn/
 * **Với Điều dưỡng:** Những câu hỏi nào điều dưỡng hay phải gọi điện hỏi DSLS nhất trong ca trực (cách pha hoàn nguyên, dung môi tương hợp, truyền chung dây chữ Y, tốc độ truyền, có được nghiền viên qua ống thông dạ dày không)?
 
 ### 3. Hỏi Lãnh đạo Khoa Dược / Phụ trách chuyên môn (Cấp quản lý & Pháp lý)
-* **Bản quyền dữ liệu thuốc:** Tài khoản *UpToDate* và *MIMS* bệnh viện đang mua chỉ cho phép đọc trên web hay có gói **tích hợp API/Cơ sở dữ liệu**? Nếu không có API thương mại, Hội đồng Thuốc & Điều trị cho phép dùng nguồn chính thống nào làm chuẩn gốc cho AI (Dược thư Quốc gia, Tờ HDSD được Cục Quản lý Dược duyệt, Guideline nội bộ Vinmec)?
+* **Bản quyền dữ liệu thuốc:** Tài khoản *UpToDate* và *MIMS* bệnh viện đang mua chỉ cho phép đọc trên web hay có gói **tích hợp API/Cơ sở dữ liệu**? Nếu không có API thương mại, Hội đồng Thuốc & Điều trị cho phép dùng nguồn chính thống nào làm chuẩn gốc cho AI (Dược thư Quốc gia, Tờ HDSD được Cục Quản lý Dược duyệt, Guideline nội bộ Bệnh viện X)?
 * **Cơ chế phê duyệt & Ranh giới dự án:** Hội đồng nào sẽ đứng ra thẩm định độ an toàn y khoa của CDSS trước khi thử nghiệm? Đơn vị công nghệ nội bộ (như VSF) hiện có đang phát triển module CDSS tương tự nào không để tránh dẫm chân nhau?
 
 ### 4. Hỏi Nhân sự CNTT / Quản trị HIS & An ninh thông tin (Chốt chặn kỹ thuật sống còn)

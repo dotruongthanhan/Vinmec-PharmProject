@@ -4,7 +4,7 @@ File này để bất kỳ phiên Claude nào (kể cả tài khoản khác) đ�
 
 ## 1. Dự án là gì
 
-Hệ thống AI agent hỗ trợ dược sĩ lâm sàng (DSLS) thẩm định y lệnh, Khoa Dược Vinmec Times City, trong chương trình Vinmec AI Exploration Sprint 6 tuần (VinUni × Vinmec). Nhóm 2 người: Vũ Gia Khải (chủ kho này, nhánh `vukhai248`) và Đỗ Trương Thành Ân.
+Hệ thống AI agent hỗ trợ dược sĩ lâm sàng (DSLS) thẩm định y lệnh, Khoa Dược Bệnh viện X Times City, trong chương trình AI Sprint 6 tuần (Đơn vị đào tạo X × Bệnh viện X). Nhóm 2 người: Vũ Gia Khải (chủ kho này, nhánh `vukhai248`) và Đỗ Trương Thành Ân.
 
 - Bản plan đầy đủ: `plan/plan-trien-khai-ai-agent-tham-dinh-y-lenh.md`
 - **Plan 1.1 – kiến trúc chi tiết** (phân lớp, quy ước hướng đối tượng, cấu trúc thư mục, RAG, đồ thị điều phối, cấu hình, sổ tay thử): `plan/plan-1.1-kien-truc-chi-tiet.md`. Thay mục 4.4 và Phụ lục B của plan gốc. Brief cho T11 trở đi phải bám bản này.

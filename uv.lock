@@ -2770,7 +2770,7 @@ wheels = [
 ]
 
 [[package]]
-name = "vinmec-pharm-cdss"
+name = "bvienx-pharm-cdss"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

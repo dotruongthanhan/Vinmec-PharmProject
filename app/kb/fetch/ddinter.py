@@ -642,7 +642,7 @@ def main(argv: list[str] | None = None) -> int:
     stopped = None
     target_count = 0
     with httpx.Client(
-        headers={"User-Agent": "VinmecPharmProject-kb/1.0"},
+        headers={"User-Agent": "BvienxPharmProject-kb/1.0"},
         timeout=30.0,
         follow_redirects=False,
     ) as http:

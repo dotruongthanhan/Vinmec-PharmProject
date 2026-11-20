@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "vinmec-pharm-cdss"
+name = "bvienx-pharm-cdss"
 version = "0.1.0"
 description = "He thong ho tro duoc si lam sang tham dinh y lenh"
 requires-python = ">=3.11"
