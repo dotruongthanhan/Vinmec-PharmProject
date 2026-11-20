@@ -288,3 +288,27 @@
 .logo-on-dark { display: none; }
 :root[data-theme="dark"] .logo-on-light { display: none; }
 :root[data-theme="dark"] .logo-on-dark { display: block; }
+
+/* Khối đóng/mở Hồ sơ bệnh án: ẩn dấu mặc định, xoay biểu tượng cạnh nhãn và trượt mượt khi không giảm chuyển động */
+.record-disclosure-summary {
+  list-style: none;
+}
+.record-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+.record-disclosure[open] > .record-disclosure-summary > .record-disclosure-chevron {
+  transform: rotate(90deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .record-disclosure::details-content {
+    interpolate-size: allow-keywords;
+    block-size: 0;
+    overflow: clip;
+    contain: layout;
+    transition: block-size 180ms ease, content-visibility 180ms ease;
+    transition-behavior: allow-discrete;
+  }
+  .record-disclosure[open]::details-content {
+    block-size: auto;
+  }
+}

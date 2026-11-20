@@ -584,7 +584,7 @@ def _query_table(
     col_sql = ", ".join(columns)
     where_sql = f" WHERE {where_clause}" if where_clause else ""
     order_sql = f" ORDER BY {order_by}" if order_by else ""
-    sql_text = f"SELECT {col_sql} FROM {table}{where_sql}{order_sql}"
+    sql_text = f"SELECT {col_sql} FROM {table}{where_sql}{order_sql}"  # noqa: S608  # bảng/cột hằng
     cur = conn.execute(sql_text, params)
     fetch = getattr(cur, "fetchall", None)
     raw_rows = fetch() if callable(fetch) else list(cur)

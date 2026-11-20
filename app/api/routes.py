@@ -123,7 +123,11 @@ def start_ai(
     body: Annotated[s.ChayAI | None, Body()] = None,
 ) -> s.KetQuaAI:
     """Khởi động phân tích AI nền cho một ca hoặc trả trạng thái hiện có."""
-    return _service(request).start_ai(ca_id, restart=body.chay_lai if body is not None else False)
+    return _service(request).start_ai(
+        ca_id,
+        restart=body.chay_lai if body is not None else False,
+        principal=principal,
+    )
 
 
 @router.get("/cases/{ca_id}/ai", response_model=s.KetQuaAI)
@@ -135,7 +139,7 @@ def get_ai(ca_id: str, request: Request, principal: Caller) -> s.KetQuaAI:
 @router.get("/cases/{ca_id}/sources/{doan_trich_id}", response_model=s.DoanNguon)
 def get_source(ca_id: str, doan_trich_id: str, request: Request, principal: Caller) -> s.DoanNguon:
     """Trả nguyên văn đoạn nguồn đã cấp cho ca bệnh trong lần phân tích gần nhất."""
-    return _service(request).get_source(ca_id, doan_trich_id)
+    return _service(request).get_source(ca_id, doan_trich_id, principal)
 
 
 @router.get("/thuoc", response_model=s.DanhSachThuoc)

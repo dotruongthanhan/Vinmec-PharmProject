@@ -167,27 +167,19 @@ function MedicalRecordTabContent({
 }) {
   const { dinh_danh, tom_tat, chi_so } = detail
 
-  return (
-    <div className="flex flex-col gap-7">
-      <AdministrativeSections identity={detail.dinh_danh_day_du}
-        management={detail.quan_ly_nguoi_benh} history={detail.lich_su_vao_vien}
-        legacy={detail.dinh_danh_day_du ? undefined : {
-          gioi_tuoi: dinh_danh.gioi_tuoi, can_nang: dinh_danh.can_nang,
-          vao_vien: formatClinicalText(tom_tat.vao_vien_text),
-          nam_vien: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : null,
-          khoa: dinh_danh.khoa_loai,
-        }} />
-
-      <section aria-label="Chẩn đoán" className="flex flex-col gap-2.5">
-        <SectionHeading title="III. Chẩn đoán" />
-        <InfoRows items={[
+  const diagnosisSection = (
+    <div className="flex flex-col gap-4">
+      <InfoRows
+        items={[
           { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
-          { label: 'Dị ứng', value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text },
-        ]} />
-      </section>
-
-      <section aria-label="Cơ địa" className="flex flex-col gap-2.5">
-        <SectionHeading title="Cơ địa đặc biệt" />
+          {
+            label: 'Dị ứng',
+            value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text || 'Chưa ghi nhận',
+          },
+        ]}
+      />
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-medium text-fg-subtle">Cơ địa đặc biệt</span>
         {tom_tat.co_dia.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {tom_tat.co_dia.map((item) => (
@@ -199,7 +191,31 @@ function MedicalRecordTabContent({
         ) : (
           <p className="text-sm text-fg-subtle">Không ghi nhận cơ địa đặc biệt.</p>
         )}
-      </section>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-3">
+        <AdministrativeSections
+          identity={detail.dinh_danh_day_du}
+          management={detail.quan_ly_nguoi_benh}
+          history={detail.lich_su_vao_vien}
+          diagnosisSection={diagnosisSection}
+          legacy={
+            detail.dinh_danh_day_du
+              ? undefined
+              : {
+                  gioi_tuoi: dinh_danh.gioi_tuoi,
+                  can_nang: dinh_danh.can_nang,
+                  vao_vien: formatClinicalText(tom_tat.vao_vien_text),
+                  nam_vien: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : null,
+                  khoa: dinh_danh.khoa_loai,
+                }
+          }
+        />
+      </div>
 
       <section aria-label="Chỉ số lâm sàng" className="flex flex-col gap-2.5">
         <SectionHeading

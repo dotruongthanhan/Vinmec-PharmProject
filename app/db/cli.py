@@ -6,7 +6,7 @@ from pathlib import Path
 
 import psycopg
 
-from app.config.settings import Settings, get_secret, load_settings
+from app.config.settings import Settings, get_secret, load_settings, loader_database_url
 from app.core.errors import ConfigError
 from app.db import bang_luat, chi_muc, engine
 from app.db.mapping import ACTIVE_DRUG_VIEW, SCHEMAS, TABLES
@@ -112,7 +112,11 @@ def _run_chi_muc(args: argparse.Namespace, settings: Settings) -> int:
             print(f"{table}: {count}")
         print("DRY-RUN: không kết nối cơ sở dữ liệu.")
         return 0
-    url = get_secret(settings.database.url_env)
+    url = (
+        loader_database_url(settings.database.url_env, secret_reader=get_secret)
+        if is_load
+        else get_secret(settings.database.url_env)
+    )
     options = {"options": "-c default_transaction_read_only=on"} if not is_load else {}
     with psycopg.connect(url, connect_timeout=10, autocommit=True, **options) as connection:
         if is_load:
@@ -131,7 +135,7 @@ def _run_bang_luat(args: argparse.Namespace, settings: Settings) -> int:
             print(f"{table}: {count}")
         print("DRY-RUN: không kết nối cơ sở dữ liệu.")
         return 0
-    url = get_secret(settings.database.url_env)
+    url = loader_database_url(settings.database.url_env, secret_reader=get_secret)
     with psycopg.connect(url, connect_timeout=10, autocommit=True) as connection:
         bang_luat.load_bang_luat(connection, ROOT)
         return 0
@@ -186,7 +190,7 @@ def main(argv: list[str] | None = None) -> int:
                 print("DRY-RUN: không kết nối cơ sở dữ liệu.")
                 return 0
             settings = load_settings()
-            url = get_secret(settings.database.url_env)
+            url = loader_database_url(settings.database.url_env, secret_reader=get_secret)
             with psycopg.connect(url, connect_timeout=10, autocommit=True) as connection:
                 engine.load_treatment_sheets(connection, batch)
             return 0
@@ -199,7 +203,7 @@ def main(argv: list[str] | None = None) -> int:
                 print("DRY-RUN: không kết nối cơ sở dữ liệu.")
                 return 0
             settings = load_settings()
-            url = get_secret(settings.database.url_env)
+            url = loader_database_url(settings.database.url_env, secret_reader=get_secret)
             with psycopg.connect(url, connect_timeout=10, autocommit=True) as connection:
                 engine.load_administrative(connection, batch)
             return 0
@@ -242,8 +246,12 @@ def main(argv: list[str] | None = None) -> int:
         if getattr(args, "dry_run", False):
             print("DRY-RUN: không kết nối cơ sở dữ liệu.")
             return 0
-        url = get_secret(settings.database.url_env)
         readonly = args.command in ("check", "verify")
+        url = (
+            get_secret(settings.database.url_env)
+            if args.command in ("check", "verify", "schema", "reset")
+            else loader_database_url(settings.database.url_env, secret_reader=get_secret)
+        )
         options = {"options": "-c default_transaction_read_only=on"} if readonly else {}
         with psycopg.connect(url, connect_timeout=10, autocommit=True, **options) as connection:
             if args.command == "check":

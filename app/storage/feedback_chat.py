@@ -59,10 +59,64 @@ _DELETE_CHAT_ADMIN_SQL = (
     "WHERE ca_id = %s AND (nguoi_dung_id = %s OR nguoi_dung_id IS NULL)"
 )
 
+_SELECT_RECENT_CHAT_USER_SQL = (
+    "SELECT thoi_diem, ca_id, cau_hoi, tra_loi, nguoi_dung_id "
+    "FROM nghiep_vu.hoi_thoai "
+    "WHERE ca_id = %s AND nguoi_dung_id = %s "
+    "ORDER BY thoi_diem DESC, id DESC "
+    "LIMIT %s"
+)
+
+_SELECT_RECENT_CHAT_ADMIN_SQL = (
+    "SELECT thoi_diem, ca_id, cau_hoi, tra_loi, nguoi_dung_id "
+    "FROM nghiep_vu.hoi_thoai "
+    "WHERE ca_id = %s AND (nguoi_dung_id = %s OR nguoi_dung_id IS NULL) "
+    "ORDER BY thoi_diem DESC, id DESC "
+    "LIMIT %s"
+)
+
 
 def owns_conversation(owner: str | None, principal: Principal) -> bool:
     """Admin chỉ được thêm quyền với dòng cũ không có chủ."""
     return owner == principal.nguoi_dung_id or (owner is None and principal.vai_tro == ADMIN)
+
+
+def _extract_chat_entry(
+    item: Mapping[str, Any],
+    principal: Principal,
+) -> tuple[str, str, dict[str, Any]] | None:
+    """Kiểm quyền sở hữu và chuẩn hoá một bản ghi hội thoại hợp lệ."""
+    owner = item.get("nguoi_dung_id")
+    if owner is not None and not isinstance(owner, str):
+        return None
+    if not owns_conversation(owner, principal):
+        return None
+    ca_id = str(item.get("ca_id") or "")
+    cau_hoi = str(item.get("cau_hoi") or "")
+    tra_loi = item.get("tra_loi")
+    if isinstance(tra_loi, str):
+        try:
+            tra_loi = json.loads(tra_loi)
+        except ValueError:
+            return None
+    if not ca_id or not cau_hoi or not isinstance(tra_loi, dict):
+        return None
+    return ca_id, cau_hoi, tra_loi
+
+
+def _parse_sort_timestamp(raw: Any) -> datetime:
+    """Đưa mốc thời gian về datetime UTC để sắp xếp lượt hội thoại ổn định."""
+    if isinstance(raw, datetime):
+        aware = raw if raw.tzinfo is not None else raw.replace(tzinfo=UTC)
+        return aware.astimezone(UTC)
+    if isinstance(raw, str) and raw:
+        try:
+            parsed = datetime.fromisoformat(raw)
+        except ValueError:
+            return datetime.min.replace(tzinfo=UTC)
+        aware = parsed if parsed.tzinfo is not None else parsed.replace(tzinfo=UTC)
+        return aware.astimezone(UTC)
+    return datetime.min.replace(tzinfo=UTC)
 
 
 class FeedbackAndChatStore(Protocol):
@@ -82,6 +136,13 @@ class FeedbackAndChatStore(Protocol):
 
     def list_conversations(self, principal: Principal) -> dict[str, list[dict[str, object]]]: ...
     def clear_conversation(self, ca_id: str, principal: Principal) -> None: ...
+
+    def recent_turns(
+        self,
+        ca_id: str,
+        principal: Principal,
+        limit: int = 3,
+    ) -> list[tuple[str, str]]: ...
 
 
 class FileFeedbackChatStore:
@@ -188,6 +249,47 @@ class FileFeedbackChatStore:
                 self._chat_path.write_text(content, encoding="utf-8")
             except OSError:
                 pass
+
+    def recent_turns(
+        self,
+        ca_id: str,
+        principal: Principal,
+        limit: int = 3,
+    ) -> list[tuple[str, str]]:
+        """Đọc tối đa limit lượt gần nhất của chính người gọi theo thời gian tăng dần."""
+        if limit <= 0:
+            return []
+        with self._lock:
+            if not self._chat_path.is_file():
+                return []
+            try:
+                lines = self._chat_path.read_text(encoding="utf-8").splitlines()
+            except OSError:
+                return []
+            matched: list[tuple[datetime, int, str, str]] = []
+            for idx, raw_line in enumerate(lines):
+                line = raw_line.strip()
+                if not line:
+                    continue
+                try:
+                    item = json.loads(line)
+                except ValueError:
+                    continue
+                if not isinstance(item, dict):
+                    continue
+                parsed = _extract_chat_entry(item, principal)
+                if parsed is None:
+                    continue
+                row_ca_id, cau_hoi, tra_loi = parsed
+                if row_ca_id != ca_id:
+                    continue
+                noi_dung = tra_loi.get("noi_dung")
+                if not isinstance(noi_dung, str):
+                    continue
+                ts = _parse_sort_timestamp(item.get("thoi_diem"))
+                matched.append((ts, idx, cau_hoi, noi_dung))
+            matched.sort(key=lambda row: (row[0], row[1]))
+            return [(cau_hoi, noi_dung) for _, _, cau_hoi, noi_dung in matched[-limit:]]
 
 
 @contextmanager
@@ -341,3 +443,45 @@ class DbFeedbackChatStore:
         except (psycopg.Error, OSError, ValueError, TypeError) as exc:
             _LOGGER.warning("Lỗi xoá hội thoại trên DB (%s)", type(exc).__name__)
             raise DatabaseReadError("Không thể xoá lịch sử hội thoại trên cơ sở dữ liệu.") from None
+
+    def recent_turns(
+        self,
+        ca_id: str,
+        principal: Principal,
+        limit: int = 3,
+    ) -> list[tuple[str, str]]:
+        """Đọc tối đa limit lượt gần nhất của người gọi từ DB theo thời gian tăng dần."""
+        if limit <= 0:
+            return []
+        query = (
+            _SELECT_RECENT_CHAT_ADMIN_SQL
+            if principal.vai_tro == ADMIN
+            else _SELECT_RECENT_CHAT_USER_SQL
+        )
+        try:
+            with self._read_conn() as conn:
+                cursor = conn.execute(query, (ca_id, principal.nguoi_dung_id, limit))
+                fetch = getattr(cursor, "fetchall", None)
+                rows = list(fetch() if callable(fetch) else cursor)
+        except DatabaseReadError:
+            raise
+        except (psycopg.Error, OSError, ValueError, TypeError) as exc:
+            _LOGGER.warning("Lỗi đọc lịch sử hội thoại gần nhất từ DB (%s)", type(exc).__name__)
+            raise DatabaseReadError("Không thể đọc lịch sử hội thoại từ cơ sở dữ liệu.") from None
+
+        turns: list[tuple[str, str]] = []
+        for row in reversed(rows):
+            if isinstance(row, Mapping):
+                item = dict(row)
+            else:
+                item = dict(zip(_CHAT_COLUMNS, row, strict=True))
+            parsed = _extract_chat_entry(item, principal)
+            if parsed is None:
+                continue
+            row_ca_id, cau_hoi, tra_loi = parsed
+            if row_ca_id != ca_id:
+                continue
+            noi_dung = tra_loi.get("noi_dung")
+            if isinstance(noi_dung, str):
+                turns.append((cau_hoi, noi_dung))
+        return turns

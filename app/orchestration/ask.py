@@ -522,14 +522,19 @@ def _build_messages(
     loi_lan_truoc: str,
 ) -> list[ChatMessage]:
     """Tách phần chỉ thị hệ thống và dữ liệu ca bệnh để gửi cho mô hình."""
+    values = {
+        "van_ban_ca": van_ban_ca,
+        "doan_nguon": doan_nguon,
+        "lich_su": lich_su,
+        "cau_hoi": cau_hoi,
+        "loi_lan_truoc": loi_lan_truoc,
+    }
 
     def _render(part: str) -> str:
-        return (
-            part.replace("{{van_ban_ca}}", van_ban_ca)
-            .replace("{{doan_nguon}}", doan_nguon)
-            .replace("{{lich_su}}", lich_su)
-            .replace("{{cau_hoi}}", cau_hoi)
-            .replace("{{loi_lan_truoc}}", loi_lan_truoc)
+        return re.sub(
+            r"\{\{(van_ban_ca|doan_nguon|lich_su|cau_hoi|loi_lan_truoc)\}\}",
+            lambda match: values[match.group(1)],
+            part,
         )
 
     if _DATA_SPLIT_MARKER in template:

@@ -7,17 +7,19 @@ services:
         VITE_SUPABASE_URL: ${SUPABASE_URL}
         VITE_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
     image: vinmec-pharm-api:latest
-    # Bí mật (DEEPSEEK_API_KEY, OPENROUTER_API_KEY, DATABASE_URL...) nằm ở file .env trên máy chủ, không nằm trong image.
-    env_file: .env
+    # Bí mật chỉ của API (DEEPSEEK_API_KEY, GEMINI_API_KEY, DATABASE_URL cho vinmec_app...) nằm ở .env.app trên máy chủ, không nằm trong image và không chứa khoá service_role.
+    env_file: .env.app
     volumes:
       # Phản hồi và nhật ký chat nằm ngoài container để không mất khi build lại.
       - ./data/runtime:/srv/data/runtime
+      # Chứng chỉ gốc AWS RDS gắn chỉ đọc cho kết nối sslmode=verify-full.
+      - ./certs/rds-global-bundle.pem:/srv/certs/rds-global-bundle.pem:ro
     restart: unless-stopped
     expose:
       - "8000"
 
   caddy:
-    image: caddy:2
+    image: caddy:2@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b
     depends_on:
       - api
     ports:

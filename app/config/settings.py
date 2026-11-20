@@ -1,10 +1,14 @@
 """Cấu hình bất biến, trộn sâu theo hồ sơ và đọc bí mật tập trung."""
 
 import io
+import logging
 import os
+from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
+from threading import Lock
 from typing import Literal, Self, cast
+from urllib.parse import parse_qs, unquote, urlsplit
 
 import yaml
 from dotenv import load_dotenv
@@ -13,6 +17,43 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_valida
 from app.core.errors import ConfigError
 
 _ROOT = Path(__file__).resolve().parents[2]
+_LOGGER = logging.getLogger(__name__)
+_warned_missing_loader_url = False
+_loader_warn_lock = Lock()
+_LOCAL_DB_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+_OWNER_DB_USERS = frozenset({"vinmec_admin", "postgres"})
+_GENERIC_DB_URL_WARNING = "DATABASE_URL không hợp lệ; không phân tích được chuỗi kết nối DB."
+DEFAULT_LLM_ASK_PER_5MIN = 20
+DEFAULT_LLM_AI_PER_HOUR = 15
+DEFAULT_LLM_DAILY_CALLS = 600
+
+
+def _read_positive_int_env(name: str, default: int) -> int:
+    """Đọc số nguyên dương từ biến môi trường; rỗng trả mặc định, sai ghi cảnh báo."""
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    stripped = raw.strip()
+    if not stripped:
+        return default
+    try:
+        value = int(stripped)
+    except ValueError:
+        _LOGGER.warning("Giá trị %s không hợp lệ; dùng mặc định %d.", name, default)
+        return default
+    if value < 1:
+        _LOGGER.warning("Giá trị %s phải >= 1; dùng mặc định %d.", name, default)
+        return default
+    return value
+
+
+def load_llm_rate_limits() -> tuple[int, int, int]:
+    """Đọc giới hạn tốc độ và ngân sách ngày gọi LLM từ biến môi trường."""
+    return (
+        _read_positive_int_env("LLM_ASK_PER_5MIN", DEFAULT_LLM_ASK_PER_5MIN),
+        _read_positive_int_env("LLM_AI_PER_HOUR", DEFAULT_LLM_AI_PER_HOUR),
+        _read_positive_int_env("LLM_DAILY_CALLS", DEFAULT_LLM_DAILY_CALLS),
+    )
 
 
 def load_case_source() -> Literal["db", "file"]:
@@ -86,6 +127,13 @@ def load_auth_settings() -> AuthSettings:
         supabase_jwt_secret=os.getenv("SUPABASE_JWT_SECRET", ""),
         **values,
     )
+
+
+def assert_auth_mode_allowed() -> None:
+    """Cấm chạy AUTH_MODE=off khi ứng dụng nằm trong container."""
+    runtime = os.getenv("CDSS_RUNTIME", "").strip().lower()
+    if os.getenv("AUTH_MODE") == "off" and runtime == "container":
+        raise ConfigError("AUTH_MODE=off bị cấm khi chạy trong container")
 
 
 class ChunkingSettings(BaseModel):
@@ -334,3 +382,59 @@ def get_secret(name: str) -> str:
     if not value:
         raise ConfigError(name)
     return value
+
+
+def loader_database_url(
+    url_env: str = "DATABASE_URL",
+    *,
+    secret_reader: Callable[[str], str] | None = None,
+) -> str:
+    """Trả DATABASE_URL_LOADER cho script nạp; thiếu thì dùng url_env kèm cảnh báo một lần."""
+    global _warned_missing_loader_url
+    reader = get_secret if secret_reader is None else secret_reader
+    try:
+        loader_url = reader("DATABASE_URL_LOADER").strip()
+    except ConfigError:
+        loader_url = ""
+    if loader_url:
+        return loader_url
+    fallback_url = reader(url_env).strip()
+    if not fallback_url:
+        raise ConfigError(url_env)
+    with _loader_warn_lock:
+        if not _warned_missing_loader_url:
+            _warned_missing_loader_url = True
+            _LOGGER.warning(
+                "Thiếu DATABASE_URL_LOADER; tạm dùng %s cho script nạp dữ liệu.",
+                url_env,
+            )
+    return fallback_url
+
+
+def database_url_warnings(url: str) -> list[str]:
+    """Kiểm tra tài khoản chủ và sslmode trên chuỗi kết nối DB, không lộ mật khẩu/URL."""
+    stripped = url.strip()
+    if not stripped:
+        return [_GENERIC_DB_URL_WARNING]
+    try:
+        parsed = urlsplit(stripped)
+        _ = parsed.port
+        host = (parsed.hostname or "").strip().lower()
+    except ValueError:
+        return [_GENERIC_DB_URL_WARNING]
+    if parsed.scheme.lower() not in ("postgres", "postgresql") or not host:
+        return [_GENERIC_DB_URL_WARNING]
+
+    warnings: list[str] = []
+    username = unquote(parsed.username or "").strip().lower()
+    if username in _OWNER_DB_USERS:
+        warnings.append("API đang dùng tài khoản chủ DB")
+
+    if host not in _LOCAL_DB_HOSTS:
+        query = parse_qs(parsed.query, keep_blank_values=True)
+        sslmode = (query.get("sslmode", [""])[-1] or "").strip().lower()
+        if sslmode != "verify-full":
+            warnings.append(
+                "Kết nối DB từ xa chưa bật sslmode=verify-full để kiểm chứng chỉ máy chủ."
+            )
+    return warnings

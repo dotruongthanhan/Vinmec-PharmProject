@@ -7,7 +7,7 @@ import psycopg
 from psycopg import sql
 from psycopg.types.json import Jsonb
 
-from app.config.settings import get_secret
+from app.config.settings import get_secret, loader_database_url
 from app.core.errors import ConfigError
 from app.kb.dictionary.accept import Ranking, candidate_path
 from app.kb.dictionary.axis import MatchMethod
@@ -87,7 +87,7 @@ def publish(root: Path, *, yes: bool = False) -> Row:
             "mau": {table: rows[:3] for table, rows in tables.items()},
         }
     try:
-        url = get_secret("DATABASE_URL")
+        url = loader_database_url(secret_reader=get_secret)
     except ConfigError:
         raise ValueError("Thieu bien moi truong DATABASE_URL") from None
     try:

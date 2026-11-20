@@ -399,21 +399,28 @@ class BanGhi(ApiModel):
 
 
 class GuiPhanHoi(ApiModel):
-    nhan_dinh_id: str
+    nhan_dinh_id: str = Field(max_length=128)
     phan_hoi: PhanHoiMa
-    nhom_ly_do: str | None = None
-    ly_do: str | None = None
+    nhom_ly_do: str | None = Field(default=None, max_length=64)
+    ly_do: str | None = Field(default=None, max_length=1000)
 
 
 class ChatMessage(ApiModel):
     vai: Literal["nguoi_dung", "he_thong"]
-    noi_dung: str
+    noi_dung: str = Field(max_length=4000)
 
 
 class GuiCauHoi(ApiModel):
+    """Thân yêu cầu hỏi đáp; trường lich_su bị bỏ qua từ T91, máy chủ tự dựng lịch sử."""
+
     cau_hoi: str
-    lich_su: list[ChatMessage] = Field(default_factory=list)
-    nhan_dinh_id: str | None = None
+    lich_su: list[ChatMessage] = Field(
+        default_factory=list,
+        max_length=6,
+        deprecated=True,
+        description="Bị bỏ qua từ T91, máy chủ tự dựng lịch sử.",
+    )
+    nhan_dinh_id: str | None = Field(default=None, max_length=128)
 
     @field_validator("cau_hoi")
     @classmethod
@@ -668,6 +675,19 @@ class DanhMucCongThuc(ApiModel):
 
 class TinhCongThucYeuCau(ApiModel):
     dau_vao: dict[str, Any]
+
+    @field_validator("dau_vao")
+    @classmethod
+    def _validate_dau_vao(cls, value: dict[str, Any]) -> dict[str, Any]:
+        """Giới hạn tối đa 30 khoá, tên khoá <= 64 và chuỗi giá trị <= 200 ký tự."""
+        if len(value) > 30:
+            raise ValueError("dau_vao tối đa 30 khoá")
+        for key, item in value.items():
+            if not isinstance(key, str) or len(key) > 64:
+                raise ValueError("Tên khoá trong dau_vao tối đa 64 ký tự")
+            if isinstance(item, str) and len(item) > 200:
+                raise ValueError("Giá trị chuỗi trong dau_vao tối đa 200 ký tự")
+        return value
 
 
 class DauVaoDaDung(ApiModel):

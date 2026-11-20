@@ -3,7 +3,7 @@
 # Cùng một địa chỉ nên trình duyệt không gặp vấn đề CORS.
 
 # --- 1. Build bản web (Vite + React) ---
-FROM node:24-alpine AS web
+FROM node:24-alpine@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 AS web
 WORKDIR /web
 COPY web/package.json web/package-lock.json ./
 RUN npm ci
@@ -16,12 +16,13 @@ ENV VITE_USE_MOCK=0
 RUN npm run build
 
 # --- 2. Môi trường Python và ứng dụng ---
-FROM python:3.13-slim AS app
+FROM python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90 AS app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    CDSS_RUNTIME=container \
     PATH="/srv/.venv/bin:$PATH"
 
-COPY --from=ghcr.io/astral-sh/uv:0.12.15 /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.12.15@sha256:62f8c047d0a0e9ece6b53fc63df902585a67a47a7f318ddec4a37db586edc8e3 /uv /usr/local/bin/uv
 
 WORKDIR /srv
 # Cài thư viện trước để tận dụng cache khi chỉ sửa mã.

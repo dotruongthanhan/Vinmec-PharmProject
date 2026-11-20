@@ -8,6 +8,10 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class AiQueueFullError(RuntimeError):
+    """Hàng đợi phân tích AI nền đã đạt trần số việc chưa hoàn tất."""
+
+
 class AiJobState(BaseModel):
     """Trạng thái hiện tại của tác vụ phân tích AI cho một ca bệnh."""
 
@@ -20,13 +24,24 @@ class AiJobState(BaseModel):
 
 
 class AiJobManager:
-    """Chạy nền tối đa 2 ca đồng thời, chống chạy trùng và lưu kết quả theo ca_id."""
+    """Chạy nền tối đa 2 ca đồng thời, chống chạy trùng và giới hạn hàng đợi."""
 
-    def __init__(self, max_workers: int = 2) -> None:
+    def __init__(self, max_workers: int = 2, max_pending: int = 6) -> None:
         self._executor = ThreadPoolExecutor(max_workers=max_workers)
         self._lock = RLock()
         self._jobs: dict[str, AiJobState] = {}
         self._generations: dict[str, int] = {}
+        self._max_pending = max_pending
+
+    @property
+    def max_pending(self) -> int:
+        """Trần số việc chưa hoàn tất (đang chạy và đang chờ)."""
+        return self._max_pending
+
+    def pending_count(self) -> int:
+        """Đếm số việc đang chạy hoặc đang chờ hoàn tất."""
+        with self._lock:
+            return sum(1 for state in self._jobs.values() if state.trang_thai == "dang_chay")
 
     def start(
         self,
@@ -34,16 +49,27 @@ class AiJobManager:
         fn: Callable[[], Any],
         restart: bool = False,
     ) -> AiJobState:
-        """Đặt dang_chay và nộp việc nếu chưa có hoặc restart=True; ngược lại giữ nguyên."""
+        """Nộp việc nếu chưa chạy hoặc đã xong/lỗi với restart=True; đang chạy luôn giữ nguyên."""
         with self._lock:
             current = self._jobs.get(ca_id)
-            if current is not None and not restart:
+            if current is not None and (current.trang_thai == "dang_chay" or not restart):
                 return current
+            if self.pending_count() >= self._max_pending:
+                raise AiQueueFullError(
+                    f"Hàng đợi phân tích AI đã đạt giới hạn {self._max_pending} việc."
+                )
             generation = self._generations.get(ca_id, 0) + 1
             self._generations[ca_id] = generation
             state = AiJobState(ca_id=ca_id, trang_thai="dang_chay")
             self._jobs[ca_id] = state
-            self._executor.submit(self._run_job, ca_id, generation, fn)
+            try:
+                self._executor.submit(self._run_job, ca_id, generation, fn)
+            except Exception:
+                if current is None:
+                    self._jobs.pop(ca_id, None)
+                else:
+                    self._jobs[ca_id] = current
+                raise
             return state
 
     def get(self, ca_id: str) -> AiJobState | None:

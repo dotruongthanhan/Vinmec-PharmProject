@@ -1,6 +1,7 @@
 ﻿import { useCallback, useEffect, useRef, useState } from 'react'
+import { ApiError } from '../api/client.ts'
 import type { ReviewApiClient } from '../api/client.ts'
-import type { LichSuHoiDapItem, TraLoi, TrangThaiTraLoi } from '../api/types.ts'
+import type { GuiCauHoi, TraLoi, TrangThaiTraLoi } from '../api/types.ts'
 import { shouldAcceptAssistantReply } from '../lib/assistant.ts'
 
 export const GLOBAL_CHAT_ID = '__global__'
@@ -32,12 +33,52 @@ export interface UseChatResult {
   clearChat: (caId: string) => void
 }
 
-function toHistory(messages: readonly ChatMessage[]): LichSuHoiDapItem[] {
-  return messages.map((msg) =>
-    msg.vai === 'nguoi_dung'
-      ? { vai: 'nguoi_dung', noi_dung: msg.noi_dung }
-      : { vai: 'he_thong', noi_dung: msg.tra_loi.noi_dung },
-  )
+function extractWaitSeconds(err: unknown): number | null {
+  if (typeof err === 'object' && err !== null && 'retryAfter' in err) {
+    const raw = (err as { retryAfter?: unknown }).retryAfter
+    if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) {
+      return Math.ceil(raw)
+    }
+  }
+  if (err instanceof Error && err.message) {
+    const match = /(\d+)\s*giây/i.exec(err.message)
+    if (match) {
+      const parsed = Number(match[1])
+      if (Number.isFinite(parsed) && parsed > 0) {
+        return parsed
+      }
+    }
+  }
+  return null
+}
+
+/** Tạo thông báo lỗi thân thiện cho người dùng, nhấn mạnh thời gian chờ khi gặp 429. */
+export function formatAskErrorMessage(err: unknown): string {
+  const status =
+    err instanceof ApiError
+      ? err.status
+      : typeof err === 'object' && err !== null && 'status' in err
+        ? (err as { status?: unknown }).status
+        : undefined
+  const ma =
+    err instanceof ApiError
+      ? err.ma
+      : typeof err === 'object' && err !== null && 'ma' in err
+        ? (err as { ma?: unknown }).ma
+        : undefined
+
+  if (status === 429) {
+    const seconds = extractWaitSeconds(err) ?? 30
+    if (ma === 'het_ngan_sach_ngay') {
+      return `Hệ thống đã hết lượt trợ lý AI trong ngày. Vui lòng thử lại sau ${seconds} giây.`
+    }
+    return `Bạn đã gửi quá nhiều câu hỏi. Vui lòng chờ ${seconds} giây rồi thử lại.`
+  }
+
+  if (err instanceof Error && err.message) {
+    return err.message
+  }
+  return 'Không thể gửi câu hỏi tới máy chủ.'
 }
 
 function isAbortError(err: unknown): boolean {
@@ -180,7 +221,6 @@ export function useChat(
       }
 
       const prevHistory = messagesRef.current[caId] ?? []
-      const apiHistory = toHistory(prevHistory)
 
       if (appendUserMessage) {
         const userMsg: ChatMessage = {
@@ -211,15 +251,13 @@ export function useChat(
 
       let reply: TraLoi | null = null
       try {
-        reply = await client.ask(
-          caId,
-          {
-            cau_hoi: question,
-            lich_su: apiHistory,
-            nhan_dinh_id: nhanDinhId,
-          },
-          { signal: controller.signal },
-        )
+        const payload: Omit<GuiCauHoi, 'lich_su'> = {
+          cau_hoi: question,
+          nhan_dinh_id: nhanDinhId,
+        }
+        reply = await client.ask(caId, payload as GuiCauHoi, {
+          signal: controller.signal,
+        })
       } catch (err: unknown) {
         if (isAbortError(err) || controller.signal.aborted) {
           if (seqByCaseRef.current[caId] === requestSeq) {
@@ -228,10 +266,7 @@ export function useChat(
           }
           return
         }
-        const message =
-          err instanceof Error && err.message
-            ? err.message
-            : 'Không thể gửi câu hỏi tới máy chủ.'
+        const message = formatAskErrorMessage(err)
         reply = {
           trang_thai: 'loi',
           noi_dung: message,

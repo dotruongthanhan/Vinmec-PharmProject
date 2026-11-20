@@ -18,6 +18,11 @@
 		Cache-Control "no-store"
 	}
 
+	# Giới hạn kích thước thân yêu cầu cho các điểm cuối API.
+	request_body /api/* {
+		max_size 256KB
+	}
+
 	# Nhật ký JSON ra stdout, loại bỏ bí mật và phần query của URI.
 	log {
 		output stdout

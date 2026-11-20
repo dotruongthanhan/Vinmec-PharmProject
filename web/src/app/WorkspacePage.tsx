@@ -383,6 +383,8 @@ export function WorkspacePage() {
   const breadcrumbLabel = 'Hồ sơ cần duyệt'
   const backTo = safeReturnTo ?? '/app'
 
+  const activePatient = detail && detail.ca_id === activeCaseId ? detail : null
+
   const sidebarCommonProps = {
     activeSection: 'orders' as const,
     onNavigate: () => setDrawerSidebarOpen(false),
@@ -393,6 +395,8 @@ export function WorkspacePage() {
     onOpenSettings: handleOpenSettings,
     onSignIn: handleSignIn,
     onSignOut: handleSignOut,
+    patient: activePatient,
+    onOpenEvidence: handleOpenEvidence,
   }
 
   return (

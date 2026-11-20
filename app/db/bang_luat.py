@@ -75,7 +75,7 @@ def _insert_table_rows(conn: Any, table: str, rows: list[dict[str, Any]]) -> Non
     columns, json_cols, _ = TABLE_SPECS[table]
     col_sql = ", ".join(columns)
     placeholders = ", ".join("%s" for _ in columns)
-    sql_text = f"INSERT INTO {table} ({col_sql}) VALUES ({placeholders})"
+    sql_text = f"INSERT INTO {table} ({col_sql}) VALUES ({placeholders})"  # noqa: S608  # bảng hằng
     payload = [
         tuple(
             Jsonb(row[col]) if col in json_cols and row.get(col) is not None else row.get(col)

@@ -6,7 +6,7 @@ import json
 import os
 import sqlite3
 from collections.abc import Iterator
-from contextlib import closing, contextmanager
+from contextlib import ExitStack, closing, contextmanager
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -330,12 +330,22 @@ class _StubAiRunner:
 def test_case_service_db_mode_uses_db_store_and_db_corpus_end_to_end(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    from app import container as container_mod
+    from app.api import service as service_mod
+    from app.db.bang_luat_store import clear_all_caches
+    from app.rules.renal_dose import RenalRuleBook
+
     case = load_case(ROOT / "data/mock/demo/DEMO-02.json")
+    renal_rules = RenalRuleBook.model_validate_json(
+        (ROOT / "data/kb/quy_tac_lieu_than.json").read_text(encoding="utf-8")
+    )
     monkeypatch.setenv("CASE_SOURCE", "db")
     monkeypatch.setenv("KB_SOURCE", "db")
     monkeypatch.setenv("AUTH_MODE", "off")
     monkeypatch.setenv("ACCESS_LOG", "off")
     monkeypatch.setenv("DATABASE_URL", "postgresql://demo:secret@db.invalid/prod")
+    monkeypatch.setattr(service_mod, "load_renal_rules", lambda _path=None: renal_rules)
+    monkeypatch.setattr(container_mod, "_SHARED_RULE_CONTEXT", None)
     monkeypatch.setattr(DbReviewService, "list_cases", lambda self: ([case], []))
     monkeypatch.setattr(CaseService, "_administrative", lambda self, cases: {})
     monkeypatch.setattr(
@@ -344,7 +354,9 @@ def test_case_service_db_mode_uses_db_store_and_db_corpus_end_to_end(
         lambda self, c: MedicalRecord(),
     )
 
-    with closing(FakeRuntimePgConnection(as_dicts=True)) as conn:
+    with ExitStack() as stack:
+        stack.callback(clear_all_caches)
+        conn = stack.enter_context(closing(FakeRuntimePgConnection(as_dicts=True)))
 
         @contextmanager
         def fake_pool(_url: str) -> Iterator[FakeRuntimePgConnection]:
