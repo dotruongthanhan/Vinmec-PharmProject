@@ -39,7 +39,7 @@ Một công cụ lâm sàng cho người làm nghề: **điềm tĩnh, dày thô
 - Dải màu chuyển tím – xanh, chữ tô dải màu, nền hạt sáng, hình cầu mờ, hiệu ứng kính mờ.
 - Biểu tượng cảm xúc. Biểu tượng lấp lánh cạnh chữ "AI" (trừ một nhãn nguồn gốc `AI · đã kiểm chứng` đang có).
 - Lưới ba thẻ giống hệt nhau, mỗi thẻ một biểu tượng trong ô vuông bo tròn, một tiêu đề, hai dòng mô tả.
-- Số liệu thành tích, lời khen của khách hàng, logo đối tác, huy hiệu chứng nhận: **không có dữ liệu thật thì không được dựng**. Không dùng logo Vinmec, VinUni; chỉ ghi tên bằng chữ.
+- Số liệu thành tích, lời khen của khách hàng, logo đối tác, huy hiệu chứng nhận: **không có dữ liệu thật thì không được dựng**. Không dùng logo Bệnh viện X, Đơn vị đào tạo X; chỉ ghi tên bằng chữ.
 - Câu sáo rỗng: "cách mạng hoá", "nâng tầm", "sức mạnh của AI", "liền mạch", "thông minh vượt trội". Câu chữ phải nói đúng việc hệ thống làm.
 - Mọi thẻ đều có viền trái màu; mọi tiêu đề đều viết hoa giãn chữ; nút nào cũng có biểu tượng.
 - Tính năng giả: mục điều hướng dẫn tới trang trống, nút bấm không làm gì, số đếm bịa. Thứ gì chưa có dữ liệu thật thì không hiện.
@@ -55,7 +55,7 @@ Nền `--color-paper`. Bề rộng nội dung tối đa 1120px. Thanh trên cùn
 2. **Một nhận định đi từ đâu ra.** Trình bày đúng một ca (ca giả lập DEMO-02) như một vết truy theo chiều dọc, có đường nối giữa các bước: dữ liệu ca (creatinin 212 µmol/L) → công thức tính bằng code (CrCl 16,0 mL/phút, Cockcroft-Gault) → bộ luật đối chiếu bảng liều → đoạn nguồn trích nguyên văn từ nhãn thuốc → AI viết diễn giải → bước kiểm chứng trích dẫn và con số → dược sĩ quyết định. Mỗi bước ghi rõ ai làm: `code`, `tài liệu`, `AI`, `dược sĩ`. Số liệu lấy từ `mockData.ts`, không bịa thêm.
 3. **Sáu yếu tố thẩm định.** Danh sách đánh số 1–6 (dùng tên yếu tố đang có trong ứng dụng), mỗi dòng ghi **trạng thái thật**: `đã có luật` hoặc `chưa có luật`. Hiện tại yếu tố 3, 4, 5 chưa có luật; ghi đúng như vậy. Đây là bảng kẻ dòng, không phải lưới thẻ.
 4. **Giới hạn và nguyên tắc.** Bốn câu ngắn, trình bày như điều khoản đánh số: dược sĩ là người quyết định; hệ thống không ghi vào hồ sơ bệnh án, không gửi y lệnh; dữ liệu trong bản thử là giả lập; thiếu dữ liệu thì hệ thống nói thiếu chứ không ghi "đạt".
-5. **Chân trang.** Một dòng: bản thử nghiệm học thuật trong chương trình Vinmec AI Exploration Sprint (VinUni × Vinmec), Khoa Dược; năm 2026. Không tên người, không logo.
+5. **Chân trang.** Một dòng: bản thử nghiệm học thuật trong chương trình AI Sprint 6 tuần (Đơn vị đào tạo X × Bệnh viện X), Khoa Dược; năm 2026. Không tên người, không logo.
 
 ### 4.2. Đoạn diễn hoạt chính
 

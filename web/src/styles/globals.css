@@ -284,11 +284,6 @@
     linear-gradient(to top, color-mix(in oklab, var(--color-ink) 70%, transparent), transparent 40%);
 }
 
-/* Logo Vinmec: hai bản cho nền sáng và nền tối, chỉ hiện một bản theo chủ đề */
-.logo-on-dark { display: none; }
-:root[data-theme="dark"] .logo-on-light { display: none; }
-:root[data-theme="dark"] .logo-on-dark { display: block; }
-
 /* Khối đóng/mở Hồ sơ bệnh án: ẩn dấu mặc định, xoay biểu tượng cạnh nhãn và trượt mượt khi không giảm chuyển động */
 .record-disclosure-summary {
   list-style: none;

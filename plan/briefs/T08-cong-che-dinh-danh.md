@@ -41,7 +41,7 @@ def restore_text(van_ban: str, anh_xa: dict[str, str]) -> str: ...
 
 | Thứ tự | Loại | Mẫu | Ví dụ |
 | :-: | :--- | :--- | :--- |
-| 1 | `EMAIL` | địa chỉ email thông thường | `a.b@vinmec.com` |
+| 1 | `EMAIL` | địa chỉ email thông thường | `a.b@example.com` |
 | 2 | `BHYT` | 2 chữ cái + 13 chữ số, liền nhau, không phân biệt hoa thường | `DN4010123456789` |
 | 3 | `CCCD` | đúng 12 chữ số, không dính chữ số khác hai bên | `001099012345` |
 | 4 | `SDT` | `0` hoặc `+84` hoặc `84`, tiếp theo một trong `3 5 7 8 9`, rồi 8 chữ số; cho phép dấu cách, chấm hoặc gạch giữa các nhóm | `0912 345 678`, `+84912345678` |
@@ -72,7 +72,7 @@ Mỗi loại ở mục 4 ít nhất 2 ca dương và 1 ca âm. Bắt buộc có 
 | `Vào viện 05/11/2026, tái khám 12-11-2026` | `[NGAY_1]`, `[NGAY_2]` |
 | `BS Nguyễn Văn An hội chẩn. BS Nguyễn Văn An đồng ý.` | Cả hai chỗ đều là `[TEN_1]`; `anh_xa` có đúng 1 mục |
 | `bệnh nhân sốt cao, ăn kém` | Không đổi (sau danh xưng không phải tên viết hoa) |
-| `Liên hệ a.b@vinmec.com` | `[EMAIL_1]` |
+| `Liên hệ a.b@example.com` | `[EMAIL_1]` |
 | `Ghi chú [TEN_1] có sẵn` | `DeidError` |
 | `scrub_text(None)` | `DeidError` |
 

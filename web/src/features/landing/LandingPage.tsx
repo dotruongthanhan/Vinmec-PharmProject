@@ -14,7 +14,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { MOCK_AI_ANNOTATIONS, MOCK_CASE_DETAILS, MOCK_SOURCES } from '@/api/mockData'
 import { Button } from '@/components/ui/button'
-import { VinmecLogo } from '@/components/VinmecLogo'
+import { AppLogo } from '@/components/AppLogo'
 import { ThemeControl } from '@/features/theme/ThemeControl'
 import { cn } from '@/lib/cn'
 import { formatClinicalText } from '@/lib/displayFormat'
@@ -234,7 +234,7 @@ export function LandingPage() {
       image: { src: '/landing/tham-dinh.jpg', alt: 'Hai dược sĩ làm việc trên máy tính trong hiệu thuốc', flip: false, position: '50% 40%', pushRight: true },
       content: (
         <SlideText
-          badge="Vinmec AI Exploration Sprint · VinUni × Vinmec"
+          badge="Bản thử nghiệm học thuật · Bệnh viện X"
           title={
             <>
               Mỗi y lệnh, một bản thẩm định <span className="landing-accent">có căn cứ.</span>
@@ -308,8 +308,8 @@ export function LandingPage() {
       {/* Thanh trên */}
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/85 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-6">
-          <Link to="/" className="flex items-center gap-3" aria-label="Vinmec · Thẩm định y lệnh">
-            <VinmecLogo imageClassName="h-11" />
+          <Link to="/" className="flex items-center gap-3" aria-label="Thẩm định y lệnh">
+            <AppLogo imageClassName="h-11" />
             <span className="hidden h-7 w-px bg-line-strong sm:block" aria-hidden="true" />
             <span className="hidden flex-col leading-tight sm:flex">
               <span className="text-sm font-bold tracking-tight">Thẩm định y lệnh</span>
@@ -579,7 +579,7 @@ export function LandingPage() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3 px-6 py-8 text-xs text-fg-subtle">
           <span>
-            Bản thử nghiệm học thuật · Vinmec AI Exploration Sprint (VinUni × Vinmec) · Khoa Dược ·
+            Bản thử nghiệm học thuật · Bệnh viện X · Khoa Dược ·
             2026
           </span>
           <span>Kết quả tham khảo. Dược sĩ kiểm chứng và quyết định.</span>

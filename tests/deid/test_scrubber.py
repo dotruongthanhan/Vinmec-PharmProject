@@ -11,7 +11,7 @@ from app.deid.scrubber import DeidError, restore_text, scrub_text
 @pytest.mark.parametrize(
     ("text", "kind", "original", "expected"),
     [
-        ("Liên hệ a.b@vinmec.com", "EMAIL", "a.b@vinmec.com", "Liên hệ [EMAIL_1]"),
+        ("Liên hệ a.b@example.org", "EMAIL", "a.b@example.org", "Liên hệ [EMAIL_1]"),
         ("Email test+deid@example.org", "EMAIL", "test+deid@example.org", "Email [EMAIL_1]"),
         ("Thẻ BHYT DN4010123456789", "BHYT", "DN4010123456789", "Thẻ BHYT [BHYT_1]"),
         ("Thẻ dn4010123456789", "BHYT", "dn4010123456789", "Thẻ [BHYT_1]"),
@@ -59,7 +59,7 @@ def test_scrubs_each_identifier(text: str, kind: str, original: str, expected: s
 @pytest.mark.parametrize(
     "text",
     [
-        "Email a.b@vinmec",
+        "Email a.b@example",
         "Thẻ DN40101234567890",
         "CCCD 0010990123456",
         "Số 0001234567890",
@@ -344,7 +344,7 @@ def test_empty_input() -> None:
         "CCCD 001099012345, BHYT DN4010123456789",
         "Vào viện 05/11/2026, tái khám 12-11-2026",
         "BS Nguyễn Văn An hội chẩn. BS Nguyễn Văn An đồng ý.",
-        "Liên hệ a.b@vinmec.com hoặc +84912345678",
+        "Liên hệ a.b@example.org hoặc +84912345678",
         "Huyết áp 120/80 mmHg, creatinin 212 umol/L, K 4.5",
         "ĐD:\tĐỗ  Ánh\nNgày 5/11; mã khác [KHAC_1]",
     ],

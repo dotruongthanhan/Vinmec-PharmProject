@@ -49,6 +49,16 @@ ROOT = Path(__file__).resolve().parents[2]
             True,
             True,
         ),
+        (
+            "postgresql://bvienx_admin:mk-bi-mat@127.0.0.1:5433/vinmec?sslmode=require",
+            True,
+            False,
+        ),
+        (
+            "postgresql://bvienx_app:mk-bi-mat@rds.example.invalid:5432/vinmec?sslmode=require",
+            False,
+            True,
+        ),
     ],
 )
 def test_database_url_warnings_checks_owner_and_sslmode(

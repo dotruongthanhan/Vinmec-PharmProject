@@ -371,3 +371,5 @@ Chú giải **Tình trạng**: ⬜ chưa làm · 🔄 đang làm · ✅ xong · 
 | T95 | Thử nghiệm: thẻ người bệnh ở nửa dưới thanh bên trái (họ tên, mã hồ sơ, ngày sinh, cân nặng/chiều cao, BHYT, dị ứng, chẩn đoán ICD, BMI/BSA/CrCl/eGFR); thu gọn còn nút biểu tượng. Brief `plan/briefs/T95-the-nguoi-benh-thanh-ben.md` | agy Hydrogen xhigh | Xong code – tsc, oxlint sạch, vitest 334/334; chờ người dùng xem, chưa commit |
 
 - 20/11: commit 9616fc3 (T94), 1c4e067 (T95), push vukhai248; EC2 kéo mã + build lại api, container healthy, duckdns /api/health 200 (truy_xuat san_sang, đọc RDS), bundle có thẻ người bệnh. RDS không đổi (T94/T95 chỉ web). Vercel chưa deploy lại.
+
+- 20/11 (chiều): deploy `4ed0be5` (T96) lên EC2 bằng SSM: sao lưu image `pre-t96` và `/home/ubuntu/vinmec-code-pre-t96.tgz`, build lại api, healthy, image không còn streamlit, không có service_role; `deploy/vercel` gộp (3b0ee78), Vercel deploy lại, CSP có, bundle không VERCEL_, /api/health 200, /api/cases 401.

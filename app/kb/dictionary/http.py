@@ -12,7 +12,7 @@ import httpx
 
 from app.kb.fetch.client import FetchError
 
-USER_AGENT = "VinmecPharmProject-kb/1.0"
+USER_AGENT = "BvienxPharmProject-kb/1.0"
 
 
 class SourceHTTP:

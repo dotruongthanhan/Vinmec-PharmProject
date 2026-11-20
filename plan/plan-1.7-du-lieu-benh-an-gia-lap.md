@@ -270,7 +270,7 @@ Kết luận: **không thay được bộ 60 hồ sơ giả lập**, nhưng **n�
 1. Phải có tài khoản **credentialed**, hoàn thành khóa CITI và ký DUA; từng thành viên tự làm.
 2. Dữ liệu và bộ phái sinh được coi là nhạy cảm, **không chia sẻ lại**. Đưa vào kho git hoặc Supabase của dự án cần xác minh DUA cho phép.
 3. Dùng với LLM: PhysioNet khuyến nghị mô hình chạy cục bộ; API đám mây chỉ khi xác minh được không lưu dữ liệu, không huấn luyện, không người xem lại. **Không áp dụng cho DeepSeek / OpenRouter đang dùng**, nên không đưa văn bản MIMIC qua hai dịch vụ này.
-4. Trái nguyên tắc dự án "100% giả lập, không dữ liệu người bệnh thật" (CLAUDE.md mục 6) nếu dùng làm dữ liệu demo; cần chủ kho và bên Vinmec/VinUni đồng ý.
+4. Trái nguyên tắc dự án "100% giả lập, không dữ liệu người bệnh thật" (CLAUDE.md mục 6) nếu dùng làm dữ liệu demo; cần chủ kho và bên Bệnh viện X/Đơn vị đào tạo X đồng ý.
 
 **Cách dùng đề xuất:**
 - **Dùng ngay, không cần quyền:** đọc **tài liệu công khai** của `poe`, `poe_detail`, `prescriptions`, `pharmacy`, `emar` để bổ sung mục 5.2: tách **y lệnh (đặt) – dòng thuốc – xác nhận của dược sĩ – ghi nhận đã dùng**; thêm bảng thực hiện y lệnh nếu cần ca "thiếu liều tối".

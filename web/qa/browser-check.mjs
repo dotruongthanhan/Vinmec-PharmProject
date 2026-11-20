@@ -3,12 +3,18 @@ import { spawn } from 'node:child_process'
 import { mkdir, writeFile, mkdtemp, rm } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
+import { fileURLToPath } from 'node:url'
 
+const chromePath = process.env.CHROME_PATH
+if (!chromePath) {
+  throw new Error('Thiếu biến môi trường CHROME_PATH: đặt đường dẫn tới chrome-headless-shell (ví dụ: set CHROME_PATH=... trước khi chạy script).')
+}
+const here = fileURLToPath(new URL('.', import.meta.url))
 const phase = process.argv[2] ?? 'a'
-const output = resolve('qa/artifacts', phase)
+const output = resolve(here, 'artifacts', phase)
 await mkdir(output, { recursive: true })
 const profile = await mkdtemp(resolve(tmpdir(), 'pharm-qa-'))
-const child = spawn('C:/Users/Admin/AppData/Local/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-win64/chrome-headless-shell.exe', [
+const child = spawn(chromePath, [
   '--headless', '--enable-begin-frame-control', '--run-all-compositor-stages-before-draw', '--disable-gpu', '--in-process-gpu', '--no-sandbox', '--no-first-run', '--no-default-browser-check',
   '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank',
 ], { windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] })

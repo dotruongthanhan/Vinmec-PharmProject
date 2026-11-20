@@ -91,7 +91,7 @@ Tiêu chí:
 - (b) Truy lại được câu gốc để làm căn cứ.
 - (c) Thật sự cần cho ít nhất một yếu tố.
 
-Bản quyền: nhóm chấp nhận dùng cho bản thử. Về sau, nếu dự án được duyệt, viện sẽ nạp tài liệu của Vinmec.
+Bản quyền: nhóm chấp nhận dùng cho bản thử. Về sau, nếu dự án được duyệt, viện sẽ nạp tài liệu của Bệnh viện X.
 
 Mỗi nguồn có một trong ba vai trò:
 - **Căn cứ:** hiện cho dược sĩ, kèm trích dẫn.
@@ -119,7 +119,7 @@ Mỗi nguồn có một trong ba vai trò:
 |:--|:--|:--|:--|
 | **Dược thư Quốc gia Việt Nam** | Chuyên luận tiếng Việt theo hoạt chất: chỉ định, chống chỉ định, thận trọng, liều (cả liều suy thận, trẻ em), tương tác, quá liều. **Có các hoạt chất không lưu hành ở Mỹ** (ví dụ cefoperazon + sulbactam). Là nguồn tầng 2, đứng trên nhãn FDA. Chính tả hoạt chất tiếng Việt chuẩn | **Không bắt buộc để chạy**, nhưng là nguồn bù tốt nhất cho chỗ trống của nhãn FDA (mục 3.2). Ưu tiên cao khi có bản PDF | ⏳ Chưa có |
 | **Tóm tắt đặc tính sản phẩm của EMA / eMC (Anh)** | Nhãn được cơ quan quản lý châu Âu duyệt, **đồng cấp với nhãn FDA**. Dược sĩ đang tra eMC (khảo sát) | Đề xuất làm nguồn bù đồng cấp khi thuốc không có nhãn FDA. Cần nhóm duyệt | ⏳ Chưa có |
-| Tài liệu Vinmec (phác đồ, danh mục, quy định) | Thay dần nguồn 3 và 4 khi dự án được duyệt | Không có trong giai đoạn thử | ⏳ Chưa có |
+| Tài liệu Bệnh viện X (phác đồ, danh mục, quy định) | Thay dần nguồn 3 và 4 khi dự án được duyệt | Không có trong giai đoạn thử | ⏳ Chưa có |
 
 #### C. Bỏ
 

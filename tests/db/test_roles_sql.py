@@ -61,7 +61,7 @@ def _extract_api_writes() -> set[tuple[str, str]]:
 
 
 def _extract_app_grants(sql_no_comments: str) -> dict[str, set[str]]:
-    """Trích các quyền GRANT trực tiếp cho vinmec_app theo đối tượng (chữ thường)."""
+    """Trích các quyền GRANT trực tiếp cho bvienx_app theo đối tượng (chữ thường)."""
     grants: dict[str, set[str]] = {}
     grant_re = re.compile(
         r"\bGRANT\s+([^;]+?)\s+ON\s+"
@@ -72,7 +72,7 @@ def _extract_app_grants(sql_no_comments: str) -> dict[str, set[str]]:
     for match in grant_re.finditer(sql_no_comments):
         privileges_raw, targets_raw, grantees_raw = match.groups()
         grantees = {item.strip().lower() for item in grantees_raw.split(",")}
-        if "vinmec_app" not in grantees:
+        if "bvienx_app" not in grantees:
             continue
         privileges = {item.strip().upper() for item in privileges_raw.split(",")}
         for target in targets_raw.split(","):
@@ -95,7 +95,7 @@ def test_roles_sql_covers_every_api_write_and_sequence() -> None:
     assert ("INSERT", "nghiep_vu.ket_qua_nhan_dinh") in api_writes
 
     for op, table in sorted(api_writes):
-        assert op in grants.get(table, set()), f"Thiếu GRANT {op} ON {table} TO vinmec_app"
+        assert op in grants.get(table, set()), f"Thiếu GRANT {op} ON {table} TO bvienx_app"
 
     # Không có truy vấn ghi trực tiếp vào tri_thuc từ đường chạy API.
     for rel in API_PATH_MODULES:
@@ -118,11 +118,11 @@ def test_roles_sql_enforces_least_privilege_and_no_secrets() -> None:
     assert not re.search(r"\bGRANT\s+ALL\b", sql_raw, re.I)
     assert not re.search(r"\bPASSWORD\s*'", sql_raw, re.I)
 
-    # vinmec_app không được có CREATE ở bất kỳ đâu và không được ghi vào tri_thuc.
+    # bvienx_app không được có CREATE ở bất kỳ đâu và không được ghi vào tri_thuc.
     for target, privs in grants.items():
-        assert "CREATE" not in privs, f"vinmec_app không được nhận CREATE trên {target}"
+        assert "CREATE" not in privs, f"bvienx_app không được nhận CREATE trên {target}"
         if target.startswith("tri_thuc") or target == "tri_thuc":
-            assert not (_WRITE_OPS & privs), f"vinmec_app không được ghi {target}: {privs}"
+            assert not (_WRITE_OPS & privs), f"bvienx_app không được ghi {target}: {privs}"
 
     assert "NOCREATEDB" in sql_clean
     assert "NOCREATEROLE" in sql_clean
@@ -130,15 +130,15 @@ def test_roles_sql_enforces_least_privilege_and_no_secrets() -> None:
     assert "NOINHERIT" in sql_clean
     assert "REVOKE CREATE ON SCHEMA public FROM PUBLIC;" in sql_clean
     assert (
-        "REVOKE CREATE ON SCHEMA tri_thuc, nghiep_vu FROM vinmec_app, vinmec_loader;" in sql_clean
+        "REVOKE CREATE ON SCHEMA tri_thuc, nghiep_vu FROM bvienx_app, bvienx_loader;" in sql_clean
     )
     assert "statement_timeout = '15s'" in sql_clean
     assert "idle_in_transaction_session_timeout = '30s'" in sql_clean
-    assert "\\password vinmec_app" in sql_raw
+    assert "\\password bvienx_app" in sql_raw
 
 
 def _extract_loader_nghiep_vu_grant_tables(sql_no_comments: str) -> set[str]:
-    """Trích danh sách bảng nghiep_vu.* được cấp quyền ghi cho vinmec_loader."""
+    """Trích danh sách bảng nghiep_vu.* được cấp quyền ghi cho bvienx_loader."""
     tables: set[str] = set()
     grant_re = re.compile(
         r"\bGRANT\s+([^;]+?)\s+ON\s+(?:TABLE\s+)?([^;]+?)\s+TO\s+([^;]+?);",
@@ -148,7 +148,7 @@ def _extract_loader_nghiep_vu_grant_tables(sql_no_comments: str) -> set[str]:
         privileges_raw, targets_raw, grantees_raw = match.groups()
         grantees = {item.strip().lower() for item in grantees_raw.split(",")}
         privileges = {item.strip().upper() for item in privileges_raw.split(",")}
-        if "vinmec_loader" not in grantees or not (_WRITE_OPS & privileges):
+        if "bvienx_loader" not in grantees or not (_WRITE_OPS & privileges):
             continue
         for target in targets_raw.split(","):
             cleaned = target.strip().lower()
@@ -206,11 +206,11 @@ def test_roles_sql_has_rls_policies_matching_grants() -> None:
         policy_name = match.group(1).lower()
         roles = {item.strip().lower() for item in match.group(4).split(",")}
         assert not (roles & {"public", "anon", "authenticated"}), match.group(0)
-        assert roles <= {"vinmec_app", "vinmec_loader"}, match.group(0)
-        if "vinmec_app" in roles:
-            assert policy_name.startswith("vinmec_app_"), policy_name
-        if "vinmec_loader" in roles:
-            assert policy_name.startswith("vinmec_loader_"), policy_name
+        assert roles <= {"bvienx_app", "bvienx_loader"}, match.group(0)
+        if "bvienx_app" in roles:
+            assert policy_name.startswith("bvienx_app_"), policy_name
+        if "bvienx_loader" in roles:
+            assert policy_name.startswith("bvienx_loader_"), policy_name
 
     # Kiểm mọi policy trực tiếp đều có DROP POLICY IF EXISTS đi trước và khớp GRANT ghi của app.
     non_dynamic = [m for m in all_policies if not m.group(2).startswith("%")]
@@ -224,8 +224,8 @@ def test_roles_sql_has_rls_policies_matching_grants() -> None:
     assert set(direct_policies) == app_write_grants
 
     for (op, table), (policy_name, roles_raw, clause) in direct_policies.items():
-        assert roles_raw == "vinmec_app"
-        assert policy_name.startswith("vinmec_app_")
+        assert roles_raw == "bvienx_app"
+        assert policy_name.startswith("bvienx_app_")
         if op == "INSERT":
             assert clause == "with check (true)", f"{table}: {clause}"
         elif op == "UPDATE":
@@ -233,18 +233,18 @@ def test_roles_sql_has_rls_policies_matching_grants() -> None:
         elif op == "DELETE":
             assert clause == "using (true)", f"{table}: {clause}"
 
-    # Kiểm khối DO $$ duyệt pg_tables tạo SELECT cho vinmec_app và FOR ALL cho vinmec_loader.
+    # Kiểm khối DO $$ duyệt pg_tables tạo SELECT cho bvienx_app và FOR ALL cho bvienx_loader.
     normalized = " ".join(sql_clean.split())
     assert "FROM pg_tables WHERE schemaname IN ('tri_thuc', 'nghiep_vu')" in normalized
-    assert "'DROP POLICY IF EXISTS vinmec_app_doc ON %I.%I'" in normalized
+    assert "'DROP POLICY IF EXISTS bvienx_app_doc ON %I.%I'" in normalized
     app_select_policy = (
-        "'CREATE POLICY vinmec_app_doc ON %I.%I FOR SELECT TO vinmec_app USING (true)'"
+        "'CREATE POLICY bvienx_app_doc ON %I.%I FOR SELECT TO bvienx_app USING (true)'"
     )
     assert app_select_policy in normalized
-    assert "'DROP POLICY IF EXISTS vinmec_loader_nap ON %I.%I'" in normalized
+    assert "'DROP POLICY IF EXISTS bvienx_loader_nap ON %I.%I'" in normalized
     loader_all_policy = (
-        "'CREATE POLICY vinmec_loader_nap ON %I.%I "
-        "FOR ALL TO vinmec_loader USING (true) WITH CHECK (true)'"
+        "'CREATE POLICY bvienx_loader_nap ON %I.%I "
+        "FOR ALL TO bvienx_loader USING (true) WITH CHECK (true)'"
     )
     assert loader_all_policy in normalized
     assert re.search(
