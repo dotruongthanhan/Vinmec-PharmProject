@@ -2784,7 +2784,6 @@ dependencies = [
     { name = "pyjwt", extra = ["crypto"] },
     { name = "python-dotenv" },
     { name = "pyyaml" },
-    { name = "streamlit" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -2795,6 +2794,7 @@ dev = [
     { name = "nbstripout" },
     { name = "pytest" },
     { name = "ruff" },
+    { name = "streamlit" },
 ]
 
 [package.metadata]
@@ -2808,7 +2808,6 @@ requires-dist = [
     { name = "pyjwt", extras = ["crypto"] },
     { name = "python-dotenv" },
     { name = "pyyaml" },
-    { name = "streamlit" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]
 
@@ -2819,6 +2818,7 @@ dev = [
     { name = "nbstripout" },
     { name = "pytest" },
     { name = "ruff" },
+    { name = "streamlit" },
 ]
 
 [[package]]
