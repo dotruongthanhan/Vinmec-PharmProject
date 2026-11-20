@@ -1,9 +1,0 @@
-TRẠNG THÁI: **CHƯA XONG nghiệm thu**. Đã nối đủ 6 luật, ma trận và giao diện; HS-024 trả cặp nghiêm trọng với ID nhận định khớp.
-
-FILE ĐÃ TẠO / SỬA: 18 tệp, liệt kê trong [báo cáo T55-fix-1](/D:/create/Vinmec-PharmProject/plan/reports/T55.md:165).
-
-LỆNH ĐÃ CHẠY VÀ KẾT QUẢ: Pytest toàn kho **1.243 qua, 2 trượt**; 12 test backend mới qua. Ruff check/format, 293 test web, oxlint, TypeScript và build đều qua.
-
-ĐIỂM LỆCH SO VỚI BRIEF VÀ LÝ DO: Chưa đạt 0 test trượt vì hai test ngoài phạm vi sửa còn kỳ vọng đường chạy 5 luật.
-
-VIỆC CHƯA LÀM / CÂU HỎI: Cần mở phạm vi `tests/api/test_routes.py` và `tests/db/test_reader.py` để cập nhật kỳ vọng tích hợp rồi chạy lại nghiệm thu. Không dùng mạng, không commit.
