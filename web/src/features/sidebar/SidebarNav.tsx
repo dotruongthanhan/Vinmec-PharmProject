@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 import type { ChiTietCa } from '@/api/types'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { VinmecLogo } from '@/components/VinmecLogo'
+import { AppLogo } from '@/components/AppLogo'
 import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
 import type { EvidenceTarget } from '@/lib/uiTypes'
@@ -110,7 +110,7 @@ export function SidebarNav({
       >
         {!effectiveCollapsed ? (
           <span className="flex min-w-0 items-center gap-2">
-            <VinmecLogo alwaysOnDark imageClassName="h-9" />
+            <AppLogo alwaysOnDark imageClassName="h-9" />
             <span className="truncate text-sm font-semibold tracking-tight text-ink-fg">
               Thẩm định y lệnh
             </span>

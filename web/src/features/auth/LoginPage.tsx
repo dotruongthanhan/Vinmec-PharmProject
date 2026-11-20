@@ -4,7 +4,7 @@ import type { FormEvent } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
-import { VinmecLogo } from '@/components/VinmecLogo'
+import { AppLogo } from '@/components/AppLogo'
 import { resolveLoginRedirect } from '@/lib/routeGuard'
 import { isDemoEnabled } from '@/lib/demoSession'
 import { ThemeControl } from '@/features/theme/ThemeControl'
@@ -105,7 +105,7 @@ export function LoginPage() {
             to="/"
             className="inline-flex items-center gap-3 text-sm font-semibold tracking-tight text-ink-fg hover:text-primary-line transition-colors duration-120"
           >
-            <VinmecLogo alwaysOnDark imageClassName="h-12" />
+            <AppLogo alwaysOnDark imageClassName="h-12" />
             <span>Hỗ trợ thẩm định y lệnh</span>
           </Link>
         </div>
