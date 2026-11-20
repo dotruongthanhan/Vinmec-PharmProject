@@ -39,7 +39,7 @@ describe('cấu hình CSP và tệp index.html', () => {
     }
 
     expect(config.rewrites).toEqual([
-      { source: '/api/:path*', destination: `${HTTPS}vinmec-pharm.duckdns.org/api/:path*` },
+      { source: '/api/:path*', destination: `${HTTPS}bvienx-pharm.duckdns.org/api/:path*` },
       { source: '/(.*)', destination: '/index.html' },
     ])
 
