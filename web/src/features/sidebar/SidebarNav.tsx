@@ -14,11 +14,14 @@
 import { useState } from 'react'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { Link } from 'react-router-dom'
+import type { ChiTietCa } from '@/api/types'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { VinmecLogo } from '@/components/VinmecLogo'
 import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
+import type { EvidenceTarget } from '@/lib/uiTypes'
+import { PatientCollapsedButton, PatientSidebarCard } from './PatientSidebarCard'
 export type SidebarSection = 'orders' | 'thuoc' | 'tuong_tac' | 'cong_thuc'
 
 export interface SidebarNavProps {
@@ -33,6 +36,8 @@ export interface SidebarNavProps {
   onOpenSettings: () => void
   onSignIn: () => void
   onSignOut: (options?: { scope?: 'local' | 'global' }) => void
+  patient?: ChiTietCa | null
+  onOpenEvidence?: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
 }
 
 /** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px). */
@@ -48,6 +53,8 @@ export function SidebarNav({
   onOpenSettings,
   onSignIn,
   onSignOut,
+  patient = null,
+  onOpenEvidence,
 }: SidebarNavProps) {
   const effectiveCollapsed = collapsed && !inDrawer
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
@@ -166,7 +173,30 @@ export function SidebarNav({
         })}
       </div>
 
-      <div className="flex-1 min-h-0" aria-hidden="true" />
+      {/* 3. Nửa dưới: thẻ thông tin người bệnh khi đang mở một ca */}
+      {patient ? (
+        effectiveCollapsed ? (
+          <>
+            <div className="shrink-0 border-t border-ink-line p-2">
+              <PatientCollapsedButton detail={patient} onExpand={onToggleCollapse} />
+            </div>
+            <div className="flex-1 min-h-0" aria-hidden="true" />
+          </>
+        ) : (
+          <section
+            aria-label="Thông tin người bệnh"
+            className="flex-1 min-h-0 overflow-y-auto overscroll-contain border-t border-ink-line p-2"
+          >
+            <PatientSidebarCard
+              key={patient.ca_id}
+              detail={patient}
+              onOpenEvidence={onOpenEvidence}
+            />
+          </section>
+        )
+      ) : (
+        <div className="flex-1 min-h-0" aria-hidden="true" />
+      )}
 
       {/* 4. Đáy: thanh hồ sơ gọn và nút Cài đặt kiểu Claude Desktop */}
       <div
