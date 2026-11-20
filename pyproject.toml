@@ -9,7 +9,6 @@ description = "He thong ho tro duoc si lam sang tham dinh y lenh"
 requires-python = ">=3.11"
 dependencies = [
     "pydantic>=2",
-    "streamlit",
     "pyyaml",
     "python-dotenv",
     "numpy",
@@ -28,6 +27,7 @@ dev = [
     "ipykernel",
     "nbformat",
     "nbstripout",
+    "streamlit",
 ]
 
 [tool.hatch.build.targets.wheel]
