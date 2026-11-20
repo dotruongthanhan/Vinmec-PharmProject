@@ -4,6 +4,7 @@ Giá trị chỉ sống trong bộ nhớ của lần gọi: không cache, không
 """
 
 import json
+import logging
 import re
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from pathlib import Path
@@ -15,6 +16,7 @@ from app.domain.models import CaBenh
 
 LoaiDinhDanh = Literal["TEN", "NGAY", "SDT", "DIACHI", "BHYT", "MA"]
 
+_LOGGER = logging.getLogger(__name__)
 _ROOT = Path(__file__).resolve().parents[2]
 _SAFE_CASE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}")
 _FALLBACK_CASE_DIRS = ("data/mock/demo", "data/mock/hoso_gia_lap")
@@ -124,8 +126,8 @@ def _default_case_dirs() -> list[Path]:
         from app.config.settings import load_settings
 
         dirs.append(_ROOT / load_settings().app.case_dir)
-    except Exception:
-        pass
+    except Exception as exc:
+        _LOGGER.debug("Không đọc được thư mục ca mặc định (%s)", type(exc).__name__)
     dirs.extend(_ROOT / item for item in _FALLBACK_CASE_DIRS)
     return list(dict.fromkeys(dirs))
 

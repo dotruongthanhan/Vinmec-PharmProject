@@ -111,7 +111,7 @@ def report_dictionary(root: Path) -> Row:
     }
     write_json(out / "T50_tom_tat.json", summary)
 
-    rng = random.Random(50)
+    rng = random.Random(50)  # noqa: S311  # mẫu kiểm dữ liệu tất định
     samples = []
     for raw, split in rng.sample(inputs.dav, min(50, length)):
         product_id = f"dav:{raw['so_dang_ky']}"

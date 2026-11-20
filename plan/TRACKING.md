@@ -269,3 +269,105 @@ Trạng thái: `chờ giao` · `đang giao` · `chờ review` · `cần sửa` �
 | T84 | Web: bỏ trang Hồ sơ bệnh án, thu gọn ma trận (đợt A); trang Tra cứu thuốc, Tra tương tác, Tính toán (đợt B, sau T83) | sub Sonnet | đợt A ✅ (20/11): vitest 294, tsc, oxlint sạch; trình duyệt: sidebar chỉ còn "Hồ sơ cần duyệt", HS-028 ma trận thu gọn "3 thuốc · 1 cặp nghiêm trọng"; đợt B ✅ (20/11): vitest 315; trình duyệt thật: tìm metformin, chi tiết meropenem (70 đoạn FDA, mở mục liều suy thận), tra warfarin+cipro+omeprazol ra N/L, Cockcroft-Gault 31,97. Lỗi nhỏ: nhãn "loai can nang", lựa chọn "thuc te/ly tuong/hieu chinh" không dấu | |
 | T85 | Mã nhận định trùng khi thuốc phối hợp (HS-056); nhãn công thức không dấu | agy Hydrogen high | đang giao (20/11) | |
 | T84-fix-1 | Chỉ thu gọn lưới ô ma trận; tiêu đề, danh sách thuốc, chú giải, thẻ cặp luôn hiện (người dùng chốt) | sub Sonnet (giao lại từ đầu) | ✅ (20/11): vitest 316, oxlint sạch; trình duyệt HS-028 đúng | |
+| T86 | Bảo mật C1: phân quyền theo ca (bảng `nghiep_vu.phan_cong`, `_authorize` ở mọi điểm cuối có `ca_id`, ngoài phạm vi → 404) | agy Hydrogen xhigh | ⏸ hoãn (20/11, người dùng chốt): chưa rõ dược sĩ phân công thật thế nào, có thể làm ca người khác khi quá tải → giữ danh sách chung (plan 1.5 mục 3.2). Đã dừng agy trước khi ghi tệp. L5 chuyển sang T88 | `plan/briefs/T86-phan-quyen-theo-ca-idor.md` |
+| T87 | Bảo mật C3 + T5: `db/roles.sql` (`vinmec_app`, `vinmec_loader`), `.env.app`, cảnh báo `sslmode`, loader dùng `DATABASE_URL_LOADER` | agy Hydrogen high | ⚠️ review (20/11): pytest 1.607 qua / 4 bỏ qua, `docker compose config -q` đạt, quyền ghi `vinmec_app` (phan_hoi I/U, hoi_thoai I/D + seq, ket_qua_tham_dinh I, ket_qua_nhan_dinh I) Claude đối chiếu khớp mã; còn: 1 lỗi E501 + lệch format, sót phần `phan_cong`/`CASE_SCOPE` (T86 hoãn), sổ tay thiếu cảnh báo triển khai → T87-fix-1 (agy high) ✅ (20/11): không còn `phan_cong`/`CASE_SCOPE`, ruff sạch, 17 test roles/URL qua, sổ tay có mục "Trước khi kéo mã mới về EC2". **T87 xong phần code; chờ chủ kho chạy sổ tay `docs/van-hanh/tai-khoan-db.md` trên RDS/EC2** | `plan/briefs/T87-tai-khoan-db-rieng-cho-ung-dung.md` |
+| T88 | Bảo mật C4 + L6 + L5: chống nộp AI trùng, trần hàng đợi, giới hạn tốc độ/ngày, giới hạn kích thước | agy Hydrogen xhigh | ✅ (20/11) sau fix-1, fix-2: pytest **1.621 qua / 0 trượt**, ruff sạch, vitest 323 qua, tsc + oxlint sạch. Claude kiểm độc lập (script riêng): 200 `chay_lai` đồng thời → AI chạy 1 lần; trần hàng đợi → 429 `hang_doi_day`; `/ask` 20 qua / 5 bị 429, LLM gọi đúng 20 lần; vượt kích thước → 422. Chờ deploy (HT11) | `plan/briefs/T88-tran-chi-phi-llm.md` |
+| T87-fix-2 | `roles.sql` thiếu policy RLS (63 bảng bật RLS, không policy → `vinmec_app` thấy 0 dòng, loader không nạp được). Claude phát hiện khi chạy thật trên Postgres Docker | agy Hydrogen xhigh | ✅ (20/11): kiểm Docker lại đạt — loader nạp cả 3 lệnh, `vinmec_app` thấy 93/228/333/58 như chủ, API chạy trọn bằng `vinmec_app`, lệnh nguy hiểm đều bị từ chối, không policy cho anon/PUBLIC; pytest 1.621 qua | `plan/briefs/T87-fix-2.md` |
+| T88-fix-1 | 3 test trượt: route thử bị SPA nuốt, `rate_limit` đọc env qua `get_secret` (nạp `.env`), test cũ khẳng định hành vi restart cũ | agy Hydrogen high | ✅ (20/11): còn 1 trượt kiến trúc → fix-2 | `plan/briefs/T88-fix-1.md` |
+| T88-fix-2 | Đọc env giới hạn LLM phải nằm trong `app/config` | agy Hydrogen high | ✅ (20/11): 1.621 qua / 0 trượt | `plan/briefs/T88-fix-2.md` |
+| T89 | Bảo mật T1 + T4 + L7: Caddy `request_body`, middleware 413/401 trước đọc thân, cấm `AUTH_MODE=off` trong container, prompt thay một lượt | agy Hydrogen xhigh | ✅ (20/11): 42 test liên quan qua; `caddy validate` đạt; Claude kiểm độc lập 7/7 đạt | `plan/briefs/T89-cung-co-backend-t1-t4-l7.md` |
+| T90 | Bảo mật T2 + L1 + L4: `web/vercel.json` CSP + tiêu đề, `theme-init.js`, nhập động `MockClient`, kiểm `https:` cho `url_goc` | agy Hydrogen xhigh | ✅ logic (20/11): tsc sạch, build không còn chunk mock; trình duyệt dưới CSP 0 lỗi console. 1 vitest trượt do chính test mới chứa `http://` → T93 | `plan/briefs/T90-web-csp-va-lien-ket.md` |
+| T91 | Bảo mật T6: lịch sử hỏi đáp lấy từ `hoi_thoai` của chính người gọi, bỏ qua `lich_su` trình duyệt | agy Hydrogen xhigh | ✅ logic (20/11): Claude kiểm độc lập 6/6 đạt; 1 tệp lệch `ruff format` → T93 | `plan/briefs/T91-lich-su-chat-tu-may-chu.md` |
+| T92 | Bảo mật T3: ghim SHA action, digest image, `CDSS_RUNTIME=container`, `dependabot.yml`, bỏ `requirements.txt` | agy Hydrogen high | ⚠️ gần xong (20/11): ghim khớp giá trị Claude tra; `docker build --target app` với digest **đạt**, image có `CDSS_RUNTIME=container`; cảnh báo `SecretsUsedInArgOrEnv` cho `VITE_SUPABASE_ANON_KEY` là khoá công khai, chấp nhận. Còn: `requirements.txt` agent không xoá được (chủ kho `git rm`); `dependabot` nên dùng hệ `uv` thay `pip` (gộp vào lượt sửa sau) | `plan/briefs/T92-ghim-chuoi-cung-ung.md` |
+| T93 | Sửa sau đợt bảo mật: test web chứa `http://`, test DB-mode `test_feedback_chat_db` trượt (bảng luật nạp DB lỗi, có thể phụ thuộc thứ tự), `ruff format` `feedback_chat.py`, dependabot `pip` → `uv` | agy Hydrogen high | ✅ (20/11): ruff sạch; pytest **1.647 qua / 0 trượt** (chạy riêng `test_feedback_chat_db` cũng qua — test cũ ăn may nhờ bộ đệm bảng luật của test chạy trước, nay tự nạp luật từ tệp và dọn bộ đệm); vitest **330 qua**, tsc + oxlint sạch; dependabot dùng `uv` | `plan/briefs/T93-sua-sau-dot-bao-mat.md` |
+| T94 | Bảo mật C5 (phần agent): `.github/workflows/security.yml` (OSV-Scanner, gitleaks), `.gitleaks.toml`, ruff bật `S` và xử lý 16 lỗi | agy Hydrogen xhigh | ✅ (20/11): ruff sạch với `S`, pytest 1.647 qua / 0 trượt; action ghim đúng SHA Claude tra (osv v2.7.1 phát hành 11/11, gitleaks v3.0.0); Claude đọc lại SQL `noqa: S608` an toàn. Chưa chạy trên GitHub (cần push) | `plan/briefs/T94-ci-bao-mat-va-ruff-s.md` |
+
+### 20/11 – Deploy
+- Push `vukhai248` `84dd4e8` (T80–T85); gộp vào `deploy/vercel` và push `2cd0216`.
+- **EC2** (qua SSM, người dùng cho phép ghi `.env` qua SSM): sao lưu `/home/ubuntu/vinmec.bak-2011`, `.env.bak-2011-supabase`; `.env` → `DATABASE_URL` RDS trực tiếp (sslmode=require), `CASE_SOURCE=db`, `KB_SOURCE=db`, thêm `GEMINI_API_KEY`; mã tải từ GitHub `vukhai248`; `docker compose build api` + `up -d` → healthy. `https://vinmec-pharm.duckdns.org/api/health` 200 (`truy_xuat: san_sang`, `co_llm: true`, xác thực bắt buộc); `/api/thuoc`, `/api/cong-thuc` 401 khi chưa đăng nhập (đã có điểm cuối); bản web trong image có các trang mới.
+- **Vercel** `vinmec-pharm-web.vercel.app` vẫn phục vụ bundle cũ (không có `/app/thuoc`, `/app/tuong-tac`) sau khi push `deploy/vercel` → dự án Vercel có thể không tự build theo nhánh này; máy không có Vercel CLI/đăng nhập. Chờ người dùng kiểm trang Vercel (nhánh production / Redeploy).
+- Chưa kiểm giao diện đã đăng nhập trên bản deploy: Claude không nhập mật khẩu trên trang thật (không phải môi trường thử cục bộ); người dùng đăng nhập trong khung trình duyệt thì Claude kiểm tiếp.
+- Lưu ý: mật khẩu tài khoản chính RDS nay nằm trong lịch sử lệnh SSM và `.env` EC2; xoay vòng 7 ngày (~26/11) sẽ làm hỏng kết nối EC2 lẫn máy local nếu không tắt xoay vòng / tạo user riêng.
+
+### 20/11 – Sự cố DB local do Claude dùng Docker (ghi để phiên sau tránh)
+- 05:42 UTC Claude chạy `docker images`/`docker info` để kiểm `roles.sql` → Docker Desktop thức dậy, tự bật container `vigilens-mirror-db` (dự án khác, `restart: unless-stopped`) chiếm `127.0.0.1:5433` = cổng đường hầm SSM tới RDS. API local nối nhầm vào Postgres container (không SSL) → `server does not support SSL` → 503, web báo "Không tải được danh sách hồ sơ". Không liên quan code T86–T93, không đụng RDS/Supabase.
+- Khắc phục (20/11): Docker Desktop đã tắt; Claude mở lại đường hầm SSM bằng lệnh trong `plan/HANDOFF.md` dòng 111 (chạy nền trong phiên Claude) → `vinmec_admin` nối được, web 5173 hiện lại 67 hồ sơ, `/api/cases` 200. Đường hầm mất khi phiên Claude đóng: mở lại bằng lệnh đó.
+- Quy tắc: trước khi dùng Docker, xem `docker ps -a` và cổng các container `restart` tự bật; không dùng cổng 5433. Kiểm giao diện trên `localhost:5173` + API thật như người dùng, không chỉ máy chủ tĩnh tự dựng.
+
+### 20/11 – Kiểm đợt bảo mật trên localhost:5173 + API mã mới + RDS thật (người dùng cho phép khởi động lại API)
+- Dừng API cũ (chạy từ 00:52), bật `cdss-api-on-dinh` (mã mới T87–T94). Log khởi động có cảnh báo đúng thiết kế "API đang dùng tài khoản chủ DB" (local vẫn `vinmec_admin` qua đường hầm 5433).
+- curl: `/api/health` 200; không token + thân hỏng → 401 (trước đây 422); thân 300 KB → 413.
+- Trình duyệt 5173 (phiên đăng nhập admin của người dùng, chỉ thao tác đọc): danh sách 67 hồ sơ; DEMO-02 chi tiết đủ; AI tự chạy, xong 42,5 s, diễn giải 10 nhận định, ~25 lượt `GET /ai` thăm dò không bị 429; tra cứu amoxicillin: 64 liên kết DailyMed đều `https:` + `rel=noopener noreferrer`. Log API: 0 lỗi, 0 `llm_rate_limited`.
+- Chưa kiểm trên trình duyệt: gửi câu hỏi (T91) và phản hồi (ghi DB thật) – đã kiểm bằng script/test.
+
+## Rà bảo mật toàn dự án (20/11/2026)
+
+- Báo cáo: `docs/bao-cao-bao-mat-2026-11-20.md`. 5 lỗ hổng mức cao (thiếu phân quyền theo ca/IDOR; agent toàn quyền máy + Supabase MCP ghi được + skill tự `npx @latest`; ứng dụng dùng tài khoản chủ RDS; chi phí LLM không trần, `chay_lai` xếp hàng không giới hạn; kho công khai không có ruleset), 7 mức trung bình, 8 mức thấp; 15 nhóm đã kiểm an toàn (JWT giả bị chặn, Supabase tắt đăng ký và không lộ lược đồ, 0 CVE trong 327 gói lockfile, không lộ khoá trong 49 commit).
+- Đã thêm quy tắc bảo mật: `AGENTS.md` quy tắc 10–14, `CLAUDE.md` mục 6a.
+- Chưa làm: quét đa agent Claude Security; thử các luồng sau đăng nhập trên production (cần tài khoản thử).
+
+### Bảng theo dõi từng lỗ hổng (bản sao mục 0a của `docs/bao-cao-bao-mat-2026-11-20.md`; sửa cả hai nơi)
+
+Chú giải cột **Ai làm**: `agent` = giao brief cho agy/Codex, Claude review; **`CHỦ KHO`** = hạ tầng, tài khoản, mật khẩu, cấu hình máy, cài đặt GitHub/Vercel/AWS: agent không được làm, chủ kho tự làm.
+Chú giải **Tình trạng**: ⬜ chưa làm · 🔄 đang làm · ✅ xong · ⏸ hoãn · 🟡 code xong, chờ chủ kho triển khai.
+
+#### Mức Cao
+
+| Mã | Vấn đề | Ai làm | T | Tình trạng | Việc còn lại |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| C1 | Thiếu phân quyền theo ca (IDOR) | agent | T86 | ⏸ hoãn (20/11, chủ kho chốt) | Chờ khoa Dược trả lời cách phân công thật (theo khoa? làm ca người khác khi quá tải?). Tạm giữ danh sách chung; nhật ký truy cập vẫn ghi |
+| C2 | Codex toàn quyền máy; Supabase MCP ghi được; skill `npx @latest` | **CHỦ KHO** | – | ⬜ | (1) `~/.gemini/antigravity/mcp_config.json`: thêm `read_only=true`, bỏ `account,functions,branching` khỏi `features` (hoặc tắt MCP khi agent code). (2) `~/.codex/config.toml`: `sandbox_mode = "workspace-write"`. (3) Gỡ `.agents/skills/modern-web-guidance` hoặc ghim phiên bản. Kiểm 20/11: cả 3 vẫn chưa sửa |
+| C3 | API dùng tài khoản chủ RDS; `sslmode=require` | agent → **CHỦ KHO** | T87, fix-1, fix-2 | 🟡 code xong + **kiểm thật đạt** (20/11) | Claude dựng Postgres tạm trong Docker: `roles.sql` chạy 2 lần không lỗi; loader nạp `cases`, `hanh-chinh`, `phieu-dieu-tri`; `vinmec_app` thấy đúng số dòng như chủ (93/228/333/58); API chạy trọn bằng `vinmec_app` (đọc ca, ghi kết quả thẩm định, phản hồi, hỏi đáp, xoá hội thoại); DROP / INSERT `tri_thuc` / DELETE `y_lenh` / TRUNCATE / CREATE TABLE / CREATE ROLE đều bị từ chối; không có policy cho anon/PUBLIC. Lượt đầu bắt được lỗi RLS (63 bảng bật RLS, không policy → `vinmec_app` thấy 0 dòng), đã sửa ở fix-2. **Chủ kho làm HT2–HT6** theo `docs/van-hanh/tai-khoan-db.md` |
+| C4 | Chi phí LLM không trần, `chay_lai` xếp hàng vô hạn | agent | T88, fix-1, fix-2 | ✅ code xong (20/11), chờ deploy (HT11) | pytest 1.621 qua / 0 trượt, vitest 323 qua. Claude kiểm độc lập: 200 lượt `chay_lai` đồng thời → AI chạy 1 lần; hàng đợi đầy → 429 `hang_doi_day`, `Retry-After: 30`; `/ask` 20 qua / 5 bị 429, LLM gọi đúng 20 lần; vượt kích thước → 422. Hợp đồng API cập nhật ở `plan/api-hop-dong-v1.9-gioi-han-bao-mat.md` |
+| C5 | Kho công khai, không ruleset, CI đỏ vẫn merge | **CHỦ KHO** (quyền admin repo) + agent | T92 (`dependabot.yml`), T94 (job `security`: OSV-Scanner + gitleaks; ruff `S`) | ✅ phần agent (20/11): workflow `security` (OSV-Scanner `uv.lock` + `web/package-lock.json`, gitleaks toàn lịch sử, action ghim SHA, quyền tối thiểu), ruff bật `S` (16 lỗi xử lý; Claude đọc lại 2 chỗ `noqa: S608`: chỉ ghép tên bảng/cột hằng). ⬜ phần chủ kho (HT7): ruleset + thêm `osv`, `gitleaks` vào check bắt buộc | Chủ repo: ruleset `main`, `vukhai248`, `deploy/vercel` (bắt buộc PR, CI xanh, cấm force push); bật Secret scanning + Push protection, Dependabot alerts; cân nhắc chuyển private. Job `security` trong CI (osv-scanner, gitleaks) cần công cụ mới → làm sau theo quy trình kiểm gói |
+
+#### Mức Trung bình
+
+| Mã | Vấn đề | Ai làm | T | Tình trạng | Việc còn lại |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| T1 | Đọc thân yêu cầu trước xác thực, không trần kích thước | agent → **CHỦ KHO** deploy | T89 | ✅ code xong (20/11), chờ deploy (HT11) | Claude kiểm: không token + JSON hỏng → 401 (trước đây 422); thân 300 KB → 413 `than_qua_lon`; `Content-Length` trùng lệch → 400; `/api/health` vẫn 200; `caddy validate` → `Valid configuration` |
+| T2 | Web thiếu CSP / chống nhúng khung; token ở localStorage | agent → **CHỦ KHO** kiểm Vercel | T90 | ✅ code xong (20/11), chờ deploy (HT8, HT11) | `web/vercel.json` (giữ `rewrites`) + CSP + 4 tiêu đề; script nội tuyến chuyển ra `theme-init.js`. Claude phục vụ bản build với đúng tiêu đề, mở trên trình duyệt: trang đăng nhập, danh sách ca, chi tiết DEMO-02, tra cứu thuốc chạy, **0 lỗi console**, font Google và giao diện tối tải đúng. Chưa kiểm được: gọi Supabase qua `connect-src` (bản build cục bộ không có biến Supabase) → kiểm trên Vercel sau deploy. Token ở localStorage giữ nguyên |
+| T3 | Chuỗi cung ứng chưa ghim (action, image Docker, `requirements.txt`) | agent | T92, T93 | ⚠️ gần xong (20/11): ghim + build Docker đạt; T93 đổi dependabot sang `uv`; chủ kho `git rm requirements.txt` | Claude đã tra SHA 3 action và digest 4 image; xoá `requirements.txt` (không tệp nào dùng); thêm `dependabot.yml`. Chưa làm: `exclude-newer` cho uv (cần khoá lại lockfile) |
+| T4 | `AUTH_MODE=off` là mở toàn quyền | agent | T89 + T92 | ✅ code xong (20/11), chờ deploy | `AUTH_MODE=off` + `CDSS_RUNTIME=container` → `ConfigError`, không khởi động; image mới có `CDSS_RUNTIME=container` |
+| T5 | `SUPABASE_SERVICE_ROLE_KEY` chung `.env` container | agent → **CHỦ KHO** | T87 | 🟡 code xong (20/11): compose chỉ đọc `.env.app` | Chủ kho: `.env.app` trên EC2 không chứa khoá này; xoá khoá khỏi `.env` EC2 (HT4) |
+| T6 | Lịch sử chat do trình duyệt gửi lên, không đối chiếu | agent | T91 | ✅ code xong (20/11), chờ deploy | Claude kiểm: A nhận đúng lượt của A; B cùng ca / hỏi đáp chung không thấy lượt của A; lượt `he_thong` bịa từ trình duyệt bị bỏ; giữ 3 lượt gần nhất; sau xoá hội thoại lịch sử rỗng. Web không gửi `lich_su` nữa |
+| T7 | Danh sách thu hồi phiên trong RAM | agent | – | ⏸ chấp nhận cho demo | Làm khi có dữ liệu thật (lưu DB hoặc Redis) |
+
+#### Mức Thấp
+
+| Mã | Vấn đề | Ai làm | T | Tình trạng | Việc còn lại |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| L1 | Bundle production có chunk dữ liệu giả | agent | T90 | ✅ code xong (20/11) | `dist/assets` không còn chunk mock |
+| L2 | Bundle lộ `VITE_VERCEL_*` | **CHỦ KHO** | – | ⬜ | Tắt "Expose System Environment Variables" trong Vercel |
+| L3 | Máy chủ gốc truy cập trực tiếp | **CHỦ KHO** | – | ⬜ (HT9) | Chỉ cho Vercel vào (header bí mật hoặc danh sách IP): cần chọn cách. Giới hạn tốc độ tầng app đã có (T88) |
+| L4 | `url_goc` vào `href` không kiểm `https:` | agent | T90 | ✅ code xong (20/11) | Dùng chung `safeHttpsUrl`; có test `javascript:` / `http:` không thành liên kết |
+| L5 | Đoạn nguồn hỏi đáp chung dùng chung giữa người dùng, tăng không trần | agent | T88 | ✅ code xong (20/11), chờ deploy | Khoá `__global__:<người dùng>`, trần 200 đoạn/khoá; test B mở đoạn của A → 404 |
+| L6 | Trường không giới hạn độ dài (`ly_do`, `nhan_dinh_id`, `dau_vao`) | agent | T88 | ✅ code xong (20/11), chờ deploy | Claude kiểm: `nhan_dinh_id` 129 ký tự, `lich_su` 7 tin → 422 |
+| L7 | Mẫu prompt `.replace` nối tiếp | agent | T89 | ✅ code xong (20/11) | `re.sub` một lượt; `ask.py` không còn `.replace("{{` |
+| L8 | Gói thừa (`@radix-ui/react-label`, Streamlit trong image) | **CHỦ KHO** gỡ gói | – | ⬜ (HT12) | Chủ kho chạy `npm uninstall @radix-ui/react-label` trong `web/`; chuyển `streamlit` sang nhóm tuỳ chọn trong `pyproject.toml` rồi `uv lock`; Claude kiểm lại sau |
+
+#### Việc hạ tầng chủ kho tự làm (gom từ các bảng trên)
+
+| # | Việc | Liên quan | Tình trạng |
+| :-- | :-- | :-- | :-- |
+| HT1 | Khoá Supabase MCP chỉ đọc; Codex `workspace-write`; gỡ skill `modern-web-guidance` | C2 | ⏸ chủ kho bỏ qua (20/11): mọi việc giao agent đi qua Claude nên kiểm soát được; skill nằm trong `.gitignore` nên `git rm` không áp dụng – muốn gỡ thì `Remove-Item -Recurse -Force .agents\skills\modern-web-guidance` |
+| HT2 | Tải chứng chỉ gốc RDS vào `certs/` (máy local và EC2) | C3 | ⏸ chủ kho bỏ qua (20/11); **bắt buộc trước HT11** vì `docker-compose.yml` gắn tệp này |
+| HT3 | Chạy `db/roles.sql` trên RDS bằng tài khoản chủ; đặt mật khẩu `vinmec_app`, `vinmec_loader` | C3 | ⬜ |
+| HT4 | Tạo `.env.app` trên EC2 (không có `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL` = `vinmec_app` + `verify-full`) **trước** khi kéo mã mới; khởi động lại, kiểm `/api/health` và log | C3, T5 | ⬜ |
+| HT5 | Đổi mật khẩu `vinmec_admin`; lưu bí mật ở SSM Parameter Store `SecureString`; xử lý xoay vòng mật khẩu RDS (~26/11) | C3 | ⬜ |
+| HT6 | Local: đặt `DATABASE_URL_LOADER` (tài khoản `vinmec_loader`) cho script nạp | C3 | ⬜ |
+| HT7 | GitHub: ruleset 3 nhánh, Secret scanning + Push protection, Dependabot; cân nhắc private | C5 | ⬜ |
+| HT8 | Vercel: kiểm nhánh production / Redeploy; tắt lộ biến hệ thống | T2, L2 | ⬜ |
+| HT9 | EC2: security group / chặn truy cập trực tiếp máy chủ gốc | L3 | ⬜ |
+| HT10 | Tạo một tài khoản thử `duoc_si_ls` để Claude kiểm luồng sau đăng nhập trên production | Giới hạn đợt rà | ⬜ |
+| HT11 | Deploy đợt bảo mật khi T87–T92 xanh: commit/push; kéo mã về EC2 (**sau** HT2, HT4); `docker compose build api && docker compose up -d` (gồm Caddy mới); gộp vào `deploy/vercel` cho Vercel (`web/vercel.json` mới có CSP) | C3, C4, T1–T6, L1, L4–L7 | ⬜ |
+| HT12 | Gỡ gói thừa theo lệnh ở dòng L8 | L8 | ✅ phần npm (20/11): chủ kho gỡ `@radix-ui/react-label`; Claude kiểm tsc, oxlint sạch, vitest 330 qua, build đạt. Còn: chuyển `streamlit` sang nhóm tuỳ chọn (chưa làm) |
+
+## Giao diện 20/11 – lấy một phần nhánh fix/ui-adjustments
+
+| Task | Nội dung | Agent | Trạng thái |
+| :--- | :--- | :--- | :--- |
+| T94 | Tab "Hồ sơ bệnh án" gom 3 khối I. Hành chính · II. Chẩn đoán · III. Quản lý người bệnh, `<details>` mặc định thu gọn (theo nhánh `fix/ui-adjustments` commit 29b0b33); giữ đủ trường hành chính, không thêm CCCD/SĐT; chỉ 4 tệp web, không đụng tệp phiên bảo mật. Brief `plan/briefs/T94-ho-so-benh-an-gom-muc.md` | agy Hydrogen xhigh | Xong code – tsc sạch, oxlint sạch, vitest 330/330; chưa xem trên trình duyệt |
+| T95 | Thử nghiệm: thẻ người bệnh ở nửa dưới thanh bên trái (họ tên, mã hồ sơ, ngày sinh, cân nặng/chiều cao, BHYT, dị ứng, chẩn đoán ICD, BMI/BSA/CrCl/eGFR); thu gọn còn nút biểu tượng. Brief `plan/briefs/T95-the-nguoi-benh-thanh-ben.md` | agy Hydrogen xhigh | Xong code – tsc, oxlint sạch, vitest 334/334; chờ người dùng xem, chưa commit |
+
+- 20/11: commit 9616fc3 (T94), 1c4e067 (T95), push vukhai248; EC2 kéo mã + build lại api, container healthy, duckdns /api/health 200 (truy_xuat san_sang, đọc RDS), bundle có thẻ người bệnh. RDS không đổi (T94/T95 chỉ web). Vercel chưa deploy lại.

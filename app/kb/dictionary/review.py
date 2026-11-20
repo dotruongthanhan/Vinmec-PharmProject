@@ -148,9 +148,9 @@ def export_review(root: Path, mode: str | None = None) -> Row:
     path = out / "T52_mau_kiem.jsonl"
     samples = read_jsonl(path) if path.is_file() else []
     samples = [row for row in samples if row["nhom_mau"] != "ung_vien_hang_1"]
-    write_jsonl(
-        path, [*samples, *Random(52).sample(with_candidates, min(10, len(with_candidates)))]
-    )
+    rng = Random(52)  # noqa: S311  # mẫu kiểm dữ liệu tất định
+    sample_rows = rng.sample(with_candidates, min(10, len(with_candidates)))
+    write_jsonl(path, [*samples, *sample_rows])
     return {"so_ten_cho_duyet": len(grouped), "so_ten_co_ung_vien": len(with_candidates)}
 
 

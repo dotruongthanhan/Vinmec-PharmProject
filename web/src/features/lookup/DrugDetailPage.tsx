@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { ErrorState } from '@/features/states/StateViews'
 import { cn } from '@/lib/cn'
 import { approvalLabel, fdaSectionLabel, ruleGroupLabel } from '@/lib/lookup'
+import { safeHttpsUrl } from '@/lib/sourceLink'
 import { useLoad } from '@/state/useLoad'
 
 export function ApprovalBadge({ trangThai }: { trangThai: string | null | undefined }) {
@@ -141,29 +142,34 @@ export function DrugDetailView({ detail }: DrugDetailViewProps) {
           disabled={group.doan.length === 0}
         >
           <ul className="flex flex-col gap-3">
-            {group.doan.map((part) => (
-              <li key={part.doan_trich_id} className="flex flex-col gap-1">
-                <p className="text-xs font-semibold text-fg-subtle">{part.duong_dan_muc}</p>
-                <p lang="en" className="text-sm leading-relaxed whitespace-pre-wrap text-fg">{part.noi_dung_goc}</p>
-                <p className="flex flex-wrap items-center gap-x-2 text-2xs text-fg-subtle">
-                  <span>
-                    {part.nguon}
-                    {part.phien_ban_nguon ? ` · ${part.phien_ban_nguon}` : ''}
-                    {part.set_id ? ` · set ${part.set_id}` : ''}
-                  </span>
-                  {part.url_goc ? (
-                    <a
-                      href={part.url_goc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-primary underline"
-                    >
-                      DailyMed <ExternalLink className="size-3" strokeWidth={1.75} aria-hidden="true" />
-                    </a>
-                  ) : null}
-                </p>
-              </li>
-            ))}
+            {group.doan.map((part) => {
+              const safeUrl = safeHttpsUrl(part.url_goc)
+              return (
+                <li key={part.doan_trich_id} className="flex flex-col gap-1">
+                  <p className="text-xs font-semibold text-fg-subtle">{part.duong_dan_muc}</p>
+                  <p lang="en" className="text-sm leading-relaxed whitespace-pre-wrap text-fg">{part.noi_dung_goc}</p>
+                  <p className="flex flex-wrap items-center gap-x-2 text-2xs text-fg-subtle">
+                    <span>
+                      {part.nguon}
+                      {part.phien_ban_nguon ? ` · ${part.phien_ban_nguon}` : ''}
+                      {part.set_id ? ` · set ${part.set_id}` : ''}
+                    </span>
+                    {safeUrl ? (
+                      <a
+                        href={safeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-primary underline"
+                      >
+                        DailyMed <ExternalLink className="size-3" strokeWidth={1.75} aria-hidden="true" />
+                      </a>
+                    ) : part.url_goc?.trim() ? (
+                      <span>DailyMed</span>
+                    ) : null}
+                  </p>
+                </li>
+              )
+            })}
           </ul>
         </FoldSection>
       ))}

@@ -1,5 +1,6 @@
 """Ghi nhật ký truy cập tối giản và dọn tệp theo ngày UTC."""
 
+import logging
 import re
 from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
@@ -12,6 +13,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from app.auth.principal import Principal
 
+_LOGGER = logging.getLogger(__name__)
 _WRITE_LOCK = Lock()
 _FILENAME = re.compile(r"nhat_ky_truy_cap-(\d{4}-\d{2}-\d{2})\.jsonl", re.ASCII)
 
@@ -70,8 +72,8 @@ class AccessLogger:
                 path = self.directory / f"nhat_ky_truy_cap-{now.date().isoformat()}.jsonl"
                 with path.open("a", encoding="utf-8") as handle:
                     handle.write(line)
-        except Exception:
-            pass
+        except Exception as exc:
+            _LOGGER.debug("Không ghi được nhật ký truy cập (%s)", type(exc).__name__)
 
     def cleanup(self) -> None:
         """Chỉ xoá tệp đúng mẫu có ngày cũ hơn 90 ngày, bỏ qua lỗi."""
@@ -87,10 +89,10 @@ class AccessLogger:
                             continue
                         if date.fromisoformat(match[1]) < cutoff:
                             path.unlink()
-                    except Exception:
-                        pass
-        except Exception:
-            pass
+                    except Exception as exc:
+                        _LOGGER.debug("Bỏ qua tệp nhật ký lỗi (%s)", type(exc).__name__)
+        except Exception as exc:
+            _LOGGER.debug("Không dọn được nhật ký truy cập (%s)", type(exc).__name__)
 
 
 class AccessLogMiddleware:

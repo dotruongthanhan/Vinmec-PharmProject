@@ -516,7 +516,7 @@ def build_dictionary(root: Path) -> Row:
     for table, rows in tables.items():
         write_jsonl(folder / f"{table}.jsonl", ({**row, **metadata} for row in rows))
     write_json(reports / "T52_do_phu_truoc_sau.json", summary)
-    rng = Random(52)
+    rng = Random(52)  # noqa: S311  # mẫu kiểm dữ liệu tất định
     samples = []
     for method in ("them_e_cuoi", "bang_vitamin"):
         group = [row for row in mappings if row["cach_khop"] == method]

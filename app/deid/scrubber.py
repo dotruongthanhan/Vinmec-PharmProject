@@ -24,7 +24,8 @@ class DeidError(Exception):
     """Không thể che định danh an toàn."""
 
 
-TOKEN_PATTERN = r"\[(?:HN|CCCD|SDT|BHYT|EMAIL|NGAY|TEN|DIACHI|MA)_\d+\]"
+# Mẫu regex nhận diện thẻ ẩn danh nội bộ, không phải bí mật hay token xác thực.
+TOKEN_PATTERN = r"\[(?:HN|CCCD|SDT|BHYT|EMAIL|NGAY|TEN|DIACHI|MA)_\d+\]"  # noqa: S105  # mẫu regex
 _TOKEN = re.compile(TOKEN_PATTERN)
 _DAY = r"(?:0?[1-9]|[12][0-9]|3[01])"
 _MONTH = r"(?:0?[1-9]|1[0-2])"

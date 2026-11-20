@@ -582,7 +582,8 @@ def check(
                 {"cap": key, "muc_do": {k: sorted(v, key=str) for k, v in sides.items()}}
             )
     details = list(read_jsonl(archive.stage / f"{PAIR}.jsonl"))
-    sample = random.Random(51).sample(details, min(40, len(details)))
+    rng = random.Random(51)  # noqa: S311  # mẫu kiểm dữ liệu tất định
+    sample = rng.sample(details, min(40, len(details)))
     report = {
         **ATTRIBUTION,
         **counts,

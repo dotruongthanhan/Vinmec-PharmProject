@@ -1,6 +1,7 @@
 """Dịch vụ ca bệnh giữ bộ đệm thẩm định, điều phối AI nền và lưu phản hồi/hội thoại."""
 
 import logging
+import math
 import time
 from collections.abc import Sequence
 from concurrent.futures import Future, ThreadPoolExecutor
@@ -27,6 +28,7 @@ from app.api.presenter import (
     present_source,
     present_warnings,
 )
+from app.api.rate_limit import LlmRateLimits, SlidingWindowLimiter
 from app.auth.principal import Principal
 from app.config.settings import (
     get_secret,
@@ -48,7 +50,7 @@ from app.llm.synthesizer import Synthesizer
 from app.orchestration.ai_review import AiReviewer, AiRunResult
 from app.orchestration.ask import AskResult, CaseAsker
 from app.orchestration.evidence import EvidenceCollector, LazyRetrieverFactory
-from app.orchestration.jobs import AiJobManager, AiJobState
+from app.orchestration.jobs import AiJobManager, AiJobState, AiQueueFullError
 from app.pipeline import KetQuaThamDinh, run_case
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import renal_dose as renal_dose_mod
@@ -97,7 +99,16 @@ class AskRunner(Protocol):
 
 _DB_READ_TTL_SECONDS = 60.0
 _CASE_REFRESH_RETRY_SECONDS = 15.0
+_MAX_ASK_SOURCES_PER_KEY = 200
 _INTERACTION_EXCLUDED = {"dich_truyen_dien_giai", "duoc_lieu"}
+
+
+def _ask_source_key(case_id: str, principal: Principal | None) -> str:
+    """Tách kho đoạn nguồn hỏi đáp chung theo người dùng, giữ khoá theo ca như cũ."""
+    if case_id == "__global__":
+        user_id = principal.nguoi_dung_id if principal is not None else "__anonymous__"
+        return f"__global__:{user_id}"
+    return case_id
 
 
 def _collect_interaction_pairs(
@@ -128,7 +139,8 @@ def _collect_interaction_pairs(
                 for ia, ib in product(ca_comp, cb_comp):
                     if ia.hoat_chat_id != ib.hoat_chat_id and ia.ddinter_id and ib.ddinter_id:
                         pairs.append((ia.ddinter_id, ib.ddinter_id))
-        except Exception:
+        except Exception as exc:
+            _LOGGER.debug("Bỏ qua ca khi gom cặp tương tác (%s)", type(exc).__name__)
             continue
     return pairs
 
@@ -163,6 +175,7 @@ class CaseService:
         asker: Any = _AUTO,
         runtime_store: FeedbackAndChatStore | None = None,
         review_store: ReviewResultStore | None = None,
+        limits: LlmRateLimits | None = None,
     ) -> None:
         resolved_renal_path = (
             Path(renal_rules_path)
@@ -220,6 +233,7 @@ class CaseService:
         self._lock = RLock()
         self._db_cache: dict[str, tuple[float, CaBenh, s.MedicalRecord]] = {}
         self._jobs = AiJobManager()
+        self._limits = limits if limits is not None else LlmRateLimits.from_env()
         self._ai_cases: set[str] = set()
         self._ask_sources: dict[str, dict[str, Chunk]] = {}
         self._container: container_mod.Container | None = None
@@ -687,7 +701,67 @@ class CaseService:
         """Chỉ lấy tác vụ AI thuộc phiên bản hiện tại của ca."""
         return self._jobs.get(case_id) if case_id in self._ai_cases else None
 
-    def start_ai(self, case_id: str, *, restart: bool = False) -> s.KetQuaAI:
+    def _log_limit_block(self, code: str, route_path: str, principal: Principal | None) -> None:
+        """Ghi log lượt LLM bị chặn với mã lỗi, đường dẫn mẫu và 8 ký tự đầu mã người dùng."""
+        user_prefix = principal.nguoi_dung_id[:8] if principal is not None else "anon"
+        _LOGGER.warning("llm_rate_limited ma=%s path=%s user=%s", code, route_path, user_prefix)
+
+    def _queue_full_error(self, principal: Principal | None) -> HTTPException:
+        """Tạo lỗi 429 khi hàng đợi AI nền đã đạt trần số việc chưa xong."""
+        self._log_limit_block("hang_doi_day", "/api/cases/{ca_id}/ai", principal)
+        return HTTPException(
+            429,
+            detail={
+                "ma": "hang_doi_day",
+                "thong_bao": "Hàng đợi phân tích AI đang bận. Vui lòng thử lại sau 30 giây.",
+            },
+            headers={"Retry-After": "30"},
+        )
+
+    def _enforce_llm_limits(
+        self,
+        limiter: SlidingWindowLimiter,
+        principal: Principal | None,
+        route_path: str,
+        rate_message: str,
+    ) -> None:
+        """Kiểm giới hạn tốc độ theo người dùng rồi trừ ngân sách lượt trong ngày."""
+        user_key = principal.nguoi_dung_id if principal is not None else "__anonymous__"
+        wait = limiter.hit(user_key)
+        if wait is not None:
+            wait_sec = max(1, math.ceil(wait))
+            self._log_limit_block("vuot_gioi_han", route_path, principal)
+            raise HTTPException(
+                429,
+                detail={
+                    "ma": "vuot_gioi_han",
+                    "thong_bao": f"{rate_message} Vui lòng thử lại sau {wait_sec} giây.",
+                },
+                headers={"Retry-After": str(wait_sec)},
+            )
+        if not self._limits.daily_budget.take():
+            reset_fn = getattr(self._limits.daily_budget, "seconds_until_reset", None)
+            wait_sec = int(reset_fn()) if callable(reset_fn) else 3600
+            self._log_limit_block("het_ngan_sach_ngay", route_path, principal)
+            raise HTTPException(
+                429,
+                detail={
+                    "ma": "het_ngan_sach_ngay",
+                    "thong_bao": (
+                        "Hệ thống đã đạt giới hạn lượt LLM trong ngày. "
+                        f"Vui lòng thử lại sau {wait_sec} giây."
+                    ),
+                },
+                headers={"Retry-After": str(wait_sec)},
+            )
+
+    def start_ai(
+        self,
+        case_id: str,
+        *,
+        restart: bool = False,
+        principal: Principal | None = None,
+    ) -> s.KetQuaAI:
         """Khởi động phân tích AI nền cho một ca hoặc trả trạng thái hiện có."""
         self._ensure_cases()
         with self._lock:
@@ -700,13 +774,29 @@ class CaseService:
                     thoi_gian_ms=None,
                     mo_hinh=None,
                 )
+            raw_job = self._jobs.get(case_id)
+            effective_restart = restart or case_id not in self._ai_cases
+            already_running = raw_job is not None and raw_job.trang_thai == "dang_chay"
+            will_submit = raw_job is None or (not already_running and effective_restart)
+            if will_submit:
+                if self._jobs.pending_count() >= self._jobs.max_pending:
+                    raise self._queue_full_error(principal)
+                self._enforce_llm_limits(
+                    self._limits.ai_limiter,
+                    principal,
+                    "/api/cases/{ca_id}/ai",
+                    "Bạn đã yêu cầu phân tích AI quá nhiều lần.",
+                )
             rule_result = self._review(case)
             runner = self._ai_runner
-            state = self._jobs.start(
-                case_id,
-                lambda: runner.run(case, rule_result),
-                restart=restart or case_id not in self._ai_cases,
-            )
+            try:
+                state = self._jobs.start(
+                    case_id,
+                    lambda: runner.run(case, rule_result),
+                    restart=effective_restart,
+                )
+            except AiQueueFullError:
+                raise self._queue_full_error(principal) from None
             self._ai_cases.add(case_id)
             feedbacks = self._store.load_feedback() if state.trang_thai == "xong" else []
         return self._present_job_state(case, rule_result, state, feedbacks)
@@ -737,7 +827,12 @@ class CaseService:
             feedbacks = self._store.load_feedback() if state.trang_thai == "xong" else []
         return self._present_job_state(case, rule_result, state, feedbacks)
 
-    def get_source(self, case_id: str, chunk_id: str) -> s.DoanNguon:
+    def get_source(
+        self,
+        case_id: str,
+        chunk_id: str,
+        principal: Principal | None = None,
+    ) -> s.DoanNguon:
         """Tra đoạn nguồn đã cấp cho ca bệnh trong phân tích AI hoặc hỏi đáp."""
         if case_id != "__global__":
             self._ensure_cases()
@@ -754,7 +849,8 @@ class CaseService:
                     None,
                 )
             if chunk is None:
-                chunk = self._ask_sources.get(case_id, {}).get(chunk_id)
+                source_key = _ask_source_key(case_id, principal)
+                chunk = self._ask_sources.get(source_key, {}).get(chunk_id)
             if chunk is None:
                 raise HTTPException(404, "Không tìm thấy đoạn nguồn trong ca bệnh.")
             return present_source(chunk)
@@ -866,10 +962,26 @@ class CaseService:
         with self._lock:
             self._store.clear_conversation(case_id, principal)
 
+    def _server_history_pairs(
+        self,
+        case_id: str,
+        principal: Principal,
+        *,
+        max_turns: int = 3,
+        max_messages: int = 6,
+        max_chars: int = 4000,
+    ) -> list[tuple[str, str]]:
+        """Dựng tối đa 6 tin lịch sử từ các lượt gần nhất của chính người gọi trên máy chủ."""
+        turns = self._store.recent_turns(case_id, principal, limit=max_turns)
+        pairs: list[tuple[str, str]] = []
+        for cau_hoi, tra_loi in turns:
+            pairs.append(("nguoi_dung", cau_hoi[:max_chars]))
+            pairs.append(("he_thong", tra_loi[:max_chars]))
+        return pairs[-max_messages:]
+
     def ask(self, case_id: str, request: s.GuiCauHoi, principal: Principal) -> s.TraLoi:
         """Gọi CaseAsker khi có LLM; hỗ trợ cả hỏi đáp chung (__global__) và theo từng ca."""
         self._ensure_cases()
-        history_pairs = [(item.vai, item.noi_dung) for item in request.lich_su]
         if case_id == "__global__":
             with self._lock:
                 assert self._cases is not None
@@ -877,6 +989,7 @@ class CaseService:
                 all_results = {c.ca_id: self._review(c) for c in all_cases}
                 asker = self._asker_impl
                 enabled = self._ai_enabled and asker is not None
+                history_pairs = self._server_history_pairs(case_id, principal)
             if not enabled or asker is None or not hasattr(asker, "ask_global"):
                 fallback_case = all_cases[0] if all_cases else None
                 msg = (
@@ -894,10 +1007,17 @@ class CaseService:
                 with self._lock:
                     self._save_chat_log(case_id, request.cau_hoi, response, principal)
                 return response
+            self._enforce_llm_limits(
+                self._limits.ask_limiter,
+                principal,
+                "/api/ask",
+                "Bạn đã gửi quá nhiều câu hỏi.",
+            )
             result = asker.ask_global(all_cases, all_results, request.cau_hoi, history_pairs)
         else:
             with self._lock:
                 case = self._get_case(case_id)
+                history_pairs = self._server_history_pairs(case_id, principal)
                 if not self._ai_enabled or self._asker_impl is None:
                     _LOGGER.info(
                         "ask rejected step=configuration reason=missing_llm_or_asker chunks=0"
@@ -923,6 +1043,12 @@ class CaseService:
                 )
                 asker = self._asker_impl
 
+            self._enforce_llm_limits(
+                self._limits.ask_limiter,
+                principal,
+                "/api/cases/{ca_id}/ask",
+                "Bạn đã gửi quá nhiều câu hỏi.",
+            )
             result = asker.ask(
                 case,
                 request.cau_hoi,
@@ -936,9 +1062,14 @@ class CaseService:
             with self._lock:
                 assert self._cases is not None
                 if case_id == "__global__" or self._cases.get(case_id) is case:
-                    case_sources = self._ask_sources.setdefault(case_id, {})
+                    source_key = _ask_source_key(case_id, principal)
+                    case_sources = self._ask_sources.setdefault(source_key, {})
                     for chunk in result.doan:
+                        if chunk.doan_trich_id in case_sources:
+                            del case_sources[chunk.doan_trich_id]
                         case_sources[chunk.doan_trich_id] = chunk
+                        while len(case_sources) > _MAX_ASK_SOURCES_PER_KEY:
+                            del case_sources[next(iter(case_sources))]
 
         response = s.TraLoi(
             trang_thai=result.trang_thai,

@@ -125,7 +125,8 @@ def _read_sqlite_counts(dbs: dict[str, sqlite3.Connection]) -> dict[str, int]:
     for spec in INDEX_TABLES:
         db = dbs[spec.source_kind]
         try:
-            row = db.execute(f'SELECT count(*) FROM "{spec.sqlite_table}"').fetchone()
+            query = f'SELECT count(*) FROM "{spec.sqlite_table}"'  # noqa: S608  # tên bảng hằng
+            row = db.execute(query).fetchone()
         except sqlite3.Error as exc:
             raise SourceError(
                 f"Lỗi đọc bảng {spec.sqlite_table} từ SQLite: {type(exc).__name__}"
@@ -167,7 +168,8 @@ def load_chi_muc(
             for spec in INDEX_TABLES:
                 src_db = dbs[spec.source_kind]
                 col_sql = ", ".join(f'"{col}"' for col in spec.columns)
-                src_cursor = src_db.execute(f'SELECT {col_sql} FROM "{spec.sqlite_table}"')
+                query = f'SELECT {col_sql} FROM "{spec.sqlite_table}"'  # noqa: S608  # bảng/cột
+                src_cursor = src_db.execute(query)
                 command = sql.SQL("COPY {} ({}) FROM STDIN").format(
                     identifier(spec.pg_table),
                     sql.SQL(", ").join(map(sql.Identifier, spec.columns)),
