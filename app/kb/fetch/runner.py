@@ -357,3 +357,54 @@ def fetch_sources(
         entries.sort(key=lambda entry: str(entry.get("duong_dan", "")))
         manifest_path.write_bytes(json_bytes(manifest))
     return outcomes
+
+
+def run_dictionary_fetch(kind: str, root: Path, *, refresh: bool = False) -> dict[str, Any]:
+    """Đồng bộ nguồn riêng của từ điển mà không ghi manifest openFDA."""
+    import httpx
+
+    from app.kb.dictionary.axis import Inputs, match_counts, mock_unmatched, resolve_names
+    from app.kb.dictionary.http import SourceHTTP
+    from app.kb.sources.dav import fetch_dav
+    from app.kb.sources.rxnav import RxNav
+
+    with httpx.Client(timeout=30.0, follow_redirects=False) as http:
+        if kind == "dav":
+            result = fetch_dav(
+                SourceHTTP(http, 1.0),
+                root / "kb_sources/dav",
+                root / "kb_staging/tu_dien/dav_thuoc.jsonl",
+                refresh=refresh,
+            )
+            return {
+                key: result[key]
+                for key in (
+                    "trang_thai",
+                    "totalCount",
+                    "so_trang",
+                    "so_id_duy_nhat",
+                    "thoi_gian_giay",
+                )
+            }
+        inputs = Inputs(root)
+        source = root / "kb_sources/rxnav"
+        rxnav = RxNav(source, SourceHTTP(http, 0.2), refresh=refresh)
+        error = None
+        try:
+            matches, _ = resolve_names(inputs, rxnav)
+        except FetchError as exc:
+            error = str(exc)
+            matches, _ = resolve_names(inputs, RxNav(source))
+        if not error and inputs.dav_manifest.get("trang_thai") != "xong":
+            error = "Thiếu lượt tải DAV đầy đủ để tra toàn bộ tên"
+        counts = {
+            "so_ten_tra": len(matches),
+            "so_phan_hoi_tra_ten_rxnav": sum(
+                "/rxcui.json?" in file["url"] for file in rxnav.files.values()
+            ),
+            "so_ten_theo_cach_khop": match_counts(matches),
+            "hoat_chat_ca_gia_lap_chua_khop": mock_unmatched(inputs, matches),
+        }
+        status = "chua_xong" if error else "xong"
+        rxnav.manifest(status, counts, error=error)
+        return {"trang_thai": status, **counts, "loi": error}

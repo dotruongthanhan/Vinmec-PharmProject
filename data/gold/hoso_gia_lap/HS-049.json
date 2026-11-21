@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-049",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "thong_tin",
+      "chi_tiet_y_lenh_id": ["CT-HS-049-04-01"],
+      "mo_ta": "Meropenem 1 g mỗi 8 giờ được kê, trong khi Pseudomonas nhạy cefepim: có thể cân nhắc hạ bậc kháng sinh phổ thay vì carbapenem."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

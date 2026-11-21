@@ -1,5 +1,12 @@
 import { createContext, useContext } from 'react'
-import type { AuthSession } from './authClient'
+import type { AuthRole, AuthSession } from './authClient'
+
+export type SignOutReason = 'nguoi_dung' | 'khong_hoat_dong' | 'het_han_phien' | '401' | 'da_dang_xuat_noi_khac'
+
+export interface SignOutOptions {
+  scope?: 'local' | 'global'
+  reason?: SignOutReason
+}
 
 export interface AuthContextValue {
   session: AuthSession | null
@@ -8,9 +15,17 @@ export interface AuthContextValue {
   isConfigured: boolean
   isLoading: boolean
   userEmail: string | null
+  vaiTro: AuthRole | null
+  phienId: string | null
+  isForbidden: boolean
+  verificationError: string | null
+  getAccessToken: () => Promise<string | null>
+  refreshSession: () => Promise<AuthSession | null>
+  verifyRole: () => Promise<void>
   signIn: (email: string, password: string) => Promise<string | null>
   enterDemoMode: () => void
-  signOut: () => Promise<void>
+  signOutReason?: SignOutReason | null
+  signOut: (options?: SignOutOptions) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)

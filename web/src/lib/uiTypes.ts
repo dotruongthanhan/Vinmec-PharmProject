@@ -1,5 +1,11 @@
 import type { ChiSo } from '../api/types.ts'
 
+export interface EncounterGroup<T> {
+  id: string
+  thuTu: number | null
+  items: T[]
+}
+
 export type DetailTabId =
   | 'ho_so_benh_an'
   | 'y_lenh'
@@ -8,6 +14,20 @@ export type DetailTabId =
   | 'vi_sinh'
   | 'dien_bien'
   | 'tham_dinh'
+
+export interface FeedbackDraft {
+  isEditing: boolean
+  pendingAction: 'bac_bo' | 'can_sua' | null
+  reasonGroup: string
+  note: string
+}
+
+export const EMPTY_FEEDBACK_DRAFT: FeedbackDraft = {
+  isEditing: false,
+  pendingAction: null,
+  reasonGroup: '',
+  note: '',
+}
 
 export type EvidenceTarget =
   | {

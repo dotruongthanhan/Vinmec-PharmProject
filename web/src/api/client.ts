@@ -1,14 +1,26 @@
 import type {
   BanGhi,
+  BuocAI,
   ChiTietCa,
+  ChiTietThuoc,
+  DanhMucCongThuc,
   DanhSachCa,
+  DanhSachThuoc,
   DoanNguon,
   GuiCauHoi,
   GuiPhanHoi,
   HealthResponse,
   KetQuaAI,
+  KetQuaCongThuc,
+  KetQuaTraTuongTac,
+  MeResponse,
+  NguonTomTat,
   PhanHoiDaGhi,
+  TienTrinhHoiDap,
+  TinhCongThucYeuCau,
   TraLoi,
+  TraTuongTacYeuCau,
+  TrangThaiBuocAI,
 } from './types.ts'
 
 /** Lỗi chuẩn hoá từ API backend hoặc lỗi kết nối / định dạng. */
@@ -33,23 +45,144 @@ export interface SavedConversationTurn {
 }
 
 export interface ReviewApiClient {
+  abortAll?(): void
+  signOut?(token: string): Promise<void>
+  getMe(): Promise<MeResponse>
   getHealth(): Promise<HealthResponse>
-  getCases(): Promise<DanhSachCa>
-  getCase(caId: string): Promise<ChiTietCa>
+  getCases(options?: { signal?: AbortSignal }): Promise<DanhSachCa>
+  getCase(caId: string, options?: { signal?: AbortSignal }): Promise<ChiTietCa>
   getRecord(caId: string, banGhiId: string): Promise<BanGhi>
   sendFeedback(caId: string, payload: GuiPhanHoi): Promise<PhanHoiDaGhi>
   ask(caId: string, payload: GuiCauHoi, options?: { signal?: AbortSignal }): Promise<TraLoi>
+  getAskProgress(caId: string, init?: { signal?: AbortSignal }): Promise<TienTrinhHoiDap>
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI>
   getAi(caId: string): Promise<KetQuaAI | null>
   getSource(caId: string, doanTrichId: string): Promise<DoanNguon>
+  /** Tra cứu thuốc (hợp đồng v1.8). `trang` bắt đầu từ 1. */
+  searchDrugs(params: { q?: string; trang?: number; soDong?: number }, options?: { signal?: AbortSignal }): Promise<DanhSachThuoc>
+  getDrug(hoatChatId: string, options?: { signal?: AbortSignal }): Promise<ChiTietThuoc>
+  checkInteractions(payload: TraTuongTacYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaTraTuongTac>
+  getFormulas(options?: { signal?: AbortSignal }): Promise<DanhMucCongThuc>
+  calculateFormula(ma: string, payload: TinhCongThucYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaCongThuc>
   getConversations?(): Promise<Record<string, SavedConversationTurn[]>>
   clearConversation?(caId: string): Promise<void>
 }
 
 export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 
+export interface AuthHooks {
+  getAccessToken(): Promise<string | null>
+  refreshSession(): Promise<unknown | null>
+  onUnauthorized(): void | Promise<void>
+  onForbidden?(): void
+}
+
 function isRecordObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
+}
+
+const VALID_AI_STEP_STATUSES = new Set<TrangThaiBuocAI>([
+  'cho',
+  'dang_chay',
+  'xong',
+  'loi',
+  'bo_qua',
+])
+
+function normalizeNguonTomTat(raw: unknown): NguonTomTat | null {
+  if (!isRecordObject(raw)) {
+    return null
+  }
+  const nhan = typeof raw['nhan'] === 'string' ? raw['nhan'] : ''
+  if (!nhan) {
+    return null
+  }
+  const soDoan =
+    typeof raw['so_doan'] === 'number' && Number.isFinite(raw['so_doan'])
+      ? raw['so_doan']
+      : 0
+  return { nhan, so_doan: soDoan }
+}
+
+function normalizeBuocAI(raw: unknown): BuocAI | null {
+  if (!isRecordObject(raw)) {
+    return null
+  }
+  const ma = typeof raw['ma'] === 'string' ? raw['ma'] : ''
+  const ten = typeof raw['ten'] === 'string' ? raw['ten'] : ''
+  const rawStatus = raw['trang_thai']
+  const trang_thai: TrangThaiBuocAI =
+    typeof rawStatus === 'string' && VALID_AI_STEP_STATUSES.has(rawStatus as TrangThaiBuocAI)
+      ? (rawStatus as TrangThaiBuocAI)
+      : 'cho'
+  const nguon = Array.isArray(raw['nguon'])
+    ? raw['nguon'].map(normalizeNguonTomTat).filter((item): item is NguonTomTat => item !== null)
+    : []
+  const thoi_gian_ms =
+    typeof raw['thoi_gian_ms'] === 'number' && Number.isFinite(raw['thoi_gian_ms'])
+      ? raw['thoi_gian_ms']
+      : null
+
+  return {
+    ma,
+    ten,
+    trang_thai,
+    chi_tiet: typeof raw['chi_tiet'] === 'string' ? raw['chi_tiet'] : null,
+    nguon,
+    thoi_gian_ms,
+    ly_do: typeof raw['ly_do'] === 'string' ? raw['ly_do'] : null,
+    goi_y: typeof raw['goi_y'] === 'string' ? raw['goi_y'] : null,
+  }
+}
+
+/** Chuẩn hoá phản hồi KetQuaAI từ API để chịu được thiếu trường tiến trình ở phiên bản cũ. */
+export function normalizeKetQuaAI(raw: KetQuaAI): KetQuaAI {
+  const cac_buoc = Array.isArray(raw.cac_buoc)
+    ? raw.cac_buoc.map(normalizeBuocAI).filter((item): item is BuocAI => item !== null)
+    : []
+  const da_chay_ms =
+    typeof raw.da_chay_ms === 'number' && Number.isFinite(raw.da_chay_ms)
+      ? raw.da_chay_ms
+      : null
+  const thuong_le_ms =
+    typeof raw.thuong_le_ms === 'number' && Number.isFinite(raw.thuong_le_ms)
+      ? raw.thuong_le_ms
+      : null
+
+  return {
+    ...raw,
+    canh_bao: Array.isArray(raw.canh_bao) ? raw.canh_bao : [],
+    cac_buoc,
+    da_chay_ms,
+    thuong_le_ms,
+  }
+}
+
+const DEFAULT_ASK_PROGRESS: TienTrinhHoiDap = {
+  dang_chay: false,
+  cac_buoc: [],
+  da_chay_ms: null,
+}
+
+/** Chuẩn hoá phản hồi TienTrinhHoiDap từ API để chịu được thiếu trường. */
+export function normalizeTienTrinhHoiDap(raw: unknown): TienTrinhHoiDap {
+  if (!isRecordObject(raw)) {
+    return { ...DEFAULT_ASK_PROGRESS, cac_buoc: [] }
+  }
+  const dang_chay = typeof raw['dang_chay'] === 'boolean' ? raw['dang_chay'] : false
+  const cac_buoc = Array.isArray(raw['cac_buoc'])
+    ? raw['cac_buoc'].map(normalizeBuocAI).filter((item): item is BuocAI => item !== null)
+    : []
+  const da_chay_ms =
+    typeof raw['da_chay_ms'] === 'number' && Number.isFinite(raw['da_chay_ms'])
+      ? raw['da_chay_ms']
+      : null
+
+  return {
+    dang_chay,
+    cac_buoc,
+    da_chay_ms,
+  }
 }
 
 function extractApiError(parsed: unknown): { ma: string; thong_bao: string } | null {
@@ -72,17 +205,94 @@ function extractApiError(parsed: unknown): { ma: string; thong_bao: string } | n
 export class ApiClient implements ReviewApiClient {
   private readonly baseUrl: string
   private readonly fetchImpl?: FetchLike
+  private readonly auth?: AuthHooks
+  private refreshPromise: Promise<string | null> | null = null
+  private refreshRevision = 0
+  private controller = new AbortController()
 
-  constructor(baseUrl = '/api', fetchImpl?: FetchLike) {
+  constructor(baseUrl = '/api', fetchImpl?: FetchLike, auth?: AuthHooks) {
     this.baseUrl = baseUrl.replace(/\/+$/, '')
     this.fetchImpl = fetchImpl
+    this.auth = auth
+  }
+
+  private async refreshToken(revision: number): Promise<string | null> {
+    if (!this.auth) return null
+    if (this.refreshPromise) return this.refreshPromise
+    // Một phản hồi 401 đến muộn dùng lại kết quả gia hạn vừa hoàn tất.
+    if (revision !== this.refreshRevision) return this.auth.getAccessToken()
+    this.refreshPromise = (async () => {
+      try {
+        if (!await this.auth!.refreshSession()) return null
+        return await this.auth!.getAccessToken()
+      } catch {
+        return null
+      } finally {
+        this.refreshRevision += 1
+      }
+    })().finally(() => { this.refreshPromise = null })
+    return this.refreshPromise
   }
 
   private async request<T>(path: string, init?: RequestInit): Promise<T> {
+    const controller = new AbortController()
+    const signals = [this.controller.signal, init?.signal].filter((signal): signal is AbortSignal => !!signal)
+    const abort = () => controller.abort()
+    for (const signal of signals) {
+      if (signal.aborted) abort()
+      else signal.addEventListener('abort', abort, { once: true })
+    }
+    try {
+      const revision = this.refreshRevision
+      const token = await this.auth?.getAccessToken() ?? null
+      controller.signal.throwIfAborted()
+      return await this.send<T>(path, { ...init, signal: controller.signal }, token, revision, false, token ? [token] : [])
+    } finally {
+      for (const signal of signals) signal.removeEventListener('abort', abort)
+    }
+  }
+
+  /** Huỷ mọi yêu cầu của phiên hiện tại, kể cả khi đang chờ token. */
+  abortAll(): void {
+    this.controller.abort()
+    this.controller = new AbortController()
+  }
+
+  /** Báo thu hồi một lần; lỗi hoặc quá ba giây không cản đăng xuất. */
+  async signOut(token: string): Promise<void> {
+    const controller = new AbortController()
+    let timer: ReturnType<typeof setTimeout> | undefined
+    try {
+      await Promise.race([
+        (this.fetchImpl ?? globalThis.fetch)(`${this.baseUrl}/dang-xuat`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        }),
+        new Promise<void>((resolve) => {
+          timer = setTimeout(() => { controller.abort(); resolve() }, 3000)
+        }),
+      ])
+    } catch {
+      // Không đưa token hoặc chi tiết lỗi ra giao diện và nhật ký.
+    } finally {
+      if (timer !== undefined) clearTimeout(timer)
+    }
+  }
+
+  private async send<T>(path: string, init: RequestInit | undefined, token: string | null,
+    revision: number, retried: boolean, secrets: string[]): Promise<T> {
+    init?.signal?.throwIfAborted()
     const fetchFn: FetchLike = this.fetchImpl ?? globalThis.fetch
+    const headers = new Headers(init?.headers)
+    if (token) headers.set('Authorization', `Bearer ${token}`)
+    const redact = (message: string): string => secrets.reduce(
+      (safe, secret) => safe.split(secret).join('[ẩn]'), message,
+    )
     let response: Response
     try {
-      response = await fetchFn(`${this.baseUrl}${path}`, init)
+      response = await fetchFn(`${this.baseUrl}${path}`, { ...init, headers })
+      init?.signal?.throwIfAborted()
     } catch (err) {
       if (
         (err instanceof DOMException && err.name === 'AbortError') ||
@@ -91,21 +301,30 @@ export class ApiClient implements ReviewApiClient {
         throw err
       }
       if (err instanceof ApiError) {
-        throw err
+        throw new ApiError(redact(err.ma), redact(err.thong_bao), err.status)
       }
       const message =
         err instanceof Error && err.message
           ? `Không thể kết nối máy chủ: ${err.message}`
           : 'Không thể kết nối máy chủ.'
-      throw new ApiError('loi_he_thong', message, 0)
+      throw new ApiError('loi_he_thong', redact(message), 0)
     }
 
+    if (response.status === 401 && this.auth && !retried) {
+      const nextToken = await this.refreshToken(revision)
+      init?.signal?.throwIfAborted()
+      if (nextToken) {
+        return this.send<T>(path, init, nextToken, this.refreshRevision, true, [...secrets, nextToken])
+      }
+    }
     let rawText = ''
     try {
       rawText = await response.text()
     } catch {
+      init?.signal?.throwIfAborted()
       throw new ApiError('loi_he_thong', 'Không đọc được phản hồi từ máy chủ.', response.status)
     }
+    init?.signal?.throwIfAborted()
 
     let parsed: unknown = null
     let jsonValid = false
@@ -118,15 +337,21 @@ export class ApiClient implements ReviewApiClient {
       }
     }
 
+    if (response.status === 401 && this.auth) {
+      await this.auth.onUnauthorized()
+    }
+
     if (!response.ok) {
       if (jsonValid) {
         const structured = extractApiError(parsed)
         if (structured !== null) {
-          throw new ApiError(structured.ma, structured.thong_bao, response.status)
+          if (response.status === 403 && structured.ma === 'khong_co_quyen') this.auth?.onForbidden?.()
+          throw new ApiError(redact(structured.ma), redact(structured.thong_bao), response.status)
         }
       }
       const fallbackMsg = rawText.trim() || `Yêu cầu thất bại (HTTP ${response.status})`
-      throw new ApiError('loi_he_thong', fallbackMsg, response.status)
+      const fallbackCode = response.status === 401 ? 'chua_dang_nhap' : 'loi_he_thong'
+      throw new ApiError(fallbackCode, redact(fallbackMsg), response.status)
     }
 
     if (!jsonValid) {
@@ -144,12 +369,16 @@ export class ApiClient implements ReviewApiClient {
     return this.request<HealthResponse>('/health')
   }
 
-  getCases(): Promise<DanhSachCa> {
-    return this.request<DanhSachCa>('/cases')
+  getMe(): Promise<MeResponse> {
+    return this.request<MeResponse>('/me')
   }
 
-  getCase(caId: string): Promise<ChiTietCa> {
-    return this.request<ChiTietCa>(`/cases/${encodeURIComponent(caId)}`)
+  getCases(options?: { signal?: AbortSignal }): Promise<DanhSachCa> {
+    return this.request<DanhSachCa>('/cases', { signal: options?.signal })
+  }
+
+  getCase(caId: string, options?: { signal?: AbortSignal }): Promise<ChiTietCa> {
+    return this.request<ChiTietCa>(`/cases/${encodeURIComponent(caId)}`, { signal: options?.signal })
   }
 
   getRecord(caId: string, banGhiId: string): Promise<BanGhi> {
@@ -179,6 +408,19 @@ export class ApiClient implements ReviewApiClient {
     })
   }
 
+  async getAskProgress(caId: string, init?: { signal?: AbortSignal }): Promise<TienTrinhHoiDap> {
+    const path =
+      caId === '__global__'
+        ? '/ask/tien-trinh'
+        : `/cases/${encodeURIComponent(caId)}/ask/tien-trinh`
+    try {
+      const res = await this.request<unknown>(path, { signal: init?.signal })
+      return normalizeTienTrinhHoiDap(res)
+    } catch {
+      return { dang_chay: false, cac_buoc: [], da_chay_ms: null }
+    }
+  }
+
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI> {
     return this.request<KetQuaAI>(`/cases/${encodeURIComponent(caId)}/ai`, {
       method: 'POST',
@@ -186,12 +428,13 @@ export class ApiClient implements ReviewApiClient {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ chay_lai: Boolean(chayLai) }),
-    })
+    }).then(normalizeKetQuaAI)
   }
 
   async getAi(caId: string): Promise<KetQuaAI | null> {
     try {
-      return await this.request<KetQuaAI>(`/cases/${encodeURIComponent(caId)}/ai`)
+      const res = await this.request<KetQuaAI>(`/cases/${encodeURIComponent(caId)}/ai`)
+      return normalizeKetQuaAI(res)
     } catch (err: unknown) {
       if (err instanceof ApiError && err.status === 404 && err.ma === 'chua_chay') {
         return null
@@ -204,6 +447,40 @@ export class ApiClient implements ReviewApiClient {
     return this.request<DoanNguon>(
       `/cases/${encodeURIComponent(caId)}/sources/${encodeURIComponent(doanTrichId)}`,
     )
+  }
+
+  searchDrugs(params: { q?: string; trang?: number; soDong?: number }, options?: { signal?: AbortSignal }): Promise<DanhSachThuoc> {
+    const query = new URLSearchParams()
+    if (params.q) query.set('q', params.q)
+    query.set('trang', String(params.trang ?? 1))
+    query.set('so_dong', String(params.soDong ?? 30))
+    return this.request<DanhSachThuoc>(`/thuoc?${query.toString()}`, { signal: options?.signal })
+  }
+
+  getDrug(hoatChatId: string, options?: { signal?: AbortSignal }): Promise<ChiTietThuoc> {
+    return this.request<ChiTietThuoc>(`/thuoc/${encodeURIComponent(hoatChatId)}`, { signal: options?.signal })
+  }
+
+  checkInteractions(payload: TraTuongTacYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaTraTuongTac> {
+    return this.request<KetQuaTraTuongTac>('/tuong-tac', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: options?.signal,
+    })
+  }
+
+  getFormulas(options?: { signal?: AbortSignal }): Promise<DanhMucCongThuc> {
+    return this.request<DanhMucCongThuc>('/cong-thuc', { signal: options?.signal })
+  }
+
+  calculateFormula(ma: string, payload: TinhCongThucYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaCongThuc> {
+    return this.request<KetQuaCongThuc>(`/cong-thuc/${encodeURIComponent(ma)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: options?.signal,
+    })
   }
 
   getConversations(): Promise<Record<string, SavedConversationTurn[]>> {

@@ -1,0 +1,385 @@
+{
+  "ho_so_id": "HS-020",
+  "kich_ban_id": "HS-020",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-020",
+    "tuoi": 3,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T10:05:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-020-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nhi",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-12T10:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nhi",
+          "tu": "2026-11-12T10:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao, đau họng 2 ngày",
+      "benh_su": "BN nam 3T, sốt cao 2 ngày, đau họng, ăn kém, nôn 1 lần sau bú. Không co giật. Vào viện theo dõi.",
+      "tien_su": {
+        "ban_than": "Khỏe mạnh, tiêm chủng theo lịch.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Có uống thuốc hạ sốt tại nhà."
+      },
+      "kham_benh": "T 39,5 °C, họng đỏ, amidan sưng nhẹ, không có mảng trắng. Phổi không ran. Bụng mềm.",
+      "tom_tat": "BN nam 3T, sốt cao, viêm họng cấp J02.9, CN 14 kg. Đang bù dịch, theo dõi T và ăn uống. Chưa ghi nhận biến chứng.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS020-01",
+          "ma_icd10": "J02.9",
+          "noi_dung": "Viêm họng cấp",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS020-02",
+          "ma_icd10": "R50.9",
+          "noi_dung": "Sốt cao",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS020-01",
+          "loai": "can_nang",
+          "gia_tri": 14.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T10:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS020-02",
+          "loai": "chieu_cao",
+          "gia_tri": 95.0,
+          "don_vi": "cm",
+          "thoi_diem_do": "2026-11-12T10:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS020-03",
+          "loai": "nhiet_do",
+          "gia_tri": 39.5,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T10:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS020-04",
+          "loai": "can_nang",
+          "gia_tri": 14.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-13T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS020-05",
+          "loai": "nhiet_do",
+          "gia_tri": 38.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-13T07:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS020-01",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 9.1,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 5.0,
+          "nguong_tren": 15.5,
+          "thoi_diem_ket_qua": "2026-11-12T11:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-020-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Trẻ sốt cao 39,5 °C, đau họng, ăn kém 2 ngày. Họng đỏ, amidan sưng nhẹ. CN 14 kg. Nhập khoa Nhi theo dõi.",
+          "thoi_diem_ghi": "2026-11-12T10:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-020-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Đêm còn sốt, sáng nay T 38,8 °C. Uống được ít nước, chưa nôn. CN 14 kg. Tiếp tục theo dõi sốt, bù dịch.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-020-01",
+          "thoi_diem_ke": "2026-11-12T10:40:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-020-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 100 mL truyền tĩnh mạch",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 100.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch",
+              "bat_dau": "2026-11-12T10:45:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T10:45:00+07:00",
+                  "lieu": 100.0,
+                  "don_vi": "mL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-020-02",
+          "thoi_diem_ke": "2026-11-12T11:00:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-020-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Xét nghiệm công thức máu (CBC)",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "lần",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "lấy máu tĩnh mạch",
+              "cach_dung": "Lấy máu xét nghiệm",
+              "bat_dau": "2026-11-12T11:00:00+07:00",
+              "ket_thuc": "2026-11-12T11:30:00+07:00",
+              "nguon_thuoc": "Phòng xét nghiệm",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-020-03",
+          "thoi_diem_ke": "2026-11-13T09:00:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-020-03-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "4 lần/ngày",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 500 mg mỗi 6 giờ",
+              "bat_dau": "2026-11-13T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-13T09:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T15:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T21:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T03:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T09:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T15:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T21:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-020-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T12:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nam 3 tuổi sốt cao 2 ngày, đau họng, ăn kém và nôn 1 lần sau bú. Khám họng đỏ, amidan sưng nhẹ, không có mảng trắng, phổi không ran, bụng mềm. Nhiệt độ 39,5 °C, cân nặng 14 kg, chiều cao 95 cm. Bạch cầu 9,1 G/L. Đã truyền natri clorid 0,9% 100 mL và đã làm công thức máu.",
+          "danh_gia": "Viêm họng cấp ở trẻ 3 tuổi kèm sốt cao, chưa có dấu hiệu nhiễm khuẩn nặng. Bạch cầu trong giới hạn bình thường. Tình trạng bù dịch còn cần theo dõi.",
+          "huong_xu_tri": "Tiếp tục bù dịch, theo dõi nhiệt độ và khả năng uống. Hạ sốt bằng thuốc theo chỉ định khi trẻ sốt. Theo dõi số lần nôn và lượng nước tiểu, đánh giá lại vào sáng mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-020-01",
+            "YL-HS-020-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cháo, sữa, nước điện giải, chia nhỏ bữa",
+          "theo_doi": [
+            "Nhiệt độ mỗi 4 giờ",
+            "Số lần nôn, lượng nước uống và nước tiểu"
+          ],
+          "dan_do": "Cho trẻ uống từng ngụm nước, báo ngay nếu trẻ nôn nhiều, lừ đừ hoặc có co giật."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-020-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đêm còn sốt, sáng nay nhiệt độ 38,8 °C. Cân nặng 14 kg. Trẻ uống được ít nước, chưa nôn trở lại. Tiếp tục truyền dịch theo y lệnh.",
+          "danh_gia": "Viêm họng cấp vẫn còn sốt, chưa ghi nhận biến chứng. Cần theo dõi nhiệt độ và khả năng uống để đánh giá mức độ bù dịch.",
+          "huong_xu_tri": "Đề nghị paracetamol 500 mg uống mỗi 6 giờ, bắt đầu 9 giờ sáng nay, chờ duyệt. Tiếp tục bù dịch đường uống và tĩnh mạch, theo dõi sốt và số lần nôn. Đánh giá lại tình trạng mất nước theo cân nặng sáng mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-020-01",
+            "YL-HS-020-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cháo, sữa, uống nước từng ngụm",
+          "theo_doi": [
+            "Nhiệt độ mỗi 4 giờ",
+            "Lượng nước uống và số lần nôn"
+          ],
+          "dan_do": "Cho trẻ uống nước thường xuyên trong ngày, báo điều dưỡng nếu trẻ sốt cao lại hoặc nôn nhiều."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "co_quan_y_te",
+        "tuyen_chuyen_den": "Cơ sở y tế chuyển đến (giả lập)",
+        "vao_khoa_luc": "2026-11-12T10:00:00+07:00",
+        "so_giuong": "G-020-01",
+        "so_luu_tru": "LT-2026-02001",
+        "ma_yt": "YT-2026-020-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-020-03",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 20",
+    "ngay_sinh": "2023-11-12",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": null,
+    "dia_chi": {
+      "so_nha": "9020",
+      "thon_pho": "Phố Bạch Mai",
+      "xa_phuong": "Bạch Mai",
+      "huyen": "Hai Bà Trưng",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000020",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 20",
+      "quan_he": "Mẹ",
+      "dien_thoai": "0900 000 020"
+    },
+    "bo_me": {
+      "bo": {
+        "ho_ten": "Nguyễn Văn 20",
+        "nghe_nghiep": "Lao động tự do"
+      },
+      "me": {
+        "ho_ten": "Nguyễn Thị 20",
+        "nghe_nghiep": "Lao động tự do"
+      }
+    },
+    "chieu_cao_cm": 95.0,
+    "can_nang_kg": 14.0,
+    "nhom_mau": null
+  }
+}

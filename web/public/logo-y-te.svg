@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Logo chữ V kết hợp biểu tượng y tế</title>
+  <desc id="desc">Chữ V màu xanh ngọc chuyển sang xanh dương, dấu thập y tế xanh ngọc ở chính giữa, nền trong suốt, không có viền.</desc>
+  <defs>
+    <linearGradient id="v-gradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0FAE9D"/>
+      <stop offset="0.5" stop-color="#078FAD"/>
+      <stop offset="1" stop-color="#2167BD"/>
+    </linearGradient>
+  </defs>
+
+  <!-- A single filled V silhouette, with gently rounded geometric corners. -->
+  <path
+    d="M 75 93
+       H 115
+       Q 129 93 135 106
+       L 256 346
+       L 377 106
+       Q 383 93 397 93
+       H 437
+       Q 454 93 445 112
+       L 293 409
+       Q 278 438 256 438
+       Q 234 438 219 409
+       L 67 112
+       Q 58 93 75 93 Z"
+    fill="url(#v-gradient)"/>
+
+  <!-- The medical cross is placed inside the V's open counterspace. -->
+  <path
+    d="M 238 123
+       H 274
+       Q 282 123 282 131
+       V 160
+       H 311
+       Q 319 160 319 168
+       V 204
+       Q 319 212 311 212
+       H 282
+       V 241
+       Q 282 249 274 249
+       H 238
+       Q 230 249 230 241
+       V 212
+       H 201
+       Q 193 212 193 204
+       V 168
+       Q 193 160 201 160
+       H 230
+       V 131
+       Q 230 123 238 123 Z"
+    fill="#0AAE9B"/>
+</svg>

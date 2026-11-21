@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-042",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 6,
+      "ket_luan": "khong_du_du_lieu",
+      "muc_do": null,
+      "chi_tiet_y_lenh_id": ["CT-HS-042-04-01"],
+      "mo_ta": "Warfarin 5 mg uống buổi tối được kê cho người bệnh nữ 78 tuổi nhưng INR gần nhất đã cách khoảng 45 ngày, không có INR hiện tại để đánh giá liều."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

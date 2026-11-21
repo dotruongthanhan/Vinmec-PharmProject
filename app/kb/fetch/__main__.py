@@ -1,17 +1,18 @@
-"""Điểm vào python -m app.kb.fetch openfda|ndc|report."""
+"""Điểm vào python -m app.kb.fetch openfda|ndc|report|dav|rxnav."""
 
 from __future__ import annotations
 
 import argparse
+import json
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 import httpx
 
-from app.kb.fetch.client import FDAClient
+from app.kb.fetch.client import FDAClient, FetchError
 from app.kb.fetch.report import write_coverage_report
-from app.kb.fetch.runner import fetch_sources, json_bytes, load_config
+from app.kb.fetch.runner import fetch_sources, json_bytes, load_config, run_dictionary_fetch
 
 
 def _exit_code(rows: list[dict[str, Any]]) -> int:
@@ -29,11 +30,21 @@ def _exit_code(rows: list[dict[str, Any]]) -> int:
 def main(argv: list[str] | None = None) -> int:
     """Tải nguồn theo cấu hình và ghi báo cáo mà không lộ khóa API."""
     parser = argparse.ArgumentParser(description="Tải nhãn/NDC openFDA và báo cáo độ phủ")
-    parser.add_argument("command", choices=["openfda", "ndc", "report"])
+    parser.add_argument("command", choices=["openfda", "ndc", "report", "dav", "rxnav"])
     parser.add_argument("--only", help="Các mã cách nhau bằng dấu phẩy")
     parser.add_argument("--refresh", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
+    if args.command in {"dav", "rxnav"}:
+        if args.only is not None or args.dry_run:
+            parser.error("--only và --dry-run chỉ dùng với nguồn openFDA")
+        try:
+            result = run_dictionary_fetch(args.command, Path("data"), refresh=args.refresh)
+        except (FetchError, OSError, ValueError) as exc:
+            print(f"[{args.command}] ERROR: {ascii(str(exc))}")
+            return 1
+        print(json.dumps(result, ensure_ascii=True, indent=2))
+        return 0 if result["trang_thai"] == "xong" else 1
     config_path = Path("config/kb/hoat_chat_can_lay.yaml")
     sources_dir = Path("data/kb_sources")
     reports_dir = Path("data/kb_reports")

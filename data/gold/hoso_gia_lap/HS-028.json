@@ -1,0 +1,21 @@
+{
+  "ca_id": "HS-028",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 5,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-028-04-01"],
+      "mo_ta": "Methotrexat liều cao khi creatinin 150 umol/L (CrCl khoảng 42 mL/phút) mà chưa điều chỉnh liều theo chức năng thận, làm giảm thải thuốc."
+    },
+    {
+      "yeu_to": 4,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-028-04-01"],
+      "mo_ta": "Methotrexat được kê khi người bệnh đang dùng ibuprofen 400 mg 3 lần/ngày; NSAID làm tăng độc tính của methotrexat."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "Hai lỗi chồng (yếu tố 5 và 4)"
+}

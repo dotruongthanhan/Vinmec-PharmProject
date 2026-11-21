@@ -1,0 +1,9 @@
+# Ép xuống dòng LF trên mọi máy (Windows core.autocrlf=true làm đổi byte tệp ca và hỏng test băm)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.sqlite binary
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf

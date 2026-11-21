@@ -1,0 +1,182 @@
+# Danh mục công thức lâm sàng (chưa được dược sĩ phê duyệt).
+# Loại công thức: cong_thuc_toan | thang_diem | diem_ra_nguy_co | tieu_chi_van_ban | tinh_lieu
+
+- ma: bmi
+  ten: Chỉ số khối cơ thể (BMI)
+  loai: cong_thuc_toan
+  ham: app.calc.body.bmi
+  dau_ra: {don_vi: kg/m2}
+  dau_vao:
+    - {ten: can_nang_kg, nhan: "Cân nặng", don_vi: [kg], nguon_trong_ca: "sinh_hieu: can_nang"}
+    - {ten: chieu_cao_cm, nhan: "Chiều cao", don_vi: [cm], nguon_trong_ca: "sinh_hieu: chieu_cao (nếu ca chưa có thì báo thiếu)"}
+  tham_khao_goc: ["WHO. Body mass index (BMI)."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/29
+  trang_thai: chua_duoc_si_duyet
+
+- ma: bsa_mosteller
+  ten: Diện tích da cơ thể (BSA) – Mosteller
+  loai: cong_thuc_toan
+  ham: app.calc.body.bsa_mosteller
+  dau_ra: {don_vi: m2}
+  dau_vao:
+    - {ten: can_nang_kg, nhan: "Cân nặng", don_vi: [kg], nguon_trong_ca: "sinh_hieu: can_nang"}
+    - {ten: chieu_cao_cm, nhan: "Chiều cao", don_vi: [cm], nguon_trong_ca: "sinh_hieu: chieu_cao (nếu ca chưa có thì báo thiếu)"}
+  tham_khao_goc: ["Mosteller RD. N Engl J Med 1987;317:1098."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/29
+  trang_thai: chua_duoc_si_duyet
+
+- ma: bsa_dubois
+  ten: Diện tích da cơ thể (BSA) – Du Bois
+  loai: cong_thuc_toan
+  ham: app.calc.body.bsa_dubois
+  dau_ra: {don_vi: m2}
+  dau_vao:
+    - {ten: can_nang_kg, nhan: "Cân nặng", don_vi: [kg], nguon_trong_ca: "sinh_hieu: can_nang"}
+    - {ten: chieu_cao_cm, nhan: "Chiều cao", don_vi: [cm], nguon_trong_ca: "sinh_hieu: chieu_cao (nếu ca chưa có thì báo thiếu)"}
+  tham_khao_goc: ["Du Bois D, Du Bois EF. Arch Intern Med 1916;17:863-871."]
+  tham_chieu_mdcalc: null
+  trang_thai: chua_duoc_si_duyet
+
+- ma: ibw_devine
+  ten: Cân nặng lý tưởng (IBW) – Devine
+  loai: cong_thuc_toan
+  ham: app.calc.body.ibw_devine
+  dau_ra: {don_vi: kg}
+  dau_vao:
+    - {ten: gioi_tinh, nhan: "Giới tính", kieu: lua_chon, gia_tri: [nam, nu], nhan_lua_chon: {nam: "Nam", nu: "Nữ"}, nguon_trong_ca: "nguoi_benh.gioi_tinh"}
+    - {ten: chieu_cao_cm, nhan: "Chiều cao", don_vi: [cm], nguon_trong_ca: "sinh_hieu: chieu_cao (nếu ca chưa có thì báo thiếu)"}
+  tham_khao_goc: ["Devine BJ. Drug Intell Clin Pharm 1974;8:650-655."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/68
+  trang_thai: chua_duoc_si_duyet
+
+- ma: adjusted_body_weight
+  ten: Cân nặng hiệu chỉnh (AdjBW)
+  loai: cong_thuc_toan
+  ham: app.calc.body.adjusted_body_weight
+  dau_ra: {don_vi: kg}
+  dau_vao:
+    - {ten: gioi_tinh, nhan: "Giới tính", kieu: lua_chon, gia_tri: [nam, nu], nhan_lua_chon: {nam: "Nam", nu: "Nữ"}, nguon_trong_ca: "nguoi_benh.gioi_tinh"}
+    - {ten: chieu_cao_cm, nhan: "Chiều cao", don_vi: [cm], nguon_trong_ca: "sinh_hieu: chieu_cao (nếu ca chưa có thì báo thiếu)"}
+    - {ten: can_nang_kg, nhan: "Cân nặng", don_vi: [kg], nguon_trong_ca: "sinh_hieu: can_nang"}
+  tham_khao_goc: ["Bauer LA. Applied Clinical Pharmacokinetics. Hệ số hiệu chỉnh 0.4."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/68
+  trang_thai: chua_duoc_si_duyet
+
+- ma: cockcroft_gault
+  ten: Độ thanh thải creatinin (CrCl) – Cockcroft-Gault
+  loai: cong_thuc_toan
+  ham: app.calc.renal.cockcroft_gault
+  dau_ra: {don_vi: mL/min}
+  dau_vao:
+    - {ten: tuoi, nhan: "Tuổi", don_vi: [tuoi], nguon_trong_ca: "nguoi_benh.tuoi"}
+    - {ten: gioi_tinh, nhan: "Giới tính", kieu: lua_chon, gia_tri: [nam, nu], nhan_lua_chon: {nam: "Nam", nu: "Nữ"}, nguon_trong_ca: "nguoi_benh.gioi_tinh"}
+    - {ten: can_nang_kg, nhan: "Cân nặng", don_vi: [kg], nguon_trong_ca: "sinh_hieu: can_nang"}
+    - {ten: creatinin, nhan: "Creatinin huyết thanh", don_vi: [mg/dL, umol/L], nguon_trong_ca: "xet_nghiem: creatinin"}
+    - {ten: loai_can_nang, nhan: "Loại cân nặng", kieu: lua_chon, gia_tri: [thuc_te, ly_tuong, hieu_chinh], nhan_lua_chon: {thuc_te: "Thực tế", ly_tuong: "Lý tưởng", hieu_chinh: "Hiệu chỉnh"}, mac_dinh: thuc_te, nguon_trong_ca: "tham số chọn cách tính (mặc định thuc_te)"}
+    - {ten: chieu_cao_cm, nhan: "Chiều cao", don_vi: [cm], bat_buoc: false, nguon_trong_ca: "sinh_hieu: chieu_cao (cần khi dùng ly_tuong hoặc hieu_chinh)"}
+  tham_khao_goc: ["Cockcroft DW, Gault MH. Nephron 1976;16:31-41."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/43
+  trang_thai: chua_duoc_si_duyet
+
+- ma: egfr_ckd_epi_2021
+  ten: Mức lọc cầu thận ước tính (eGFR) – CKD-EPI 2021
+  loai: cong_thuc_toan
+  ham: app.calc.renal.egfr_ckd_epi_2021
+  dau_ra: {don_vi: mL/min/1.73m2}
+  dau_vao:
+    - {ten: tuoi, nhan: "Tuổi", don_vi: [tuoi], nguon_trong_ca: "nguoi_benh.tuoi"}
+    - {ten: gioi_tinh, nhan: "Giới tính", kieu: lua_chon, gia_tri: [nam, nu], nhan_lua_chon: {nam: "Nam", nu: "Nữ"}, nguon_trong_ca: "nguoi_benh.gioi_tinh"}
+    - {ten: creatinin, nhan: "Creatinin huyết thanh", don_vi: [mg/dL, umol/L], nguon_trong_ca: "xet_nghiem: creatinin"}
+  tham_khao_goc: ["Inker LA, et al. N Engl J Med 2021;385:1737-1749."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/3939
+  trang_thai: chua_duoc_si_duyet
+
+- ma: child_pugh
+  ten: Child-Pugh
+  loai: thang_diem
+  ham: app.calc.hepatic.child_pugh
+  dau_ra: {don_vi: diem, phan_hang: [A, B, C]}
+  dau_vao:
+    - {ten: bilirubin, nhan: "Bilirubin toàn phần", don_vi: [mg/dL, umol/L], nguon_trong_ca: "xet_nghiem: bilirubin"}
+    - {ten: albumin, nhan: "Albumin", don_vi: [g/dL, g/L], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: inr, nhan: "INR", don_vi: [], nguon_trong_ca: "xet_nghiem: inr"}
+    - {ten: co_truong, nhan: "Cổ trướng", kieu: lua_chon, gia_tri: [khong, nhe, vua], nhan_lua_chon: {khong: "Không", nhe: "Nhẹ", vua: "Vừa"}, nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: nao_gan, nhan: "Bệnh não gan", kieu: lua_chon, gia_tri: [khong, do_1_2, do_3_4], nhan_lua_chon: {khong: "Không", do_1_2: "Độ 1–2", do_3_4: "Độ 3–4"}, nguon_trong_ca: "chưa có trường trong CaBenh"}
+  tham_khao_goc:
+    - "Child CG, Turcotte JG. Surgery and portal hypertension. In: The liver and portal hypertension. Philadelphia: Saunders 1964:50-64."
+    - "Pugh RN, Murray-Lyon IM, Dawson JL, Pietroni MC, Williams R. Transection of the oesophagus for bleeding oesophageal varices. Br J Surg 1973;60(8):646-9."
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/340
+  trang_thai: chua_duoc_si_duyet
+
+- ma: qtc_bazett
+  ten: QTc – Bazett
+  loai: cong_thuc_toan
+  ham: app.calc.cardiac.qtc_bazett
+  dau_ra: {don_vi: ms}
+  dau_vao:
+    - {ten: qt_ms, nhan: "Khoảng QT", don_vi: [ms], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: nhip_tim, nhan: "Nhịp tim", don_vi: [lan/phut], nguon_trong_ca: "chưa có trường trong CaBenh"}
+  tham_khao_goc: ["Bazett HC. Heart 1920;7:353-70."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/48
+  trang_thai: chua_duoc_si_duyet
+
+- ma: qtc_fridericia
+  ten: QTc – Fridericia
+  loai: cong_thuc_toan
+  ham: app.calc.cardiac.qtc_fridericia
+  dau_ra: {don_vi: ms}
+  dau_vao:
+    - {ten: qt_ms, nhan: "Khoảng QT", don_vi: [ms], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: nhip_tim, nhan: "Nhịp tim", don_vi: [lan/phut], nguon_trong_ca: "chưa có trường trong CaBenh"}
+  tham_khao_goc: ["Fridericia LS. Acta Med Scand 1920;53:469-86 (bản dịch Ann Noninvasive Electrocardiol 2003;8(4):343-51)."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/48
+  trang_thai: chua_duoc_si_duyet
+
+- ma: qtc_framingham
+  ten: QTc – Framingham
+  loai: cong_thuc_toan
+  ham: app.calc.cardiac.qtc_framingham
+  dau_ra: {don_vi: ms}
+  dau_vao:
+    - {ten: qt_ms, nhan: "Khoảng QT", don_vi: [ms], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: nhip_tim, nhan: "Nhịp tim", don_vi: [lan/phut], nguon_trong_ca: "chưa có trường trong CaBenh"}
+  tham_khao_goc: ["Sagie A, et al. Am J Cardiol 1992;70:797-801."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/48
+  trang_thai: chua_duoc_si_duyet
+
+- ma: qtc_hodges
+  ten: QTc – Hodges
+  loai: cong_thuc_toan
+  ham: app.calc.cardiac.qtc_hodges
+  dau_ra: {don_vi: ms}
+  dau_vao:
+    - {ten: qt_ms, nhan: "Khoảng QT", don_vi: [ms], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: nhip_tim, nhan: "Nhịp tim", don_vi: [lan/phut], nguon_trong_ca: "chưa có trường trong CaBenh"}
+  tham_khao_goc: ["Hodges M, et al. J Am Coll Cardiol 1983;1:694."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/48
+  trang_thai: chua_duoc_si_duyet
+
+- ma: qtc_rautaharju
+  ten: QTc – Rautaharju
+  loai: cong_thuc_toan
+  ham: app.calc.cardiac.qtc_rautaharju
+  dau_ra: {don_vi: ms}
+  dau_vao:
+    - {ten: qt_ms, nhan: "Khoảng QT", don_vi: [ms], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: nhip_tim, nhan: "Nhịp tim", don_vi: [lan/phut], nguon_trong_ca: "chưa có trường trong CaBenh"}
+  tham_khao_goc: ["Rautaharju PM, et al. Int J Cardiol 2014;174(3):535-40."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/48
+  trang_thai: chua_duoc_si_duyet
+
+- ma: calcium_corrected
+  ten: Canxi toàn phần hiệu chỉnh theo albumin
+  loai: cong_thuc_toan
+  ham: app.calc.electrolyte.calcium_corrected
+  dau_ra: {don_vi: [mg/dL, mmol/L]}
+  dau_vao:
+    - {ten: canxi, nhan: "Canxi toàn phần", don_vi: [mg/dL, mmol/L], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: albumin, nhan: "Albumin", don_vi: [g/dL, g/L], nguon_trong_ca: "chưa có trường trong CaBenh"}
+    - {ten: albumin_binh_thuong, nhan: "Albumin bình thường", don_vi: [g/dL], mac_dinh: 4.0, nguon_trong_ca: "tham số tham chiếu (mặc định 4.0 g/dL)"}
+  tham_khao_goc: ["Payne RB, Little AJ, Williams RB, Milner JR. Interpretation of serum calcium in patients with abnormal serum proteins. BMJ 1973;4(5893):643-6."]
+  tham_chieu_mdcalc: https://www.mdcalc.com/calc/31
+  trang_thai: chua_duoc_si_duyet

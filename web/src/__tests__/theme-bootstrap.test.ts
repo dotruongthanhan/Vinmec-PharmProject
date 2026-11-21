@@ -4,8 +4,7 @@ import { runInNewContext } from 'node:vm'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { loadThemePreference, saveThemePreference } from '../lib/prefs'
 
-const html = readFileSync(new URL('../../index.html', import.meta.url), 'utf8')
-const bootstrap = /<script>([\s\S]*?)<\/script>/.exec(html)?.[1] ?? ''
+const bootstrap = readFileSync(new URL('../../public/theme-init.js', import.meta.url), 'utf8')
 const storageName = ['local', 'Storage'].join('')
 afterEach(() => vi.unstubAllGlobals())
 

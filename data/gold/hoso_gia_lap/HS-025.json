@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-025",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 4,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-025-04-01"],
+      "mo_ta": "Fluconazol 200 mg 1 lần/ngày được kê khi đang dùng phenytoin 300 mg/ngày; fluconazol có thể làm tăng nồng độ phenytoin, phenytoin máu 14 mcg/mL cần theo dõi."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

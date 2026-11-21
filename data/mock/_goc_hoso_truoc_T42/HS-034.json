@@ -1,0 +1,332 @@
+{
+  "ho_so_id": "HS-034",
+  "kich_ban_id": "HS-034",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-034",
+    "tuoi": 50,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-16T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin the he 3"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "ten_thuoc": "Ceftriaxon 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-034-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-05T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-11-05T09:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao, ho đờm, khó thở 3 ngày",
+      "benh_su": "BN nam 50T, viêm phổi bệnh viện. Vào hồi sức sốt 38,9, thở oxy qua mũi. Bắt đầu ceftriaxon 2 g tĩnh mạch 1 lần/ngày từ ngày vào.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "T 38,9, SpO2 93% khí phòng, thở oxy qua mũi. Ran ẩm đáy phổi phải.",
+      "tom_tat": "BN nam 50T viêm phổi bệnh viện, ngày điều trị 12, dùng ceftriaxon. Hết sốt 7 ngày nay. CRP 4 mg/L, bạch cầu 8,2 G/L, T 36,8.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS034-1-01",
+          "ma_icd10": "J15.9",
+          "noi_dung": "Viêm phổi bệnh viện",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS034-1-01",
+          "loai": "nhiet_do",
+          "gia_tri": 38.9,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-05T09:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-09T08:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-03",
+          "loai": "nhiet_do",
+          "gia_tri": 37.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-04",
+          "loai": "nhiet_do",
+          "gia_tri": 36.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-05",
+          "loai": "spo2",
+          "gia_tri": 98.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-06",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-07",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 118.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-08",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 74.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS034-1-09",
+          "loai": "can_nang",
+          "gia_tri": 72.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS034-1-01",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 148.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-05T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS034-1-02",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 16.8,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-05T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS034-1-03",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 4.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-16T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS034-1-04",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 8.2,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-16T07:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-034-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Nhập HSTC vì viêm phổi bệnh viện, sốt 38,9, SpO2 93% khí phòng, thở oxy qua mũi. Bạch cầu 16,8, CRP 148. Bắt đầu ceftriaxon 2 g TM 1 lần/ngày.",
+          "thoi_diem_ghi": "2026-11-05T09:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-034-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Còn sốt 38,2 chiều qua, ho đờm giảm dần. Đang dùng ceftriaxon ngày thứ 5, thở oxy giảm dần.",
+          "thoi_diem_ghi": "2026-11-09T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-034-1-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "T 37,4, ăn uống được, ho ít. Không khó thở, SpO2 ổn khí phòng.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-034-1-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay T 36,8, không sốt, SpO2 98%, không khó thở. Bạch cầu 8,2, CRP 4. Đang dùng ceftriaxon ngày thứ 12.",
+          "thoi_diem_ghi": "2026-11-16T07:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-034-01",
+          "thoi_diem_ke": "2026-11-05T09:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-034-01-01",
+              "thuoc_id": "T-CEFTRIAXON-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-05T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho hồi sức",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-034-02",
+          "thoi_diem_ke": "2026-11-05T09:40:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-034-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-05T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho hồi sức",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-034-03",
+          "thoi_diem_ke": "2026-11-16T08:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": "YL-HS-034-01",
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-034-03-01",
+              "thuoc_id": "T-CEFTRIAXON-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-16T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho hồi sức",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-16T09:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-17T09:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-034-03"
+}

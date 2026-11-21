@@ -23,10 +23,16 @@ def test_reset_requires_yes_before_connect(
 
 
 @pytest.mark.parametrize("group", ["cases", "kb", "ddinter", "embeddings"])
-def test_dry_run_never_connects(group: str) -> None:
+def test_dry_run_never_connects(group: str, tmp_path: Path) -> None:
     from app.db.cli import main
+    from app.db.sources import Batch
 
-    with patch("psycopg.connect", side_effect=AssertionError("Không được kết nối")):
+    finish = Batch.finish
+    with (
+        patch("psycopg.connect", side_effect=AssertionError("Không được kết nối")),
+        patch.object(Batch, "finish", lambda batch, _: finish(batch, tmp_path / "nap_loi.jsonl")),
+        patch("app.db.cli.get_secret", side_effect=AssertionError("Không được đọc .env")),
+    ):
         assert main(["load", group, "--dry-run"]) == 0
 
 
@@ -91,3 +97,55 @@ def test_windows_encoding_does_not_leak_connection_traceback() -> None:
     assert b"mat-khau-kiem-thu" not in combined
     assert b"private.example" not in combined
     assert b"Traceback" not in combined
+
+
+def test_all_reset_builds_and_loads_every_group_before_verify() -> None:
+    from unittest.mock import MagicMock, call
+
+    from app.db.cli import ROOT, main
+    from app.db.engine import expected_counts
+    from app.db.sources import Batch, Embeddings
+
+    batches = {group: Batch() for group in ("cases", "kb", "ddinter")}
+    batches["kb"].tables.add("tri_thuc.doan_trich")
+    connection = MagicMock()
+    connect = MagicMock()
+    connect.return_value.__enter__.return_value = connection
+    operations = MagicMock()
+    with (
+        patch("app.db.cli.prepare", side_effect=lambda group, _: batches[group]),
+        patch("app.db.cli.read_embeddings", return_value=Embeddings()),
+        patch("app.db.cli.get_secret", return_value="postgresql://fake@localhost/test"),
+        patch("psycopg.connect", connect),
+        patch("app.db.cli.engine.apply_schema", operations.schema),
+        patch("app.db.cli.engine.load_batch", operations.load),
+        patch("app.db.cli.engine.load_embeddings", operations.embeddings),
+        patch("app.db.cli.engine.verify", operations.verify),
+    ):
+        operations.verify.return_value = True
+        assert main(["all", "--reset", "--yes"]) == 0
+    assert operations.mock_calls == [
+        call.schema(connection, ROOT, True),
+        call.load(connection, batches["cases"], "cases"),
+        call.load(connection, batches["kb"], "kb"),
+        call.load(connection, batches["ddinter"], "ddinter"),
+        call.embeddings(connection, Embeddings()),
+        call.verify(
+            connection,
+            expected_counts(batches.values()),
+            Embeddings(),
+        ),
+    ]
+
+
+def test_bang_luat_dry_run_subprocess() -> None:
+    root = Path(__file__).resolve().parents[2]
+    result = subprocess.run(
+        [sys.executable, "-m", "app.db.cli", "load", "bang-luat", "--dry-run"],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert b"tri_thuc.bang_luat_meta: 12" in result.stdout
+    assert b"DRY-RUN" in result.stdout

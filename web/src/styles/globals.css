@@ -42,16 +42,17 @@
   flex: none;
   scroll-snap-align: start;
 }
-.orders-table th, .orders-table td { padding: 6px 6px; vertical-align: middle; }
-.orders-table th { text-transform: none; letter-spacing: normal; white-space: nowrap; }
-.orders-table .order-priority { width: 12%; white-space: nowrap; }
-.orders-table .order-time { width: 12%; }
-.orders-table .order-code { width: 12%; }
-.orders-table .order-patient-id { width: 11%; }
-.orders-table .order-patient { width: 13%; }
-.orders-table .order-dept { width: 15%; }
-.orders-table .order-status { width: 13%; }
-.orders-table .order-ai-warn { width: 12%; }
+.orders-table th, .orders-table td { padding: 8px 8px; vertical-align: middle; }
+.orders-table th { white-space: nowrap; }
+.orders-table .order-priority { width: 9%; white-space: nowrap; }
+.orders-table .order-time { width: 11%; }
+.orders-table .order-patient-id { width: 9%; }
+.orders-table .order-patient { width: 15%; }
+.orders-table .order-dob { width: 10%; }
+.orders-table .order-dept { width: 10%; }
+.orders-table .order-diagnosis { width: 16%; }
+.orders-table .order-status { width: 10%; }
+.orders-table .order-ai-warn { width: 10%; }
 .factor-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; align-items: stretch; }
 @container (min-width: 500px) {
   .factor-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -283,7 +284,26 @@
     linear-gradient(to top, color-mix(in oklab, var(--color-ink) 70%, transparent), transparent 40%);
 }
 
-/* Logo Vinmec: hai bản cho nền sáng và nền tối, chỉ hiện một bản theo chủ đề */
-.logo-on-dark { display: none; }
-:root[data-theme="dark"] .logo-on-light { display: none; }
-:root[data-theme="dark"] .logo-on-dark { display: block; }
+/* Khối đóng/mở Hồ sơ bệnh án: ẩn dấu mặc định, xoay biểu tượng cạnh nhãn và trượt mượt khi không giảm chuyển động */
+.record-disclosure-summary {
+  list-style: none;
+}
+.record-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+.record-disclosure[open] > .record-disclosure-summary > .record-disclosure-chevron {
+  transform: rotate(90deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .record-disclosure::details-content {
+    interpolate-size: allow-keywords;
+    block-size: 0;
+    overflow: clip;
+    contain: layout;
+    transition: block-size 180ms ease, content-visibility 180ms ease;
+    transition-behavior: allow-discrete;
+  }
+  .record-disclosure[open]::details-content {
+    block-size: auto;
+  }
+}

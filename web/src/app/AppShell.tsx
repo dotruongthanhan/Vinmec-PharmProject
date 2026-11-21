@@ -17,6 +17,10 @@ import { TopBar } from './TopBar'
 export interface AppShellProps {
   cheDo: CheDo | null
   activeOrderCode: string | null
+  breadcrumbLabel?: string
+  backTo?: string
+  /** false ở các trang tra cứu: không có khung trợ lý và ô tìm hồ sơ. */
+  assistantAvailable?: boolean
   searchQuery: string
   searchInputRef: RefObject<HTMLInputElement | null>
   isDemoMode: boolean
@@ -69,6 +73,9 @@ function useMediaQuery(query: string): boolean {
 export function AppShell({
   cheDo,
   activeOrderCode,
+  breadcrumbLabel,
+  backTo,
+  assistantAvailable = true,
   searchQuery,
   searchInputRef,
   isDemoMode,
@@ -108,7 +115,7 @@ export function AppShell({
   }, [isCompactAssistant, drawerAssistantOpen, onDrawerAssistantChange])
 
   const sidebarOpen = isCompactSidebar ? drawerSidebarOpen : !sidebarCollapsed
-  const assistantOpen = isCompactAssistant ? drawerAssistantOpen : !assistantCollapsed
+  const assistantOpen = assistantAvailable && (isCompactAssistant ? drawerAssistantOpen : !assistantCollapsed)
 
   const handleToggleSidebar = useCallback(() => {
     if (isCompactSidebar) {
@@ -188,6 +195,10 @@ export function AppShell({
         <TopBar
           cheDo={cheDo}
           activeOrderCode={activeOrderCode}
+          breadcrumbLabel={breadcrumbLabel}
+          backTo={backTo}
+          showAssistantToggle={assistantAvailable}
+          showSearch={assistantAvailable}
           searchQuery={searchQuery}
           searchInputRef={searchInputRef}
           isDemoMode={isDemoMode}
@@ -213,7 +224,7 @@ export function AppShell({
       </div>
 
       {/* Cột 3: Trợ lý AI kéo đổi chiều rộng */}
-      {!isCompactAssistant && !assistantCollapsed ? (
+      {assistantAvailable && !isCompactAssistant && !assistantCollapsed ? (
         <aside
           aria-label="Khung trợ lý AI"
           style={{ width: `${effectiveAssistantWidth}px` }}
@@ -267,7 +278,7 @@ export function AppShell({
 
       {/* Ngăn trượt phải cho trợ lý (< 1180px) */}
       <Dialog
-        open={isCompactAssistant && drawerAssistantOpen}
+        open={assistantAvailable && isCompactAssistant && drawerAssistantOpen}
         onOpenChange={onDrawerAssistantChange}
       >
         <DialogContent

@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-023",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 4,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-023-02-01"],
+      "mo_ta": "Simvastatin 40 mg kê khi đang dùng amiodaron; tương tác làm tăng nguy cơ bệnh cơ, simvastatin không quá 20 mg khi dùng cùng amiodaron."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

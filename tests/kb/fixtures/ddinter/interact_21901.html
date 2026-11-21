@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>DDInter 2.0</title>
+    <link rel="stylesheet" href="/static/common/layui/css/layui.css">
+    <script src="/static/common/layui/layui.js"></script>
+    
+    <link rel="stylesheet" href="/static/common/bootstrap-5.3.2-dist/css/bootstrap.min.css">
+
+    <link href="/static/common/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/static/home/css/style.css"/>
+    <script src="/static/common/js/jquery.min.js"></script>
+    
+    <script src="/static/common/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+        <link rel="stylesheet" type="text/css" href="/static/common/nav/css/style.css"/>
+        <script src="/static/common/nav/js/style.js"></script>
+    
+
+    
+    <link rel="stylesheet" href="/static/common/footer/css/style.css"/>
+
+    
+    <link rel="stylesheet" href="/static/common/banner/css/style.css"/>
+
+    <link rel="stylesheet" href="/static/services/css/jquery.dataTables.min.css">
+    <script src="/static/services/js/jquery.dataTables.min.js"></script>
+
+    
+    <link href="/static/common/fontawesome/css/all.min.css" rel="stylesheet" type="text/css"/>
+<script defer src="/_scbdd_stats/script.js?v=20261023" data-website-id="c68fef63-7d38-436f-abee-3a4e8312a664" data-domains="ddinter2.scbdd.com" data-exclude-search="true"></script></head>
+<body>
+<div class="antin-container">
+    
+        
+<style>
+    .box-with-border {
+        border-bottom: 1px solid rgb(6, 101, 183); /* 边框样式，2px 宽度，颜色 #333 */
+    
+    }
+
+    /* 添加阴影 */
+    .box-with-shadow {
+        box-shadow: 0 0 10px 0 rgba(6, 101, 183, 0.3); /* x偏移、y偏移、模糊度、颜色（rgba格式） */
+    
+    }
+
+    .nav-link {
+        font-size: 1.1rem;
+    }
+</style>
+<header class="header-area overlay box-with-border box-with-shadow" style="">
+    <nav class="navbar navbar-expand-md navbar-dark" data-bs-theme="dark">
+        <div class="offset-1 col-10 d-flex align-items-center justify-content-between">
+            <a href="/" class="navbar-brand d-flex justify-content-center align-items-center">
+                <img src="/static/favicon.ico" width="45" height="45"
+                     class="d-inline-block justify-content-center align-items-center me-2" alt=""/>
+                <h1 class="" style="font-family: 'Lobster', sans-serif">DDInter 2.0</h1>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                    aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="main-nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="fas fa-atom"></i> Services
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/server/drug/">Drug</a></li>
+                            <li><a class="dropdown-item" href="/server/dis_food/">Disease</a></li>
+                            <li><a class="dropdown-item" href="/server/interaction/">Drug-Drug
+                                Interaction</a></li>
+                            <li><a class="dropdown-item" href="/server/other_interaction/">Drug-Others
+                                Interaction</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inter-checker/">
+                            <i class="fab fa-staylinked nav-icon"></i>
+                            Interaction Checker
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false"
+                        >
+                            <i class="far fa-file-alt"></i> About
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/explanation/">Explanation</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/statistics/">Statistics</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/tutorials/">Tutorials</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/terms/">Terms and conditions</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact/"><i class="fas fa-id-card"></i> Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+    
+
+    
+
+
+    <div class="antin-contain">
+        
+    
+
+
+<link rel="stylesheet" href="/static/home/css/header.css">
+<link rel="stylesheet" href="/static/services/interaction/detail/style.css">
+<link rel="stylesheet" href="/static/services/interaction/style.css">
+<script src="/static/services/js/echarts.js"></script>
+<script src="/static/services/database/js/renderLineMarker.js"></script>
+<style>
+    table td.key, td.value {
+        padding: 15px 25px 15px 25px;
+        color: rgb(102, 102, 102);
+    }
+
+    table td.key {
+        font-weight: 600;
+    }
+
+    .sub-title {
+        /*background-color: #404E69;*/
+        background: #33619B;
+        color: white;
+        padding-left: 20px;
+        font-size: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+        font-family: Poppins, serif;
+        font-weight: 600;
+    }
+
+    .blockquote-info {
+        border-left: 4px solid #33619B;
+        padding: 10px 15px 10px 15px;
+        line-height: 2rem;
+    }
+</style>
+<script>
+    function plotLineMarker() {
+        $.getJSON("/server/linkmarker/21901/", function (data) {
+            renderLineMarker(data);
+        });
+    }
+</script>
+<main class="">
+    <div class="offset-1 col-10 mt-5 mb-5">
+        <div class="p-3" role="alert" style="word-break:break-all;border: 2px solid rgb(38,97,158)">
+            <div class="py-1 d-flex align-items-center justify-content-between">
+                <div class="" style="font-size: 1.1rem">
+                    <span class="d-flex align-items-center">Interaction between <strong class="mx-2">
+                        Warfarin</strong>
+                        and
+                        <strong class="mx-2">Amiodarone</strong></span>
+                    
+                        <span class="badge rounded-pill" style="background-color:#a8456b">Major</span>
+                    
+
+                    
+                        
+                            <span class="badge rounded-pill" style="background-color:#1491a8">Metabolism</span>
+                        
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="sub-title mt-3"><i class="fas fa-arrow-right"></i> Basic Information</div>
+
+        <table class="table table-hover table-bordered align-middle">
+            <colgroup>
+                <col width="20%">
+                <col width="">
+            </colgroup>
+            <tbody>
+            <tr></tr>
+            <tr>
+                <td class="key">ID</td>
+                <td style="font-weight: 700" class="value"><a
+                        href="/server/drug-detail/DDInter1951/">
+                    DDInter1951</a>
+                    and
+                    <a href="/server/drug-detail/DDInter76/">
+                        DDInter76</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="key">Interaction</td>
+                <td style="text-align: justify" class="value">
+                    Amiodarone may increase the pharmacologic effects of warfarin by inhibiting CYP450 2C9 hepatic metabolism of S-warfarin. Similar effects may also occur with other oral anticoagulants, resulting in significant hypoprothrombinemia and bleeding. When amiodarone is added to an anticoagulant regimen, increased anticoagulant effects may become apparent within one to several weeks and may persist for months after the amiodarone is discontinued. The effects of this interaction are highly variable - while some patients are asymptomatic, serious and life-threatening bleeding complications have been reported in others. Patients who are poor CYP450 2C9 metabolizers may have a higher risk of bleeding and a faster onset of the interaction.
+                </td>
+            </tr>
+            <tr>
+                <td class="key">Management</td>
+                <td style="text-align: justify" class="value">
+                    
+                        An empiric 30% to 50% reduction in anticoagulant dosage has been recommended, in addition to frequent monitoring of the patient and the prothrombin time or International Normalized Ratio (INR). Patients should be advised to notify their physician promptly if they experience any signs of excessive anticoagulation such as unusual or prolonged bleeding, bruising, vomiting, change in stool or urine color, headache, dizziness, or weakness.
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="key">References</td>
+                <td id="reference-text" style="text-align: justify;font-style: italic" class="value">
+                    
+                        
+                            <span class="d-block my-2">[1] Fondevila C, Meschengieser S, Lazzari M &quot;Amiodarone-acenocoumarin interaction.&quot; Thromb Haemost 65 (1991): 328</span>
+                        
+                            <span class="d-block my-2">[2] Cheung B, Lam FM, Kumana CR &quot;Lesson of the week: insidiously evolving, occult drug interaction involving warfarin and amiodarone.&quot; BMJ 312 (1996): 107-8</span>
+                        
+                            <span class="d-block my-2">[3] Shirolkar SC, Fiuzat M, Becker RC &quot;Dronedarone and vitamin K antagonists: A review of drug-drug interactions.&quot; Am Heart J 160 (2010): 577-82</span>
+                        
+                            <span class="d-block my-2">[4] Hamer A, Peter T, Mandel WJ, et al &quot;The potentiation of warfarin anticoagulation by amiodarone.&quot; Circulation 65 (1982): 1025-9</span>
+                        
+                            <span class="d-block my-2">[5] Serlin MJ, Sibeon RG, Breen GJ &quot;Dangers of amiodarone and anticoagulant treatment.&quot; Br Med J (Clin Res Ed) 283 (1981): 58</span>
+                        
+                            <span class="d-block my-2">[6] Kerin NZ, Blevins RD, Goldman L, et al &quot;The incidence, magnitude, and time course of the amiodarone-warfarin interaction.&quot; Arch Intern Med 148 (1988): 1779-81</span>
+                        
+                            <span class="d-block my-2">[7] Jafari-Fesharaki M, Scheinman MM &quot;Adverse effects of amiodarone.&quot; Pacing Clin Electrophysiol 21 (1998): 108-20</span>
+                        
+                            <span class="d-block my-2">[8] Thijssen HH, Flin ois JP, Beaune PH &quot;Cytochrome P4502C9 is the principal catalyst of racemic acenocoumarol hydroxylation reactions in human liver microsomes.&quot; Drug Metab Dispos 28 (2000): 1284-90</span>
+                        
+                            <span class="d-block my-2">[9] Wells PS, Holbrook AM, Crowther NR, Hirsh J &quot;Interactions of warfarin with drugs and food.&quot; Ann Intern Med 121 (1994): 676-83</span>
+                        
+                            <span class="d-block my-2">[10] Caraco Y, Chajek-Shaul T &quot;The incidence and clinical significance of amiodarone and acenocoumarol interaction.&quot; Thromb Haemost 62 (1989): 906-8</span>
+                        
+                            <span class="d-block my-2">[11] Heimark LD, Wienkers L, Kunze K, et al &quot;The mechanism of the interaction between amiodarone and warfarin in humans.&quot; Clin Pharmacol Ther 51 (1992): 398-407</span>
+                        
+                            <span class="d-block my-2">[12] Gill J, Heel RC, Fitton A &quot;Amiodarone: an overview of its pharmacological properties, and review of its therapeutic use in cardiac arrhythmias.&quot; Drugs 43 (1992): 69-110</span>
+                        
+                            <span class="d-block my-2">[13] Neyroz P, Bonati M &quot;In vitro amiodarone protein binding and its interaction with warfarin.&quot; Experientia 41 (1985): 361-3</span>
+                        
+                            <span class="d-block my-2">[14] Libersa CC, Brique SA, Motte KB, et al. &quot;Dramatic inhibition of amiodarone metabolism induced by grapefruit juice.&quot; Br J Clin Pharmacol 49 (2000): 373-8</span>
+                        
+                            <span class="d-block my-2">[15] Meng X, Mojaverian P, Doedee M, Lin E, Weinryb I, Chiang ST, Kowey PR &quot;Bioavailability of Amiodarone tablets administered with and without food in healthy subjects.&quot; Am J Cardiol 87 (2001): 432-5</span>
+                        
+                            <span class="d-block my-2">[16] &quot;Product Information. Cordarone (amiodarone).&quot; Wyeth-Ayerst Laboratories, Philadelphia, PA.</span>
+                        
+                            <span class="d-block my-2">[17] Guo LQ, Yamazoe Y &quot;Inhibition of cytochrome P450 by furanocoumarins in grapefruit juice and herbal medicines.&quot; Acta Pharmacol Sin 25 (2004): 129-36</span>
+                        
+                            <span class="d-block my-2">[18] Bodiford AB, Kessler FO, Fermo JD, Ragucci KR &quot;Elevated international normalized ratio with the consumption of grapefruit and use of warfarin.&quot; SAGE Open Med Case Rep 0 (2013): 1-3</span>
+                        
+                            <span class="d-block my-2">[19] Suvarna R, Pirmohamed M, Henderson L &quot;Possible interaction between warfarin and cranberry juice.&quot; BMJ 327 (2003): 1454</span>
+                        
+                            <span class="d-block my-2">[20] Beckey NP, Korman LB, Parra D &quot;Effect of the moderate consumption of olestra in patients receiving long-term warfarin therapy.&quot; Pharmacotherapy 19 (1999): 1075-9</span>
+                        
+                            <span class="d-block my-2">[21] Lee M, Schwartz RN, Sharifi R &quot;Warfarin resistance and vitamin K.&quot; Ann Intern Med 94 (1981): 140-1</span>
+                        
+                            <span class="d-block my-2">[22] Sullivan DM, Ford MA, Boyden TW &quot;Grapefruit juice and the response to warfarin.&quot; Am J Health Syst Pharm 55 (1998): 1581-3</span>
+                        
+                            <span class="d-block my-2">[23] Brandin H, Myrberg O, Rundlof T, Arvidsson AK, Brenning G &quot;Adverse effects by artificial grapefruit seed extract products in patients on warfarin therapy.&quot; Eur J Clin Pharmacol 63 (2007): 565-70</span>
+                        
+                            <span class="d-block my-2">[24] Harrell CC, Kline SS &quot;Vitamin K-supplemented snacks containing olestra: Implication for patients taking warfarin.&quot; Jama J Am Med Assn 282 (1999): 1133-4</span>
+                        
+                            <span class="d-block my-2">[25] Westfall LK &quot;An unrecognized cause of warfarin resistance.&quot; Drug Intell Clin Pharm 15 (1981): 131</span>
+                        
+                            <span class="d-block my-2">[26] Grant P &quot;Warfarin and cranberry juice: an interaction?&quot; J Heart Valve Dis 13 (2004): 25-6</span>
+                        
+                            <span class="d-block my-2">[27] Walker FB &quot;Myocardial infarction after diet-induced warfarin resistance.&quot; Arch Intern Med 144 (1984): 2089-90</span>
+                        
+                            <span class="d-block my-2">[28] Pedersen FM, Hamberg O, Hess K, Ovesen L &quot;The effect of dietary vitamin K on warfarin-induced anticoagulation.&quot; J Intern Med 229 (1991): 517-20</span>
+                        
+                            <span class="d-block my-2">[29] Ge B, Zhang Z, Zuo Z &quot;Updates on the clinical evidenced herb-warfarin interactions.&quot; Evid Based Complement Alternat Med 2014 (2014): 957362</span>
+                        
+                            <span class="d-block my-2">[30] Griffith LD, Olvey SE, Triplett WC &quot;Increasing prothrombin times in a warfarin-treated patient upon withdrawal of ensure plus.&quot; Crit Care Med 10 (1982): 799-800</span>
+                        
+                            <span class="d-block my-2">[31] Wells PS, Holbrook AM, Crowther NR, Hirsh J &quot;Interactions of warfarin with drugs and food.&quot; Ann Intern Med 121 (1994): 676-83</span>
+                        
+                            <span class="d-block my-2">[32] Agencia Española de Medicamentos y Productos Sanitarios Healthcare &quot;Centro de información online de medicamentos de la AEMPS - CIMA. Available from: URL: https://cima.aemps.es/cima/publico/home.html.&quot; ([2018]):</span>
+                        
+                            <span class="d-block my-2">[33] Zallman JA, Lee DP, Jeffrey PL &quot;Liquid nutrition as a cause of warfarin resistance.&quot; Am J Hosp Pharm 38 (1981): 1174</span>
+                        
+                            <span class="d-block my-2">[34] Watson AJ, Pegg M, Green JR &quot;Enteral feeds may antagonise warfarin.&quot; Br Med J 288 (1984): 557</span>
+                        
+                            <span class="d-block my-2">[35] Kuykendall JR, Houle MD, Rhodes RS &quot;Possible warfarin failure due to interaction with smokeless tobacco.&quot; Ann Pharmacother 38 (2004): 595-7</span>
+                        
+                            <span class="d-block my-2">[36] Wohlt PD, Zheng L, Gunderson S, Balzar SA, Johnson BD, Fish JT &quot;Recommendations for the use of medications with continuous enteral nutrition.&quot; Am J Health Syst Pharm 66 (2009): 1438-67</span>
+                        
+                            <span class="d-block my-2">[37] Andersen P, Godal HC &quot;Predictable reduction in anticoagulant activity of warfarin by small amounts of vitamin K.&quot; Acta Med Scand 198 (1975): 269-70</span>
+                        
+                            <span class="d-block my-2">[38] MHRA. Mediciines and Healthcare products Regulatory Agency. Committee on Safety of Medicines &quot;Possible interaction between warfarin and cranberry juice. Available from: URL: http://medicines.mhra.gov.uk/ourwork/monitorsafequalmed/currentproblems/currentproblems.htm.&quot; ([2003 Sept]):</span>
+                        
+                            <span class="d-block my-2">[39] Karlson B, Leijd B, Hellstrom K &quot;On the influence of vitamin K-rich vegetables and wine on the effectiveness of warfarin treatment.&quot; Acta Med Scand 220 (1986): 347-50</span>
+                        
+                            <span class="d-block my-2">[40] O&#x27;Reilly RA, Rytand DA &quot;&quot;Resistance&quot; to warfarin due to unrecognized vitamin K supplementation.&quot; N Engl J Med 303 (1980): 160-1</span>
+                        
+                            <span class="d-block my-2">[41] Kempin SJ &quot;Warfarin resistance caused by broccoli.&quot; N Engl J Med 308 (1983): 1229-30</span>
+                        
+                            <span class="d-block my-2">[42] Cambria-Kiely JA &quot;Effect of soy milk on warfarin efficacy.&quot; Ann Pharmacother 36 (2002): 1893-6</span>
+                        
+                            <span class="d-block my-2">[43] Chow WH, Chow TC, Tse TM, Tai YT, Lee WT &quot;Anticoagulation instability with life-threatening complication after dietary modification.&quot; Postgrad Med J 66 (1990): 855-7</span>
+                        
+                            <span class="d-block my-2">[44] Hamann GL, Campbell JD, George CM &quot;Warfarin-cranberry juice interaction.&quot; Ann Pharmacother 45 (2011): e17</span>
+                        
+                            <span class="d-block my-2">[45] MacLeod SM, Sellers EM &quot;Pharmacodynamic and pharmacokinetic drug interactions with coumarin anticoagulants.&quot; Drugs 11 (1976): 461-70</span>
+                        
+                            <span class="d-block my-2">[46] Jarvis S, Li C, Bogle RG &quot;Possible interaction between pomegranate juice and warfarin.&quot; Emerg Med J 27 (2010): 74-5</span>
+                        
+                            <span class="d-block my-2">[47] Kazmier FJ, Spittell JA Jr &quot;Coumarin drug interactions.&quot; Mayo Clin Proc 45 (1970): 249-55</span>
+                        
+                            <span class="d-block my-2">[48] Monterrey-Rodriguez J &quot;Interaction between warfarin and mango fruit.&quot; Ann Pharmacother 36 (2002): 940-1</span>
+                        
+                            <span class="d-block my-2">[49] Roberts D, Flanagan P &quot;Case report: Cranberry juice and warfarin.&quot; Home Healthc Nurse 29 (2011): 92-7</span>
+                        
+                            <span class="d-block my-2">[50] Griffiths AP, Beddall A, Pegler S &quot;Fatal haemopericardium and gastrointestinal haemorrhage due to possible interaction of cranberry juice with warfarin.&quot; J R Soc Health 128 (2008): 324-6</span>
+                        
+                            <span class="d-block my-2">[51] Parr MD, Record KE, Griffith GL, et al &quot;Effect of enteral nutrition on warfarin therapy.&quot; Clin Pharm 1 (1982): 274-6</span>
+                        
+                            <span class="d-block my-2">[52] Howard PA, Hannaman KN &quot;Warfarin resistance linked to enteral nutrition products.&quot; J Am Diet Assoc 85 (1985): 713-5</span>
+                        
+                            <span class="d-block my-2">[53] Rindone JP, Murphy TW &quot;Warfarin-cranberry juice interaction resulting in profound hypoprothrombinemia and bleeding.&quot; Am J Ther 13 (2006): 283-4</span>
+                        
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="key">Alternative for <span style="color: #a94442"
+                >Warfarin</span>
+                    <i class="fas fa-info-circle"
+                       data-tippy-content="The alternatives are based on the third level (pharmacological subgroup) of ATC codes."></i>
+                </td>
+                <td class="value">
+                    
+                        
+                            
+                                
+                                <i class="fas fa-yin-yang" style="color: #2F4056"></i>
+                                <span class="badge text-bg-dark" style="background-color: #2F4056">B01A</span>
+                                <div class="row">
+                                    
+                                        
+                                            </div>
+                                            <div class="row">
+                                        
+                                        <a href="/server/drug-detail/DDInter908/" class="col-md-2">
+                                            Iloprost
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter1037/" class="col-md-2">
+                                            Lepirudin
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter1905/" class="col-md-2">
+                                            Urokinase
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter283/" class="col-md-2">
+                                            Cangrelor
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter573/" class="col-md-2">
+                                            Dipyridamole
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter286/" class="col-md-2">
+                                            Caplacizumab
+                                        </a>
+                                    
+                                        
+                                            </div>
+                                            <div class="row">
+                                        
+                                        <a href="/server/drug-detail/DDInter117/" class="col-md-2">
+                                            Argatroban
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter1508/" class="col-md-2">
+                                            Prasugrel
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter505/" class="col-md-2">
+                                            Desirudin
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter659/" class="col-md-2">
+                                            Eptifibatide
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter1712/" class="col-md-2">
+                                            Streptokinase
+                                        </a>
+                                    
+                                    </div>
+                            
+                            <a href="javascript:void(0);" onclick="changeCandidateContext($(this))" isDetail="true"
+                               class="col-md-2 more-hide" style="color: #a94442">
+                                More
+                            </a>
+                        
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="key">Alternative for <span
+                        style="color: #a94442">Amiodarone</span>
+                    <i class="fas fa-info-circle"
+                       data-tippy-content="The alternatives are based on the third level (pharmacological subgroup) of ATC codes."></i>
+                </td>
+                <td class="value">
+                    
+                        
+                            
+                                
+                                <i class="fas fa-yin-yang" style="color: #2F4056"></i>
+                                <span class="badge text-bg-dark" style="background-color: #2F4056">C01B</span>
+                                <div class="row">
+                                    
+                                        
+                                            </div>
+                                            <div class="row">
+                                        
+                                        <a href="/server/drug-detail/DDInter1823/" class="col-md-2">
+                                            Tocainide
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter229/" class="col-md-2">
+                                            Bretylium
+                                        </a>
+                                    
+                                        
+                                        <a href="/server/drug-detail/DDInter901/" class="col-md-2">
+                                            Ibutilide
+                                        </a>
+                                    
+                                    </div>
+                            
+                        
+                    
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        
+
+        <div class="sub-title mt-3"><i class="fas fa-arrow-right"></i> Potential Metabolism Interactions</div>
+        <div class="row mt-5">
+            <div class="contain" style="position: relative; width: 100%; height: 400px;">
+                <div id="lineMarker" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+
+        <blockquote class="blockquote-info" style="text-align: justify;">
+            <strong><i class="fas fa-star"></i> Substrate-Substrate Interaction</strong>：If more than one drug is
+            metabolized by the same CYP, it is
+            possible that its metabolism is inhibited because of the competition between the drugs. That means, it
+            can
+            be useful to lower the dosage of the drugs in the drug-cocktail because they remain longer in the
+            organism
+            than in monotherapy. <br>
+            <strong><i class="fas fa-star"></i> Inhibitor-Inhibitor Interaction</strong>：Combining two or more
+            inhibitors of one CYP, should be
+            compensated by lowering the dosage of these drugs because the metabolism is reduced and the drugs remain
+            longer in the organism than in monotherapy. Not adapting the dosage bears the risk of even more side
+            effects. <br>
+            <strong><i class="fas fa-star"></i> Inhibitor-Substrate Interaction</strong>：Combining drugs that have
+            inhibitory effect and are
+            substrates of one particular CYP, should be compensated by lowering the dosage. They rest longer in the
+            organism than in monotherapy. Not adapting the dosage bears the risk of even more side effects.
+        </blockquote>
+        
+    </div>
+</main>
+<script src="/static/common/js/popper.min.js"></script>
+<script src="/static/common/js/tippy-bundle.umd.min.js"></script>
+<script>plotLineMarker()</script>
+<script>
+    tippy('[data-tippy-content]', {
+        maxWidth: 'none',
+        role: 'tooltip',
+        allowHTML: true,
+    });
+
+    function changeShowRemarks(obj, max_length) {//obj是td
+        var content = $(obj).attr("content");
+        if (content != null && content !== '') {
+            if ($(obj).attr("isDetail") === 'true') {//当前显示的是详细备注，切换到显示部分
+                //$(obj).removeAttr('isDetail');//remove也可以
+                $(obj).attr('isDetail', false);
+                $(obj).html(getPartialRemarksHtml(content, max_length));
+            } else {//当前显示的是部分备注信息，切换到显示全部
+                $(obj).attr('isDetail', true);
+                $(obj).html(getTotalRemarksHtml(content));
+            }
+        }
+    }
+
+    function getPartialRemarksHtml(remarks, max_length) {
+        return remarks.substr(0, max_length) + '...&nbsp;&nbsp;<a href="javascript:void(0);" >More</a>';
+    }
+
+    function getTotalRemarksHtml(remarks) {
+        return remarks + '&nbsp;&nbsp;<a href="javascript:void(0);" >Hide</a>';
+    }
+
+    function set_show_hide_init(item, max_length, content) {
+        if (content.length > max_length) {
+            item.attr('onclick', 'javascript:changeShowRemarks(this, ' + max_length + ');');
+            item.html(getPartialRemarksHtml(content, max_length));
+        }
+        item.attr('content', content);
+        item.attr('style', 'word-break: break-all;');
+    }
+
+    var all_candidate_a_html = '';
+    var part_candidate_a_html = '';
+    
+        
+            base_str = '<i class="fas fa-yin-yang" style="color: #2F4056"></i> <span class="badge text-bg-dark" ' +
+                'style="background-color: #2F4056">B01A</span>';
+            
+                all_candidate_a_html += base_str
+            
+            
+                
+                    all_candidate_a_html += '</div>';
+                    all_candidate_a_html += '<div class="row">';
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter908/" class="col-md-2">Iloprost</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1037/" class="col-md-2">Lepirudin</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1905/" class="col-md-2">Urokinase</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter283/" class="col-md-2">Cangrelor</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter573/" class="col-md-2">Dipyridamole</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter286/" class="col-md-2">Caplacizumab</a>';
+            
+                
+                    all_candidate_a_html += '</div>';
+                    all_candidate_a_html += '<div class="row">';
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter117/" class="col-md-2">Argatroban</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1508/" class="col-md-2">Prasugrel</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter505/" class="col-md-2">Desirudin</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter659/" class="col-md-2">Eptifibatide</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1712/" class="col-md-2">Streptokinase</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1812/" class="col-md-2">Tinzaparin</a>';
+            
+                
+                    all_candidate_a_html += '</div>';
+                    all_candidate_a_html += '<div class="row">';
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1656/" class="col-md-2">Selexipag</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1945/" class="col-md-2">Vorapaxar</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter645/" class="col-md-2">Enoxaparin</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter605/" class="col-md-2">Drotrecogin alfa</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter6/" class="col-md-2">Abciximab</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter775/" class="col-md-2">Fondaparinux</a>';
+            
+                
+                    all_candidate_a_html += '</div>';
+                    all_candidate_a_html += '<div class="row">';
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1764/" class="col-md-2">Tenecteplase</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter217/" class="col-md-2">Bivalirudin</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter99/" class="col-md-2">Anistreplase</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter56/" class="col-md-2">Alteplase</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1818/" class="col-md-2">Tirofiban</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter470/" class="col-md-2">Dalteparin</a>';
+            
+                
+                    all_candidate_a_html += '</div>';
+                    all_candidate_a_html += '<div class="row">';
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter471/" class="col-md-2">Danaparoid</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter491/" class="col-md-2">Defibrotide</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter105/" class="col-md-2">Antithrombin III human</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1542/" class="col-md-2">Protein C</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1804/" class="col-md-2">Ticlopidine</a>';
+            
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1585/" class="col-md-2">Reteplase</a>';
+            
+                
+                    all_candidate_a_html += '</div>';
+                    all_candidate_a_html += '<div class="row">';
+                
+                all_candidate_a_html += '<a href="/server/drug-detail/DDInter1852/" class="col-md-2">Treprostinil</a>';
+            
+            all_candidate_a_html += '</div>';
+        
+        
+            base_str = '<i class="fas fa-yin-yang" style="color: #2F4056"></i> <span class="badge text-bg-dark" ' +
+                'style="background-color: #2F4056">B01A</span>';
+            
+                part_candidate_a_html += base_str;
+            
+            
+                
+                    part_candidate_a_html += '</div>';
+                    part_candidate_a_html += '<div class="row">';
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter908/" class="col-md-2">Iloprost</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter1037/" class="col-md-2">Lepirudin</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter1905/" class="col-md-2">Urokinase</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter283/" class="col-md-2">Cangrelor</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter573/" class="col-md-2">Dipyridamole</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter286/" class="col-md-2">Caplacizumab</a>';
+            
+                
+                    part_candidate_a_html += '</div>';
+                    part_candidate_a_html += '<div class="row">';
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter117/" class="col-md-2">Argatroban</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter1508/" class="col-md-2">Prasugrel</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter505/" class="col-md-2">Desirudin</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter659/" class="col-md-2">Eptifibatide</a>';
+            
+                
+                part_candidate_a_html += '<a href="/server/drug-detail/DDInter1712/" class="col-md-2">Streptokinase</a>';
+            
+            part_candidate_a_html += '</div>';
+        
+
+        function changeCandidateContext(object) {
+            if (object.attr("isDetail") === 'false') {      //显示的是全部
+                let html_text = part_candidate_a_html;
+                html_text += '<a href="javascript:void(0);" onclick="changeCandidateContext($(this))" ' +
+                    'class="more-hide" isDetail="true"><div class="col-md-2" style="color: #a94442">More</div></a>'
+                object.parents('td').html(html_text);
+                
+            } else {//当前显示的是部分
+                let html_text = all_candidate_a_html;
+                html_text += '<a href="javascript:void(0);" onclick="changeCandidateContext($(this))" ' +
+                    'class="more-hide" isDetail="false"><div class="col-md-2" style="color: #a94442">Hide</div></a>'
+                object.parents('td').html(html_text);
+                
+            }
+        }
+    
+
+    var all_candidate_b_html = '';
+    var part_candidate_b_html = '';
+    
+        
+            base_str = '<i class="fas fa-yin-yang" style="color: #2F4056"></i> <span class="badge text-bg-dark" ' +
+                'style="background-color: #2F4056">C01B</span>';
+            
+                all_candidate_b_html += base_str
+            
+            
+                
+                    all_candidate_b_html += '</div>';
+                    all_candidate_b_html += '<div class="row">';
+                
+                all_candidate_b_html += '<a href="/server/drug-detail/DDInter1823/" class="col-md-2">Tocainide</a>';
+            
+                
+                all_candidate_b_html += '<a href="/server/drug-detail/DDInter229/" class="col-md-2">Bretylium</a>';
+            
+                
+                all_candidate_b_html += '<a href="/server/drug-detail/DDInter901/" class="col-md-2">Ibutilide</a>';
+            
+            all_candidate_b_html += '</div>';
+        
+        
+            base_str = '<i class="fas fa-yin-yang" style="color: #2F4056"></i> <span class="badge text-bg-dark" ' +
+                'style="background-color: #2F4056">C01B</span>';
+            
+                part_candidate_b_html += base_str
+            
+            
+                
+                    part_candidate_b_html += '</div>';
+                    part_candidate_b_html += '<div class="row">';
+                
+                part_candidate_b_html += '<a href="/server/drug-detail/DDInter1823/" class="col-md-2">Tocainide</a>';
+            
+                
+                part_candidate_b_html += '<a href="/server/drug-detail/DDInter229/" class="col-md-2">Bretylium</a>';
+            
+                
+                part_candidate_b_html += '<a href="/server/drug-detail/DDInter901/" class="col-md-2">Ibutilide</a>';
+            
+            part_candidate_b_html += '</div>';
+        
+        function changeCandidatebContext(object) {
+            if (object.attr("isDetail") === 'false') {      //显示的是全部
+                let html_text = part_candidate_b_html;
+                html_text += '<a href="javascript:void(0);" onclick="changeCandidatebContext($(this))" ' +
+                    'class="more-hide" isDetail="true"><div class="col-md-2" style="color: #a94442">More</div></a>'
+                object.parents('td').html(html_text);
+                
+            } else {//当前显示的是部分
+                let html_text = all_candidate_b_html;
+                html_text += '<a href="javascript:void(0);" onclick="changeCandidatebContext($(this))" ' +
+                    'class="more-hide" isDetail="false"><div class="col-md-2" style="color: #a94442">Hide</div></a>'
+                object.parents('td').html(html_text);
+                
+            }
+        }
+    
+</script>
+
+    </div>
+    
+        
+
+<footer class="site-footer" id="footer">
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="copyright">
+      &copy; Copyright &nbsp; <a href="http://www.scbdd.com/" target="_blank">Computational Biology & Drug DesignGroup</a>. All Rights Reserved<div class="heart d-inline-block mx-2"></div>
+      
+    </div>
+    <div style="width: 200px;">
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=TXcYuwgsTf230Gc363rPwJc4RS20yZ5QOakSiw4gHgw&cl=ffffff&w=a"></script>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .heart {
+    width: 10px;
+    height: 10px;
+    background: #f00;
+    position: relative;
+    filter: drop-shadow(0px 0px 20px rgb(255, 20, 20));
+    transform: rotate(45deg);
+  }
+  
+  .heart:before,
+  .heart:after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #f00;
+    border-radius: 5px;
+  }
+  
+  .heart:before {
+    left: -5px;
+  }
+  
+  .heart:after {
+    left: 0;
+    top: -5px;
+  }
+  
+  @keyframes heartbeat {
+    0% {
+      transform: rotate(45deg) scale(0.8, 0.8);
+      opacity: 1;
+    }
+    25% {
+      transform: rotate(45deg) scale(1, 1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: rotate(45deg) scale(0.8, 0.8);
+      opacity: 1;
+    }
+  }
+</style>
+
+    
+</div>
+</body>
+
+
+
+</html>

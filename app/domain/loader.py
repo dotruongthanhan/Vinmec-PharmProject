@@ -1,6 +1,9 @@
 """Bộ nạp dữ liệu ca bệnh từ JSON và các hàm truy xuất bối cảnh cơ bản."""
 
+import json
 from pathlib import Path
+
+from pydantic import ValidationError
 
 from app.domain.models import (
     CaBenh,
@@ -14,8 +17,27 @@ from app.domain.models import (
 
 def load_case(path: Path) -> CaBenh:
     """Nạp một ca bệnh từ tệp JSON mã hoá UTF-8."""
-    raw = Path(path).read_text(encoding="utf-8")
-    return CaBenh.model_validate_json(raw)
+    try:
+        raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        raise ValidationError.from_exception_data(
+            "CaBenh",
+            [
+                {
+                    "type": "json_invalid",
+                    "loc": (),
+                    "input": None,
+                    "ctx": {"error": "JSON không hợp lệ"},
+                }
+            ],
+        ) from None
+    if not isinstance(raw, dict):
+        return CaBenh.model_validate(raw)
+    # Hai phần mở rộng chỉ dành cho giao diện, không đi vào pipeline AI.
+    raw.pop("hanh_chinh", None)
+    if isinstance(raw.get("dot_dieu_tri"), dict):
+        raw["dot_dieu_tri"].pop("quan_ly", None)
+    return CaBenh.model_validate(raw)
 
 
 def load_all_cases(folder: Path) -> list[CaBenh]:

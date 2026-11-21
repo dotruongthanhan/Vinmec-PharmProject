@@ -4,6 +4,7 @@ import nbformat
 import pytest
 
 from app.config import settings as settings_module
+from app.rules.registry import default_rules
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -32,4 +33,4 @@ def test_notebook_valid_clean_and_runs_without_reading_dotenv(
     assert "OPENROUTER_API_KEY: thiếu" in output
     assert "DATABASE_URL: thiếu" in output
     assert "Số ca: 6" in output
-    assert "Số luật: 5" in output
+    assert f"Số luật: {len(default_rules())}" in output

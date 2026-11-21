@@ -1,5 +1,172 @@
 # HANDOFF – bàn giao giữa các phiên Claude
 
+## CẬP NHẬT 19/11/2026 tối – D4 + D5 đã giao (đọc trước khối 15:00)
+
+- Claude đã kiểm dữ liệu D4/D5: **103/103 trích nguyên văn khớp tệp nhãn**; 6/17 quy tắc thận chồng khoảng CrCl ở ranh giới → sửa bằng trường mới `bao_gom_can_tren`.
+- Đã giao, chạy song song (người dùng chốt: Codex hết quota, code giao agy Hydrogen **high**, lượt sửa nâng **xhigh**):
+  - **T65-T66-ht** (sub Sonnet, dữ liệu): `plan/briefs/T65-T66-hoan-thien-du-lieu.md`. Xong khi có `plan/reports/T65.md`, `T66.md`, `docs/du-lieu/lieu-than-gan-xet-nghiem.md`, `lieu-duong-dung.md`.
+  - **T67** (agy high, luật D4): `plan/briefs/T67-luat-d4-than-gan-xet-nghiem-benh.md`, log `plan/reports/T67.agy.log`, báo cáo `plan/reports/T67.md`.
+  - **T68** (agy high, luật D5): `plan/briefs/T68-luat-d5-duong-dung-lieu-toi-da.md`, log `plan/reports/T68.agy.log`, báo cáo `plan/reports/T68.md`.
+- **T67, T68 không sửa `engine.py` / `registry.py`.** Sau khi review đạt cả hai, viết brief **T69**: nối 5 luật mới vào engine + registry (chỉ chạy khi có resolver, như luật tương tác), truyền resolver cho `renal_dose.check`, chuyển `antibiotic.py` sang yếu tố 6 (sửa `tests/rules/test_registry.py`, `test_antibiotic.py`, `tests/domain/test_demo_cases.py`), test API 3 tình huống plan (levofloxacin uống kê tiêm, HS-019 paracetamol 6 g, HS-026 bỏ cân nặng), sửa 4 tệp lệch `ruff format`.
+- Review: chạy kiểm phủ khoảng CrCl (script mẫu đã dùng ở scratchpad phiên này: thử 0 → 150 bước 0,5, mỗi điểm đúng một mức).
+
+## CẬP NHẬT 19/11/2026 15:00 – ĐỌC PHẦN NÀY TRƯỚC (người dùng chuyển tài khoản Claude vì sắp hết hạn mức)
+
+Các khối "CẬP NHẬT" bên dưới là lịch sử; phần agent và nhúng trong đó **đã lỗi thời**. Thứ tự đọc:
+1. Khối này.
+2. `CLAUDE.md`, `AGENTS.md` (quy tắc 9: tài liệu dữ liệu ở `docs/du-lieu/`).
+3. `plan/plan-1.8-du-lieu-tham-dinh-7-yeu-to.md` mục 5.0.
+4. `plan/TRACKING.md` (bảng T50 → T66, nhật ký cuối tệp).
+
+### 1. Bối cảnh
+
+- Demo 20/11 chỉ gửi link sản phẩm; bản đang chạy dùng dữ liệu cũ. Không còn mốc đóng băng.
+- Đang làm **plan 1.8**: dữ liệu thật cho 7 yếu tố thẩm định.
+- **Đã xong và đã push** (nhánh `vukhai248`, commit `846086b`):
+  - **D0**: từ điển và bộ phân giải.
+  - **D1**: tương tác DDInter và ma trận.
+  - **D2**: trùng nhóm ATC (T57).
+  - **D3**: dị ứng chéo (dữ liệu T60, luật T63).
+  - **Nhúng `gemini-embedding-2`**: T61 code, T62 nhúng 3.730 đoạn.
+  - **CI GitHub Actions** (T58).
+  - **Tài liệu dữ liệu `docs/du-lieu/`** (T59).
+- CI lượt cuối **xanh**: web 293 qua; backend Ubuntu và Windows 1.252 qua / 109 bỏ qua / 0 trượt.
+- Máy người dùng: pytest **1.359 qua / 2 bỏ qua / 0 trượt**.
+
+### 2. Quy tắc người dùng chốt (bắt buộc)
+
+- **Claude không viết code.** Claude chỉ:
+  - viết brief, giao agent;
+  - review: chạy `uv run ruff check .` và `uv run pytest -q -p no:cacheprovider`, rồi **kiểm độc lập qua API thật** bằng TestClient, `AUTH_MODE=off`, `CASE_SOURCE=file`, ca lấy từ `load_source_cases`;
+  - ghi `plan/TRACKING.md`.
+- **Việc dữ liệu** (cào, xử lý, dựng bảng, nạp, nhúng, đánh giá) **chỉ giao sub Claude Sonnet.** Codex và agy **chỉ viết code**.
+- **Agent code:**
+  - Codex `gpt-6.1-sol` xhigh **hết quota tới 24/11/2026 9:41**.
+  - Hiện dùng agy, chạy nền, không dùng `&`:
+    ```
+    agy --model gemini-4-hydrogen-xhigh --mode accept-edits --print-timeout 1800s -p "Đọc AGENTS.md và plan/briefs/Txx.md rồi thực hiện đúng brief đó. KHÔNG gọi shell, không gọi mạng; chỉ đọc và ghi tệp."
+    ```
+  - agy không chạy được test, nên **Claude luôn tự chạy pytest**.
+  - Lỗi agy hay mắc trong test: đoán sai dữ liệu (tên mã nhóm), nạp thẳng `HS-*.json` thay vì qua `app.db.reader.load_source_cases(ROOT)`, đếm cả tệp `_kich_ban.json`.
+- **Brief phải liệt kê đủ tệp.**
+  - Luật mới phải nối cả `app/rules/engine.py` lẫn `registry.py` (T55, T57 từng thiếu).
+  - Hai task code cùng sửa `engine.py` / `registry.py` thì chạy **lần lượt**.
+- **Tài liệu dữ liệu:**
+  - Đọc `docs/du-lieu/*.md` trước, không mở dữ liệu dò lại.
+  - Tải hay xử lý dữ liệu thì cập nhật tệp đó.
+  - **Không** chạy `du` / `find` trong `data/kb_sources/ddinter_web`: hàng chục nghìn tệp, treo lệnh.
+- **Git:**
+  - `data/` không còn trên git, trừ `data/mock`, `data/gold`, `data/kb` và các `README.md`.
+  - Commit / push **chỉ khi người dùng bảo ngay trong lượt đó**; hệ thống sẽ chặn nếu không có lời bảo.
+  - Trước khi commit, quét khoá: `AIza…`, `sk-…`, `postgres://user:pass@`.
+- **Quy tắc 3 lần:** sửa 3 lượt liên tiếp không cải thiện thì dừng, đánh dấu ⏸️.
+- **Tự chuyển đợt:** đợt D qua review thì tự sang đợt kế. Vẫn hỏi trước khi commit / push, ghi DB, xoá dữ liệu.
+- **Công thức** (Child-Pugh, QTc, liều theo BSA…):
+  - nguồn **chỉ lấy theo MDCalc**;
+  - **chờ người dùng gửi**;
+  - không giao agent tự cài.
+- Khoá chỉ nằm trong `.env`: không in, không ghi vào brief hay log.
+
+### 3. Việc dở lúc bàn giao: dữ liệu D4 (T65) và D5 (T66)
+
+Người dùng **đã dừng hai sub Sonnet lúc khoảng 14:50.**
+- Brief: `plan/briefs/T65-du-lieu-d4-than-gan-xet-nghiem.md`, `plan/briefs/T66-du-lieu-d5-lieu-duong-dung.md`.
+- Chưa có báo cáo `plan/reports/T65.md` / `T66.md`.
+- Chưa có tài liệu `docs/du-lieu/lieu-than-gan-xet-nghiem.md` / `lieu-duong-dung.md`.
+- Chưa có tệp `data/kb_reports/T65_*` / `T66_*`.
+- **Chưa commit.**
+
+Trạng thái tệp, do Claude kiểm lúc 14:55. Mọi tệp đọc được bằng `json.load`; mọi khoá hoạt chất đều có trên trục `tra_cuu.sqlite`; mọi dòng `trang_thai: cho_duoc_si_duyet`.
+
+| Tệp (`data/kb/`) | Task | Đã có | Còn thiếu |
+|:--|:--|:--|:--|
+| `quy_tac_lieu_than.json` | T65 | Giữ nguyên `quy_tac` (meropenem đã duyệt, luật `renal_dose.py` đang dùng). **Thêm khoá mới `quy_tac_cho_duyet`: 17 quy tắc**: acetaminophen, cefepime, ciprofloxacin, clarithromycin, colistimethate, enalapril, enoxaparin, fluconazole, gabapentin, levetiracetam, levofloxacin, methotrexate, piperacillin/tazobactam, rivaroxaban, simvastatin, sulfamethoxazole/trimethoprim, tramadol. 24 trích nguyên văn kèm URL | **Chưa kiểm** trích là chuỗi con nguyên văn của nhãn. **Chưa kiểm** khoảng CrCl phủ kín, không chồng. Thiếu danh sách "không có ngưỡng". Luật chưa đọc `quy_tac_cho_duyet`, nên app chưa đổi hành vi. Test `tests/rules` + `tests/api` vẫn 247 qua |
+| `quy_tac_gan.json` | T65 | 24 dòng, 22 hoạt chất, 24 trích + URL | Kiểm trích nguyên văn |
+| `nguong_xet_nghiem.json` | T65 | 15 dòng, 10 hoạt chất, 15 trích + URL | Kiểm trích; đối chiếu đơn vị với xét nghiệm trong ca |
+| `thuoc_benh_icd.json` | T65 | 119 tên bệnh DDInter → ICD-10, 40/48 hoạt chất ca, 2 tên chưa ánh xạ; 10 cặp hoạt chất–bệnh khớp `chan_doan` ở 9 ca | Không có trích (ánh xạ tay, chờ dược sĩ duyệt). Kiểm vài ánh xạ ICD bằng tay |
+| `duong_dung_hop_le.json` | T66 | Bảng chuẩn hoá tên đường dùng + 62 dòng theo hoạt chất và dạng bào chế, 37 hoạt chất, 37 URL | Kiểm tình huống levofloxacin uống kê tiêm; ghi nguồn (Cục Quản lý Dược / NDC) cho từng dòng |
+| `lieu_toi_da.json` | T66 | 40 dòng, 37 hoạt chất, 40 trích + URL | Kiểm trích; kiểm paracetamol 4 g/ngày; gentamicin theo kg; danh sách "nhãn không ghi tối đa" |
+
+**Phiên mới làm như sau:**
+1. Giao **sub Sonnet** (không giao Hydrogen, vì đây là việc dữ liệu), hai task chạy song song.
+   - Prompt mẫu: "Tiếp tục T65 (hoặc T66) theo brief. Lượt trước bị dừng; các tệp `data/kb/...` đã có, xem bảng trong `plan/HANDOFF.md` mục 3: đọc, kiểm, hoàn thiện, **không làm lại từ đầu**. Làm nốt phần còn thiếu, viết `docs/du-lieu/...md` và `plan/reports/T6x.md`."
+2. **Claude review dữ liệu:**
+   - Kiểm trích nguyên văn: mở tệp nhãn trong `data/kb_sources/openfda*` theo `set_id`.
+   - Khoảng CrCl phủ kín, không chồng, không hở.
+   - Không có số "bịa".
+   - Ba tình huống plan: levofloxacin, paracetamol 1 g × 6, gentamicin thiếu cân nặng.
+   - Chạy pytest toàn kho.
+3. Viết **brief code cho Hydrogen**, **D4 trước, D5 sau** (cùng sửa `engine.py` / `registry.py`).
+   - **D4:** `renal_dose.py` đọc thêm `quy_tac_cho_duyet` (vẫn ghi "chờ dược sĩ duyệt" trong căn cứ); luật gan theo câu nhãn (**không** cài Child-Pugh); luật ngưỡng xét nghiệm; thuốc–bệnh theo ICD của `chan_doan`. Thiếu dữ liệu ca thì `khong_du_du_lieu`.
+   - **D5:** luật đường dùng; luật liều tối đa (liều × số lần; theo kg cần cân nặng, thiếu thì `khong_du_du_lieu`); chuyển `antibiotic.py` sang yếu tố 6.
+   - **Kiểm chỉ định** (RAG + LLM): không làm ở 1.8, đã dời sang plan 1.9 mục 14.
+
+### 4. Việc khác còn mở
+
+- **AWS:**
+  - RDS `vinmec-pharm-db` (PostgreSQL 18.6, pgvector 0.8.2, `db.t4g.micro`, không công khai, `ap-southeast-1`) đã tạo.
+  - Mật khẩu nằm trong Secrets Manager.
+  - Mở đường hầm (thêm `C:\Program Files\Amazon\SessionManagerPlugin\bin` vào PATH):
+    ```
+    aws ssm start-session --target i-050630fbca49cc994 --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters '{"host":["vinmec-pharm-db.c3c2kos8cqpm.ap-southeast-1.rds.amazonaws.com"],"portNumber":["5432"],"localPortNumber":["5433"]}'
+    ```
+  - Lược đồ đã chạy thử trong giao dịch rồi hoàn tác. Cần sửa:
+    - hai câu `REVOKE … anon, authenticated`;
+    - BOM của `db/tu_dien.sql`;
+    - thiếu bảng đích cho hậu quả / xử trí DDInter, thức ăn, `chuyen_ma_ca`, dị ứng chéo, các bảng D4 / D5.
+  - **Chỉ nạp DB sau khi xong mọi đợt D và đạt** (người dùng chốt). Auth giữ ở Supabase.
+- **RAG / rerank:** dời sang plan 1.9 mục 14.
+  - Đo 50 câu (T64): chỉ vector tốt hơn đường lai đang chạy, vì BM25 làm hại câu Việt.
+  - Đề xuất: vector + lọc hoạt chất, không BM25, không rerank.
+  - Bộ câu hỏi: `data/kb_reports/T64_bo_cau_hoi.json`.
+- **Khoá OpenRouter:**
+  - Người dùng muốn đặt tên `OPENROUTER_API_KEY_1` → `_4` và tự chuyển khoá khi hết hạn mức.
+  - Lúc 14:00, `.env` có `_2`, `_3` (hai lần), `_4`, chưa có `_1` hay tên không số.
+  - Code chỉ đọc `OPENROUTER_API_KEY` và `_2`. Sửa trong lượt code RAG.
+- **Nhỏ:**
+  - 4 tệp lệch `ruff format` (CI không kiểm): gom vào brief code kế tiếp.
+  - Workflow dùng tham số sai `python-version-file` cho `setup-uv`: chỉ cảnh báo, không lỗi.
+- **Chờ dược sĩ duyệt:** bảng nhóm điều trị D2, bảng dị ứng chéo D3, các bảng D4 / D5.
+- **Chờ người dùng:**
+  - công thức MDCalc;
+  - QĐ 5948 bản gốc;
+  - quyết định quản lý dữ liệu (đề xuất DVC + S3);
+  - khoá Jev (typesafe) nếu muốn thử làm bộ chấm rerank.
+- **D6** (độc tính), **D7** (lịch dùng): chưa bắt đầu; làm sau D4, D5.
+
+---
+
+## CẬP NHẬT 19/11/2026 (rạng sáng) – ĐỌC PHẦN NÀY TRƯỚC
+
+Đang làm **plan 1.8** (`plan/plan-1.8-du-lieu-tham-dinh-7-yeu-to.md`): dữ liệu thật cho thẩm định 7 yếu tố. Tiến độ từng bước nằm ở **mục 5.0** của plan; tiến độ nguồn nằm ở cột "Tiến độ (19/11)" của mục 3.1.
+
+**Quyền người dùng giao (19/11, khi đi ngủ):**
+- Khi **D0 và D1 xong hết** các bước làm được, Claude làm **một vòng review tổng** (plan 1.8 mục 5.0.1). Đạt thì **tự sang D2, D3… không cần hỏi**. Mỗi đợt vẫn qua cổng review mục 6.
+- Vẫn phải hỏi trước: commit / push, ghi Supabase, xoá dữ liệu, việc ngoài plan.
+- **Nhúng tạm gác (19/11 đêm):** không chạy nhúng thật (T52 ứng viên ngữ nghĩa, hiệu chuẩn, nhúng nốt RAG) cho tới khi người dùng nạp credit OpenRouter hoặc đổi nhà cung cấp nhúng. Việc nào phụ thuộc nhúng thì đánh dấu ⏸️ và làm việc khác; không để nhúng chặn luật / bảng tương tác (các phần này không dùng nhúng).
+- **Quy tắc 3 lần** (từ 19/11, lượt trước không tính): việc giao / sửa 3 lượt liên tiếp không cải thiện chỉ số mục tiêu thì dừng, đánh dấu ⏸️ ở plan 1.8 mục 5.0 và TRACKING, chuyển việc khác.
+
+**Chọn agent** (người dùng chốt 19/11):
+- Không cần mạng: Codex `gpt-6.1-sol` xhigh (6.2 chỉ dự phòng).
+- Cần mạng: sub Claude Sonnet medium/high (Codex `-s workspace-write` bị chặn mạng).
+- Hết quota: `agy` `gemini-4-hydrogen-high/xhigh`.
+
+**Đang chạy lúc ghi:**
+- T52-fix-1 (Codex 6.2): lỗi lùi độ phủ do dạng muối.
+- T54 (sub Sonnet): tải TT20 / 15-VBHN / TT37, QĐ 5631, QĐ 5948, LiverTox, LactMed.
+- T55 (Codex 6.1): bảng tương tác + luật yếu tố 4 + ma trận, theo hợp đồng `plan/api-hop-dong-v1.6-ma-tran-tuong-tac.md`.
+
+**Việc còn của D0 / D1 sau khi các task trên xong:**
+- Chạy nhúng thật và hiệu chuẩn (T52).
+- D0.7: nối nhãn openFDA ↔ trục.
+- D0.8: lệnh ma trận độ phủ đa nguồn.
+- Sửa `app/kb/dictionary/publish.py` đọc biến môi trường ngoài config (test kiến trúc trượt).
+- Chạy lại `python -m app.kb.resolver build-index` sau T52.
+- D1.2 phần một bên (~25k trang, sub Sonnet chạy nền).
+- Vòng review tổng.
+
+---
+
 ## CẬP NHẬT PHIÊN 5 (17/11/2026, khoảng 10:35) – ĐỌC PHẦN NÀY TRƯỚC
 
 Khối "PHIÊN 4" bên dưới vẫn đúng về quyết định của người dùng, bẫy đã gặp và danh sách việc kế; riêng mục 2 và 3 của nó (bốn việc chạy nền) **đã xử lý xong**:

@@ -6,6 +6,7 @@ import hashlib
 import logging
 import re
 import time
+from collections import Counter
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
@@ -17,18 +18,24 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from app.config.settings import CaseContextSettings
 from app.core.errors import ProviderError
 from app.core.interfaces import LLMClient, Retriever
+from app.core.progress import NguonTomTat, ghi_buoc, tien_trinh_hien_tai
 from app.core.types import ChatMessage, Chunk, RetrievalQuery, ScoredChunk, SearchFilter
-from app.deid.scrubber import DeidError, ScrubResult, restore_text, scrub_text
+from app.deid.known import GiaTriDinhDanh
+from app.deid.scrubber import TOKEN_PATTERN, DeidError, restore_text, scrub_text
+from app.deid.session import DeidSession
 from app.domain.loader import ingredients_of
-from app.domain.models import CaBenh
-from app.llm.case_context import build_case_context
+from app.domain.models import CaBenh, ChiTietYLenh
+from app.llm.case_context import (
+    RecordIdMap,
+    build_case_bundle,
+    open_deid_session,
+)
 from app.llm.prompt_loader import load_prompt
 from app.orchestration.ai_review import AiRunResult
 from app.orchestration.evidence import LazyRetrieverFactory
 from app.pipeline import KetQuaThamDinh, run_case
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import RenalRuleBook, load_renal_rules
-from app.rules.types import PhatHien
 from app.ui import labels
 from app.ui import view_model as vm
 from app.verify.citation import quote_matches_source
@@ -56,6 +63,8 @@ NOT_READY_MESSAGE = (
 )
 
 _ROOT = Path(__file__).resolve().parents[2]
+_MAX_SOURCE_GROUPS = 8
+_ASK_RETRY_HINT = "Bấm Thử lại sau ít phút"
 _DATA_SPLIT_MARKER = "\n## DỮ LIỆU ĐẦU VÀO\n"
 _FALLBACK_SYSTEM_PROMPT = "Bạn là trợ lý hỗ trợ dược sĩ lâm sàng giải đáp về ca bệnh đang mở."
 _ROLE_LABELS = {"nguoi_dung": "Dược sĩ", "he_thong": "Hệ thống"}
@@ -76,7 +85,8 @@ _BLOCK_MARKERS = (
     "<<<CAU_HOI",
     "CAU_HOI>>>",
 )
-_DEID_TOKEN_RE = re.compile(r"\[(?:HN|CCCD|SDT|BHYT|EMAIL|NGAY|TEN)_\d+\]")
+_DEID_TOKEN_RE = re.compile(TOKEN_PATTERN)
+_SCRUB_FALLBACK = "[không đưa được vào vì lỗi che định danh]"
 _CITATION_REF_RE = re.compile(r"\[(\d+)\]")
 _CLINICAL_QUESTION_RE = re.compile(
     r"\b(?:thuốc|liều|tương\s+tác|xét\s+nghiệm|creatinin|crcl|egfr|"
@@ -133,6 +143,55 @@ def _log_rejection(step: str, reason: str, chunks: int = 0) -> str:
     return safe_reason
 
 
+def _summarize_sources(chunks: Sequence[Chunk]) -> tuple[str, list[NguonTomTat]]:
+    """Tóm tắt số đoạn và nhóm nguồn công khai cho bước truy xuất."""
+    if not chunks:
+        return "0 đoạn từ 0 nguồn", []
+    counts = Counter(chunk.nguon for chunk in chunks)
+    top_groups = sorted(
+        counts.items(),
+        key=lambda item: (-item[1], _source_label(item[0])),
+    )[:_MAX_SOURCE_GROUPS]
+    nguon = [NguonTomTat(nhan=_source_label(code), so_doan=count) for code, count in top_groups]
+    return f"{len(chunks)} đoạn từ {len(counts)} nguồn", nguon
+
+
+def _ask_error_reason(exc: Exception) -> str:
+    """Rút gọn ngoại lệ thành mã lý do ngắn gọn, không lộ dữ liệu nhạy cảm."""
+    reason = type(exc).__name__
+    if isinstance(exc, ProviderError):
+        message = str(exc)
+        if message == "Lỗi kết nối nhà cung cấp":
+            return "provider_connection_error"
+        if message in {"dau_ra_khong_hop_le", "het_han_muc_token"}:
+            return message
+        if match := re.match(r"HTTP (\d{3}):", message):
+            return f"provider_http_status={match.group(1)}"
+    return reason
+
+
+def _safe_step_error_message(reason: str) -> str:
+    """Đổi mã lỗi đã lọc sang lý do tiếng Việt an toàn cho dược sĩ."""
+    if reason == "het_han_muc_token":
+        return "Vượt hạn mức độ dài"
+    if reason == "provider_connection_error":
+        return "Không kết nối được nhà cung cấp mô hình"
+    return "Không soạn được câu trả lời"
+
+
+def _mark_running_step_error(fallback_step: str, reason: str) -> None:
+    """Đánh dấu bước đang chạy là lỗi với lý do và gợi ý an toàn."""
+    tracker = tien_trinh_hien_tai.get()
+    if tracker is None:
+        return
+    step_id = tracker.dang_chay_ma() or fallback_step
+    tracker.loi(
+        step_id,
+        ly_do=_safe_step_error_message(reason),
+        goi_y=_ASK_RETRY_HINT,
+    )
+
+
 class AskCitationRaw(BaseModel):
     """Mục trích dẫn thô do LLM trả về trước khi đối chiếu."""
 
@@ -185,11 +244,6 @@ def _source_label(nguon: str) -> str:
     return _SOURCE_LABELS.get(nguon, nguon.replace("_", " "))
 
 
-def _rule_finding_id(finding: PhatHien) -> str:
-    """Tạo mã nhận định ổn định cho phát hiện của bộ luật."""
-    return finding.ma_luat + "|" + ",".join(sorted(finding.chi_tiet_y_lenh_id))
-
-
 def _ai_finding_id(yeu_to: int, nhan_xet: str, chi_tiet_y_lenh_id: Sequence[str]) -> str:
     """Tạo mã nhận định ổn định cho dòng do AI đề xuất."""
     line_ids = ",".join(sorted(chi_tiet_y_lenh_id))
@@ -239,31 +293,26 @@ def _output_attempts_override(reply_text: str, ket_qua: KetQuaThamDinh) -> bool:
 def _scrub_history_and_question(
     cau_hoi: str,
     lich_su: Sequence[tuple[str, str]],
-) -> tuple[str, list[tuple[str, str]], dict[str, str]]:
-    """Che định danh câu hỏi và tối đa 6 tin gần nhất, gộp ánh xạ không đụng mã."""
+    session: DeidSession,
+) -> tuple[str, list[tuple[str, str]]]:
+    """Che câu hỏi và tối đa 6 tin gần nhất bằng phiên chung (lớp 1 rồi lớp 2).
+
+    Một giá trị một mã trong cả phiên; bảng khôi phục nằm ở session.anh_xa.
+    """
     recent = list(lich_su)[-MAX_HISTORY_MESSAGES:]
-    token_by_value: dict[tuple[str, str], str] = {}
-    kind_counts: dict[str, int] = {}
-    anh_xa: dict[str, str] = {}
+    scrubbed_question = _sanitize_markers(session.scrub(cau_hoi))
+    scrubbed_history = [
+        (role, _sanitize_markers(session.scrub(content))) for role, content in recent
+    ]
+    return scrubbed_question, scrubbed_history
 
-    def _remap(res: ScrubResult) -> str:
-        local_map: dict[str, str] = {}
-        for item in res.thay_the:
-            orig = res.anh_xa[item.ma_tam]
-            key = (item.loai, orig)
-            if key not in token_by_value:
-                kind_counts[item.loai] = kind_counts.get(item.loai, 0) + 1
-                new_tok = f"[{item.loai}_{kind_counts[item.loai]}]"
-                token_by_value[key] = new_tok
-                anh_xa[new_tok] = orig
-            local_map[item.ma_tam] = token_by_value[key]
-        return _sanitize_markers(restore_text(res.van_ban, local_map))
 
-    scrubbed_question = _remap(scrub_text(cau_hoi))
-    scrubbed_history: list[tuple[str, str]] = []
-    for role, content in recent:
-        scrubbed_history.append((role, _remap(scrub_text(content))))
-    return scrubbed_question, scrubbed_history, anh_xa
+def _scrub_free_text(session: DeidSession, text: str) -> str:
+    """Che văn bản tự do (lớp 1 và lớp 2); lỗi thì thay bằng dòng báo, không để lọt bản gốc."""
+    try:
+        return session.scrub(text)
+    except DeidError:
+        return _SCRUB_FALLBACK
 
 
 def _collect_case_numbers(
@@ -272,6 +321,7 @@ def _collect_case_numbers(
     base_numbers: Sequence[float],
     kept_record_ids: set[str],
     ai_result: AiRunResult | None,
+    session: DeidSession,
 ) -> list[float]:
     """Gom toàn bộ con số hợp lệ từ hồ sơ, chỉ số, phát hiện luật và nhận định AI."""
     numbers = list(base_numbers)
@@ -306,20 +356,20 @@ def _collect_case_numbers(
     for db in ca.dien_bien:
         if db.dien_bien_id in kept_record_ids:
             try:
-                safe_note = scrub_text(db.noi_dung).van_ban
+                safe_note = session.scrub(db.noi_dung)
             except DeidError:
                 continue
             numbers.extend(numbers_in_text(safe_note))
     for xn in ca.xet_nghiem:
         if xn.gia_tri_text:
             try:
-                numbers.extend(numbers_in_text(scrub_text(xn.gia_tri_text).van_ban))
+                numbers.extend(numbers_in_text(session.scrub(xn.gia_tri_text)))
             except DeidError:
                 continue
     for line in (*ca.y_lenh_cho_duyet.chi_tiet, *ca.thuoc_dang_dung):
         if line.cach_dung:
             try:
-                numbers.extend(numbers_in_text(scrub_text(line.cach_dung).van_ban))
+                numbers.extend(numbers_in_text(session.scrub(line.cach_dung)))
             except DeidError:
                 continue
 
@@ -342,46 +392,84 @@ def _collect_case_numbers(
     return numbers
 
 
-def _format_ai_section(ai_result: AiRunResult | None) -> str:
-    """Định dạng phần nhận định AI đã kiểm chứng khi tác vụ AI đã hoàn tất."""
+def _format_ai_section(
+    ai_result: AiRunResult | None,
+    ids: RecordIdMap,
+    session: DeidSession,
+) -> str:
+    """Định dạng phần nhận định AI đã kiểm chứng; mã bản ghi thành mã tạm, định danh được che."""
     if ai_result is None or ai_result.llm.trang_thai != "ok":
         return ""
+    ai_rule_findings = [
+        item.phat_hien
+        for item in ai_result.llm.nhan_dinh
+        if item.nguon_goc == "luat" and item.phat_hien is not None
+    ]
+    ai_rule_nids = iter(vm.finding_ids(ai_rule_findings))
     lines: list[str] = []
     for item in ai_result.llm.nhan_dinh:
-        if item.nguon_goc == "luat" and item.phat_hien is not None and item.dien_giai is not None:
-            fid = _rule_finding_id(item.phat_hien)
-            cites = ", ".join(td.doan_trich_id for td in item.dien_giai.trich_dan) or "không có"
-            lines.append(
-                f"- Diễn giải AI cho {fid}: {item.dien_giai.nhan_xet}"
-                + (f" | Đề xuất: {item.dien_giai.de_xuat}" if item.dien_giai.de_xuat else "")
-                + f" | Nguồn: {cites}"
-            )
+        if item.nguon_goc == "luat" and item.phat_hien is not None:
+            fid = next(ai_rule_nids)
+            if item.dien_giai is not None:
+                cites = ", ".join(td.doan_trich_id for td in item.dien_giai.trich_dan) or "không có"
+                explanation = _scrub_free_text(session, item.dien_giai.nhan_xet)
+                lines.append(
+                    f"- Diễn giải AI cho {fid}: {explanation}"
+                    + (
+                        f" | Đề xuất: {_scrub_free_text(session, item.dien_giai.de_xuat)}"
+                        if item.dien_giai.de_xuat
+                        else ""
+                    )
+                    + f" | Nguồn: {cites}"
+                )
         elif item.nguon_goc == "ai_da_kiem_chung" and item.de_xuat is not None:
             dx = item.de_xuat
             aid = _ai_finding_id(dx.yeu_to, dx.nhan_xet, dx.chi_tiet_y_lenh_id)
             cites = ", ".join(td.doan_trich_id for td in dx.trich_dan) or "không có"
-            records = ", ".join(dx.ban_ghi_ids) or "không có"
+            records = ", ".join(ids.tam(record_id) for record_id in dx.ban_ghi_ids) or "không có"
             lines.append(
-                f"- [{aid}] Yếu tố {dx.yeu_to} | {dx.ket_luan} | {dx.nhan_xet}"
-                + (f" | Đề xuất: {dx.de_xuat}" if dx.de_xuat else "")
+                f"- [{aid}] Yếu tố {dx.yeu_to} | {dx.ket_luan} | "
+                f"{_scrub_free_text(session, dx.nhan_xet)}"
+                + (f" | Đề xuất: {_scrub_free_text(session, dx.de_xuat)}" if dx.de_xuat else "")
                 + f" | Bản ghi: {records} | Nguồn: {cites}"
             )
     if not lines:
         return ""
-    return "\n".join(["NHẬN ĐỊNH AI ĐÃ KIỂM CHỨNG", *lines])
+    return session.mask_known(
+        ids.doi_van_ban_sang_tam("\n".join(["NHẬN ĐỊNH AI ĐÃ KIỂM CHỨNG", *lines]))
+    )
 
 
 def _format_priority_finding(
     nhan_dinh_id: str | None,
     ket_qua: KetQuaThamDinh,
     ai_result: AiRunResult | None,
+    ids: RecordIdMap,
+    session: DeidSession,
 ) -> tuple[str, set[str]]:
-    """Đưa nhận định được dược sĩ chọn cùng toàn bộ căn cứ của nó lên đầu ngữ cảnh."""
+    """Đưa nhận định được chọn cùng căn cứ lên đầu ngữ cảnh, đã đổi mã tạm và che định danh."""
+    block, chunk_ids = _priority_finding_raw(nhan_dinh_id, ket_qua, ai_result, ids, session)
+    if not block:
+        return block, chunk_ids
+    return session.mask_known(ids.doi_van_ban_sang_tam(block)), chunk_ids
+
+
+def _priority_finding_raw(
+    nhan_dinh_id: str | None,
+    ket_qua: KetQuaThamDinh,
+    ai_result: AiRunResult | None,
+    ids: RecordIdMap,
+    session: DeidSession,
+) -> tuple[str, set[str]]:
+    """Dựng khối nhận định ưu tiên; mã bản ghi được cấp mã tạm trước khi đổi văn bản."""
     if not nhan_dinh_id:
         return "", set()
 
-    for ph in ket_qua.phat_hien:
-        if _rule_finding_id(ph) == nhan_dinh_id:
+    rule_nids = vm.finding_ids(ket_qua.phat_hien)
+    for ph, fid in zip(ket_qua.phat_hien, rule_nids, strict=True):
+        if fid == nhan_dinh_id:
+            for line_id in ph.chi_tiet_y_lenh_id:
+                ids.tam(line_id)
             lines = [
                 "NHẬN ĐỊNH ĐANG ĐƯỢC HỎI (ƯU TIÊN)",
                 f"- nhan_dinh_id: {nhan_dinh_id}",
@@ -396,22 +484,31 @@ def _format_priority_finding(
                 lines.append(f"  + Căn cứ [{cc.loai}] ma={ref}: {cc.mo_ta}")
             cited_chunk_ids: set[str] = set()
             if ai_result is not None and ai_result.llm.trang_thai == "ok":
+                ai_rule_findings = [
+                    item.phat_hien
+                    for item in ai_result.llm.nhan_dinh
+                    if item.nguon_goc == "luat" and item.phat_hien is not None
+                ]
+                ai_rule_nids = iter(vm.finding_ids(ai_rule_findings))
                 for item in ai_result.llm.nhan_dinh:
-                    if (
-                        item.nguon_goc == "luat"
-                        and item.phat_hien is not None
-                        and _rule_finding_id(item.phat_hien) == nhan_dinh_id
-                        and item.dien_giai is not None
-                    ):
-                        lines.append(f"- Diễn giải AI: {item.dien_giai.nhan_xet}")
-                        if item.dien_giai.de_xuat:
-                            lines.append(f"- Đề xuất AI: {item.dien_giai.de_xuat}")
-                        for td in item.dien_giai.trich_dan:
-                            cited_chunk_ids.add(td.doan_trich_id)
+                    if item.nguon_goc == "luat" and item.phat_hien is not None:
+                        ai_fid = next(ai_rule_nids)
+                        if ai_fid == nhan_dinh_id and item.dien_giai is not None:
                             lines.append(
-                                f"  + Trích dẫn tài liệu [{td.doan_trich_id}]: "
-                                f"{td.trich_nguyen_van}"
+                                "- Diễn giải AI: "
+                                f"{_scrub_free_text(session, item.dien_giai.nhan_xet)}"
                             )
+                            if item.dien_giai.de_xuat:
+                                lines.append(
+                                    "- Đề xuất AI: "
+                                    f"{_scrub_free_text(session, item.dien_giai.de_xuat)}"
+                                )
+                            for td in item.dien_giai.trich_dan:
+                                cited_chunk_ids.add(td.doan_trich_id)
+                                lines.append(
+                                    f"  + Trích dẫn tài liệu [{td.doan_trich_id}]: "
+                                    f"{td.trich_nguyen_van}"
+                                )
             return "\n".join(lines), cited_chunk_ids
 
     if ai_result is not None and ai_result.llm.trang_thai == "ok":
@@ -420,15 +517,17 @@ def _format_priority_finding(
                 dx = item.de_xuat
                 aid = _ai_finding_id(dx.yeu_to, dx.nhan_xet, dx.chi_tiet_y_lenh_id)
                 if aid == nhan_dinh_id:
+                    for record_id in (*dx.chi_tiet_y_lenh_id, *dx.ban_ghi_ids):
+                        ids.tam(record_id)
                     lines = [
                         "NHẬN ĐỊNH ĐANG ĐƯỢC HỎI (ƯU TIÊN)",
                         f"- nhan_dinh_id: {aid}",
                         f"- yeu_to={dx.yeu_to} | ket_luan={dx.ket_luan} | muc_do={dx.muc_do}",
                         f"- dong={', '.join(dx.chi_tiet_y_lenh_id) or 'cả đơn'}"
-                        f" | nhan_xet: {dx.nhan_xet}",
+                        f" | nhan_xet: {_scrub_free_text(session, dx.nhan_xet)}",
                     ]
                     if dx.de_xuat:
-                        lines.append(f"- Đề xuất AI: {dx.de_xuat}")
+                        lines.append(f"- Đề xuất AI: {_scrub_free_text(session, dx.de_xuat)}")
                     for record_id in dx.ban_ghi_ids:
                         lines.append(f"  + Căn cứ [du_lieu] ma={record_id}")
                     cited_chunk_ids = set()
@@ -476,14 +575,19 @@ def _build_messages(
     loi_lan_truoc: str,
 ) -> list[ChatMessage]:
     """Tách phần chỉ thị hệ thống và dữ liệu ca bệnh để gửi cho mô hình."""
+    values = {
+        "van_ban_ca": van_ban_ca,
+        "doan_nguon": doan_nguon,
+        "lich_su": lich_su,
+        "cau_hoi": cau_hoi,
+        "loi_lan_truoc": loi_lan_truoc,
+    }
 
     def _render(part: str) -> str:
-        return (
-            part.replace("{{van_ban_ca}}", van_ban_ca)
-            .replace("{{doan_nguon}}", doan_nguon)
-            .replace("{{lich_su}}", lich_su)
-            .replace("{{cau_hoi}}", cau_hoi)
-            .replace("{{loi_lan_truoc}}", loi_lan_truoc)
+        return re.sub(
+            r"\{\{(van_ban_ca|doan_nguon|lich_su|cau_hoi|loi_lan_truoc)\}\}",
+            lambda match: values[match.group(1)],
+            part,
         )
 
     if _DATA_SPLIT_MARKER in template:
@@ -496,6 +600,22 @@ def _build_messages(
         ChatMessage(role="system", content=_FALLBACK_SYSTEM_PROMPT),
         ChatMessage(role="user", content=_render(template).strip()),
     ]
+
+
+def _format_global_order_line(line: ChiTietYLenh) -> str:
+    """Định dạng một dòng y lệnh cho bảng tóm tắt chung, chịu được trường None."""
+    name = line.ten_tu_do or line.thuoc_id or line.chi_tiet_y_lenh_id
+    unit = (line.don_vi_lieu or "").strip()
+    if line.lieu_moi_lan is not None:
+        dose_num = f"{line.lieu_moi_lan:g}"
+        dose_part = f"{dose_num} {unit}" if unit else f"{dose_num} (đơn vị chưa ghi)"
+    elif unit:
+        dose_part = f"liều chưa ghi ({unit})"
+    else:
+        dose_part = "liều chưa ghi"
+    freq_part = (line.tan_suat or "").strip() or "tần suất chưa ghi"
+    route_part = (line.duong_dung or "").strip() or "đường dùng chưa ghi"
+    return f"{name} {dose_part} ({freq_part}, {route_part})"
 
 
 class CaseAsker:
@@ -539,7 +659,7 @@ class CaseAsker:
     def _get_renal_rules(self) -> RenalRuleBook:
         """Nạp bảng quy tắc chỉnh liều thận khi người gọi không truyền sẵn kết quả luật."""
         if self._renal_rules is None:
-            self._renal_rules = load_renal_rules(_ROOT / "data/kb/quy_tac_lieu_than.json")
+            self._renal_rules = load_renal_rules()
         return self._renal_rules
 
     def _run_with_deadline(self, fn: Callable[[], object], deadline: float) -> object:
@@ -666,10 +786,17 @@ class CaseAsker:
         allowed_numbers: list[float],
         chunk_by_id: dict[str, Chunk],
         anh_xa: dict[str, str],
+        ids: RecordIdMap,
         tools_called: list[str],
         perf_start: float,
     ) -> AskResult:
-        """Kiểm chứng phạm vi, trích dẫn, chuỗi con nguyên văn và mọi con số trong câu trả lời."""
+        """Kiểm chứng phạm vi, trích dẫn, chuỗi con nguyên văn và mọi con số trong câu trả lời.
+
+        allowed_record_ids là mã tạm; mã thật chỉ xuất hiện ở kết quả trả về giao diện.
+        """
+
+        def _restore(text: str) -> str:
+            return ids.doi_van_ban_sang_that(restore_text(text, anh_xa))
 
         def _elapsed() -> int:
             return int((time.perf_counter() - perf_start) * 1000.0)
@@ -697,7 +824,7 @@ class CaseAsker:
                 and not _output_attempts_override(reply_text, ket_qua)
                 and not unverified_numbers([reply_text], list(allowed_numbers))
             ):
-                natural_msg = restore_text(reply_text, anh_xa)
+                natural_msg = _restore(reply_text)
             else:
                 natural_msg = NO_SOURCE_MESSAGE if clinical else OUT_OF_SCOPE_MESSAGE
             return AskResult(
@@ -740,7 +867,7 @@ class CaseAsker:
             clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
             return AskResult(
                 trang_thai="khong_co_nguon" if clinical else "ok",
-                noi_dung=restore_text(reply_text, anh_xa),
+                noi_dung=_restore(reply_text),
                 trich_dan=[],
                 cong_cu_da_goi=tools_called,
                 thoi_gian_ms=_elapsed(),
@@ -765,18 +892,19 @@ class CaseAsker:
             if item.loai == "du_lieu_ca":
                 if item.ma not in allowed_record_ids:
                     _reject(f"unknown_record_id:{item.ma}")
-                detail = vm.record_detail(ca, item.ma)
+                real_id = ids.that(item.ma)
+                detail = vm.record_detail(ca, real_id)
                 label = (
                     f"{detail['loai']}: {detail['tieu_de']}"
                     if detail is not None
-                    else f"Bản ghi {item.ma}"
+                    else f"Bản ghi {real_id}"
                 )
                 citations.append(
                     AskCitation(
                         so=item.so,
                         loai_ma="du_lieu",
                         nhan=label,
-                        ban_ghi_id=item.ma,
+                        ban_ghi_id=real_id,
                     )
                 )
             elif item.loai == "tinh_toan":
@@ -828,7 +956,7 @@ class CaseAsker:
         if number_errors:
             _reject("; ".join(number_errors))
 
-        restored_reply = restore_text(reply_text, anh_xa)
+        restored_reply = _restore(reply_text)
         return AskResult(
             trang_thai="ok",
             noi_dung=restored_reply,
@@ -870,13 +998,22 @@ class CaseAsker:
                 doan=[],
             )
 
+        ghi_buoc("bat_dau", "chuan_bi", ten="Đọc hồ sơ ca và chạy bộ luật")
         try:
-            scrubbed_question, scrubbed_history, anh_xa = _scrub_history_and_question(
+            session = open_deid_session(ca, [])
+            scrubbed_question, scrubbed_history = _scrub_history_and_question(
                 cleaned_question,
                 lich_su or [],
+                session,
             )
-        except DeidError:
+        except Exception:
             _log_rejection("deid", "scrub_failed")
+            ghi_buoc(
+                "loi",
+                "chuan_bi",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
+            )
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
@@ -891,7 +1028,10 @@ class CaseAsker:
         selected_chunks: list[Chunk] = []
         try:
             active_result = ket_qua or run_case(ca, self._get_renal_rules())
-            goi, _ = build_case_context(ca, active_result, self._case_settings)
+            bundle = build_case_bundle(ca, active_result, self._case_settings, session=session)
+            goi = bundle.goi
+            ids = bundle.ma_ban_ghi
+            anh_xa = session.anh_xa
             allowed_record_ids = set(goi.ban_ghi_ids)
             allowed_calc_ids = {
                 cs.cong_thuc for cs in active_result.chi_so if cs.ket_qua is not None
@@ -900,22 +1040,31 @@ class CaseAsker:
                 ca,
                 active_result,
                 goi.so_cho_phep,
-                allowed_record_ids,
+                set(ids.that_nhieu(goi.ban_ghi_ids)),
                 ai_result,
+                session,
             )
 
             priority_block, priority_chunk_ids = _format_priority_finding(
                 nhan_dinh_id,
                 active_result,
                 ai_result,
+                ids,
+                session,
             )
-            ai_block = _format_ai_section(ai_result)
+            ai_block = _format_ai_section(ai_result, ids, session)
             context_parts = [
                 part for part in (priority_block, goi.van_ban_ca, ai_block) if part.strip()
             ]
             van_ban_ca = _sanitize_markers("\n\n".join(context_parts))
+            ghi_buoc(
+                "xong",
+                "chuan_bi",
+                chi_tiet=f"{len(active_result.phat_hien)} phát hiện của bộ luật",
+            )
 
             step = "retrieval"
+            ghi_buoc("bat_dau", "truy_xuat", ten="Tra cứu nhãn thuốc và hướng dẫn")
             retrieved_chunks, used_retrieval = self._retrieve_chunks(
                 ca,
                 scrubbed_question,
@@ -923,6 +1072,15 @@ class CaseAsker:
             )
             if used_retrieval:
                 tools_called.append("truy_xuat")
+                source_detail, source_groups = _summarize_sources(retrieved_chunks)
+                ghi_buoc(
+                    "xong",
+                    "truy_xuat",
+                    chi_tiet=source_detail,
+                    nguon=source_groups,
+                )
+            else:
+                ghi_buoc("xong", "truy_xuat", chi_tiet="Không dùng tra cứu nguồn")
             _LOGGER.info("ask retrieval chunks=%s used=%s", len(retrieved_chunks), used_retrieval)
 
             candidate_chunks = list(retrieved_chunks)
@@ -958,6 +1116,16 @@ class CaseAsker:
             llm = self._llm
             assert llm is not None
             for attempt in range(2):
+                llm_step = "goi_mo_hinh" if attempt == 0 else f"goi_mo_hinh_{attempt + 1}"
+                verify_step = "kiem_chung" if attempt == 0 else f"kiem_chung_{attempt + 1}"
+                if attempt >= 1:
+                    ghi_buoc("them", llm_step, ten=f"Soạn lại, lần {attempt + 1}")
+                ghi_buoc(
+                    "bat_dau",
+                    llm_step,
+                    chi_tiet="Đang gọi mô hình",
+                    ten="Soạn câu trả lời" if attempt == 0 else None,
+                )
                 messages = _build_messages(
                     template,
                     van_ban_ca=van_ban_ca,
@@ -979,15 +1147,32 @@ class CaseAsker:
                         for error in exc.errors(include_input=False, include_context=False)
                     )
                     _log_rejection("llm_schema", f"invalid_json:{errors}", len(selected_chunks))
+                    if attempt == 0:
+                        ghi_buoc("xong", llm_step, chi_tiet="Đầu ra sai định dạng, thử lại")
+                    else:
+                        ghi_buoc(
+                            "loi",
+                            llm_step,
+                            ly_do="Không soạn được câu trả lời",
+                            goi_y=_ASK_RETRY_HINT,
+                        )
                     previous_error = (
                         f"Lần trước sai lược đồ JSON ({errors}). "
                         "Chỉ trả về đúng đối tượng JSON hợp lệ."
                     )
                     continue
 
+                ghi_buoc("xong", llm_step)
                 step = "verification"
+                if attempt >= 1:
+                    ghi_buoc("them", verify_step, ten=f"Kiểm chứng lại, lần {attempt + 1}")
+                ghi_buoc(
+                    "bat_dau",
+                    verify_step,
+                    ten="Kiểm chứng trích dẫn và số liệu" if attempt == 0 else None,
+                )
                 try:
-                    return self._verify_and_build_reply(
+                    verified = self._verify_and_build_reply(
                         ca=ca,
                         ket_qua=active_result,
                         cleaned_question=cleaned_question,
@@ -997,23 +1182,34 @@ class CaseAsker:
                         allowed_numbers=allowed_numbers,
                         chunk_by_id=chunk_by_id,
                         anh_xa=anh_xa,
+                        ids=ids,
                         tools_called=tools_called,
                         perf_start=perf_start,
                     )
                 except _AskVerificationError as exc:
                     if attempt == 1:
+                        ghi_buoc("xong", verify_step, chi_tiet="Không đủ căn cứ")
                         return AskResult(
                             trang_thai="khong_co_nguon",
                             noi_dung=NO_SOURCE_MESSAGE,
                             cong_cu_da_goi=tools_called,
                             thoi_gian_ms=_elapsed(),
                         )
+                    ghi_buoc("xong", verify_step, chi_tiet="Không đạt, thử lại")
                     previous_error = (
                         "Câu trả lời trước không qua kiểm chứng: "
                         f"{exc}. "
                         "Hãy viết lại toàn bộ câu trả lời cùng trích dẫn từ ngữ cảnh đã cấp. "
                         "Không chỉ xoá riêng câu hay trích dẫn hỏng; không bịa mã hoặc con số."
                     )
+                else:
+                    if verified.trang_thai == "ok":
+                        ghi_buoc("xong", verify_step, chi_tiet="Đạt")
+                    elif verified.trang_thai == "ngoai_pham_vi":
+                        ghi_buoc("xong", verify_step, chi_tiet="Ngoài phạm vi hỗ trợ")
+                    else:
+                        ghi_buoc("xong", verify_step, chi_tiet="Không đủ căn cứ")
+                    return verified
 
             _log_rejection("llm_schema", "invalid_json_after_retry", len(selected_chunks))
             return AskResult(
@@ -1023,16 +1219,16 @@ class CaseAsker:
                 thoi_gian_ms=_elapsed(),
             )
         except Exception as exc:
-            reason = type(exc).__name__
-            if isinstance(exc, ProviderError):
-                message = str(exc)
-                if message == "Lỗi kết nối nhà cung cấp":
-                    reason = "provider_connection_error"
-                elif message in {"dau_ra_khong_hop_le", "het_han_muc_token"}:
-                    reason = message
-                elif match := re.match(r"HTTP (\d{3}):", message):
-                    reason = f"provider_http_status={match.group(1)}"
+            reason = _ask_error_reason(exc)
             _log_rejection(step, reason, len(selected_chunks))
+            fallback_step = {
+                "context": "chuan_bi",
+                "retrieval": "truy_xuat",
+                "prompt": "goi_mo_hinh",
+                "llm": "goi_mo_hinh",
+                "verification": "kiem_chung",
+            }.get(step, "chuan_bi")
+            _mark_running_step_error(fallback_step, reason)
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
@@ -1056,6 +1252,51 @@ class CaseAsker:
                     if kb_id not in matched_kb:
                         matched_kb.append(kb_id)
         return matched_kb
+
+    def _build_global_summary(
+        self,
+        cases: Sequence[CaBenh],
+        results: dict[str, KetQuaThamDinh],
+    ) -> str:
+        """Dựng bảng tóm tắt các ca bệnh cho chế độ hỏi đáp chung."""
+        summary_lines = [f"TỔNG QUAN HÀNG ĐỢI Y LỆNH ({len(cases)} ca bệnh đang có trên hệ thống):"]
+        for ca in cases:
+            kq = results.get(ca.ca_id) or run_case(ca, self._get_renal_rules())
+            if ca.nguoi_benh.gioi_tinh == "nam":
+                gioi = "Nam"
+            elif ca.nguoi_benh.gioi_tinh == "nu":
+                gioi = "Nữ"
+            else:
+                gioi = "Chưa rõ giới"
+            tuoi_text = (
+                f"{ca.nguoi_benh.tuoi} tuổi" if ca.nguoi_benh.tuoi is not None else "chưa rõ tuổi"
+            )
+            cd_chinh = next(
+                (cd.noi_dung for cd in ca.chan_doan if cd.loai == "chinh"),
+                "Chưa rõ",
+            )
+            drugs_str = ", ".join(
+                _format_global_order_line(line) for line in ca.y_lenh_cho_duyet.chi_tiet
+            )
+            metrics_str = ", ".join(
+                f"{cs.cong_thuc}={cs.ket_qua:.1f} {cs.don_vi}"
+                for cs in kq.chi_so
+                if cs.ket_qua is not None
+            )
+            attention = [ph for ph in kq.phat_hien if ph.ket_luan != "dat"]
+            if attention:
+                findings_str = "; ".join(
+                    f"[{ph.muc_do}/{ph.ket_luan}] {ph.mo_ta}" for ph in attention
+                )
+            else:
+                findings_str = "Đạt (không có cảnh báo cần xem)"
+            summary_lines.append(
+                f"- Ca {ca.ca_id} (Mã y lệnh {ca.y_lenh_cho_duyet.y_lenh_id}): "
+                f"{gioi} {tuoi_text}, Khoa {ca.y_lenh_cho_duyet.khoa_ke_don}, "
+                f"Chẩn đoán: {cd_chinh} | Thuốc kê: {drugs_str} | "
+                f"Chỉ số: {metrics_str or 'chưa đủ'} | Kết quả bộ luật: {findings_str}"
+            )
+        return "\n".join(summary_lines)
 
     def ask_global(
         self,
@@ -1083,59 +1324,59 @@ class CaseAsker:
             )
 
         if _has_injection_directive(cleaned_question):
+            ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
+            ghi_buoc("xong", "chuan_bi", chi_tiet="Ngoài phạm vi hỗ trợ")
             return AskResult(
                 trang_thai="ngoai_pham_vi",
                 noi_dung=OUT_OF_SCOPE_MESSAGE,
                 thoi_gian_ms=_elapsed(),
             )
 
+        ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
+        # Câu hỏi chung: không có người bệnh đang mở nên chỉ che theo mẫu (lớp 2);
+        # mã ca và mã y lệnh trong bảng tổng quan đổi thành mã tạm, khôi phục ở câu trả lời.
         try:
-            scrubbed_question, scrubbed_history, anh_xa = _scrub_history_and_question(
+            session = DeidSession(
+                GiaTriDinhDanh(loai="MA", gia_tri=code)
+                for ca in cases
+                for code in (ca.ca_id, ca.y_lenh_cho_duyet.y_lenh_id)
+                if code
+            )
+            scrubbed_question, scrubbed_history = _scrub_history_and_question(
                 cleaned_question,
                 lich_su or [],
+                session,
             )
-        except DeidError:
+        except Exception:
+            ghi_buoc(
+                "loi",
+                "chuan_bi",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
+            )
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
                 thoi_gian_ms=_elapsed(),
             )
+        anh_xa = session.anh_xa
 
         tools_called = ["danh_sach_y_lenh", "bo_luat"]
-        summary_lines = [
-            f"TỔNG QUAN HÀNG ĐỢI Y LỆNH ({len(cases)} ca bệnh đang có trên hệ thống):"
-        ]
-        for ca in cases:
-            kq = results.get(ca.ca_id) or run_case(ca, self._get_renal_rules())
-            gioi = "Nam" if ca.nguoi_benh.gioi_tinh == "nam" else "Nữ"
-            cd_chinh = next(
-                (cd.noi_dung for cd in ca.chan_doan if cd.loai == "chinh"),
-                "Chưa rõ",
+        summary_text = self._build_global_summary(cases, results)
+        try:
+            van_ban_ca = _sanitize_markers(session.mask_known(summary_text))
+        except DeidError:
+            ghi_buoc(
+                "loi",
+                "chuan_bi",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
             )
-            drugs_str = ", ".join(
-                f"{line.ten_tu_do or line.thuoc_id} {line.lieu_moi_lan:g} "
-                f"{line.don_vi_lieu} ({line.tan_suat}, {line.duong_dung})"
-                for line in ca.y_lenh_cho_duyet.chi_tiet
+            return AskResult(
+                trang_thai="loi",
+                noi_dung=ERROR_MESSAGE,
+                thoi_gian_ms=_elapsed(),
             )
-            metrics_str = ", ".join(
-                f"{cs.cong_thuc}={cs.ket_qua:.1f} {cs.don_vi}"
-                for cs in kq.chi_so
-                if cs.ket_qua is not None
-            )
-            attention = [ph for ph in kq.phat_hien if ph.ket_luan != "dat"]
-            if attention:
-                findings_str = "; ".join(
-                    f"[{ph.muc_do}/{ph.ket_luan}] {ph.mo_ta}" for ph in attention
-                )
-            else:
-                findings_str = "Đạt (không có cảnh báo cần xem)"
-            summary_lines.append(
-                f"- Ca {ca.ca_id} (Mã y lệnh {ca.y_lenh_cho_duyet.y_lenh_id}): "
-                f"{gioi} {ca.nguoi_benh.tuoi} tuổi, Khoa {ca.y_lenh_cho_duyet.khoa_ke_don}, "
-                f"Chẩn đoán: {cd_chinh} | Thuốc kê: {drugs_str} | "
-                f"Chỉ số: {metrics_str or 'chưa đủ'} | Kết quả bộ luật: {findings_str}"
-            )
-        van_ban_ca = _sanitize_markers("\n".join(summary_lines))
 
         selected_chunks: list[Chunk] = []
         kb_ids = self._extract_question_drugs(scrubbed_question)
@@ -1180,6 +1421,13 @@ class CaseAsker:
         else:
             doan_nguon_text = "(không có đoạn nguồn)"
 
+        prep_detail = (
+            f"{len(cases)} ca, {len(selected_chunks)} đoạn nguồn"
+            if selected_chunks
+            else f"{len(cases)} ca"
+        )
+        ghi_buoc("xong", "chuan_bi", chi_tiet=prep_detail)
+
         chunk_by_id = {c.doan_trich_id: c for c in selected_chunks}
         try:
             _, template = load_prompt(self._prompt_path)
@@ -1200,13 +1448,17 @@ class CaseAsker:
                 cau_hoi=scrubbed_question,
                 loi_lan_truoc="Không có.",
             )
+            ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình", ten="Soạn câu trả lời")
             raw = self._run_with_deadline(
                 lambda msgs=messages: self._llm.complete_json(msgs, schema),  # type: ignore[union-attr]
                 deadline,
             )
             parsed = AskLLMOutput.model_validate(raw)
+            ghi_buoc("xong", "goi_mo_hinh")
+            ghi_buoc("bat_dau", "kiem_chung", ten="Kiểm chứng trích dẫn và số liệu")
             reply_text = parsed.tra_loi.strip()
             if not reply_text:
+                ghi_buoc("xong", "kiem_chung", chi_tiet="Không đủ căn cứ")
                 return AskResult(
                     trang_thai="khong_co_nguon",
                     noi_dung=NO_SOURCE_MESSAGE,
@@ -1262,6 +1514,11 @@ class CaseAsker:
             status: Literal["ok", "ngoai_pham_vi"] = (
                 "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
             )
+            ghi_buoc(
+                "xong",
+                "kiem_chung",
+                chi_tiet="Ngoài phạm vi hỗ trợ" if status == "ngoai_pham_vi" else "Đạt",
+            )
             return AskResult(
                 trang_thai=status,
                 noi_dung=restored,
@@ -1270,7 +1527,8 @@ class CaseAsker:
                 thoi_gian_ms=_elapsed(),
                 doan=cited_chunks,
             )
-        except Exception:
+        except Exception as exc:
+            _mark_running_step_error("goi_mo_hinh", _ask_error_reason(exc))
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,

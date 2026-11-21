@@ -1,0 +1,133 @@
+{
+  "ca_id": "DEMO-05",
+  "mo_ta_ngan": "Nam 55 tuổi, tăng huyết áp, lịch dùng Metoprolol 50 mg thiếu liều tối",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-DEMO-05",
+    "tuoi": 55,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-09T10:30:00+07:00"
+  },
+  "di_ung": [],
+  "dot_dieu_tri": {
+    "dot_dieu_tri_id": "DT-DEMO-05",
+    "khoa_dieu_tri": "Tim mạch",
+    "loai_dieu_tri": "noi_tru",
+    "thoi_diem_bat_dau": "2026-11-09T10:00:00+07:00"
+  },
+  "chan_doan": [
+    {
+      "chan_doan_id": "CD-DEMO05-01",
+      "ma_icd10": "I10",
+      "noi_dung": "Tăng huyết áp nguyên phát",
+      "loai": "chinh"
+    }
+  ],
+  "co_dia": [],
+  "sinh_hieu": [
+    {
+      "sinh_hieu_id": "SH-DEMO05-01",
+      "loai": "can_nang",
+      "gia_tri": 72.0,
+      "don_vi": "kg",
+      "thoi_diem_do": "2026-11-10T07:00:00+07:00"
+    },
+    {
+      "sinh_hieu_id": "SH-DEMO05-02",
+      "loai": "chieu_cao",
+      "gia_tri": 168.0,
+      "don_vi": "cm",
+      "thoi_diem_do": "2026-11-10T07:00:00+07:00"
+    }
+  ],
+  "xet_nghiem": [
+    {
+      "xet_nghiem_id": "XN-DEMO05-01",
+      "ma_xet_nghiem": "creatinin",
+      "ten_xet_nghiem": "Creatinin máu",
+      "gia_tri_so": 85.0,
+      "gia_tri_text": null,
+      "don_vi": "umol/L",
+      "nguong_duoi": 62,
+      "nguong_tren": 106,
+      "thoi_diem_ket_qua": "2026-11-10T06:30:00+07:00"
+    }
+  ],
+  "vi_sinh": [],
+  "dien_bien": [
+    {
+      "dien_bien_id": "DB-DEMO05-01",
+      "loai_ho_so": "Phiếu điều trị",
+      "noi_dung": "Người bệnh tỉnh, tiếp tục điều trị tăng huyết áp nội trú.",
+      "thoi_diem_ghi": "2026-11-10T07:30:00+07:00"
+    }
+  ],
+  "thuoc_dang_dung": [],
+  "y_lenh_cho_duyet": {
+    "y_lenh_id": "YL-DEMO-05",
+    "khoa_ke_don": "Tim mạch",
+    "luong_duyet": "truc_tiep",
+    "muc_uu_tien": null,
+    "thoi_diem_ke": "2026-11-10T07:45:00+07:00",
+    "chi_tiet": [
+      {
+        "chi_tiet_y_lenh_id": "CT-DEMO05-01",
+        "thuoc_id": "T-METOPROLOL-50",
+        "ten_tu_do": null,
+        "loai_san_pham": "thuoc",
+        "lieu_moi_lan": 50.0,
+        "don_vi_lieu": "mg",
+        "tan_suat": "2 lần/ngày",
+        "so_lan_moi_ngay": 2,
+        "khoang_cach_gio": 12.0,
+        "duong_dung": "uống",
+        "cach_dung": "Uống 2 lần/ngày, sáng và tối",
+        "bat_dau": "2026-11-10T08:00:00+07:00",
+        "ket_thuc": null,
+        "nguon_thuoc": "Kho nội trú",
+        "trang_thai_dong": "active",
+        "lich_dung": [
+          {
+            "thoi_diem_du_kien": "2026-11-10T08:00:00+07:00",
+            "lieu": 50.0,
+            "don_vi": "mg"
+          },
+          {
+            "thoi_diem_du_kien": "2026-11-11T08:00:00+07:00",
+            "lieu": 50.0,
+            "don_vi": "mg"
+          }
+        ]
+      }
+    ]
+  },
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-METOPROLOL-50",
+      "ten_thuoc": "Metoprolol tartrat 50 mg",
+      "ham_luong": "50 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METOPROLOL",
+          "ham_luong_thanh_phan": 50.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-METOPROLOL",
+      "ten_hoat_chat": "Metoprolol",
+      "ten_quoc_te": "metoprolol",
+      "ma_atc": "C07AB02",
+      "nhom_duoc_ly": "chen_beta_chon_loc"
+    }
+  ]
+}

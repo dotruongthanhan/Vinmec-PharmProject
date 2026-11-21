@@ -1,0 +1,1288 @@
+{
+  "ho_so_id": "HS-052",
+  "kich_ban_id": "HS-052",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-052",
+    "tuoi": 66,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-16T08:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin_the_he_3"
+    },
+    {
+      "hoat_chat_id": "HC-MEROPENEM",
+      "ten_hoat_chat": "Meropenem",
+      "ten_quoc_te": "meropenem",
+      "ma_atc": "J01DH02",
+      "nhom_duoc_ly": "carbapenem"
+    },
+    {
+      "hoat_chat_id": "HC-AMIKACIN",
+      "ten_hoat_chat": "Amikacin",
+      "ten_quoc_te": "amikacin",
+      "ma_atc": "J01GB06",
+      "nhom_duoc_ly": "aminoglycosid"
+    },
+    {
+      "hoat_chat_id": "HC-COLISTIMETHATE",
+      "ten_hoat_chat": "Colistimethat",
+      "ten_quoc_te": "colistimethate",
+      "ma_atc": null,
+      "nhom_duoc_ly": "polymyxin"
+    },
+    {
+      "hoat_chat_id": "HC-PIPERACILLIN",
+      "ten_hoat_chat": "Piperacilin",
+      "ten_quoc_te": "piperacillin",
+      "ma_atc": "J01CA12",
+      "nhom_duoc_ly": "penicillin_pho_rong"
+    },
+    {
+      "hoat_chat_id": "HC-TAZOBACTAM",
+      "ten_hoat_chat": "Tazobactam",
+      "ten_quoc_te": "tazobactam",
+      "ma_atc": null,
+      "nhom_duoc_ly": "ức_che_beta_lactamase"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "ten_thuoc": "Ceftriaxon 2 g",
+      "ham_luong": "2 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 2000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-MEROPENEM-1G",
+      "ten_thuoc": "Meropenem 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-MEROPENEM",
+          "ham_luong_thanh_phan": 1.0,
+          "don_vi": "g"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-COLISTIMETHATE-4M5",
+      "ten_thuoc": "Colistimethat natri 4,5 triệu đơn vị",
+      "ham_luong": "4,5 triệu đơn vị",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-COLISTIMETHATE",
+          "ham_luong_thanh_phan": 4.5,
+          "don_vi": "triệu đơn vị"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PIPERACILLIN-TAZOBACTAM-4G5",
+      "ten_thuoc": "Piperacilin 4 g + tazobactam 0,5 g",
+      "ham_luong": "4 g + 0,5 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-PIPERACILLIN",
+          "ham_luong_thanh_phan": 4000.0,
+          "don_vi": "mg"
+        },
+        {
+          "hoat_chat_id": "HC-TAZOBACTAM",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-052-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2025-08-10T09:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-08-15T10:00:00+07:00",
+      "so_ngay_dieu_tri": 5,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2025-08-10T09:00:00+07:00",
+          "den": "2025-08-15T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Sốt, ho đờm, khó thở nhẹ",
+      "benh_su": "BN nữ 65T, sốt 38,5 °C, ho đờm vàng, khó thở nhẹ 4 ngày. X-quang phổi đông đặc thùy dưới phải.",
+      "tien_su": {
+        "ban_than": "Không ghi nhận bệnh nền đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng kháng sinh trong 3 tháng gần đây."
+      },
+      "kham_benh": "T 38,5 °C, mạch 96 lần/phút, SpO2 95% khí phòng. Ran ẩm đáy phổi phải.",
+      "tom_tat": "BN nữ 65T viêm phổi cộng đồng thùy dưới phải, đáp ứng ceftriaxon. Ra viện sau 5 ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS052-1-01",
+          "ma_icd10": "J18.9",
+          "noi_dung": "Viêm phổi cộng đồng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS052-1-01",
+          "loai": "nhiet_do",
+          "gia_tri": 38.5,
+          "don_vi": "°C",
+          "thoi_diem_do": "2025-08-10T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-1-02",
+          "loai": "can_nang",
+          "gia_tri": 60.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2025-08-10T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-1-03",
+          "loai": "nhiet_do",
+          "gia_tri": 37.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2025-08-13T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS052-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 78.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2025-08-10T10:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS052-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Sốt 38,5 °C, ho đờm, ran ẩm đáy phổi phải, X-quang đông đặc thùy dưới phải. Nhập khoa Hô hấp, khởi trị ceftriaxon 2 g/ngày.",
+          "thoi_diem_ghi": "2025-08-10T09:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS052-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sau 3 ngày điều trị, sốt giảm, ho còn ít đờm, không khó thở.",
+          "thoi_diem_ghi": "2025-08-13T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-052-01",
+          "thoi_diem_ke": "2025-08-10T10:00:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-052-01-01",
+              "thuoc_id": "T-CEFTRIAXONE-2G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2025-08-10T11:00:00+07:00",
+              "ket_thuc": "2025-08-15T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Viêm phổi cộng đồng, đáp ứng ceftriaxon 2 g/ngày. Ra viện ổn định, tái khám theo hẹn.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-08-10T12:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 65T, sốt 38,5 °C, ho đờm vàng và khó thở nhẹ khoảng 4 ngày. Cân nặng 60 kg. X-quang phổi đông đặc thùy dưới phải, ran ẩm đáy phổi phải. Creatinin máu 78 umol/L trong giới hạn. Chưa dùng kháng sinh trong 3 tháng gần đây, nhập khoa Hô hấp.",
+          "danh_gia": "Viêm phổi cộng đồng thùy dưới phải, người cao tuổi chưa có dấu hiệu suy hô hấp nặng. Chức năng thận còn tốt, có thể dùng cephalosporin thế hệ ba theo phác đồ.",
+          "huong_xu_tri": "Ceftriaxon 2 g truyền tĩnh mạch mỗi ngày một lần, theo dõi đáp ứng sau 48 đến 72 giờ. Tiếp tục theo dõi sinh hiệu, lượng đờm và tình trạng hô hấp, chưa cần xét nghiệm bổ sung.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn cơm mềm, chia nhỏ bữa, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 6 giờ",
+            "Nhịp thở và mức độ khó thở",
+            "Lượng và màu sắc đờm"
+          ],
+          "dan_do": "Ngồi đầu cao khi ăn, tập thở sâu và ho khạc đờm, báo điều dưỡng nếu khó thở tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2025-08-11T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN còn ho đờm, sốt giảm so với lúc nhập viện, không khó thở khi nghỉ. Đang dùng ceftriaxon 2 g mỗi ngày qua đường tĩnh mạch, dung nạp tốt, không ghi nhận phản ứng bất thường tại chỗ truyền.",
+          "danh_gia": "Viêm phổi cộng đồng đang đáp ứng với ceftriaxon, sốt và triệu chứng hô hấp cải thiện từng ngày. Không có biến chứng mới. Người bệnh không có dấu hiệu tràn dịch màng phổi hay bội nhiễm trên lâm sàng, khả năng sinh hoạt đã trở lại gần bình thường.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g truyền tĩnh mạch mỗi ngày một lần. Theo dõi sốt và ho, dự kiến ổn định trong 2 đến 3 ngày nữa.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn cơm mềm, chia nhỏ bữa, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 6 giờ",
+            "Ho và lượng đờm",
+            "Vị trí tiêm truyền"
+          ],
+          "dan_do": "Tiếp tục ngồi đầu cao khi ăn và tập ho khạc đờm, báo điều dưỡng khi có khó thở hoặc đau ngực."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2025-08-12T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày điều trị thứ ba, người bệnh tỉnh, ăn uống được, ho ít đờm hơn. Không khó thở khi nghỉ ngơi. Ceftriaxon 2 g truyền tĩnh mạch đã dùng đủ ba ngày, không có tác dụng không mong muốn đáng kể.",
+          "danh_gia": "Đáp ứng điều trị tốt, sốt giảm rõ. Chưa có dấu hiệu biến chứng và cần đánh giá lại khả năng ra viện sớm nếu tiếp tục ổn định. Cân nặng và ăn uống cũng đã ổn định, người bệnh chịu khó tập ho khạc đờm.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g truyền tĩnh mạch mỗi ngày một lần đến khi đủ liệu trình. Chuẩn bị kế hoạch chuyển sang kháng sinh đường uống nếu thân nhiệt ổn định hai ngày liên tiếp.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn cơm thường, ít muối, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 8 giờ",
+            "Ho và lượng đờm",
+            "Tình trạng hô hấp khi nghỉ"
+          ],
+          "dan_do": "Tiếp tục vận động nhẹ trong phòng và ho khạc đờm đúng cách."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2025-08-13T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay nhiệt độ 37,2 °C lúc 07:00, ho đờm ít, không khó thở. Người bệnh ăn ngủ tốt, đi lại trong phòng được. Ceftriaxon đang tiếp tục theo y lệnh đã kê.",
+          "danh_gia": "Viêm phổi cộng đồng đã kiểm soát được sốt, triệu chứng hô hấp giảm rõ. Đáp ứng điều trị tốt theo đường truyền ceftriaxon.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g mỗi ngày đến hết liệu trình. Dự kiến ra viện sau khi ổn định thêm một ngày, tái khám theo hẹn. Hướng dẫn người bệnh và gia đình các dấu hiệu cần quay lại khám sớm, đồng thời giải thích về việc dùng đủ liệu trình kháng sinh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, ít muối",
+          "theo_doi": [
+            "Thân nhiệt mỗi 8 giờ",
+            "Tình trạng ho và đờm",
+            "Nhịp thở khi nghỉ"
+          ],
+          "dan_do": "Khạc đờm và thở sâu thường xuyên, tái khám ngay nếu sốt lại hoặc khó thở tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2025-08-14T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh ổn định, không sốt, ho còn ít đờm, không khó thở. Sinh hoạt gần như bình thường trong phòng bệnh. Liệu trình ceftriaxon sắp hoàn tất trong sáng mai.",
+          "danh_gia": "Viêm phổi cộng đồng đã đáp ứng tốt với ceftriaxon, đủ điều kiện chuẩn bị ra viện sau khi hoàn tất liệu trình. Chức năng thận và sinh hiệu đều ổn định suốt đợt điều trị, không có biến chứng cần xử trí thêm.",
+          "huong_xu_tri": "Hoàn tất ceftriaxon đúng liệu trình, không kê thêm thuốc mới. Hướng dẫn tái khám theo hẹn và chuẩn bị giấy ra viện. Không cần thêm xét nghiệm trước khi ra viện nếu người bệnh tiếp tục ổn định.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, ít muối",
+          "theo_doi": [
+            "Thân nhiệt trước khi ra viện",
+            "Triệu chứng ho và khó thở"
+          ],
+          "dan_do": "Tái khám theo hẹn, mang theo giấy ra viện và báo cơ sở y tế khi sốt trở lại hoặc khó thở."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "co_quan_y_te",
+        "tuyen_chuyen_den": "Cơ sở y tế chuyển đến (giả lập)",
+        "vao_khoa_luc": "2025-08-10T09:00:00+07:00",
+        "so_giuong": "G-052-01",
+        "so_luu_tru": "LT-2026-05201",
+        "ma_yt": "YT-2026-052-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Viêm phổi cộng đồng, đáp ứng ceftriaxon 2 g/ngày. Ra viện ổn định, tái khám theo hẹn."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-052-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-07-03T08:30:00+07:00",
+      "thoi_diem_ket_thuc": "2026-07-19T10:00:00+07:00",
+      "so_ngay_dieu_tri": 16,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2026-07-03T08:30:00+07:00",
+          "den": "2026-07-04T14:00:00+07:00"
+        },
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-07-04T14:00:00+07:00",
+          "den": "2026-07-19T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao, khó thở tăng, thở máy xâm nhập",
+      "benh_su": "BN nữ 66T, viêm phổi, khó thở tăng nhanh, SpO2 90% khí phòng. Đờm mủ nhiều, sốt 38,9 °C. Đã từng nhập viện viêm phổi cộng đồng năm 2025.",
+      "tien_su": {
+        "ban_than": "Viêm phổi cộng đồng 2025, điều trị ceftriaxon, đã ra viện.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa rõ thuốc kháng sinh dùng trong tuần trước khi vào viện."
+      },
+      "kham_benh": "Thở máy xâm nhập, FiO2 60%, T 38,9 °C, HA 102/60 mmHg, mạch 118 lần/phút. Ran ẩm rải rác hai phế trường.",
+      "tom_tat": "BN nữ 66T viêm phổi thở máy. Cấy đờm có Acinetobacter baumannii đa kháng, nhạy colistin. Đã cai máy, chuyển khoa sau khi ổn định.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS052-2-01",
+          "ma_icd10": "J15.9",
+          "noi_dung": "Viêm phổi thở máy",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS052-2-01",
+          "loai": "spo2",
+          "gia_tri": 90.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-07-03T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-2-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.9,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-07-03T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-2-03",
+          "loai": "mach",
+          "gia_tri": 118.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-07-03T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-2-04",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-07-03T09:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-2-05",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-07-15T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS052-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 96.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-07-03T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS052-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 88.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-07-15T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [
+        {
+          "vi_sinh_id": "VS-HS052-2-01",
+          "benh_pham": "đờm",
+          "vi_khuan": "Acinetobacter baumannii",
+          "thoi_diem_lay_mau": "2026-07-03T08:30:00+07:00",
+          "khang_sinh_do": [
+            {
+              "hoat_chat_id": "HC-MEROPENEM",
+              "ket_qua": "R",
+              "mic": null
+            },
+            {
+              "hoat_chat_id": "HC-AMIKACIN",
+              "ket_qua": "R",
+              "mic": null
+            },
+            {
+              "hoat_chat_id": "HC-COLISTIMETHATE",
+              "ket_qua": "S",
+              "mic": null
+            }
+          ]
+        }
+      ],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS052-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào HSTC vì suy hô hấp do viêm phổi, thở máy xâm nhập. Lấy đờm cấy, máu cấy. Khởi trị meropenem 1 g mỗi 8 giờ.",
+          "thoi_diem_ghi": "2026-07-03T09:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS052-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Đã cai máy, thở oxy 2 L/phút, SpO2 97%. Đờm giảm. Cấy đờm có Acinetobacter baumannii đa kháng, nhạy colistin. Chuyển khoa khi ổn định.",
+          "thoi_diem_ghi": "2026-07-15T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-052-02",
+          "thoi_diem_ke": "2026-07-03T10:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Đổi kháng sinh theo kết quả nuôi cấy đờm",
+          "thoi_diem_ngung": "2026-07-12T10:00:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-052-02-01",
+              "thuoc_id": "T-MEROPENEM-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 3 lần/ngày",
+              "bat_dau": "2026-07-03T10:30:00+07:00",
+              "ket_thuc": "2026-07-12T10:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-052-03",
+          "thoi_diem_ke": "2026-07-12T10:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": "YL-HS-052-02",
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-052-03-01",
+              "thuoc_id": "T-COLISTIMETHATE-4M5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 4.5,
+              "don_vi_lieu": "triệu đơn vị",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 2 lần/ngày",
+              "bat_dau": "2026-07-12T12:00:00+07:00",
+              "ket_thuc": "2026-07-19T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Viêm phổi thở máy, cấy đờm Acinetobacter baumannii đa kháng nhạy colistin. Dùng colistin 4,5 triệu đơn vị x 2 lần/ngày, cai máy, chuyển khoa.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-07-03T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nữ 66T, viêm phổi, khó thở tăng nhanh, SpO2 90% khi thở khí phòng, sốt 38,9 °C, mạch 118 lần/phút, HA 102/60 mmHg. Thở máy xâm nhập, FiO2 60%. Ran ẩm rải rác hai phế trường, đờm mủ nhiều. Cân nặng 58 kg, creatinin 96 umol/L. Đã lấy đờm và máu cấy, khởi trị meropenem 1 g truyền tĩnh mạch mỗi 8 giờ.",
+          "danh_gia": "Viêm phổi thở máy ở người có tiền sử viêm phổi cộng đồng 2025, nguy cơ vi khuẩn đa kháng cao. Suy hô hấp và sốc nhẹ cần hồi sức tích cực, chức năng thận hiện còn đủ để dùng thuốc theo liều thông thường.",
+          "huong_xu_tri": "Tiếp tục meropenem 1 g truyền tĩnh mạch mỗi 8 giờ trong khi chờ kết quả cấy đờm. Theo dõi khí máu và sinh hiệu sát, điều chỉnh thông khí theo đáp ứng, đánh giá lại khi có kháng sinh đồ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-02"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định, theo dõi dung nạp và nguy cơ sặc",
+          "theo_doi": [
+            "SpO2 và nhịp thở liên tục",
+            "Thân nhiệt mỗi 4 giờ",
+            "Huyết áp và mạch mỗi giờ trong 6 giờ đầu",
+            "Lượng đờm qua nội khí quản"
+          ],
+          "dan_do": "Điều dưỡng hút đờm theo quy trình, giữ đầu cao 30 đến 45 độ, báo bác sĩ ngay nếu SpO2 giảm hoặc huyết áp tụt."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-07-04T15:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh đã chuyển sang Hồi sức tích cực từ 14 giờ hôm nay sau khi ổn định hơn tại khoa Hô hấp. Vẫn thở máy xâm nhập, sốt còn cao, đờm mủ nhiều. Meropenem đang được truyền đều đặn theo y lệnh.",
+          "danh_gia": "Viêm phổi thở máy đang tiếp tục điều trị, chưa có đáp ứng rõ về oxy hóa. Cần chờ kết quả cấy đờm để điều chỉnh kháng sinh. Người bệnh vẫn cần hỗ trợ hô hấp đầy đủ, nên tiếp tục theo dõi sát các chỉ số hô hấp và tri giác trong vài ngày tới.",
+          "huong_xu_tri": "Tiếp tục meropenem theo y lệnh đang có. Theo dõi khí máu, công thức máu và creatinin, đánh giá khả năng cai máy khi tình trạng cải thiện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-02"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định, theo dõi dung nạp",
+          "theo_doi": [
+            "SpO2 và nhịp thở liên tục",
+            "Thân nhiệt mỗi 4 giờ",
+            "Lượng đờm và màu sắc đờm"
+          ],
+          "dan_do": "Điều dưỡng hút đờm đúng quy trình, theo dõi áp lực đường thở và báo bác sĩ khi có thay đổi."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-07-06T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày điều trị thứ tư tại Hồi sức tích cực, người bệnh vẫn thở máy, đờm còn nhiều nhưng bớt mủ. Sốt còn dao động, nhịp tim nhanh nhẹ khi hút đờm. Meropenem tiếp tục theo y lệnh.",
+          "danh_gia": "Viêm phổi thở máy chưa cải thiện rõ, còn nhiễm trùng hô hấp dưới. Cần làm sạch đường thở và chờ kết quả nuôi cấy. Đờm vẫn nhiều nên cần hút đờm thường xuyên, theo dõi biến chứng xẹp phổi hoặc tắc đờm.",
+          "huong_xu_tri": "Tiếp tục meropenem, đánh giá lại trong ngày. Tăng cường vật lý trị liệu hô hấp, theo dõi thông khí và khí máu. Đánh giá lại độ bão hòa oxy mỗi giờ trong ca trực.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-02"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và nhịp thở",
+            "Thân nhiệt mỗi 4 giờ",
+            "Đờm: số lượng và tính chất"
+          ],
+          "dan_do": "Vật lý trị liệu hô hấp theo hướng dẫn, báo điều dưỡng khi người bệnh có cơn ho sặc."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-07-08T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh vẫn thở máy, huyết động ổn định hơn, không cần thuốc vận mạch. Đờm còn nhiều, sốt đã bớt. Meropenem đang dùng theo y lệnh, chưa có kết quả nuôi cấy đờm đủ rõ.",
+          "danh_gia": "Viêm phổi thở máy đang trong giai đoạn đáp ứng chậm. Chưa có tiêu chí cai máy đầy đủ, cần đánh giá lại kháng sinh khi có kháng sinh đồ. Chưa nên rút ống nội khí quản lúc này khi thông số thở còn cao.",
+          "huong_xu_tri": "Tiếp tục meropenem theo y lệnh, chờ kết quả nuôi cấy đờm. Đánh giá thử cai máy khi SpO2 và FiO2 đạt ngưỡng. Cân nhắc đổi kháng sinh đích ngay khi kết quả cấy đờm có.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-02"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 6 giờ",
+            "Đờm qua nội khí quản"
+          ],
+          "dan_do": "Điều dưỡng giữ vệ sinh miệng và đường thở, báo bác sĩ khi có tiết dịch nhiều hoặc sốt cao trở lại."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-09",
+          "ngay_dieu_tri": 9,
+          "thoi_diem_lap": "2026-07-11T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Thở máy đã giảm dần, người bệnh đáp ứng tốt hơn với thông khí hỗ trợ. Đờm giảm, sốt không còn đáng kể. Meropenem vẫn theo y lệnh đang có, chờ kết quả cấy đờm.",
+          "danh_gia": "Viêm phổi thở máy đang cải thiện dần, chưa thấy biến chứng mới. Cần làm kháng sinh đồ đầy đủ để quyết định phác đồ tiếp theo. Chức năng thận và điện giải được theo dõi thường xuyên trong thời gian điều trị.",
+          "huong_xu_tri": "Tiếp tục meropenem theo y lệnh. Đánh giá cai máy thở xâm nhập trong vài ngày tới khi thông số ổn định. Ghi nhận các chỉ số thở máy để đánh giá cai máy vào ngày hôm sau.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-02"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định, bắt đầu thử ăn qua đường miệng khi đủ điều kiện",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 6 giờ",
+            "Đờm: số lượng và màu sắc"
+          ],
+          "dan_do": "Tiếp tục hút đờm và vệ sinh răng miệng, báo bác sĩ khi người bệnh có dấu hiệu gắng sức thở."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-10",
+          "ngay_dieu_tri": 10,
+          "thoi_diem_lap": "2026-07-12T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Cấy đờm trước đó ghi nhận Acinetobacter baumannii, kháng meropenem và amikacin, nhạy colistin. Meropenem đã được ngưng lúc 10 giờ theo kết quả nuôi cấy, chuyển sang colistin 4,5 triệu đơn vị truyền tĩnh mạch mỗi 12 giờ theo y lệnh mới. Người bệnh vẫn thở máy, sinh hiệu ổn định.",
+          "danh_gia": "Viêm phổi thở máy do vi khuẩn đa kháng Acinetobacter baumannii, đã chuyển phác đồ theo kháng sinh đồ. Chức năng thận cần theo dõi trong quá trình dùng colistin.",
+          "huong_xu_tri": "Dùng colistin 4,5 triệu đơn vị truyền tĩnh mạch mỗi 12 giờ, theo dõi creatinin và nước tiểu. Đánh giá đáp ứng sau 48 đến 72 giờ và tiếp tục theo dõi nguy cơ tổn thương thận.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-02",
+            "YL-HS-052-03"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "Creatinin và lượng nước tiểu",
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 6 giờ"
+          ],
+          "dan_do": "Điều dưỡng theo dõi lượng nước tiểu mỗi 6 giờ, báo bác sĩ nếu nước tiểu giảm rõ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-12",
+          "ngay_dieu_tri": 12,
+          "thoi_diem_lap": "2026-07-14T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh vẫn đang dùng colistin theo y lệnh, lượng đờm giảm dần, sốt không còn đáng kể. Thở máy vẫn duy trì, chưa đủ tiêu chí cai hoàn toàn.",
+          "danh_gia": "Viêm phổi thở máy đang đáp ứng với colistin. Cần tiếp tục theo dõi chức năng thận trong khi dùng thuốc. Cần theo dõi chặt chức năng thận, lượng nước tiểu và điện giải vì colistin có độc tính trên thận.",
+          "huong_xu_tri": "Tiếp tục colistin theo y lệnh, theo dõi creatinin mỗi ngày. Chuẩn bị đánh giá cai máy khi tình trạng hô hấp ổn định hơn. Đánh giá lại khả năng cai máy khi người bệnh tỉnh táo hơn.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-03"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "Creatinin và lượng nước tiểu",
+            "SpO2 và thông số máy thở",
+            "Đờm: số lượng và màu sắc"
+          ],
+          "dan_do": "Điều dưỡng tiếp tục hút đờm và chăm sóc đường thở, báo bác sĩ khi lượng nước tiểu giảm."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-13",
+          "ngay_dieu_tri": 13,
+          "thoi_diem_lap": "2026-07-15T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đã cai máy thở, thở oxy qua gọng 2 lít mỗi phút, SpO2 97% lúc 07:00. Đờm giảm rõ. Creatinin 88 umol/L lúc 06:30, chức năng thận được duy trì tốt trong quá trình dùng colistin.",
+          "danh_gia": "Viêm phổi thở máy đã đáp ứng, suy hô hấp được kiểm soát. Người bệnh đủ điều kiện xem xét chuyển khoa khi tiếp tục ổn định. Lượng đờm giảm và không sốt, đây là dấu hiệu đáp ứng tốt với phác đồ hiện tại.",
+          "huong_xu_tri": "Tiếp tục colistin theo y lệnh đến khi kết thúc liệu trình. Theo dõi hô hấp sau cai máy, đánh giá chuyển khoa Hô hấp khi ổn định hai đến ba ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, mềm, chia nhỏ bữa, theo dõi sặc khi ăn",
+          "theo_doi": [
+            "SpO2 và nhịp thở khi nghỉ",
+            "Creatinin hằng ngày",
+            "Đờm và ho"
+          ],
+          "dan_do": "Tập thở sâu và ho khạc đờm, ngồi đầu cao khi ăn, báo điều dưỡng khi khó thở khi gắng sức."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-15",
+          "ngay_dieu_tri": 15,
+          "thoi_diem_lap": "2026-07-17T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh tỉnh, thở tự nhiên với oxy gọng, đờm ít, ăn uống được một phần. Colistin vẫn theo y lệnh, chưa có biểu hiện độc thận rõ trên lâm sàng.",
+          "danh_gia": "Viêm phổi thở máy đã ổn định, đang hoàn tất phác đồ colistin. Cần chuẩn bị hồ sơ chuyển khoa và tái đánh giá chức năng thận. Người bệnh tương đối ổn định về tuần hoàn, không cần thêm can thiệp hỗ trợ.",
+          "huong_xu_tri": "Tiếp tục colistin theo y lệnh đến hết liệu trình. Lập kế hoạch chuyển khoa khi ổn định, hẹn kiểm tra creatinin trước khi ra viện. Đánh giá lại chức năng thận trước khi chuyển khoa.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, mềm, chia nhỏ bữa",
+          "theo_doi": [
+            "SpO2 và nhịp thở",
+            "Creatinin và lượng nước tiểu",
+            "Ho và đờm"
+          ],
+          "dan_do": "Tiếp tục tập thở và ho khạc đờm, báo điều dưỡng nếu khó thở hoặc ít nước tiểu."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-2-16",
+          "ngay_dieu_tri": 16,
+          "thoi_diem_lap": "2026-07-18T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày điều trị cuối tại Hồi sức tích cực, người bệnh ổn định, thở oxy gọng, không sốt, đờm ít. Colistin theo y lệnh đã dùng đủ liệu trình gần hoàn tất.",
+          "danh_gia": "Viêm phổi thở máy do Acinetobacter baumannii đa kháng, đã đáp ứng với colistin và cai máy thành công. Đủ điều kiện chuyển khoa. Thời gian thở máy kéo dài và tình trạng nhiễm khuẩn đã được kiểm soát tốt.",
+          "huong_xu_tri": "Hoàn tất colistin theo y lệnh, chuyển người bệnh sang khoa Hô hấp khi thủ tục hoàn tất. Hẹn tái khám, kiểm tra creatinin và chức năng hô hấp sau khi ra viện. Bàn giao đầy đủ phác đồ colistin và lịch xét nghiệm creatinin cho khoa tiếp nhận.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn cơm mềm, ít muối",
+          "theo_doi": [
+            "SpO2 và nhịp thở",
+            "Creatinin trước khi chuyển khoa"
+          ],
+          "dan_do": "Người bệnh tập thở và ho khạc đờm đều đặn, báo điều dưỡng khi khó thở trở lại."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "co_quan_y_te",
+        "tuyen_chuyen_den": "Cơ sở y tế chuyển đến (giả lập)",
+        "vao_khoa_luc": "2026-07-03T08:30:00+07:00",
+        "so_giuong": "G-052-02",
+        "so_luu_tru": "LT-2026-05202",
+        "ma_yt": "YT-2026-052-02",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Viêm phổi thở máy, cấy đờm Acinetobacter baumannii đa kháng nhạy colistin. Dùng colistin 4,5 triệu đơn vị x 2 lần/ngày, cai máy, chuyển khoa."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-052-3",
+      "thu_tu": 3,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-08T14:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-11-08T14:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt, khó thở tăng, SpO2 88%",
+      "benh_su": "BN nữ 66T, sốt 38,7 °C, ho đờm, khó thở tăng 2 ngày. SpO2 88% khí phòng. Phải thở máy xâm nhập lại.",
+      "tien_su": {
+        "ban_than": "Viêm phổi thở máy 4 tháng trước, cấy đờm lần đó có Acinetobacter baumannii đa kháng, điều trị colistin.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận kháng sinh trong tháng gần đây."
+      },
+      "kham_benh": "Thở máy xâm nhập, FiO2 50%, PEEP 8 cmH2O, SpO2 94%. T 38,7 °C, mạch 110 lần/phút, HA 118/70 mmHg. Ran ẩm phổi phải.",
+      "tom_tat": "BN nữ 66T viêm phổi thở máy. Cấy đờm lần này không mọc vi khuẩn. Creatinin 90 umol/L, cân nặng 58 kg.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS052-3-01",
+          "ma_icd10": "J15.9",
+          "noi_dung": "Viêm phổi thở máy",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS052-3-01",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-08T14:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-3-02",
+          "loai": "spo2",
+          "gia_tri": 88.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-08T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-3-03",
+          "loai": "nhiet_do",
+          "gia_tri": 38.7,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-08T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-3-04",
+          "loai": "spo2",
+          "gia_tri": 94.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-3-05",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS052-3-06",
+          "loai": "nhiet_do",
+          "gia_tri": 37.5,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS052-3-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 94.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-08T14:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS052-3-02",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 13.8,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-08T14:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS052-3-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 90.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-16T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [
+        {
+          "vi_sinh_id": "VS-HS052-3-01",
+          "benh_pham": "đờm",
+          "vi_khuan": null,
+          "thoi_diem_lay_mau": "2026-11-08T14:30:00+07:00",
+          "khang_sinh_do": []
+        }
+      ],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS052-3-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 66T sốt 38,7 °C, ho đờm, khó thở tăng. SpO2 88%. Thở máy xâm nhập lại. Lấy đờm cấy, máu cấy. Nhập HSTC.",
+          "thoi_diem_ghi": "2026-11-08T14:10:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS052-3-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 3 thở máy. T 38,2 °C. Đang dùng kháng sinh phổ rộng theo phác đồ viêm phổi bệnh viện, chờ kết quả cấy đờm.",
+          "thoi_diem_ghi": "2026-11-10T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS052-3-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Cấy đờm không mọc vi khuẩn. Ngưng piperacilin-tazobactam. Đờm ít, SpO2 92% với FiO2 40%. Creatinin 94 umol/L.",
+          "thoi_diem_ghi": "2026-11-12T08:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS052-3-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "T 37,5 °C, SpO2 94% với FiO2 35%. Đờm vàng ít. Đang xem xét y lệnh điều trị tiếp theo.",
+          "thoi_diem_ghi": "2026-11-16T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-052-04",
+          "thoi_diem_ke": "2026-11-08T15:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Ngưng theo kết quả cấy đờm không mọc vi khuẩn",
+          "thoi_diem_ngung": "2026-11-12T08:30:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-052-04-01",
+              "thuoc_id": "T-PIPERACILLIN-TAZOBACTAM-4G5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 4.5,
+              "don_vi_lieu": "g",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 3 lần/ngày",
+              "bat_dau": "2026-11-08T15:30:00+07:00",
+              "ket_thuc": "2026-11-12T08:30:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-052-05",
+          "thoi_diem_ke": "2026-11-08T15:40:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-052-05-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-08T16:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-052-06",
+          "thoi_diem_ke": "2026-11-16T09:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-052-06-01",
+              "thuoc_id": "T-COLISTIMETHATE-4M5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 4.5,
+              "don_vi_lieu": "triệu đơn vị",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 2 lần/ngày",
+              "bat_dau": "2026-11-16T12:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-16T12:00:00+07:00",
+                  "lieu": 4.5,
+                  "don_vi": "triệu đơn vị"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-17T00:00:00+07:00",
+                  "lieu": 4.5,
+                  "don_vi": "triệu đơn vị"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-17T12:00:00+07:00",
+                  "lieu": 4.5,
+                  "don_vi": "triệu đơn vị"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-08T16:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nữ 66T tái nhập với sốt 38,7 °C, ho đờm, khó thở tăng trong 2 ngày, SpO2 88% khi thở khí phòng. Cân nặng 58 kg, creatinin 94 umol/L, bạch cầu 13,8 G/L. Đã thở máy xâm nhập lại, lấy đờm và máu cấy trước khi dùng kháng sinh. Ran ẩm phổi phải, huyết áp và mạch đang được theo dõi sát.",
+          "danh_gia": "Viêm phổi thở máy tái phát ở người bệnh đã từng có Acinetobacter baumannii đa kháng nhiều tháng trước, cần lưu ý nguy cơ vi khuẩn kháng thuốc. Chức năng thận còn trong giới hạn bình thường.",
+          "huong_xu_tri": "Khởi trị piperacilin 4 g với tazobactam 0,5 g truyền tĩnh mạch mỗi 8 giờ theo phác đồ viêm phổi bệnh viện, chờ kết quả cấy đờm. Theo dõi khí máu và điều chỉnh thông khí, dùng natri clorid 0,9% một ngày một lần.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-04",
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định, theo dõi dung nạp và nguy cơ sặc",
+          "theo_doi": [
+            "SpO2 và nhịp thở liên tục",
+            "Thân nhiệt mỗi 4 giờ",
+            "Huyết áp và mạch mỗi giờ trong giai đoạn đầu",
+            "Lượng đờm qua nội khí quản"
+          ],
+          "dan_do": "Điều dưỡng hút đờm đúng quy trình, giữ đầu cao, báo bác sĩ ngay nếu SpO2 giảm hoặc sốt tăng cao."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-09T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh vẫn thở máy xâm nhập, sốt còn dao động, đờm mủ vẫn nhiều. Piperacilin-tazobactam đang truyền theo y lệnh, chờ kết quả nuôi cấy đờm và máu.",
+          "danh_gia": "Viêm phổi thở máy đang trong giai đoạn đầu điều trị kháng sinh theo kinh nghiệm. Chưa đủ dữ liệu để thay đổi phác đồ. Người bệnh cần được theo dõi sát về huyết động và tri giác, vì nhiễm khuẩn có thể tiến triển nhanh trong giai đoạn này.",
+          "huong_xu_tri": "Tiếp tục piperacilin-tazobactam theo y lệnh. Theo dõi khí máu, công thức máu và đờm, đánh giá lại khi có kết quả nuôi cấy.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-04",
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 4 giờ",
+            "Lượng và màu sắc đờm"
+          ],
+          "dan_do": "Tiếp tục hút đờm và vệ sinh đường thở theo quy trình, báo bác sĩ khi có tiết dịch nhiều hoặc huyết áp tụt."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-10T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày thứ ba thở máy, thân nhiệt vẫn còn sốt nhẹ, người bệnh chưa có dấu hiệu cải thiện rõ về oxy. Đang dùng kháng sinh phổ rộng theo phác đồ viêm phổi bệnh viện, chờ kết quả cấy đờm.",
+          "danh_gia": "Viêm phổi thở máy còn tiến triển, chưa rõ nguyên nhân vi khuẩn. Cần đánh giá lại kháng sinh khi có kết quả nuôi cấy. Cần đối chiếu với kết quả vi sinh khi có để tránh kéo dài kháng sinh không cần thiết.",
+          "huong_xu_tri": "Tiếp tục điều trị theo y lệnh hiện tại, chờ kết quả cấy đờm và máu. Theo dõi thân nhiệt và thông khí, dự kiến đánh giá lại trong 24 giờ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-04",
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "SpO2 liên tục",
+            "Đờm: số lượng và tính chất"
+          ],
+          "dan_do": "Điều dưỡng tiếp tục theo quy trình chăm sóc đường thở và báo bác sĩ khi có sốt cao."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-11T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh vẫn thở máy, ít đờm hơn, sốt giảm dần. Piperacilin-tazobactam tiếp tục theo y lệnh, chưa có kết quả cấy đờm dương tính.",
+          "danh_gia": "Viêm phổi thở máy đang cải thiện chậm. Kết quả nuôi cấy vẫn đang chờ hoàn tất, cần cân nhắc ngưng kháng sinh phổ rộng khi đủ điều kiện. Cần đánh giá hiệu quả của kháng sinh đang dùng và đối chiếu với diễn tiến thân nhiệt trong 24 đến 48 giờ tới.",
+          "huong_xu_tri": "Tiếp tục piperacilin-tazobactam đến khi có kết quả cấy đờm đầy đủ. Theo dõi thông khí, đánh giá lại trong ngày mai. Ghi chép đầy đủ lượng đờm và tình trạng thông khí trong ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-04",
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 6 giờ",
+            "Đờm qua nội khí quản"
+          ],
+          "dan_do": "Tiếp tục vệ sinh đường thở và báo điều dưỡng khi có khó chịu hoặc tiết dịch nhiều."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-11-12T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Kết quả cấy đờm không mọc vi khuẩn, theo đó ngưng piperacilin-tazobactam lúc 08 giờ 30 sáng nay. Đờm ít hơn, oxy hóa máu còn chưa cao khi đang dùng FiO2 40%. Creatinin gần nhất 94 umol/L ngày 08/11, chức năng thận chưa suy.",
+          "danh_gia": "Viêm phổi thở máy chưa xác định được vi khuẩn, đang cải thiện chậm dần về oxy. Cần theo dõi sát khi chưa có kháng sinh thay thế, đánh giá lại tình trạng thông khí.",
+          "huong_xu_tri": "Đã ngưng kháng sinh theo kết quả cấy. Theo dõi thân nhiệt, công thức máu và oxy hóa máu, xem xét lại chỉ định kháng sinh nếu sốt trở lại hoặc đờm tăng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-04",
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và FiO2 máy thở",
+            "Thân nhiệt mỗi 6 giờ",
+            "Đờm: số lượng và màu sắc"
+          ],
+          "dan_do": "Hút đờm đúng kỹ thuật, báo bác sĩ ngay nếu sốt lại hoặc SpO2 giảm."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-11-13T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh vẫn thở máy xâm nhập, đờm ít, chưa sốt đáng kể trong vài giờ gần đây. Chưa có kháng sinh điều trị mới theo y lệnh trong thời điểm này.",
+          "danh_gia": "Tình trạng hô hấp đang ổn định tương đối, chưa rõ nguyên nhân vi khuẩn. Cần theo dõi sát và đánh giá lại nhu cầu kháng sinh. Tình trạng này cần được theo dõi đều đặn để không bỏ sót nhiễm trùng tái phát.",
+          "huong_xu_tri": "Theo dõi sinh hiệu, thông khí và công thức máu. Đánh giá lại khả năng dùng kháng sinh tiếp theo khi có dấu hiệu nhiễm trùng mới. Đánh giá lại công thức máu vào sáng mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 6 giờ",
+            "Đờm"
+          ],
+          "dan_do": "Điều dưỡng hút đờm theo quy trình và báo bác sĩ khi có sốt trở lại."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-07",
+          "ngay_dieu_tri": 7,
+          "thoi_diem_lap": "2026-11-14T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày thứ bảy thở máy, không sốt rõ rệt, đờm ít và không đục nhiều. Chưa có kháng sinh mới trong y lệnh. Người bệnh vẫn cần hỗ trợ hô hấp.",
+          "danh_gia": "Viêm phổi thở máy đang trong giai đoạn hồi phục chậm. Cần tiếp tục theo dõi, chưa có chỉ định điều trị kháng sinh mới tại thời điểm này. Người bệnh còn cần máy thở nên nguy cơ liên quan đến thở máy vẫn được cân nhắc hằng ngày.",
+          "huong_xu_tri": "Tiếp tục theo dõi hô hấp, khí máu và thân nhiệt. Đánh giá khả năng cai máy khi tình trạng ổn định hơn. Chăm sóc đường thở và vệ sinh răng miệng theo quy trình đầy đủ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 8 giờ",
+            "Đờm và ho"
+          ],
+          "dan_do": "Tiếp tục chăm sóc đường thở theo quy trình, báo điều dưỡng khi người bệnh khó thở."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-08",
+          "ngay_dieu_tri": 8,
+          "thoi_diem_lap": "2026-11-15T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Người bệnh tiếp tục thở máy với thông số cải thiện dần, đờm vàng ít. Chưa sốt đáng kể, huyết áp ổn định với dịch truyền natri clorid 0,9% theo y lệnh.",
+          "danh_gia": "Viêm phổi thở máy đang hồi phục dần, không có biến chứng mới được ghi nhận. Cần đánh giá lại kháng sinh khi có dấu hiệu nhiễm trùng hoạt động. Cần duy trì theo dõi chức năng thận vì người bệnh đã dùng nhiều kháng sinh trong đợt điều trị này.",
+          "huong_xu_tri": "Tiếp tục theo dõi, dự kiến đánh giá xem xét kháng sinh và cai máy trong ngày mai. Theo dõi công thức máu và creatinin. Xem lại kết quả công thức máu trước khi quyết định điều chỉnh.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Thân nhiệt mỗi 8 giờ",
+            "Creatinin"
+          ],
+          "dan_do": "Điều dưỡng tiếp tục chăm sóc đường thở và báo bác sĩ khi người bệnh có dấu hiệu sốt hoặc tăng đờm."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-052-3-09",
+          "ngay_dieu_tri": 9,
+          "thoi_diem_lap": "2026-11-16T09:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay T 37,5 °C lúc 07:00, SpO2 94% khi thở máy, cân nặng 58 kg, creatinin 90 umol/L lúc 06:30. Đờm vàng ít. Dịch natri clorid 0,9% đang theo y lệnh.",
+          "danh_gia": "Viêm phổi thở máy đang đáp ứng chậm nhưng ổn định, chưa xác định được vi khuẩn từ lần cấy này. Chức năng thận ổn định, cần cân nhắc kháng sinh khi có chỉ định. Cần theo dõi sát creatinin sau khi bắt đầu colistin.",
+          "huong_xu_tri": "Chỉ định/đề nghị colistin 4,5 triệu đơn vị truyền tĩnh mạch mỗi 12 giờ, chờ duyệt y lệnh. Theo dõi creatinin và lượng nước tiểu sau khi bắt đầu thuốc.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-052-05",
+            "YL-HS-052-06"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Nuôi dưỡng đường tiêu hóa theo chỉ định",
+          "theo_doi": [
+            "SpO2 và thông số máy thở",
+            "Creatinin và lượng nước tiểu",
+            "Thân nhiệt mỗi 6 giờ"
+          ],
+          "dan_do": "Điều dưỡng tiếp tục hút đờm và báo bác sĩ khi người bệnh có sốt hoặc lượng nước tiểu giảm."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "co_quan_y_te",
+        "tuyen_chuyen_den": "Cơ sở y tế chuyển đến (giả lập)",
+        "vao_khoa_luc": "2026-11-08T14:00:00+07:00",
+        "so_giuong": "G-052-03",
+        "so_luu_tru": "LT-2026-05203",
+        "ma_yt": "YT-2026-052-03",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-052-06",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 52",
+    "ngay_sinh": "1959-08-10",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9052",
+      "thon_pho": "Thôn Đoài",
+      "xa_phuong": "Việt Hùng",
+      "huyen": "Đông Anh",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000052",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 52",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 052"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 58.0,
+    "nhom_mau": null
+  }
+}

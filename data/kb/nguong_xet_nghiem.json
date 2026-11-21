@@ -1,0 +1,583 @@
+{
+  "phien_ban": "D4-v2",
+  "ngay": "2026-11-19",
+  "trang_thai": "cho_duoc_si_duyet",
+  "ghi_chu": "Chỉ lấy ngưỡng có số trong nhãn FDA. toan_tu: <, <=, >, >=, khoang (gia_tri đến gia_tri_den). Mã xét nghiệm theo ca (ma_xet_nghiem). don_vi_nhan và don_vi_trong_ca nêu rõ khi cần quy đổi. Mã tieu_cau và natri chưa có trong 66 ca. D4-v2 (T65 hoàn thiện, 19/11/2026): mỗi dòng có kieu_dieu_kien: canh_bao_khi_thoa = điều kiện đúng thì cảnh báo; canh_bao_khi_ngoai_khoang = dieu_kien là khoảng đích, giá trị ngoài khoảng thì cảnh báo; dieu_kien_khoi_dau = nhãn chỉ cho bắt đầu khi điều kiện đúng, điều kiện sai thì cảnh báo. muc_do_de_xuat: nghiem_trong (nhãn dùng chống chỉ định, not receive, discontinue) hoặc can_luu_y (theo dõi, cân nhắc, giảm liều); đề xuất chờ dược sĩ duyệt. Mỗi dieu_kien có don_vi_nhan (đơn vị gia_tri theo nhãn, null nếu không đơn vị), don_vi_ca (đúng chuỗi don_vi của xét nghiệm trong ca; INR ca ghi rỗng hoặc null nên để null; tieu_cau và natri là đơn vị dự kiến) và he_so_ca_sang_nhan (nhân giá trị ca để ra đơn vị nhãn). dieu_kien_khac: tiêu chí không phải xét nghiệm trong cùng câu nhãn; luật chỉ báo cần xem, đối chiếu thêm, không kết luận từ xét nghiệm một mình. Tiểu cầu (tieu_cau) và natri (natri) chưa có trong 66 ca; giữ dòng với mã dự kiến.",
+  "quy_tac": [
+    {
+      "ten_quoc_te": "warfarin",
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "xet_nghiem": "inr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "inr",
+          "toan_tu": ">",
+          "gia_tri": 4.0,
+          "don_vi_nhan": null,
+          "don_vi_ca": null,
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "INR > 4,0 không thêm lợi ích điều trị ở đa số bệnh nhân và tăng nguy cơ chảy máu",
+      "don_vi_nhan": "không đơn vị (tỷ số)",
+      "don_vi_trong_ca": "không đơn vị (ca ghi rỗng hoặc null)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Warfarin Sodium",
+          "set_id": "61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/warfarin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "An INR of greater than 4.0 appears to provide no additional therapeutic benefit in most patients and is associated with a higher risk of bleeding.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y"
+    },
+    {
+      "ten_quoc_te": "warfarin",
+      "hoat_chat_ids": [
+        "warfarin"
+      ],
+      "xet_nghiem": "inr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "inr",
+          "toan_tu": "khoang",
+          "gia_tri": 2.0,
+          "gia_tri_den": 3.0,
+          "don_vi_nhan": null,
+          "don_vi_ca": null,
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Huyết khối tĩnh mạch (DVT, PE): INR mục tiêu 2,5 (khoảng 2,0–3,0)",
+      "don_vi_nhan": "không đơn vị (tỷ số)",
+      "don_vi_trong_ca": "không đơn vị (ca ghi rỗng hoặc null)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Warfarin Sodium",
+          "set_id": "61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/warfarin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Adjust the warfarin dose to maintain a target INR of 2.5 (INR range, 2.0 to 3.0)",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61ab23a7-bc67-4777-854a-bf43c788a69a",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Khoảng mục tiêu phụ thuộc chỉ định (nhãn có mục riêng cho van tim cơ học, rung nhĩ...); dòng này chỉ cho huyết khối tĩnh mạch.",
+      "kieu_dieu_kien": "canh_bao_khi_ngoai_khoang",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng cho chỉ định huyết khối tĩnh mạch (DVT, PE); nhãn có khoảng INR khác cho van tim cơ học, rung nhĩ."
+    },
+    {
+      "ten_quoc_te": "enoxaparin",
+      "hoat_chat_ids": [
+        "enoxaparin"
+      ],
+      "xet_nghiem": "tieu_cau",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "tieu_cau",
+          "toan_tu": "<",
+          "gia_tri": 100000,
+          "don_vi_nhan": "/mm3",
+          "don_vi_ca": "G/L",
+          "he_so_ca_sang_nhan": 1000
+        }
+      ],
+      "hanh_dong_nhan": "Tiểu cầu giảm xuống dưới 100.000/mm3: ngừng enoxaparin",
+      "don_vi_nhan": "/mm3",
+      "don_vi_trong_ca": "chưa có xét nghiệm tiểu cầu trong 66 ca (mã dự kiến tieu_cau, đơn vị G/L)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Enoxaparin Sodium Injection,USP",
+          "set_id": "1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "phien_ban_nguon": "20261015",
+          "tep": "data/kb_sources/openfda/enoxaparin.json",
+          "truong_nhan": "warnings_and_cautions",
+          "trich_nguyen_van": "If the platelet count falls below 100,000/mm 3 , enoxaparin sodium injection should be discontinued.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e0ac5e2-329c-d0a8-e063-6394a90afba8",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "quy_doi": "100.000/mm3 = 100 G/L (1 G/L = 1.000/mm3)",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "nghiem_trong",
+      "ghi_chu": "Hệ số 1000 (G/L sang /mm3): 1 G/L = 10^9/L = 1.000/mm3, nên 100 G/L = 100.000/mm3 (đổi đơn vị thuần tuý, không từ nguồn ngoài)."
+    },
+    {
+      "ten_quoc_te": "spironolactone",
+      "hoat_chat_ids": [
+        "spironolactone"
+      ],
+      "xet_nghiem": "kali",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "kali",
+          "toan_tu": "<=",
+          "gia_tri": 5.0,
+          "don_vi_nhan": "mEq/L",
+          "don_vi_ca": "mmol/L",
+          "he_so_ca_sang_nhan": 1
+        },
+        {
+          "ma_xet_nghiem": "egfr",
+          "toan_tu": ">",
+          "gia_tri": 50,
+          "don_vi_nhan": "mL/min/1.73 m2",
+          "don_vi_ca": "mL/phút/1,73m2",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Suy tim, K+ ≤ 5,0 mEq/L và eGFR > 50: khởi đầu 25 mg 1 lần/ngày",
+      "don_vi_nhan": "mEq/L; mL/min/1.73 m2",
+      "don_vi_trong_ca": "mmol/L (kali); mL/phút/1,73m2 (egfr)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Spironolactone",
+          "set_id": "37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/spironolactone.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients with serum potassium ≤5.0 mEq/L and eGFR >50 mL/min/1.73 m², initiate treatment at 25 mg once daily.",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "quy_doi": "K+ đơn trị: 1 mEq/L = 1 mmol/L (số không đổi)",
+      "kieu_dieu_kien": "dieu_kien_khoi_dau",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng cho người suy tim khi khởi đầu spironolacton 25 mg 1 lần/ngày; cả hai điều kiện (K+ và eGFR) phải đúng."
+    },
+    {
+      "ten_quoc_te": "spironolactone",
+      "hoat_chat_ids": [
+        "spironolactone"
+      ],
+      "xet_nghiem": "egfr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "egfr",
+          "toan_tu": "khoang",
+          "gia_tri": 30,
+          "gia_tri_den": 50,
+          "don_vi_nhan": "mL/min/1.73 m2",
+          "don_vi_ca": "mL/phút/1,73m2",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Suy tim, eGFR 30–50: cân nhắc khởi đầu 25 mg cách ngày vì nguy cơ tăng kali máu",
+      "don_vi_nhan": "mL/min/1.73 m2",
+      "don_vi_trong_ca": "mL/phút/1,73m2",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Spironolactone",
+          "set_id": "37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/spironolactone.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients with an eGFR between 30 and 50 mL/min/1.73 m 2 consider initiating therapy at 25 mg every other day because of the risk of hyperkalemia",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37066684-5b63-4d3e-ae6a-08c4b3edd7aa",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng cho người suy tim khi khởi đầu spironolacton."
+    },
+    {
+      "ten_quoc_te": "metformin",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "xet_nghiem": "egfr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "egfr",
+          "toan_tu": "<",
+          "gia_tri": 30,
+          "don_vi_nhan": "mL/min/1.73 m2",
+          "don_vi_ca": "mL/phút/1,73m2",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "eGFR < 30: chống chỉ định; ngừng nếu eGFR giảm xuống dưới 30",
+      "don_vi_nhan": "mL/min/1.73 m2",
+      "don_vi_trong_ca": "mL/phút/1,73m2",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Metformin Hydrochloride",
+          "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/metformin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "contraindicated in patients with an estimated glomerular filtration rate (eGFR) below 30 mL/minute/1.73 m 2",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "nghiem_trong"
+    },
+    {
+      "ten_quoc_te": "metformin",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "xet_nghiem": "egfr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "egfr",
+          "toan_tu": "khoang",
+          "gia_tri": 30,
+          "gia_tri_den": 45,
+          "don_vi_nhan": "mL/min/1.73 m2",
+          "don_vi_ca": "mL/phút/1,73m2",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "eGFR 30–45: không khuyến cáo bắt đầu dùng metformin",
+      "don_vi_nhan": "mL/min/1.73 m2",
+      "don_vi_trong_ca": "mL/phút/1,73m2",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Metformin Hydrochloride",
+          "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/metformin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Initiation of metformin hydrochloride tablets in patients with an eGFR between 30 to 45 mL/minute/1.73 m 2 is not recommended",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng khi khởi đầu metformin; người đang dùng xem dòng eGFR < 45."
+    },
+    {
+      "ten_quoc_te": "metformin",
+      "hoat_chat_ids": [
+        "metformin"
+      ],
+      "xet_nghiem": "egfr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "egfr",
+          "toan_tu": "<",
+          "gia_tri": 45,
+          "don_vi_nhan": "mL/min/1.73 m2",
+          "don_vi_ca": "mL/phút/1,73m2",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Đang dùng và eGFR giảm xuống dưới 45: đánh giá lại lợi ích/nguy cơ khi tiếp tục",
+      "don_vi_nhan": "mL/min/1.73 m2",
+      "don_vi_trong_ca": "mL/phút/1,73m2",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Metformin Hydrochloride",
+          "set_id": "0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "phien_ban_nguon": "20261109",
+          "tep": "data/kb_sources/openfda/metformin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients taking metformin hydrochloride tablets whose eGFR later falls below 45 mL/min/1.73 m 2 , assess the benefit risk of continuing therapy",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0230a3c3-34cf-478b-88c3-4d96e5300018",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng cho người đang dùng metformin."
+    },
+    {
+      "ten_quoc_te": "amoxicillin",
+      "hoat_chat_ids": [
+        "amoxicillin",
+        "clavulanic_acid"
+      ],
+      "xet_nghiem": "egfr",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "egfr",
+          "toan_tu": "<",
+          "gia_tri": 30,
+          "don_vi_nhan": "mL/min",
+          "don_vi_ca": "mL/phút/1,73m2",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "GFR < 30 mL/min: không dùng viên 875 mg (thành phần amoxicillin); dùng 500 mg hoặc 250 mg mỗi 12 giờ (GFR 10–30) hoặc mỗi 24 giờ (GFR < 10)",
+      "don_vi_nhan": "mL/min (nhãn ghi GFR, không nêu eGFR hay CrCl)",
+      "don_vi_trong_ca": "mL/phút/1,73m2 (egfr)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Amoxicillin and Clavulanate Potassium",
+          "set_id": "416fa58c-88fa-42aa-9195-74aeba641577",
+          "phien_ban_nguon": "20261105",
+          "tep": "data/kb_sources/openfda/amoxicillin_and_clavulanate_potassium.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Renal impairment patients with a glomerular filtration rate (GFR) of less than 30 mL/min should NOT receive the 875 mg dose",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=416fa58c-88fa-42aa-9195-74aeba641577",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn chỉ ghi GFR (mL/min), không nêu công thức; chưa rõ nên dùng CrCl hay eGFR. Bảng liều: GFR 10–30: 500 hoặc 250 mg mỗi 12 giờ; GFR < 10: 500 hoặc 250 mg mỗi 24 giờ. Dược sĩ chốt chỉ số.",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "nghiem_trong",
+      "dieu_kien_khac": "Chỉ áp dụng cho viên amoxicillin/clavulanate 875 mg (thành phần amoxicillin); liều 500 mg hoặc 250 mg dùng bảng GFR 10-30 và < 10 của nhãn. Nhãn ghi GFR (mL/min), chưa rõ eGFR hay CrCl."
+    },
+    {
+      "ten_quoc_te": "enalapril",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "xet_nghiem": "natri",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "natri",
+          "toan_tu": "<",
+          "gia_tri": 130,
+          "don_vi_nhan": "mEq/L",
+          "don_vi_ca": "mmol/L",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Suy tim kèm hạ natri máu: khởi đầu 2,5 mg/ngày, theo dõi sát",
+      "don_vi_nhan": "mEq/L",
+      "don_vi_trong_ca": "chưa có xét nghiệm natri trong 66 ca (mã dự kiến natri, đơn vị mmol/L)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ENALAPRIL MALEATE",
+          "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+          "phien_ban_nguon": "20261009",
+          "tep": "data/kb_sources/openfda/enalapril.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients with heart failure who have hyponatremia (serum sodium less than 130 mEq/L) or with serum creatinine greater than 1.6 mg/dL, therapy should be initiated at 2.5 mg daily under close medical supervision",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "quy_doi": "Na+ đơn trị: 1 mEq/L = 1 mmol/L (số không đổi)",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng cho người suy tim khi khởi đầu enalapril (2,5 mg/ngày); nhãn gộp natri < 130 mEq/L với creatinin > 1,6 mg/dL, một trong hai là đủ."
+    },
+    {
+      "ten_quoc_te": "enalapril",
+      "hoat_chat_ids": [
+        "enalapril"
+      ],
+      "xet_nghiem": "creatinin",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "creatinin",
+          "toan_tu": ">",
+          "gia_tri": 1.6,
+          "don_vi_nhan": "mg/dL",
+          "don_vi_ca": "umol/L",
+          "he_so_ca_sang_nhan": 0.011312
+        }
+      ],
+      "hanh_dong_nhan": "Suy tim kèm creatinin huyết thanh > 1,6 mg/dL: khởi đầu 2,5 mg/ngày, theo dõi sát",
+      "don_vi_nhan": "mg/dL",
+      "don_vi_trong_ca": "umol/L",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ENALAPRIL MALEATE",
+          "set_id": "d6af58f2-4129-45fe-a510-03b7403495ac",
+          "phien_ban_nguon": "20261009",
+          "tep": "data/kb_sources/openfda/enalapril.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "In patients with heart failure who have hyponatremia (serum sodium less than 130 mEq/L) or with serum creatinine greater than 1.6 mg/dL, therapy should be initiated at 2.5 mg daily under close medical supervision",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d6af58f2-4129-45fe-a510-03b7403495ac",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "quy_doi": "1,6 mg/dL x 88,4 = 141,44 umol/L (hệ số 88,4 theo app/calc/units.py)",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Chỉ áp dụng cho người suy tim khi khởi đầu enalapril (2,5 mg/ngày); nhãn gộp natri < 130 mEq/L với creatinin > 1,6 mg/dL, một trong hai là đủ.",
+      "ghi_chu": "Hệ số 1/88,4 = 0,011312 (umol/L sang mg/dL); 88,4 là hằng số trong app/calc/units.py."
+    },
+    {
+      "ten_quoc_te": "apixaban",
+      "hoat_chat_ids": [
+        "apixaban"
+      ],
+      "xet_nghiem": "creatinin",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "creatinin",
+          "toan_tu": ">=",
+          "gia_tri": 1.5,
+          "don_vi_nhan": "mg/dL",
+          "don_vi_ca": "umol/L",
+          "he_so_ca_sang_nhan": 0.011312
+        }
+      ],
+      "hanh_dong_nhan": "Rung nhĩ không do bệnh van tim: 2,5 mg x 2 lần/ngày khi có ít nhất 2 trong 3 đặc điểm (tuổi ≥ 80, cân nặng ≤ 60 kg, creatinin ≥ 1,5 mg/dL)",
+      "don_vi_nhan": "mg/dL",
+      "don_vi_trong_ca": "umol/L",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "ELIQUIS",
+          "set_id": "41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "phien_ban_nguon": "20260924",
+          "tep": "data/kb_sources/openfda/apixaban.json",
+          "truong_nhan": "use_in_specific_populations",
+          "trich_nguyen_van": "The recommended dose is 2.5 mg twice daily in patients with at least two of the following characteristics [see Dosage and Administration (2.1) ] : age greater than or equal to 80 years body weight less than or equal to 60 kg serum creatinine greater than or equal to 1.5 mg/dL",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41a133ef-e461-48ad-8221-b735bdd0ec25",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "quy_doi": "1,5 mg/dL x 88,4 = 132,6 umol/L (hệ số 88,4 theo app/calc/units.py)",
+      "ghi_chu": "Luật tổ hợp: cần ít nhất 2 trong 3 đặc điểm; creatinin chỉ là một tiêu chí. Hệ số 1/88,4 = 0,011312 (umol/L sang mg/dL); 88,4 là hằng số trong app/calc/units.py.",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y",
+      "dieu_kien_khac": "Rung nhĩ không do bệnh van tim: giảm liều xuống 2,5 mg x 2 lần/ngày khi có ít nhất 2 trong 3 đặc điểm: tuổi >= 80, cân nặng <= 60 kg, creatinin >= 1,5 mg/dL. Creatinin chỉ là một tiêu chí; cần đối chiếu tuổi và cân nặng."
+    },
+    {
+      "ten_quoc_te": "digoxin",
+      "hoat_chat_ids": [
+        "digoxin"
+      ],
+      "xet_nghiem": "digoxin",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "digoxin",
+          "toan_tu": "<",
+          "gia_tri": 0.5,
+          "don_vi_nhan": "ng/mL",
+          "don_vi_ca": "ng/mL",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Nồng độ digoxin huyết thanh < 0,5 ng/mL liên quan hiệu quả giảm",
+      "don_vi_nhan": "ng/mL",
+      "don_vi_trong_ca": "ng/mL (khớp)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Digoxin",
+          "set_id": "98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+          "phien_ban_nguon": "20261106",
+          "tep": "data/kb_sources/openfda/digoxin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Serum digoxin levels less than 0.5 ng/mL have been associated with diminished efficacy",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Nhãn nhấn mạnh diễn giải theo bối cảnh lâm sàng, không dùng một giá trị riêng lẻ để chỉnh liều.",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y"
+    },
+    {
+      "ten_quoc_te": "digoxin",
+      "hoat_chat_ids": [
+        "digoxin"
+      ],
+      "xet_nghiem": "digoxin",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "digoxin",
+          "toan_tu": ">",
+          "gia_tri": 2.0,
+          "don_vi_nhan": "ng/mL",
+          "don_vi_ca": "ng/mL",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Nồng độ digoxin huyết thanh > 2 ng/mL liên quan tăng độc tính, không tăng lợi ích",
+      "don_vi_nhan": "ng/mL",
+      "don_vi_trong_ca": "ng/mL (khớp)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Digoxin",
+          "set_id": "98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+          "phien_ban_nguon": "20261106",
+          "tep": "data/kb_sources/openfda/digoxin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "levels above 2 ng/mL have been associated with increased toxicity without increased benefit",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=98d2ad5b-9ffa-4456-9a01-567636c3a4d2",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Cùng câu nhãn với dòng < 0,5 ng/mL.",
+      "kieu_dieu_kien": "canh_bao_khi_thoa",
+      "muc_do_de_xuat": "can_luu_y"
+    },
+    {
+      "ten_quoc_te": "phenytoin",
+      "hoat_chat_ids": [
+        "phenytoin"
+      ],
+      "xet_nghiem": "phenytoin",
+      "dieu_kien": [
+        {
+          "ma_xet_nghiem": "phenytoin",
+          "toan_tu": "khoang",
+          "gia_tri": 10,
+          "gia_tri_den": 20,
+          "don_vi_nhan": "mcg/mL",
+          "don_vi_ca": "mcg/mL",
+          "he_so_ca_sang_nhan": 1
+        }
+      ],
+      "hanh_dong_nhan": "Tác dụng điều trị không có dấu hiệu độc thường gặp ở nồng độ toàn phần 10–20 mcg/mL (phần tự do 1–2 mcg/mL)",
+      "don_vi_nhan": "mcg/mL",
+      "don_vi_trong_ca": "mcg/mL (khớp)",
+      "trang_thai": "cho_duoc_si_duyet",
+      "nguon_chi_tiet": [
+        {
+          "loai": "nhan_fda",
+          "ten_nhan": "Phenytoin Sodium",
+          "set_id": "889dd22c-46f0-48d0-b18e-a3783c5fa653",
+          "phien_ban_nguon": "20261106",
+          "tep": "data/kb_sources/openfda/phenytoin.json",
+          "truong_nhan": "dosage_and_administration",
+          "trich_nguyen_van": "Therapeutic effect without clinical signs of toxicity occurs more often with serum total concentrations between 10 to 20 mcg/mL (unbound phenytoin concentrations of 1 to 2 mcg/mL)",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=889dd22c-46f0-48d0-b18e-a3783c5fa653",
+          "ngay_lay": "2026-11-19"
+        }
+      ],
+      "ghi_chu": "Là khoảng điều trị thường gặp, không phải ngưỡng hành động; nhãn nói một số ca được kiểm soát ở nồng độ thấp hơn.",
+      "kieu_dieu_kien": "canh_bao_khi_ngoai_khoang",
+      "muc_do_de_xuat": "can_luu_y"
+    }
+  ]
+}

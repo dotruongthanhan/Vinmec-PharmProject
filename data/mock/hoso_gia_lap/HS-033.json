@@ -1,0 +1,579 @@
+{
+  "ho_so_id": "HS-033",
+  "kich_ban_id": "HS-033",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-033",
+    "tuoi": 33,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-16T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    },
+    {
+      "hoat_chat_id": "HC-TRAMADOL",
+      "ten_hoat_chat": "Tramadol",
+      "ten_quoc_te": "tramadol",
+      "ma_atc": "N02AX02",
+      "nhom_duoc_ly": "giam dau opioid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-TRAMADOL-50",
+      "ten_thuoc": "Tramadol 50 mg",
+      "ham_luong": "50 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-TRAMADOL",
+          "ham_luong_thanh_phan": 50.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-033-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Sản",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2025-07-08T08:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-07-08T10:30:00+07:00",
+      "so_ngay_dieu_tri": 1,
+      "lich_su_khoa": [
+        {
+          "khoa": "Sản",
+          "tu": "2025-07-08T08:00:00+07:00",
+          "den": "2025-07-08T10:30:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Khám thai định kỳ",
+      "benh_su": "BN nữ 32T, khám thai định kỳ, không ghi nhận triệu chứng bất thường.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "T 36,7, HA 110/70. Thai phát triển phù hợp tuổi thai.",
+      "tom_tat": "Khám thai định kỳ, ổn. Dặn bổ sung sắt và acid folic, hẹn tái khám.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS033-1-01",
+          "ma_icd10": "Z34.9",
+          "noi_dung": "Khám thai định kỳ",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-033-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Khám thai định kỳ, thai phát triển tốt. Dặn bổ sung sắt và acid folic.",
+          "thoi_diem_ghi": "2025-07-08T09:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-033-01",
+          "thoi_diem_ke": "2025-07-08T09:35:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-033-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Sắt fumarat 200 mg + acid folic 1 mg, 1 viên",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "viên",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên mỗi ngày sau ăn",
+              "bat_dau": "2025-07-08T09:40:00+07:00",
+              "ket_thuc": "2025-07-08T09:45:00+07:00",
+              "nguon_thuoc": "Kho ngoại trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Khám thai định kỳ ổn. Dặn bổ sung sắt và acid folic, hẹn tái khám.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-033-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-07-08T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 32 tuổi đến khám thai định kỳ, không ghi nhận triệu chứng bất thường. Khám: T 36,7, HA 110/70 mmHg. Thai phát triển phù hợp tuổi thai. Chưa ghi nhận bệnh mạn tính. Không ghi nhận tiền sử bệnh mạn tính cần lưu ý trong thai kỳ này.",
+          "danh_gia": "Thai kỳ diễn tiến bình thường, chưa có dấu hiệu bất thường cần nhập viện. BN được tư vấn về dinh dưỡng và các dấu hiệu cần đến cơ sở y tế sớm.",
+          "huong_xu_tri": "Bổ sung sắt và acid folic mỗi ngày 1 viên sau ăn. Hẹn tái khám theo lịch thai kỳ. Tiếp tục khám thai định kỳ theo lịch đã hẹn.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-033-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn đủ bữa, tăng đạm và rau xanh, uống đủ nước mỗi ngày.",
+          "theo_doi": [
+            "Cử động thai và dấu hiệu chuyển dạ",
+            "Huyết áp ở lần khám sau",
+            "Triệu chứng thiếu máu như mệt, hoa mắt"
+          ],
+          "dan_do": "Uống sắt sau ăn, phân có thể sẫm màu nhẹ. Đến khám ngay nếu ra máu âm đạo, đau bụng hoặc nhức đầu nhiều."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2025-07-08T08:00:00+07:00",
+        "so_giuong": null,
+        "so_luu_tru": "LT-2026-03301",
+        "ma_yt": "YT-2026-033-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Khám thai định kỳ ổn. Dặn bổ sung sắt và acid folic, hẹn tái khám."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-033-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Sản",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-13T07:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Sản",
+          "tu": "2026-11-13T07:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau vết mổ sau mổ lấy thai",
+      "benh_su": "BN nữ 33T, mổ lấy thai ngày 13/11, hậu sản ngày 3, đang cho con bú. Đau vết mổ, cần giảm đau.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính. Có khám thai định kỳ năm 2025.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "T 37,0, M 84, HA 118/72, SpO2 98%. Vết mổ khô, không đỏ. Bụng mềm, tử cung co tốt.",
+      "tom_tat": "BN nữ 33T hậu sản ngày 3 sau mổ lấy thai, đang cho con bú. Đau vết mổ, dùng giảm đau. Creatinin 62 umol/L. Sinh hiệu ổn.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS033-2-01",
+          "ma_icd10": "Z39.0",
+          "noi_dung": "Hậu sản ngày 3 sau mổ lấy thai",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [
+        {
+          "loai": "cho_con_bu",
+          "trang_thai": "co",
+          "gia_tri": "đang cho con bú, con 3 ngày tuổi",
+          "thoi_diem": "2026-11-13T08:00:00+07:00",
+          "nguon": "EMR"
+        },
+        {
+          "loai": "hau_phau",
+          "trang_thai": "co",
+          "gia_tri": "hậu sản ngày 3 sau mổ lấy thai",
+          "thoi_diem": "2026-11-13T08:00:00+07:00",
+          "nguon": "EMR"
+        }
+      ],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS033-2-01",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS033-2-02",
+          "loai": "nhiet_do",
+          "gia_tri": 37.0,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS033-2-03",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS033-2-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 118.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS033-2-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 72.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS033-2-06",
+          "loai": "spo2",
+          "gia_tri": 98.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-16T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS033-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 74.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-13T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS033-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 62.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-16T07:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-033-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Mổ lấy thai ngày 13/11, ra khỏi mổ ổn định. Nhập khoa Sản hậu phẫu, đau vết mổ, cho con bú sớm.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-033-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Hậu phẫu ngày 1, đau vết mổ, đã trung tiện. Tiểu tốt. Đang cho con bú.",
+          "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-033-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Hậu phẫu ngày 2, vết mổ khô, đau giảm nhưng còn đau khi vận động. Ăn uống được.",
+          "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-033-2-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Hậu sản ngày 3, sinh hiệu ổn, còn đau vết mổ. Con bú tốt. Creatinin 62 umol/L.",
+          "thoi_diem_ghi": "2026-11-16T07:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-033-02",
+          "thoi_diem_ke": "2026-11-13T09:00:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-033-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-13T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-033-03",
+          "thoi_diem_ke": "2026-11-13T09:10:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-033-03-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "mỗi 6 giờ",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 500 mg mỗi 6 giờ",
+              "bat_dau": "2026-11-13T12:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-033-04",
+          "thoi_diem_ke": "2026-11-16T08:40:00+07:00",
+          "khoa_ke_don": "Sản",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-033-04-01",
+              "thuoc_id": "T-TRAMADOL-50",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 50.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "mỗi 6 giờ",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 50 mg mỗi 6 giờ khi đau",
+              "bat_dau": "2026-11-16T06:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-16T06:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T12:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T18:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-17T00:00:00+07:00",
+                  "lieu": 50.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-033-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-13T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 33 tuổi mổ lấy thai hôm nay, ra khỏi mổ ổn định và chuyển khoa Sản hậu phẫu. Đang cho con bú, đau vết mổ cần giảm đau đường uống. Creatinin 74 umol/L trong xét nghiệm sáng nay.",
+          "danh_gia": "Sau mổ lấy thai ngày đầu diễn tiến ổn. Đau vết mổ là vấn đề chính, cần kiểm soát đau đa mô thức để BN vận động sớm. Cần theo dõi sát vết mổ, tử cung và lượng ra máu trong các ngày đầu hậu phẫu.",
+          "huong_xu_tri": "Truyền dịch natri clorid 0,9% theo y lệnh. Paracetamol 500 mg uống mỗi 6 giờ. Khuyến khích vận động sớm, theo dõi vết mổ và tử cung.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-033-02",
+            "YL-HS-033-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng khi tỉnh hẳn, tăng dần lên ăn thường. Uống đủ nước để duy trì sữa.",
+          "theo_doi": [
+            "Mạch, huyết áp và nhiệt độ mỗi 4 giờ",
+            "Vết mổ và lượng ra máu âm đạo",
+            "Mức đau khi nghỉ và khi vận động"
+          ],
+          "dan_do": "Báo điều dưỡng nếu sốt, chảy máu nhiều hoặc vết mổ đỏ sưng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-033-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-14T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Hậu phẫu ngày 1, đã trung tiện, tiểu tốt. Đau vết mổ còn nhiều, đang cho con bú và ăn uống được. Điều dưỡng hướng dẫn BN cách cho con bú và xoa bóp tử cung.",
+          "danh_gia": "Hồi phục hậu phẫu đúng tiến trình. Đau vết mổ còn mức vừa, cần đảm bảo giảm đau để BN vận động và chăm sóc con. Hồi phục tử cung và vết mổ đang diễn tiến tốt, chưa có dấu hiệu nhiễm trùng.",
+          "huong_xu_tri": "Tiếp tục paracetamol và truyền dịch theo y lệnh. Theo dõi tiểu, vết mổ và mức đau. Ghi nhận lượng ra máu và tình trạng đau mỗi ca. Điều dưỡng hỗ trợ BN tập đi lại ngắn trong buồng để phòng biến chứng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-033-02",
+            "YL-HS-033-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, đủ đạm, uống nhiều nước để duy trì sữa.",
+          "theo_doi": [
+            "Mạch, huyết áp và nhiệt độ mỗi 4 giờ",
+            "Tiểu và đi ngoài",
+            "Mức đau khi vận động"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-033-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-15T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Hậu phẫu ngày 2, vết mổ khô, đau giảm nhưng còn đau khi vận động. Ăn uống được, con bú tốt. BN tự đi lại được vài bước trong buồng, bế con và cho bú được. Điều dưỡng hướng dẫn BN cách đỡ vết mổ khi ho và đứng dậy.",
+          "danh_gia": "Vết mổ hồi phục tốt. Đau khi vận động còn ảnh hưởng tập đi lại, cần kiểm soát đau để tiến tới xuất viện. Mức đau đang được theo dõi để điều chỉnh giảm đau cho phù hợp.",
+          "huong_xu_tri": "Tiếp tục paracetamol và truyền dịch theo y lệnh. Ngày mai đánh giá vết mổ và mức đau. Tiếp tục theo y lệnh hiện có và đánh giá lại trong buổi sáng hôm sau.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-033-02",
+            "YL-HS-033-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, đủ đạm, uống nhiều nước để duy trì sữa.",
+          "theo_doi": [
+            "Vết mổ và chảy dịch",
+            "Mức đau khi vận động",
+            "Tiểu và đi ngoài"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-033-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-16T08:40:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Hậu sản ngày 3, sinh hiệu ổn: T 37,0, mạch 84, HA 118/72 mmHg, SpO2 98%. Vết mổ khô, không đỏ, bụng mềm, tử cung co tốt. Đang cho con bú, con bú tốt. Creatinin 62 umol/L, cân nặng 70 kg. Đau vết mổ còn khi vận động.",
+          "danh_gia": "Hậu sản ngày 3 ổn định, chức năng thận trong giới hạn bình thường. Đau vết mổ vẫn còn khi vận động, cần giảm đau để hồi phục vận động.",
+          "huong_xu_tri": "Đề nghị tramadol 50 mg uống mỗi 6 giờ khi đau, chỉ định chờ duyệt. Tiếp tục paracetamol 500 mg mỗi 6 giờ. Dự kiến ra viện khi đi lại tốt và cho con bú ổn định.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-033-02",
+            "YL-HS-033-03",
+            "YL-HS-033-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, đủ đạm, uống khoảng 2 lít nước mỗi ngày khi cho con bú.",
+          "theo_doi": [
+            "Vết mổ và chảy dịch",
+            "Mức đau theo thang điểm trước và sau mỗi lần dùng thuốc giảm đau",
+            "Co hồi tử cung và lượng ra máu âm đạo"
+          ],
+          "dan_do": "Báo ngay nếu sốt, vết mổ đỏ sưng hoặc ra máu nhiều. Khi dùng thuốc giảm đau, theo dõi con bú và mức độ buồn ngủ của mẹ."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-13T07:30:00+07:00",
+        "so_giuong": "G-033-02",
+        "so_luu_tru": "LT-2026-03302",
+        "ma_yt": "YT-2026-033-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-033-04",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 33",
+    "ngay_sinh": "1992-07-08",
+    "dan_toc": "Hoa",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9033",
+      "thon_pho": "Phố Dịch Vọng",
+      "xa_phuong": "Dịch Vọng",
+      "huyen": "Cầu Giấy",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000033",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 33",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 033"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 70.0,
+    "nhom_mau": null
+  }
+}

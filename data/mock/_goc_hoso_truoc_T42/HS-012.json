@@ -1,0 +1,644 @@
+{
+  "ho_so_id": "HS-012",
+  "kich_ban_id": "HS-012",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-012",
+    "tuoi": 63,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "chua_co_thong_tin",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin the he 3"
+    },
+    {
+      "hoat_chat_id": "HC-FUROSEMIDE",
+      "ten_hoat_chat": "Furosemid",
+      "ten_quoc_te": "furosemide",
+      "ma_atc": "C03CA01",
+      "nhom_duoc_ly": "thuoc loi tieu quai"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFTRIAXON-1G",
+      "ten_thuoc": "Ceftriaxon 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-FUROSEMID-40",
+      "ten_thuoc": "Furosemid 40 mg/4 mL",
+      "ham_luong": "40 mg/4 mL",
+      "duong_dung": "tiem tinh mach",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-FUROSEMIDE",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-012-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tổng quát",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2025-05-10T14:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-05-16T09:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tổng quát",
+          "tu": "2025-05-10T14:00:00+07:00",
+          "den": "2025-05-16T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Sưng đau đỏ cẳng chân trái 3 ngày",
+      "benh_su": "BN nam 62T, sưng đau đỏ cẳng chân trái 3 ngày, sốt nhẹ. Truyền ceftriaxon 2 g, đến lần truyền thứ hai nổi mề đay toàn thân, ngứa, thở hơi nhanh. Chẩn đoán phản vệ độ 2 do ceftriaxon, đã ghi dị ứng cephalosporin.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "T 37,8. Da cẳng chân trái sưng đỏ, ấn đau, chưa có ổ mủ rõ.",
+      "tom_tat": "BN nam nhiễm trùng da chi dưới, dùng ceftriaxon, có phản vệ độ 2 sau truyền, đã ngưng thuốc và xử trí. Dị ứng cephalosporin được ghi nhận. Ra viện ổn định.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS012-1-01",
+          "ma_icd10": "L03.1",
+          "noi_dung": "Viêm mô tế bào chi dưới",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS012-1-02",
+          "ma_icd10": null,
+          "noi_dung": "Phản vệ do ceftriaxon",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS012-1-01",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 13.2,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2025-05-10T16:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-012-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì sưng đau đỏ cẳng chân trái 3 ngày, sốt nhẹ. Bắt đầu ceftriaxon 2 g tiêm truyền tĩnh mạch.",
+          "thoi_diem_ghi": "2025-05-10T14:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-012-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sau truyền ceftriaxon lần 2, BN nổi mề đay toàn thân, ngứa, thở hơi nhanh. Chẩn đoán phản vệ độ 2 do ceftriaxon. Ngưng ceftriaxon, dùng kháng histamin và corticoid tiêm, theo dõi ổn. Ghi dị ứng cephalosporin vào hồ sơ.",
+          "thoi_diem_ghi": "2025-05-12T11:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-012-01",
+          "thoi_diem_ke": "2025-05-10T14:20:00+07:00",
+          "khoa_ke_don": "Nội tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Phản vệ độ 2 sau truyền ceftriaxon",
+          "thoi_diem_ngung": "2025-05-12T10:45:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-01-01",
+              "thuoc_id": "T-CEFTRIAXON-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2025-05-10T15:00:00+07:00",
+              "ket_thuc": "2025-05-12T10:45:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-012-02",
+          "thoi_diem_ke": "2025-05-12T10:50:00+07:00",
+          "khoa_ke_don": "Nội tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Hydrocortison 100 mg tiêm tĩnh mạch",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 100.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "tiêm tĩnh mạch",
+              "cach_dung": "Tiêm tĩnh mạch 1 lần",
+              "bat_dau": "2025-05-12T10:50:00+07:00",
+              "ket_thuc": "2025-05-12T10:55:00+07:00",
+              "nguon_thuoc": "Kho cấp cứu",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Phản vệ độ 2 sau truyền ceftriaxon. Đã ngưng thuốc, xử trí và ổn định khi ra viện."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-012-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-04-20T10:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-04-27T09:00:00+07:00",
+      "so_ngay_dieu_tri": 7,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-04-20T10:00:00+07:00",
+          "den": "2026-04-27T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Khó thở tăng dần, phù hai chân",
+      "benh_su": "BN nam suy tim, khó thở tăng 4 ngày, phù hai chân, khó nằm đầu bằng, phải kê gối cao. Được điều trị suy tim cấp.",
+      "tien_su": {
+        "ban_than": "Suy tim, đang theo dõi ngoại trú.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa rõ."
+      },
+      "kham_benh": "Phổi có ran ẩm hai đáy, tim nhịp nhanh đều, phù chi dưới hai bên ấn lõm.",
+      "tom_tat": "BN nam suy tim cấp, đáp ứng lợi tiểu tốt, khó thở giảm sau 3 ngày. Ra viện ổn định.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS012-2-01",
+          "ma_icd10": "I50.9",
+          "noi_dung": "Suy tim",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS012-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 96.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-04-21T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-012-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì khó thở tăng dần, phù hai chân. Ran ẩm hai đáy phổi. Nhập khoa Tim mạch, dùng lợi tiểu tiêm tĩnh mạch.",
+          "thoi_diem_ghi": "2026-04-20T09:45:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-012-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Khó thở giảm, phù giảm, tiểu nhiều sau furosemid. Mạch 84, HA ổn định.",
+          "thoi_diem_ghi": "2026-04-23T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-012-03",
+          "thoi_diem_ke": "2026-04-20T10:10:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-03-01",
+              "thuoc_id": "T-FUROSEMID-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "tiêm tĩnh mạch",
+              "cach_dung": "Tiêm tĩnh mạch 2 lần/ngày",
+              "bat_dau": "2026-04-20T10:30:00+07:00",
+              "ket_thuc": "2026-04-26T20:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-012-04",
+          "thoi_diem_ke": "2026-04-20T10:15:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-04-20T11:00:00+07:00",
+              "ket_thuc": "2026-04-26T11:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Suy tim cấp, đáp ứng tốt lợi tiểu. Ra viện, hẹn tái khám tim mạch."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-012-3",
+      "thu_tu": 3,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-12T08:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-12T08:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Ho đờm, sốt, khó thở 3 ngày",
+      "benh_su": "BN nam 63T, nền suy tim. Ho đờm vàng, sốt cao, khó thở tăng dần 3 ngày. Đã nhập viện 2 lần trước vì suy tim.",
+      "tien_su": {
+        "ban_than": "Suy tim, đã nhập viện 2 lần.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa ghi nhận thuốc đang dùng trước khi nhập viện."
+      },
+      "kham_benh": "T 38,6, M 104, HA 128/78, SpO2 93% khí phòng. Ran ẩm đáy phổi phải. Phù chi dưới nhẹ.",
+      "tom_tat": "BN nam 63T, viêm phổi bệnh viện trên nền suy tim, sốt, ho đờm, SpO2 93% khí phòng. Chưa dùng kháng sinh, theo dõi và cấy đờm. Creatinin giảm từ 118 xuống 100 umol/L.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS012-3-01",
+          "ma_icd10": "J15.9",
+          "noi_dung": "Viêm phổi bệnh viện",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS012-3-02",
+          "ma_icd10": "I50.9",
+          "noi_dung": "Suy tim",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS012-3-01",
+          "loai": "nhiet_do",
+          "gia_tri": 38.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-02",
+          "loai": "mach",
+          "gia_tri": 104.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-03",
+          "loai": "spo2",
+          "gia_tri": 93.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-12T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 128.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:35:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 78.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:35:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-06",
+          "loai": "can_nang",
+          "gia_tri": 68.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-07",
+          "loai": "nhiet_do",
+          "gia_tri": 37.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-08",
+          "loai": "mach",
+          "gia_tri": 88.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-09",
+          "loai": "spo2",
+          "gia_tri": 96.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS012-3-10",
+          "loai": "can_nang",
+          "gia_tri": 68.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS012-3-01",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 15.2,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-12T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS012-3-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 118.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-12T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS012-3-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 100.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-012-3-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì ho đờm vàng, sốt 38,6 độ, khó thở tăng dần 3 ngày. Nền suy tim. Nghi viêm phổi bệnh viện, nhập khoa Tim mạch theo dõi, cấy đờm.",
+          "thoi_diem_ghi": "2026-11-12T08:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-012-3-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN ho đờm vàng giảm nhẹ, sốt còn 37,9 độ chiều qua. SpO2 94% khí phòng. Phù chân giảm. Chưa dùng kháng sinh, chờ kết quả cấy đờm.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-012-3-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay T 37,4, M 88, SpO2 96%, khó thở giảm. Creatinin giảm còn 100 umol/L. Dự kiến bắt đầu kháng sinh điều trị viêm phổi bệnh viện.",
+          "thoi_diem_ghi": "2026-11-14T07:10:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-012-05",
+          "thoi_diem_ke": "2026-11-12T09:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-05-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-12T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-012-06",
+          "thoi_diem_ke": "2026-11-12T09:05:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-06-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt trên 38,5 độ",
+              "bat_dau": "2026-11-12T14:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-012-07",
+          "thoi_diem_ke": "2026-11-14T08:45:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-012-07-01",
+              "thuoc_id": "T-CEFTRIAXON-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiêm truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-14T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T09:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T09:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-012-07"
+}

@@ -1,0 +1,29 @@
+title = "Cấu hình Gitleaks cho dữ liệu giả lập trong tests/"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Chỉ bỏ qua các tệp kiểm thử có chuỗi kết nối DB hoặc khoá API giả lập"
+paths = [
+    '^tests/config/test_db_url_security\.py$',
+    '^tests/db/test_cli\.py$',
+    '^tests/db/test_bang_luat\.py$',
+    '^tests/db/test_reader\.py$',
+    '^tests/api/test_feedback_chat_db\.py$',
+    '^tests/api/test_review_results_db\.py$',
+    '^tests/api/test_ai_routes\.py$',
+    '^tests/api/test_ask_routes\.py$',
+    '^tests/kb/test_store_from_db\.py$',
+    '^tests/retrieval/test_precomputed_rag\.py$',
+    '^tests/retrieval/test_embed_corpus\.py$',
+    '^tests/providers/test_deepseek_llm\.py$',
+    '^tests/providers/test_gemini_embed\.py$',
+    '^tests/providers/test_openrouter_embed\.py$',
+    '^tests/providers/test_openrouter_rerank\.py$',
+    '^tests/llm/test_setup\.py$',
+    # Báo nhầm: khoá cấu hình chỉ số (egfr_ckd_epi_2021) bị luật generic-api-key bắt nhầm.
+    '^web/src/features/sidebar/PatientSidebarCard\.tsx$',
+    # Báo nhầm: trang HTML công khai của DDInter lưu làm tệp mẫu, có mã CSRF của trang đó.
+    '^tests/kb/fixtures/ddinter/.*\.html$',
+]

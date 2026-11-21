@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-040",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "khong_du_du_lieu",
+      "muc_do": null,
+      "chi_tiet_y_lenh_id": ["CT-HS-040-03-01"],
+      "mo_ta": "Paracetamol 15 mg/kg được kê nhưng hồ sơ không có cân nặng, không tính được liều mg."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

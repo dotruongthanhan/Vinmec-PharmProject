@@ -1,0 +1,190 @@
+{
+  "ho_so_id": "HS-007",
+  "kich_ban_id": "HS-007",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-007",
+    "tuoi": 5,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T08:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-AMOXICILLIN",
+      "ten_hoat_chat": "Amoxicillin",
+      "ten_quoc_te": "amoxicillin",
+      "ma_atc": "J01CA04",
+      "nhom_duoc_ly": "penicilin nhom aminopenicilin"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-AMOXICILLIN-400",
+      "ten_thuoc": "Amoxicillin 400 mg/5 mL",
+      "ham_luong": "400 mg/5 mL",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-AMOXICILLIN",
+          "ham_luong_thanh_phan": 400.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-007-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nhi",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-14T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nhi",
+          "tu": "2026-11-14T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau tai phải, sốt 2 ngày",
+      "benh_su": "BN nam 5T đau tai phải, sốt 38,5 độ C, 2 ngày nay, có chảy dịch tai ít. Không co giật, không nôn nhiều, ăn uống được.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh nền. Đã từng viêm đường hô hấp trên, ít dùng kháng sinh.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol nhỏ giọt khi sốt tại nhà."
+      },
+      "kham_benh": "Tỉnh, T 38,5 °C, màng nhĩ phải đỏ phồng, mất ánh sáng. Họng không đỏ. Phổi không ran.",
+      "tom_tat": "BN nam 5T VTMC cấp bên phải, T 38,5 độ C. Cân nặng 18 kg, cao 108 cm. Chỉ định amoxicillin 400 mg uống 2 lần/ngày x 7 ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS007-01",
+          "ma_icd10": "H66.9",
+          "noi_dung": "Viêm tai giữa cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS007-01",
+          "loai": "can_nang",
+          "gia_tri": 18.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS007-02",
+          "loai": "chieu_cao",
+          "gia_tri": 108.0,
+          "don_vi": "cm",
+          "thoi_diem_do": "2026-11-14T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS007-03",
+          "loai": "nhiet_do",
+          "gia_tri": 38.5,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS007-04",
+          "loai": "mach",
+          "gia_tri": 110.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T08:20:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-007-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 5T viêm tai giữa cấp bên phải, sốt 38,5 độ C, màng nhĩ phồng đỏ. Chưa có dấu hiệu nhiễm trùng nặng. Cân nặng 18 kg. Chỉ định amoxicillin 400 mg uống 2 lần/ngày, dùng 7 ngày. Hẹn tái khám nếu không đỡ sau 48 đến 72 giờ.",
+          "thoi_diem_ghi": "2026-11-14T08:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-007-01",
+          "thoi_diem_ke": "2026-11-14T09:00:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-007-01-01",
+              "thuoc_id": "T-AMOXICILLIN-400",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 400.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 400 mg mỗi 12 giờ, dùng trong 7 ngày",
+              "bat_dau": "2026-11-14T09:00:00+07:00",
+              "ket_thuc": "2026-11-21T09:00:00+07:00",
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T09:00:00+07:00",
+                  "lieu": 400.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T21:00:00+07:00",
+                  "lieu": 400.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-007-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-14T09:05:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 5T đau tai phải, sốt 2 ngày, có chảy dịch tai ít, không co giật, không nôn nhiều, ăn uống được. Khám: tỉnh, nhiệt độ 38,5 °C, mạch 110 lần/phút, màng nhĩ phải đỏ phồng và mất ánh sáng, họng không đỏ, phổi không ran. Cân nặng 18 kg, chiều cao 108 cm.",
+          "danh_gia": "Viêm tai giữa cấp bên phải, chưa có dấu hiệu nhiễm trùng nặng. Trẻ đã từng viêm đường hô hấp trên và ít dùng kháng sinh, không có bệnh nền. Chỉ định kháng sinh đường uống phù hợp phác đồ viêm tai giữa cấp.",
+          "huong_xu_tri": "Đề nghị amoxicillin hỗn dịch 400 mg/5 mL, uống 400 mg mỗi 12 giờ trong 7 ngày. Hạ sốt khi cần bằng paracetamol theo cân nặng. Hẹn tái khám nếu không đỡ sau 48 đến 72 giờ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-007-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn mềm, uống đủ nước",
+          "theo_doi": [
+            "Nhiệt độ mỗi 4 đến 6 giờ khi còn sốt",
+            "Ăn uống và số lần đi tiểu trong ngày",
+            "Dịch chảy ở tai, mức độ đau tai"
+          ],
+          "dan_do": "Cho trẻ uống đủ thuốc đến hết 7 ngày, kể cả khi đã hết sốt. Đưa trẻ đi khám sớm nếu sốt cao kéo dài, co giật hoặc nôn nhiều."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-007-01"
+}

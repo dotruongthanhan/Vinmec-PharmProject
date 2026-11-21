@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      args:
+        # Chỉ lấy khoá anon (công khai) đưa vào web. Khoá service_role tuyệt đối không đi vào bước build.
+        VITE_SUPABASE_URL: ${SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+    image: bvienx-pharm-api:latest
+    # Bí mật chỉ của API (DEEPSEEK_API_KEY, GEMINI_API_KEY, DATABASE_URL cho bvienx_app...) nằm ở .env.app trên máy chủ, không nằm trong image và không chứa khoá service_role.
+    env_file: .env.app
+    volumes:
+      # Phản hồi và nhật ký chat nằm ngoài container để không mất khi build lại.
+      - ./data/runtime:/srv/data/runtime
+      # Bộ nhớ đệm embedding của câu truy vấn (cache_path); ghi được bởi appuser (uid 1000) và giữ lại khi build lại.
+      - ./data/cache:/srv/data/cache
+      # Chứng chỉ gốc AWS RDS gắn chỉ đọc cho kết nối sslmode=verify-full.
+      - ./certs/rds-global-bundle.pem:/srv/certs/rds-global-bundle.pem:ro
+    restart: unless-stopped
+    expose:
+      - "8000"
+
+  caddy:
+    image: caddy:2@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # Đặt tên miền để Caddy tự xin HTTPS (ví dụ demo.example.com). Mặc định ":80" = chỉ HTTP, dùng để thử.
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

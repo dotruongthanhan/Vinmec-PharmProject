@@ -138,10 +138,17 @@ def test_engine_isolates_rule_runtime_error(monkeypatch: pytest.MonkeyPatch) -> 
     assert "duplicate" in err.mo_ta
     assert "RuntimeError" in err.mo_ta
 
-    other_codes = {item.ma_luat for item in findings}
-    assert "di_ung_khong_co" in other_codes
-    assert "lich_dung_thieu_lieu" in other_codes
-    assert [item.ket_luan for item in findings] == ["can_xem", "khong_du_du_lieu", "dat"]
+    by_code = {item.ma_luat: item for item in findings}
+    expected_codes = {
+        "loi_luat",
+        "di_ung_khong_co",
+        "lich_dung_thieu_lieu",
+        "y_lenh_thieu_truong",
+    }
+    assert expected_codes <= set(by_code)
+    assert by_code["lich_dung_thieu_lieu"].ket_luan == "can_xem"
+    assert by_code["y_lenh_thieu_truong"].ket_luan == "can_xem"
+    assert by_code["di_ung_khong_co"].ket_luan == "dat"
 
 
 def test_cli_outputs_valid_utf8_json(capsys: pytest.CaptureFixture[str]) -> None:

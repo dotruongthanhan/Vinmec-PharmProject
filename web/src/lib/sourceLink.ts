@@ -124,6 +124,23 @@ export function printerFriendlyUrl(urlGoc: string): URL | null {
 }
 
 /**
+ * Kiểm tra chuỗi URL và chỉ chấp nhận giao thức `https:`; trả về URL đã trim hoặc `null`.
+ */
+export function safeHttpsUrl(urlGoc: string | null | undefined): string | null {
+  const trimmed = typeof urlGoc === 'string' ? urlGoc.trim() : ''
+  if (!trimmed) {
+    return null
+  }
+  let url: URL
+  try {
+    url = new URL(trimmed)
+  } catch {
+    return null
+  }
+  return url.protocol === 'https:' ? trimmed : null
+}
+
+/**
  * Trả URL HTTPS mở trang gốc; với nhãn DailyMed thì mở bản nhãn đầy đủ, kèm neo mục và text fragment.
  * Trả null nếu không phải địa chỉ HTTPS hợp lệ.
  */
@@ -132,14 +149,8 @@ export function buildSourceLink({
   duongDanMuc,
   trichNguyenVan,
 }: SourceLinkInput): string | null {
-  const trimmed = typeof urlGoc === 'string' ? urlGoc.trim() : ''
-  let url: URL
-  try {
-    url = new URL(trimmed)
-  } catch {
-    return null
-  }
-  if (url.protocol !== 'https:') {
+  const trimmed = safeHttpsUrl(urlGoc)
+  if (!trimmed) {
     return null
   }
   const full = printerFriendlyUrl(trimmed)

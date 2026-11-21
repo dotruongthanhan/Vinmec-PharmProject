@@ -1,4 +1,5 @@
 import type { BanGhi, CheDo, ChiTietCa, DanhSachCa, DoanNguon, NhanDinh, TrichDan } from './types.ts'
+import { medicalOrders } from '../lib/medicalRecord.ts'
 
 export const MOCK_CHE_DO: CheDo = {
   co_llm: true,
@@ -2172,4 +2173,9 @@ export const MOCK_SOURCES: Record<string, Record<string, DoanNguon>> = {
         'Use in Adult Patients with Renal Impairment: Dosage adjustment is recommended for adult patients with impaired renal function. Refer to full prescribing information and clinical judgment when selecting dosing regimen.',
     },
   },
+}
+
+// Bổ sung y lệnh từ bảng có sẵn; phiếu mới tùy chọn để giữ dữ liệu demo cũ.
+for (const detail of Object.values(MOCK_CASE_DETAILS)) {
+  detail.danh_sach_y_lenh = medicalOrders(detail)
 }

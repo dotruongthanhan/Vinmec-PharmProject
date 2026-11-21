@@ -1,0 +1,134 @@
+{
+  "ho_so_id": "HS-055",
+  "kich_ban_id": "HS-055",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-055",
+    "tuoi": 6,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T08:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [],
+  "danh_muc_thuoc": [],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-055-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nhi",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-14T08:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nhi",
+          "tu": "2026-11-14T08:30:00+07:00",
+          "den": "2026-11-14T09:30:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Ho kéo dài",
+      "benh_su": "BN nữ 6T, ho khan kéo dài khoảng 3 tuần, không sốt cao, ăn uống bình thường. Người nhà cho uống siro thảo dược tại nhà.",
+      "tien_su": {
+        "ban_than": "Không ghi nhận đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Siro thảo dược trị ho, dùng tại nhà."
+      },
+      "kham_benh": "Họng đỏ nhẹ, phổi không ran, không khó thở, SpO2 98%.",
+      "tom_tat": "BN nữ 6T ho kéo dài, không sốt, phổi không ran. Cho uống thuốc ho, tái khám nếu ho nhiều hơn.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS055-1-01",
+          "ma_icd10": "R05",
+          "noi_dung": "Ho kéo dài",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS055-1-01",
+          "loai": "can_nang",
+          "gia_tri": 21.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T08:35:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS055-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Ho khan kéo dài khoảng 3 tuần, không sốt cao, ăn uống bình thường. Họng đỏ nhẹ, phổi không ran. Cân nặng 21 kg. Kê đơn siro trị ho.",
+          "thoi_diem_ghi": "2026-11-14T09:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-055-01",
+          "thoi_diem_ke": "2026-11-14T08:50:00+07:00",
+          "khoa_ke_don": "Nhi",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-055-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Siro thảo dược trị ho (thực phẩm chức năng)",
+              "loai_san_pham": "tpcn",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 5 mL, 3 lần/ngày",
+              "bat_dau": "2026-11-14T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Tự mua, người nhà mang đến",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-055-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-14T09:10:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 6 tuổi, cân nặng 21 kg, ho khan kéo dài khoảng 3 tuần, không sốt cao, ăn uống bình thường. Họng đỏ nhẹ, phổi không ran, không khó thở, SpO2 bình thường khi khám. Gia đình đã cho uống siro thảo dược tại nhà.",
+          "danh_gia": "Ho kéo dài sau nhiễm khuẩn hô hấp trên, chưa có dấu hiệu viêm phổi hay suy hô hấp trên thăm khám. Siro thảo dược đang dùng tại nhà là thực phẩm chức năng, chưa có thông tin đánh giá hiệu quả trong hồ sơ.",
+          "huong_xu_tri": "Đề nghị siro thảo dược trị ho (thực phẩm chức năng) 5 mL uống 3 lần mỗi ngày, chờ duyệt y lệnh. Hẹn tái khám nếu ho tăng lên hoặc kéo dài thêm, theo dõi triệu chứng hằng ngày tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-055-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn uống bình thường, uống đủ nước, tránh đồ lạnh",
+          "theo_doi": [
+            "Số cơn ho và ban đêm có ho nhiều không",
+            "Sốt và tình trạng ăn ngủ",
+            "Thở nhanh hoặc khò khè"
+          ],
+          "dan_do": "Gia đình ghi lại thời gian và mức độ ho, tái khám sớm nếu trẻ sốt cao, thở nhanh, khó thở hoặc bỏ ăn."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-055-01"
+}

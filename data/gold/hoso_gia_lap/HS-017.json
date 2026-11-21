@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-017",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 2,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-017-03-01"],
+      "mo_ta": "Ketorolac 30 mg tiêm TM mỗi 8 giờ được kê khi BN đang dùng ibuprofen 400 mg uống 3 lần/ngày, hai thuốc cùng nhóm NSAID."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

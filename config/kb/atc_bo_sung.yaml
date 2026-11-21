@@ -1,0 +1,5 @@
+# Chờ Claude kiểm; không sửa chỉ mục tra_cuu.sqlite.
+trang_thai: cho_claude_kiem
+nguon: WHO ATC/DDD Index, N03AG01
+ma_atc:
+  valproic_acid: [N03AG]

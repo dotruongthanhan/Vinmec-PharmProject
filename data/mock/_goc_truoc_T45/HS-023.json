@@ -1,0 +1,276 @@
+{
+  "ho_so_id": "HS-023",
+  "kich_ban_id": "HS-023",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-023",
+    "tuoi": 65,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T08:10:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-AMIODARONE",
+      "ten_hoat_chat": "Amiodaron",
+      "ten_quoc_te": "amiodarone",
+      "ma_atc": "C01BD01",
+      "nhom_duoc_ly": "chong_loan_nhip"
+    },
+    {
+      "hoat_chat_id": "HC-SIMVASTATIN",
+      "ten_hoat_chat": "Simvastatin",
+      "ten_quoc_te": "simvastatin",
+      "ma_atc": "C10AA01",
+      "nhom_duoc_ly": "statin"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-AMIODARON-200",
+      "ten_thuoc": "Amiodaron 200 mg",
+      "ham_luong": "200 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-AMIODARONE",
+          "ham_luong_thanh_phan": 200.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-SIMVASTATIN-40",
+      "ten_thuoc": "Simvastatin 40 mg",
+      "ham_luong": "40 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-SIMVASTATIN",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-023-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T08:15:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-12T08:15:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Tái khám rối loạn lipid máu, rung nhĩ.",
+      "benh_su": "BN nữ 65T, rung nhĩ đang điều trị amiodaron 200 mg/ngày. Lipid máu cao, chưa dùng thuốc hạ mỡ máu. Đến khám theo hẹn.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận thêm.",
+        "gia_dinh": "Chưa ghi nhận.",
+        "thuoc_truoc_vao_vien": "Amiodaron 200 mg uống 1 lần/ngày."
+      },
+      "kham_benh": "Nhịp tim đều, không suy tim. Không đau cơ, không yếu cơ. HA ổn.",
+      "tom_tat": "BN nữ 65T, rối loạn lipid máu E78.5 và rung nhĩ I48 đang dùng amiodaron. Khám ngoại trú, cần kê thuốc hạ mỡ máu.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS023-01",
+          "ma_icd10": "E78.5",
+          "noi_dung": "Rối loạn lipid máu",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS023-02",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS023-01",
+          "loai": "can_nang",
+          "gia_tri": 64.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS023-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 124.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS023-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 78.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS023-04",
+          "loai": "mach",
+          "gia_tri": 72.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T08:20:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS023-01",
+          "ma_xet_nghiem": "ck",
+          "ten_xet_nghiem": "Creatin kinase (CK)",
+          "gia_tri_so": 120.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 30,
+          "nguong_tren": 200,
+          "thoi_diem_ket_qua": "2026-11-12T08:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS023-02",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 32.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 7,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-11-12T08:40:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS023-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN tái khám. Đang dùng amiodaron 200 mg uống mỗi ngày, rung nhĩ kiểm soát tốt, không đánh trống ngực. Không đau cơ. CK và ALT đã có. Kê thêm thuốc hạ lipid máu.",
+          "thoi_diem_ghi": "2026-11-12T08:50:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-023-01",
+          "thoi_diem_ke": "2026-11-12T08:05:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-023-01-01",
+              "thuoc_id": "T-AMIODARON-200",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 200.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-10-20T08:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T08:00:00+07:00",
+                  "lieu": 200.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-023-02",
+          "thoi_diem_ke": "2026-11-12T09:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-023-02-01",
+              "thuoc_id": "T-SIMVASTATIN-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống buổi tối",
+              "bat_dau": "2026-11-12T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T20:00:00+07:00",
+                  "lieu": 40.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-023-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T09:10:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 65T tái khám theo hẹn. Đang uống amiodaron 200 mg mỗi ngày, rung nhĩ kiểm soát tốt, không đánh trống ngực. Không đau cơ, không yếu cơ. Khám: nhịp tim đều, không suy tim, HA 124/78 mmHg, mạch 72 lần/phút, cân nặng 64 kg.",
+          "danh_gia": "Rối loạn lipid máu (E78.5) chưa dùng thuốc hạ lipid. Rung nhĩ kiểm soát tốt bằng amiodaron. CK 120 U/L và ALT 32 U/L trong giới hạn bình thường.",
+          "huong_xu_tri": "Đề nghị simvastatin 40 mg uống buổi tối, y lệnh đang chờ duyệt. Tiếp tục amiodaron 200 mg uống mỗi ngày. Hẹn tái khám và làm lại CK, ALT theo lịch.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-023-01",
+            "YL-HS-023-02"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn nhạt, hạn chế mỡ động vật",
+          "theo_doi": [
+            "Đau cơ, yếu cơ",
+            "Nhịp tim, triệu chứng rung nhĩ",
+            "CK và men gan theo lịch"
+          ],
+          "dan_do": "Báo bác sĩ nếu đau cơ, yếu cơ hoặc nước tiểu sẫm màu."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-023-02"
+}

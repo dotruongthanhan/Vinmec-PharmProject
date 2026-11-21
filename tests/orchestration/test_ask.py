@@ -23,6 +23,7 @@ from app.orchestration.ask import (
 from app.pipeline import run_case
 from app.providers.fakes import FakeLLM
 from app.retrieval.query_builder import QueryBuilder
+from tests.deid_support import temp_id
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT_PATH = ROOT / "config/prompts/hoi_them.v1.md"
@@ -120,7 +121,7 @@ def test_ask_valid_with_document_and_case_citations_and_calc() -> None:
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     },
                     {
@@ -292,7 +293,7 @@ def test_ask_retries_format_once_and_handles_errors_timeout_and_missing_llm() ->
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -338,7 +339,7 @@ def test_ask_scrubs_question_and_six_history_messages_and_handles_deid_error() -
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -474,7 +475,7 @@ def test_ask_prioritizes_finding_caps_chunks_and_falls_back_on_retriever_error()
                     {
                         "so": 1,
                         "loai": "du_lieu_ca",
-                        "ma": "XN-DEMO02-01",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
                         "trich_nguyen_van": None,
                     }
                 ],
@@ -573,10 +574,73 @@ def test_ask_retries_unknown_deid_token_id_without_deid_error() -> None:
         "trich_dan": [{"so": 1, "loai": "du_lieu_ca", "ma": "[TEN_1]"}],
     }
     repaired = deepcopy(reply)
-    repaired["trich_dan"][0]["ma"] = "XN-DEMO02-01"
+    repaired["trich_dan"][0]["ma"] = temp_id("DEMO-02", "XN-DEMO02-01")
     llm = FakeLLM([reply, repaired])
     result = _make_asker(llm).ask(case, "Creatinin của ca này?")
     assert result.trang_thai == "ok"
     assert len(llm.calls) == 2
     assert "unknown_record_id" in llm.calls[1]["messages"][1].content
     assert result.trich_dan[0].ban_ghi_id == "XN-DEMO02-01"
+
+
+def test_ask_prioritizes_exact_disambiguated_finding_by_nhan_dinh_id() -> None:
+    from app.ui.view_model import finding_ids
+
+    case = load_case(ROOT / "data/mock/demo/DEMO-02.json")
+    base_result = run_case(case, build_container("test").renal_rules)
+    template = base_result.phat_hien[0]
+    line_id = template.chi_tiet_y_lenh_id[0]
+    f1 = template.model_copy(
+        update={
+            "ma_luat": "lieu_toi_da_khong_co_nguon",
+            "chi_tiet_y_lenh_id": [line_id],
+            "mo_ta": "Thanh phan thu nhat sulfamethoxazol thieu nguon.",
+        }
+    )
+    f2 = template.model_copy(
+        update={
+            "ma_luat": "lieu_toi_da_khong_co_nguon",
+            "chi_tiet_y_lenh_id": [line_id],
+            "mo_ta": "Thanh phan thu hai trimethoprim thieu nguon.",
+        }
+    )
+    rule_result = base_result.model_copy(update={"phat_hien": [f1, f2]})
+    nids = finding_ids(rule_result.phat_hien)
+    assert len(set(nids)) == 2
+
+    llm = FakeLLM(
+        [
+            {
+                "pham_vi": "trong",
+                "tra_loi": "Creatinin 212 umol/L [1].",
+                "trich_dan": [
+                    {
+                        "so": 1,
+                        "loai": "du_lieu_ca",
+                        "ma": temp_id("DEMO-02", "XN-DEMO02-01"),
+                    }
+                ],
+            }
+        ]
+    )
+    asker = _make_asker(llm)
+    res = asker.ask(
+        case,
+        "Giải thích nhận định thứ hai?",
+        ket_qua=rule_result,
+        nhan_dinh_id=nids[1],
+    )
+    assert res.trang_thai == "ok"
+    user_msg = llm.calls[0]["messages"][1].content
+    priority_marker = "NHẬN ĐỊNH ĐANG ĐƯỢC HỎI (ƯU TIÊN)"
+    assert priority_marker in user_msg
+    priority_section = user_msg.split(priority_marker, 1)[1].split("\n\n", 1)[0]
+    # Mã dòng y lệnh trong prompt đổi sang mã tạm (vd. R6) có chủ đích; hậu tố phân biệt giữ nguyên.
+    suffix_1 = nids[1].rsplit("|", 1)[-1]
+    suffix_0 = nids[0].rsplit("|", 1)[-1]
+    assert suffix_1 != suffix_0
+    assert "nhan_dinh_id: lieu_toi_da_khong_co_nguon|" in priority_section
+    assert f"|{suffix_1}" in priority_section
+    assert f"|{suffix_0}" not in priority_section
+    assert "trimethoprim" in priority_section
+    assert "sulfamethoxazol" not in priority_section

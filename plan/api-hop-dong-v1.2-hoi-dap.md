@@ -59,3 +59,7 @@ Mỗi dòng của danh sách (`DongHangDoi`) thêm bốn trường, đều có m
 | `thoi_diem_ke` | chuỗi ISO 8601 hoặc `null` | Thời điểm kê y lệnh |
 | `nguoi_benh_tom_tat` | chuỗi hoặc `null` | Chỉ giới và tuổi, ví dụ `Nữ, 75 tuổi`. Không có họ tên |
 | `thuoc` | danh sách chuỗi (mặc định rỗng) | Tên thuốc kèm hàm lượng của từng dòng y lệnh, theo thứ tự kê |
+
+## 5. v1.10 – tiến trình hỏi đáp
+
+Bổ sung cặp điểm cuối đọc-chỉ `GET /api/cases/{ca_id}/ask/tien-trinh` và `GET /api/ask/tien-trinh` trả `TienTrinhHoiDap` (`dang_chay`, `cac_buoc`, `da_chay_ms`) gắn theo chính người gọi trong lúc `POST` đang xử lý và giữ thêm 60 giây sau khi xong. Chi tiết hợp đồng và quy tắc bảo mật xem tại [plan 1.10 mục 10](plan-1.10-tien-trinh-ai-ui.md#10-mở-rộng-tiến-trình-trong-khung-chat-hỏi-đáp-21112026-người-dùng-chọn-làm-đủ).
