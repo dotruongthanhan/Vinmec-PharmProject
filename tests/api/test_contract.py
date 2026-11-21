@@ -63,6 +63,7 @@ INLINE_FIELDS: dict[str, set[str]] = {
         "ly_do",
         "goi_y",
     },
+    "TienTrinhHoiDap": {"dang_chay", "cac_buoc", "da_chay_ms"},
     "ChayAI": {"chay_lai"},
 }
 

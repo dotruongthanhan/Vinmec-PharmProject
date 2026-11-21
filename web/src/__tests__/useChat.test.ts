@@ -1,8 +1,13 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '../api/client.ts'
+import type { ReviewApiClient } from '../api/client.ts'
 import { MockClient } from '../api/mock.ts'
-import type { GuiCauHoi, TraLoi } from '../api/types.ts'
-import { formatAskErrorMessage, useChat } from '../state/useChat.ts'
+import type { BuocAI, GuiCauHoi, TienTrinhHoiDap, TraLoi } from '../api/types.ts'
+import {
+  ASK_PROGRESS_POLL_INTERVAL_MS,
+  formatAskErrorMessage,
+  useChat,
+} from '../state/useChat.ts'
 
 // Bộ chạy hook tối thiểu cho môi trường Node (không phụ thuộc jsdom).
 const hooks = vi.hoisted(() => {
@@ -192,5 +197,291 @@ describe('formatAskErrorMessage xử lý lỗi 429', () => {
       'Lỗi máy chủ',
     )
     expect(formatAskErrorMessage(null)).toBe('Không thể gửi câu hỏi tới máy chủ.')
+  })
+})
+
+function makeAskStep(
+  ma: string,
+  ten: string,
+  trang_thai: BuocAI['trang_thai'],
+  overrides: Partial<BuocAI> = {},
+): BuocAI {
+  return {
+    ma,
+    ten,
+    trang_thai,
+    chi_tiet: null,
+    nguon: [],
+    thoi_gian_ms: null,
+    ly_do: null,
+    goi_y: null,
+    ...overrides,
+  }
+}
+
+describe('useChat tiến trình hỏi đáp 1000 ms, tạm dừng khi ẩn tab và chống đua ca', () => {
+  let visibility: EventTarget & { hidden: boolean }
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    visibility = Object.assign(new EventTarget(), { hidden: false })
+    vi.stubGlobal('document', visibility)
+  })
+
+  afterEach(() => {
+    for (const cleanup of cleanups.splice(0)) cleanup()
+    vi.unstubAllGlobals()
+    vi.useRealTimers()
+  })
+
+  it('hỏi getAskProgress mỗi 1000 ms, dừng khi tab ẩn rồi hỏi ngay khi hiện, gắn cac_buoc khi xong', async () => {
+    expect(ASK_PROGRESS_POLL_INTERVAL_MS).toBe(1000)
+
+    let resolveAsk!: (value: TraLoi) => void
+    const ask = vi.fn<ReviewApiClient['ask']>(
+      () =>
+        new Promise<TraLoi>((resolve) => {
+          resolveAsk = resolve
+        }),
+    )
+
+    const runningStep = makeAskStep('truy_xuat', 'Tra cứu nguồn', 'dang_chay', {
+      thoi_gian_ms: 400,
+    })
+    const doneSteps: BuocAI[] = [
+      makeAskStep('chuan_bi', 'Chuẩn bị ngữ cảnh ca', 'xong', { thoi_gian_ms: 150 }),
+      makeAskStep('truy_xuat', 'Tra cứu nguồn', 'xong', { thoi_gian_ms: 600 }),
+      makeAskStep('goi_mo_hinh', 'Soạn câu trả lời', 'xong', { thoi_gian_ms: 900 }),
+      makeAskStep('kiem_chung', 'Kiểm chứng trích dẫn và số liệu', 'xong', {
+        chi_tiet: 'kiểm chứng đạt',
+        thoi_gian_ms: 250,
+      }),
+    ]
+
+    const getAskProgress = vi
+      .fn<ReviewApiClient['getAskProgress']>()
+      .mockResolvedValueOnce({
+        dang_chay: true,
+        cac_buoc: [runningStep],
+        da_chay_ms: 1000,
+      })
+      .mockResolvedValueOnce({
+        dang_chay: true,
+        cac_buoc: [
+          makeAskStep('truy_xuat', 'Tra cứu nguồn', 'xong', { thoi_gian_ms: 600 }),
+          makeAskStep('goi_mo_hinh', 'Soạn câu trả lời', 'dang_chay', { thoi_gian_ms: 400 }),
+        ],
+        da_chay_ms: 2000,
+      })
+      .mockResolvedValueOnce({
+        dang_chay: false,
+        cac_buoc: doneSteps,
+        da_chay_ms: 2400,
+      })
+
+    const client = { ask, getAskProgress } as unknown as ReviewApiClient
+    const runner = hooks.create()
+    cleanups.push(runner.unmount)
+    const render = () => runner.render(() => useChat(client, 'DEMO-02'))
+
+    const sendPromise = render().sendQuestion('DEMO-02', 'Vì sao chỉnh liều?')
+
+    await vi.advanceTimersByTimeAsync(999)
+    expect(getAskProgress).not.toHaveBeenCalled()
+
+    await vi.advanceTimersByTimeAsync(1)
+    expect(getAskProgress).toHaveBeenCalledTimes(1)
+    expect(getAskProgress).toHaveBeenCalledWith('DEMO-02', expect.objectContaining({ signal: expect.any(AbortSignal) }))
+    expect(render().getProgress('DEMO-02')).toEqual({
+      cacBuoc: [runningStep],
+      daChayMs: 1000,
+    })
+
+    visibility.hidden = true
+    visibility.dispatchEvent(new Event('visibilitychange'))
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(getAskProgress).toHaveBeenCalledTimes(1)
+
+    visibility.hidden = false
+    visibility.dispatchEvent(new Event('visibilitychange'))
+    await vi.advanceTimersByTimeAsync(0)
+    expect(getAskProgress).toHaveBeenCalledTimes(2)
+    expect(render().getProgress('DEMO-02').daChayMs).toBe(2000)
+
+    resolveAsk(sampleReply)
+    await sendPromise
+
+    expect(getAskProgress).toHaveBeenCalledTimes(3)
+    expect(render().isSending('DEMO-02')).toBe(false)
+    expect(render().getProgress('DEMO-02')).toEqual({ cacBuoc: [], daChayMs: null })
+
+    const msgs = render().getMessages('DEMO-02')
+    const assistant = msgs[1]
+    expect(assistant?.vai).toBe('he_thong')
+    if (assistant?.vai === 'he_thong') {
+      expect(assistant.cac_buoc).toEqual(doneSteps)
+      expect(assistant.da_chay_ms).toBe(2400)
+    }
+
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(getAskProgress).toHaveBeenCalledTimes(3)
+  })
+
+  it('dừng hỏi tiến trình khi stopQuestion hoặc clearChat', async () => {
+    const ask = vi.fn<ReviewApiClient['ask']>(
+      (_caId, _payload, options) =>
+        new Promise<TraLoi>((_resolve, reject) => {
+          options?.signal?.addEventListener('abort', () => {
+            reject(new DOMException('Đã huỷ.', 'AbortError'))
+          })
+        }),
+    )
+    const getAskProgress = vi.fn<ReviewApiClient['getAskProgress']>(async () => ({
+      dang_chay: true,
+      cac_buoc: [makeAskStep('chuan_bi', 'Chuẩn bị ngữ cảnh ca', 'dang_chay')],
+      da_chay_ms: 1000,
+    }))
+
+    const client = { ask, getAskProgress } as unknown as ReviewApiClient
+    const runner = hooks.create()
+    cleanups.push(runner.unmount)
+    const render = () => runner.render(() => useChat(client, 'DEMO-02'))
+
+    const p1 = render().sendQuestion('DEMO-02', 'Câu hỏi 1')
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(getAskProgress).toHaveBeenCalledTimes(1)
+
+    render().stopQuestion('DEMO-02')
+    await p1
+    expect(render().isSending('DEMO-02')).toBe(false)
+    expect(render().getProgress('DEMO-02')).toEqual({ cacBuoc: [], daChayMs: null })
+
+    await vi.advanceTimersByTimeAsync(3000)
+    expect(getAskProgress).toHaveBeenCalledTimes(1)
+
+    const p2 = render().sendQuestion('DEMO-02', 'Câu hỏi 2')
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(getAskProgress).toHaveBeenCalledTimes(2)
+
+    render().clearChat('DEMO-02')
+    await p2
+    expect(render().getMessages('DEMO-02')).toEqual([])
+    await vi.advanceTimersByTimeAsync(3000)
+    expect(getAskProgress).toHaveBeenCalledTimes(2)
+  })
+
+  it('hai ca đổi nhanh dừng polling ca cũ và không lẫn bước sang ca mới', async () => {
+    let resolveOldAsk!: (value: TraLoi) => void
+    const ask = vi.fn<ReviewApiClient['ask']>((caId) => {
+      if (caId === 'DEMO-02') {
+        return new Promise<TraLoi>((resolve) => {
+          resolveOldAsk = resolve
+        })
+      }
+      return Promise.resolve(sampleReply)
+    })
+
+    const getAskProgress = vi.fn<ReviewApiClient['getAskProgress']>(async (caId): Promise<TienTrinhHoiDap> => {
+      if (caId === 'DEMO-02') {
+        return {
+          dang_chay: true,
+          cac_buoc: [makeAskStep('chuan_bi', 'Bước ca cũ rò sang', 'dang_chay')],
+          da_chay_ms: 1000,
+        }
+      }
+      return {
+        dang_chay: false,
+        cac_buoc: [makeAskStep('chuan_bi', 'Bước ca mới', 'xong')],
+        da_chay_ms: 200,
+      }
+    })
+
+    const client = { ask, getAskProgress } as unknown as ReviewApiClient
+    const runner = hooks.create()
+    cleanups.push(runner.unmount)
+    let activeCase = 'DEMO-02'
+    const render = () => runner.render(() => useChat(client, activeCase))
+
+    const oldPromise = render().sendQuestion('DEMO-02', 'Câu hỏi ca cũ')
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(getAskProgress).toHaveBeenCalledTimes(1)
+    expect(render().getProgress('DEMO-02').cacBuoc[0]?.ten).toBe('Bước ca cũ rò sang')
+
+    activeCase = 'DEMO-06'
+    render()
+
+    await vi.advanceTimersByTimeAsync(3000)
+    expect(getAskProgress).toHaveBeenCalledTimes(1)
+
+    await render().sendQuestion('DEMO-06', 'Câu hỏi ca mới')
+    resolveOldAsk(sampleReply)
+    await oldPromise
+
+    const oldMsgs = render().getMessages('DEMO-02')
+    expect(oldMsgs).toHaveLength(1)
+    expect(oldMsgs[0].vai).toBe('nguoi_dung')
+
+    const newMsgs = render().getMessages('DEMO-06')
+    expect(newMsgs).toHaveLength(2)
+    if (newMsgs[1].vai === 'he_thong') {
+      expect(newMsgs[1].cac_buoc?.[0]?.ten).toBe('Bước ca mới')
+    }
+  })
+
+  it('gắn bước lỗi khi thất bại, hỗ trợ retryLastQuestion và không gắn bước cho lịch sử khôi phục', async () => {
+    const errSteps: BuocAI[] = [
+      makeAskStep('chuan_bi', 'Chuẩn bị ngữ cảnh ca', 'xong', { thoi_gian_ms: 100 }),
+      makeAskStep('goi_mo_hinh', 'Soạn câu trả lời', 'loi', {
+        ly_do: 'Quá hạn chờ',
+        goi_y: 'Thử lại sau',
+      }),
+    ]
+    const okSteps: BuocAI[] = [
+      makeAskStep('chuan_bi', 'Chuẩn bị ngữ cảnh ca', 'xong', { thoi_gian_ms: 100 }),
+      makeAskStep('goi_mo_hinh', 'Soạn câu trả lời', 'xong', { thoi_gian_ms: 300 }),
+    ]
+
+    const ask = vi
+      .fn<ReviewApiClient['ask']>()
+      .mockRejectedValueOnce(new ApiError('loi_mo_hinh', 'Lỗi tạm thời', 503))
+      .mockResolvedValueOnce(sampleReply)
+
+    const getAskProgress = vi
+      .fn<ReviewApiClient['getAskProgress']>()
+      .mockResolvedValueOnce({ dang_chay: false, cac_buoc: errSteps, da_chay_ms: 900 })
+      .mockResolvedValueOnce({ dang_chay: false, cac_buoc: okSteps, da_chay_ms: 400 })
+
+    const getConversations = vi.fn<NonNullable<ReviewApiClient['getConversations']>>(async () => ({
+      'DEMO-01': [{ cau_hoi: 'Câu cũ', tra_loi: sampleReply }],
+    }))
+
+    const client = { ask, getAskProgress, getConversations } as unknown as ReviewApiClient
+    const runner = hooks.create()
+    cleanups.push(runner.unmount)
+    const render = () => runner.render(() => useChat(client, 'DEMO-02'))
+
+    render()
+    await vi.advanceTimersByTimeAsync(0)
+    const restored = render().getMessages('DEMO-01')
+    expect(restored).toHaveLength(2)
+    if (restored[1].vai === 'he_thong') {
+      expect(restored[1].cac_buoc).toBeUndefined()
+    }
+
+    await render().sendQuestion('DEMO-02', 'Câu hỏi gặp lỗi')
+    const afterErr = render().getMessages('DEMO-02')
+    expect(afterErr).toHaveLength(2)
+    if (afterErr[1].vai === 'he_thong') {
+      expect(afterErr[1].tra_loi.trang_thai).toBe('loi')
+      expect(afterErr[1].cac_buoc).toEqual(errSteps)
+    }
+
+    await render().retryLastQuestion('DEMO-02')
+    const afterRetry = render().getMessages('DEMO-02')
+    expect(afterRetry).toHaveLength(2)
+    if (afterRetry[1].vai === 'he_thong') {
+      expect(afterRetry[1].tra_loi.trang_thai).toBe('ok')
+      expect(afterRetry[1].cac_buoc).toEqual(okSteps)
+    }
   })
 })

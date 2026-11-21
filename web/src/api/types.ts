@@ -39,6 +39,12 @@ export interface BuocAI {
   goi_y: string | null
 }
 
+export interface TienTrinhHoiDap {
+  dang_chay: boolean
+  cac_buoc: BuocAI[]
+  da_chay_ms: number | null
+}
+
 export type TrangThaiTraLoi =
   | 'chua_san_sang'
   | 'ok'

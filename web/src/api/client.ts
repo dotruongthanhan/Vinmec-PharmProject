@@ -16,6 +16,7 @@ import type {
   MeResponse,
   NguonTomTat,
   PhanHoiDaGhi,
+  TienTrinhHoiDap,
   TinhCongThucYeuCau,
   TraLoi,
   TraTuongTacYeuCau,
@@ -53,6 +54,7 @@ export interface ReviewApiClient {
   getRecord(caId: string, banGhiId: string): Promise<BanGhi>
   sendFeedback(caId: string, payload: GuiPhanHoi): Promise<PhanHoiDaGhi>
   ask(caId: string, payload: GuiCauHoi, options?: { signal?: AbortSignal }): Promise<TraLoi>
+  getAskProgress(caId: string, init?: { signal?: AbortSignal }): Promise<TienTrinhHoiDap>
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI>
   getAi(caId: string): Promise<KetQuaAI | null>
   getSource(caId: string, doanTrichId: string): Promise<DoanNguon>
@@ -153,6 +155,33 @@ export function normalizeKetQuaAI(raw: KetQuaAI): KetQuaAI {
     cac_buoc,
     da_chay_ms,
     thuong_le_ms,
+  }
+}
+
+const DEFAULT_ASK_PROGRESS: TienTrinhHoiDap = {
+  dang_chay: false,
+  cac_buoc: [],
+  da_chay_ms: null,
+}
+
+/** Chuẩn hoá phản hồi TienTrinhHoiDap từ API để chịu được thiếu trường. */
+export function normalizeTienTrinhHoiDap(raw: unknown): TienTrinhHoiDap {
+  if (!isRecordObject(raw)) {
+    return { ...DEFAULT_ASK_PROGRESS, cac_buoc: [] }
+  }
+  const dang_chay = typeof raw['dang_chay'] === 'boolean' ? raw['dang_chay'] : false
+  const cac_buoc = Array.isArray(raw['cac_buoc'])
+    ? raw['cac_buoc'].map(normalizeBuocAI).filter((item): item is BuocAI => item !== null)
+    : []
+  const da_chay_ms =
+    typeof raw['da_chay_ms'] === 'number' && Number.isFinite(raw['da_chay_ms'])
+      ? raw['da_chay_ms']
+      : null
+
+  return {
+    dang_chay,
+    cac_buoc,
+    da_chay_ms,
   }
 }
 
@@ -377,6 +406,19 @@ export class ApiClient implements ReviewApiClient {
       body: JSON.stringify(payload),
       signal: options?.signal,
     })
+  }
+
+  async getAskProgress(caId: string, init?: { signal?: AbortSignal }): Promise<TienTrinhHoiDap> {
+    const path =
+      caId === '__global__'
+        ? '/ask/tien-trinh'
+        : `/cases/${encodeURIComponent(caId)}/ask/tien-trinh`
+    try {
+      const res = await this.request<unknown>(path, { signal: init?.signal })
+      return normalizeTienTrinhHoiDap(res)
+    } catch {
+      return { dang_chay: false, cac_buoc: [], da_chay_ms: null }
+    }
   }
 
   startAi(caId: string, chayLai?: boolean): Promise<KetQuaAI> {

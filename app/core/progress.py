@@ -1,6 +1,7 @@
 """Theo dõi tiến trình các bước phân tích AI trong bộ nhớ, an toàn đa luồng và ngữ cảnh."""
 
 import time
+from collections.abc import Callable, Sequence
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 from threading import RLock
@@ -10,8 +11,11 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 MAX_PROGRESS_STEPS = 40
 MAX_PROGRESS_TEXT_LEN = 160
+MAX_ASK_PROGRESS_ENTRIES = 200
+ASK_PROGRESS_RETENTION_SECONDS = 60.0
 
 TrangThaiBuoc = Literal["cho", "dang_chay", "xong", "loi", "bo_qua"]
+AskProgressKey = tuple[str, str]
 
 
 def _clip_str(value: str) -> str:
@@ -288,3 +292,96 @@ def ghi_buoc(
         tracker.xong(ma, chi_tiet=chi_tiet, nguon=nguon)
     elif hanh_dong == "loi":
         tracker.loi(ma, ly_do=ly_do or "Bước phân tích gặp lỗi", goi_y=goi_y)
+
+
+@dataclass
+class _AskProgressEntry:
+    """Mục tiến trình hỏi đáp đang chạy hoặc mới xong trong sổ đăng ký."""
+
+    token: int
+    tracker: TienTrinh
+    dang_chay: bool = True
+    xong_luc: float | None = None
+    ket_thuc_perf: float | None = None
+
+
+class AskProgressRegistry:
+    """Sổ đăng ký tiến trình hỏi đáp theo (ca_id, nguoi_dung_id), an toàn đa luồng."""
+
+    def __init__(
+        self,
+        *,
+        clock: Callable[[], float] | None = None,
+        retention_seconds: float = ASK_PROGRESS_RETENTION_SECONDS,
+        max_entries: int = MAX_ASK_PROGRESS_ENTRIES,
+    ) -> None:
+        self._lock = RLock()
+        self._clock = clock
+        self._retention_seconds = retention_seconds
+        self._max_entries = max(1, max_entries)
+        self._entries: dict[AskProgressKey, _AskProgressEntry] = {}
+        self._next_token = 0
+
+    def _now(self) -> float:
+        """Lấy mốc đồng hồ đơn điệu hiện tại (cho phép giả lập trong kiểm thử)."""
+        return self._clock() if self._clock is not None else time.monotonic()
+
+    def _prune_expired_locked(self, now_mono: float) -> None:
+        """Xoá các mục đã hoàn tất quá thời hạn lưu giữ."""
+        expired = [
+            key
+            for key, entry in self._entries.items()
+            if (
+                not entry.dang_chay
+                and entry.xong_luc is not None
+                and now_mono - entry.xong_luc >= self._retention_seconds
+            )
+        ]
+        for key in expired:
+            del self._entries[key]
+
+    def bat_dau(
+        self,
+        khoa: AskProgressKey,
+        cac_buoc_dang_ky: Sequence[tuple[str, str]],
+    ) -> tuple[int, TienTrinh]:
+        """Tạo mục tiến trình mới thay mục cũ cùng khoá và giữ trần 200 mục."""
+        with self._lock:
+            self._prune_expired_locked(self._now())
+            self._entries.pop(khoa, None)
+            while len(self._entries) >= self._max_entries:
+                del self._entries[next(iter(self._entries))]
+            tracker = TienTrinh()
+            for ma, ten in cac_buoc_dang_ky:
+                tracker.dang_ky(ma, ten)
+            self._next_token += 1
+            token = self._next_token
+            self._entries[khoa] = _AskProgressEntry(token=token, tracker=tracker)
+            return token, tracker
+
+    def ket_thuc(self, khoa: AskProgressKey, token: int, thanh_cong: bool) -> None:
+        """Chốt mục tiến trình khớp token và giữ thêm 60 giây trước khi dọn."""
+        with self._lock:
+            entry = self._entries.get(khoa)
+            if entry is None or entry.token != token or not entry.dang_chay:
+                return
+            entry.tracker.chot(thanh_cong)
+            entry.dang_chay = False
+            now_mono = self._now()
+            entry.xong_luc = now_mono
+            entry.ket_thuc_perf = entry.tracker.thoi_diem_ket_thuc
+            self._prune_expired_locked(now_mono)
+
+    def doc(self, khoa: AskProgressKey) -> tuple[bool, list[BuocTienTrinh], float] | None:
+        """Đọc trạng thái, danh sách bước và tổng thời gian nếu mục còn hạn."""
+        with self._lock:
+            self._prune_expired_locked(self._now())
+            entry = self._entries.get(khoa)
+            if entry is None:
+                return None
+            snapshot_at = entry.ket_thuc_perf if not entry.dang_chay else None
+            return (
+                entry.dang_chay,
+                entry.tracker.chup(now=snapshot_at),
+                entry.tracker.tong_ms(now=snapshot_at),
+            )

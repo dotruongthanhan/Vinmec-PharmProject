@@ -10,8 +10,11 @@ from pydantic import ValidationError
 from app.container import build_container
 from app.core.errors import ProviderError
 from app.core.progress import (
+    ASK_PROGRESS_RETENTION_SECONDS,
+    MAX_ASK_PROGRESS_ENTRIES,
     MAX_PROGRESS_STEPS,
     MAX_PROGRESS_TEXT_LEN,
+    AskProgressRegistry,
     BuocTienTrinh,
     NguonTomTat,
     TienTrinh,
@@ -23,6 +26,7 @@ from app.domain.loader import load_case
 from app.kb.names import DrugNameIndex
 from app.llm.synthesizer import Synthesizer
 from app.orchestration.ai_review import AiReviewer
+from app.orchestration.ask import CaseAsker
 from app.orchestration.evidence import EvidenceCollector
 from app.orchestration.jobs import AiJobManager
 from app.pipeline import run_case
@@ -360,3 +364,249 @@ def test_thu_thap_nguon_caps_source_groups_at_eight() -> None:
     assert step.chi_tiet == "11 đoạn từ 10 nguồn"
     assert len(step.nguon) == 8
     assert step.nguon[0] == NguonTomTat(nhan="Nhãn FDA", so_doan=2)
+
+
+def test_ask_progress_registry_lifecycle_retention_token_and_cap() -> None:
+    now = [100.0]
+    registry = AskProgressRegistry(clock=lambda: now[0])
+    steps_spec = [("chuan_bi", "Chuẩn bị ngữ cảnh ca"), ("goi_mo_hinh", "Soạn câu trả lời")]
+
+    key_a = ("DEMO-02", "user-a")
+    key_b = ("DEMO-02", "user-b")
+    token_a, tp_a = registry.bat_dau(key_a, steps_spec)
+    tp_a.bat_dau("chuan_bi")
+
+    snap_running = registry.doc(key_a)
+    assert snap_running is not None
+    assert snap_running[0] is True
+    assert [s.ma for s in snap_running[1]] == ["chuan_bi", "goi_mo_hinh"]
+    assert snap_running[1][0].trang_thai == "dang_chay"
+    assert snap_running[2] >= 0.0
+    assert registry.doc(key_b) is None
+
+    registry.ket_thuc(key_a, token_a, True)
+    snap_done = registry.doc(key_a)
+    assert snap_done is not None
+    assert snap_done[0] is False
+    assert snap_done[1][0].trang_thai == "xong"
+    assert snap_done[1][1].trang_thai == "bo_qua"
+
+    now[0] = 100.0 + ASK_PROGRESS_RETENTION_SECONDS - 0.1
+    assert registry.doc(key_a) is not None
+
+    now[0] = 100.0 + ASK_PROGRESS_RETENTION_SECONDS
+    assert registry.doc(key_a) is None
+
+    # Mục cũ kết thúc muộn không được xoá hoặc chốt mục mới cùng khoá.
+    t_old, _ = registry.bat_dau(key_a, [("chuan_bi", "Lượt cũ")])
+    t_new, tp_new = registry.bat_dau(key_a, [("chuan_bi", "Lượt mới")])
+    tp_new.bat_dau("chuan_bi")
+    registry.ket_thuc(key_a, t_old, False)
+    still_new = registry.doc(key_a)
+    assert still_new is not None
+    assert still_new[0] is True
+    assert still_new[1][0].ten == "Lượt mới"
+    assert still_new[1][0].trang_thai == "dang_chay"
+    registry.ket_thuc(key_a, t_new, True)
+
+    # Trần 200 mục: đẩy mục tạo sớm nhất ra.
+    for i in range(MAX_ASK_PROGRESS_ENTRIES + 5):
+        registry.bat_dau((f"CA-{i}", "u"), [("chuan_bi", "Chuẩn bị")])
+    for i in range(5):
+        assert registry.doc((f"CA-{i}", "u")) is None
+    for i in range(5, MAX_ASK_PROGRESS_ENTRIES + 5):
+        assert registry.doc((f"CA-{i}", "u")) is not None
+
+
+def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
+    container = build_container("test")
+    case = load_case(ROOT / "data/mock/demo/DEMO-02.json")
+    rule = run_case(case, container.renal_rules)
+    ask_prompt = ROOT / "config/prompts/hoi_them.v1.md"
+
+    def _run_with_tracker(
+        asker: CaseAsker,
+        question: str,
+        *,
+        is_global: bool = False,
+    ) -> tuple[object, list[BuocTienTrinh]]:
+        tp = TienTrinh()
+        if is_global:
+            tp.dang_ky("chuan_bi", "Tổng hợp danh sách y lệnh")
+            tp.dang_ky("goi_mo_hinh", "Soạn câu trả lời")
+            tp.dang_ky("kiem_chung", "Kiểm chứng trích dẫn và số liệu")
+        else:
+            tp.dang_ky("chuan_bi", "Chuẩn bị ngữ cảnh ca")
+            tp.dang_ky("truy_xuat", "Tra cứu nguồn")
+            tp.dang_ky("goi_mo_hinh", "Soạn câu trả lời")
+            tp.dang_ky("kiem_chung", "Kiểm chứng trích dẫn và số liệu")
+        token = tien_trinh_hien_tai.set(tp)
+        try:
+            if is_global:
+                res = asker.ask_global([case], {case.ca_id: rule}, question)
+            else:
+                res = asker.ask(case, question, ket_qua=rule)
+        finally:
+            tien_trinh_hien_tai.reset(token)
+        tp.chot(getattr(res, "trang_thai", None) == "ok")
+        return res, tp.chup()
+
+    chunks = [
+        make_chunk(
+            "DT-MERO-01",
+            "For creatinine clearance 10 to 25 mL/min, administer one-half the "
+            "recommended dose every 12 hours.",
+            nguon="openfda",
+        ),
+        make_chunk("DT-MERO-02", "Hướng dẫn dùng meropenem.", nguon="openfda"),
+        make_chunk("DT-BYT-01", "Hướng dẫn Bộ Y tế về kháng sinh.", nguon="byt"),
+    ]
+    good_payload = {
+        "pham_vi": "trong",
+        "tra_loi": "Creatinin 212 umol/L [1], nhãn FDA khuyến cáo giảm nửa liều mỗi 12 giờ [2].",
+        "trich_dan": [
+            {"so": 1, "loai": "du_lieu_ca", "ma": temp_id("DEMO-02", "XN-DEMO02-01")},
+            {
+                "so": 2,
+                "loai": "tai_lieu",
+                "ma": "DT-MERO-01",
+                "trich_nguyen_van": "administer one-half the recommended dose every 12 hours.",
+            },
+        ],
+    }
+
+    # 1. Thành công với truy xuất nhiều nguồn.
+    asker_ok = CaseAsker(
+        llm=FakeLLM([good_payload]),
+        retriever=_StaticRetriever(chunks),
+        query_builder=QueryBuilder(container.settings.retrieval),
+        resolve_name=NAMES.resolve,
+        prompt_path=ask_prompt,
+        case_settings=container.settings.case_context,
+        evidence_max_chars=container.settings.evidence.max_chars,
+        model_name="deepseek-flash",
+        renal_rules=container.renal_rules,
+    )
+    res_ok, steps_ok = _run_with_tracker(asker_ok, "Vì sao cần giảm liều meropenem?")
+    assert res_ok.trang_thai == "ok"  # type: ignore[attr-defined]
+    by_ma = {s.ma: s for s in steps_ok}
+    assert by_ma["chuan_bi"].trang_thai == "xong"
+    assert by_ma["truy_xuat"].trang_thai == "xong"
+    assert by_ma["truy_xuat"].chi_tiet == "3 đoạn từ 2 nguồn"
+    assert by_ma["truy_xuat"].nguon == [
+        NguonTomTat(nhan="Nhãn FDA", so_doan=2),
+        NguonTomTat(nhan="Hướng dẫn Bộ Y tế", so_doan=1),
+    ]
+    assert by_ma["goi_mo_hinh"].trang_thai == "xong"
+    assert by_ma["kiem_chung"].trang_thai == "xong"
+    assert by_ma["kiem_chung"].chi_tiet == "Đạt"
+
+    # 2. Không dùng tra cứu nguồn (retriever=None).
+    no_ret_payload = {
+        "pham_vi": "trong",
+        "tra_loi": "Creatinin 212 umol/L [1].",
+        "trich_dan": [{"so": 1, "loai": "du_lieu_ca", "ma": temp_id("DEMO-02", "XN-DEMO02-01")}],
+    }
+    asker_no_ret = CaseAsker(
+        llm=FakeLLM([no_ret_payload]),
+        retriever=None,
+        query_builder=QueryBuilder(container.settings.retrieval),
+        resolve_name=NAMES.resolve,
+        prompt_path=ask_prompt,
+        case_settings=container.settings.case_context,
+        evidence_max_chars=container.settings.evidence.max_chars,
+        model_name="deepseek-flash",
+        renal_rules=container.renal_rules,
+    )
+    res_no_ret, steps_no_ret = _run_with_tracker(asker_no_ret, "Creatinin ca này bao nhiêu?")
+    assert res_no_ret.trang_thai == "ok"  # type: ignore[attr-defined]
+    assert {s.ma: s for s in steps_no_ret}["truy_xuat"].chi_tiet == "Không dùng tra cứu nguồn"
+
+    # 3. Thử lại lần 2 do kiểm chứng không đạt.
+    bad_number_payload = {
+        "pham_vi": "trong",
+        "tra_loi": "Creatinin 212 umol/L [1], truyền 750 mg [2].",
+        "trich_dan": good_payload["trich_dan"],
+    }
+    asker_retry = CaseAsker(
+        llm=FakeLLM([bad_number_payload, good_payload]),
+        retriever=_StaticRetriever(chunks),
+        query_builder=QueryBuilder(container.settings.retrieval),
+        resolve_name=NAMES.resolve,
+        prompt_path=ask_prompt,
+        case_settings=container.settings.case_context,
+        evidence_max_chars=container.settings.evidence.max_chars,
+        model_name="deepseek-flash",
+        renal_rules=container.renal_rules,
+    )
+    res_retry, steps_retry = _run_with_tracker(asker_retry, "Liều meropenem thế nào?")
+    assert res_retry.trang_thai == "ok"  # type: ignore[attr-defined]
+    by_ma_retry = {s.ma: s for s in steps_retry}
+    assert by_ma_retry["kiem_chung"].trang_thai == "xong"
+    assert by_ma_retry["kiem_chung"].chi_tiet == "Không đạt, thử lại"
+    assert by_ma_retry["goi_mo_hinh_2"].ten == "Soạn lại, lần 2"
+    assert by_ma_retry["goi_mo_hinh_2"].trang_thai == "xong"
+    assert by_ma_retry["kiem_chung_2"].ten == "Kiểm chứng lại, lần 2"
+    assert by_ma_retry["kiem_chung_2"].trang_thai == "xong"
+    assert by_ma_retry["kiem_chung_2"].chi_tiet == "Đạt"
+
+    # 4. Các loại lỗi provider và ngoại lệ chung không rò message gốc.
+    class _RaisingLLM:
+        def __init__(self, err: Exception) -> None:
+            self._err = err
+
+        def complete_json(self, messages: list, schema: dict) -> dict:
+            del messages, schema
+            raise self._err
+
+    for exc_obj, expected_reason in (
+        (ProviderError("het_han_muc_token"), "Vượt hạn mức độ dài"),
+        (ProviderError("Lỗi kết nối nhà cung cấp"), "Không kết nối được nhà cung cấp mô hình"),
+        (RuntimeError("SENSITIVE_ERR_999"), "Không soạn được câu trả lời"),
+    ):
+        asker_err = CaseAsker(
+            llm=_RaisingLLM(exc_obj),  # type: ignore[arg-type]
+            retriever=None,
+            query_builder=QueryBuilder(container.settings.retrieval),
+            resolve_name=NAMES.resolve,
+            prompt_path=ask_prompt,
+            case_settings=container.settings.case_context,
+            evidence_max_chars=container.settings.evidence.max_chars,
+            model_name="deepseek-flash",
+            renal_rules=container.renal_rules,
+        )
+        res_err, steps_err = _run_with_tracker(asker_err, "Câu hỏi kiểm tra lỗi?")
+        assert res_err.trang_thai == "loi"  # type: ignore[attr-defined]
+        by_ma_err = {s.ma: s for s in steps_err}
+        assert by_ma_err["goi_mo_hinh"].trang_thai == "loi"
+        assert by_ma_err["goi_mo_hinh"].ly_do == expected_reason
+        assert by_ma_err["goi_mo_hinh"].goi_y == "Bấm Thử lại sau ít phút"
+        assert by_ma_err["kiem_chung"].trang_thai == "bo_qua"
+        assert "SENSITIVE_ERR_999" not in str(steps_err)
+
+    # 5. Nhánh hỏi đáp chung ask_global.
+    global_payload = {
+        "pham_vi": "trong",
+        "tra_loi": "Có 1 ca đang dùng meropenem.",
+        "trich_dan": [],
+    }
+    asker_global = CaseAsker(
+        llm=FakeLLM([global_payload]),
+        retriever=None,
+        query_builder=QueryBuilder(container.settings.retrieval),
+        resolve_name=NAMES.resolve,
+        prompt_path=ask_prompt,
+        case_settings=container.settings.case_context,
+        evidence_max_chars=container.settings.evidence.max_chars,
+        model_name="deepseek-flash",
+        renal_rules=container.renal_rules,
+    )
+    res_g, steps_g = _run_with_tracker(asker_global, "Ca nào cần chú ý?", is_global=True)
+    assert res_g.trang_thai == "ok"  # type: ignore[attr-defined]
+    by_ma_g = {s.ma: s for s in steps_g}
+    assert list(by_ma_g) == ["chuan_bi", "goi_mo_hinh", "kiem_chung"]
+    assert by_ma_g["chuan_bi"].ten == "Tổng hợp danh sách y lệnh"
+    assert by_ma_g["chuan_bi"].trang_thai == "xong"
+    assert by_ma_g["goi_mo_hinh"].trang_thai == "xong"
+    assert by_ma_g["kiem_chung"].trang_thai == "xong"
+    assert by_ma_g["kiem_chung"].chi_tiet == "Đạt"

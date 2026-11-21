@@ -37,7 +37,7 @@ from app.config.settings import (
     load_kb_source,
 )
 from app.core.errors import ConfigError
-from app.core.progress import TienTrinh
+from app.core.progress import AskProgressRegistry, BuocTienTrinh, TienTrinh, tien_trinh_hien_tai
 from app.core.types import Chunk
 from app.db import administrative, medical_record
 from app.db.reader import DatabaseReadError, DbReviewService
@@ -102,6 +102,17 @@ _DB_READ_TTL_SECONDS = 60.0
 _CASE_REFRESH_RETRY_SECONDS = 15.0
 _MAX_ASK_SOURCES_PER_KEY = 200
 _INTERACTION_EXCLUDED = {"dich_truyen_dien_giai", "duoc_lieu"}
+_CASE_ASK_STEPS: tuple[tuple[str, str], ...] = (
+    ("chuan_bi", "Chuẩn bị ngữ cảnh ca"),
+    ("truy_xuat", "Tra cứu nguồn"),
+    ("goi_mo_hinh", "Soạn câu trả lời"),
+    ("kiem_chung", "Kiểm chứng trích dẫn và số liệu"),
+)
+_GLOBAL_ASK_STEPS: tuple[tuple[str, str], ...] = (
+    ("chuan_bi", "Tổng hợp danh sách y lệnh"),
+    ("goi_mo_hinh", "Soạn câu trả lời"),
+    ("kiem_chung", "Kiểm chứng trích dẫn và số liệu"),
+)
 
 
 def _ask_source_key(case_id: str, principal: Principal | None) -> str:
@@ -110,6 +121,33 @@ def _ask_source_key(case_id: str, principal: Principal | None) -> str:
         user_id = principal.nguoi_dung_id if principal is not None else "__anonymous__"
         return f"__global__:{user_id}"
     return case_id
+
+
+def _ask_progress_key(case_id: str, principal: Principal | None) -> tuple[str, str]:
+    """Khoá sổ đăng ký tiến trình hỏi đáp theo (ca_id, nguoi_dung_id)."""
+    user_id = (
+        principal.nguoi_dung_id
+        if principal is not None and principal.nguoi_dung_id
+        else "__anonymous__"
+    )
+    return (case_id, user_id)
+
+
+def _present_progress_steps(steps: Sequence[BuocTienTrinh]) -> list[s.BuocAI]:
+    """Chuyển các bước tiến trình nội bộ sang lược đồ BuocAI công khai."""
+    return [
+        s.BuocAI(
+            ma=step.ma,
+            ten=step.ten,
+            trang_thai=step.trang_thai,
+            chi_tiet=step.chi_tiet,
+            nguon=[s.NguonTomTat(nhan=item.nhan, so_doan=item.so_doan) for item in step.nguon],
+            thoi_gian_ms=step.thoi_gian_ms,
+            ly_do=step.ly_do,
+            goi_y=step.goi_y,
+        )
+        for step in steps
+    ]
 
 
 def _collect_interaction_pairs(
@@ -234,6 +272,7 @@ class CaseService:
         self._lock = RLock()
         self._db_cache: dict[str, tuple[float, CaBenh, s.MedicalRecord]] = {}
         self._jobs = AiJobManager()
+        self._ask_progress = AskProgressRegistry()
         self._limits = limits if limits is not None else LlmRateLimits.from_env()
         self._ai_cases: set[str] = set()
         self._ask_sources: dict[str, dict[str, Chunk]] = {}
@@ -704,19 +743,7 @@ class CaseService:
             return base.model_copy(update={"thuong_le_ms": self._jobs.thuong_le_ms()})
 
         snapshot_at = state.ket_thuc if state.trang_thai != "dang_chay" else None
-        steps = [
-            s.BuocAI(
-                ma=step.ma,
-                ten=step.ten,
-                trang_thai=step.trang_thai,
-                chi_tiet=step.chi_tiet,
-                nguon=[s.NguonTomTat(nhan=item.nhan, so_doan=item.so_doan) for item in step.nguon],
-                thoi_gian_ms=step.thoi_gian_ms,
-                ly_do=step.ly_do,
-                goi_y=step.goi_y,
-            )
-            for step in tracker.chup(now=snapshot_at)
-        ]
+        steps = _present_progress_steps(tracker.chup(now=snapshot_at))
         return base.model_copy(
             update={
                 "cac_buoc": steps,
@@ -1007,115 +1034,158 @@ class CaseService:
             pairs.append(("he_thong", tra_loi[:max_chars]))
         return pairs[-max_messages:]
 
+    def get_ask_progress(
+        self,
+        case_id: str,
+        principal: Principal | None = None,
+    ) -> s.TienTrinhHoiDap:
+        """Đọc tiến trình hỏi đáp hiện tại hoặc mới xong của chính người gọi."""
+        snapshot = self._ask_progress.doc(_ask_progress_key(case_id, principal))
+        if snapshot is None:
+            return s.TienTrinhHoiDap(dang_chay=False, cac_buoc=[], da_chay_ms=None)
+        dang_chay, steps, tong_ms = snapshot
+        return s.TienTrinhHoiDap(
+            dang_chay=dang_chay,
+            cac_buoc=_present_progress_steps(steps),
+            da_chay_ms=tong_ms,
+        )
+
     def ask(self, case_id: str, request: s.GuiCauHoi, principal: Principal) -> s.TraLoi:
         """Gọi CaseAsker khi có LLM; hỗ trợ cả hỏi đáp chung (__global__) và theo từng ca."""
-        self._ensure_cases()
-        if case_id == "__global__":
-            with self._lock:
-                assert self._cases is not None
-                all_cases = list(self._cases.values())
-                all_results = {c.ca_id: self._review(c) for c in all_cases}
-                asker = self._asker_impl
-                enabled = self._ai_enabled and asker is not None
-                history_pairs = self._server_history_pairs(case_id, principal)
-            if not enabled or asker is None or not hasattr(asker, "ask_global"):
-                fallback_case = all_cases[0] if all_cases else None
-                msg = (
-                    self._ask.ask(fallback_case, request.cau_hoi, history_pairs).noi_dung
-                    if fallback_case is not None
-                    else "Chức năng hỏi thêm chưa được nối với hệ thống."
-                )
-                response = s.TraLoi(
-                    trang_thai="chua_san_sang",
-                    noi_dung=msg,
-                    trich_dan=[],
-                    cong_cu_da_goi=[],
-                    thoi_gian_ms=0,
-                )
+        progress_steps = _GLOBAL_ASK_STEPS if case_id == "__global__" else _CASE_ASK_STEPS
+        progress_key = _ask_progress_key(case_id, principal)
+        progress_token, progress_tracker = self._ask_progress.bat_dau(progress_key, progress_steps)
+        ctx_token = tien_trinh_hien_tai.set(progress_tracker)
+        succeeded = False
+        try:
+            self._ensure_cases()
+            if case_id == "__global__":
                 with self._lock:
-                    self._save_chat_log(case_id, request.cau_hoi, response, principal)
-                return response
-            self._enforce_llm_limits(
-                self._limits.ask_limiter,
-                principal,
-                "/api/ask",
-                "Bạn đã gửi quá nhiều câu hỏi.",
-            )
-            result = asker.ask_global(all_cases, all_results, request.cau_hoi, history_pairs)
-        else:
-            with self._lock:
-                case = self._get_case(case_id)
-                history_pairs = self._server_history_pairs(case_id, principal)
-                if not self._ai_enabled or self._asker_impl is None:
-                    _LOGGER.info(
-                        "ask rejected step=configuration reason=missing_llm_or_asker chunks=0"
-                    )
-                    reply = self._ask.ask(
-                        case,
-                        request.cau_hoi,
-                        history_pairs,
+                    assert self._cases is not None
+                    all_cases = list(self._cases.values())
+                    all_results = {c.ca_id: self._review(c) for c in all_cases}
+                    asker = self._asker_impl
+                    enabled = self._ai_enabled and asker is not None
+                    history_pairs = self._server_history_pairs(case_id, principal)
+                if not enabled or asker is None or not hasattr(asker, "ask_global"):
+                    fallback_case = all_cases[0] if all_cases else None
+                    msg = (
+                        self._ask.ask(fallback_case, request.cau_hoi, history_pairs).noi_dung
+                        if fallback_case is not None
+                        else "Chức năng hỏi thêm chưa được nối với hệ thống."
                     )
                     response = s.TraLoi(
-                        trang_thai=reply.trang_thai,
-                        noi_dung=reply.noi_dung,
+                        trang_thai="chua_san_sang",
+                        noi_dung=msg,
                         trich_dan=[],
                         cong_cu_da_goi=[],
                         thoi_gian_ms=0,
                     )
-                    self._save_chat_log(case_id, request.cau_hoi, response, principal)
+                    with self._lock:
+                        self._save_chat_log(case_id, request.cau_hoi, response, principal)
                     return response
-                rule_result = self._review(case)
-                state = self._get_ai_state(case_id)
-                ai_result = (
-                    state.ket_qua if state is not None and state.trang_thai == "xong" else None
+                self._enforce_llm_limits(
+                    self._limits.ask_limiter,
+                    principal,
+                    "/api/ask",
+                    "Bạn đã gửi quá nhiều câu hỏi.",
                 )
-                asker = self._asker_impl
+                result = asker.ask_global(all_cases, all_results, request.cau_hoi, history_pairs)
+            else:
+                with self._lock:
+                    case = self._get_case(case_id)
+                    history_pairs = self._server_history_pairs(case_id, principal)
+                    if not self._ai_enabled or self._asker_impl is None:
+                        _LOGGER.info(
+                            "ask rejected step=configuration reason=missing_llm_or_asker chunks=0"
+                        )
+                        reply = self._ask.ask(
+                            case,
+                            request.cau_hoi,
+                            history_pairs,
+                        )
+                        response = s.TraLoi(
+                            trang_thai=reply.trang_thai,
+                            noi_dung=reply.noi_dung,
+                            trich_dan=[],
+                            cong_cu_da_goi=[],
+                            thoi_gian_ms=0,
+                        )
+                        self._save_chat_log(case_id, request.cau_hoi, response, principal)
+                        return response
+                    rule_result = self._review(case)
+                    state = self._get_ai_state(case_id)
+                    ai_result = (
+                        state.ket_qua if state is not None and state.trang_thai == "xong" else None
+                    )
+                    asker = self._asker_impl
 
-            self._enforce_llm_limits(
-                self._limits.ask_limiter,
-                principal,
-                "/api/cases/{ca_id}/ask",
-                "Bạn đã gửi quá nhiều câu hỏi.",
-            )
-            result = asker.ask(
-                case,
-                request.cau_hoi,
-                history_pairs,
-                ket_qua=rule_result,
-                ai_result=ai_result,
-                nhan_dinh_id=request.nhan_dinh_id,
-            )
+                self._enforce_llm_limits(
+                    self._limits.ask_limiter,
+                    principal,
+                    "/api/cases/{ca_id}/ask",
+                    "Bạn đã gửi quá nhiều câu hỏi.",
+                )
+                result = asker.ask(
+                    case,
+                    request.cau_hoi,
+                    history_pairs,
+                    ket_qua=rule_result,
+                    ai_result=ai_result,
+                    nhan_dinh_id=request.nhan_dinh_id,
+                )
 
-        if result.trang_thai == "ok" and result.doan:
+            succeeded = result.trang_thai == "ok"
+            if result.trang_thai == "ok" and result.doan:
+                with self._lock:
+                    assert self._cases is not None
+                    if case_id == "__global__" or self._cases.get(case_id) is case:
+                        source_key = _ask_source_key(case_id, principal)
+                        case_sources = self._ask_sources.setdefault(source_key, {})
+                        for chunk in result.doan:
+                            if chunk.doan_trich_id in case_sources:
+                                del case_sources[chunk.doan_trich_id]
+                            case_sources[chunk.doan_trich_id] = chunk
+                            while len(case_sources) > _MAX_ASK_SOURCES_PER_KEY:
+                                del case_sources[next(iter(case_sources))]
+
+            response = s.TraLoi(
+                trang_thai=result.trang_thai,
+                noi_dung=result.noi_dung,
+                trich_dan=[
+                    s.Citation(
+                        so=item.so,
+                        loai_ma=item.loai_ma,
+                        nhan=item.nhan,
+                        ban_ghi_id=item.ban_ghi_id,
+                        doan_trich_id=item.doan_trich_id,
+                        trich_nguyen_van=item.trich_nguyen_van,
+                    )
+                    for item in result.trich_dan
+                ],
+                cong_cu_da_goi=list(result.cong_cu_da_goi),
+                thoi_gian_ms=result.thoi_gian_ms,
+            )
             with self._lock:
-                assert self._cases is not None
-                if case_id == "__global__" or self._cases.get(case_id) is case:
-                    source_key = _ask_source_key(case_id, principal)
-                    case_sources = self._ask_sources.setdefault(source_key, {})
-                    for chunk in result.doan:
-                        if chunk.doan_trich_id in case_sources:
-                            del case_sources[chunk.doan_trich_id]
-                        case_sources[chunk.doan_trich_id] = chunk
-                        while len(case_sources) > _MAX_ASK_SOURCES_PER_KEY:
-                            del case_sources[next(iter(case_sources))]
-
-        response = s.TraLoi(
-            trang_thai=result.trang_thai,
-            noi_dung=result.noi_dung,
-            trich_dan=[
-                s.Citation(
-                    so=item.so,
-                    loai_ma=item.loai_ma,
-                    nhan=item.nhan,
-                    ban_ghi_id=item.ban_ghi_id,
-                    doan_trich_id=item.doan_trich_id,
-                    trich_nguyen_van=item.trich_nguyen_van,
+                self._save_chat_log(case_id, request.cau_hoi, response, principal)
+            return response
+        except HTTPException as exc:
+            if exc.status_code == 429:
+                step_id = progress_tracker.dang_chay_ma() or "chuan_bi"
+                progress_tracker.loi(
+                    step_id,
+                    ly_do="Vượt giới hạn lượt hỏi",
+                    goi_y="Chờ ít giây rồi hỏi lại",
                 )
-                for item in result.trich_dan
-            ],
-            cong_cu_da_goi=list(result.cong_cu_da_goi),
-            thoi_gian_ms=result.thoi_gian_ms,
-        )
-        with self._lock:
-            self._save_chat_log(case_id, request.cau_hoi, response, principal)
-        return response
+            raise
+        except Exception:
+            step_id = progress_tracker.dang_chay_ma() or "chuan_bi"
+            progress_tracker.loi(
+                step_id,
+                ly_do="Không soạn được câu trả lời",
+                goi_y="Bấm Thử lại sau ít phút",
+            )
+            raise
+        finally:
+            tien_trinh_hien_tai.reset(ctx_token)
+            self._ask_progress.ket_thuc(progress_key, progress_token, succeeded)

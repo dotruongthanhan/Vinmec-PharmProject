@@ -470,6 +470,12 @@ class BuocAI(ApiModel):
     goi_y: str | None = None
 
 
+class TienTrinhHoiDap(ApiModel):
+    dang_chay: bool
+    cac_buoc: list[BuocAI] = Field(default_factory=list)
+    da_chay_ms: float | None = None
+
+
 class KetQuaAI(ApiModel):
     trang_thai: Literal["tat", "dang_chay", "xong", "loi"]
     nhan_dinh: AiFindings | None = None

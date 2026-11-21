@@ -9,13 +9,22 @@
   RotateCw,
   SendHorizontal,
   ShieldCheck,
+  Sparkles,
   Square,
   X,
 } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import type { ReviewApiClient } from '@/api/client'
-import type { ChiTietCa, DoanNguon, NhanDinh, TrangThaiTraLoi, TrichDanTraLoi } from '@/api/types'
+import type {
+  BuocAI,
+  ChiTietCa,
+  DoanNguon,
+  NhanDinh,
+  TrangThaiBuocAI,
+  TrangThaiTraLoi,
+  TrichDanTraLoi,
+} from '@/api/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ClinicalMarkdown } from '@/components/ui/ClinicalMarkdown'
@@ -31,8 +40,13 @@ import { InlineAlert } from '@/components/ui/inline-alert'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { AiStepList, toStepStatusMap } from '@/features/findings/AiStepList'
 import { cn } from '@/lib/cn'
-import { splitHighlightSegments } from '@/lib/aiReview'
+import {
+  formatAiElapsedClock,
+  pickStepStatusAnnouncement,
+  splitHighlightSegments,
+} from '@/lib/aiReview'
 import { buildSourceLink } from '@/lib/sourceLink'
 import {
   MAX_ASSISTANT_QUESTION_LENGTH,
@@ -46,7 +60,12 @@ import { formatHistoryTime } from '@/lib/historyTime'
 import { HistoryDialog } from './HistoryDialog'
 import type { AssistantHistoryEntry } from './HistoryDialog'
 import { GLOBAL_CHAT_ID } from '@/state/useChat'
-import type { ChatMessage } from '@/state/useChat'
+import type { AskProgressSnapshot, ChatMessage } from '@/state/useChat'
+
+const EMPTY_ASK_PROGRESS: AskProgressSnapshot = {
+  cacBuoc: [],
+  daChayMs: null,
+}
 
 const GLOBAL_SUGGESTED_QUESTIONS: readonly string[] = [
   'Tóm tắt các y lệnh có cảnh báo nghiêm trọng cần ưu tiên',
@@ -68,6 +87,7 @@ export interface AssistantPanelProps {
   attentionFindings: readonly NhanDinh[]
   messages: readonly ChatMessage[]
   sending: boolean
+  askProgress?: AskProgressSnapshot
   lastStatus: TrangThaiTraLoi | null
   focusedFinding: FocusedFindingContext | null
   onClearFocusedFinding: () => void
@@ -77,6 +97,125 @@ export interface AssistantPanelProps {
   onClear: (caId: string) => void
   onClose: () => void
   onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
+}
+
+/** Khối tiến trình hỏi đáp thu gọn hiển thị trong lúc đang gửi câu hỏi. */
+export function AssistantLiveProgress({
+  steps,
+  daChayMs = null,
+}: {
+  steps: readonly BuocAI[]
+  daChayMs?: number | null
+}) {
+  const runningStep = steps.find((step) => step.trang_thai === 'dang_chay')
+  const anchorKey = `${daChayMs ?? 'null'}:${runningStep ? `${runningStep.ma}:${runningStep.thoi_gian_ms ?? 'null'}` : 'none'}`
+
+  const [tickState, setTickState] = useState<{ key: string; deltaMs: number }>({
+    key: anchorKey,
+    deltaMs: 0,
+  })
+  const effectiveDeltaMs = tickState.key === anchorKey ? tickState.deltaMs : 0
+
+  useEffect(() => {
+    const anchor = Date.now()
+    const timer = setInterval(() => {
+      setTickState({
+        key: anchorKey,
+        deltaMs: Math.max(0, Date.now() - anchor),
+      })
+    }, 500)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [anchorKey])
+
+  const statusSignature = steps.map((s) => `${s.ma}:${s.trang_thai}`).join('|')
+  const [prevStatusSignature, setPrevStatusSignature] = useState<string>(statusSignature)
+  const [prevStepMap, setPrevStepMap] = useState<Record<string, TrangThaiBuocAI>>(() =>
+    toStepStatusMap(steps),
+  )
+  const [liveAnnouncement, setLiveAnnouncement] = useState<string>(() =>
+    pickStepStatusAnnouncement(steps, null),
+  )
+
+  if (statusSignature !== prevStatusSignature) {
+    const nextMap = toStepStatusMap(steps)
+    const nextMessage = pickStepStatusAnnouncement(steps, prevStepMap)
+    setPrevStatusSignature(statusSignature)
+    setPrevStepMap(nextMap)
+    if (nextMessage) {
+      setLiveAnnouncement(nextMessage)
+    }
+  }
+
+  return (
+    <div className="rounded-md border border-ai-line bg-ai-bg px-3 py-2.5 text-sm text-ai-fg">
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {liveAnnouncement}
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+        <div className="flex min-w-0 items-center gap-2">
+          <Sparkles className="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+          <span className="font-medium break-words">Đang tra cứu dữ liệu và nguồn</span>
+        </div>
+
+        <span
+          aria-hidden="true"
+          className="shrink-0 text-xs text-ai-fg/80 tabular-nums"
+        >
+          {formatAiElapsedClock((daChayMs ?? 0) + effectiveDeltaMs)}
+        </span>
+      </div>
+
+      <div className="mt-2.5">
+        <AiStepList steps={steps} liveDeltaMs={effectiveDeltaMs} />
+      </div>
+    </div>
+  )
+}
+
+/** Nút thu gọn / mở rộng danh sách bước gắn dưới tin nhắn trả lời trong phiên. */
+export function AssistantMessageSteps({
+  steps,
+  defaultExpanded = false,
+}: {
+  steps: readonly BuocAI[]
+  defaultExpanded?: boolean
+}) {
+  const stepsRegionId = useId()
+  const [expanded, setExpanded] = useState<boolean>(defaultExpanded)
+
+  if (steps.length === 0) {
+    return null
+  }
+
+  return (
+    <div className="min-w-0">
+      <Button
+        variant="ghost"
+        size="sm"
+        aria-expanded={expanded}
+        aria-controls={stepsRegionId}
+        onClick={() => setExpanded((prev) => !prev)}
+        className="px-2 text-xs text-fg-subtle hover:text-fg"
+      >
+        {expanded ? 'Ẩn các bước' : `Xem các bước (${steps.length})`}
+      </Button>
+
+      <div
+        id={stepsRegionId}
+        hidden={!expanded}
+        className={
+          expanded
+            ? 'mt-1.5 rounded-md border border-line bg-surface-muted/40 px-3 py-2.5'
+            : undefined
+        }
+      >
+        {expanded ? <AiStepList steps={steps} liveDeltaMs={0} /> : null}
+      </div>
+    </div>
+  )
 }
 
 type AssistantTab = 'hoi_dap' | 'lich_su' | 'nguon'
@@ -103,6 +242,7 @@ export function AssistantPanel({
   attentionFindings,
   messages,
   sending,
+  askProgress = EMPTY_ASK_PROGRESS,
   lastStatus,
   focusedFinding,
   onClearFocusedFinding,
@@ -416,6 +556,10 @@ export function AssistantPanel({
                         }
 
                         const status = msg.tra_loi.trang_thai
+                        const msgSteps = msg.cac_buoc ?? []
+                        const errorSteps = msgSteps.filter(
+                          (step) => step.trang_thai === 'loi' && (step.ly_do || step.goi_y),
+                        )
 
                         return (
                           <div
@@ -454,6 +598,31 @@ export function AssistantPanel({
                               onCitationClick={handleOpenCitation}
                             />
 
+                            {errorSteps.length > 0 ? (
+                              <div
+                                role="alert"
+                                className="flex flex-col gap-1.5 rounded-sm border border-warning-line bg-warning-bg px-2.5 py-2 text-xs text-warning-fg"
+                              >
+                                {errorSteps.map((step, errIdx) => (
+                                  <div
+                                    key={`${msg.id}-err-${step.ma || errIdx}`}
+                                    className="flex flex-col gap-0.5"
+                                  >
+                                    {step.ly_do ? (
+                                      <p className="font-medium whitespace-pre-wrap break-words">
+                                        {step.ly_do}
+                                      </p>
+                                    ) : null}
+                                    {step.goi_y ? (
+                                      <p className="text-fg-muted whitespace-pre-wrap break-words">
+                                        {step.goi_y}
+                                      </p>
+                                    ) : null}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+
                             {status === 'loi' ? (
                               <div>
                                 <Button
@@ -467,6 +636,10 @@ export function AssistantPanel({
                                   Gửi lại
                                 </Button>
                               </div>
+                            ) : null}
+
+                            {msgSteps.length > 0 ? (
+                              <AssistantMessageSteps steps={msgSteps} />
                             ) : null}
 
                             {msg.tra_loi.trich_dan.length > 0 ? (
@@ -527,18 +700,26 @@ export function AssistantPanel({
                   ) : null}
 
                   {sending ? (
-                    <div
-                      className="flex items-center gap-2 py-2 text-xs text-fg-muted"
-                      role="status"
-                      aria-live="polite"
-                    >
-                      <LoaderCircle
-                        className="size-3.5 animate-spin text-primary shrink-0"
-                        strokeWidth={1.75}
-                        aria-hidden="true"
+                    askProgress.cacBuoc.length > 0 ? (
+                      <AssistantLiveProgress
+                        key={activeChatId}
+                        steps={askProgress.cacBuoc}
+                        daChayMs={askProgress.daChayMs}
                       />
-                      <span>Đang tra cứu dữ liệu và nguồn…</span>
-                    </div>
+                    ) : (
+                      <div
+                        className="flex items-center gap-2 py-2 text-xs text-fg-muted"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        <LoaderCircle
+                          className="size-3.5 motion-safe:animate-spin text-primary shrink-0"
+                          strokeWidth={1.75}
+                          aria-hidden="true"
+                        />
+                        <span>Đang tra cứu dữ liệu và nguồn…</span>
+                      </div>
+                    )
                   ) : null}
               </>
             </div>

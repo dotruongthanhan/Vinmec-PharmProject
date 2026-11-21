@@ -6,6 +6,7 @@ import hashlib
 import logging
 import re
 import time
+from collections import Counter
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
@@ -17,6 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from app.config.settings import CaseContextSettings
 from app.core.errors import ProviderError
 from app.core.interfaces import LLMClient, Retriever
+from app.core.progress import NguonTomTat, ghi_buoc, tien_trinh_hien_tai
 from app.core.types import ChatMessage, Chunk, RetrievalQuery, ScoredChunk, SearchFilter
 from app.deid.known import GiaTriDinhDanh
 from app.deid.scrubber import TOKEN_PATTERN, DeidError, restore_text, scrub_text
@@ -61,6 +63,8 @@ NOT_READY_MESSAGE = (
 )
 
 _ROOT = Path(__file__).resolve().parents[2]
+_MAX_SOURCE_GROUPS = 8
+_ASK_RETRY_HINT = "Bấm Thử lại sau ít phút"
 _DATA_SPLIT_MARKER = "\n## DỮ LIỆU ĐẦU VÀO\n"
 _FALLBACK_SYSTEM_PROMPT = "Bạn là trợ lý hỗ trợ dược sĩ lâm sàng giải đáp về ca bệnh đang mở."
 _ROLE_LABELS = {"nguoi_dung": "Dược sĩ", "he_thong": "Hệ thống"}
@@ -137,6 +141,55 @@ def _log_rejection(step: str, reason: str, chunks: int = 0) -> str:
         safe_reason = "diagnostic_redacted"
     _LOGGER.info("ask rejected step=%s reason=%s chunks=%s", step, safe_reason, chunks)
     return safe_reason
+
+
+def _summarize_sources(chunks: Sequence[Chunk]) -> tuple[str, list[NguonTomTat]]:
+    """Tóm tắt số đoạn và nhóm nguồn công khai cho bước truy xuất."""
+    if not chunks:
+        return "0 đoạn từ 0 nguồn", []
+    counts = Counter(chunk.nguon for chunk in chunks)
+    top_groups = sorted(
+        counts.items(),
+        key=lambda item: (-item[1], _source_label(item[0])),
+    )[:_MAX_SOURCE_GROUPS]
+    nguon = [NguonTomTat(nhan=_source_label(code), so_doan=count) for code, count in top_groups]
+    return f"{len(chunks)} đoạn từ {len(counts)} nguồn", nguon
+
+
+def _ask_error_reason(exc: Exception) -> str:
+    """Rút gọn ngoại lệ thành mã lý do ngắn gọn, không lộ dữ liệu nhạy cảm."""
+    reason = type(exc).__name__
+    if isinstance(exc, ProviderError):
+        message = str(exc)
+        if message == "Lỗi kết nối nhà cung cấp":
+            return "provider_connection_error"
+        if message in {"dau_ra_khong_hop_le", "het_han_muc_token"}:
+            return message
+        if match := re.match(r"HTTP (\d{3}):", message):
+            return f"provider_http_status={match.group(1)}"
+    return reason
+
+
+def _safe_step_error_message(reason: str) -> str:
+    """Đổi mã lỗi đã lọc sang lý do tiếng Việt an toàn cho dược sĩ."""
+    if reason == "het_han_muc_token":
+        return "Vượt hạn mức độ dài"
+    if reason == "provider_connection_error":
+        return "Không kết nối được nhà cung cấp mô hình"
+    return "Không soạn được câu trả lời"
+
+
+def _mark_running_step_error(fallback_step: str, reason: str) -> None:
+    """Đánh dấu bước đang chạy là lỗi với lý do và gợi ý an toàn."""
+    tracker = tien_trinh_hien_tai.get()
+    if tracker is None:
+        return
+    step_id = tracker.dang_chay_ma() or fallback_step
+    tracker.loi(
+        step_id,
+        ly_do=_safe_step_error_message(reason),
+        goi_y=_ASK_RETRY_HINT,
+    )
 
 
 class AskCitationRaw(BaseModel):
@@ -945,6 +998,7 @@ class CaseAsker:
                 doan=[],
             )
 
+        ghi_buoc("bat_dau", "chuan_bi")
         try:
             session = open_deid_session(ca, [])
             scrubbed_question, scrubbed_history = _scrub_history_and_question(
@@ -954,6 +1008,12 @@ class CaseAsker:
             )
         except Exception:
             _log_rejection("deid", "scrub_failed")
+            ghi_buoc(
+                "loi",
+                "chuan_bi",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
+            )
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
@@ -997,8 +1057,10 @@ class CaseAsker:
                 part for part in (priority_block, goi.van_ban_ca, ai_block) if part.strip()
             ]
             van_ban_ca = _sanitize_markers("\n\n".join(context_parts))
+            ghi_buoc("xong", "chuan_bi")
 
             step = "retrieval"
+            ghi_buoc("bat_dau", "truy_xuat")
             retrieved_chunks, used_retrieval = self._retrieve_chunks(
                 ca,
                 scrubbed_question,
@@ -1006,6 +1068,15 @@ class CaseAsker:
             )
             if used_retrieval:
                 tools_called.append("truy_xuat")
+                source_detail, source_groups = _summarize_sources(retrieved_chunks)
+                ghi_buoc(
+                    "xong",
+                    "truy_xuat",
+                    chi_tiet=source_detail,
+                    nguon=source_groups,
+                )
+            else:
+                ghi_buoc("xong", "truy_xuat", chi_tiet="Không dùng tra cứu nguồn")
             _LOGGER.info("ask retrieval chunks=%s used=%s", len(retrieved_chunks), used_retrieval)
 
             candidate_chunks = list(retrieved_chunks)
@@ -1041,6 +1112,11 @@ class CaseAsker:
             llm = self._llm
             assert llm is not None
             for attempt in range(2):
+                llm_step = "goi_mo_hinh" if attempt == 0 else f"goi_mo_hinh_{attempt + 1}"
+                verify_step = "kiem_chung" if attempt == 0 else f"kiem_chung_{attempt + 1}"
+                if attempt >= 1:
+                    ghi_buoc("them", llm_step, ten=f"Soạn lại, lần {attempt + 1}")
+                ghi_buoc("bat_dau", llm_step, chi_tiet="Đang gọi mô hình")
                 messages = _build_messages(
                     template,
                     van_ban_ca=van_ban_ca,
@@ -1062,15 +1138,28 @@ class CaseAsker:
                         for error in exc.errors(include_input=False, include_context=False)
                     )
                     _log_rejection("llm_schema", f"invalid_json:{errors}", len(selected_chunks))
+                    if attempt == 0:
+                        ghi_buoc("xong", llm_step, chi_tiet="Đầu ra sai định dạng, thử lại")
+                    else:
+                        ghi_buoc(
+                            "loi",
+                            llm_step,
+                            ly_do="Không soạn được câu trả lời",
+                            goi_y=_ASK_RETRY_HINT,
+                        )
                     previous_error = (
                         f"Lần trước sai lược đồ JSON ({errors}). "
                         "Chỉ trả về đúng đối tượng JSON hợp lệ."
                     )
                     continue
 
+                ghi_buoc("xong", llm_step)
                 step = "verification"
+                if attempt >= 1:
+                    ghi_buoc("them", verify_step, ten=f"Kiểm chứng lại, lần {attempt + 1}")
+                ghi_buoc("bat_dau", verify_step)
                 try:
-                    return self._verify_and_build_reply(
+                    verified = self._verify_and_build_reply(
                         ca=ca,
                         ket_qua=active_result,
                         cleaned_question=cleaned_question,
@@ -1086,18 +1175,28 @@ class CaseAsker:
                     )
                 except _AskVerificationError as exc:
                     if attempt == 1:
+                        ghi_buoc("xong", verify_step, chi_tiet="Không đủ căn cứ")
                         return AskResult(
                             trang_thai="khong_co_nguon",
                             noi_dung=NO_SOURCE_MESSAGE,
                             cong_cu_da_goi=tools_called,
                             thoi_gian_ms=_elapsed(),
                         )
+                    ghi_buoc("xong", verify_step, chi_tiet="Không đạt, thử lại")
                     previous_error = (
                         "Câu trả lời trước không qua kiểm chứng: "
                         f"{exc}. "
                         "Hãy viết lại toàn bộ câu trả lời cùng trích dẫn từ ngữ cảnh đã cấp. "
                         "Không chỉ xoá riêng câu hay trích dẫn hỏng; không bịa mã hoặc con số."
                     )
+                else:
+                    if verified.trang_thai == "ok":
+                        ghi_buoc("xong", verify_step, chi_tiet="Đạt")
+                    elif verified.trang_thai == "ngoai_pham_vi":
+                        ghi_buoc("xong", verify_step, chi_tiet="Ngoài phạm vi hỗ trợ")
+                    else:
+                        ghi_buoc("xong", verify_step, chi_tiet="Không đủ căn cứ")
+                    return verified
 
             _log_rejection("llm_schema", "invalid_json_after_retry", len(selected_chunks))
             return AskResult(
@@ -1107,16 +1206,16 @@ class CaseAsker:
                 thoi_gian_ms=_elapsed(),
             )
         except Exception as exc:
-            reason = type(exc).__name__
-            if isinstance(exc, ProviderError):
-                message = str(exc)
-                if message == "Lỗi kết nối nhà cung cấp":
-                    reason = "provider_connection_error"
-                elif message in {"dau_ra_khong_hop_le", "het_han_muc_token"}:
-                    reason = message
-                elif match := re.match(r"HTTP (\d{3}):", message):
-                    reason = f"provider_http_status={match.group(1)}"
+            reason = _ask_error_reason(exc)
             _log_rejection(step, reason, len(selected_chunks))
+            fallback_step = {
+                "context": "chuan_bi",
+                "retrieval": "truy_xuat",
+                "prompt": "goi_mo_hinh",
+                "llm": "goi_mo_hinh",
+                "verification": "kiem_chung",
+            }.get(step, "chuan_bi")
+            _mark_running_step_error(fallback_step, reason)
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
@@ -1212,12 +1311,15 @@ class CaseAsker:
             )
 
         if _has_injection_directive(cleaned_question):
+            ghi_buoc("bat_dau", "chuan_bi")
+            ghi_buoc("xong", "chuan_bi", chi_tiet="Ngoài phạm vi hỗ trợ")
             return AskResult(
                 trang_thai="ngoai_pham_vi",
                 noi_dung=OUT_OF_SCOPE_MESSAGE,
                 thoi_gian_ms=_elapsed(),
             )
 
+        ghi_buoc("bat_dau", "chuan_bi")
         # Câu hỏi chung: không có người bệnh đang mở nên chỉ che theo mẫu (lớp 2);
         # mã ca và mã y lệnh trong bảng tổng quan đổi thành mã tạm, khôi phục ở câu trả lời.
         try:
@@ -1233,6 +1335,12 @@ class CaseAsker:
                 session,
             )
         except Exception:
+            ghi_buoc(
+                "loi",
+                "chuan_bi",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
+            )
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
@@ -1245,6 +1353,12 @@ class CaseAsker:
         try:
             van_ban_ca = _sanitize_markers(session.mask_known(summary_text))
         except DeidError:
+            ghi_buoc(
+                "loi",
+                "chuan_bi",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
+            )
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,
@@ -1294,6 +1408,13 @@ class CaseAsker:
         else:
             doan_nguon_text = "(không có đoạn nguồn)"
 
+        prep_detail = (
+            f"{len(cases)} ca, {len(selected_chunks)} đoạn nguồn"
+            if selected_chunks
+            else f"{len(cases)} ca"
+        )
+        ghi_buoc("xong", "chuan_bi", chi_tiet=prep_detail)
+
         chunk_by_id = {c.doan_trich_id: c for c in selected_chunks}
         try:
             _, template = load_prompt(self._prompt_path)
@@ -1314,13 +1435,17 @@ class CaseAsker:
                 cau_hoi=scrubbed_question,
                 loi_lan_truoc="Không có.",
             )
+            ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình")
             raw = self._run_with_deadline(
                 lambda msgs=messages: self._llm.complete_json(msgs, schema),  # type: ignore[union-attr]
                 deadline,
             )
             parsed = AskLLMOutput.model_validate(raw)
+            ghi_buoc("xong", "goi_mo_hinh")
+            ghi_buoc("bat_dau", "kiem_chung")
             reply_text = parsed.tra_loi.strip()
             if not reply_text:
+                ghi_buoc("xong", "kiem_chung", chi_tiet="Không đủ căn cứ")
                 return AskResult(
                     trang_thai="khong_co_nguon",
                     noi_dung=NO_SOURCE_MESSAGE,
@@ -1376,6 +1501,11 @@ class CaseAsker:
             status: Literal["ok", "ngoai_pham_vi"] = (
                 "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
             )
+            ghi_buoc(
+                "xong",
+                "kiem_chung",
+                chi_tiet="Ngoài phạm vi hỗ trợ" if status == "ngoai_pham_vi" else "Đạt",
+            )
             return AskResult(
                 trang_thai=status,
                 noi_dung=restored,
@@ -1384,7 +1514,8 @@ class CaseAsker:
                 thoi_gian_ms=_elapsed(),
                 doan=cited_chunks,
             )
-        except Exception:
+        except Exception as exc:
+            _mark_running_step_error("goi_mo_hinh", _ask_error_reason(exc))
             return AskResult(
                 trang_thai="loi",
                 noi_dung=ERROR_MESSAGE,

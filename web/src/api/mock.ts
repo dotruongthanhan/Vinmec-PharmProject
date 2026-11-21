@@ -29,6 +29,7 @@ import type {
   NhanDinh,
   PhanHoiDaGhi,
   PhanHoiMa,
+  TienTrinhHoiDap,
   TinhCongThucYeuCau,
   TraTuongTacYeuCau,
   TraLoi,
@@ -73,11 +74,28 @@ const MOCK_NGUON_TOM_TAT: NguonTomTat[] = [
   { nhan: 'DDInter', so_doan: 2 },
 ]
 
+const MOCK_ASK_NGUON_TOM_TAT: NguonTomTat[] = [
+  { nhan: 'openFDA', so_doan: 5 },
+  { nhan: 'Bộ Y tế', so_doan: 3 },
+]
+
+const MOCK_ASK_DONE_RETENTION_MS = 60_000
+
 interface MockAiRunState {
   startedAt: number
   status: 'dang_chay' | 'xong' | 'loi'
   attempt: number
   shouldFail: boolean
+}
+
+interface MockAskRunState {
+  startedAt: number
+  finishedAt: number | null
+  status: 'dang_chay' | 'xong' | 'loi'
+  isGlobal: boolean
+  shouldFail: boolean
+  stepsSnapshot: BuocAI[] | null
+  daChayMsSnapshot: number | null
 }
 
 /** Client giả lập chạy độc lập không cần backend, lưu phản hồi trong bộ nhớ phiên. */
@@ -91,6 +109,7 @@ export class MockClient implements ReviewApiClient {
   private readonly recordsData: Record<string, Record<string, BanGhi>>
   private readonly sourcesData: Record<string, Record<string, DoanNguon>>
   private readonly aiRuns: Record<string, MockAiRunState> = {}
+  private readonly askRuns: Record<string, MockAskRunState> = {}
   private readonly aiFeedbackByCase: Record<string, Record<string, PhanHoiDaGhi>> = {}
 
   constructor(options: MockClientOptions = {}) {
@@ -252,46 +271,93 @@ export class MockClient implements ReviewApiClient {
     payload: GuiCauHoi,
     options?: { signal?: AbortSignal },
   ): Promise<TraLoi> {
-    if (caId === '__global__') {
+    const isGlobal = caId === '__global__'
+    if (isGlobal) {
       if (!payload.cau_hoi.trim()) {
         await this.waitDelay()
         throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi không được để trống.', 422)
       }
+      if (payload.cau_hoi.trim().length > 1000) {
+        await this.waitDelay()
+        throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi vượt quá 1000 ký tự.', 422)
+      }
+    } else {
+      const detail = this.detailsData[caId]
+      if (!detail) {
+        await this.waitDelay()
+        throw new ApiError('khong_tim_thay', `Không tìm thấy ca ${caId}.`, 404)
+      }
+      if (!payload.cau_hoi.trim()) {
+        await this.waitDelay()
+        throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi không được để trống.', 422)
+      }
+      if (payload.cau_hoi.trim().length > 1000) {
+        await this.waitDelay()
+        throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi vượt quá 1000 ký tự.', 422)
+      }
+      if (!detail.che_do.hoi_them) {
+        await this.waitDelay()
+        return {
+          trang_thai: 'chua_san_sang',
+          noi_dung: 'Máy chủ chưa bật trợ lý.',
+          trich_dan: [],
+          cong_cu_da_goi: [],
+          thoi_gian_ms: 0,
+        }
+      }
+    }
+
+    const shouldFail = payload.cau_hoi.toLowerCase().includes('lỗi')
+    const run: MockAskRunState = {
+      startedAt: Date.now(),
+      finishedAt: null,
+      status: 'dang_chay',
+      isGlobal,
+      shouldFail,
+      stepsSnapshot: null,
+      daChayMsSnapshot: null,
+    }
+    this.askRuns[caId] = run
+
+    try {
       await this.waitAskDelay(options?.signal)
+    } catch (err: unknown) {
+      if (this.askRuns[caId] === run) {
+        delete this.askRuns[caId]
+      }
+      throw err
+    }
+
+    const elapsed = Math.max(0, Date.now() - run.startedAt)
+    if (run.shouldFail) {
+      run.status = 'loi'
+      run.finishedAt = Date.now()
+      run.daChayMsSnapshot = elapsed
+      run.stepsSnapshot = this.buildAskErrorSteps(isGlobal, elapsed)
+      return {
+        trang_thai: 'loi',
+        noi_dung: 'Không hoàn tất xử lý câu hỏi do mô hình tạm thời gián đoạn.',
+        trich_dan: [],
+        cong_cu_da_goi: isGlobal ? ['danh_sach_y_lenh', 'truy_xuat'] : ['du_lieu_ca', 'truy_xuat'],
+        thoi_gian_ms: elapsed,
+      }
+    }
+
+    run.status = 'xong'
+    run.finishedAt = Date.now()
+    run.daChayMsSnapshot = elapsed
+    run.stepsSnapshot = this.buildAskDoneSteps(isGlobal, elapsed)
+
+    if (isGlobal) {
       return {
         trang_thai: 'ok',
         noi_dung:
           'Hiện tại danh sách có 6 y lệnh chờ thẩm định, trong đó DEMO-02 (Meropenem 1 g trên bệnh nhân CrCl 16,0 mL/phút) và DEMO-06 (Amoxicillin trên bệnh nhân có tiền sử dị ứng nhóm beta-lactam) ở mức nghiêm trọng cần ưu tiên xem trước.',
         trich_dan: [],
         cong_cu_da_goi: ['danh_sach_y_lenh', 'bo_luat'],
-        thoi_gian_ms: 800,
+        thoi_gian_ms: elapsed || 800,
       }
     }
-    const detail = this.detailsData[caId]
-    if (!detail) {
-      await this.waitDelay()
-      throw new ApiError('khong_tim_thay', `Không tìm thấy ca ${caId}.`, 404)
-    }
-    if (!payload.cau_hoi.trim()) {
-      await this.waitDelay()
-      throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi không được để trống.', 422)
-    }
-    if (payload.cau_hoi.trim().length > 1000) {
-      await this.waitDelay()
-      throw new ApiError('du_lieu_khong_hop_le', 'Câu hỏi vượt quá 1000 ký tự.', 422)
-    }
-    if (!detail.che_do.hoi_them) {
-      await this.waitDelay()
-      return {
-        trang_thai: 'chua_san_sang',
-        noi_dung: 'Máy chủ chưa bật trợ lý.',
-        trich_dan: [],
-        cong_cu_da_goi: [],
-        thoi_gian_ms: 0,
-      }
-    }
-
-    await this.waitAskDelay(options?.signal)
 
     if (caId === 'DEMO-02') {
       const focusNote = payload.nhan_dinh_id
@@ -320,7 +386,7 @@ export class MockClient implements ReviewApiClient {
           },
         ],
         cong_cu_da_goi: ['du_lieu_ca', 'bo_luat', 'truy_xuat'],
-        thoi_gian_ms: 1500,
+        thoi_gian_ms: elapsed || 1500,
       }
     }
 
@@ -329,8 +395,329 @@ export class MockClient implements ReviewApiClient {
       noi_dung: 'Không tìm thấy căn cứ trong kho nguồn hiện có cho câu hỏi này trên ca đang mở.',
       trich_dan: [],
       cong_cu_da_goi: ['du_lieu_ca', 'truy_xuat'],
-      thoi_gian_ms: 1500,
+      thoi_gian_ms: elapsed || 1500,
     }
+  }
+
+  async getAskProgress(
+    caId: string,
+    init?: { signal?: AbortSignal },
+  ): Promise<TienTrinhHoiDap> {
+    if (init?.signal?.aborted) {
+      return { dang_chay: false, cac_buoc: [], da_chay_ms: null }
+    }
+    const run = this.askRuns[caId]
+    if (!run) {
+      return { dang_chay: false, cac_buoc: [], da_chay_ms: null }
+    }
+    if (run.status === 'dang_chay') {
+      const elapsed = Math.max(0, Date.now() - run.startedAt)
+      return {
+        dang_chay: true,
+        cac_buoc: this.buildAskRunningSteps(run.isGlobal, elapsed),
+        da_chay_ms: elapsed,
+      }
+    }
+    if (run.finishedAt !== null && Date.now() - run.finishedAt > MOCK_ASK_DONE_RETENTION_MS) {
+      delete this.askRuns[caId]
+      return { dang_chay: false, cac_buoc: [], da_chay_ms: null }
+    }
+    return {
+      dang_chay: false,
+      cac_buoc: cloneData(run.stepsSnapshot ?? []),
+      da_chay_ms: run.daChayMsSnapshot,
+    }
+  }
+
+  private buildAskRunningSteps(isGlobal: boolean, elapsedMs: number): BuocAI[] {
+    const prepLabel = isGlobal ? 'Tổng hợp danh sách y lệnh' : 'Chuẩn bị ngữ cảnh ca'
+    const prepDoneDetail = isGlobal ? '6 y lệnh' : 'đã sẵn sàng'
+    const total = Math.max(1, this.askDelayMs)
+    const t1 = Math.round(total * 0.15)
+    const t2 = Math.round(total * 0.45)
+    const t3 = Math.round(total * 0.8)
+
+    if (elapsedMs < t1) {
+      return [
+        {
+          ma: 'chuan_bi',
+          ten: prepLabel,
+          trang_thai: 'dang_chay',
+          chi_tiet: isGlobal ? 'đang gom danh sách y lệnh…' : 'đang dựng dữ liệu ca…',
+          nguon: [],
+          thoi_gian_ms: elapsedMs,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'truy_xuat',
+          ten: 'Tra cứu nguồn',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'goi_mo_hinh',
+          ten: 'Soạn câu trả lời',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'kiem_chung',
+          ten: 'Kiểm chứng trích dẫn và số liệu',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+      ]
+    }
+
+    if (elapsedMs < t2) {
+      return [
+        {
+          ma: 'chuan_bi',
+          ten: prepLabel,
+          trang_thai: 'xong',
+          chi_tiet: prepDoneDetail,
+          nguon: [],
+          thoi_gian_ms: t1,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'truy_xuat',
+          ten: 'Tra cứu nguồn',
+          trang_thai: 'dang_chay',
+          chi_tiet: 'đang tìm trong kho nguồn…',
+          nguon: [],
+          thoi_gian_ms: Math.max(0, elapsedMs - t1),
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'goi_mo_hinh',
+          ten: 'Soạn câu trả lời',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'kiem_chung',
+          ten: 'Kiểm chứng trích dẫn và số liệu',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+      ]
+    }
+
+    if (elapsedMs < t3) {
+      return [
+        {
+          ma: 'chuan_bi',
+          ten: prepLabel,
+          trang_thai: 'xong',
+          chi_tiet: prepDoneDetail,
+          nguon: [],
+          thoi_gian_ms: t1,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'truy_xuat',
+          ten: 'Tra cứu nguồn',
+          trang_thai: 'xong',
+          chi_tiet: '8 đoạn từ 2 nguồn',
+          nguon: cloneData(MOCK_ASK_NGUON_TOM_TAT),
+          thoi_gian_ms: Math.max(0, t2 - t1),
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'goi_mo_hinh',
+          ten: 'Soạn câu trả lời',
+          trang_thai: 'dang_chay',
+          chi_tiet: 'đang gọi mô hình…',
+          nguon: [],
+          thoi_gian_ms: Math.max(0, elapsedMs - t2),
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'kiem_chung',
+          ten: 'Kiểm chứng trích dẫn và số liệu',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+      ]
+    }
+
+    return [
+      {
+        ma: 'chuan_bi',
+        ten: prepLabel,
+        trang_thai: 'xong',
+        chi_tiet: prepDoneDetail,
+        nguon: [],
+        thoi_gian_ms: t1,
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'truy_xuat',
+        ten: 'Tra cứu nguồn',
+        trang_thai: 'xong',
+        chi_tiet: '8 đoạn từ 2 nguồn',
+        nguon: cloneData(MOCK_ASK_NGUON_TOM_TAT),
+        thoi_gian_ms: Math.max(0, t2 - t1),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'goi_mo_hinh',
+        ten: 'Soạn câu trả lời',
+        trang_thai: 'xong',
+        chi_tiet: 'đã nhận đầu ra',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, t3 - t2),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'kiem_chung',
+        ten: 'Kiểm chứng trích dẫn và số liệu',
+        trang_thai: 'dang_chay',
+        chi_tiet: 'đang đối chiếu trích dẫn…',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, elapsedMs - t3),
+        ly_do: null,
+        goi_y: null,
+      },
+    ]
+  }
+
+  private buildAskDoneSteps(isGlobal: boolean, elapsedMs: number): BuocAI[] {
+    const prepLabel = isGlobal ? 'Tổng hợp danh sách y lệnh' : 'Chuẩn bị ngữ cảnh ca'
+    const prepDoneDetail = isGlobal ? '6 y lệnh' : 'đã sẵn sàng'
+    const total = Math.max(0, elapsedMs)
+    const t1 = Math.round(total * 0.15)
+    const t2 = Math.round(total * 0.45)
+    const t3 = Math.round(total * 0.8)
+    const t4 = Math.max(0, total - t3)
+
+    return [
+      {
+        ma: 'chuan_bi',
+        ten: prepLabel,
+        trang_thai: 'xong',
+        chi_tiet: prepDoneDetail,
+        nguon: [],
+        thoi_gian_ms: t1,
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'truy_xuat',
+        ten: 'Tra cứu nguồn',
+        trang_thai: 'xong',
+        chi_tiet: '8 đoạn từ 2 nguồn',
+        nguon: cloneData(MOCK_ASK_NGUON_TOM_TAT),
+        thoi_gian_ms: Math.max(0, t2 - t1),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'goi_mo_hinh',
+        ten: 'Soạn câu trả lời',
+        trang_thai: 'xong',
+        chi_tiet: 'đã soạn câu trả lời',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, t3 - t2),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'kiem_chung',
+        ten: 'Kiểm chứng trích dẫn và số liệu',
+        trang_thai: 'xong',
+        chi_tiet: 'kiểm chứng đạt',
+        nguon: [],
+        thoi_gian_ms: t4,
+        ly_do: null,
+        goi_y: null,
+      },
+    ]
+  }
+
+  private buildAskErrorSteps(isGlobal: boolean, elapsedMs: number): BuocAI[] {
+    const prepLabel = isGlobal ? 'Tổng hợp danh sách y lệnh' : 'Chuẩn bị ngữ cảnh ca'
+    const prepDoneDetail = isGlobal ? '6 y lệnh' : 'đã sẵn sàng'
+    const total = Math.max(0, elapsedMs)
+    const t1 = Math.round(total * 0.15)
+    const t2 = Math.round(total * 0.45)
+
+    return [
+      {
+        ma: 'chuan_bi',
+        ten: prepLabel,
+        trang_thai: 'xong',
+        chi_tiet: prepDoneDetail,
+        nguon: [],
+        thoi_gian_ms: t1,
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'truy_xuat',
+        ten: 'Tra cứu nguồn',
+        trang_thai: 'xong',
+        chi_tiet: '8 đoạn từ 2 nguồn',
+        nguon: cloneData(MOCK_ASK_NGUON_TOM_TAT),
+        thoi_gian_ms: Math.max(0, t2 - t1),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'goi_mo_hinh',
+        ten: 'Soạn câu trả lời',
+        trang_thai: 'loi',
+        chi_tiet: 'TimeoutError',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, total - t2),
+        ly_do: 'Nhà cung cấp mô hình tạm thời không phản hồi đúng hạn.',
+        goi_y: 'Thử gửi lại câu hỏi sau ít phút hoặc kiểm tra lại đoạn nguồn.',
+      },
+      {
+        ma: 'kiem_chung',
+        ten: 'Kiểm chứng trích dẫn và số liệu',
+        trang_thai: 'bo_qua',
+        chi_tiet: null,
+        nguon: [],
+        thoi_gian_ms: null,
+        ly_do: null,
+        goi_y: null,
+      },
+    ]
   }
 
   private getMockTypicalMs(): number | null {
