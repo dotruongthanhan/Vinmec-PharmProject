@@ -439,6 +439,7 @@ export function WorkspacePage() {
             attentionFindings={attentionFindings}
             messages={chat.getMessages(currentChatId)}
             sending={chat.isSending(currentChatId)}
+            askProgress={chat.getProgress(currentChatId)}
             lastStatus={chat.getLastStatus(currentChatId)}
             focusedFinding={focusedFinding}
             onClearFocusedFinding={() => setFocusedFinding(null)}
@@ -519,6 +520,9 @@ export function WorkspacePage() {
             aiKetQua={ai.ketQua}
             aiThoiGianMs={ai.thoiGianMs}
             aiCanhBao={ai.canhBao}
+            aiCacBuoc={ai.cacBuoc}
+            aiDaChayMs={ai.daChayMs}
+            aiThuongLeMs={ai.thuongLeMs}
             sessionFeedbackForCase={sessionFeedback[detail.ca_id] ?? {}}
             onRerunAi={ai.chayLai}
             isFeedbackSubmitting={feedback.isSubmitting}

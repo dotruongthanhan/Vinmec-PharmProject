@@ -52,6 +52,18 @@ INLINE_FIELDS: dict[str, set[str]] = {
         "trich_nguyen_van",
     },
     "AiFindings": {"can_chu_y", "dat"},
+    "NguonTomTat": {"nhan", "so_doan"},
+    "BuocAI": {
+        "ma",
+        "ten",
+        "trang_thai",
+        "chi_tiet",
+        "nguon",
+        "thoi_gian_ms",
+        "ly_do",
+        "goi_y",
+    },
+    "TienTrinhHoiDap": {"dang_chay", "cac_buoc", "da_chay_ms"},
     "ChayAI": {"chay_lai"},
 }
 
@@ -122,6 +134,11 @@ def test_interface_field_sets_match_contract() -> None:
     assert len(v18_fields) == 24
     for name, fields in v18_fields.items():
         contract_fields.setdefault(name, set()).update(fields)
+
+    v110_doc = (ROOT / "plan/plan-1.10-tien-trinh-ai-ui.md").read_text(encoding="utf-8")
+    for field in ("cac_buoc", "da_chay_ms", "thuong_le_ms"):
+        assert f"`{field}`" in v110_doc
+    contract_fields["KetQuaAI"].update({"cac_buoc", "da_chay_ms", "thuong_le_ms"})
 
     for name, fields in contract_fields.items():
         model = getattr(schemas, name)

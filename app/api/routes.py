@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends, Query, Request, Response
+from fastapi import APIRouter, Body, Depends, Path, Query, Request, Response
 
 from app.api import formulas, lookup
 from app.api import schemas as s
@@ -103,10 +103,31 @@ def clear_conversation(ca_id: str, request: Request, principal: Writer) -> dict[
     return {"ok": True}
 
 
+@router.get("/ask/tien-trinh", response_model=s.TienTrinhHoiDap)
+def get_global_ask_progress(
+    request: Request, response: Response, principal: Caller
+) -> s.TienTrinhHoiDap:
+    """Đọc tiến trình câu hỏi chung đang xử lý hoặc vừa xong của chính người gọi."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return _service(request).get_ask_progress("__global__", principal)
+
+
 @router.post("/ask", response_model=s.TraLoi)
 def ask_global(body: s.GuiCauHoi, request: Request, principal: Writer) -> s.TraLoi:
     """Trả lời câu hỏi chung trên toàn bộ danh sách y lệnh và kho tài liệu."""
     return _service(request).ask("__global__", body, principal)
+
+
+@router.get("/cases/{ca_id}/ask/tien-trinh", response_model=s.TienTrinhHoiDap)
+def get_case_ask_progress(
+    ca_id: Annotated[str, Path(min_length=1, max_length=128)],
+    request: Request,
+    response: Response,
+    principal: Caller,
+) -> s.TienTrinhHoiDap:
+    """Đọc tiến trình hỏi đáp theo ca đang xử lý hoặc vừa xong của chính người gọi."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return _service(request).get_ask_progress(ca_id, principal)
 
 
 @router.post("/cases/{ca_id}/ask", response_model=s.TraLoi)

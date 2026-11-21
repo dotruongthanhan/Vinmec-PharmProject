@@ -7,7 +7,7 @@ services:
         VITE_SUPABASE_URL: ${SUPABASE_URL}
         VITE_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
     image: bvienx-pharm-api:latest
-    # Bí mật chỉ của API (DEEPSEEK_API_KEY, GEMINI_API_KEY, DATABASE_URL cho vinmec_app...) nằm ở .env.app trên máy chủ, không nằm trong image và không chứa khoá service_role.
+    # Bí mật chỉ của API (DEEPSEEK_API_KEY, GEMINI_API_KEY, DATABASE_URL cho bvienx_app...) nằm ở .env.app trên máy chủ, không nằm trong image và không chứa khoá service_role.
     env_file: .env.app
     volumes:
       # Phản hồi và nhật ký chat nằm ngoài container để không mất khi build lại.

@@ -62,6 +62,7 @@ function createLazyMockClient(): ReviewApiClient {
     getRecord: async (caId, banGhiId) => (await load()).getRecord(caId, banGhiId),
     sendFeedback: async (caId, payload) => (await load()).sendFeedback(caId, payload),
     ask: async (caId, payload, options) => (await load()).ask(caId, payload, options),
+    getAskProgress: async (caId, init) => (await load()).getAskProgress(caId, init),
     startAi: async (caId, chayLai) => (await load()).startAi(caId, chayLai),
     getAi: async (caId) => (await load()).getAi(caId),
     getSource: async (caId, doanTrichId) => (await load()).getSource(caId, doanTrichId),

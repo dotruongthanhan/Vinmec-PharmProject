@@ -1,10 +1,27 @@
 ﻿import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '../api/client.ts'
 import type { ReviewApiClient } from '../api/client.ts'
-import type { GuiCauHoi, TraLoi, TrangThaiTraLoi } from '../api/types.ts'
+import type {
+  BuocAI,
+  GuiCauHoi,
+  TienTrinhHoiDap,
+  TraLoi,
+  TrangThaiTraLoi,
+} from '../api/types.ts'
 import { shouldAcceptAssistantReply } from '../lib/assistant.ts'
 
 export const GLOBAL_CHAT_ID = '__global__'
+export const ASK_PROGRESS_POLL_INTERVAL_MS = 1000
+
+export interface AskProgressSnapshot {
+  cacBuoc: BuocAI[]
+  daChayMs: number | null
+}
+
+const EMPTY_ASK_PROGRESS: AskProgressSnapshot = {
+  cacBuoc: [],
+  daChayMs: null,
+}
 
 export type ChatMessage =
   | {
@@ -17,11 +34,14 @@ export type ChatMessage =
       id: string
       vai: 'he_thong'
       tra_loi: TraLoi
+      cac_buoc?: BuocAI[]
+      da_chay_ms?: number | null
     }
 
 export interface UseChatResult {
   getMessages: (caId: string) => ChatMessage[]
   isSending: (caId: string) => boolean
+  getProgress: (caId: string) => AskProgressSnapshot
   getLastStatus: (caId: string) => TrangThaiTraLoi | null
   /** Mã phạm vi đã hỏi (kể cả hỏi đáp chung), mới nhất đứng đầu. */
   askedCaseIds: string[]
@@ -31,6 +51,10 @@ export interface UseChatResult {
   stopQuestion: (caId: string) => void
   retryLastQuestion: (caId: string) => Promise<void>
   clearChat: (caId: string) => void
+}
+
+function isDocumentHidden(): boolean {
+  return typeof document !== 'undefined' && Boolean(document.hidden)
 }
 
 function extractWaitSeconds(err: unknown): number | null {
@@ -95,6 +119,7 @@ export function useChat(
 ): UseChatResult {
   const [messagesByCase, setMessagesByCase] = useState<Record<string, ChatMessage[]>>({})
   const [sendingByCase, setSendingByCase] = useState<Record<string, boolean>>({})
+  const [progressByCase, setProgressByCase] = useState<Record<string, AskProgressSnapshot>>({})
   const [askedCaseIds, setAskedCaseIds] = useState<string[]>([])
   const [activityByCase, setActivityByCase] = useState<Record<string, string>>({})
 
@@ -104,12 +129,15 @@ export function useChat(
   const activeCaseRef = useRef<string | null>(activeCaseId ?? null)
   const seqByCaseRef = useRef<Record<string, number>>({})
   const controllersRef = useRef<Record<string, AbortController | undefined>>({})
+  const progressPollCleanupRef = useRef<Record<string, (() => void) | undefined>>({})
   const lastQueryByCaseRef = useRef<
     Record<string, { question: string; nhanDinhId: string | null } | undefined>
   >({})
   const nextIdRef = useRef<number>(1)
 
   useEffect(() => () => {
+    for (const cleanup of Object.values(progressPollCleanupRef.current)) cleanup?.()
+    progressPollCleanupRef.current = {}
     for (const controller of Object.values(controllersRef.current)) controller?.abort()
     controllersRef.current = {}
     messagesRef.current = {}
@@ -174,7 +202,16 @@ export function useChat(
 
   useEffect(() => {
     activeCaseRef.current = activeCaseId ?? null
-  }, [activeCaseId])
+    if (!hasExplicitActiveCase) {
+      return
+    }
+    for (const [caId, cleanup] of Object.entries(progressPollCleanupRef.current)) {
+      if (caId !== activeCaseId) {
+        cleanup?.()
+        progressPollCleanupRef.current[caId] = undefined
+      }
+    }
+  }, [activeCaseId, hasExplicitActiveCase])
 
   const createId = useCallback((prefix: string): string => {
     const id = `${prefix}-${nextIdRef.current}`
@@ -190,6 +227,11 @@ export function useChat(
   const isSending = useCallback(
     (caId: string): boolean => Boolean(sendingByCase[caId]),
     [sendingByCase],
+  )
+
+  const getProgress = useCallback(
+    (caId: string): AskProgressSnapshot => progressByCase[caId] ?? EMPTY_ASK_PROGRESS,
+    [progressByCase],
   )
 
   const getLastStatus = useCallback(
@@ -242,14 +284,130 @@ export function useChat(
       const requestSeq = (seqByCaseRef.current[caId] ?? 0) + 1
       seqByCaseRef.current[caId] = requestSeq
 
+      progressPollCleanupRef.current[caId]?.()
+      progressPollCleanupRef.current[caId] = undefined
       controllersRef.current[caId]?.abort()
       const controller = new AbortController()
       controllersRef.current[caId] = controller
 
       sendingRef.current = { ...sendingRef.current, [caId]: true }
       setSendingByCase((prev) => ({ ...prev, [caId]: true }))
+      setProgressByCase((prev) => ({ ...prev, [caId]: EMPTY_ASK_PROGRESS }))
+
+      let lastPolledSteps: BuocAI[] = []
+      let lastPolledDaChayMs: number | null = null
+      let pollStopped = false
+      let pollInFlight = false
+      let pollTimer: ReturnType<typeof setTimeout> | null = null
+      let pollAbortController: AbortController | null = null
+
+      const isPollingAllowed = (): boolean =>
+        !pollStopped &&
+        !controller.signal.aborted &&
+        Boolean(sendingRef.current[caId]) &&
+        seqByCaseRef.current[caId] === requestSeq &&
+        (!hasExplicitActiveCase || activeCaseRef.current === caId)
+
+      const clearPollTimer = () => {
+        if (pollTimer !== null) {
+          clearTimeout(pollTimer)
+          pollTimer = null
+        }
+      }
+
+      const applyProgress = (progress: TienTrinhHoiDap) => {
+        if (!isPollingAllowed()) {
+          return
+        }
+        if (progress.cac_buoc.length > 0 || progress.da_chay_ms !== null) {
+          lastPolledSteps = progress.cac_buoc
+          lastPolledDaChayMs = progress.da_chay_ms
+          setProgressByCase((prev) => ({
+            ...prev,
+            [caId]: {
+              cacBuoc: progress.cac_buoc,
+              daChayMs: progress.da_chay_ms,
+            },
+          }))
+        }
+      }
+
+      const stopPolling = () => {
+        pollStopped = true
+        clearPollTimer()
+        pollAbortController?.abort()
+        pollAbortController = null
+        if (typeof document !== 'undefined' && typeof document.removeEventListener === 'function') {
+          document.removeEventListener('visibilitychange', onVisibilityChange)
+        }
+      }
+
+      const scheduleNextPoll = () => {
+        clearPollTimer()
+        if (!isPollingAllowed() || isDocumentHidden()) {
+          return
+        }
+        pollTimer = setTimeout(runPoll, ASK_PROGRESS_POLL_INTERVAL_MS)
+      }
+
+      const runPoll = () => {
+        pollTimer = null
+        if (!isPollingAllowed() || isDocumentHidden() || pollInFlight) {
+          return
+        }
+        if (typeof client.getAskProgress !== 'function') {
+          return
+        }
+        pollInFlight = true
+        const reqController = new AbortController()
+        pollAbortController = reqController
+        void client
+          .getAskProgress(caId, { signal: reqController.signal })
+          .then((progress) => {
+            pollInFlight = false
+            if (pollAbortController === reqController) {
+              pollAbortController = null
+            }
+            if (!isPollingAllowed()) {
+              return
+            }
+            applyProgress(progress)
+            scheduleNextPoll()
+          })
+          .catch(() => {
+            pollInFlight = false
+            if (pollAbortController === reqController) {
+              pollAbortController = null
+            }
+            if (isPollingAllowed()) {
+              scheduleNextPoll()
+            }
+          })
+      }
+
+      const onVisibilityChange = () => {
+        if (!isPollingAllowed()) {
+          stopPolling()
+          return
+        }
+        if (isDocumentHidden()) {
+          clearPollTimer()
+          return
+        }
+        if (!pollInFlight) {
+          clearPollTimer()
+          runPoll()
+        }
+      }
+
+      progressPollCleanupRef.current[caId] = stopPolling
+      if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+        document.addEventListener('visibilitychange', onVisibilityChange)
+      }
+      scheduleNextPoll()
 
       let reply: TraLoi | null = null
+      let wasAborted = false
       try {
         const payload: Omit<GuiCauHoi, 'lich_su'> = {
           cau_hoi: question,
@@ -260,23 +418,75 @@ export function useChat(
         })
       } catch (err: unknown) {
         if (isAbortError(err) || controller.signal.aborted) {
-          if (seqByCaseRef.current[caId] === requestSeq) {
-            sendingRef.current = { ...sendingRef.current, [caId]: false }
-            setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+          wasAborted = true
+        } else {
+          const message = formatAskErrorMessage(err)
+          reply = {
+            trang_thai: 'loi',
+            noi_dung: message,
+            trich_dan: [],
+            cong_cu_da_goi: [],
           }
-          return
-        }
-        const message = formatAskErrorMessage(err)
-        reply = {
-          trang_thai: 'loi',
-          noi_dung: message,
-          trich_dan: [],
-          cong_cu_da_goi: [],
         }
       } finally {
+        stopPolling()
+        if (progressPollCleanupRef.current[caId] === stopPolling) {
+          progressPollCleanupRef.current[caId] = undefined
+        }
+      }
+
+      if (wasAborted) {
         if (controllersRef.current[caId] === controller) {
           controllersRef.current[caId] = undefined
         }
+        if (seqByCaseRef.current[caId] === requestSeq) {
+          sendingRef.current = { ...sendingRef.current, [caId]: false }
+          setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+          setProgressByCase((prev) => ({ ...prev, [caId]: EMPTY_ASK_PROGRESS }))
+        }
+        return
+      }
+
+      const acceptedBeforeFinal = shouldAcceptAssistantReply({
+        requestCaseId: caId,
+        activeCaseId: hasExplicitActiveCase ? activeCaseRef.current : caId,
+        requestSeq,
+        latestSeqForCase: seqByCaseRef.current[caId] ?? 0,
+        aborted: controller.signal.aborted,
+      })
+
+      if (!acceptedBeforeFinal || reply === null) {
+        if (controllersRef.current[caId] === controller) {
+          controllersRef.current[caId] = undefined
+        }
+        if (seqByCaseRef.current[caId] === requestSeq) {
+          sendingRef.current = { ...sendingRef.current, [caId]: false }
+          setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+          setProgressByCase((prev) => ({ ...prev, [caId]: EMPTY_ASK_PROGRESS }))
+        }
+        return
+      }
+
+      let finalSteps: BuocAI[] = lastPolledSteps
+      let finalDaChayMs: number | null = lastPolledDaChayMs
+      if (typeof client.getAskProgress === 'function') {
+        try {
+          const finalProgress = await client.getAskProgress(caId, {
+            signal: controller.signal,
+          })
+          if (finalProgress.cac_buoc.length > 0) {
+            finalSteps = finalProgress.cac_buoc
+          }
+          if (finalProgress.da_chay_ms !== null) {
+            finalDaChayMs = finalProgress.da_chay_ms
+          }
+        } catch {
+          // Không chặn hiển thị câu trả lời nếu đọc tiến trình lần cuối gặp lỗi.
+        }
+      }
+
+      if (controllersRef.current[caId] === controller) {
+        controllersRef.current[caId] = undefined
       }
 
       const accepted = shouldAcceptAssistantReply({
@@ -290,9 +500,10 @@ export function useChat(
       if (seqByCaseRef.current[caId] === requestSeq) {
         sendingRef.current = { ...sendingRef.current, [caId]: false }
         setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+        setProgressByCase((prev) => ({ ...prev, [caId]: EMPTY_ASK_PROGRESS }))
       }
 
-      if (!accepted || reply === null) {
+      if (!accepted) {
         return
       }
 
@@ -300,6 +511,8 @@ export function useChat(
         id: createId('assistant'),
         vai: 'he_thong',
         tra_loi: reply,
+        ...(finalSteps.length > 0 ? { cac_buoc: finalSteps } : {}),
+        ...(finalDaChayMs !== null ? { da_chay_ms: finalDaChayMs } : {}),
       }
       const latestForCase = messagesRef.current[caId] ?? []
       const withReply = [...latestForCase, assistantMsg]
@@ -329,10 +542,13 @@ export function useChat(
 
   const stopQuestion = useCallback((caId: string) => {
     seqByCaseRef.current[caId] = (seqByCaseRef.current[caId] ?? 0) + 1
+    progressPollCleanupRef.current[caId]?.()
+    progressPollCleanupRef.current[caId] = undefined
     controllersRef.current[caId]?.abort()
     controllersRef.current[caId] = undefined
     sendingRef.current = { ...sendingRef.current, [caId]: false }
     setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+    setProgressByCase((prev) => ({ ...prev, [caId]: EMPTY_ASK_PROGRESS }))
   }, [])
 
   const retryLastQuestion = useCallback(
@@ -360,11 +576,14 @@ export function useChat(
   const clearChat = useCallback(
     (caId: string) => {
       seqByCaseRef.current[caId] = (seqByCaseRef.current[caId] ?? 0) + 1
+      progressPollCleanupRef.current[caId]?.()
+      progressPollCleanupRef.current[caId] = undefined
       controllersRef.current[caId]?.abort()
       controllersRef.current[caId] = undefined
       sendingRef.current = { ...sendingRef.current, [caId]: false }
       messagesRef.current = { ...messagesRef.current, [caId]: [] }
       setSendingByCase((prev) => ({ ...prev, [caId]: false }))
+      setProgressByCase((prev) => ({ ...prev, [caId]: EMPTY_ASK_PROGRESS }))
       setMessagesByCase((prev) => ({ ...prev, [caId]: [] }))
       setAskedCaseIds((prev) => prev.filter((id) => id !== caId))
       setActivityByCase((prev) => {
@@ -386,6 +605,7 @@ export function useChat(
   return {
     getMessages,
     isSending,
+    getProgress,
     getLastStatus,
     askedCaseIds,
     getLastActivity,

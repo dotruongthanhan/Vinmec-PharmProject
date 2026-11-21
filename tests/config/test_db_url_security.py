@@ -19,43 +19,43 @@ ROOT = Path(__file__).resolve().parents[2]
     ("url", "expected_owner", "expected_ssl"),
     [
         (
-            "postgresql://vinmec_app:mk-bi-mat@rds.example.invalid:5432/vinmec"
+            "postgresql://bvienx_app:mk-bi-mat@rds.example.invalid:5432/bvienx"
             "?sslmode=verify-full&sslrootcert=/srv/certs/rds-global-bundle.pem",
             False,
             False,
         ),
         (
-            "postgresql://vinmec_admin:mk-bi-mat@127.0.0.1:5433/vinmec?sslmode=require",
+            "postgresql://bvienx_admin:mk-bi-mat@127.0.0.1:5433/bvienx?sslmode=require",
             True,
             False,
         ),
         (
-            "postgresql://postgres:mk-bi-mat@localhost:5432/vinmec",
+            "postgresql://postgres:mk-bi-mat@localhost:5432/bvienx",
             True,
             False,
         ),
         (
-            "postgresql://vinmec_app:mk-bi-mat@[::1]:5433/vinmec",
+            "postgresql://bvienx_app:mk-bi-mat@[::1]:5433/bvienx",
             False,
             False,
         ),
         (
-            "postgresql://vinmec_app:mk-bi-mat@rds.example.invalid:5432/vinmec?sslmode=require",
+            "postgresql://bvienx_app:mk-bi-mat@rds.example.invalid:5432/bvienx?sslmode=require",
             False,
             True,
         ),
         (
-            "postgresql://vinmec_admin:mk-bi-mat@rds.example.invalid:5432/vinmec",
+            "postgresql://bvienx_admin:mk-bi-mat@rds.example.invalid:5432/bvienx",
             True,
             True,
         ),
         (
-            "postgresql://bvienx_admin:mk-bi-mat@127.0.0.1:5433/vinmec?sslmode=require",
+            "postgresql://bvienx_admin:mk-bi-mat@127.0.0.1:5433/bvienx?sslmode=require",
             True,
             False,
         ),
         (
-            "postgresql://bvienx_app:mk-bi-mat@rds.example.invalid:5432/vinmec?sslmode=require",
+            "postgresql://bvienx_app:mk-bi-mat@rds.example.invalid:5432/bvienx?sslmode=require",
             False,
             True,
         ),
@@ -78,10 +78,10 @@ def test_database_url_warnings_checks_owner_and_sslmode(
     [
         ("", "khong-co"),
         ("   ", "khong-co"),
-        ("mysql://vinmec_admin:p@ss#1!@rds.example.invalid/db", "p@ss#1!"),
-        ("postgresql://vinmec_admin:p@ss:abc@rds.example.invalid:badport/db", "p@ss:abc"),
+        ("mysql://bvienx_admin:p@ss#1!@rds.example.invalid/db", "p@ss#1!"),
+        ("postgresql://bvienx_admin:p@ss:abc@rds.example.invalid:badport/db", "p@ss:abc"),
         ("khong-phai-url-co-mat-khau-bi-mat", "mat-khau-bi-mat"),
-        ("postgresql://vinmec_app:secret@[::1/db", "secret"),
+        ("postgresql://bvienx_app:secret@[::1/db", "secret"),
     ],
 )
 def test_database_url_warnings_handles_unparseable_and_special_passwords(
@@ -98,8 +98,8 @@ def test_database_url_warnings_handles_unparseable_and_special_passwords(
 def test_database_url_warnings_never_leaks_encoded_special_password() -> None:
     secret_raw = "p@ss!#%:word"
     url = (
-        "postgresql://vinmec_admin:p%40ss%21%23%25%3Aword"
-        "@rds.example.invalid:5432/vinmec?sslmode=require"
+        "postgresql://bvienx_admin:p%40ss%21%23%25%3Aword"
+        "@rds.example.invalid:5432/bvienx?sslmode=require"
     )
     warnings = database_url_warnings(url)
     assert len(warnings) == 2
@@ -116,8 +116,8 @@ def test_loader_database_url_prefers_loader_env_and_warns_once(
     monkeypatch.setenv("PYTHON_DOTENV_DISABLED", "1")
     monkeypatch.setattr(settings_mod, "_warned_missing_loader_url", False)
 
-    loader_dsn = "postgresql://vinmec_loader:mk-loader-123@db.invalid:5432/vinmec"
-    app_dsn = "postgresql://vinmec_app:mk-app-456@db.invalid:5432/vinmec"
+    loader_dsn = "postgresql://bvienx_loader:mk-loader-123@db.invalid:5432/bvienx"
+    app_dsn = "postgresql://bvienx_app:mk-app-456@db.invalid:5432/bvienx"
 
     monkeypatch.setenv("DATABASE_URL_LOADER", loader_dsn)
     monkeypatch.setenv("DATABASE_URL", app_dsn)
@@ -150,7 +150,7 @@ def test_app_lifespan_logs_url_warnings_without_blocking_or_leaking(
     monkeypatch.setenv("ACCESS_LOG", "off")
     monkeypatch.setenv(
         "DATABASE_URL",
-        "postgresql://vinmec_admin:mat-khau-lifespan@rds.example.invalid:5432/vinmec"
+        "postgresql://bvienx_admin:mat-khau-lifespan@rds.example.invalid:5432/bvienx"
         "?sslmode=require",
     )
     service = CaseService(

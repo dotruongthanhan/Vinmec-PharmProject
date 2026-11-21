@@ -8,10 +8,12 @@ Quy ước nút:
 """
 
 import time
+from collections import Counter
 from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
+from app.core.progress import NguonTomTat, ghi_buoc, tien_trinh_hien_tai
 from app.core.types import Chunk
 from app.llm.schema import KetQuaLLM, NhanDinhCuoi
 from app.llm.synthesizer import Synthesizer
@@ -21,6 +23,20 @@ from app.orchestration.graph.state import ThamDinhState
 from app.pipeline import KetQuaThamDinh
 
 NodeFn = Callable[[ThamDinhState], dict]
+
+_MAX_SOURCE_GROUPS = 8
+_SOURCE_LABELS: dict[str, str] = {
+    "openfda": "Nhãn FDA",
+    "openfda_drug_label": "Nhãn FDA",
+    "byt": "Hướng dẫn Bộ Y tế",
+    "van_ban_byt": "Văn bản Bộ Y tế",
+    "duoc_thu": "Dược thư Quốc gia",
+}
+
+
+def _source_label(nguon: str) -> str:
+    """Đổi mã nguồn công khai sang nhãn hiển thị tiếng Việt (không chứa dấu gạch dưới)."""
+    return _SOURCE_LABELS.get(nguon, nguon.replace("_", " "))
 
 
 def canh_bao_loi(exc: Exception) -> str:
@@ -38,6 +54,21 @@ def an_toan(fn: Callable[[Any, ThamDinhState], dict]) -> Callable[[Any, ThamDinh
         try:
             return fn(self, state)
         except Exception as exc:
+            tracker = tien_trinh_hien_tai.get()
+            if tracker is not None:
+                if isinstance(self, ThuThapNguon):
+                    tracker.loi(
+                        "thu_thap_nguon",
+                        ly_do="Không lấy được nguồn",
+                        goi_y="Thử lại; bảng luật vẫn dùng được",
+                    )
+                else:
+                    step_id = tracker.dang_chay_ma() or "tong_hop_1"
+                    tracker.loi(
+                        step_id,
+                        ly_do="Bước tổng hợp gặp lỗi",
+                        goi_y="Bảng luật vẫn đúng; bấm Thử lại sau ít phút",
+                    )
             return {"loi": canh_bao_loi(exc)}
 
     return wrapper
@@ -74,7 +105,29 @@ class ThuThapNguon:
 
     @an_toan
     def __call__(self, state: ThamDinhState) -> dict:
+        ghi_buoc("bat_dau", "thu_thap_nguon")
         doan, canh_bao = self._collector.collect(state["ca"], state["ket_qua_luat"])
+        if doan:
+            counts = Counter(chunk.nguon for chunk in doan)
+            top_groups = sorted(
+                counts.items(),
+                key=lambda item: (-item[1], _source_label(item[0])),
+            )[:_MAX_SOURCE_GROUPS]
+            nguon = [
+                NguonTomTat(nhan=_source_label(code), so_doan=count) for code, count in top_groups
+            ]
+            ghi_buoc(
+                "xong",
+                "thu_thap_nguon",
+                chi_tiet=f"{len(doan)} đoạn từ {len(counts)} nguồn",
+                nguon=nguon,
+            )
+        else:
+            ghi_buoc(
+                "xong",
+                "thu_thap_nguon",
+                chi_tiet="Không tìm thấy đoạn nguồn phù hợp",
+            )
         return {"doan": doan, "canh_bao": canh_bao}
 
 
