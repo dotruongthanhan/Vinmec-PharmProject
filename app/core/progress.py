@@ -127,17 +127,23 @@ class TienTrinh:
         with self._lock:
             self._append_unlocked(ma, ten)
 
-    def bat_dau(self, ma: str, chi_tiet: str | None = None) -> None:
-        """Đánh dấu bước bắt đầu chạy và ghi mốc thời gian."""
+    def bat_dau(self, ma: str, chi_tiet: str | None = None, ten: str | None = None) -> None:
+        """Đánh dấu bước bắt đầu chạy và ghi mốc thời gian.
+
+        Bước chưa có thì được tạo ngay lúc bắt đầu (hiển thị dần theo diễn biến thật); `ten` đặt
+        hoặc cập nhật tên hiển thị.
+        """
         with self._lock:
             clipped_ma = _clip_str(ma)
             idx = self._index.get(clipped_ma)
             if idx is None:
-                record = self._append_unlocked(clipped_ma, clipped_ma)
+                record = self._append_unlocked(clipped_ma, ten if ten is not None else clipped_ma)
                 if record is None:
                     return
             else:
                 record = self._steps[idx]
+                if ten is not None:
+                    record.ten = _clip_str(ten)
             record.trang_thai = "dang_chay"
             record.bat_dau = time.perf_counter()
             record.ket_thuc = None
@@ -287,7 +293,7 @@ def ghi_buoc(
     elif hanh_dong == "them":
         tracker.them(ma, ten if ten is not None else ma)
     elif hanh_dong == "bat_dau":
-        tracker.bat_dau(ma, chi_tiet=chi_tiet)
+        tracker.bat_dau(ma, chi_tiet=chi_tiet, ten=ten)
     elif hanh_dong == "xong":
         tracker.xong(ma, chi_tiet=chi_tiet, nguon=nguon)
     elif hanh_dong == "loi":

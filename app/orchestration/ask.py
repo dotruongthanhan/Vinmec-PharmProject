@@ -998,7 +998,7 @@ class CaseAsker:
                 doan=[],
             )
 
-        ghi_buoc("bat_dau", "chuan_bi")
+        ghi_buoc("bat_dau", "chuan_bi", ten="Đọc hồ sơ ca và chạy bộ luật")
         try:
             session = open_deid_session(ca, [])
             scrubbed_question, scrubbed_history = _scrub_history_and_question(
@@ -1057,10 +1057,14 @@ class CaseAsker:
                 part for part in (priority_block, goi.van_ban_ca, ai_block) if part.strip()
             ]
             van_ban_ca = _sanitize_markers("\n\n".join(context_parts))
-            ghi_buoc("xong", "chuan_bi")
+            ghi_buoc(
+                "xong",
+                "chuan_bi",
+                chi_tiet=f"{len(active_result.phat_hien)} phát hiện của bộ luật",
+            )
 
             step = "retrieval"
-            ghi_buoc("bat_dau", "truy_xuat")
+            ghi_buoc("bat_dau", "truy_xuat", ten="Tra cứu nhãn thuốc và hướng dẫn")
             retrieved_chunks, used_retrieval = self._retrieve_chunks(
                 ca,
                 scrubbed_question,
@@ -1116,7 +1120,12 @@ class CaseAsker:
                 verify_step = "kiem_chung" if attempt == 0 else f"kiem_chung_{attempt + 1}"
                 if attempt >= 1:
                     ghi_buoc("them", llm_step, ten=f"Soạn lại, lần {attempt + 1}")
-                ghi_buoc("bat_dau", llm_step, chi_tiet="Đang gọi mô hình")
+                ghi_buoc(
+                    "bat_dau",
+                    llm_step,
+                    chi_tiet="Đang gọi mô hình",
+                    ten="Soạn câu trả lời" if attempt == 0 else None,
+                )
                 messages = _build_messages(
                     template,
                     van_ban_ca=van_ban_ca,
@@ -1157,7 +1166,11 @@ class CaseAsker:
                 step = "verification"
                 if attempt >= 1:
                     ghi_buoc("them", verify_step, ten=f"Kiểm chứng lại, lần {attempt + 1}")
-                ghi_buoc("bat_dau", verify_step)
+                ghi_buoc(
+                    "bat_dau",
+                    verify_step,
+                    ten="Kiểm chứng trích dẫn và số liệu" if attempt == 0 else None,
+                )
                 try:
                     verified = self._verify_and_build_reply(
                         ca=ca,
@@ -1311,7 +1324,7 @@ class CaseAsker:
             )
 
         if _has_injection_directive(cleaned_question):
-            ghi_buoc("bat_dau", "chuan_bi")
+            ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
             ghi_buoc("xong", "chuan_bi", chi_tiet="Ngoài phạm vi hỗ trợ")
             return AskResult(
                 trang_thai="ngoai_pham_vi",
@@ -1319,7 +1332,7 @@ class CaseAsker:
                 thoi_gian_ms=_elapsed(),
             )
 
-        ghi_buoc("bat_dau", "chuan_bi")
+        ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
         # Câu hỏi chung: không có người bệnh đang mở nên chỉ che theo mẫu (lớp 2);
         # mã ca và mã y lệnh trong bảng tổng quan đổi thành mã tạm, khôi phục ở câu trả lời.
         try:
@@ -1435,14 +1448,14 @@ class CaseAsker:
                 cau_hoi=scrubbed_question,
                 loi_lan_truoc="Không có.",
             )
-            ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình")
+            ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình", ten="Soạn câu trả lời")
             raw = self._run_with_deadline(
                 lambda msgs=messages: self._llm.complete_json(msgs, schema),  # type: ignore[union-attr]
                 deadline,
             )
             parsed = AskLLMOutput.model_validate(raw)
             ghi_buoc("xong", "goi_mo_hinh")
-            ghi_buoc("bat_dau", "kiem_chung")
+            ghi_buoc("bat_dau", "kiem_chung", ten="Kiểm chứng trích dẫn và số liệu")
             reply_text = parsed.tra_loi.strip()
             if not reply_text:
                 ghi_buoc("xong", "kiem_chung", chi_tiet="Không đủ căn cứ")

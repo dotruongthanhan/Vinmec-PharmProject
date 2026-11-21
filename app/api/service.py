@@ -102,17 +102,6 @@ _DB_READ_TTL_SECONDS = 60.0
 _CASE_REFRESH_RETRY_SECONDS = 15.0
 _MAX_ASK_SOURCES_PER_KEY = 200
 _INTERACTION_EXCLUDED = {"dich_truyen_dien_giai", "duoc_lieu"}
-_CASE_ASK_STEPS: tuple[tuple[str, str], ...] = (
-    ("chuan_bi", "Chuẩn bị ngữ cảnh ca"),
-    ("truy_xuat", "Tra cứu nguồn"),
-    ("goi_mo_hinh", "Soạn câu trả lời"),
-    ("kiem_chung", "Kiểm chứng trích dẫn và số liệu"),
-)
-_GLOBAL_ASK_STEPS: tuple[tuple[str, str], ...] = (
-    ("chuan_bi", "Tổng hợp danh sách y lệnh"),
-    ("goi_mo_hinh", "Soạn câu trả lời"),
-    ("kiem_chung", "Kiểm chứng trích dẫn và số liệu"),
-)
 
 
 def _ask_source_key(case_id: str, principal: Principal | None) -> str:
@@ -1052,9 +1041,9 @@ class CaseService:
 
     def ask(self, case_id: str, request: s.GuiCauHoi, principal: Principal) -> s.TraLoi:
         """Gọi CaseAsker khi có LLM; hỗ trợ cả hỏi đáp chung (__global__) và theo từng ca."""
-        progress_steps = _GLOBAL_ASK_STEPS if case_id == "__global__" else _CASE_ASK_STEPS
         progress_key = _ask_progress_key(case_id, principal)
-        progress_token, progress_tracker = self._ask_progress.bat_dau(progress_key, progress_steps)
+        # Không đăng ký sẵn bước: mỗi bước chỉ xuất hiện khi thật sự bắt đầu (hiển thị dần).
+        progress_token, progress_tracker = self._ask_progress.bat_dau(progress_key, ())
         ctx_token = tien_trinh_hien_tai.set(progress_tracker)
         succeeded = False
         try:
@@ -1172,6 +1161,7 @@ class CaseService:
         except HTTPException as exc:
             if exc.status_code == 429:
                 step_id = progress_tracker.dang_chay_ma() or "chuan_bi"
+                progress_tracker.them(step_id, "Nhận câu hỏi")
                 progress_tracker.loi(
                     step_id,
                     ly_do="Vượt giới hạn lượt hỏi",
@@ -1180,6 +1170,7 @@ class CaseService:
             raise
         except Exception:
             step_id = progress_tracker.dang_chay_ma() or "chuan_bi"
+            progress_tracker.them(step_id, "Xử lý câu hỏi")
             progress_tracker.loi(
                 step_id,
                 ly_do="Không soạn được câu trả lời",

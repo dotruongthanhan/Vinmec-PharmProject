@@ -1,4 +1,5 @@
 ﻿import {
+  ChevronRight,
   CornerDownRight,
   ExternalLink,
   History,
@@ -148,29 +149,22 @@ export function AssistantLiveProgress({
     }
   }
 
+  // Không khung: các bước hiện dần ngay dưới tin nhắn người dùng như một dòng thời gian.
   return (
-    <div className="rounded-md border border-ai-line bg-ai-bg px-3 py-2.5 text-sm text-ai-fg">
+    <div className="flex flex-col gap-2.5 text-sm text-fg">
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {liveAnnouncement}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <div className="flex min-w-0 items-center gap-2">
-          <Sparkles className="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
-          <span className="font-medium break-words">Đang tra cứu dữ liệu và nguồn</span>
-        </div>
-
-        <span
-          aria-hidden="true"
-          className="shrink-0 text-xs text-ai-fg/80 tabular-nums"
-        >
+      <div className="flex items-center gap-2 text-xs text-fg-muted">
+        <Sparkles className="size-3.5 shrink-0 text-ai-fg" strokeWidth={1.75} aria-hidden="true" />
+        <span className="font-medium">Đang xử lý</span>
+        <span aria-hidden="true" className="tabular-nums text-fg-subtle">
           {formatAiElapsedClock((daChayMs ?? 0) + effectiveDeltaMs)}
         </span>
       </div>
 
-      <div className="mt-2.5">
-        <AiStepList steps={steps} liveDeltaMs={effectiveDeltaMs} />
-      </div>
+      <AiStepList steps={steps} liveDeltaMs={effectiveDeltaMs} variant="timeline" />
     </div>
   )
 }
@@ -198,7 +192,14 @@ export function AssistantMessageSteps({
         aria-expanded={expanded}
         aria-controls={stepsRegionId}
         onClick={() => setExpanded((prev) => !prev)}
-        className="px-2 text-xs text-fg-subtle hover:text-fg"
+        className="-ml-2 gap-1 px-2 text-xs text-fg-subtle hover:text-fg"
+        iconLeft={
+          <ChevronRight
+            className={cn('size-3.5 transition-transform duration-120', expanded && 'rotate-90')}
+            strokeWidth={1.75}
+            aria-hidden="true"
+          />
+        }
       >
         {expanded ? 'Ẩn các bước' : `Xem các bước (${steps.length})`}
       </Button>
@@ -206,13 +207,9 @@ export function AssistantMessageSteps({
       <div
         id={stepsRegionId}
         hidden={!expanded}
-        className={
-          expanded
-            ? 'mt-1.5 rounded-md border border-line bg-surface-muted/40 px-3 py-2.5'
-            : undefined
-        }
+        className={expanded ? 'mt-2 pl-1' : undefined}
       >
-        {expanded ? <AiStepList steps={steps} liveDeltaMs={0} /> : null}
+        {expanded ? <AiStepList steps={steps} liveDeltaMs={0} variant="timeline" /> : null}
       </div>
     </div>
   )
@@ -280,6 +277,14 @@ export function AssistantPanel({
     el.style.height = 'auto'
     el.style.height = `${Math.min(el.scrollHeight, 132)}px`
   }, [draft])
+
+  // Cuộn theo diễn biến: khi có tin nhắn mới hoặc một bước mới hiện ra (không cuộn theo từng
+  // nhịp đồng hồ), để dược sĩ luôn thấy bước đang chạy ở cuối khung.
+  const chatEndRef = useRef<HTMLDivElement | null>(null)
+  const liveStepCount = askProgress.cacBuoc.length
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView?.({ block: 'nearest' })
+  }, [messages.length, liveStepCount, sending, activeTab])
 
   const sourceFetchKey = sourceSelection
     ? `${sourceSelection.caId}::${sourceSelection.doanTrichId}::${sourceReloadTick}`
@@ -722,6 +727,7 @@ export function AssistantPanel({
                       </div>
                     )
                   ) : null}
+                  <div ref={chatEndRef} aria-hidden="true" />
               </>
             </div>
           </ScrollArea>

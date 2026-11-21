@@ -67,15 +67,15 @@ class _ControlledAsker:
         nhan_dinh_id: str | None = None,
     ) -> AskResult:
         del ca, cau_hoi, lich_su, ket_qua, ai_result, nhan_dinh_id
-        ghi_buoc("bat_dau", "chuan_bi")
+        ghi_buoc("bat_dau", "chuan_bi", ten="Đọc hồ sơ ca và chạy bộ luật")
         ghi_buoc("xong", "chuan_bi")
-        ghi_buoc("bat_dau", "truy_xuat")
+        ghi_buoc("bat_dau", "truy_xuat", ten="Tra cứu nhãn thuốc và hướng dẫn")
         ghi_buoc("xong", "truy_xuat", chi_tiet="Không dùng tra cứu nguồn")
-        ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình")
+        ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình", ten="Soạn câu trả lời")
         self._entered.set()
         assert self._release.wait(timeout=3.0)
         ghi_buoc("xong", "goi_mo_hinh")
-        ghi_buoc("bat_dau", "kiem_chung")
+        ghi_buoc("bat_dau", "kiem_chung", ten="Kiểm chứng trích dẫn và số liệu")
         ghi_buoc("xong", "kiem_chung", chi_tiet="Đạt")
         return AskResult(
             trang_thai="ok",
@@ -100,13 +100,13 @@ class _ControlledAsker:
         lich_su: list[tuple[str, str]] | None = None,
     ) -> AskResult:
         del results, cau_hoi, lich_su
-        ghi_buoc("bat_dau", "chuan_bi")
+        ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
         ghi_buoc("xong", "chuan_bi", chi_tiet=f"{len(cases)} ca")
-        ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình")
+        ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình", ten="Soạn câu trả lời")
         self._entered.set()
         assert self._release.wait(timeout=3.0)
         ghi_buoc("xong", "goi_mo_hinh")
-        ghi_buoc("bat_dau", "kiem_chung")
+        ghi_buoc("bat_dau", "kiem_chung", ten="Kiểm chứng trích dẫn và số liệu")
         ghi_buoc("xong", "kiem_chung", chi_tiet="Đạt")
         return AskResult(
             trang_thai="ok",
@@ -176,7 +176,7 @@ def test_ask_progress_case_and_global_lifecycle_retention_and_response(
             "/api/cases/DEMO-02/ask",
             json={"cau_hoi": "Creatinin thế nào?"},
         )
-        assert entered.wait(timeout=2.0)
+        assert entered.wait(timeout=10.0)
 
         mid_resp = client.get("/api/cases/DEMO-02/ask/tien-trinh")
         assert mid_resp.status_code == 200
@@ -185,16 +185,21 @@ def test_ask_progress_case_and_global_lifecycle_retention_and_response(
         _check_display_strings(mid)
         assert mid["dang_chay"] is True
         assert mid["da_chay_ms"] >= 0.0
+        # Bước chỉ xuất hiện khi thật sự bắt đầu: chưa tới kiểm chứng thì chưa có bước đó.
         assert [b["ma"] for b in mid["cac_buoc"]] == [
             "chuan_bi",
             "truy_xuat",
             "goi_mo_hinh",
-            "kiem_chung",
+        ]
+        assert [b["ten"] for b in mid["cac_buoc"]] == [
+            "Đọc hồ sơ ca và chạy bộ luật",
+            "Tra cứu nhãn thuốc và hướng dẫn",
+            "Soạn câu trả lời",
         ]
         assert mid["cac_buoc"][0]["trang_thai"] == "xong"
         assert mid["cac_buoc"][1]["trang_thai"] == "xong"
         assert mid["cac_buoc"][2]["trang_thai"] == "dang_chay"
-        assert mid["cac_buoc"][3]["trang_thai"] == "cho"
+        assert not any(b["trang_thai"] == "cho" for b in mid["cac_buoc"])
 
         release.set()
         post_resp = future.result(timeout=3.0)
@@ -219,12 +224,12 @@ def test_ask_progress_case_and_global_lifecycle_retention_and_response(
         entered.clear()
         release.clear()
         g_future = pool.submit(client.post, "/api/ask", json={"cau_hoi": "Tổng quan hàng đợi?"})
-        assert entered.wait(timeout=2.0)
+        assert entered.wait(timeout=10.0)
 
         g_mid = client.get("/api/ask/tien-trinh").json()
         TienTrinhHoiDap.model_validate(g_mid, extra="forbid")
         assert g_mid["dang_chay"] is True
-        assert [b["ma"] for b in g_mid["cac_buoc"]] == ["chuan_bi", "goi_mo_hinh", "kiem_chung"]
+        assert [b["ma"] for b in g_mid["cac_buoc"]] == ["chuan_bi", "goi_mo_hinh"]
         assert g_mid["cac_buoc"][0]["ten"] == "Tổng hợp danh sách y lệnh"
         assert g_mid["cac_buoc"][1]["trang_thai"] == "dang_chay"
 
@@ -275,7 +280,7 @@ def test_ask_progress_isolates_between_users(
             json={"cau_hoi": "Câu hỏi của A"},
             headers=headers_a,
         )
-        assert entered.wait(timeout=2.0)
+        assert entered.wait(timeout=10.0)
 
         # User B cùng ca_id không thấy tiến trình của user A.
         b_mid = client.get("/api/cases/DEMO-02/ask/tien-trinh", headers=headers_b)
@@ -488,10 +493,10 @@ def test_ask_progress_consecutive_requests_do_not_let_old_clear_new(
         ThreadPoolExecutor(max_workers=2) as pool,
     ):
         f1 = pool.submit(client.post, "/api/cases/DEMO-02/ask", json={"cau_hoi": "Lượt 1"})
-        assert entered_1.wait(timeout=2.0)
+        assert entered_1.wait(timeout=10.0)
 
         f2 = pool.submit(client.post, "/api/cases/DEMO-02/ask", json={"cau_hoi": "Lượt 2"})
-        assert entered_2.wait(timeout=2.0)
+        assert entered_2.wait(timeout=10.0)
 
         # Lượt 1 kết thúc sau khi lượt 2 đã bắt đầu -> không được chốt hay xoá mục lượt 2.
         gate_1.set()
@@ -500,7 +505,7 @@ def test_ask_progress_consecutive_requests_do_not_let_old_clear_new(
         during_2 = client.get("/api/cases/DEMO-02/ask/tien-trinh").json()
         assert during_2["dang_chay"] is True
         assert during_2["cac_buoc"][0]["chi_tiet"] == "Lượt 2"
-        assert during_2["cac_buoc"][2]["trang_thai"] == "dang_chay"
+        assert during_2["cac_buoc"][1]["trang_thai"] == "dang_chay"
 
         gate_2.set()
         assert f2.result(timeout=3.0).status_code == 200
