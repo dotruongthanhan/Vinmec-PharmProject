@@ -1,4 +1,11 @@
-import type { KetQuaAI, NhanDinh, PhanHoiDaGhi, TrangThaiAI } from '../api/types.ts'
+import type {
+  BuocAI,
+  KetQuaAI,
+  NhanDinh,
+  PhanHoiDaGhi,
+  TrangThaiAI,
+  TrangThaiBuocAI,
+} from '../api/types.ts'
 
 export interface BangNhanDinh {
   can_chu_y: NhanDinh[]
@@ -174,4 +181,130 @@ export function getSafeHttpsUrl(url: string | null | undefined): string | null {
 /** Định dạng mili-giây sang giây dùng dấu phẩy thập phân để hiển thị trên dải trạng thái AI. */
 export function formatAiSeconds(ms: number): string {
   return (Math.max(0, ms) / 1000).toFixed(1).replace(/\.0$/, '').replace('.', ',')
+}
+
+export const AI_STEP_SLOW_MS = 30_000
+
+export const AI_STEP_STATUS_LABELS: Record<TrangThaiBuocAI, string> = {
+  cho: 'chờ',
+  dang_chay: 'đang chạy',
+  xong: 'xong',
+  loi: 'lỗi',
+  bo_qua: 'bỏ qua',
+}
+
+/** Định dạng thời lượng bước AI gọn dạng "14s" (từ 10 giây trở lên) hoặc "1,2s". */
+export function formatAiDuration(ms: number | null | undefined): string {
+  if (ms === null || ms === undefined || !Number.isFinite(ms)) {
+    return ''
+  }
+  const safeMs = Math.max(0, ms)
+  if (safeMs >= 10_000) {
+    return `${Math.round(safeMs / 1000)}s`
+  }
+  return `${formatAiSeconds(safeMs)}s`
+}
+
+/** Định dạng đồng hồ tổng chạy nền theo giây nguyên ("14s") để tránh nhảy số lẻ liên tục. */
+export function formatAiElapsedClock(ms: number | null | undefined): string {
+  if (ms === null || ms === undefined || !Number.isFinite(ms)) {
+    return '0s'
+  }
+  return `${Math.floor(Math.max(0, ms) / 1000)}s`
+}
+
+/** Ước lượng khoảng "thường a–b s" từ trung vị (0,7× đến 1,5×, làm tròn 5 s); thiếu thì trả null. */
+export function formatAiTypicalRange(thuongLeMs: number | null | undefined): string | null {
+  if (thuongLeMs === null || thuongLeMs === undefined || !Number.isFinite(thuongLeMs) || thuongLeMs <= 0) {
+    return null
+  }
+  const medianSec = thuongLeMs / 1000
+  const low = Math.max(5, Math.round((medianSec * 0.7) / 5) * 5)
+  const high = Math.max(low, Math.round((medianSec * 1.5) / 5) * 5)
+  return low === high ? `thường ${low} s` : `thường ${low}–${high} s`
+}
+
+export interface SlowAiCheckInput {
+  cacBuoc: readonly BuocAI[]
+  daChayMs: number | null
+  thuongLeMs: number | null
+  localDeltaMs?: number
+}
+
+export interface SlowAiStatus {
+  isSlow: boolean
+  stepName: string | null
+  message: string | null
+}
+
+/** Kiểm tra cờ chậm: bước đang chạy quá 30 s hoặc tổng quá 1,5× trung vị thường lệ. */
+export function evaluateSlowAi(input: SlowAiCheckInput): SlowAiStatus {
+  const delta = Math.max(0, input.localDeltaMs ?? 0)
+  const runningStep = input.cacBuoc.find((step) => step.trang_thai === 'dang_chay')
+  const stepElapsedMs = runningStep ? (runningStep.thoi_gian_ms ?? 0) + delta : 0
+  const totalElapsedMs = (input.daChayMs ?? 0) + delta
+
+  const stepSlow = runningStep !== undefined && stepElapsedMs > AI_STEP_SLOW_MS
+  const totalSlow =
+    input.thuongLeMs !== null &&
+    Number.isFinite(input.thuongLeMs) &&
+    input.thuongLeMs > 0 &&
+    totalElapsedMs > input.thuongLeMs * 1.5
+
+  if (!stepSlow && !totalSlow) {
+    return { isSlow: false, stepName: null, message: null }
+  }
+
+  const stepName = runningStep?.ten ?? null
+  const message = stepName
+    ? `Bước ${stepName} đang lâu hơn thường lệ. Bảng luật vẫn dùng được.`
+    : 'Phân tích AI đang lâu hơn thường lệ. Bảng luật vẫn dùng được.'
+
+  return {
+    isSlow: true,
+    stepName,
+    message,
+  }
+}
+
+/** Tạo câu ngắn cho vùng aria-live="polite" khi bước đổi trạng thái (không chứa giây). */
+export function formatStepStatusAnnouncement(
+  step: Pick<BuocAI, 'ten' | 'trang_thai'>,
+): string {
+  return `Bước ${step.ten}: ${AI_STEP_STATUS_LABELS[step.trang_thai]}`
+}
+
+/** Chọn thông báo bước mới đổi trạng thái (hoặc bước đang hoạt động lúc đầu) cho aria-live. */
+export function pickStepStatusAnnouncement(
+  steps: readonly BuocAI[],
+  previousStatuses: Readonly<Record<string, TrangThaiBuocAI>> | null,
+): string {
+  if (steps.length === 0) {
+    return ''
+  }
+  if (previousStatuses === null) {
+    const errorStep = steps.find((step) => step.trang_thai === 'loi')
+    if (errorStep) {
+      return formatStepStatusAnnouncement(errorStep)
+    }
+    const runningStep = steps.find((step) => step.trang_thai === 'dang_chay')
+    if (runningStep) {
+      return formatStepStatusAnnouncement(runningStep)
+    }
+    return ''
+  }
+
+  const changed = steps.filter((step) => previousStatuses[step.ma] !== step.trang_thai)
+  if (changed.length === 0) {
+    return ''
+  }
+
+  const priority: readonly TrangThaiBuocAI[] = ['loi', 'dang_chay', 'xong', 'bo_qua', 'cho']
+  for (const status of priority) {
+    const matched = changed.find((step) => step.trang_thai === status)
+    if (matched) {
+      return formatStepStatusAnnouncement(matched)
+    }
+  }
+  return formatStepStatusAnnouncement(changed[0])
 }

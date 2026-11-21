@@ -454,12 +454,31 @@ class AiFindings(ApiModel):
     dat: list[NhanDinh]
 
 
+class NguonTomTat(ApiModel):
+    nhan: str
+    so_doan: int
+
+
+class BuocAI(ApiModel):
+    ma: str
+    ten: str
+    trang_thai: Literal["cho", "dang_chay", "xong", "loi", "bo_qua"]
+    chi_tiet: str | None = None
+    nguon: list[NguonTomTat] = Field(default_factory=list)
+    thoi_gian_ms: float | None = None
+    ly_do: str | None = None
+    goi_y: str | None = None
+
+
 class KetQuaAI(ApiModel):
     trang_thai: Literal["tat", "dang_chay", "xong", "loi"]
     nhan_dinh: AiFindings | None = None
     canh_bao: list[str]
     thoi_gian_ms: float | None = None
     mo_hinh: str | None = None
+    cac_buoc: list[BuocAI] = Field(default_factory=list)
+    da_chay_ms: float | None = None
+    thuong_le_ms: float | None = None
 
 
 class DoanNguon(ApiModel):

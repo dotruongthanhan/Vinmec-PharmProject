@@ -21,6 +21,24 @@ export type TruyXuatCheDo = 'chua_co' | 'tu_khoa' | 'lai' | 'san_sang'
 
 export type TrangThaiAI = 'tat' | 'dang_chay' | 'xong' | 'loi'
 
+export type TrangThaiBuocAI = 'cho' | 'dang_chay' | 'xong' | 'loi' | 'bo_qua'
+
+export interface NguonTomTat {
+  nhan: string
+  so_doan: number
+}
+
+export interface BuocAI {
+  ma: string
+  ten: string
+  trang_thai: TrangThaiBuocAI
+  chi_tiet: string | null
+  nguon: NguonTomTat[]
+  thoi_gian_ms: number | null
+  ly_do: string | null
+  goi_y: string | null
+}
+
 export type TrangThaiTraLoi =
   | 'chua_san_sang'
   | 'ok'
@@ -238,6 +256,9 @@ export interface KetQuaAI {
   canh_bao: string[]
   thoi_gian_ms: number | null
   mo_hinh: string | null
+  cac_buoc: BuocAI[]
+  da_chay_ms: number | null
+  thuong_le_ms: number | null
 }
 
 export interface DoanNguon {

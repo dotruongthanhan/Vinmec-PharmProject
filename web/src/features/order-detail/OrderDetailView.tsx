@@ -2,6 +2,7 @@ import { ArrowDown, ArrowUp, ClipboardList, FileText, Pill, X } from 'lucide-rea
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import type {
+  BuocAI,
   ChiTietCa,
   GuiPhanHoi,
   KetQuaAI,
@@ -80,6 +81,9 @@ export interface OrderDetailViewProps {
   aiKetQua: KetQuaAI | null
   aiThoiGianMs: number | null
   aiCanhBao: readonly string[]
+  aiCacBuoc?: readonly BuocAI[]
+  aiDaChayMs?: number | null
+  aiThuongLeMs?: number | null
   sessionFeedbackForCase: Readonly<Record<string, PhanHoiDaGhi>>
   onRerunAi: () => void
   isFeedbackSubmitting: (caId: string, id: string) => boolean
@@ -300,6 +304,9 @@ export function OrderDetailView({
   aiKetQua,
   aiThoiGianMs,
   aiCanhBao,
+  aiCacBuoc,
+  aiDaChayMs,
+  aiThuongLeMs,
   sessionFeedbackForCase,
   onRerunAi,
   isFeedbackSubmitting,
@@ -832,6 +839,9 @@ export function OrderDetailView({
               doAiThem={aiSummary.doAiThem}
               canhBao={aiCanhBao}
               onRerun={onRerunAi}
+              cacBuoc={aiCacBuoc}
+              daChayMs={aiDaChayMs}
+              thuongLeMs={aiThuongLeMs}
             />
 
             {Object.entries(feedbackDrafts).filter(([id]) =>

@@ -11,6 +11,7 @@ import {
 } from './mockData.ts'
 import type {
   BanGhi,
+  BuocAI,
   ChiTietCa,
   ChiTietThuoc,
   DanhMucCongThuc,
@@ -24,6 +25,7 @@ import type {
   KetQuaCongThuc,
   KetQuaTraTuongTac,
   MeResponse,
+  NguonTomTat,
   NhanDinh,
   PhanHoiDaGhi,
   PhanHoiMa,
@@ -36,6 +38,7 @@ export interface MockClientOptions {
   delayMs?: number
   aiDelayMs?: number
   askDelayMs?: number
+  failAiCases?: readonly string[]
   cases?: DanhSachCa
   details?: Record<string, ChiTietCa>
   records?: Record<string, Record<string, BanGhi>>
@@ -62,22 +65,39 @@ function formatNowTime(): string {
   return `${dd}/${mm}/${yyyy} ${hh}:${min}`
 }
 
+const MOCK_THUONG_LE_MS = 25_000
+
+const MOCK_NGUON_TOM_TAT: NguonTomTat[] = [
+  { nhan: 'openFDA', so_doan: 6 },
+  { nhan: 'Bộ Y tế', so_doan: 4 },
+  { nhan: 'DDInter', so_doan: 2 },
+]
+
+interface MockAiRunState {
+  startedAt: number
+  status: 'dang_chay' | 'xong' | 'loi'
+  attempt: number
+  shouldFail: boolean
+}
+
 /** Client giả lập chạy độc lập không cần backend, lưu phản hồi trong bộ nhớ phiên. */
 export class MockClient implements ReviewApiClient {
   private readonly delayMs: number
   private readonly aiDelayMs: number
   private readonly askDelayMs: number
+  private readonly explicitFailAiCases: readonly string[] | null
   private readonly casesData: DanhSachCa
   private readonly detailsData: Record<string, ChiTietCa>
   private readonly recordsData: Record<string, Record<string, BanGhi>>
   private readonly sourcesData: Record<string, Record<string, DoanNguon>>
-  private readonly aiRuns: Record<string, { startedAt: number; status: 'dang_chay' | 'xong' }> = {}
+  private readonly aiRuns: Record<string, MockAiRunState> = {}
   private readonly aiFeedbackByCase: Record<string, Record<string, PhanHoiDaGhi>> = {}
 
   constructor(options: MockClientOptions = {}) {
     this.delayMs = options.delayMs ?? 90
     this.aiDelayMs = options.aiDelayMs ?? 3000
     this.askDelayMs = options.askDelayMs ?? 1500
+    this.explicitFailAiCases = options.failAiCases ?? null
     this.casesData = cloneData(options.cases ?? MOCK_CASES)
     this.detailsData = cloneData(options.details ?? MOCK_CASE_DETAILS)
     this.recordsData = cloneData(options.records ?? MOCK_RECORDS)
@@ -313,6 +333,233 @@ export class MockClient implements ReviewApiClient {
     }
   }
 
+  private getMockTypicalMs(): number | null {
+    return this.aiDelayMs > 0 ? MOCK_THUONG_LE_MS : null
+  }
+
+  private buildRunningSteps(elapsedMs: number): BuocAI[] {
+    const t1 = Math.round(this.aiDelayMs * 0.25)
+    const t2 = Math.round(this.aiDelayMs * 0.75)
+
+    if (elapsedMs < t1) {
+      return [
+        {
+          ma: 'thu_thap_nguon',
+          ten: 'Lấy nguồn',
+          trang_thai: 'dang_chay',
+          chi_tiet: 'đang tìm trong kho nguồn…',
+          nguon: [],
+          thoi_gian_ms: elapsedMs,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'tong_hop_1',
+          ten: 'Tổng hợp nhận định',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'kiem_chung_1',
+          ten: 'Kiểm chứng trích dẫn',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+      ]
+    }
+
+    if (elapsedMs < t2) {
+      return [
+        {
+          ma: 'thu_thap_nguon',
+          ten: 'Lấy nguồn',
+          trang_thai: 'xong',
+          chi_tiet: '12 đoạn',
+          nguon: cloneData(MOCK_NGUON_TOM_TAT),
+          thoi_gian_ms: t1,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'tong_hop_1',
+          ten: 'Tổng hợp nhận định',
+          trang_thai: 'dang_chay',
+          chi_tiet: 'đang gọi mô hình…',
+          nguon: [],
+          thoi_gian_ms: Math.max(0, elapsedMs - t1),
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'kiem_chung_1',
+          ten: 'Kiểm chứng trích dẫn',
+          trang_thai: 'cho',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+      ]
+    }
+
+    return [
+      {
+        ma: 'thu_thap_nguon',
+        ten: 'Lấy nguồn',
+        trang_thai: 'xong',
+        chi_tiet: '12 đoạn',
+        nguon: cloneData(MOCK_NGUON_TOM_TAT),
+        thoi_gian_ms: t1,
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'tong_hop_1',
+        ten: 'Tổng hợp nhận định',
+        trang_thai: 'xong',
+        chi_tiet: 'đã nhận đầu ra',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, t2 - t1),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'kiem_chung_1',
+        ten: 'Kiểm chứng trích dẫn',
+        trang_thai: 'dang_chay',
+        chi_tiet: 'đang đối chiếu trích dẫn…',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, elapsedMs - t2),
+        ly_do: null,
+        goi_y: null,
+      },
+    ]
+  }
+
+  private buildAiDoneSteps(): BuocAI[] {
+    const t1 = Math.round(this.aiDelayMs * 0.25)
+    const t2 = Math.round(this.aiDelayMs * 0.75)
+    const t3 = Math.max(0, this.aiDelayMs - t2)
+    return [
+      {
+        ma: 'thu_thap_nguon',
+        ten: 'Lấy nguồn',
+        trang_thai: 'xong',
+        chi_tiet: '12 đoạn',
+        nguon: cloneData(MOCK_NGUON_TOM_TAT),
+        thoi_gian_ms: t1,
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'tong_hop_1',
+        ten: 'Tổng hợp nhận định',
+        trang_thai: 'xong',
+        chi_tiet: 'đã tổng hợp nhận định',
+        nguon: [],
+        thoi_gian_ms: Math.max(0, t2 - t1),
+        ly_do: null,
+        goi_y: null,
+      },
+      {
+        ma: 'kiem_chung_1',
+        ten: 'Kiểm chứng trích dẫn',
+        trang_thai: 'xong',
+        chi_tiet: '3/3 dòng đạt',
+        nguon: [],
+        thoi_gian_ms: t3,
+        ly_do: null,
+        goi_y: null,
+      },
+    ]
+  }
+
+  private buildAiErrorResult(): KetQuaAI {
+    const t1 = Math.round(this.aiDelayMs * 0.25)
+    const failAt = Math.round(this.aiDelayMs * 0.75)
+    return {
+      trang_thai: 'loi',
+      nhan_dinh: null,
+      canh_bao: ['Không gọi được mô hình tổng hợp.'],
+      thoi_gian_ms: failAt,
+      mo_hinh: null,
+      cac_buoc: [
+        {
+          ma: 'thu_thap_nguon',
+          ten: 'Lấy nguồn',
+          trang_thai: 'xong',
+          chi_tiet: '12 đoạn',
+          nguon: cloneData(MOCK_NGUON_TOM_TAT),
+          thoi_gian_ms: t1,
+          ly_do: null,
+          goi_y: null,
+        },
+        {
+          ma: 'tong_hop_1',
+          ten: 'Tổng hợp nhận định',
+          trang_thai: 'loi',
+          chi_tiet: 'TimeoutError',
+          nguon: [],
+          thoi_gian_ms: Math.max(0, failAt - t1),
+          ly_do: 'Nhà cung cấp mô hình tạm thời không phản hồi đúng hạn.',
+          goi_y: 'Sử dụng bảng nhận định của bộ luật bên dưới và bấm "Thử lại" sau ít phút.',
+        },
+        {
+          ma: 'kiem_chung_1',
+          ten: 'Kiểm chứng trích dẫn',
+          trang_thai: 'bo_qua',
+          chi_tiet: null,
+          nguon: [],
+          thoi_gian_ms: null,
+          ly_do: null,
+          goi_y: null,
+        },
+      ],
+      da_chay_ms: failAt,
+      thuong_le_ms: this.getMockTypicalMs(),
+    }
+  }
+
+  private buildAiRunningResult(elapsedMs: number): KetQuaAI {
+    return {
+      trang_thai: 'dang_chay',
+      nhan_dinh: null,
+      canh_bao: [],
+      thoi_gian_ms: null,
+      mo_hinh: null,
+      cac_buoc: this.buildRunningSteps(elapsedMs),
+      da_chay_ms: elapsedMs,
+      thuong_le_ms: this.getMockTypicalMs(),
+    }
+  }
+
+  private resolveRunState(caId: string, detail: ChiTietCa, run: MockAiRunState): KetQuaAI {
+    const elapsed = Math.max(0, Date.now() - run.startedAt)
+    if (run.shouldFail) {
+      const failAt = this.aiDelayMs > 0 ? Math.round(this.aiDelayMs * 0.75) : 0
+      if (run.status === 'loi' || elapsed >= failAt) {
+        run.status = 'loi'
+        return this.buildAiErrorResult()
+      }
+      return this.buildAiRunningResult(elapsed)
+    }
+
+    if (run.status === 'xong' || elapsed >= this.aiDelayMs) {
+      run.status = 'xong'
+      return this.buildAiDoneResult(caId, detail)
+    }
+    return this.buildAiRunningResult(elapsed)
+  }
+
   private buildAiDoneResult(caId: string, detail: ChiTietCa): KetQuaAI {
     const annotations = MOCK_AI_ANNOTATIONS[caId] ?? {}
     const added = MOCK_AI_ADDED_FINDINGS[caId]
@@ -351,6 +598,9 @@ export class MockClient implements ReviewApiClient {
       canh_bao: [],
       thoi_gian_ms: this.aiDelayMs,
       mo_hinh: 'mock-ai',
+      cac_buoc: this.buildAiDoneSteps(),
+      da_chay_ms: this.aiDelayMs,
+      thuong_le_ms: this.getMockTypicalMs(),
     }
   }
 
@@ -367,32 +617,30 @@ export class MockClient implements ReviewApiClient {
         canh_bao: [],
         thoi_gian_ms: null,
         mo_hinh: null,
+        cac_buoc: [],
+        da_chay_ms: null,
+        thuong_le_ms: null,
       }
     }
 
     const existing = this.aiRuns[caId]
     if (existing && !chayLai) {
-      if (existing.status === 'xong' || Date.now() - existing.startedAt >= this.aiDelayMs) {
-        existing.status = 'xong'
-        return this.buildAiDoneResult(caId, detail)
-      }
-      return {
-        trang_thai: 'dang_chay',
-        nhan_dinh: null,
-        canh_bao: [],
-        thoi_gian_ms: null,
-        mo_hinh: null,
-      }
+      return this.resolveRunState(caId, detail, existing)
     }
 
-    this.aiRuns[caId] = { startedAt: Date.now(), status: 'dang_chay' }
-    return {
-      trang_thai: 'dang_chay',
-      nhan_dinh: null,
-      canh_bao: [],
-      thoi_gian_ms: null,
-      mo_hinh: null,
+    const attempt = (existing?.attempt ?? 0) + 1
+    const shouldFail = this.explicitFailAiCases !== null
+      ? this.explicitFailAiCases.includes(caId)
+      : caId === 'DEMO-04' && attempt === 1
+
+    const nextRun: MockAiRunState = {
+      startedAt: Date.now(),
+      status: 'dang_chay',
+      attempt,
+      shouldFail,
     }
+    this.aiRuns[caId] = nextRun
+    return this.resolveRunState(caId, detail, nextRun)
   }
 
   async getAi(caId: string): Promise<KetQuaAI | null> {
@@ -408,6 +656,9 @@ export class MockClient implements ReviewApiClient {
         canh_bao: [],
         thoi_gian_ms: null,
         mo_hinh: null,
+        cac_buoc: [],
+        da_chay_ms: null,
+        thuong_le_ms: null,
       }
     }
 
@@ -415,17 +666,7 @@ export class MockClient implements ReviewApiClient {
     if (!existing) {
       return null
     }
-    if (existing.status === 'xong' || Date.now() - existing.startedAt >= this.aiDelayMs) {
-      existing.status = 'xong'
-      return this.buildAiDoneResult(caId, detail)
-    }
-    return {
-      trang_thai: 'dang_chay',
-      nhan_dinh: null,
-      canh_bao: [],
-      thoi_gian_ms: null,
-      mo_hinh: null,
-    }
+    return this.resolveRunState(caId, detail, existing)
   }
 
   async getSource(caId: string, doanTrichId: string): Promise<DoanNguon> {

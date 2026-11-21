@@ -47,3 +47,7 @@ interface DoanNguon {
 3. Khi `trang_thai` là `"loi"` hoặc `"tat"` thì `nhan_dinh = null`; web tiếp tục hiển thị bảng của luật từ `ChiTietCa`.
 4. `che_do.co_llm` là `true` khi bước AI bật được: có khoá, cấu hình hợp lệ, và biến môi trường `CDSS_AI` khác `off`. `che_do.truy_xuat` là `"san_sang"` khi có kho đoạn (`data/kb_curated/chunks.jsonl`), ngược lại `"chua_co"`.
 5. Phản hồi (`POST …/feedback`) nhận cả `nhan_dinh_id` của dòng AI trong lần phân tích gần nhất của ca.
+
+## 4. v1.10 – tiến trình
+
+Từ v1.10, `KetQuaAI` (POST và GET `/api/cases/{ca_id}/ai`) bổ sung ba trường tuỳ chọn có mặc định (`cac_buoc: BuocAI[] = []`, `da_chay_ms: number | null = null`, `thuong_le_ms: number | null = null`) và kiểu phụ `BuocAI` / `NguonTomTat` để phản ánh tiến trình phân tích theo thời gian thực. Chi tiết hợp đồng và thiết kế ở `plan/plan-1.10-tien-trinh-ai-ui.md` (mục 4 và 5).

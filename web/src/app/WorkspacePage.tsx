@@ -519,6 +519,9 @@ export function WorkspacePage() {
             aiKetQua={ai.ketQua}
             aiThoiGianMs={ai.thoiGianMs}
             aiCanhBao={ai.canhBao}
+            aiCacBuoc={ai.cacBuoc}
+            aiDaChayMs={ai.daChayMs}
+            aiThuongLeMs={ai.thuongLeMs}
             sessionFeedbackForCase={sessionFeedback[detail.ca_id] ?? {}}
             onRerunAi={ai.chayLai}
             isFeedbackSubmitting={feedback.isSubmitting}

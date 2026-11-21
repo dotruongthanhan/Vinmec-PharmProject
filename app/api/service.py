@@ -37,6 +37,7 @@ from app.config.settings import (
     load_kb_source,
 )
 from app.core.errors import ConfigError
+from app.core.progress import TienTrinh
 from app.core.types import Chunk
 from app.db import administrative, medical_record
 from app.db.reader import DatabaseReadError, DbReviewService
@@ -677,25 +678,52 @@ class CaseService:
         state: AiJobState,
         feedbacks: list[PhanHoi],
     ) -> s.KetQuaAI:
-        """Chuyển trạng thái tác vụ nền sang KetQuaAI."""
+        """Chuyển trạng thái tác vụ nền sang KetQuaAI kèm danh sách bước tiến trình."""
         if state.trang_thai == "dang_chay":
-            return s.KetQuaAI(
+            base = s.KetQuaAI(
                 trang_thai="dang_chay",
                 nhan_dinh=None,
                 canh_bao=present_warnings(state.canh_bao),
                 thoi_gian_ms=None,
                 mo_hinh=self._ai_model_name(),
             )
-        if state.trang_thai == "loi":
-            return s.KetQuaAI(
+        elif state.trang_thai == "loi":
+            base = s.KetQuaAI(
                 trang_thai="loi",
                 nhan_dinh=None,
                 canh_bao=present_warnings(state.canh_bao),
                 thoi_gian_ms=None,
                 mo_hinh=self._ai_model_name(),
             )
-        assert state.ket_qua is not None
-        return present_ai_result(case, rule_result, state.ket_qua, feedbacks)
+        else:
+            assert state.ket_qua is not None
+            base = present_ai_result(case, rule_result, state.ket_qua, feedbacks)
+
+        tracker = state.tien_trinh if isinstance(state.tien_trinh, TienTrinh) else None
+        if tracker is None:
+            return base.model_copy(update={"thuong_le_ms": self._jobs.thuong_le_ms()})
+
+        snapshot_at = state.ket_thuc if state.trang_thai != "dang_chay" else None
+        steps = [
+            s.BuocAI(
+                ma=step.ma,
+                ten=step.ten,
+                trang_thai=step.trang_thai,
+                chi_tiet=step.chi_tiet,
+                nguon=[s.NguonTomTat(nhan=item.nhan, so_doan=item.so_doan) for item in step.nguon],
+                thoi_gian_ms=step.thoi_gian_ms,
+                ly_do=step.ly_do,
+                goi_y=step.goi_y,
+            )
+            for step in tracker.chup(now=snapshot_at)
+        ]
+        return base.model_copy(
+            update={
+                "cac_buoc": steps,
+                "da_chay_ms": tracker.tong_ms(now=snapshot_at),
+                "thuong_le_ms": self._jobs.thuong_le_ms(),
+            }
+        )
 
     def _get_ai_state(self, case_id: str) -> AiJobState | None:
         """Chỉ lấy tác vụ AI thuộc phiên bản hiện tại của ca."""

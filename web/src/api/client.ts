@@ -1,5 +1,6 @@
 import type {
   BanGhi,
+  BuocAI,
   ChiTietCa,
   ChiTietThuoc,
   DanhMucCongThuc,
@@ -13,10 +14,12 @@ import type {
   KetQuaCongThuc,
   KetQuaTraTuongTac,
   MeResponse,
+  NguonTomTat,
   PhanHoiDaGhi,
   TinhCongThucYeuCau,
   TraLoi,
   TraTuongTacYeuCau,
+  TrangThaiBuocAI,
 } from './types.ts'
 
 /** Lỗi chuẩn hoá từ API backend hoặc lỗi kết nối / định dạng. */
@@ -74,6 +77,83 @@ export interface AuthHooks {
 
 function isRecordObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
+}
+
+const VALID_AI_STEP_STATUSES = new Set<TrangThaiBuocAI>([
+  'cho',
+  'dang_chay',
+  'xong',
+  'loi',
+  'bo_qua',
+])
+
+function normalizeNguonTomTat(raw: unknown): NguonTomTat | null {
+  if (!isRecordObject(raw)) {
+    return null
+  }
+  const nhan = typeof raw['nhan'] === 'string' ? raw['nhan'] : ''
+  if (!nhan) {
+    return null
+  }
+  const soDoan =
+    typeof raw['so_doan'] === 'number' && Number.isFinite(raw['so_doan'])
+      ? raw['so_doan']
+      : 0
+  return { nhan, so_doan: soDoan }
+}
+
+function normalizeBuocAI(raw: unknown): BuocAI | null {
+  if (!isRecordObject(raw)) {
+    return null
+  }
+  const ma = typeof raw['ma'] === 'string' ? raw['ma'] : ''
+  const ten = typeof raw['ten'] === 'string' ? raw['ten'] : ''
+  const rawStatus = raw['trang_thai']
+  const trang_thai: TrangThaiBuocAI =
+    typeof rawStatus === 'string' && VALID_AI_STEP_STATUSES.has(rawStatus as TrangThaiBuocAI)
+      ? (rawStatus as TrangThaiBuocAI)
+      : 'cho'
+  const nguon = Array.isArray(raw['nguon'])
+    ? raw['nguon'].map(normalizeNguonTomTat).filter((item): item is NguonTomTat => item !== null)
+    : []
+  const thoi_gian_ms =
+    typeof raw['thoi_gian_ms'] === 'number' && Number.isFinite(raw['thoi_gian_ms'])
+      ? raw['thoi_gian_ms']
+      : null
+
+  return {
+    ma,
+    ten,
+    trang_thai,
+    chi_tiet: typeof raw['chi_tiet'] === 'string' ? raw['chi_tiet'] : null,
+    nguon,
+    thoi_gian_ms,
+    ly_do: typeof raw['ly_do'] === 'string' ? raw['ly_do'] : null,
+    goi_y: typeof raw['goi_y'] === 'string' ? raw['goi_y'] : null,
+  }
+}
+
+/** Chuẩn hoá phản hồi KetQuaAI từ API để chịu được thiếu trường tiến trình ở phiên bản cũ. */
+export function normalizeKetQuaAI(raw: KetQuaAI): KetQuaAI {
+  const cac_buoc = Array.isArray(raw.cac_buoc)
+    ? raw.cac_buoc.map(normalizeBuocAI).filter((item): item is BuocAI => item !== null)
+    : []
+  const da_chay_ms =
+    typeof raw.da_chay_ms === 'number' && Number.isFinite(raw.da_chay_ms)
+      ? raw.da_chay_ms
+      : null
+  const thuong_le_ms =
+    typeof raw.thuong_le_ms === 'number' && Number.isFinite(raw.thuong_le_ms)
+      ? raw.thuong_le_ms
+      : null
+
+  return {
+    ...raw,
+    canh_bao: Array.isArray(raw.canh_bao) ? raw.canh_bao : [],
+    cac_buoc,
+    da_chay_ms,
+    thuong_le_ms,
+  }
 }
 
 function extractApiError(parsed: unknown): { ma: string; thong_bao: string } | null {
@@ -306,12 +386,13 @@ export class ApiClient implements ReviewApiClient {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ chay_lai: Boolean(chayLai) }),
-    })
+    }).then(normalizeKetQuaAI)
   }
 
   async getAi(caId: string): Promise<KetQuaAI | null> {
     try {
-      return await this.request<KetQuaAI>(`/cases/${encodeURIComponent(caId)}/ai`)
+      const res = await this.request<KetQuaAI>(`/cases/${encodeURIComponent(caId)}/ai`)
+      return normalizeKetQuaAI(res)
     } catch (err: unknown) {
       if (err instanceof ApiError && err.status === 404 && err.ma === 'chua_chay') {
         return null
