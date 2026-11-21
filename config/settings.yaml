@@ -72,3 +72,7 @@ prompts:
 
 orchestration:
   engine: "langgraph"               # langgraph | tuan_tu (đồ thị LangGraph hoặc hàm tuần tự cũ)
+
+ask:
+  engine: "co_dinh"                 # co_dinh | agentic (plan 1.9 mục 6.6)
+  tool_policy: "config/tool_policy.yaml"

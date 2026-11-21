@@ -3,6 +3,8 @@
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
+
 from app.container import build_container
 from app.domain.models import (
     CaBenh,
@@ -21,6 +23,7 @@ from app.retrieval.query_builder import QueryBuilder
 
 ROOT = Path(__file__).resolve().parents[2]
 NOW = datetime(2026, 11, 16, 8, 0, tzinfo=UTC)
+pytestmark = pytest.mark.luong_cu_cung
 
 
 def _make_case_with_lines(lines: list[ChiTietYLenh], *, tuoi: int | None = 4) -> CaBenh:

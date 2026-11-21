@@ -468,6 +468,7 @@ def test_db_failure_returns_safe_fallback_and_logs_single_warning_without_dsn(
     clear_all_caches()
 
 
+@pytest.mark.luong_cu_cung
 def test_container_service_asker_use_db_without_local_kb_files(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

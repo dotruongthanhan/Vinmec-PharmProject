@@ -17,6 +17,7 @@ from tests.orchestration.test_ask import _make_asker, _sample_chunk
 
 ROOT = Path(__file__).resolve().parents[2]
 DEMO_DIR = ROOT / "data/mock/demo"
+pytestmark = pytest.mark.luong_cu_cung
 NAME = json.loads((DEMO_DIR / "DEMO-02.json").read_text(encoding="utf-8"))["hanh_chinh"]["ho_ten"]
 LAB = "XN-DEMO02-01"
 LINE = "CT-DEMO02-01"

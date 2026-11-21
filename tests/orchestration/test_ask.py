@@ -27,6 +27,7 @@ from tests.deid_support import temp_id
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT_PATH = ROOT / "config/prompts/hoi_them.v1.md"
+pytestmark = pytest.mark.luong_cu_cung
 
 
 def test_ask_logs_rejection_without_question_or_identifiers(

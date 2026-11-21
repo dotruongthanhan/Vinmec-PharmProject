@@ -1,0 +1,13 @@
+# Chính sách công cụ của agent hỏi đáp (plan 1.9 mục 7). Mặc định từ chối.
+mac_dinh: tu_choi
+cong_cu:
+  luong_cu_cung:
+    bat: true          # Luồng cũ cứng (RAG cố định). Tắt: luồng cũ tắt hẳn, test của nó bị skip.
+vai_tro:
+  duoc_si_ls:
+    cho_phep: [luong_cu_cung]
+  admin:
+    cho_phep: [luong_cu_cung]
+che_do:
+  chung:
+    cam: []
