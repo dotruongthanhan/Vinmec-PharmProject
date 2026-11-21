@@ -12,6 +12,8 @@ services:
     volumes:
       # Phản hồi và nhật ký chat nằm ngoài container để không mất khi build lại.
       - ./data/runtime:/srv/data/runtime
+      # Bộ nhớ đệm embedding của câu truy vấn (cache_path); ghi được bởi appuser (uid 1000) và giữ lại khi build lại.
+      - ./data/cache:/srv/data/cache
       # Chứng chỉ gốc AWS RDS gắn chỉ đọc cho kết nối sslmode=verify-full.
       - ./certs/rds-global-bundle.pem:/srv/certs/rds-global-bundle.pem:ro
     restart: unless-stopped
