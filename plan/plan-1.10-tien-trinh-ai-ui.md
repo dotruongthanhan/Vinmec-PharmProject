@@ -94,3 +94,31 @@ Từ ngữ chi tiết từng bước, bố cục chính xác, tên lớp CSS, c�
 ## 9. Liên hệ plan 1.9
 
 Khi thêm công cụ agentic: mỗi lần gọi công cụ là một bước nối thêm qua `ghi_buoc` (ví dụ `cong_cu_tra_cuu_n`); không phải đổi hợp đồng hay giao diện.
+
+## 10. Mở rộng: tiến trình trong khung chat hỏi đáp (21/11/2026, người dùng chọn "làm đủ")
+
+Hiện `POST /api/cases/{ca_id}/ask` và `POST /api/ask` chạy đồng bộ nên khung chat chỉ có vòng xoay "Đang tra cứu dữ liệu và nguồn…".
+
+**Cách làm (giữ POST đồng bộ, không đổi hợp đồng của nó):** khi `ask` đang chạy, backend ghi bước vào một sổ đăng ký tiến trình; web hỏi thêm một điểm cuối đọc-chỉ trong lúc POST còn treo. Lý do: lịch sử hội thoại, giới hạn tốc độ, ngân sách LLM, huỷ yêu cầu và lưu log của `ask` giữ nguyên, rủi ro thấp; khi plan 1.9 biến `ask` thành vòng gọi công cụ, mỗi lần gọi chỉ là thêm một bước qua `ghi_buoc`.
+
+### Hợp đồng (chỉ thêm)
+
+`GET /api/cases/{ca_id}/ask/tien-trinh` và `GET /api/ask/tien-trinh` (hỏi đáp chung) trả `TienTrinhHoiDap`:
+
+| Trường | Kiểu | Ý nghĩa |
+| :--- | :--- | :--- |
+| `dang_chay` | bool | Có câu hỏi của chính người gọi đang xử lý trong phạm vi này |
+| `cac_buoc` | `BuocAI[]` | Cùng kiểu với mục 4 |
+| `da_chay_ms` | number \| null | Thời gian đã chạy (đang chạy) hoặc tổng (đã xong) |
+
+Bước đăng ký sẵn cho `ask` theo ca: `chuan_bi` "Chuẩn bị ngữ cảnh ca" (che định danh, dựng dữ liệu ca và bộ luật), `truy_xuat` "Tra cứu nguồn", `goi_mo_hinh` "Soạn câu trả lời", `kiem_chung` "Kiểm chứng trích dẫn và số liệu". Vòng thử lại thứ hai nối thêm `goi_mo_hinh_2` "Soạn lại, lần 2" và `kiem_chung_2` "Kiểm chứng lại, lần 2". Hỏi đáp chung bỏ `chuan_bi` theo ca, dùng `chuan_bi` "Tổng hợp danh sách y lệnh". Chi tiết ví dụ: "8 đoạn từ 2 nguồn", "kiểm chứng đạt", lỗi kèm `ly_do` và `goi_y`.
+
+Sổ đăng ký (`AskProgressRegistry` trong `app/core/progress.py`): khoá `(ca_id, nguoi_dung_id)`; một mục mới thay mục cũ cùng khoá; mục đã xong giữ thêm 60 giây (để web đọc lần cuối rồi gắn vào tin nhắn), sau đó bị dọn; tối đa 200 mục (đẩy mục cũ nhất ra). Điểm cuối chỉ đọc mục của chính người gọi, không bao giờ trả mục của người khác; không có mục thì trả `dang_chay=false, cac_buoc=[]` (không 404, không lộ ca nào tồn tại).
+
+### Bảo mật
+
+Như mục 5, thêm: khoá theo người dùng (test: người B không thấy tiến trình của người A); điểm cuối yêu cầu đăng nhập như `GET /ai`; chuỗi bước KHÔNG chứa câu hỏi của người dùng, câu trả lời, tên thuốc theo ca hay thông điệp ngoại lệ thô (test cố ý đưa chuỗi nhận diện vào câu hỏi và khẳng định không xuất hiện trong JSON); hỏi 1 giây một lần chỉ khi đang gửi câu hỏi và tab đang hiện.
+
+### Giao diện
+
+Thay vòng xoay trong `AssistantPanel` bằng danh sách bước thu gọn (cùng bộ biểu tượng, dùng lại dòng bước của `AiProgressPanel`, không viết lại), có đồng hồ. Khi có câu trả lời, danh sách thu thành dòng "Xem các bước (n)" gắn dưới tin nhắn trả lời đó (chỉ trong phiên, không khôi phục từ lịch sử). Lỗi: lý do và gợi ý ngay trong khung chat; nút "Thử lại" giữ nguyên.
