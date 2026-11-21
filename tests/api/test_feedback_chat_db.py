@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
+import threading
 from collections.abc import Iterator
 from contextlib import ExitStack, closing, contextmanager
 from datetime import UTC, datetime, timedelta
@@ -76,20 +77,24 @@ class FakeRuntimePgConnection:
         self._db.executescript(_FAKE_RUNTIME_SCHEMA)
         self.as_dicts = as_dicts
         self.statements: list[str] = []
+        # Kết nối SQLite dùng chung giữa các luồng: tuần tự hoá giao dịch như một kết nối thật,
+        # nếu không hai luồng cùng BEGIN sẽ lỗi "cannot start a transaction within a transaction".
+        self._tx_lock = threading.RLock()
 
     def close(self) -> None:
         self._db.close()
 
     @contextmanager
     def transaction(self) -> Iterator[None]:
-        self._db.execute("BEGIN")
-        try:
-            yield
-        except Exception:
-            self._db.rollback()
-            raise
-        else:
-            self._db.commit()
+        with self._tx_lock:
+            self._db.execute("BEGIN")
+            try:
+                yield
+            except Exception:
+                self._db.rollback()
+                raise
+            else:
+                self._db.commit()
 
     def _convert_param(self, value: Any) -> Any:
         if isinstance(value, datetime):
