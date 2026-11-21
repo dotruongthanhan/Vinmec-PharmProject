@@ -288,6 +288,7 @@ class PromptSettings(BaseModel):
 
     tong_hop: str
     hoi_them: str
+    tac_tu: str = "config/prompts/tac_tu.v1.md"
 
 
 class OrchestrationSettings(BaseModel):

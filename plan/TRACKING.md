@@ -373,3 +373,12 @@ Chú giải **Tình trạng**: ⬜ chưa làm · 🔄 đang làm · ✅ xong · 
 - 20/11: commit 9616fc3 (T94), 1c4e067 (T95), push vukhai248; EC2 kéo mã + build lại api, container healthy, duckdns /api/health 200 (truy_xuat san_sang, đọc RDS), bundle có thẻ người bệnh. RDS không đổi (T94/T95 chỉ web). Vercel chưa deploy lại.
 
 - 20/11 (chiều): deploy `4ed0be5` (T96) lên EC2 bằng SSM: sao lưu image `pre-t96` và `/home/ubuntu/vinmec-code-pre-t96.tgz`, build lại api, healthy, image không còn streamlit, không có service_role; `deploy/vercel` gộp (3b0ee78), Vercel deploy lại, CSP có, bundle không VERCEL_, /api/health 200, /api/cases 401.
+
+## Plan 1.9 – khung agent hỏi đáp (22/11/2026)
+
+| Task | Nội dung | Agent | Trạng thái | Brief |
+| :--- | :--- | :--- | :--- | :--- |
+| T101 | Lớp công cụ agent: `Tool`, danh mục, chính sách `config/tool_policy.yaml` (mặc định từ chối), `ToolGateway` (quyền, ngân sách, lược đồ, PII tham số, che PII + quét chèn lệnh kết quả, tiến trình, kiểm toán), tool `luong_cu_cung` bọc `CaseAsker`; marker `luong_cu_cung` | agy Hydrogen high | ✅ commit 3f1fbc0: pytest 1700/0 trượt; `CDSS_LUONG_CU_CUNG=0` → 45 test luồng cũ skip, 0 trượt. Claude sửa: chuyển đọc env vào `app/config` (test kiến trúc), format | `plan/briefs/T101-khung-cong-cu-agent-va-luong-cu-cung.md` |
+| T102 | Đồ thị LangGraph hỏi đáp (che PII → guardrail vào → ngữ cảnh → vòng tac_tu ⇄ công cụ → kiểm chứng → đường lui → hoàn tất), `AgenticAsker`, cờ `ask.engine` (mặc định `co_dinh`), tách `chuan_bi_ngu_canh_ca` / `kiem_chung_tra_loi` khỏi `CaseAsker` | agy Hydrogen high | ✅ pytest 1719/0 trượt; tắt luồng cũ 76 qua/47 skip. Claude sửa: thiếu import `open_deid_session` (làm 8 test trượt). Chạy thật DEMO-02 với DeepSeek: câu liều → gọi `luong_cu_cung`, kiểm chứng lần 2 đạt, 34 s; câu đơn giản → trả lời thẳng, 3 s. Chế độ chung đi thẳng đường lui | `plan/briefs/T102-do-thi-agent-hoi-dap.md` |
+
+- Theo dõi: `luong_cu_cung` chỉ chuyển các đoạn luồng cũ **đã trích** (`AskResult.doan`), nên agent ít đoạn nhãn để trích; bước nội bộ của luồng cũ không hiện trên tiến trình vì tool chạy ở luồng phụ (ContextVar không truyền). Xử lý khi cắm `tim_doan_nguon`.

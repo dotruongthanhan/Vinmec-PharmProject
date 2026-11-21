@@ -10,6 +10,7 @@ from collections import Counter
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal, NoReturn
 
@@ -129,8 +130,25 @@ _OVERRIDE_OUTPUT_PATTERNS: tuple[re.Pattern[str], ...] = (
 IngredientResolver = Callable[[str], Sequence[str] | str | None]
 
 
-class _AskVerificationError(ValueError):
+class AskVerificationError(ValueError):
     """Giữ lỗi cụ thể để yêu cầu LLM sửa toàn bộ câu trả lời đúng một lần."""
+
+
+_AskVerificationError = AskVerificationError
+
+
+@dataclass(frozen=True)
+class NguCanhCa:
+    """Ngữ cảnh ca bệnh đã chạy bộ luật, che định danh và tổng hợp chuỗi cho LLM."""
+
+    active_result: KetQuaThamDinh
+    van_ban_ca: str
+    ids: RecordIdMap
+    anh_xa: dict[str, str]
+    allowed_record_ids: set[str]
+    allowed_calc_ids: set[str]
+    allowed_numbers: list[float]
+    priority_chunk_ids: set[str]
 
 
 def _log_rejection(step: str, reason: str, chunks: int = 0) -> str:
@@ -618,6 +636,244 @@ def _format_global_order_line(line: ChiTietYLenh) -> str:
     return f"{name} {dose_part} ({freq_part}, {route_part})"
 
 
+def chuan_bi_ngu_canh_ca(
+    ca: CaBenh,
+    ket_qua: KetQuaThamDinh | None,
+    ai_result: AiRunResult | None,
+    nhan_dinh_id: str | None,
+    session: DeidSession,
+    case_settings: CaseContextSettings,
+    renal_rules_getter: Callable[[], RenalRuleBook],
+) -> NguCanhCa:
+    """Chạy bộ luật (nếu chưa có), dựng gói ca đã che định danh và danh sách số/mã hợp lệ."""
+    active_result = ket_qua or run_case(ca, renal_rules_getter())
+    bundle = build_case_bundle(ca, active_result, case_settings, session=session)
+    goi = bundle.goi
+    ids = bundle.ma_ban_ghi
+    anh_xa = session.anh_xa
+    allowed_record_ids = set(goi.ban_ghi_ids)
+    allowed_calc_ids = {cs.cong_thuc for cs in active_result.chi_so if cs.ket_qua is not None}
+    allowed_numbers = _collect_case_numbers(
+        ca,
+        active_result,
+        goi.so_cho_phep,
+        set(ids.that_nhieu(goi.ban_ghi_ids)),
+        ai_result,
+        session,
+    )
+
+    priority_block, priority_chunk_ids = _format_priority_finding(
+        nhan_dinh_id,
+        active_result,
+        ai_result,
+        ids,
+        session,
+    )
+    ai_block = _format_ai_section(ai_result, ids, session)
+    context_parts = [part for part in (priority_block, goi.van_ban_ca, ai_block) if part.strip()]
+    van_ban_ca = _sanitize_markers("\n\n".join(context_parts))
+    return NguCanhCa(
+        active_result=active_result,
+        van_ban_ca=van_ban_ca,
+        ids=ids,
+        anh_xa=anh_xa,
+        allowed_record_ids=allowed_record_ids,
+        allowed_calc_ids=allowed_calc_ids,
+        allowed_numbers=allowed_numbers,
+        priority_chunk_ids=priority_chunk_ids,
+    )
+
+
+def kiem_chung_tra_loi(
+    *,
+    ca: CaBenh,
+    ket_qua: KetQuaThamDinh,
+    cleaned_question: str,
+    output: AskLLMOutput,
+    allowed_record_ids: set[str],
+    allowed_calc_ids: set[str],
+    allowed_numbers: list[float],
+    chunk_by_id: dict[str, Chunk],
+    anh_xa: dict[str, str],
+    ids: RecordIdMap,
+    tools_called: list[str],
+    perf_start: float,
+) -> AskResult:
+    """Kiểm chứng phạm vi, trích dẫn, chuỗi con nguyên văn và mọi con số trong câu trả lời.
+
+    allowed_record_ids là mã tạm; mã thật chỉ xuất hiện ở kết quả trả về giao diện.
+    """
+
+    def _restore(text: str) -> str:
+        return ids.doi_van_ban_sang_that(restore_text(text, anh_xa))
+
+    def _elapsed() -> int:
+        return int((time.perf_counter() - perf_start) * 1000.0)
+
+    if _has_injection_directive(cleaned_question):
+        _log_rejection("scope", "input_directive", len(chunk_by_id))
+        return AskResult(
+            trang_thai="ngoai_pham_vi",
+            noi_dung=OUT_OF_SCOPE_MESSAGE,
+            trich_dan=[],
+            cong_cu_da_goi=tools_called,
+            thoi_gian_ms=_elapsed(),
+            doan=[],
+        )
+
+    reply_text = output.tra_loi.strip()
+
+    if output.pham_vi == "ngoai":
+        clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
+        _log_rejection(
+            "scope", f"llm_pham_vi=ngoai; clinical_question={clinical}", len(chunk_by_id)
+        )
+        if (
+            reply_text
+            and not _output_attempts_override(reply_text, ket_qua)
+            and not unverified_numbers([reply_text], list(allowed_numbers))
+        ):
+            natural_msg = _restore(reply_text)
+        else:
+            natural_msg = NO_SOURCE_MESSAGE if clinical else OUT_OF_SCOPE_MESSAGE
+        return AskResult(
+            trang_thai="khong_co_nguon" if clinical else "ngoai_pham_vi",
+            noi_dung=natural_msg,
+            cong_cu_da_goi=tools_called,
+            thoi_gian_ms=_elapsed(),
+        )
+
+    if _output_attempts_override(reply_text, ket_qua):
+        _log_rejection("scope", "output_attempts_override", len(chunk_by_id))
+        return AskResult(
+            trang_thai="ngoai_pham_vi",
+            noi_dung=OUT_OF_SCOPE_MESSAGE,
+            trich_dan=[],
+            cong_cu_da_goi=tools_called,
+            thoi_gian_ms=_elapsed(),
+            doan=[],
+        )
+
+    if not reply_text:
+        _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
+        return AskResult(
+            trang_thai="khong_co_nguon",
+            noi_dung=NO_SOURCE_MESSAGE,
+            trich_dan=[],
+            cong_cu_da_goi=tools_called,
+            thoi_gian_ms=_elapsed(),
+            doan=[],
+        )
+
+    if not output.trich_dan:
+        _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
+        number_errors = unverified_numbers([reply_text], list(allowed_numbers))
+        if number_errors:
+            safe_reason = _log_rejection("verification", "; ".join(number_errors), len(chunk_by_id))
+            raise AskVerificationError(safe_reason)
+        clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
+        return AskResult(
+            trang_thai="khong_co_nguon" if clinical else "ok",
+            noi_dung=_restore(reply_text),
+            trich_dan=[],
+            cong_cu_da_goi=tools_called,
+            thoi_gian_ms=_elapsed(),
+            doan=[],
+        )
+
+    citations: list[AskCitation] = []
+    seen_so: set[int] = set()
+    cited_chunks: list[Chunk] = []
+    seen_chunk_ids: set[str] = set()
+    effective_numbers = list(allowed_numbers)
+
+    def _reject(reason: str) -> NoReturn:
+        safe_reason = _log_rejection("verification", reason, len(chunk_by_id))
+        raise AskVerificationError(safe_reason)
+
+    for item in output.trich_dan:
+        if item.so <= 0 or item.so in seen_so:
+            _reject(f"invalid_citation_number:{item.so}")
+        seen_so.add(item.so)
+
+        if item.loai == "du_lieu_ca":
+            if item.ma not in allowed_record_ids:
+                _reject(f"unknown_record_id:{item.ma}")
+            real_id = ids.that(item.ma)
+            detail = vm.record_detail(ca, real_id)
+            label = (
+                f"{detail['loai']}: {detail['tieu_de']}"
+                if detail is not None
+                else f"Bản ghi {real_id}"
+            )
+            citations.append(
+                AskCitation(
+                    so=item.so,
+                    loai_ma="du_lieu",
+                    nhan=label,
+                    ban_ghi_id=real_id,
+                )
+            )
+        elif item.loai == "tinh_toan":
+            if item.ma not in allowed_calc_ids:
+                _reject(f"unknown_calc_id:{item.ma}")
+            calc_label = labels.NHAN_CONG_THUC.get(item.ma, item.ma.replace("_", " "))
+            citations.append(
+                AskCitation(
+                    so=item.so,
+                    loai_ma="tinh_toan",
+                    nhan=calc_label,
+                    ban_ghi_id=item.ma,
+                )
+            )
+        else:
+            chunk = chunk_by_id.get(item.ma)
+            if chunk is None:
+                _reject(f"unknown_chunk_id:{item.ma}")
+            if not item.trich_nguyen_van:
+                _reject(f"empty_quote:so={item.so}; ma={item.ma}")
+            if not quote_matches_source(item.trich_nguyen_van, chunk.noi_dung_goc):
+                _reject(f"quote_mismatch:so={item.so}; ma={item.ma}")
+            if chunk.doan_trich_id not in seen_chunk_ids:
+                seen_chunk_ids.add(chunk.doan_trich_id)
+                cited_chunks.append(chunk)
+                effective_numbers.extend(
+                    numbers_in_text(
+                        chunk.noi_dung_goc,
+                        include_en_thousands=chunk.ngon_ngu == "en",
+                    )
+                )
+            citations.append(
+                AskCitation(
+                    so=item.so,
+                    loai_ma="tai_lieu",
+                    nhan=f"{_source_label(chunk.nguon)} · {chunk.duong_dan_muc}",
+                    ban_ghi_id=None,
+                    doan_trich_id=chunk.doan_trich_id,
+                    trich_nguyen_van=item.trich_nguyen_van.strip(),
+                )
+            )
+
+    referenced_nums = {int(match.group(1)) for match in _CITATION_REF_RE.finditer(reply_text)}
+    if not referenced_nums.issubset(seen_so):
+        _reject(f"unknown_markers:{sorted(referenced_nums - seen_so)}")
+
+    masked_reply = mask_citation_markers(reply_text, seen_so)
+    number_errors = unverified_numbers([masked_reply], effective_numbers)
+    if number_errors:
+        _reject("; ".join(number_errors))
+
+    restored_reply = _restore(reply_text)
+    return AskResult(
+        trang_thai="ok",
+        noi_dung=restored_reply,
+        trich_dan=citations,
+        cong_cu_da_goi=tools_called,
+        thoi_gian_ms=_elapsed(),
+        doan=cited_chunks,
+    )
+
+
 class CaseAsker:
     """Xử lý câu hỏi của dược sĩ về ca bệnh đang mở qua che định danh, RAG và kiểm chứng."""
 
@@ -794,176 +1050,19 @@ class CaseAsker:
 
         allowed_record_ids là mã tạm; mã thật chỉ xuất hiện ở kết quả trả về giao diện.
         """
-
-        def _restore(text: str) -> str:
-            return ids.doi_van_ban_sang_that(restore_text(text, anh_xa))
-
-        def _elapsed() -> int:
-            return int((time.perf_counter() - perf_start) * 1000.0)
-
-        if _has_injection_directive(cleaned_question):
-            _log_rejection("scope", "input_directive", len(chunk_by_id))
-            return AskResult(
-                trang_thai="ngoai_pham_vi",
-                noi_dung=OUT_OF_SCOPE_MESSAGE,
-                trich_dan=[],
-                cong_cu_da_goi=tools_called,
-                thoi_gian_ms=_elapsed(),
-                doan=[],
-            )
-
-        reply_text = output.tra_loi.strip()
-
-        if output.pham_vi == "ngoai":
-            clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
-            _log_rejection(
-                "scope", f"llm_pham_vi=ngoai; clinical_question={clinical}", len(chunk_by_id)
-            )
-            if (
-                reply_text
-                and not _output_attempts_override(reply_text, ket_qua)
-                and not unverified_numbers([reply_text], list(allowed_numbers))
-            ):
-                natural_msg = _restore(reply_text)
-            else:
-                natural_msg = NO_SOURCE_MESSAGE if clinical else OUT_OF_SCOPE_MESSAGE
-            return AskResult(
-                trang_thai="khong_co_nguon" if clinical else "ngoai_pham_vi",
-                noi_dung=natural_msg,
-                cong_cu_da_goi=tools_called,
-                thoi_gian_ms=_elapsed(),
-            )
-
-        if _output_attempts_override(reply_text, ket_qua):
-            _log_rejection("scope", "output_attempts_override", len(chunk_by_id))
-            return AskResult(
-                trang_thai="ngoai_pham_vi",
-                noi_dung=OUT_OF_SCOPE_MESSAGE,
-                trich_dan=[],
-                cong_cu_da_goi=tools_called,
-                thoi_gian_ms=_elapsed(),
-                doan=[],
-            )
-
-        if not reply_text:
-            _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
-            return AskResult(
-                trang_thai="khong_co_nguon",
-                noi_dung=NO_SOURCE_MESSAGE,
-                trich_dan=[],
-                cong_cu_da_goi=tools_called,
-                thoi_gian_ms=_elapsed(),
-                doan=[],
-            )
-
-        if not output.trich_dan:
-            _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
-            number_errors = unverified_numbers([reply_text], list(allowed_numbers))
-            if number_errors:
-                safe_reason = _log_rejection(
-                    "verification", "; ".join(number_errors), len(chunk_by_id)
-                )
-                raise _AskVerificationError(safe_reason)
-            clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
-            return AskResult(
-                trang_thai="khong_co_nguon" if clinical else "ok",
-                noi_dung=_restore(reply_text),
-                trich_dan=[],
-                cong_cu_da_goi=tools_called,
-                thoi_gian_ms=_elapsed(),
-                doan=[],
-            )
-
-        citations: list[AskCitation] = []
-        seen_so: set[int] = set()
-        cited_chunks: list[Chunk] = []
-        seen_chunk_ids: set[str] = set()
-        effective_numbers = list(allowed_numbers)
-
-        def _reject(reason: str) -> NoReturn:
-            safe_reason = _log_rejection("verification", reason, len(chunk_by_id))
-            raise _AskVerificationError(safe_reason)
-
-        for item in output.trich_dan:
-            if item.so <= 0 or item.so in seen_so:
-                _reject(f"invalid_citation_number:{item.so}")
-            seen_so.add(item.so)
-
-            if item.loai == "du_lieu_ca":
-                if item.ma not in allowed_record_ids:
-                    _reject(f"unknown_record_id:{item.ma}")
-                real_id = ids.that(item.ma)
-                detail = vm.record_detail(ca, real_id)
-                label = (
-                    f"{detail['loai']}: {detail['tieu_de']}"
-                    if detail is not None
-                    else f"Bản ghi {real_id}"
-                )
-                citations.append(
-                    AskCitation(
-                        so=item.so,
-                        loai_ma="du_lieu",
-                        nhan=label,
-                        ban_ghi_id=real_id,
-                    )
-                )
-            elif item.loai == "tinh_toan":
-                if item.ma not in allowed_calc_ids:
-                    _reject(f"unknown_calc_id:{item.ma}")
-                calc_label = labels.NHAN_CONG_THUC.get(item.ma, item.ma.replace("_", " "))
-                citations.append(
-                    AskCitation(
-                        so=item.so,
-                        loai_ma="tinh_toan",
-                        nhan=calc_label,
-                        ban_ghi_id=item.ma,
-                    )
-                )
-            else:
-                chunk = chunk_by_id.get(item.ma)
-                if chunk is None:
-                    _reject(f"unknown_chunk_id:{item.ma}")
-                if not item.trich_nguyen_van:
-                    _reject(f"empty_quote:so={item.so}; ma={item.ma}")
-                if not quote_matches_source(item.trich_nguyen_van, chunk.noi_dung_goc):
-                    _reject(f"quote_mismatch:so={item.so}; ma={item.ma}")
-                if chunk.doan_trich_id not in seen_chunk_ids:
-                    seen_chunk_ids.add(chunk.doan_trich_id)
-                    cited_chunks.append(chunk)
-                    effective_numbers.extend(
-                        numbers_in_text(
-                            chunk.noi_dung_goc,
-                            include_en_thousands=chunk.ngon_ngu == "en",
-                        )
-                    )
-                citations.append(
-                    AskCitation(
-                        so=item.so,
-                        loai_ma="tai_lieu",
-                        nhan=f"{_source_label(chunk.nguon)} · {chunk.duong_dan_muc}",
-                        ban_ghi_id=None,
-                        doan_trich_id=chunk.doan_trich_id,
-                        trich_nguyen_van=item.trich_nguyen_van.strip(),
-                    )
-                )
-
-        referenced_nums = {int(match.group(1)) for match in _CITATION_REF_RE.finditer(reply_text)}
-        if not referenced_nums.issubset(seen_so):
-            _reject(f"unknown_markers:{sorted(referenced_nums - seen_so)}")
-
-        masked_reply = mask_citation_markers(reply_text, seen_so)
-        number_errors = unverified_numbers([masked_reply], effective_numbers)
-        if number_errors:
-            _reject("; ".join(number_errors))
-
-        restored_reply = _restore(reply_text)
-        return AskResult(
-            trang_thai="ok",
-            noi_dung=restored_reply,
-            trich_dan=citations,
-            cong_cu_da_goi=tools_called,
-            thoi_gian_ms=_elapsed(),
-            doan=cited_chunks,
+        return kiem_chung_tra_loi(
+            ca=ca,
+            ket_qua=ket_qua,
+            cleaned_question=cleaned_question,
+            output=output,
+            allowed_record_ids=allowed_record_ids,
+            allowed_calc_ids=allowed_calc_ids,
+            allowed_numbers=allowed_numbers,
+            chunk_by_id=chunk_by_id,
+            anh_xa=anh_xa,
+            ids=ids,
+            tools_called=tools_called,
+            perf_start=perf_start,
         )
 
     def ask(
@@ -1027,36 +1126,23 @@ class CaseAsker:
         step = "context"
         selected_chunks: list[Chunk] = []
         try:
-            active_result = ket_qua or run_case(ca, self._get_renal_rules())
-            bundle = build_case_bundle(ca, active_result, self._case_settings, session=session)
-            goi = bundle.goi
-            ids = bundle.ma_ban_ghi
-            anh_xa = session.anh_xa
-            allowed_record_ids = set(goi.ban_ghi_ids)
-            allowed_calc_ids = {
-                cs.cong_thuc for cs in active_result.chi_so if cs.ket_qua is not None
-            }
-            allowed_numbers = _collect_case_numbers(
+            ngu_canh = chuan_bi_ngu_canh_ca(
                 ca,
-                active_result,
-                goi.so_cho_phep,
-                set(ids.that_nhieu(goi.ban_ghi_ids)),
+                ket_qua,
                 ai_result,
-                session,
-            )
-
-            priority_block, priority_chunk_ids = _format_priority_finding(
                 nhan_dinh_id,
-                active_result,
-                ai_result,
-                ids,
                 session,
+                self._case_settings,
+                self._get_renal_rules,
             )
-            ai_block = _format_ai_section(ai_result, ids, session)
-            context_parts = [
-                part for part in (priority_block, goi.van_ban_ca, ai_block) if part.strip()
-            ]
-            van_ban_ca = _sanitize_markers("\n\n".join(context_parts))
+            active_result = ngu_canh.active_result
+            ids = ngu_canh.ids
+            anh_xa = ngu_canh.anh_xa
+            allowed_record_ids = ngu_canh.allowed_record_ids
+            allowed_calc_ids = ngu_canh.allowed_calc_ids
+            allowed_numbers = ngu_canh.allowed_numbers
+            priority_chunk_ids = ngu_canh.priority_chunk_ids
+            van_ban_ca = ngu_canh.van_ban_ca
             ghi_buoc(
                 "xong",
                 "chuan_bi",

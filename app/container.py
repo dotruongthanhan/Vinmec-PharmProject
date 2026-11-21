@@ -34,6 +34,7 @@ from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 from app.storage.case_repo import JsonCaseRepository
 
 if TYPE_CHECKING:
+    from app.agent.asker import AgenticAsker
     from app.orchestration.ask import CaseAsker
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -265,6 +266,39 @@ class Container:
             evidence_max_chars=self.settings.evidence.max_chars,
             model_name=self.settings.llm.model if llm is not None else None,
             renal_rules=self.renal_rules,
+        )
+
+    @_LockedCachedProperty
+    def agentic_asker(self) -> AgenticAsker:
+        """Dựng bộ hỏi đáp agent theo đồ thị LangGraph từ cấu hình và chính sách công cụ."""
+        from app.agent.asker import AgenticAsker
+        from app.agent.tools import ChinhSachCongCu, DanhMucCongCu, LuongCuCung
+        from app.llm import setup as llm_setup
+
+        try:
+            llm: LLMClient | None = llm_setup.build_llm(self)
+        except ConfigError as exc:
+            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+                llm = None
+            else:
+                raise
+
+        policy = ChinhSachCongCu.tu_tep(self._resolve_path(self.settings.ask.tool_policy))
+        danh_muc = DanhMucCongCu()
+        luong_cu: LuongCuCung | None = None
+        if policy.cong_cu_bat("luong_cu_cung"):
+            luong_cu = LuongCuCung(self.case_asker)
+            danh_muc.dang_ky(luong_cu)
+
+        return AgenticAsker(
+            llm=llm,
+            danh_muc=danh_muc,
+            chinh_sach=policy,
+            luong_cu=luong_cu,
+            prompt_path=self._resolve_path(self.settings.prompts.tac_tu),
+            case_settings=self.settings.case_context,
+            renal_rules=self.renal_rules,
+            max_turns=self.settings.agent.max_turns,
         )
 
 
