@@ -566,6 +566,11 @@ export function AssistantPanel({
                             key={msg.id}
                             className="flex flex-col gap-2.5 border-b border-line pb-3.5 last:border-b-0 last:pb-0 text-sm text-fg"
                           >
+                            {/* Quá trình xử lý nằm trên câu trả lời (giữa tin nhắn người dùng và tin nhắn AI), thu gọn sẵn. */}
+                            {msgSteps.length > 0 ? (
+                              <AssistantMessageSteps steps={msgSteps} />
+                            ) : null}
+
                             {status === 'khong_co_nguon' ? (
                               <div>
                                 <Badge tone="neutral" variant="outline">
@@ -636,10 +641,6 @@ export function AssistantPanel({
                                   Gửi lại
                                 </Button>
                               </div>
-                            ) : null}
-
-                            {msgSteps.length > 0 ? (
-                              <AssistantMessageSteps steps={msgSteps} />
                             ) : null}
 
                             {msg.tra_loi.trich_dan.length > 0 ? (
