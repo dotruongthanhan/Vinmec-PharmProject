@@ -467,8 +467,8 @@ export function useChat(
         return
       }
 
-      let finalSteps = lastPolledSteps
-      let finalDaChayMs = lastPolledDaChayMs
+      let finalSteps: BuocAI[] = lastPolledSteps
+      let finalDaChayMs: number | null = lastPolledDaChayMs
       if (typeof client.getAskProgress === 'function') {
         try {
           const finalProgress = await client.getAskProgress(caId, {
