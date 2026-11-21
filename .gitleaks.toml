@@ -22,4 +22,8 @@ paths = [
     '^tests/providers/test_openrouter_embed\.py$',
     '^tests/providers/test_openrouter_rerank\.py$',
     '^tests/llm/test_setup\.py$',
+    # Báo nhầm: khoá cấu hình chỉ số (egfr_ckd_epi_2021) bị luật generic-api-key bắt nhầm.
+    '^web/src/features/sidebar/PatientSidebarCard\.tsx$',
+    # Báo nhầm: trang HTML công khai của DDInter lưu làm tệp mẫu, có mã CSRF của trang đó.
+    '^tests/kb/fixtures/ddinter/.*\.html$',
 ]
