@@ -272,7 +272,7 @@ class Container:
     def agentic_asker(self) -> AgenticAsker:
         """Dựng bộ hỏi đáp agent theo đồ thị LangGraph từ cấu hình và chính sách công cụ."""
         from app.agent.asker import AgenticAsker
-        from app.agent.tools import ChinhSachCongCu, DanhMucCongCu, LuongCuCung
+        from app.agent.tools import ChinhSachCongCu, DanhMucCongCu
         from app.llm import setup as llm_setup
 
         try:
@@ -284,17 +284,14 @@ class Container:
                 raise
 
         policy = ChinhSachCongCu.tu_tep(self._resolve_path(self.settings.ask.tool_policy))
+        # Danh mục chưa có công cụ chuyên biệt nào (plan 1.9 mục 5.8 sẽ cắm dần).
         danh_muc = DanhMucCongCu()
-        luong_cu: LuongCuCung | None = None
-        if policy.cong_cu_bat("luong_cu_cung"):
-            luong_cu = LuongCuCung(self.case_asker)
-            danh_muc.dang_ky(luong_cu)
 
         return AgenticAsker(
             llm=llm,
             danh_muc=danh_muc,
             chinh_sach=policy,
-            luong_cu=luong_cu,
+            global_asker=self.case_asker,
             prompt_path=self._resolve_path(self.settings.prompts.tac_tu),
             case_settings=self.settings.case_context,
             renal_rules=self.renal_rules,

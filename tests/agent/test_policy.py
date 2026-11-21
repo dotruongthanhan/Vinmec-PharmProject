@@ -34,18 +34,16 @@ class _StubTool(Tool):
         return KetQuaCongCu(trang_thai="ok")
 
 
-def test_real_tool_policy_loads_and_allows_duoc_si_ls(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_real_tool_policy_loads_and_denies_everything_by_default(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.delenv("CDSS_LUONG_CU_CUNG", raising=False)
     policy = ChinhSachCongCu.tu_tep()
-    assert policy.cong_cu_bat("luong_cu_cung") is True
-    assert policy.cho_phep("duoc_si_ls", "ca", "luong_cu_cung") is True
-    assert policy.cho_phep("duoc_si_ls", "chung", "luong_cu_cung") is True
-    assert policy.cho_phep("admin", "ca", "luong_cu_cung") is True
-
+    assert policy.mac_dinh == "tu_choi"
     registry = DanhMucCongCu()
-    registry.dang_ky(_StubTool("luong_cu_cung"))
     registry.dang_ky(_StubTool("tool_chua_khai_bao"))
-    assert policy.cac_cong_cu_duoc_phep("duoc_si_ls", "ca", registry) == ["luong_cu_cung"]
+    assert policy.cac_cong_cu_duoc_phep("duoc_si_ls", "ca", registry) == []
+    assert policy.cho_phep("duoc_si_ls", "ca", "tool_chua_khai_bao") is False
 
 
 def test_unknown_role_is_denied() -> None:

@@ -33,7 +33,7 @@ class _SpyAgenticAsker(AgenticAsker):
             llm=FakeLLM([]),
             danh_muc=DanhMucCongCu(),
             chinh_sach=ChinhSachCongCu.tu_tep(ROOT / "config/tool_policy.yaml"),
-            luong_cu=None,
+            global_asker=None,
             prompt_path=PROMPT_PATH,
             case_settings=settings.case_context,
             max_turns=2,
@@ -183,3 +183,9 @@ def test_co_dinh_with_disabled_luong_cu_cung_raises_config_error(
             ROOT / "data/kb/quy_tac_lieu_than.json",
             tmp_path / "phan_hoi.jsonl",
         )
+
+
+def test_production_config_runs_agentic_engine() -> None:
+    """Từ 22/11/2026 ô hỏi đáp chạy agent; luồng cũ chỉ còn là đường lui bằng cờ co_dinh."""
+    assert load_settings("dev").ask.engine == "agentic"
+    assert load_settings("test").ask.engine == "co_dinh"

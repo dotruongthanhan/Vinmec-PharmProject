@@ -5,14 +5,13 @@ from __future__ import annotations
 import time
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 from langsmith import tracing_context
 
 from app.agent.graph import dung_do_thi_hoi_dap
 from app.agent.tools.base import ToolContext
 from app.agent.tools.gateway import ToolGateway
-from app.agent.tools.luong_cu_cung import LuongCuCung
 from app.agent.tools.policy import ChinhSachCongCu
 from app.agent.tools.registry import DanhMucCongCu
 from app.config.settings import CaseContextSettings
@@ -25,20 +24,35 @@ from app.rules import RenalRuleBook, load_renal_rules
 
 DEFAULT_AGENT_TIMEOUT_SECONDS = 75.0
 _GLOBAL_UNSUPPORTED_MESSAGE = (
-    "Chế độ hỏi đáp chung chưa hỗ trợ khi tắt luồng cũ cứng. "
-    "Vui lòng mở từng ca bệnh để đặt câu hỏi."
+    "Chế độ hỏi đáp chung chưa hỗ trợ trên agent. Vui lòng mở từng ca bệnh để đặt câu hỏi."
 )
 
 
+class _GlobalAsker(Protocol):
+    """Bộ hỏi đáp chung của luồng cũ (CaseAsker.ask_global)."""
+
+    def ask_global(
+        self,
+        cases: Sequence[CaBenh],
+        results: dict[str, KetQuaThamDinh],
+        cau_hoi: str,
+        lich_su: list[tuple[str, str]] | None = None,
+    ) -> AskResult: ...
+
+
 class AgenticAsker:
-    """Điều phối hỏi đáp bằng đồ thị LangGraph (chế độ ca) và đường lui cho chế độ chung."""
+    """Điều phối hỏi đáp bằng đồ thị LangGraph (chế độ ca).
+
+    Chế độ chung chưa có đồ thị riêng: chuyển thẳng cho bộ hỏi chung của luồng cũ
+    (định tuyến ở mức engine, không phải công cụ của agent).
+    """
 
     def __init__(
         self,
         llm: LLMClient | None,
         danh_muc: DanhMucCongCu,
         chinh_sach: ChinhSachCongCu,
-        luong_cu: LuongCuCung | None,
+        global_asker: _GlobalAsker | None,
         prompt_path: Path,
         case_settings: CaseContextSettings,
         renal_rules: RenalRuleBook | None = None,
@@ -48,7 +62,7 @@ class AgenticAsker:
         self._llm = llm
         self._danh_muc = danh_muc
         self._chinh_sach = chinh_sach
-        self._luong_cu = luong_cu
+        self._global_asker = global_asker
         self._prompt_path = Path(prompt_path)
         self._case_settings = case_settings
         self._renal_rules = renal_rules
@@ -59,7 +73,6 @@ class AgenticAsker:
                 llm=llm,
                 danh_muc=danh_muc,
                 chinh_sach=chinh_sach,
-                luong_cu=luong_cu,
                 prompt_path=self._prompt_path,
                 case_settings=case_settings,
                 renal_rules_getter=self._get_renal_rules,
@@ -75,12 +88,6 @@ class AgenticAsker:
             self._renal_rules = load_renal_rules()
         return self._renal_rules
 
-    def _fallback_tool(self) -> LuongCuCung | None:
-        if self._luong_cu is not None:
-            return self._luong_cu
-        registered = self._danh_muc.lay("luong_cu_cung")
-        return registered if isinstance(registered, LuongCuCung) else None
-
     def close(self) -> None:
         """Đóng máy khách HTTP dùng chung nếu có."""
         if self._llm is not None:
@@ -88,12 +95,9 @@ class AgenticAsker:
             close_fn = getattr(client, "close", None)
             if callable(close_fn):
                 close_fn()
-        fallback = self._fallback_tool()
-        if fallback is not None:
-            inner = getattr(fallback, "_asker", None)
-            close_inner = getattr(inner, "close", None)
-            if callable(close_inner):
-                close_inner()
+        close_global = getattr(self._global_asker, "close", None)
+        if callable(close_global):
+            close_global()
 
     def ask(
         self,
@@ -176,7 +180,7 @@ class AgenticAsker:
         *,
         vai_tro: str = "duoc_si_ls",
     ) -> AskResult:
-        """Chế độ chung tạm thời đi thẳng đường lui luong_cu_cung nếu đang bật."""
+        """Chế độ chung tạm thời chuyển thẳng cho bộ hỏi chung của luồng cũ."""
         perf_start = time.perf_counter()
         cleaned_question = cau_hoi.strip()
         if not 1 <= len(cleaned_question) <= 1000:
@@ -189,25 +193,13 @@ class AgenticAsker:
                 thoi_gian_ms=int((time.perf_counter() - perf_start) * 1000.0),
             )
 
-        fallback = self._fallback_tool()
-        if not self._chinh_sach.cong_cu_bat("luong_cu_cung") or fallback is None:
+        del vai_tro
+        if self._global_asker is None:
             return AskResult(
                 trang_thai="chua_san_sang",
                 noi_dung=_GLOBAL_UNSUPPORTED_MESSAGE,
                 thoi_gian_ms=int((time.perf_counter() - perf_start) * 1000.0),
             )
-
-        ctx = ToolContext(
-            vai_tro=vai_tro,
-            che_do="chung",
-            han_chot=time.monotonic() + self._timeout_seconds,
-            cau_hoi_goc=cleaned_question,
-            lich_su_goc=tuple(lich_su or ()),
-            cac_ca=tuple(cases),
-            cac_ket_qua=dict(results),
+        return self._global_asker.ask_global(
+            list(cases), dict(results), cleaned_question, list(lich_su or [])
         )
-        res = fallback.chay_truc_tiep(ctx)
-        tools = list(res.cong_cu_da_goi)
-        if "luong_cu_cung" not in tools:
-            tools.append("luong_cu_cung")
-        return res.model_copy(update={"cong_cu_da_goi": tools})

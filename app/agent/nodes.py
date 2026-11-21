@@ -16,9 +16,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from app.agent.state import HoiDapState, KeHoachTacTu, LoiGoiCongCu
-from app.agent.tools.base import KetQuaCongCu
 from app.agent.tools.gateway import ToolGateway
-from app.agent.tools.luong_cu_cung import LuongCuCung
 from app.agent.tools.policy import ChinhSachCongCu
 from app.agent.tools.registry import DanhMucCongCu
 from app.config.settings import CaseContextSettings
@@ -35,7 +33,6 @@ from app.orchestration.ask import (
     OUT_OF_SCOPE_MESSAGE,
     AskResult,
     AskVerificationError,
-    NguCanhCa,
     _ask_error_reason,
     _has_injection_directive,
     _output_attempts_override,
@@ -51,7 +48,7 @@ __all__ = [
     "ChanDauVao",
     "ChePii",
     "ChuanBiNguCanh",
-    "DuPhongLuongCu",
+    "DuPhong",
     "GoiCongCu",
     "HoanTat",
     "KeHoachTacTu",
@@ -142,27 +139,6 @@ def _run_with_deadline(fn: Callable[[], object], deadline: float) -> object:
     else:
         executor.shutdown(wait=False)
         return result
-
-
-def _unwrap_luong_cu_result(
-    res: KetQuaCongCu,
-    session: DeidSession | None,
-    ngu_canh: NguCanhCa | None,
-) -> AskResult:
-    """Dựng lại AskResult từ kết quả Gateway của luong_cu_cung để không gọi lại LLM."""
-    body = res.noi_dung
-    prefix = "<<<KET_QUA_CONG_CU ten=luong_cu_cung>>>\n"
-    suffix = "\nKET_QUA_CONG_CU>>>"
-    if body.startswith(prefix):
-        body = body[len(prefix) :]
-    if body.endswith(suffix):
-        body = body[: -len(suffix)]
-    if session is not None:
-        body = restore_text(body, session.anh_xa)
-    if ngu_canh is not None:
-        body = ngu_canh.ids.doi_van_ban_sang_that(body)
-    doan = [cc.doan for cc in res.can_cu if cc.doan is not None]
-    return AskResult(trang_thai="ok", noi_dung=body, doan=doan)
 
 
 def an_toan(
@@ -499,7 +475,6 @@ class GoiCongCu:
         can_cu = list(state.get("can_cu", []))
         ket_qua_cong_cu = list(state.get("ket_qua_cong_cu", []))
         cong_cu_da_goi = list(state.get("cong_cu_da_goi", []))
-        ket_qua_luong_cu = state.get("ket_qua_luong_cu")
 
         for call in ke_hoach.goi[:3]:
             res = gateway.goi(call.cong_cu, call.tham_so, ctx)
@@ -517,23 +492,14 @@ class GoiCongCu:
                 can_cu.extend(res.can_cu)
             if call.cong_cu not in cong_cu_da_goi:
                 cong_cu_da_goi.append(call.cong_cu)
-            if call.cong_cu == "luong_cu_cung" and res.trang_thai == "ok":
-                ket_qua_luong_cu = _unwrap_luong_cu_result(
-                    res,
-                    state.get("session"),
-                    state.get("ngu_canh"),
-                )
 
-        updates: dict[str, Any] = {
+        return {
             "gateway": gateway,
             "can_cu": can_cu,
             "ket_qua_cong_cu": ket_qua_cong_cu,
             "cong_cu_da_goi": cong_cu_da_goi,
             "so_vong": state.get("so_vong", 0) + 1,
         }
-        if ket_qua_luong_cu is not None:
-            updates["ket_qua_luong_cu"] = ket_qua_luong_cu
-        return updates
 
 
 class KiemChung:
@@ -606,48 +572,18 @@ class KiemChung:
         }
 
 
-class DuPhongLuongCu:
-    """Đường lui về luồng cũ cứng hoặc thông báo an toàn khi luong_cu_cung bị tắt."""
+class DuPhong:
+    """Kết thúc an toàn khi agent lỗi, hết lượt, hết giờ hoặc không đủ căn cứ.
 
-    def __init__(
-        self,
-        danh_muc: DanhMucCongCu,
-        chinh_sach: ChinhSachCongCu,
-        luong_cu: LuongCuCung | None,
-    ) -> None:
-        self._danh_muc = danh_muc
-        self._chinh_sach = chinh_sach
-        self._luong_cu = luong_cu
+    Không còn gọi luồng cũ: đường lui về luồng cũ nằm ở cờ `ask.engine: co_dinh`
+    (người dùng chốt 22/11/2026, plan 1.9 mục 6.6).
+    """
 
     def __call__(self, state: HoiDapState) -> dict[str, Any]:
-        ghi_buoc("bat_dau", "agent_du_phong", ten="Chuyển sang luồng cũ cứng")
-        try:
-            cached = state.get("ket_qua_luong_cu")
-            if cached is not None:
-                ghi_buoc("xong", "agent_du_phong", chi_tiet="Dùng kết quả luồng cũ")
-                return {"ket_qua": cached}
-
-            fallback_tool = self._luong_cu
-            if fallback_tool is None:
-                registered = self._danh_muc.lay("luong_cu_cung")
-                if isinstance(registered, LuongCuCung):
-                    fallback_tool = registered
-
-            if self._chinh_sach.cong_cu_bat("luong_cu_cung") and fallback_tool is not None:
-                result = fallback_tool.chay_truc_tiep(state["ctx"])
-                cong_cu_da_goi = list(state.get("cong_cu_da_goi", []))
-                if "luong_cu_cung" not in cong_cu_da_goi:
-                    cong_cu_da_goi.append("luong_cu_cung")
-                ghi_buoc("xong", "agent_du_phong", chi_tiet="Dùng kết quả luồng cũ")
-                return {"ket_qua": result, "cong_cu_da_goi": cong_cu_da_goi}
-        except Exception:
-            ghi_buoc("loi", "agent_du_phong", ly_do="Không chạy được luồng dự phòng")
-            return {"ket_qua": AskResult(trang_thai="loi", noi_dung=ERROR_MESSAGE)}
-
+        ghi_buoc("bat_dau", "agent_du_phong", ten="Kết thúc an toàn")
         if state.get("ly_do_du_phong") == "loi":
-            ghi_buoc("xong", "agent_du_phong", chi_tiet="Luồng dự phòng đang tắt")
+            ghi_buoc("xong", "agent_du_phong", chi_tiet="Gặp lỗi khi xử lý")
             return {"ket_qua": AskResult(trang_thai="loi", noi_dung=ERROR_MESSAGE)}
-
         ghi_buoc("xong", "agent_du_phong", chi_tiet="Không đủ căn cứ")
         return {"ket_qua": AskResult(trang_thai="khong_co_nguon", noi_dung=NO_SOURCE_MESSAGE)}
 

@@ -10,3 +10,5 @@ rerank:
   provider: "noop"
 vector_store:
   provider: "memory"
+ask:
+  engine: "co_dinh"                 # test giữ luồng cũ để test API dùng bộ hỏi tiêm như trước

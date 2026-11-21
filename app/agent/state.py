@@ -65,7 +65,6 @@ class HoiDapState(TypedDict, total=False):
     cong_cu_da_goi: list[str]
     gateway: ToolGateway
     thoi_gian_bat_dau: float
-    ket_qua_luong_cu: AskResult | None
     ket_qua: AskResult
     can_du_phong: bool
     ly_do_du_phong: str

@@ -7,13 +7,13 @@ Sơ đồ:
     tac_tu -- (goi_cong_cu & còn lượt & còn giờ) ------> goi_cong_cu -> tac_tu
     tac_tu -- (tra_loi) -------------------------------> kiem_chung
     tac_tu -- (hoi_lai hợp lệ / đã có ket_qua) --------> hoan_tat -> END
-    tac_tu -- (khong_du_can_cu / hết lượt / hết giờ / sai lược đồ 2 lần) -> du_phong_luong_cu
+    tac_tu -- (khong_du_can_cu / hết lượt / hết giờ / sai lược đồ 2 lần) -> du_phong
     kiem_chung -- (trượt lần 1) -----------------------> tac_tu
-    kiem_chung -- (trượt lần 2 / khong_co_nguon) ------> du_phong_luong_cu
+    kiem_chung -- (trượt lần 2 / khong_co_nguon) ------> du_phong
     kiem_chung -- (qua) -------------------------------> hoan_tat -> END
-    du_phong_luong_cu ---------------------------------> hoan_tat -> END
+    du_phong ---------------------------------> hoan_tat -> END
 
-Ngoại lệ không mong muốn ở bất kỳ nút nào đều được `@an_toan` bắt và rẽ về `du_phong_luong_cu`.
+Ngoại lệ không mong muốn ở bất kỳ nút nào đều được `@an_toan` bắt và rẽ về `du_phong`.
 
 Cách thêm công cụ mới sau này:
 1. Tạo lớp kế thừa `Tool` trong `app/agent/tools/`.
@@ -41,14 +41,13 @@ from app.agent.nodes import (
     ChanDauVao,
     ChePii,
     ChuanBiNguCanh,
-    DuPhongLuongCu,
+    DuPhong,
     GoiCongCu,
     HoanTat,
     KiemChung,
     TacTu,
 )
 from app.agent.state import HoiDapState
-from app.agent.tools.luong_cu_cung import LuongCuCung
 from app.agent.tools.policy import ChinhSachCongCu
 from app.agent.tools.registry import DanhMucCongCu
 from app.config.settings import CaseContextSettings
@@ -61,13 +60,13 @@ CHUAN_BI_NGU_CANH = "chuan_bi_ngu_canh"
 TAC_TU = "tac_tu"
 GOI_CONG_CU = "goi_cong_cu"
 KIEM_CHUNG = "kiem_chung"
-DU_PHONG_LUONG_CU = "du_phong_luong_cu"
+DU_PHONG = "du_phong"
 HOAN_TAT = "hoan_tat"
 
 
 def _sau_che_pii(state: HoiDapState) -> str:
     if state.get("can_du_phong"):
-        return DU_PHONG_LUONG_CU
+        return DU_PHONG
     if state.get("ket_qua") is not None:
         return HOAN_TAT
     return CHAN_DAU_VAO
@@ -75,7 +74,7 @@ def _sau_che_pii(state: HoiDapState) -> str:
 
 def _sau_chan_dau_vao(state: HoiDapState) -> str:
     if state.get("can_du_phong"):
-        return DU_PHONG_LUONG_CU
+        return DU_PHONG
     if state.get("ket_qua") is not None:
         return HOAN_TAT
     return CHUAN_BI_NGU_CANH
@@ -83,13 +82,13 @@ def _sau_chan_dau_vao(state: HoiDapState) -> str:
 
 def _sau_chuan_bi(state: HoiDapState) -> str:
     if state.get("can_du_phong"):
-        return DU_PHONG_LUONG_CU
+        return DU_PHONG
     return TAC_TU
 
 
 def _sau_tac_tu(state: HoiDapState) -> str:
     if state.get("can_du_phong"):
-        return DU_PHONG_LUONG_CU
+        return DU_PHONG
     if state.get("ket_qua") is not None:
         return HOAN_TAT
     ke_hoach = state.get("ke_hoach")
@@ -101,18 +100,18 @@ def _sau_tac_tu(state: HoiDapState) -> str:
         return KIEM_CHUNG
     if ke_hoach.hanh_dong == "hoi_lai":
         return HOAN_TAT
-    return DU_PHONG_LUONG_CU
+    return DU_PHONG
 
 
 def _sau_goi_cong_cu(state: HoiDapState) -> str:
     if state.get("can_du_phong"):
-        return DU_PHONG_LUONG_CU
+        return DU_PHONG
     return TAC_TU
 
 
 def _sau_kiem_chung(state: HoiDapState) -> str:
     if state.get("can_du_phong"):
-        return DU_PHONG_LUONG_CU
+        return DU_PHONG
     if state.get("ket_qua") is not None:
         return HOAN_TAT
     return TAC_TU
@@ -122,7 +121,6 @@ def dung_do_thi_hoi_dap(
     llm: LLMClient,
     danh_muc: DanhMucCongCu,
     chinh_sach: ChinhSachCongCu,
-    luong_cu: LuongCuCung | None,
     prompt_path: Path,
     case_settings: CaseContextSettings,
     renal_rules_getter: Callable[[], RenalRuleBook],
@@ -136,7 +134,7 @@ def dung_do_thi_hoi_dap(
     builder.add_node(TAC_TU, TacTu(llm, danh_muc, chinh_sach, prompt_path, max_turns))
     builder.add_node(GOI_CONG_CU, GoiCongCu(danh_muc, chinh_sach, max_turns))
     builder.add_node(KIEM_CHUNG, KiemChung())
-    builder.add_node(DU_PHONG_LUONG_CU, DuPhongLuongCu(danh_muc, chinh_sach, luong_cu))
+    builder.add_node(DU_PHONG, DuPhong())
     builder.add_node(HOAN_TAT, HoanTat())
 
     builder.add_edge(START, CHE_PII)
@@ -145,7 +143,7 @@ def dung_do_thi_hoi_dap(
         _sau_che_pii,
         {
             CHAN_DAU_VAO: CHAN_DAU_VAO,
-            DU_PHONG_LUONG_CU: DU_PHONG_LUONG_CU,
+            DU_PHONG: DU_PHONG,
             HOAN_TAT: HOAN_TAT,
         },
     )
@@ -154,7 +152,7 @@ def dung_do_thi_hoi_dap(
         _sau_chan_dau_vao,
         {
             CHUAN_BI_NGU_CANH: CHUAN_BI_NGU_CANH,
-            DU_PHONG_LUONG_CU: DU_PHONG_LUONG_CU,
+            DU_PHONG: DU_PHONG,
             HOAN_TAT: HOAN_TAT,
         },
     )
@@ -163,7 +161,7 @@ def dung_do_thi_hoi_dap(
         _sau_chuan_bi,
         {
             TAC_TU: TAC_TU,
-            DU_PHONG_LUONG_CU: DU_PHONG_LUONG_CU,
+            DU_PHONG: DU_PHONG,
         },
     )
     builder.add_conditional_edges(
@@ -173,7 +171,7 @@ def dung_do_thi_hoi_dap(
             TAC_TU: TAC_TU,
             GOI_CONG_CU: GOI_CONG_CU,
             KIEM_CHUNG: KIEM_CHUNG,
-            DU_PHONG_LUONG_CU: DU_PHONG_LUONG_CU,
+            DU_PHONG: DU_PHONG,
             HOAN_TAT: HOAN_TAT,
         },
     )
@@ -182,7 +180,7 @@ def dung_do_thi_hoi_dap(
         _sau_goi_cong_cu,
         {
             TAC_TU: TAC_TU,
-            DU_PHONG_LUONG_CU: DU_PHONG_LUONG_CU,
+            DU_PHONG: DU_PHONG,
         },
     )
     builder.add_conditional_edges(
@@ -190,11 +188,11 @@ def dung_do_thi_hoi_dap(
         _sau_kiem_chung,
         {
             TAC_TU: TAC_TU,
-            DU_PHONG_LUONG_CU: DU_PHONG_LUONG_CU,
+            DU_PHONG: DU_PHONG,
             HOAN_TAT: HOAN_TAT,
         },
     )
-    builder.add_edge(DU_PHONG_LUONG_CU, HOAN_TAT)
+    builder.add_edge(DU_PHONG, HOAN_TAT)
     builder.add_edge(HOAN_TAT, END)
 
     return builder.compile()

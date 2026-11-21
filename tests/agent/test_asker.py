@@ -9,7 +9,6 @@ from typing import Any
 import pytest
 
 from app.agent.asker import AgenticAsker
-from app.agent.tools.luong_cu_cung import LuongCuCung
 from app.agent.tools.policy import ChinhSachCongCu
 from app.agent.tools.registry import DanhMucCongCu
 from app.container import build_container
@@ -59,18 +58,16 @@ class _SpyAsker:
 def _make_asker(
     llm: FakeLLM | None,
     *,
-    luong_cu: LuongCuCung | None = None,
+    global_asker: _SpyAsker | None = None,
 ) -> AgenticAsker:
     container = build_container("test")
     reg = DanhMucCongCu()
-    if luong_cu is not None:
-        reg.dang_ky(luong_cu)
     pol = ChinhSachCongCu.tu_tep(ROOT / "config/tool_policy.yaml")
     return AgenticAsker(
         llm=llm,
         danh_muc=reg,
         chinh_sach=pol,
-        luong_cu=luong_cu,
+        global_asker=global_asker,
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         renal_rules=container.renal_rules,
@@ -99,24 +96,19 @@ def test_missing_llm_returns_chua_san_sang() -> None:
     assert res_global.noi_dung == NOT_READY_MESSAGE
 
 
-@pytest.mark.luong_cu_cung
-def test_ask_global_delegates_directly_to_luong_cu_cung() -> None:
+def test_ask_global_delegates_to_legacy_global_asker() -> None:
     container = build_container("test")
     case = load_case(DEMO_02_PATH)
     rule = run_case(case, container.renal_rules)
     spy = _SpyAsker(AskResult(trang_thai="ok", noi_dung="Tổng quan từ spy."))
-    asker = _make_asker(FakeLLM([]), luong_cu=LuongCuCung(spy))
+    asker = _make_asker(FakeLLM([]), global_asker=spy)
     result = asker.ask_global([case], {case.ca_id: rule}, "Ca nào cần xem lại liều?")
     assert len(spy.global_calls) == 1
     assert result.trang_thai == "ok"
     assert result.noi_dung == "Tổng quan từ spy."
-    assert "luong_cu_cung" in result.cong_cu_da_goi
 
 
-def test_ask_global_returns_unsupported_when_luong_cu_cung_disabled(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setenv("CDSS_LUONG_CU_CUNG", "0")
+def test_ask_global_returns_unsupported_without_global_asker() -> None:
     case = load_case(DEMO_02_PATH)
     asker = _make_asker(FakeLLM([]))
     result = asker.ask_global([case], {}, "Ca nào cần chú ý?")

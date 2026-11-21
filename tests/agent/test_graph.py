@@ -15,7 +15,6 @@ from app.agent import nodes as agent_nodes
 from app.agent.graph import dung_do_thi_hoi_dap
 from app.agent.tools.base import KetQuaCongCu, Tool, ToolContext
 from app.agent.tools.gateway import ToolGateway
-from app.agent.tools.luong_cu_cung import LuongCuCung
 from app.agent.tools.policy import ChinhSachCongCu
 from app.agent.tools.registry import DanhMucCongCu
 from app.container import build_container
@@ -94,7 +93,7 @@ class _SpyAsker:
 
 
 def _policy(allow_tools: list[str] | None = None) -> ChinhSachCongCu:
-    tools = allow_tools if allow_tools is not None else ["luong_cu_cung"]
+    tools = allow_tools if allow_tools is not None else []
     return ChinhSachCongCu.model_validate(
         {
             "mac_dinh": "tu_choi",
@@ -111,7 +110,6 @@ def _run_graph(
     *,
     danh_muc: DanhMucCongCu | None = None,
     chinh_sach: ChinhSachCongCu | None = None,
-    luong_cu: LuongCuCung | None = None,
     max_turns: int = 5,
     timeout_seconds: float = 30.0,
 ) -> tuple[AskResult, list[str], Any]:
@@ -123,7 +121,6 @@ def _run_graph(
         llm=llm,
         danh_muc=reg,
         chinh_sach=pol,
-        luong_cu=luong_cu,
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         renal_rules_getter=lambda: container.renal_rules,
@@ -169,7 +166,6 @@ def test_graph_has_no_checkpointer_or_store() -> None:
         llm=FakeLLM([]),
         danh_muc=DanhMucCongCu(),
         chinh_sach=_policy([]),
-        luong_cu=None,
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         renal_rules_getter=lambda: container.renal_rules,
@@ -271,7 +267,6 @@ def test_tool_loop_stops_after_max_turns_and_falls_back() -> None:
         "Tra cứu liều meropenem?",
         danh_muc=reg,
         chinh_sach=pol,
-        luong_cu=None,
         max_turns=2,
     )
     assert len(tool.calls) == 2
@@ -337,10 +332,7 @@ def test_calling_disallowed_tool_is_rejected_by_gateway_and_graph_continues() ->
     assert "Bị từ chối" in second_user_msg
 
 
-def test_two_verification_failures_fallback_to_khong_co_nguon_when_luong_cu_disabled(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setenv("CDSS_LUONG_CU_CUNG", "0")
+def test_two_verification_failures_end_with_khong_co_nguon() -> None:
     lab_temp = temp_id("DEMO-02", "XN-DEMO02-01")
     bad_answer = {
         "hanh_dong": "tra_loi",
@@ -358,33 +350,6 @@ def test_two_verification_failures_fallback_to_khong_co_nguon_when_luong_cu_disa
     assert result.noi_dung == NO_SOURCE_MESSAGE
     assert "agent_kiem_chung_1" in steps
     assert "agent_kiem_chung_2" in steps
-    assert "agent_du_phong" in steps
-
-
-@pytest.mark.luong_cu_cung
-def test_khong_du_can_cu_uses_luong_cu_cung_spy_and_records_tool_name() -> None:
-    expected = AskResult(
-        trang_thai="ok",
-        noi_dung="Trả lời từ luồng cũ spy.",
-        cong_cu_da_goi=["du_lieu_ca", "bo_luat"],
-    )
-    spy = _SpyAsker(expected)
-    luong_cu = LuongCuCung(spy)
-    reg = DanhMucCongCu()
-    reg.dang_ky(luong_cu)
-    pol = _policy(["luong_cu_cung"])
-    llm = FakeLLM([{"hanh_dong": "khong_du_can_cu"}])
-    result, steps, _ = _run_graph(
-        llm,
-        "Vì sao cần giảm liều?",
-        danh_muc=reg,
-        chinh_sach=pol,
-        luong_cu=luong_cu,
-    )
-    assert len(spy.ask_calls) == 1
-    assert result.trang_thai == "ok"
-    assert result.noi_dung == "Trả lời từ luồng cũ spy."
-    assert "luong_cu_cung" in result.cong_cu_da_goi
     assert "agent_du_phong" in steps
 
 

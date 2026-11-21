@@ -2,7 +2,6 @@
 
 from app.agent.tools.base import CanCu, CheDo, KetQuaCongCu, Tool, ToolContext
 from app.agent.tools.gateway import ToolGateway
-from app.agent.tools.luong_cu_cung import LuongCuCung
 from app.agent.tools.policy import ChinhSachCongCu, luong_cu_cung_dang_bat
 from app.agent.tools.registry import DanhMucCongCu
 
@@ -12,7 +11,6 @@ __all__ = [
     "ChinhSachCongCu",
     "DanhMucCongCu",
     "KetQuaCongCu",
-    "LuongCuCung",
     "Tool",
     "ToolContext",
     "ToolGateway",

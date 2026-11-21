@@ -17,7 +17,7 @@ Bám:
 | Q3 | **Chia tool theo cách tra, không theo nguồn.** Nguồn là bộ lọc | Thêm Dược thư, BYT, phác đồ thì chỉ thêm giá trị lọc, không thêm tool |
 | Q4 | **Dữ liệu có cấu trúc ở SQL, văn bản dài ở vector** (mục 4.3) | SQL trả lời chính xác có/không; vector chỉ để tìm đoạn văn để trích |
 | Q5 | **Gói ca vẫn nằm sẵn trong prompt.** Tool đọc hồ sơ chỉ bật khi gói bị cắt | Ít tool thì mô hình chọn đúng hơn, ít lượt hơn, ít đường rò PII hơn |
-| Q6 | **Dựng khung agent trước, 0 tool chuyên biệt; luồng cứng hiện tại bọc thành tool `luong_cu_cung`** (người dùng chốt 21/11) | Có luồng cơ bản chạy được ngay; tool được duyệt cắm vào dần mà không sửa đồ thị; luồng cũ vừa là tool vừa là đường lui (mục 6.6) |
+| Q6 | **Dựng khung agent trước, 0 tool; luồng cũ không là tool mà là đường lui ở mức engine** (`ask.engine: co_dinh`). Từ 22/11 mặc định chạy `agentic` (người dùng chốt 21–22/11) | Có luồng cơ bản chạy được ngay; tool được duyệt cắm vào dần mà không sửa đồ thị. Bọc luồng cũ thành tool (thử 21/11) làm agent gọi LLM 3–4 lần, chậm gấp đôi mà không tốt hơn, nên đã bỏ (mục 6.6) |
 
 ## 2. Hiện trạng (đã kiểm mã và DB ngày 21/11)
 
@@ -383,28 +383,19 @@ Chi tiết chỉ gồm số đếm, nhãn nguồn công khai và mã lỗi đã 
 
 Không sửa đồ thị.
 
-**Tool `luong_cu_cung` – "Luồng cũ cứng (RAG cố định)"**
+**Luồng cũ (`CaseAsker`) không phải tool của agent** (người dùng chốt 22/11). Bản 21/11 từng bọc nó thành tool `luong_cu_cung`. Khi chạy thật, agent gọi tool, luồng cũ tự gọi LLM và kiểm chứng, rồi agent soạn lại và kiểm chứng lần nữa: 3–4 lần LLM, 34 giây so với 15–20 giây, câu trả lời không tốt hơn. Đã xoá tool.
 
-| Mục | Nội dung |
-| :--- | :--- |
-| Làm gì | Gọi nguyên vẹn luồng hỏi đáp cứng hiện tại: `CaseAsker.ask` (chế độ ca) hoặc `CaseAsker.ask_global` (chế độ chung). Truy xuất 6 đoạn theo hoạt chất của ca, một lần LLM, kiểm chứng |
-| Tham số từ LLM | Không có (lược đồ rỗng, `extra="forbid"`). Câu hỏi gốc, lịch sử, ca, kết quả luật lấy từ `ToolContext`, không qua LLM |
-| Trả về cho agent | Câu trả lời đã kiểm chứng **được che PII lại** bằng `DeidSession` của lượt, cùng các đoạn nguồn làm căn cứ `doan:<id>` |
-| Ghi chú bắt buộc trong mã | Đây là luồng cũ giữ làm tool chuyển tiếp và đường lui. Sẽ không gọi nữa khi các tool chuyên biệt (5.8) đạt đánh giá; không thêm tính năng mới vào đây |
-| Bật/tắt | `config/tool_policy.yaml`: `cong_cu.luong_cu_cung.bat` (mặc định `true`); biến môi trường `CDSS_LUONG_CU_CUNG=0` để tắt nhanh khi thử |
-
-**Ba lớp đường lui**
+**Đường lui**
 
 | Lớp | Khi nào | Hành vi |
 | :--- | :--- | :--- |
-| 1. Cờ engine | `ask.engine: co_dinh` (mặc định) | Dịch vụ gọi thẳng `CaseAsker` như hiện nay; không chạy đồ thị |
-| 2. Nút `du_phong_luong_cu` trong đồ thị | `ask.engine: agentic`, nhưng agent lỗi, hết lượt, hết giờ mà chưa có câu trả lời, hoặc kiểm chứng trượt lần 2 | Nếu `luong_cu_cung` đang bật: trả nguyên `AskResult` của luồng cũ (đã kiểm chứng). Nếu tắt: "Không đủ căn cứ" hoặc thông báo lỗi như hiện nay |
-| 3. Git | Khung làm hỏng hành vi | Commit neo và tag `neo/truoc-khung-agent` trước khi giao việc; lùi bằng `git revert` các commit của khung |
+| 1. Cờ engine | `ask.engine: co_dinh` (đổi tay trong `config/settings.yaml`) | Dịch vụ gọi thẳng `CaseAsker` như trước plan 1.9; không chạy đồ thị. Mặc định từ 22/11 là `agentic`; profile test giữ `co_dinh` |
+| 2. Nút `du_phong` trong đồ thị | Agent lỗi, hết lượt, hết giờ, không đủ căn cứ, hoặc kiểm chứng trượt lần 2 | Kết thúc an toàn: "Không đủ căn cứ" hoặc thông báo lỗi. Không gọi luồng cũ |
+| 3. Git | Khung làm hỏng hành vi | Tag `neo/truoc-khung-agent`; lùi bằng `git revert` các commit của khung |
 
-**Khi tắt `luong_cu_cung`:**
-- luồng cũ tắt hẳn: không là tool, không là đường lui;
-- `ask.engine` buộc phải là `agentic` (cấu hình `co_dinh` + tắt tool là lỗi cấu hình, báo ngay khi khởi động);
-- **test riêng của luồng cũ được bỏ qua (skip), không báo trượt.** Các module test dựng `CaseAsker` trực tiếp mang marker `pytest.mark.luong_cu_cung`; `tests/conftest.py` đọc cờ và skip khi tắt. Test API dùng bộ hỏi giả không mang marker và luôn chạy.
+Chế độ hỏi chung (`__global__`) chưa có đồ thị riêng. `AgenticAsker.ask_global` chuyển thẳng cho `CaseAsker.ask_global`; đây là định tuyến ở mức engine, không phải tool.
+
+**Marker test `luong_cu_cung`:** các test dựng `CaseAsker` trực tiếp mang marker này. Biến môi trường `CDSS_LUONG_CU_CUNG=0` tắt luồng cũ: các test đó được skip thay vì báo trượt, và `ask.engine: co_dinh` khi đó là lỗi cấu hình, báo ngay lúc khởi động.
 
 **Cấu trúc mã của khung**
 
@@ -412,14 +403,13 @@ Không sửa đồ thị.
 app/agent/
   state.py          HoiDapState (TypedDict)
   graph.py          dung_do_thi_hoi_dap(): nút + cạnh điều kiện, không checkpointer
-  nodes.py          các nút của 6.2 và du_phong_luong_cu
+  nodes.py          các nút của 6.2 và du_phong
   asker.py          AgenticAsker: cùng giao diện AskRunner (ask, ask_global), trả AskResult
   tools/
     base.py         Tool, ToolContext, KetQuaCongCu, CanCu
     registry.py     DanhMucCongCu
     gateway.py      ToolGateway: chính sách, lược đồ, ngân sách, PII tham số, nhật ký, ghi_buoc
     policy.py       đọc config/tool_policy.yaml, mặc định từ chối
-    luong_cu_cung.py
 config/tool_policy.yaml
 config/prompts/tac_tu.v1.md
 ```
@@ -479,8 +469,8 @@ Mặc định từ chối. Thêm vai trò mới chỉ cần sửa chính sách, 
 | P0 – thử mô hình | Thử `deepseek-flash` và `deepseek-v4-pro`: tool calling gốc so với kế hoạch JSON, trên 20 câu mẫu; đo độ đúng tên tool, tham số, độ trễ | Báo cáo ngắn, chọn cách gọi (6.3) | Người dùng duyệt |
 | P1a – sửa RAG | Chỉ vector trong bộ lọc hoạt chất (đề xuất T64); kiểm log rerank; ngưỡng "không có nguồn"; tìm qua HNSW trên DB thay vì bộ nhớ; khoá OpenRouter `_1`→`_4` | Đo lại bộ 50 câu T64: không kém "chỉ vector" | recall@5, top-1 |
 | P1b – dọn DB | Mục 4.5: danh mục gốc, khoá ngoại, bảng chết, cột ATC | Migration có phiên bản; 66 ca cho kết quả luật giống hệt | Kết quả luật không đổi |
-| P1c – khung agent | Mục 6.6: đồ thị 6.2, lớp tool, Gateway, chính sách, tool `luong_cu_cung`, ba lớp đường lui, marker test (T101, T102). Cờ `ask.engine` mặc định `co_dinh` | Khung chạy được với `agentic`; mặc định hành vi không đổi; test quyền, PII, vòng lặp | Toàn bộ test cũ xanh; test khung xanh |
-| P2 – cắm tool | Lần lượt 8 tool của mục 5.8 theo thứ tự người dùng duyệt; kiểm chứng mở rộng 5.9; tiến trình theo 6.5 | Đối chiếu với luồng cứng trên bộ câu hỏi (mục 10) | Không kém luồng cứng ở mọi chỉ số; khi đạt mới tắt `luong_cu_cung` |
+| P1c – khung agent | ✅ 22/11. Mục 6.6: đồ thị 6.2, lớp tool, Gateway, chính sách, đường lui, marker test (T101, T102, bỏ tool luồng cũ). `ask.engine` mặc định `agentic` | Khung chạy với 0 tool | Toàn bộ test xanh; thử trên trình duyệt |
+| P2 – cắm tool | Lần lượt 8 tool của mục 5.8 theo thứ tự người dùng duyệt; kiểm chứng mở rộng 5.9; tiến trình theo 6.5 | Đối chiếu với luồng cứng trên bộ câu hỏi (mục 10) | Không kém luồng cứng ở mọi chỉ số |
 | P3 – làm dày văn bản | Nạp Dược thư, văn bản BYT, phác đồ được duyệt vào `doan_trich` với `nhom_nguon` riêng; mở rộng openFDA | Độ phủ hoạt chất có văn bản tăng | Có nguồn được Khoa Dược chấp nhận |
 | P4 – tool ca bệnh mở rộng | C1, C2, C4 khi có ca dài; bảng viết tắt nội viện | | Khi có dữ liệu thật |
 | P5 – nguồn ngoài | E1 `tra_openfda`, rồi E2, E3 theo quyết định nhóm; E3 có dược sĩ bấm xác nhận | | Sau P2 |

@@ -1,13 +1,13 @@
 # Chính sách công cụ của agent hỏi đáp (plan 1.9 mục 7). Mặc định từ chối.
+# Chưa có công cụ chuyên biệt nào; mỗi công cụ được duyệt thêm một dòng ở cong_cu và cho_phep.
+# Luồng cũ cứng không còn là công cụ: đường lui là cờ ask.engine: co_dinh trong config/settings.yaml.
 mac_dinh: tu_choi
-cong_cu:
-  luong_cu_cung:
-    bat: true          # Luồng cũ cứng (RAG cố định). Tắt: luồng cũ tắt hẳn, test của nó bị skip.
+cong_cu: {}
 vai_tro:
   duoc_si_ls:
-    cho_phep: [luong_cu_cung]
+    cho_phep: []
   admin:
-    cho_phep: [luong_cu_cung]
+    cho_phep: []
 che_do:
   chung:
     cam: []
