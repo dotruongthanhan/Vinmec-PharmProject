@@ -1,6 +1,9 @@
 import type { ChiTietCa, DienBienTomTat, NhanDinh } from '../api/types.ts'
+import type { DetailTabId } from './uiTypes.ts'
 
 export type SixFactorStatus = 'co_van_de' | 'dat' | 'thieu_du_lieu' | 'chua_co_luat'
+export type FactorIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7
+export type ReviewSectionId = 'tong_quan' | FactorIndex
 
 export interface SixFactorItem {
   index: 1 | 2 | 3 | 4 | 5 | 6 | 7
@@ -35,6 +38,103 @@ export const SIX_FACTOR_STATUS_LABELS: Record<SixFactorStatus, string> = {
 function matchesFactorIndex(yeuToText: string, index: number): boolean {
   const trimmed = yeuToText.trim()
   return trimmed.startsWith(`${index}.`) || trimmed.startsWith(`${index} ·`)
+}
+
+/** Trích chỉ số yếu tố (1..7) từ nhãn yếu tố; không khớp trả null. */
+export function factorIndexOf(yeuTo: string): FactorIndex | null {
+  for (const def of SIX_FACTOR_DEFINITIONS) {
+    if (matchesFactorIndex(yeuTo, def.index)) {
+      return def.index
+    }
+  }
+  return null
+}
+
+/** Đếm số nhận định cần chú ý theo từng yếu tố (1..7). */
+export function countAttentionByFactor(
+  canChuY: readonly NhanDinh[],
+): Record<FactorIndex, number> {
+  const counts: Record<FactorIndex, number> = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+  }
+  for (const item of canChuY) {
+    const idx = factorIndexOf(item.yeu_to)
+    if (idx !== null) {
+      counts[idx] += 1
+    }
+  }
+  return counts
+}
+
+/** Xác định yếu tố (1..7) có ít nhất một nhận định mức Nghiêm trọng. */
+export function hasSevereByFactor(
+  canChuY: readonly NhanDinh[],
+): Record<FactorIndex, boolean> {
+  const severe: Record<FactorIndex, boolean> = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+    7: false,
+  }
+  for (const item of canChuY) {
+    if (item.muc_do_ma !== 'nghiem_trong') {
+      continue
+    }
+    const idx = factorIndexOf(item.yeu_to)
+    if (idx !== null) {
+      severe[idx] = true
+    }
+  }
+  return severe
+}
+
+const VALID_DETAIL_TABS: ReadonlySet<string> = new Set<DetailTabId>([
+  'ho_so_benh_an',
+  'y_lenh',
+  'phieu_dieu_tri',
+  'xet_nghiem',
+  'vi_sinh',
+  'dien_bien',
+  'tham_dinh',
+])
+
+/** Đọc tham số URL ?tab=, vắng hoặc sai giá trị mặc định về 'tham_dinh'. */
+export function parseDetailTabParam(raw: string | null): DetailTabId {
+  return raw && VALID_DETAIL_TABS.has(raw) ? (raw as DetailTabId) : 'tham_dinh'
+}
+
+/** Đọc tham số URL ?yt=: chỉ nhận 'tong_quan' hoặc '1'..'7', vắng hoặc sai về 'tong_quan'. */
+export function parseReviewFactorParam(raw: string | null): ReviewSectionId {
+  if (raw === null || raw === '' || raw === 'tong_quan') {
+    return 'tong_quan'
+  }
+  if (/^[1-7]$/.test(raw)) {
+    return Number(raw) as FactorIndex
+  }
+  return 'tong_quan'
+}
+
+/** Cập nhật tham số ?yt= trong URLSearchParams, xoá yt khi về Tổng quan và giữ tham số khác. */
+export function updateReviewFactorParams(
+  previous: URLSearchParams,
+  target: ReviewSectionId,
+): URLSearchParams {
+  const next = new URLSearchParams(previous)
+  if (target === 'tong_quan') {
+    next.delete('yt')
+  } else {
+    next.set('yt', String(target))
+  }
+  return next
 }
 
 /**

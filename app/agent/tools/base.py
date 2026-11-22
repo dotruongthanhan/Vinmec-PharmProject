@@ -27,6 +27,7 @@ class CanCu(BaseModel):
     loai: Literal["doan", "bang", "tinh", "ca"]
     nhan: str
     doan: Chunk | None = None
+    noi_dung: str | None = None
 
 
 class KetQuaCongCu(BaseModel):

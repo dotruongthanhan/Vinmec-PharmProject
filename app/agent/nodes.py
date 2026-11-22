@@ -522,6 +522,11 @@ class KiemChung:
             for cc in state.get("can_cu", [])
             if cc.loai == "doan" and cc.doan is not None
         }
+        bang_by_ma = {
+            cc.ma: (cc.nhan, cc.noi_dung)
+            for cc in state.get("can_cu", [])
+            if cc.loai == "bang" and cc.noi_dung
+        }
         try:
             verified = kiem_chung_tra_loi(
                 ca=ctx.ca,
@@ -536,6 +541,7 @@ class KiemChung:
                 ids=ngu_canh.ids,
                 tools_called=list(state.get("cong_cu_da_goi", [])),
                 perf_start=state.get("thoi_gian_bat_dau", time.perf_counter()),
+                bang_by_ma=bang_by_ma,
             )
         except AskVerificationError as exc:
             if attempt == 1:

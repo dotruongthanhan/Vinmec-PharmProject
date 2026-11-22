@@ -4,6 +4,7 @@ from app.agent.tools.base import CanCu, CheDo, KetQuaCongCu, Tool, ToolContext
 from app.agent.tools.gateway import ToolGateway
 from app.agent.tools.policy import ChinhSachCongCu, luong_cu_cung_dang_bat
 from app.agent.tools.registry import DanhMucCongCu
+from app.agent.tools.tim_doan_nguon import TimDoanNguon
 
 __all__ = [
     "CanCu",
@@ -13,6 +14,7 @@ __all__ = [
     "KetQuaCongCu",
     "Tool",
     "ToolContext",
+    "TimDoanNguon",
     "ToolGateway",
     "luong_cu_cung_dang_bat",
 ]

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ClipboardList, FileText, Pill, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, ClipboardList, FileText, MinusCircle, Pill, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import type {
@@ -28,7 +28,8 @@ import { LabTrendChart } from '@/features/charts/LabTrendChart'
 import { AiStatusBar } from '@/features/findings/AiStatusBar'
 import { FindingCard } from '@/features/findings/FindingCard'
 import { PassedList } from '@/features/findings/PassedList'
-import { countAiSummary, mergeFindingsFeedback, selectFindingsSource } from '@/lib/aiReview'
+import { FactorStatusIcon } from '@/features/sidebar/ReviewFactorNav'
+import { countAiSummary } from '@/lib/aiReview'
 import { parseInfoPairs } from '@/lib/detailTables'
 import {
   extractOrderTimeText,
@@ -37,12 +38,15 @@ import {
   parseTrendValue,
 } from '@/lib/displayFormat'
 import {
-  computeSixFactorsStatus,
+  factorIndexOf,
   filterFindingsByDrug,
   filterTreatmentSheetNotes,
+  parseDetailTabParam,
+  parseReviewFactorParam,
+  updateReviewFactorParams,
 } from '@/lib/orderDetail'
-import type { SixFactorItem } from '@/lib/orderDetail'
-import { sortAttentionFindings } from '@/lib/presentation'
+import type { FactorIndex, SixFactorStatus } from '@/lib/orderDetail'
+import type { SemanticTone } from '@/lib/severity'
 import { EMPTY_FEEDBACK_DRAFT } from '@/lib/uiTypes'
 import type { DetailTabId, EvidenceTarget, FeedbackDraft } from '@/lib/uiTypes'
 import {
@@ -55,24 +59,25 @@ import {
 } from './DetailSections'
 import type { InfoItem } from './DetailSections'
 import { InteractionSection } from './InteractionSection'
-import { SixFactorStrip } from './SixFactorStrip'
 import { AdministrativeSections } from './AdministrativeSections'
 import { countMedicalOrders, medicalOrders, orderSelectionParams, selectMedicalOrder } from '@/lib/medicalRecord'
 import { OrderExtraInfo, OrderSelector, SelectedOrderDetails, TreatmentSheets } from './MedicalRecordSections'
+import { useReviewFindings } from './useReviewFindings'
 
 export type OrderDetailTab = DetailTabId
 
-const ORDERED_TABS: readonly OrderDetailTab[] = [
-  'ho_so_benh_an',
-  'y_lenh',
-  'phieu_dieu_tri',
-  'xet_nghiem',
-  'vi_sinh',
-  'dien_bien',
-  'tham_dinh',
-]
-
-const VALID_TABS = new Set<OrderDetailTab>(ORDERED_TABS)
+function factorStatusTone(status: SixFactorStatus, hasSevere: boolean): SemanticTone {
+  switch (status) {
+    case 'co_van_de':
+      return hasSevere ? 'danger' : 'warning'
+    case 'thieu_du_lieu':
+      return 'missing'
+    case 'dat':
+      return 'success'
+    case 'chua_co_luat':
+      return 'neutral'
+  }
+}
 
 export interface OrderDetailViewProps {
   detail: ChiTietCa
@@ -319,11 +324,15 @@ export function OrderDetailView({
   const [searchParams, setSearchParams] = useSearchParams()
   const { state: locationState } = useLocation()
   const [selectedDrug, setSelectedDrug] = useState<string | null>(null)
-  const [passedOpen, setPassedOpen] = useState<boolean>(false)
+  const [passedOpenByScope, setPassedOpenByScope] = useState<Record<string, boolean>>({})
   const [interactionOpen, setInteractionOpen] = useState<boolean>(false)
   const [prevCaId, setPrevCaId] = useState<string>(detail.ca_id)
   const [rejectedOrderId, setRejectedOrderId] = useState<string | null>(null)
   const [feedbackDrafts, setFeedbackDrafts] = useState<Record<string, FeedbackDraft>>({})
+  const [pendingScrollTarget, setPendingScrollTarget] = useState<{
+    id: string
+    factor: FactorIndex | null
+  } | null>(null)
   const tabTriggerRefs = useRef<Partial<Record<OrderDetailTab, HTMLButtonElement | null>>>({})
   const requestedOrderId = searchParams.get('yl')
   const orders = useMemo(() => medicalOrders(detail), [detail])
@@ -353,18 +362,18 @@ export function OrderDetailView({
   if (prevCaId !== detail.ca_id) {
     setPrevCaId(detail.ca_id)
     setSelectedDrug(null)
-    setPassedOpen(false)
+    setPassedOpenByScope({})
     setRejectedOrderId(invalidOrderId)
     setFeedbackDrafts({})
+    setPendingScrollTarget(null)
   } else if (invalidOrderId !== null && invalidOrderId !== rejectedOrderId) {
     setRejectedOrderId(invalidOrderId)
   } else if (invalidOrderId === null && requestedOrderId !== null && rejectedOrderId !== null) {
     setRejectedOrderId(null)
   }
 
-  const rawTab = searchParams.get('tab') as OrderDetailTab | null
-  const activeTab: OrderDetailTab =
-    rawTab && VALID_TABS.has(rawTab) ? rawTab : 'tham_dinh'
+  const activeTab = parseDetailTabParam(searchParams.get('tab'))
+  const activeFactor = parseReviewFactorParam(searchParams.get('yt'))
 
   const updateFeedbackDraft = (id: string, draft: FeedbackDraft) => {
     setFeedbackDrafts((previous) => {
@@ -380,9 +389,7 @@ export function OrderDetailView({
 
   const handleTabChange = useCallback(
     (nextTab: string) => {
-      const validTab: OrderDetailTab = VALID_TABS.has(nextTab as OrderDetailTab)
-        ? (nextTab as OrderDetailTab)
-        : 'tham_dinh'
+      const validTab = parseDetailTabParam(nextTab)
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev)
@@ -405,40 +412,60 @@ export function OrderDetailView({
     [locationState, setSearchParams],
   )
 
-  const displayedFindings = useMemo(() => {
-    const raw = selectFindingsSource(detail.nhan_dinh, aiTrangThai, aiKetQua)
-    const fallbackSources =
-      raw === detail.nhan_dinh
-        ? aiKetQua?.nhan_dinh
-          ? [aiKetQua.nhan_dinh]
-          : []
-        : [detail.nhan_dinh]
-    return mergeFindingsFeedback(raw, sessionFeedbackForCase, fallbackSources)
-  }, [detail, aiTrangThai, aiKetQua, sessionFeedbackForCase])
-
-  const allAttention = useMemo(
-    () => sortAttentionFindings(displayedFindings.can_chu_y),
-    [displayedFindings],
+  const handleSelectReviewFactor = useCallback(
+    (target: 'tong_quan' | FactorIndex) => {
+      setSearchParams(
+        (prev) => updateReviewFactorParams(prev, target),
+        { replace: true, state: locationState },
+      )
+    },
+    [locationState, setSearchParams],
   )
-  const allPassed = displayedFindings.dat
+
+  const { allAttention, allPassed, sixFactors } = useReviewFindings({
+    detail,
+    aiTrangThai,
+    aiKetQua,
+    sessionFeedbackForCase,
+  })
+
+  const currentFactor =
+    activeFactor === 'tong_quan'
+      ? null
+      : (sixFactors.find((factor) => factor.index === activeFactor) ?? null)
+
+  const factorAttention = useMemo(
+    () =>
+      activeFactor === 'tong_quan'
+        ? allAttention
+        : allAttention.filter((item) => factorIndexOf(item.yeu_to) === activeFactor),
+    [activeFactor, allAttention],
+  )
+  const factorPassed = useMemo(
+    () =>
+      activeFactor === 'tong_quan'
+        ? allPassed
+        : allPassed.filter((item) => factorIndexOf(item.yeu_to) === activeFactor),
+    [activeFactor, allPassed],
+  )
 
   const filteredAttention = useMemo(
-    () => filterFindingsByDrug(allAttention, selectedDrug),
-    [allAttention, selectedDrug],
+    () => filterFindingsByDrug(factorAttention, selectedDrug),
+    [factorAttention, selectedDrug],
   )
   const filteredPassed = useMemo(
-    () => filterFindingsByDrug(allPassed, selectedDrug),
-    [allPassed, selectedDrug],
+    () => filterFindingsByDrug(factorPassed, selectedDrug),
+    [factorPassed, selectedDrug],
   )
 
-  const sixFactors = useMemo(
-    () =>
-      computeSixFactorsStatus({
-        can_chu_y: allAttention,
-        dat: allPassed,
-        yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
-      }),
-    [allAttention, allPassed, detail.nhan_dinh.yeu_to_chua_kiem],
+  const passedScopeKey = String(activeFactor)
+  const defaultPassedOpen = activeFactor !== 'tong_quan' && factorAttention.length === 0
+  const passedOpen = passedOpenByScope[passedScopeKey] ?? defaultPassedOpen
+  const handlePassedOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      setPassedOpenByScope((prev) => ({ ...prev, [passedScopeKey]: nextOpen }))
+    },
+    [passedScopeKey],
   )
 
   const treatmentSheetNotes = useMemo(
@@ -459,9 +486,22 @@ export function OrderDetailView({
       setSelectedDrug((prev) =>
         prev && prev.toLowerCase() === drugName.toLowerCase() ? null : drugName,
       )
-      handleTabChange('tham_dinh')
+      setSearchParams(
+        (prev) => {
+          const next = updateReviewFactorParams(prev, 'tong_quan')
+          next.delete('tab')
+          return next
+        },
+        { replace: true, state: locationState },
+      )
+      requestAnimationFrame(() => {
+        tabTriggerRefs.current.tham_dinh?.scrollIntoView({
+          block: 'nearest',
+          inline: 'nearest',
+        })
+      })
     },
-    [handleTabChange],
+    [locationState, setSearchParams],
   )
 
   const orderInfoItems = useMemo<InfoItem[]>(() => {
@@ -484,41 +524,114 @@ export function OrderDetailView({
     return items
   }, [detail, allAttention.length])
 
-  const handleOpenFinding = useCallback((findingId: string) => {
-    setSelectedDrug(null)
-    requestAnimationFrame(() => {
-      document
-        .getElementById(`finding-${findingId}`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    })
-  }, [])
+  const handleOpenFinding = useCallback(
+    (findingId: string) => {
+      setSelectedDrug(null)
+      const inPassed = allPassed.find((item) => item.nhan_dinh_id === findingId)
+      const targetFinding =
+        allAttention.find((item) => item.nhan_dinh_id === findingId) ?? inPassed ?? null
+      const targetFactor = targetFinding ? factorIndexOf(targetFinding.yeu_to) : null
 
-  const handleSelectFactor = useCallback((factor: SixFactorItem) => {
-    if (factor.index === 4 && !factor.firstFindingId) {
-      document
-        .getElementById('interaction-section')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      return
-    }
-    if (!factor.firstFindingId) {
-      return
-    }
-    setSelectedDrug(null)
-    if (factor.inPassedOnly) {
-      setPassedOpen(true)
-    }
-    requestAnimationFrame(() => {
-      const targetEl = document.getElementById(`finding-${factor.firstFindingId}`)
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      } else if (factor.inPassedOnly) {
-        document.getElementById('passed-findings-section')?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        })
+      if (inPassed) {
+        const scopeKey =
+          activeFactor === 'tong_quan'
+            ? 'tong_quan'
+            : String(targetFactor ?? activeFactor)
+        setPassedOpenByScope((prev) => ({ ...prev, [scopeKey]: true }))
       }
+
+      if (
+        targetFactor !== null &&
+        activeFactor !== 'tong_quan' &&
+        activeFactor !== targetFactor
+      ) {
+        setSearchParams(
+          (prev) => updateReviewFactorParams(prev, targetFactor),
+          { replace: true, state: locationState },
+        )
+        setPendingScrollTarget({ id: findingId, factor: targetFactor })
+        return
+      }
+
+      setPendingScrollTarget({ id: findingId, factor: null })
+    },
+    [activeFactor, allAttention, allPassed, locationState, setSearchParams],
+  )
+
+  useEffect(() => {
+    if (!pendingScrollTarget) {
+      return
+    }
+    if (
+      pendingScrollTarget.factor !== null &&
+      activeFactor !== 'tong_quan' &&
+      activeFactor !== pendingScrollTarget.factor
+    ) {
+      return
+    }
+    const targetId = pendingScrollTarget.id
+    let cancelled = false
+    const raf = requestAnimationFrame(() => {
+      if (cancelled) {
+        return
+      }
+      document
+        .getElementById(`finding-${targetId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      setPendingScrollTarget(null)
     })
-  }, [])
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+    }
+  }, [pendingScrollTarget, activeFactor, passedOpenByScope])
+
+  const selectedDrugFilterChip = selectedDrug ? (
+    <div className="inline-flex items-center gap-1.5 rounded-sm border border-primary-line bg-primary-soft px-2.5 py-1 text-xs text-primary">
+      <span>Đang lọc: {selectedDrug}</span>
+      <button
+        type="button"
+        onClick={() => setSelectedDrug(null)}
+        aria-label="Bỏ lọc theo thuốc"
+        className="inline-flex cursor-pointer items-center gap-0.5 rounded-sm px-1 hover:bg-surface/60"
+      >
+        <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
+        <span>Bỏ lọc</span>
+      </button>
+    </div>
+  ) : null
+
+  const renderFindingCards = (includeOpenFactor: boolean) => (
+    <div className="flex flex-col gap-3">
+      {filteredAttention.map((finding) => {
+        const factorIdx = includeOpenFactor ? factorIndexOf(finding.yeu_to) : null
+        return (
+          <FindingCard
+            key={`${detail.ca_id}::${finding.nhan_dinh_id}`}
+            caId={detail.ca_id}
+            finding={finding}
+            chiSo={detail.chi_so}
+            nhomLyDo={detail.nhom_ly_do}
+            submitting={isFeedbackSubmitting(detail.ca_id, finding.nhan_dinh_id)}
+            feedbackError={getFeedbackError(detail.ca_id, finding.nhan_dinh_id)}
+            feedbackDraft={feedbackDrafts[finding.nhan_dinh_id] ?? EMPTY_FEEDBACK_DRAFT}
+            onFeedbackDraftChange={(draft) => updateFeedbackDraft(finding.nhan_dinh_id, draft)}
+            onSubmitFeedback={onSubmitFeedback}
+            onClearFeedbackError={onClearFeedbackError}
+            onOpenEvidence={onOpenEvidence}
+            onAskAboutFinding={onAskAboutFinding}
+            onOpenFactor={
+              factorIdx !== null ? () => handleSelectReviewFactor(factorIdx) : undefined
+            }
+          />
+        )
+      })}
+    </div>
+  )
+
+  const hasSevereInFactor = factorAttention.some(
+    (item) => item.muc_do_ma === 'nghiem_trong',
+  )
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="detail-sticky-host flex flex-col">
@@ -793,127 +906,149 @@ export function OrderDetailView({
         </TabsContent>
 
         <TabsContent value="tham_dinh" className="flex flex-col gap-5">
-          {/* 1. Dải bảy yếu tố thẩm định */}
-          <section aria-label="Tổng quan bảy yếu tố" className="flex flex-col gap-2.5">
-            <SectionHeading
-              title="Bảy yếu tố thẩm định"
-              aside={`${detail.nhan_dinh.so_luat_da_chay} luật đã chạy`}
-            />
-            <SixFactorStrip factors={sixFactors} onSelectFactor={handleSelectFactor} />
-          </section>
-
-          {/* 2. Dải trạng thái AI + Danh sách nhận định + Mục đạt */}
-          <section aria-label="Nhận định thẩm định" className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-base font-semibold tracking-tight text-fg">Nhận định</h2>
-                <Badge
-                  tone={filteredAttention.length > 0 ? 'neutral' : 'success'}
-                  variant="soft"
-                  className="border-transparent tabular-nums"
-                >
-                  {filteredAttention.length} mục cần chú ý
-                </Badge>
-              </div>
-
-              {selectedDrug ? (
-                <div className="inline-flex items-center gap-1.5 rounded-sm border border-primary-line bg-primary-soft px-2.5 py-1 text-xs text-primary">
-                  <span>Đang lọc: {selectedDrug}</span>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDrug(null)}
-                    aria-label="Bỏ lọc theo thuốc"
-                    className="inline-flex cursor-pointer items-center gap-0.5 rounded-sm px-1 hover:bg-surface/60"
+          {!currentFactor ? (
+            <section aria-label="Nhận định thẩm định" className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-base font-semibold tracking-tight text-fg">Nhận định</h2>
+                  <Badge
+                    tone={filteredAttention.length > 0 ? 'neutral' : 'success'}
+                    variant="soft"
+                    className="border-transparent tabular-nums"
                   >
-                    <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
-                    <span>Bỏ lọc</span>
-                  </button>
+                    {filteredAttention.length} mục cần chú ý
+                  </Badge>
                 </div>
-              ) : null}
-            </div>
 
-            <AiStatusBar
-              trangThai={aiTrangThai}
-              thoiGianMs={aiThoiGianMs}
-              coDienGiai={aiSummary.coDienGiai}
-              doAiThem={aiSummary.doAiThem}
-              canhBao={aiCanhBao}
-              onRerun={onRerunAi}
-              cacBuoc={aiCacBuoc}
-              daChayMs={aiDaChayMs}
-              thuongLeMs={aiThuongLeMs}
-            />
-
-            {Object.entries(feedbackDrafts).filter(([id]) =>
-              !allAttention.some((finding) => finding.nhan_dinh_id === id),
-            ).map(([id, draft]) => (
-              <InlineAlert key={id} tone="neutral" title="Bản nháp phản hồi">
-                <div className="flex flex-col gap-1.5">
-                  <p>Nhận định đã thay đổi. Bản nháp của bạn vẫn còn.</p>
-                  {draft.reasonGroup ? <p>{draft.reasonGroup}</p> : null}
-                  {draft.note ? <p className="whitespace-pre-wrap break-words">{draft.note}</p> : null}
-                  <Button variant="ghost" size="sm" className="self-start"
-                    onClick={() => updateFeedbackDraft(id, EMPTY_FEEDBACK_DRAFT)}>Xóa bản nháp</Button>
-                </div>
-              </InlineAlert>
-            ))}
-
-            {filteredAttention.length === 0 ? (
-              <InlineAlert tone="success">
-                {selectedDrug
-                  ? `Không có nhận định cần chú ý cho ${selectedDrug}.`
-                  : `Không có mục cần chú ý trong phạm vi ${detail.nhan_dinh.so_luat_da_chay} luật đã chạy.`}
-              </InlineAlert>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {filteredAttention.map((finding) => (
-                  <FindingCard
-                    key={`${detail.ca_id}::${finding.nhan_dinh_id}`}
-                    caId={detail.ca_id}
-                    finding={finding}
-                    chiSo={detail.chi_so}
-                    nhomLyDo={detail.nhom_ly_do}
-                    submitting={isFeedbackSubmitting(detail.ca_id, finding.nhan_dinh_id)}
-                    feedbackError={getFeedbackError(detail.ca_id, finding.nhan_dinh_id)}
-                    feedbackDraft={feedbackDrafts[finding.nhan_dinh_id] ?? EMPTY_FEEDBACK_DRAFT}
-                    onFeedbackDraftChange={(draft) => updateFeedbackDraft(finding.nhan_dinh_id, draft)}
-                    onSubmitFeedback={onSubmitFeedback}
-                    onClearFeedbackError={onClearFeedbackError}
-                    onOpenEvidence={onOpenEvidence}
-                    onAskAboutFinding={onAskAboutFinding}
-                  />
-                ))}
+                {selectedDrugFilterChip}
               </div>
-            )}
 
-            <PassedList
-              key={`passed-${detail.ca_id}`}
-              passed={filteredPassed}
-              open={passedOpen}
-              onOpenChange={setPassedOpen}
-            />
-          </section>
+              <AiStatusBar
+                trangThai={aiTrangThai}
+                thoiGianMs={aiThoiGianMs}
+                coDienGiai={aiSummary.coDienGiai}
+                doAiThem={aiSummary.doAiThem}
+                canhBao={aiCanhBao}
+                onRerun={onRerunAi}
+                cacBuoc={aiCacBuoc}
+                daChayMs={aiDaChayMs}
+                thuongLeMs={aiThuongLeMs}
+              />
 
-          {/* 3. Tương tác thuốc theo từng cặp */}
-          <section
-            id="interaction-section"
-            aria-label="Tương tác thuốc"
-            className="flex flex-col gap-2.5"
-          >
-            <InteractionSection
-              open={interactionOpen}
-              onOpenChange={setInteractionOpen}
-              choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
-              dangDung={detail.chi_tiet.y_lenh.dang_dung}
-              maTranTuongTac={detail.ma_tran_tuong_tac}
-              nhanDinh={{
-                can_chu_y: allAttention,
-                dat: allPassed,
-                yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
-              }}
-              onOpenFinding={handleOpenFinding}
-            />
-          </section>
+              {Object.entries(feedbackDrafts).filter(([id]) =>
+                !allAttention.some((finding) => finding.nhan_dinh_id === id),
+              ).map(([id, draft]) => (
+                <InlineAlert key={id} tone="neutral" title="Bản nháp phản hồi">
+                  <div className="flex flex-col gap-1.5">
+                    <p>Nhận định đã thay đổi. Bản nháp của bạn vẫn còn.</p>
+                    {draft.reasonGroup ? <p>{draft.reasonGroup}</p> : null}
+                    {draft.note ? <p className="whitespace-pre-wrap break-words">{draft.note}</p> : null}
+                    <Button variant="ghost" size="sm" className="self-start"
+                      onClick={() => updateFeedbackDraft(id, EMPTY_FEEDBACK_DRAFT)}>Xóa bản nháp</Button>
+                  </div>
+                </InlineAlert>
+              ))}
+
+              {filteredAttention.length === 0 ? (
+                <InlineAlert tone="success">
+                  {selectedDrug
+                    ? `Không có nhận định cần chú ý cho ${selectedDrug}.`
+                    : `Không có mục cần chú ý trong phạm vi ${detail.nhan_dinh.so_luat_da_chay} luật đã chạy.`}
+                </InlineAlert>
+              ) : (
+                renderFindingCards(true)
+              )}
+
+              <PassedList
+                key={`passed-${detail.ca_id}-tong_quan`}
+                passed={filteredPassed}
+                open={passedOpen}
+                onOpenChange={handlePassedOpenChange}
+              />
+            </section>
+          ) : (
+            <>
+              <section
+                aria-label={`${currentFactor.index}. ${currentFactor.title}`}
+                className="flex flex-col gap-3"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-base font-semibold tracking-tight text-fg">
+                      {currentFactor.index}. {currentFactor.title}
+                    </h2>
+                    <Badge
+                      tone={factorStatusTone(currentFactor.status, hasSevereInFactor)}
+                      variant="soft"
+                      icon={<FactorStatusIcon status={currentFactor.status} />}
+                    >
+                      {currentFactor.statusLabel}
+                    </Badge>
+                    {filteredAttention.length > 0 ? (
+                      <Badge
+                        tone="neutral"
+                        variant="soft"
+                        className="border-transparent tabular-nums"
+                      >
+                        {filteredAttention.length} mục cần chú ý
+                      </Badge>
+                    ) : null}
+                  </div>
+
+                  {selectedDrugFilterChip}
+                </div>
+
+                {currentFactor.status === 'chua_co_luat' ? (
+                  <EmptyBox
+                    icon={MinusCircle}
+                    title="Chưa có luật cho yếu tố này"
+                    description="Hệ thống chưa có quy tắc kiểm tra tự động cho yếu tố này."
+                  />
+                ) : (
+                  <>
+                    {filteredAttention.length === 0 ? (
+                      <InlineAlert tone="success">
+                        {selectedDrug
+                          ? `Không có nhận định cần chú ý cho ${selectedDrug} ở yếu tố ${currentFactor.index} (${currentFactor.title}).`
+                          : `Không có mục cần chú ý ở yếu tố ${currentFactor.index} (${currentFactor.title}) trong phạm vi ${detail.nhan_dinh.so_luat_da_chay} luật đã chạy.`}
+                      </InlineAlert>
+                    ) : (
+                      renderFindingCards(false)
+                    )}
+
+                    <PassedList
+                      key={`passed-${detail.ca_id}-${currentFactor.index}`}
+                      passed={filteredPassed}
+                      open={passedOpen}
+                      onOpenChange={handlePassedOpenChange}
+                    />
+                  </>
+                )}
+              </section>
+
+              {currentFactor.index === 4 ? (
+                <section
+                  id="interaction-section"
+                  aria-label="Tương tác thuốc"
+                  className="flex flex-col gap-2.5"
+                >
+                  <InteractionSection
+                    open={interactionOpen}
+                    onOpenChange={setInteractionOpen}
+                    choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
+                    dangDung={detail.chi_tiet.y_lenh.dang_dung}
+                    maTranTuongTac={detail.ma_tran_tuong_tac}
+                    nhanDinh={{
+                      can_chu_y: allAttention,
+                      dat: allPassed,
+                      yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
+                    }}
+                    onOpenFinding={handleOpenFinding}
+                  />
+                </section>
+              ) : null}
+            </>
+          )}
         </TabsContent>
       </div>
     </Tabs>

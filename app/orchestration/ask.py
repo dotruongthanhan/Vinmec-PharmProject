@@ -7,7 +7,7 @@ import logging
 import re
 import time
 from collections import Counter
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
@@ -216,7 +216,7 @@ class AskCitationRaw(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     so: int
-    loai: Literal["du_lieu_ca", "tinh_toan", "tai_lieu"]
+    loai: Literal["du_lieu_ca", "tinh_toan", "tai_lieu", "bang"]
     ma: str
     trich_nguyen_van: str | None = None
 
@@ -698,10 +698,12 @@ def kiem_chung_tra_loi(
     ids: RecordIdMap,
     tools_called: list[str],
     perf_start: float,
+    bang_by_ma: Mapping[str, tuple[str, str]] | None = None,
 ) -> AskResult:
     """Kiểm chứng phạm vi, trích dẫn, chuỗi con nguyên văn và mọi con số trong câu trả lời.
 
     allowed_record_ids là mã tạm; mã thật chỉ xuất hiện ở kết quả trả về giao diện.
+    bang_by_ma: mã dòng bảng do công cụ trả về -> (nhãn nguồn, nội dung dòng); None là không có.
     """
 
     def _restore(text: str) -> str:
@@ -824,6 +826,26 @@ def kiem_chung_tra_loi(
                     loai_ma="tinh_toan",
                     nhan=calc_label,
                     ban_ghi_id=item.ma,
+                )
+            )
+        elif item.loai == "bang":
+            table = bang_by_ma or {}
+            ma_bang = item.ma.strip().strip("[]").strip()
+            row = table.get(ma_bang)
+            if row is None and not ma_bang.startswith("bang:"):
+                row = table.get(f"bang:{ma_bang}")
+            if row is None:
+                _reject(f"unknown_table_row:{item.ma}")
+            row_label, row_text = row
+            effective_numbers.extend(numbers_in_text(row_text, include_en_thousands=True))
+            citations.append(
+                AskCitation(
+                    so=item.so,
+                    loai_ma="tai_lieu",
+                    nhan=row_label,
+                    ban_ghi_id=None,
+                    doan_trich_id=None,
+                    trich_nguyen_van=None,
                 )
             )
         else:

@@ -11,13 +11,21 @@ import { useAuth } from '@/features/auth/useAuth'
 import type { SignOutOptions } from '@/features/auth/useAuth'
 import { EvidenceDialog } from '@/features/findings/EvidenceDialog'
 import { OrderDetailView } from '@/features/order-detail/OrderDetailView'
+import { useReviewFindings } from '@/features/order-detail/useReviewFindings'
 import { OrdersTable } from '@/features/orders/OrdersTable'
 import { SettingsDialog } from '@/features/settings/SettingsDialog'
 import { SidebarNav } from '@/features/sidebar/SidebarNav'
+import type { SidebarReviewNav } from '@/features/sidebar/SidebarNav'
 import { DetailSkeleton, ErrorState } from '@/features/states/StateViews'
-import { mergeFindingsFeedback, selectFindingsSource } from '@/lib/aiReview'
+import { mergeFindingsFeedback } from '@/lib/aiReview'
 import { extractOrderCode } from '@/lib/displayFormat'
-import { extractShortDrugName } from '@/lib/orderDetail'
+import {
+  extractShortDrugName,
+  parseDetailTabParam,
+  parseReviewFactorParam,
+  updateReviewFactorParams,
+} from '@/lib/orderDetail'
+import type { ReviewSectionId } from '@/lib/orderDetail'
 import {
   countOrderGroups,
   filterOrders,
@@ -36,7 +44,6 @@ import {
   saveChatCollapsed,
   saveQueueCollapsed,
 } from '@/lib/prefs'
-import { sortAttentionFindings } from '@/lib/presentation'
 import { parsePageParam, updatePageInSearchParams } from '@/lib/pagination'
 import type { EvidenceTarget } from '@/lib/uiTypes'
 import { useAiReview } from '@/state/useAiReview'
@@ -52,6 +59,7 @@ interface DialogState {
 }
 
 const ALL_ORDERS: OrderSelectionFilter = { type: 'group', group: 'tat_ca' }
+const EMPTY_CASE_FEEDBACK: Readonly<Record<string, PhanHoiDaGhi>> = {}
 
 /** Bàn làm việc ba cột cho danh sách y lệnh, hồ sơ và chi tiết ca. */
 export function WorkspacePage() {
@@ -198,23 +206,55 @@ export function WorkspacePage() {
     [navigate],
   )
 
-  const displayedFindings = useMemo(() => {
-    if (!detail) {
-      return null
-    }
-    const raw = selectFindingsSource(detail.nhan_dinh, ai.trangThai, ai.ketQua)
-    const fallbackSources =
-      raw === detail.nhan_dinh
-        ? ai.ketQua?.nhan_dinh
-          ? [ai.ketQua.nhan_dinh]
-          : []
-        : [detail.nhan_dinh]
-    return mergeFindingsFeedback(raw, sessionFeedback[detail.ca_id] ?? {}, fallbackSources)
-  }, [detail, ai.trangThai, ai.ketQua, sessionFeedback])
+  const activePatient = detail && detail.ca_id === activeCaseId ? detail : null
+  const activeDetailTab = parseDetailTabParam(searchParams.get('tab'))
+  const activeReviewSection = parseReviewFactorParam(searchParams.get('yt'))
+  const sessionFeedbackForActiveCase = activePatient
+    ? (sessionFeedback[activePatient.ca_id] ?? EMPTY_CASE_FEEDBACK)
+    : EMPTY_CASE_FEEDBACK
 
-  const attentionFindings = useMemo(
-    () => (displayedFindings ? sortAttentionFindings(displayedFindings.can_chu_y) : []),
-    [displayedFindings],
+  const reviewFindings = useReviewFindings({
+    detail: activePatient,
+    aiTrangThai: ai.trangThai,
+    aiKetQua: ai.ketQua,
+    sessionFeedbackForCase: sessionFeedbackForActiveCase,
+  })
+
+  const handleSelectReviewSection = useCallback(
+    (target: ReviewSectionId) => {
+      setSearchParams(
+        (previous) => updateReviewFactorParams(previous, target),
+        { replace: true, state: location.state },
+      )
+    },
+    [location.state, setSearchParams],
+  )
+
+  const reviewNav = useMemo<SidebarReviewNav | null>(
+    () =>
+      activePatient && activeDetailTab === 'tham_dinh'
+        ? {
+            selected: activeReviewSection,
+            factors: reviewFindings.sixFactors,
+            attentionCountByFactor: reviewFindings.attentionCountByFactor,
+            severeByFactor: reviewFindings.severeByFactor,
+            totalAttention: reviewFindings.totalAttention,
+            hasAnySevere: reviewFindings.hasAnySevere,
+            soLuatDaChay: activePatient.nhan_dinh.so_luat_da_chay,
+            onSelect: handleSelectReviewSection,
+          }
+        : null,
+    [
+      activePatient,
+      activeDetailTab,
+      activeReviewSection,
+      reviewFindings.sixFactors,
+      reviewFindings.attentionCountByFactor,
+      reviewFindings.severeByFactor,
+      reviewFindings.totalAttention,
+      reviewFindings.hasAnySevere,
+      handleSelectReviewSection,
+    ],
   )
 
   const handleFocusSearch = useCallback(() => {
@@ -383,8 +423,6 @@ export function WorkspacePage() {
   const breadcrumbLabel = 'Hồ sơ cần duyệt'
   const backTo = safeReturnTo ?? '/app'
 
-  const activePatient = detail && detail.ca_id === activeCaseId ? detail : null
-
   const sidebarCommonProps = {
     activeSection: 'orders' as const,
     onNavigate: () => setDrawerSidebarOpen(false),
@@ -396,6 +434,7 @@ export function WorkspacePage() {
     onSignIn: handleSignIn,
     onSignOut: handleSignOut,
     patient: activePatient,
+    reviewNav,
     onOpenEvidence: handleOpenEvidence,
   }
 
@@ -436,7 +475,7 @@ export function WorkspacePage() {
             globalHoiThemEnabled={Boolean(casesData?.che_do.hoi_them ?? true)}
             history={assistantHistory}
             onOpenHistory={handleOpenHistory}
-            attentionFindings={attentionFindings}
+            attentionFindings={reviewFindings.allAttention}
             messages={chat.getMessages(currentChatId)}
             sending={chat.isSending(currentChatId)}
             askProgress={chat.getProgress(currentChatId)}

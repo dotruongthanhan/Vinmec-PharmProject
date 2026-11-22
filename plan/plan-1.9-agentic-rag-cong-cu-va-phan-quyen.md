@@ -276,6 +276,29 @@ Bộ kiểm chứng hiện chỉ chấp nhận câu trích khớp nguyên văn m
 
 Chỉ căn cứ do tool trả **trong lượt này** mới được trích.
 
+### 5.10. Duyệt lại từng tool trước khi cắm (22/11, thay 5.8)
+
+Người dùng yêu cầu xét từng tool: có cần không, có cách đơn giản hơn không, SQL hay vector. Kết luận sau khi đọc mã hiện có:
+
+| Tool ở 5.8 | Kết luận | Trạng thái | Lý do, cách đơn giản hơn |
+| :--- | :--- | :--- | :--- |
+| `tra_tuong_tac` | **Giữ, làm đầu tiên (T106)** | ✅ Xong 22/11 (T106), chưa commit. LLM thật 6/6 ok | `lookup_interactions` của trang Tra tương tác đã làm trọn: phân giải tên tự do, DDInter, phân biệt "không có trong DDInter" với "không có tương tác". Tool chỉ là lớp bọc, **không cần `tra_thuoc` gọi trước**. Thuốc–thức ăn, thuốc–bệnh: SQL trên `ddinter_thuc_an`, `tuong_tac_benh` |
+| `tim_doan_nguon` | **Giữ (T107)**, đổi cách tra | ✅ Xong 22/11 (T107), chưa commit. LLM thật 4/4 ok, đủ 3 chế độ | Ba cách theo tham số: **chính xác** (biết hoạt chất và mục: lọc SQL `hoat_chat_ids` + `muc`, không gọi nhúng, nếu tập lọc ≤ `so_doan` trả luôn); **ngữ nghĩa** (không có bộ lọc: vector); **kết hợp** (xếp hạng vector trong tập đã lọc). Bỏ BM25 và rerank theo số đo T64. Đây là tool duy nhất đưa văn bản nhãn vào khung agent: khung 0 tool hiện **không có RAG** |
+| `tra_thuoc` | **Giữ, gộp thêm `tra_quy_dinh` (T108)** | 📝 Có brief T108, sẵn sàng giao | `drug_detail` và `_rules_for` đã gom sẵn mọi bảng luật theo hoạt chất (liều tối đa, thận, gan, ngưỡng xét nghiệm, độc tính, đường dùng, kháng sinh quản lý, dị ứng chéo, nhóm trùng điều trị). Một tool, tham số `phan` chọn phần cần trả. Phân giải tên dùng `DrugSuggestIndex` (T105), mơ hồ thì trả danh sách ứng viên |
+| `tra_quy_dinh` | **Bỏ, gộp vào `tra_thuoc`** | — (gộp vào `tra_thuoc`) | Cùng nguồn `_rules_for`, tách ra chỉ tốn thêm một vòng LLM |
+| `tra_nhom_thuoc` | **Hoãn** | ⏸️ Hoãn | Chiều hoạt chất → nhóm (ATC, nhóm trùng điều trị, nhóm dị ứng chéo) đã có trong `tra_thuoc` phần `quy_tac`. Chiều nhóm → các hoạt chất chưa có câu hỏi thật cần; khi cần thì tra `ma_atc_json` bằng toán tử jsonb của Postgres, không cần tách cột |
+| `tinh_chi_so` | **Giữ, làm sau cùng (T109)** | 📝 Có brief T109, chờ T108 | Chỉ để trả lời "nếu dùng cân nặng lý tưởng thì sao". CrCl, eGFR, BMI, BSA mặc định đã có trong gói ca |
+| `doc_doan_mo_rong` | **Hoãn** | ⏸️ Hoãn, đo lại sau T107 | Chưa có bằng chứng bảng liều bị cắt làm sai câu trả lời. Đo lại sau T107 |
+| `hoi_lai_duoc_si` | **Bỏ khỏi danh mục tool** | — (đã có sẵn) | Đã là `hanh_dong="hoi_lai"` trong `KeHoachTacTu` |
+
+Còn **4 tool**, làm lần lượt, mỗi tool một task, review xong mới giao tool kế. Cột **Trạng thái** cập nhật sau mỗi lần review; chi tiết bằng chứng ở `plan/TRACKING.md`.
+
+**Trích dẫn dòng bảng (mục 5.9) làm cùng T106, cách tối giản:**
+- `AskCitationRaw.loai` thêm `"bang"`; `ma` là mã căn cứ tool trả trong lượt (`bang:<ten_bang>:<khoa>`).
+- Bộ kiểm chứng: mã phải có trong `can_cu` của lượt; số trong câu trả lời được phép nếu có trong nội dung dòng đó.
+- Ra API dưới dạng `loai_ma="tai_lieu"`, `doan_trich_id=null`, `nhan` mô tả nguồn (ví dụ "DDInter · amiodarone – warfarin"). Giao diện đã hiển thị loại này thành nhãn không bấm được: **không đổi hợp đồng API, không sửa web.**
+- Luồng cũ `CaseAsker` không truyền gì mới, hành vi giữ nguyên.
+
 ## 6. Kiến trúc
 
 ### 6.1. Ba lớp

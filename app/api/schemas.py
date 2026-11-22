@@ -546,6 +546,21 @@ class DanhSachThuoc(ApiModel):
     trang: int
     so_dong: int
     ket_qua: list[KetQuaThuoc]
+    goi_y_sua: str | None = None
+
+
+class GoiYThuoc(ApiModel):
+    nhan: str
+    loai: Literal["hoat_chat", "dong_nghia", "biet_duoc"]
+    hoat_chat_ids: list[str]
+    ten_hoat_chat: list[str]
+    gia_tri_gui: str
+    khop: Literal["chinh_xac", "tien_to", "gan_dung"]
+
+
+class KetQuaGoiYThuoc(ApiModel):
+    ket_qua: list[GoiYThuoc]
+    goi_y_sua: str | None = None
 
 
 class DinhDanhThuoc(ApiModel):

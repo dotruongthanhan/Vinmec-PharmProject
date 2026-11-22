@@ -23,6 +23,21 @@ interface DanhSachThuoc {
   trang: number;
   so_dong: number;
   ket_qua: KetQuaThuoc[];
+  goi_y_sua?: string | null;    // tên gợi ý gần đúng khi LIKE trả 0 kết quả
+}
+
+interface GoiYThuoc {
+  nhan: string;
+  loai: "hoat_chat" | "dong_nghia" | "biet_duoc";
+  hoat_chat_ids: string[];
+  ten_hoat_chat: string[];
+  gia_tri_gui: string;
+  khop: "chinh_xac" | "tien_to" | "gan_dung";
+}
+
+interface KetQuaGoiYThuoc {
+  ket_qua: GoiYThuoc[];
+  goi_y_sua: string | null;
 }
 
 interface DinhDanhThuoc {
@@ -201,7 +216,8 @@ interface KetQuaCongThuc {
 
 | Phương thức | Đường dẫn | Trả về | Ghi chú |
 | :--- | :--- | :--- | :--- |
-| GET | `/api/thuoc?q=&trang=1&so_dong=30` | `DanhSachThuoc` | `q` không dấu, không phân biệt hoa thường; tìm trên tên hoạt chất, đồng nghĩa (kể cả tên Việt) và tên chế phẩm Cục QLD. Xếp: khớp đúng tên trước, rồi khớp đầu, rồi khớp chứa, cuối cùng là hoạt chất chỉ xuất hiện trong tên chế phẩm phối hợp. `q` rỗng: chỉ liệt kê hoạt chất có nhãn FDA hoặc có quy tắc (hoạt chất khác tìm được bằng `q`). `so_dong` tối đa 100 |
+| GET | `/api/thuoc?q=&trang=1&so_dong=30` | `DanhSachThuoc` | `q` không dấu, không phân biệt hoa thường; tìm trên tên hoạt chất, đồng nghĩa (kể cả tên Việt) và tên chế phẩm Cục QLD. Xếp: khớp đúng tên trước, rồi khớp đầu, rồi khớp chứa, cuối cùng là hoạt chất chỉ xuất hiện trong tên chế phẩm phối hợp. Khi `q` có giá trị mà truy vấn `LIKE` trả 0 hoạt chất, tự fallback sang chỉ mục gợi ý (30 mục) và trả kèm `goi_y_sua` nếu chỉ khớp gần đúng. `q` rỗng: chỉ liệt kê hoạt chất có nhãn FDA hoặc có quy tắc (hoạt chất khác tìm được bằng `q`). `so_dong` tối đa 100 |
+| GET | `/api/thuoc/goi-y?q=&gioi_han=8` | `KetQuaGoiYThuoc` | Gợi ý tên thuốc khi gõ (hoạt chất, đồng nghĩa, biệt dược có thành phần); `q` bắt buộc tối đa 100 ký tự, `gioi_han` từ 1 đến 15 (mặc định 8). Dưới 2 ký tự sau chuẩn hoá trả rỗng. Không ghi `q` vào log |
 | GET | `/api/thuoc/{hoat_chat_id}` | `ChiTietThuoc` | 404 nếu không có hoạt chất. `che_pham.danh_sach` tối đa 50; `tuong_tac_tom_tat.major` tối đa 20 |
 | POST | `/api/tuong-tac` | `KetQuaTraTuongTac` | Mỗi tên phân giải bằng bộ phân giải thuốc như dòng y lệnh `ten_tu_do`, dựng một ca tạm **trong bộ nhớ** (tất cả dòng chờ duyệt), chạy đúng luật yếu tố 4. Tên lạ vẫn trả 200: `phan_giai[].trang_thai = "khong_nhan_dien"` và các ô liên quan là `thieu_du_lieu`. 422 nếu ít hơn 2 hoặc nhiều hơn 12 tên, tên rỗng, tên quá 200 ký tự, hoặc trùng (so sánh sau khi bỏ dấu, bỏ hoa thường; hai liều khác nhau của cùng thuốc là hai tên khác nhau và được báo "trùng hoạt chất – xem yếu tố 2") |
 | GET | `/api/cong-thuc` | `DanhMucCongThuc` | Từ `config/kb/cong_thuc.yaml` (14 công thức) |

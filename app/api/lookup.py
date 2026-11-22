@@ -6,8 +6,10 @@
 
 import json
 import logging
+import re
 import sqlite3
 import time
+from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from datetime import datetime
@@ -28,6 +30,8 @@ from app.db.reader import DatabaseReadError
 from app.db.timezone import VN_TZ
 from app.domain.models import CaBenh, ChiTietYLenh, DotDieuTri, NguoiBenh, TinhTrangDiUng, YLenh
 from app.kb.names import normalize_key
+from app.kb.resolver.matching import product_key, without_strength
+from app.kb.suggest import DrugSuggestIndex, SuggestTuple
 from app.retrieval.corpus import load_corpus
 from app.rules.interaction import check_with_matrix
 
@@ -35,8 +39,12 @@ _LOGGER = logging.getLogger(__name__)
 _ROOT = Path(__file__).resolve().parents[2]
 _TTL_SECONDS = 600.0
 _MAX_PAGE_SIZE = 100
+_MAX_SUGGEST = 15
 _MAX_PRODUCTS = 50
 _MAX_MAJOR = 20
+_EMPTY_BRACKETS_RE = re.compile(r"\(\s*[+/;,.-]*\s*\)|\[\s*[+/;,.-]*\s*\]")
+_DANGLING_SEP_RE = re.compile(r"(?:\s*[+/;,.-]+\s*$|\s*[+/;,.-]+\s+(?=[+/;,.-]))")
+_SPACE_RE = re.compile(r"\s+")
 _MIN_NAMES, _MAX_NAMES, _MAX_NAME_LENGTH = 2, 12, 200
 _CHUNKS_PATH = _ROOT / "data/kb_curated/chunks.jsonl"
 _FDA_SECTIONS = (
@@ -130,8 +138,9 @@ register_cache_clear(_CACHE.clear)
 
 
 def clear_caches() -> None:
-    """Xoá bộ đệm tra cứu (dùng khi kiểm thử hoặc đổi nguồn)."""
+    """Xoá bộ đệm tra cứu, kể cả chỉ mục gợi ý (dùng khi kiểm thử hoặc đổi nguồn)."""
     _CACHE.clear()
+    _clear_suggest_index()
 
 
 def _db_url() -> str:
@@ -360,6 +369,149 @@ _SEARCH_SQL = (
 )
 
 
+def _strip_product_strength(name: str) -> str:
+    """Bỏ hàm lượng khỏi tên biệt dược để làm nhãn hiển thị sạch."""
+    cleaned = without_strength(name)
+    while True:
+        next_val = _EMPTY_BRACKETS_RE.sub(" ", cleaned)
+        if next_val == cleaned:
+            break
+        cleaned = next_val
+    cleaned = _SPACE_RE.sub(" ", cleaned).strip()
+    cleaned = _DANGLING_SEP_RE.sub("", cleaned).strip(" +/;,.-")
+    cleaned = _SPACE_RE.sub(" ", cleaned).strip()
+    return cleaned or name.strip()
+
+
+_SUGGEST_LOCK = Lock()
+_SUGGEST_INDEX: DrugSuggestIndex | None = None
+
+
+def _clear_suggest_index() -> None:
+    global _SUGGEST_INDEX
+    with _SUGGEST_LOCK:
+        _SUGGEST_INDEX = None
+
+
+register_cache_clear(_clear_suggest_index)
+
+
+def _suggest_index() -> DrugSuggestIndex:
+    """Chỉ mục gợi ý tên thuốc, giữ suốt vòng đời tiến trình.
+
+    Dựng mất vài giây trên DB nên không đặt hết hạn theo `_TTL_SECONDS` (tránh để một người
+    dùng chờ mỗi 10 phút); được làm nóng lúc khởi động và xoá khi gọi `clear_caches()`.
+    """
+    global _SUGGEST_INDEX
+    if _SUGGEST_INDEX is not None:
+        return _SUGGEST_INDEX
+    with _SUGGEST_LOCK:
+        if _SUGGEST_INDEX is None:
+            _SUGGEST_INDEX = _build_suggest_index()
+        return _SUGGEST_INDEX
+
+
+def _build_suggest_index() -> DrugSuggestIndex:
+    """Dựng chỉ mục gợi ý tên thuốc từ bảng tra cứu (DB hoặc tệp)."""
+    catalog = _catalog()
+    inn_by_id = {hid: str(row["ten_inn"]) for hid, row in catalog.items()}
+    viet_by_id = {
+        (hid, normalize_key(str(row["ten_viet"]))): str(row["ten_viet"]).strip()
+        for hid, row in catalog.items()
+        if row.get("ten_viet")
+    }
+    entries: list[SuggestTuple] = []
+    non_brand_keys: dict[frozenset[str], set[str]] = defaultdict(set)
+
+    for hid, row in catalog.items():
+        ten_inn = str(row["ten_inn"])
+        key = normalize_key(ten_inn)
+        if key:
+            entries.append((key, ten_inn, "hoat_chat", [hid], ten_inn))
+            non_brand_keys[frozenset({hid})].add(key)
+
+    synonym_rows = _query("tra_cuu", "SELECT DISTINCT khoa_chuan_hoa, hoat_chat_id FROM {dn}")
+    syn_to_ids: dict[str, set[str]] = defaultdict(set)
+    for row in synonym_rows:
+        khoa = str(row["khoa_chuan_hoa"] or "").strip()
+        hid = str(row["hoat_chat_id"])
+        if khoa and hid in catalog:
+            syn_to_ids[khoa].add(hid)
+    for khoa, ids_set in syn_to_ids.items():
+        if len(ids_set) != 1:
+            continue
+        hid = next(iter(ids_set))
+        display = viet_by_id.get((hid, khoa), khoa)
+        gia_tri_gui = display if product_key(display) == khoa else khoa
+        entries.append((khoa, display, "dong_nghia", [hid], gia_tri_gui))
+        non_brand_keys[frozenset({hid})].add(khoa)
+
+    product_rows = _query(
+        "tra_cuu",
+        "SELECT t.thuoc_id, t.khoa_ten_thuoc, t.ten_thuoc, p.hoat_chat_id "
+        "FROM {th} t JOIN {tp} p ON p.thuoc_id = t.thuoc_id",
+    )
+    product_meta: dict[str, tuple[str, str]] = {}
+    product_ings: dict[str, set[str]] = defaultdict(set)
+    for row in product_rows:
+        tid = str(row["thuoc_id"])
+        khoa = str(row["khoa_ten_thuoc"] or "").strip()
+        ten = str(row["ten_thuoc"] or "").strip()
+        hid = str(row["hoat_chat_id"])
+        if not khoa or not ten or hid not in catalog:
+            continue
+        product_meta.setdefault(tid, (khoa, ten))
+        product_ings[tid].add(hid)
+
+    by_key_names: dict[str, Counter[str]] = defaultdict(Counter)
+    by_key_formulas: dict[str, set[frozenset[str]]] = defaultdict(set)
+    for tid, (khoa, ten) in product_meta.items():
+        ings = frozenset(product_ings[tid])
+        if not ings:
+            continue
+        by_key_names[khoa][ten] += 1
+        by_key_formulas[khoa].add(ings)
+
+    for khoa, formulas in by_key_formulas.items():
+        if len(formulas) != 1:
+            continue
+        ings = next(iter(formulas))
+        if khoa in non_brand_keys.get(ings, ()):
+            continue
+        counts = by_key_names[khoa]
+        top_ten = min(counts.items(), key=lambda item: (-item[1], len(item[0]), item[0]))[0]
+        nhan = _strip_product_strength(top_ten)
+        gia_tri_gui = nhan if product_key(nhan) == khoa else top_ten
+        entries.append((khoa, nhan, "biet_duoc", sorted(ings), gia_tri_gui))
+
+    return DrugSuggestIndex(entries, inn_by_id=inn_by_id)
+
+
+def warm_suggest_index() -> None:
+    """Dựng sẵn chỉ mục gợi ý (gọi từ luồng làm nóng lúc khởi động API)."""
+    _suggest_index()
+
+
+def suggest_drugs(q: str, limit: int = 8) -> s.KetQuaGoiYThuoc:
+    """Gợi ý tên thuốc khi gõ; không ghi chuỗi tìm kiếm vào nhật ký."""
+    bounded = max(1, min(_MAX_SUGGEST, limit))
+    result = _suggest_index().goi_y(q, bounded)
+    return s.KetQuaGoiYThuoc(
+        ket_qua=[
+            s.GoiYThuoc(
+                nhan=item.nhan,
+                loai=item.loai,
+                hoat_chat_ids=list(item.hoat_chat_ids),
+                ten_hoat_chat=list(item.ten_hoat_chat),
+                gia_tri_gui=item.gia_tri_gui,
+                khop=item.khop,
+            )
+            for item in result.ket_qua
+        ],
+        goi_y_sua=result.goi_y_sua,
+    )
+
+
 def search_drugs(q: str | None, page: int, page_size: int) -> s.DanhSachThuoc:
     """Tìm hoạt chất theo tên thuốc, hoạt chất hoặc đồng nghĩa; không dấu, không phân biệt hoa."""
     page = max(1, page)
@@ -367,6 +519,7 @@ def search_drugs(q: str | None, page: int, page_size: int) -> s.DanhSachThuoc:
     catalog = _catalog()
     fda = _fda_ids()
     key = normalize_key(q or "")
+    goi_y_sua: str | None = None
     if not key:
         ordered = sorted(
             catalog.values(),
@@ -392,12 +545,24 @@ def search_drugs(q: str | None, page: int, page_size: int) -> s.DanhSachThuoc:
             (key, key, f"{key}%", like, like, key, f"{key}%", like, like),
         )
         ids = [row["hoat_chat_id"] for row in rows if row["hoat_chat_id"] in catalog]
+        if not ids:
+            suggested = _suggest_index().goi_y(q or "", 30)
+            ids = list(
+                dict.fromkeys(
+                    hid
+                    for item in suggested.ket_qua
+                    for hid in item.hoat_chat_ids
+                    if hid in catalog
+                )
+            )
+            goi_y_sua = suggested.goi_y_sua
     start = (page - 1) * page_size
     return s.DanhSachThuoc(
         tong=len(ids),
         trang=page,
         so_dong=page_size,
         ket_qua=[_summary(catalog[item], fda) for item in ids[start : start + page_size]],
+        goi_y_sua=goi_y_sua,
     )
 
 

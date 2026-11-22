@@ -131,7 +131,7 @@ def test_interface_field_sets_match_contract() -> None:
         contract_fields.setdefault(name, set()).update(fields)
 
     v18_fields = _parse_contract_interfaces(ROOT / "plan/api-hop-dong-v1.8-tra-cuu.md")
-    assert len(v18_fields) == 24
+    assert len(v18_fields) == 26  # +GoiYThuoc, KetQuaGoiYThuoc (T105)
     for name, fields in v18_fields.items():
         contract_fields.setdefault(name, set()).update(fields)
 
