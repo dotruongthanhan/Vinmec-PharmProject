@@ -196,7 +196,32 @@ def test_co_dinh_with_disabled_luong_cu_cung_raises_config_error(
         )
 
 
-def test_production_config_runs_agentic_engine() -> None:
-    """Từ 22/11/2026 ô hỏi đáp chạy agent; luồng cũ chỉ còn là đường lui bằng cờ co_dinh."""
-    assert load_settings("dev").ask.engine == "agentic"
+def test_production_config_defaults_to_co_dinh_engine() -> None:
+    """Demo chạy luồng cũ ổn định (CaseAsker); agent chỉ bật bằng cờ ask.engine=agentic."""
+    assert load_settings("dev").ask.engine == "co_dinh"
     assert load_settings("test").ask.engine == "co_dinh"
+
+
+def test_agentic_flag_still_builds_agentic_asker(
+    ai_bat_voi_llm_gia: None,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    agentic_settings = load_settings("dev").model_copy(
+        update={"ask": AskSettings(engine="agentic", tool_policy="config/tool_policy.yaml")}
+    )
+    monkeypatch.setattr(
+        container_mod,
+        "build_container",
+        lambda profile=None: container_mod.Container(agentic_settings),
+    )
+    monkeypatch.setenv("CDSS_LUONG_CU_CUNG", "0")
+    service = CaseService(
+        ROOT / "data/mock/demo",
+        ROOT / "data/kb/quy_tac_lieu_than.json",
+        tmp_path / "phan_hoi.jsonl",
+    )
+    try:
+        assert isinstance(service._asker_impl, AgenticAsker)
+    finally:
+        service.shutdown()
