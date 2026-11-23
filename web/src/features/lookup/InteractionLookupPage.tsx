@@ -2,17 +2,27 @@ import { ArrowLeftRight, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { apiClient } from '@/api/index'
-import type { KetQuaTraTuongTac, PhanGiaiTen } from '@/api/types'
+import type {
+  GoiYThuoc,
+  KetQuaGoiYThuoc,
+  KetQuaTraTuongTac,
+  PhanGiaiTen,
+} from '@/api/types'
 import { LookupWorkspace } from '@/app/LookupWorkspace'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { InlineAlert } from '@/components/ui/inline-alert'
+import { DrugNameCombobox } from '@/features/lookup/DrugNameCombobox'
 import { InteractionMatrix } from '@/features/order-detail/InteractionMatrix'
 import { ErrorState } from '@/features/states/StateViews'
+import { cn } from '@/lib/cn'
 import {
   MAX_INTERACTION_DRUGS,
   MIN_INTERACTION_DRUGS,
   addDrugName,
+  applyChipSuggestion,
+  foldName,
+  formatIngredientSummary,
   splitDrugNames,
 } from '@/lib/lookup'
 
@@ -72,13 +82,42 @@ export interface DrugChipInputProps {
   onChange: (names: string[]) => void
   onSubmit: () => void
   disabled?: boolean
+  initialMatched?: readonly GoiYThuoc[]
+  fetchSuggest?: (q: string, options?: { signal?: AbortSignal }) => Promise<KetQuaGoiYThuoc>
 }
 
-/** Ô nhập dạng thẻ: Enter hoặc dấu phẩy để thêm, Backspace khi ô trống để bỏ thẻ cuối. */
-export function DrugChipInput({ names, onChange, onSubmit, disabled = false }: DrugChipInputProps) {
+/** Ô nhập dạng thẻ: chọn gợi ý danh mục hoặc Enter/dấu phẩy thêm chữ tự do, Backspace bỏ thẻ cuối. */
+export function DrugChipInput({
+  names,
+  onChange,
+  onSubmit,
+  disabled = false,
+  initialMatched = [],
+  fetchSuggest,
+}: DrugChipInputProps) {
   const [draft, setDraft] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [matchedMeta, setMatchedMeta] = useState<Record<string, GoiYThuoc>>(() => {
+    const initial: Record<string, GoiYThuoc> = {}
+    for (const item of initialMatched) {
+      initial[foldName(item.gia_tri_gui)] = item
+    }
+    return initial
+  })
   const inputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    const activeKeys = new Set(names.map((item) => foldName(item)))
+    setMatchedMeta((prev) => {
+      const keys = Object.keys(prev)
+      if (keys.every((key) => activeKeys.has(key))) return prev
+      const next: Record<string, GoiYThuoc> = {}
+      for (const key of keys) {
+        if (activeKeys.has(key)) next[key] = prev[key]
+      }
+      return next
+    })
+  }, [names])
 
   const commit = (raw: string): boolean => {
     let next = [...names]
@@ -96,19 +135,44 @@ export function DrugChipInput({ names, onChange, onSubmit, disabled = false }: D
     return true
   }
 
+  const removeName = (target: string) => {
+    const targetFolded = foldName(target)
+    setMatchedMeta((prev) => {
+      if (!(targetFolded in prev)) return prev
+      const next = { ...prev }
+      delete next[targetFolded]
+      return next
+    })
+    onChange(names.filter((item) => item !== target))
+  }
+
+  const handleSelectSuggestion = (item: GoiYThuoc) => {
+    const next = applyChipSuggestion(names, matchedMeta, item)
+    if (next.error) {
+      setError(next.error)
+      onChange(next.list)
+      return
+    }
+    setError(null)
+    setMatchedMeta(next.matchedMeta)
+    onChange(next.list)
+    setDraft('')
+  }
+
+  const handleEnterFreeText = () => {
+    if (draft.trim() === '') {
+      if (names.length >= MIN_INTERACTION_DRUGS) onSubmit()
+      return
+    }
+    if (commit(draft)) setDraft('')
+  }
+
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      if (draft.trim() === '') {
-        if (names.length >= MIN_INTERACTION_DRUGS) onSubmit()
-        return
-      }
-      if (commit(draft)) setDraft('')
-    } else if (event.key === ',' || event.key === ';') {
+    if (event.key === ',' || event.key === ';') {
       event.preventDefault()
       if (commit(draft)) setDraft('')
     } else if (event.key === 'Backspace' && draft === '' && names.length > 0) {
-      onChange(names.slice(0, -1))
+      removeName(names[names.length - 1])
     }
   }
 
@@ -121,36 +185,61 @@ export function DrugChipInput({ names, onChange, onSubmit, disabled = false }: D
         className="flex min-h-10 flex-wrap items-center gap-1.5 rounded-sm border border-line-strong bg-surface px-2 py-1.5 focus-within:border-primary"
         onClick={() => inputRef.current?.focus()}
       >
-        {names.map((name) => (
-          <span key={name} className="inline-flex items-center gap-1 rounded-full border border-line-strong bg-surface-muted py-0.5 pl-2.5 pr-1 text-sm text-fg">
-            {name}
-            <button
-              type="button"
-              aria-label={`Bỏ ${name}`}
-              disabled={disabled}
-              onClick={(event) => {
-                event.stopPropagation()
-                onChange(names.filter((item) => item !== name))
-              }}
-              className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full text-fg-muted hover:bg-surface-hover hover:text-fg focus-visible:outline-2 focus-visible:outline-primary"
+        {names.map((name) => {
+          const meta = matchedMeta[foldName(name)]
+          const isFreeText = !meta
+          const ingredients = meta ? formatIngredientSummary(meta) : null
+          return (
+            <span
+              key={name}
+              title={isFreeText ? 'Chưa đối chiếu danh mục' : undefined}
+              className={cn(
+                'inline-flex items-center gap-1 rounded-full border py-0.5 pl-2.5 pr-1 text-sm text-fg',
+                isFreeText
+                  ? 'border-dashed border-line-strong bg-surface'
+                  : 'border-line-strong bg-surface-muted',
+              )}
             >
-              <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
-            </button>
-          </span>
-        ))}
-        <input
+              <span>{meta ? meta.nhan : name}</span>
+              {ingredients ? (
+                <span className="text-xs text-fg-subtle">→ {ingredients}</span>
+              ) : null}
+              <button
+                type="button"
+                aria-label={`Bỏ ${meta ? meta.nhan : name}`}
+                disabled={disabled}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  removeName(name)
+                }}
+                className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full text-fg-muted hover:bg-surface-hover hover:text-fg focus-visible:outline-2 focus-visible:outline-primary"
+              >
+                <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
+              </button>
+            </span>
+          )
+        })}
+        <DrugNameCombobox
           id="tra-tuong-tac-input"
-          ref={inputRef}
+          inputRef={inputRef}
           value={draft}
           disabled={disabled}
-          onChange={(event) => setDraft(event.target.value)}
+          onValueChange={setDraft}
+          onSelect={handleSelectSuggestion}
+          onEnterFreeText={handleEnterFreeText}
           onKeyDown={handleKeyDown}
           onBlur={() => {
             if (draft.trim() !== '' && commit(draft)) setDraft('')
           }}
-          placeholder={names.length === 0 ? 'Gõ tên thuốc rồi nhấn Enter, ví dụ: Amiodaron 200 mg' : 'Thêm thuốc…'}
-          aria-describedby="tra-tuong-tac-help"
-          className="min-w-40 flex-1 bg-transparent py-0.5 text-sm text-fg placeholder:text-fg-subtle"
+          placeholder={
+            names.length === 0
+              ? 'Gõ tên thuốc rồi chọn gợi ý hoặc nhấn Enter, ví dụ: Amiodaron 200 mg'
+              : 'Thêm thuốc…'
+          }
+          ariaDescribedBy="tra-tuong-tac-help"
+          className="min-w-40 flex-1"
+          inputClassName="w-full bg-transparent py-0.5 text-sm text-fg placeholder:text-fg-subtle"
+          fetchSuggest={fetchSuggest}
         />
       </div>
       <p id="tra-tuong-tac-help" className="text-xs text-fg-subtle">

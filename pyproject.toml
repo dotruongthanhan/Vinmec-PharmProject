@@ -50,4 +50,5 @@ ignore = ["S101"]
 testpaths = ["tests"]
 markers = [
     "can_du_lieu: cần tệp dữ liệu cục bộ không có trên git; tự bỏ qua khi thiếu",
+    "luong_cu_cung: test của luồng hỏi đáp cũ cứng; tự bỏ qua khi tool luong_cu_cung tắt",
 ]

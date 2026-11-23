@@ -69,6 +69,11 @@ vector_store:
 prompts:
   tong_hop: "config/prompts/tong_hop.v1.md"
   hoi_them: "config/prompts/hoi_them.v1.md"
+  tac_tu: "config/prompts/tac_tu.v1.md"
 
 orchestration:
   engine: "langgraph"               # langgraph | tuan_tu (đồ thị LangGraph hoặc hàm tuần tự cũ)
+
+ask:
+  engine: "agentic"                 # agentic | co_dinh (đường lui về luồng cũ, plan 1.9 mục 6.6)
+  tool_policy: "config/tool_policy.yaml"

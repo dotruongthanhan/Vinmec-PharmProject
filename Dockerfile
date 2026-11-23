@@ -40,8 +40,8 @@ COPY --from=web /web/dist ./web/dist
 
 # Thư mục ghi phản hồi và nhật ký; trên máy chủ sẽ gắn volume vào đây.
 RUN useradd --create-home --uid 1000 appuser \
-    && mkdir -p data/runtime \
-    && chown -R appuser:appuser data/runtime
+    && mkdir -p data/runtime data/cache \
+    && chown -R appuser:appuser data/runtime data/cache
 USER appuser
 
 EXPOSE 8000

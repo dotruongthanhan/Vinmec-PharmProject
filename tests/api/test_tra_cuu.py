@@ -5,6 +5,7 @@ Chạy ở chế độ tệp, không cần DB; mọi truy cập `read_pool` bị
 
 from collections.abc import Iterator
 from pathlib import Path
+from time import perf_counter
 from typing import Any
 
 import psycopg
@@ -431,6 +432,7 @@ def test_formula_catalog_only_maps_allowed_functions() -> None:
     ("method", "path", "body"),
     [
         ("get", "/api/thuoc", None),
+        ("get", "/api/thuoc/goi-y?q=amiod", None),
         ("get", "/api/thuoc/meropenem", None),
         ("post", "/api/tuong-tac", {"thuoc": ["A", "B"]}),
         ("get", "/api/cong-thuc", None),
@@ -447,3 +449,81 @@ def test_lookup_endpoints_require_login(
         path, headers=harness.headers(), **({"json": body} if body else {})
     )
     assert ok.status_code != 401
+
+
+@needs_index
+def test_suggest_endpoint_typo_validation_and_route_order(client: TestClient) -> None:
+    resp = client.get("/api/thuoc/goi-y", params={"q": "parecetamo"})
+    assert resp.status_code == 200
+    assert resp.headers["cache-control"] == "private, no-store"
+    body = resp.json()
+    assert set(body) == {"ket_qua", "goi_y_sua"}
+    assert body["ket_qua"]
+    assert any("acetaminophen" in item["hoat_chat_ids"] for item in body["ket_qua"])
+    assert body["goi_y_sua"] is not None
+
+    # Khong roi vao route /thuoc/{hoat_chat_id}.
+    missing_q = client.get("/api/thuoc/goi-y")
+    assert missing_q.status_code == 422
+    assert missing_q.json()["loi"]["ma"] == "du_lieu_khong_hop_le"
+
+    too_long = client.get("/api/thuoc/goi-y", params={"q": "x" * 101})
+    assert too_long.status_code == 422
+    assert too_long.json()["loi"]["ma"] == "du_lieu_khong_hop_le"
+
+
+@needs_chunks
+def test_search_drugs_falls_back_to_fuzzy_suggest_with_goi_y_sua(client: TestClient) -> None:
+    resp = client.get("/api/thuoc", params={"q": "parecetamo"})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["tong"] > 0
+    assert body["goi_y_sua"] is not None
+    assert any(row["hoat_chat_id"] == "acetaminophen" for row in body["ket_qua"])
+
+
+@needs_index
+def test_suggest_gia_tri_gui_resolves_in_interaction_lookup(client: TestClient) -> None:
+    for query in ("amiod", "parac", "cordar"):
+        resp = client.get("/api/thuoc/goi-y", params={"q": query, "gioi_han": 5})
+        assert resp.status_code == 200
+        items = resp.json()["ket_qua"]
+        assert items
+        for item in items[:5]:
+            inter = client.post(
+                "/api/tuong-tac",
+                json={"thuoc": [item["gia_tri_gui"], "meropenem"]},
+            )
+            assert inter.status_code == 200
+            resolved = inter.json()["phan_giai"][0]
+            assert resolved["trang_thai"] == "da_phan_giai"
+            assert resolved["hoat_chat"] == item["ten_hoat_chat"]
+
+
+@needs_index
+def test_suggest_index_build_and_query_latency(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Đo dựng chỉ mục từ tệp sqlite cục bộ, không đo mạng tới DB.
+    monkeypatch.setattr(lookup, "load_kb_source", lambda: "file")
+    lookup.clear_caches()
+    t0 = perf_counter()
+    index = lookup._suggest_index()
+    build_seconds = perf_counter() - t0
+    assert build_seconds < 3.0
+
+    queries = [
+        "amiod",
+        "parac",
+        "cordar",
+        "parecetamo",
+        "metform",
+        "meropen",
+        "amoxicilin",
+        "digox",
+        "warfar",
+        "extra",
+    ] * 5
+    q0 = perf_counter()
+    for query in queries:
+        index.goi_y(query, 8)
+    avg_ms = (perf_counter() - q0) * 1000.0 / len(queries)
+    assert avg_ms < 30.0

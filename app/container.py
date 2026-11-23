@@ -34,7 +34,9 @@ from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 from app.storage.case_repo import JsonCaseRepository
 
 if TYPE_CHECKING:
+    from app.agent.asker import AgenticAsker
     from app.orchestration.ask import CaseAsker
+    from app.orchestration.evidence import LazyRetrieverFactory
 
 _ROOT = Path(__file__).resolve().parents[1]
 _RULE_CONTEXT_LOCK = Lock()
@@ -221,12 +223,29 @@ class Container:
         return ctx
 
     @_LockedCachedProperty
+    def evidence_retriever(self) -> LazyRetrieverFactory | None:
+        """Bộ nạp đoạn nguồn dùng chung cho hỏi đáp và công cụ agent; None nếu chưa có kho."""
+        from app.orchestration.evidence import LazyRetrieverFactory
+
+        corpus_path = _ROOT / "data/kb_curated/chunks.jsonl"
+        if self._use_db(corpus_path):
+            if self._database_url() is None:
+                logging.getLogger(__name__).warning(
+                    "Không nạp được kho đoạn từ tri_thuc.doan_trich: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                return None
+            return LazyRetrieverFactory(self, use_db=True)
+        if corpus_path.is_file():
+            return LazyRetrieverFactory(self, corpus_path, use_db=False)
+        return None
+
+    @_LockedCachedProperty
     def case_asker(self) -> CaseAsker:
         """Dựng bộ hỏi đáp theo ca từ cấu hình, máy khách LLM, bộ truy xuất và prompt."""
         from app.kb.names import DrugNameIndex
         from app.llm import setup as llm_setup
         from app.orchestration.ask import CaseAsker
-        from app.orchestration.evidence import LazyRetrieverFactory
         from app.retrieval.query_builder import QueryBuilder
 
         try:
@@ -237,21 +256,7 @@ class Container:
             else:
                 raise
 
-        corpus_path = _ROOT / "data/kb_curated/chunks.jsonl"
-        retriever: LazyRetrieverFactory | None
-        if self._use_db(corpus_path):
-            if self._database_url() is None:
-                logging.getLogger(__name__).warning(
-                    "Không nạp được kho đoạn từ tri_thuc.doan_trich: thiếu %s",
-                    self.settings.database.url_env,
-                )
-                retriever = None
-            else:
-                retriever = LazyRetrieverFactory(self, use_db=True)
-        elif corpus_path.is_file():
-            retriever = LazyRetrieverFactory(self, corpus_path, use_db=False)
-        else:
-            retriever = None
+        retriever = self.evidence_retriever
         names = DrugNameIndex.load()
         raw_prompt = Path(self.settings.prompts.hoi_them)
         prompt_path = raw_prompt if raw_prompt.is_absolute() else _ROOT / raw_prompt
@@ -265,6 +270,41 @@ class Container:
             evidence_max_chars=self.settings.evidence.max_chars,
             model_name=self.settings.llm.model if llm is not None else None,
             renal_rules=self.renal_rules,
+        )
+
+    @_LockedCachedProperty
+    def agentic_asker(self) -> AgenticAsker:
+        """Dựng bộ hỏi đáp agent theo đồ thị LangGraph từ cấu hình và chính sách công cụ."""
+        from app.agent.asker import AgenticAsker
+        from app.agent.tools import ChinhSachCongCu, DanhMucCongCu
+        from app.agent.tools.tim_doan_nguon import TimDoanNguon
+        from app.agent.tools.tra_tuong_tac import TraTuongTac
+        from app.kb.names import DrugNameIndex
+        from app.llm import setup as llm_setup
+
+        try:
+            llm: LLMClient | None = llm_setup.build_llm(self)
+        except ConfigError as exc:
+            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+                llm = None
+            else:
+                raise
+
+        policy = ChinhSachCongCu.tu_tep(self._resolve_path(self.settings.ask.tool_policy))
+        # Công cụ chuyên biệt cắm dần (plan 1.9 mục 5.8): mỗi công cụ một dòng đăng ký.
+        danh_muc = DanhMucCongCu()
+        danh_muc.dang_ky(TraTuongTac())
+        danh_muc.dang_ky(TimDoanNguon(self.evidence_retriever, DrugNameIndex.load().resolve))
+
+        return AgenticAsker(
+            llm=llm,
+            danh_muc=danh_muc,
+            chinh_sach=policy,
+            global_asker=self.case_asker,
+            prompt_path=self._resolve_path(self.settings.prompts.tac_tu),
+            case_settings=self.settings.case_context,
+            renal_rules=self.renal_rules,
+            max_turns=self.settings.agent.max_turns,
         )
 
 

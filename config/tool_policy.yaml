@@ -1,0 +1,17 @@
+# Chính sách công cụ của agent hỏi đáp (plan 1.9 mục 7). Mặc định từ chối.
+# Mỗi công cụ được duyệt thêm một dòng ở cong_cu và cho_phep của từng vai trò.
+# Luồng cũ cứng không còn là công cụ: đường lui là cờ ask.engine: co_dinh trong config/settings.yaml.
+mac_dinh: tu_choi
+cong_cu:
+  tra_tuong_tac:
+    bat: true
+  tim_doan_nguon:
+    bat: true
+vai_tro:
+  duoc_si_ls:
+    cho_phep: [tra_tuong_tac, tim_doan_nguon]
+  admin:
+    cho_phep: [tra_tuong_tac, tim_doan_nguon]
+che_do:
+  chung:
+    cam: []

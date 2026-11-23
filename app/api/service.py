@@ -14,6 +14,8 @@ from typing import Any, Protocol
 from fastapi import HTTPException
 
 from app import container as container_mod
+from app.agent.asker import AgenticAsker
+from app.agent.tools.policy import luong_cu_cung_dang_bat
 from app.api import schemas as s
 from app.api.presenter import (
     ai_finding_id,
@@ -274,6 +276,13 @@ class CaseService:
         else:
             self._ai_runner = ai_runner
         self._ai_enabled = self._ai_runner is not None
+        if self._ai_enabled and self._container is not None:
+            if self._container.settings.ask.engine == "co_dinh":
+                policy_path = self._container._resolve_path(
+                    self._container.settings.ask.tool_policy
+                )
+                if not luong_cu_cung_dang_bat(policy_path):
+                    raise ConfigError("ask.engine=co_dinh nhưng luong_cu_cung đang tắt")
         if asker is not _AUTO:
             self._asker_impl = asker
         elif self._ai_enabled and self._container is not None:
@@ -330,7 +339,9 @@ class CaseService:
         return AiReviewer(collector, synthesizer)
 
     def _build_default_asker(self, container: container_mod.Container) -> AskRunner | None:
-        """Dựng CaseAsker qua container hoặc theo corpus_path tuỳ chỉnh khi kiểm thử."""
+        """Dựng CaseAsker hoặc AgenticAsker qua container theo cờ ask.engine."""
+        if container.settings.ask.engine == "agentic":
+            return container.agentic_asker
         default_corpus = _ROOT / "data/kb_curated/chunks.jsonl"
         if self._corpus_path == default_corpus:
             return container.case_asker
@@ -1079,7 +1090,18 @@ class CaseService:
                     "/api/ask",
                     "Bạn đã gửi quá nhiều câu hỏi.",
                 )
-                result = asker.ask_global(all_cases, all_results, request.cau_hoi, history_pairs)
+                if isinstance(asker, AgenticAsker):
+                    result = asker.ask_global(
+                        all_cases,
+                        all_results,
+                        request.cau_hoi,
+                        history_pairs,
+                        vai_tro=principal.vai_tro,
+                    )
+                else:
+                    result = asker.ask_global(
+                        all_cases, all_results, request.cau_hoi, history_pairs
+                    )
             else:
                 with self._lock:
                     case = self._get_case(case_id)
@@ -1115,14 +1137,25 @@ class CaseService:
                     "/api/cases/{ca_id}/ask",
                     "Bạn đã gửi quá nhiều câu hỏi.",
                 )
-                result = asker.ask(
-                    case,
-                    request.cau_hoi,
-                    history_pairs,
-                    ket_qua=rule_result,
-                    ai_result=ai_result,
-                    nhan_dinh_id=request.nhan_dinh_id,
-                )
+                if isinstance(asker, AgenticAsker):
+                    result = asker.ask(
+                        case,
+                        request.cau_hoi,
+                        history_pairs,
+                        ket_qua=rule_result,
+                        ai_result=ai_result,
+                        nhan_dinh_id=request.nhan_dinh_id,
+                        vai_tro=principal.vai_tro,
+                    )
+                else:
+                    result = asker.ask(
+                        case,
+                        request.cau_hoi,
+                        history_pairs,
+                        ket_qua=rule_result,
+                        ai_result=ai_result,
+                        nhan_dinh_id=request.nhan_dinh_id,
+                    )
 
             succeeded = result.trang_thai == "ok"
             if result.trang_thai == "ok" and result.doan:

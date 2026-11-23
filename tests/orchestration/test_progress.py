@@ -418,6 +418,7 @@ def test_ask_progress_registry_lifecycle_retention_token_and_cap() -> None:
         assert registry.doc((f"CA-{i}", "u")) is not None
 
 
+@pytest.mark.luong_cu_cung
 def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
     container = build_container("test")
     case = load_case(ROOT / "data/mock/demo/DEMO-02.json")

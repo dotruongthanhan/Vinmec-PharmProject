@@ -1,4 +1,10 @@
-import type { CongThucMuc, DauVaoCongThuc, NhomNhanFda } from '@/api/types'
+import type {
+  CongThucMuc,
+  DauVaoCongThuc,
+  GoiYThuoc,
+  LoaiGoiYThuoc,
+  NhomNhanFda,
+} from '@/api/types'
 
 /** Nhãn tiếng Việt cho 13 mục của nhãn FDA (khoá theo hợp đồng v1.8, đúng thứ tự). */
 export const FDA_SECTION_LABELS: Record<string, string> = {
@@ -219,4 +225,161 @@ export function formatFormulaResult(value: number): string {
   const abs = Math.abs(value)
   const digits = abs >= 100 ? 1 : abs >= 10 ? 2 : 3
   return new Intl.NumberFormat('vi-VN', { maximumFractionDigits: digits }).format(value)
+}
+
+export const SUGGEST_CACHE_MAX_KEYS = 100
+
+export const SUGGEST_KIND_LABELS: Record<LoaiGoiYThuoc, string> = {
+  hoat_chat: 'Hoạt chất',
+  dong_nghia: 'Tên khác',
+  biet_duoc: 'Biệt dược',
+}
+
+export interface HighlightSegment {
+  text: string
+  match: boolean
+}
+
+/** Tách nhãn thành các đoạn khớp và không khớp (không dấu, không phân biệt hoa) để render React an toàn. */
+export function splitHighlightSegments(label: string, query: string): HighlightSegment[] {
+  if (!label) return []
+  const source = label.normalize('NFC')
+  const foldedQuery = foldName(query)
+  if (!foldedQuery) return [{ text: source, match: false }]
+
+  const foldedChars: string[] = []
+  const origStart: number[] = []
+  const origEnd: number[] = []
+  let offset = 0
+  for (const cp of source) {
+    const start = offset
+    offset += cp.length
+    const f = cp
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replaceAll('đ', 'd')
+      .replaceAll('Đ', 'D')
+      .toLowerCase()
+    for (const ch of f) {
+      foldedChars.push(ch)
+      origStart.push(start)
+      origEnd.push(offset)
+    }
+  }
+  const foldedLabel = foldedChars.join('')
+  let pos = foldedLabel.indexOf(foldedQuery)
+  let matchLen = foldedQuery.length
+  if (pos === -1 && foldedQuery.includes(' ')) {
+    const firstWord = foldedQuery.split(' ')[0]
+    if (firstWord) {
+      pos = foldedLabel.indexOf(firstWord)
+      matchLen = firstWord.length
+    }
+  }
+  if (pos === -1 || matchLen === 0) {
+    return [{ text: source, match: false }]
+  }
+  const startIdx = origStart[pos]
+  const endIdx = origEnd[pos + matchLen - 1]
+  const segments: HighlightSegment[] = []
+  if (startIdx > 0) segments.push({ text: source.slice(0, startIdx), match: false })
+  segments.push({ text: source.slice(startIdx, endIdx), match: true })
+  if (endIdx < source.length) segments.push({ text: source.slice(endIdx), match: false })
+  return segments
+}
+
+/** Chuỗi hoạt chất nối bằng ` + `; trả null khi nhãn trùng tên hoạt chất (sau khi bỏ dấu). */
+export function formatIngredientSummary(
+  item: Pick<GoiYThuoc, 'nhan' | 'ten_hoat_chat'>,
+): string | null {
+  const joined = item.ten_hoat_chat.join(' + ').trim()
+  if (!joined) return null
+  return foldName(item.nhan) === foldName(joined) ? null : joined
+}
+
+/** Cập nhật bộ nhớ đệm trong RAM có trần số khoá (LRU đơn giản theo thứ tự chèn Map). */
+export function setBoundedCache<K, V>(
+  cache: Map<K, V>,
+  key: K,
+  value: V,
+  maxSize = SUGGEST_CACHE_MAX_KEYS,
+): void {
+  if (maxSize <= 0) return
+  if (cache.has(key)) {
+    cache.delete(key)
+  } else if (cache.size >= maxSize) {
+    const oldest = cache.keys().next().value
+    if (oldest !== undefined) cache.delete(oldest)
+  }
+  cache.set(key, value)
+}
+
+/** Chỉ tự sáng dòng đầu khi mục đầu khớp chính xác hoặc tiền tố. */
+export function comboboxInitialActiveIndex(items: readonly GoiYThuoc[]): number {
+  if (items.length === 0) return -1
+  const first = items[0]
+  return first.khop === 'chinh_xac' || first.khop === 'tien_to' ? 0 : -1
+}
+
+export type ComboboxKeyAction =
+  | { type: 'move'; nextIndex: number; preventDefault: true }
+  | { type: 'select'; item: GoiYThuoc; preventDefault: true }
+  | { type: 'close'; preventDefault: boolean }
+  | { type: 'free_text' }
+  | { type: 'pass' }
+
+/** Xử lý phím điều hướng của combobox gợi ý tên thuốc theo chuẩn WAI-ARIA 1.2. */
+export function resolveComboboxKeyDown(params: {
+  key: string
+  open: boolean
+  items: readonly GoiYThuoc[]
+  activeIndex: number
+}): ComboboxKeyAction {
+  const { key, open, items, activeIndex } = params
+  if (key === 'ArrowDown') {
+    if (!open || items.length === 0) return { type: 'pass' }
+    const nextIndex = activeIndex < items.length - 1 ? activeIndex + 1 : 0
+    return { type: 'move', nextIndex, preventDefault: true }
+  }
+  if (key === 'ArrowUp') {
+    if (!open || items.length === 0) return { type: 'pass' }
+    const nextIndex = activeIndex > 0 ? activeIndex - 1 : items.length - 1
+    return { type: 'move', nextIndex, preventDefault: true }
+  }
+  if (key === 'Enter') {
+    if (open && activeIndex >= 0 && activeIndex < items.length) {
+      return { type: 'select', item: items[activeIndex], preventDefault: true }
+    }
+    return { type: 'free_text' }
+  }
+  if (key === 'Escape') {
+    return open ? { type: 'close', preventDefault: true } : { type: 'pass' }
+  }
+  if (key === 'Tab') {
+    return open ? { type: 'close', preventDefault: false } : { type: 'pass' }
+  }
+  return { type: 'pass' }
+}
+
+export interface ChipSuggestionResult {
+  list: string[]
+  matchedMeta: Record<string, GoiYThuoc>
+  error: string | null
+}
+
+/** Thêm thẻ thuốc từ mục gợi ý (lưu giá trị gửi và ghi nhận nhãn hiển thị). */
+export function applyChipSuggestion(
+  list: readonly string[],
+  matchedMeta: Readonly<Record<string, GoiYThuoc>>,
+  item: GoiYThuoc,
+): ChipSuggestionResult {
+  const res = addDrugName(list, item.gia_tri_gui)
+  if (res.error) {
+    return { list: res.list, matchedMeta: { ...matchedMeta }, error: res.error }
+  }
+  return {
+    list: res.list,
+    matchedMeta: { ...matchedMeta, [foldName(item.gia_tri_gui)]: item },
+    error: null,
+  }
 }

@@ -16,6 +16,7 @@ from starlette.staticfiles import StaticFiles
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from app import container as container_mod
+from app.api import lookup
 from app.api.access_log import AccessLogger, AccessLogMiddleware, utc_now
 from app.api.routes import router
 from app.api.service import CaseService
@@ -274,6 +275,7 @@ def _warmup_db_knowledge() -> None:
         allergy_config.try_load_default_allergy_config,
         duplicate_config.try_load_default_duplicate_config,
         DrugNameIndex.load,
+        lookup.warm_suggest_index,
     )
     for loader in loaders:
         try:

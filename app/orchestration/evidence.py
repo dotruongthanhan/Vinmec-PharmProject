@@ -5,6 +5,7 @@ from collections.abc import Callable, Sequence
 from pathlib import Path
 from threading import RLock
 
+import numpy as np
 import psycopg
 
 from app.config.settings import get_secret
@@ -88,6 +89,7 @@ class LazyRetrieverFactory:
         self._lock = RLock()
         self._chunks: list[Chunk] | None = None
         self._cache: dict[frozenset[str], HybridRetriever] = {}
+        self._item_cache: dict[frozenset[str], list[tuple[Chunk, list[float] | None]]] = {}
         self._client: object | None = None
         self._embedder: Embedder | None = None
         self._reranker: Reranker | None = None
@@ -216,6 +218,54 @@ class LazyRetrieverFactory:
                 retriever.canh_bao.append(warning)
             self._cache[key] = retriever
             return retriever
+
+    def ingredient_items(self, ids: set[str]) -> list[tuple[Chunk, list[float] | None]]:
+        """Đoạn của tập hoạt chất kèm vector có sẵn (None nếu chưa có); không gọi nhúng."""
+        key = frozenset(ids)
+        if not key:
+            return []
+        with self._lock:
+            cached = self._item_cache.get(key)
+            if cached is None:
+                if self._should_use_db():
+                    cached = self._load_db_chunks_for_ingredients(key)
+                else:
+                    cached = [
+                        (chunk, None)
+                        for chunk in self._get_chunks()
+                        if set(chunk.hoat_chat_ids) & key
+                    ]
+                self._item_cache[key] = cached
+            return list(cached)
+
+    def rank_by_vector(
+        self, items: Sequence[tuple[Chunk, list[float] | None]], query: str, k: int
+    ) -> list[Chunk]:
+        """Xếp hạng đoạn theo cosine với vector câu hỏi; chỉ nhúng bù đoạn chưa có vector."""
+        if not items or k <= 0:
+            return []
+        embedder, _ = self._ensure_providers()
+        if self._should_use_db():
+            self._validate_db_embedding_settings(embedder)
+        query_vector = np.asarray(embedder.embed_query(query), dtype=float)
+        vectors: list[list[float] | None] = [vector for _, vector in items]
+        missing = [index for index, vector in enumerate(vectors) if vector is None]
+        if missing:
+            computed = embedder.embed_documents([items[i][0].noi_dung_nhung for i in missing])
+            for index, vector in zip(missing, computed, strict=True):
+                vectors[index] = vector
+        try:
+            matrix = np.asarray(vectors, dtype=float)
+        except (TypeError, ValueError):
+            raise RetrievalError("Số chiều véc-tơ không khớp") from None
+        if matrix.ndim != 2 or matrix.shape[1] != query_vector.size:
+            raise RetrievalError("Số chiều véc-tơ không khớp truy vấn")
+        denominators = np.linalg.norm(matrix, axis=1) * np.linalg.norm(query_vector)
+        scores = np.divide(
+            matrix @ query_vector, denominators, out=np.zeros(len(items)), where=denominators != 0
+        )
+        order = np.argsort(-scores, kind="stable")[:k]
+        return [items[int(i)][0] for i in order]
 
     def close(self) -> None:
         """Đóng máy khách HTTP dùng chung nếu đã khởi tạo."""

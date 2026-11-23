@@ -17,6 +17,7 @@ Từ 19/11/2026, thư mục `data/` không còn trên git, trừ `data/mock`, `d
 
 | Bộ dữ liệu | Tệp mô tả | Dùng cho | Trạng thái |
 |:--|:--|:--|:--|
+| **Cơ sở dữ liệu RDS `bvienx`: ERD, mọi bảng và cột, vector, vấn đề chất lượng** | [erd-db-hien-tai.md](erd-db-hien-tai.md) | Toàn bộ; thiết kế tool plan 1.9 | ✅ đọc trực tiếp DB 21/11 |
 | DDInter 2.0 (tương tác) | [ddinter.md](ddinter.md) | Yếu tố 4 | ✅ cập nhật 19/11 |
 | Cục Quản lý Dược (số đăng ký) | [dav.md](dav.md) | Từ điển thuốc | ✅ cập nhật 19/11 (T59) |
 | RxNav / RxClass (RxNorm, ATC) | [rxnav.md](rxnav.md) | Trục hoạt chất, ATC | ✅ cập nhật 19/11 (T59) |

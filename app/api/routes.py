@@ -176,6 +176,18 @@ def search_drugs(
     return lookup.search_drugs(q, trang, so_dong)
 
 
+@router.get("/thuoc/goi-y", response_model=s.KetQuaGoiYThuoc)
+def suggest_drugs(
+    response: Response,
+    principal: Caller,
+    q: Annotated[str, Query(max_length=100)],
+    gioi_han: Annotated[int, Query(ge=1, le=15)] = 8,
+) -> s.KetQuaGoiYThuoc:
+    """Gợi ý tên thuốc khi gõ (hoạt chất, đồng nghĩa, biệt dược); không ghi q vào nhật ký."""
+    response.headers["Cache-Control"] = "private, no-store"
+    return lookup.suggest_drugs(q, gioi_han)
+
+
 @router.get("/thuoc/{hoat_chat_id}", response_model=s.ChiTietThuoc)
 def drug_detail(hoat_chat_id: str, response: Response, principal: Caller) -> s.ChiTietThuoc:
     """Toàn bộ thông tin tra cứu của một hoạt chất, mỗi phần ghi nguồn."""

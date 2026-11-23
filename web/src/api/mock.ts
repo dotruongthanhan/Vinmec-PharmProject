@@ -1,5 +1,6 @@
 import { ApiError } from './client.ts'
 import { MOCK_DRUGS, MOCK_FORMULAS, buildMockDrugDetail } from './mockLookup.ts'
+import { foldName } from '../lib/lookup.ts'
 import type { ReviewApiClient } from './client.ts'
 import {
   MOCK_AI_ADDED_FINDINGS,
@@ -18,11 +19,13 @@ import type {
   DanhSachThuoc,
   DanhSachCa,
   DoanNguon,
+  GoiYThuoc,
   GuiCauHoi,
   GuiPhanHoi,
   HealthResponse,
   KetQuaAI,
   KetQuaCongThuc,
+  KetQuaGoiYThuoc,
   KetQuaTraTuongTac,
   MeResponse,
   NguonTomTat,
@@ -1078,7 +1081,58 @@ export class MockClient implements ReviewApiClient {
     const found = MOCK_DRUGS.filter(
       (d) => !q || d.ten_inn.includes(q) || (d.ten_viet ?? '').toLowerCase().includes(q),
     )
-    return { tong: found.length, trang: params.trang ?? 1, so_dong: params.soDong ?? 30, ket_qua: cloneData(found) }
+    return {
+      tong: found.length,
+      trang: params.trang ?? 1,
+      so_dong: params.soDong ?? 30,
+      ket_qua: cloneData(found),
+      goi_y_sua: null,
+    }
+  }
+
+  async suggestDrugs(
+    q: string,
+    options?: { signal?: AbortSignal; gioiHan?: number },
+  ): Promise<KetQuaGoiYThuoc> {
+    if (options?.signal?.aborted) {
+      throw new DOMException('Đã huỷ yêu cầu.', 'AbortError')
+    }
+    await this.waitDelay()
+    if (options?.signal?.aborted) {
+      throw new DOMException('Đã huỷ yêu cầu.', 'AbortError')
+    }
+    const folded = foldName(q)
+    if (folded.length < 2) {
+      return { ket_qua: [], goi_y_sua: null }
+    }
+    const limit = Math.max(1, Math.min(15, options?.gioiHan ?? 8))
+    const matches: GoiYThuoc[] = []
+    for (const drug of MOCK_DRUGS) {
+      const innFolded = foldName(drug.ten_inn)
+      const vietFolded = drug.ten_viet ? foldName(drug.ten_viet) : ''
+      if (innFolded === folded || innFolded.startsWith(folded)) {
+        matches.push({
+          nhan: drug.ten_inn,
+          loai: 'hoat_chat',
+          hoat_chat_ids: [drug.hoat_chat_id],
+          ten_hoat_chat: [drug.ten_inn],
+          gia_tri_gui: drug.ten_inn,
+          khop: innFolded === folded ? 'chinh_xac' : 'tien_to',
+        })
+      } else if (vietFolded && (vietFolded === folded || vietFolded.startsWith(folded))) {
+        const display = drug.ten_viet ?? drug.ten_inn
+        matches.push({
+          nhan: display,
+          loai: 'dong_nghia',
+          hoat_chat_ids: [drug.hoat_chat_id],
+          ten_hoat_chat: [drug.ten_inn],
+          gia_tri_gui: display,
+          khop: vietFolded === folded ? 'chinh_xac' : 'tien_to',
+        })
+      }
+      if (matches.length >= limit) break
+    }
+    return { ket_qua: matches, goi_y_sua: null }
   }
 
   async getDrug(hoatChatId: string): Promise<ChiTietThuoc> {

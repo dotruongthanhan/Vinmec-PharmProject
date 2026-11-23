@@ -22,7 +22,10 @@ import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
 import type { EvidenceTarget } from '@/lib/uiTypes'
 import { PatientCollapsedButton, PatientSidebarCard } from './PatientSidebarCard'
+import { ReviewFactorNav } from './ReviewFactorNav'
+import type { ReviewFactorNavProps } from './ReviewFactorNav'
 export type SidebarSection = 'orders' | 'thuoc' | 'tuong_tac' | 'cong_thuc'
+export type SidebarReviewNav = Omit<ReviewFactorNavProps, 'collapsed'>
 
 export interface SidebarNavProps {
   collapsed: boolean
@@ -37,6 +40,7 @@ export interface SidebarNavProps {
   onSignIn: () => void
   onSignOut: (options?: { scope?: 'local' | 'global' }) => void
   patient?: ChiTietCa | null
+  reviewNav?: SidebarReviewNav | null
   onOpenEvidence?: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
 }
 
@@ -54,6 +58,7 @@ export function SidebarNav({
   onSignIn,
   onSignOut,
   patient = null,
+  reviewNav = null,
   onOpenEvidence,
 }: SidebarNavProps) {
   const effectiveCollapsed = collapsed && !inDrawer
@@ -173,8 +178,24 @@ export function SidebarNav({
         })}
       </div>
 
-      {/* 3. Nửa dưới: thẻ thông tin người bệnh khi đang mở một ca */}
-      {patient ? (
+      {/* 3. Nửa dưới: điều hướng 8 mục khi mở ca ở tab Thẩm định; tab khác giữ thẻ người bệnh */}
+      {reviewNav ? (
+        <div
+          className={cn(
+            'flex-1 min-h-0 overflow-y-auto overscroll-contain border-t border-ink-line',
+            effectiveCollapsed ? 'p-1.5' : 'p-2',
+          )}
+        >
+          <ReviewFactorNav
+            {...reviewNav}
+            collapsed={effectiveCollapsed}
+            onSelect={(target) => {
+              reviewNav.onSelect(target)
+              onNavigate()
+            }}
+          />
+        </div>
+      ) : patient ? (
         effectiveCollapsed ? (
           <>
             <div className="shrink-0 border-t border-ink-line p-2">

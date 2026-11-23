@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+import pytest
+
 from app.container import build_container
 from app.core.types import Chunk, RetrievalQuery, ScoredChunk
 from app.domain.loader import load_case
@@ -14,6 +16,7 @@ from tests.deid_support import temp_id
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT_PATH = ROOT / "config/prompts/hoi_them.v1.md"
+pytestmark = pytest.mark.luong_cu_cung
 
 
 class _StaticRetriever:

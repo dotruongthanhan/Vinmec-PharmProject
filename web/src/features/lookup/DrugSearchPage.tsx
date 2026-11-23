@@ -6,7 +6,9 @@ import type { DanhSachThuoc, KetQuaThuoc } from '@/api/types'
 import { LookupWorkspace } from '@/app/LookupWorkspace'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/empty-state'
+import { InlineAlert } from '@/components/ui/inline-alert'
 import { Skeleton } from '@/components/ui/skeleton'
+import { DrugNameCombobox } from '@/features/lookup/DrugNameCombobox'
 import { TablePagination } from '@/features/orders/TablePagination'
 import { ErrorState } from '@/features/states/StateViews'
 import { DEFAULT_PAGE_SIZE, parsePageParam, updatePageInSearchParams } from '@/lib/pagination'
@@ -52,6 +54,12 @@ export function DrugResultsTable({ data, loading, error, query, onOpen, onPageCh
   const endIndex = startIndex + data.ket_qua.length - 1
   return (
     <>
+      {data.goi_y_sua ? (
+        <InlineAlert tone="neutral" role="status">
+          Không có kết quả khớp đúng. Đang hiện kết quả gần đúng cho{' '}
+          <strong className="font-semibold text-fg">{data.goi_y_sua}</strong>.
+        </InlineAlert>
+      ) : null}
       <div
         role="region"
         aria-label="Bảng tra cứu thuốc"
@@ -144,17 +152,36 @@ export default function DrugSearchPage() {
             ) : null}
           </div>
         </div>
-        <div className="relative flex items-center">
-          <Search className="pointer-events-none absolute left-2.5 size-3.5 text-fg-subtle" strokeWidth={1.75} aria-hidden="true" />
-          <input
-            type="search"
-            value={draft}
-            aria-label="Tìm thuốc theo hoạt chất, tên Việt hoặc biệt dược"
-            placeholder="Tìm hoạt chất, tên Việt, biệt dược…"
-            onChange={(event) => setDraft(event.target.value)}
-            className="h-9 w-full max-w-xl rounded-sm border border-line-strong bg-surface pl-8 pr-3 text-sm text-fg placeholder:text-fg-subtle focus:border-primary"
-          />
-        </div>
+        <DrugNameCombobox
+          type="search"
+          value={draft}
+          ariaLabel="Tìm thuốc theo hoạt chất, tên Việt hoặc biệt dược"
+          placeholder="Tìm hoạt chất, tên Việt, biệt dược…"
+          onValueChange={setDraft}
+          onSelect={(item) => {
+            const firstId = item.hoat_chat_ids[0]
+            if (firstId) navigate(`/app/thuoc/${encodeURIComponent(firstId)}`)
+          }}
+          onEnterFreeText={() => {
+            const trimmed = draft.trim()
+            if (trimmed === query.trim()) return
+            setSearchParams((prev) => {
+              const next = updatePageInSearchParams(prev, 1)
+              if (trimmed) next.set('q', trimmed)
+              else next.delete('q')
+              return next
+            }, { replace: true })
+          }}
+          className="relative flex w-full max-w-xl items-center"
+          leadingIcon={
+            <Search
+              className="pointer-events-none absolute left-2.5 size-3.5 text-fg-subtle"
+              strokeWidth={1.75}
+              aria-hidden="true"
+            />
+          }
+          inputClassName="h-9 w-full rounded-sm border border-line-strong bg-surface pl-8 pr-3 text-sm text-fg placeholder:text-fg-subtle focus:border-primary"
+        />
         <DrugResultsTable
           data={state.data}
           loading={state.loading}

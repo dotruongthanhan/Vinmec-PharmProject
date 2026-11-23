@@ -6,10 +6,10 @@ import type { MaTranTuongTac } from '../api/types'
 import { TooltipProvider } from '../components/ui/tooltip'
 import { OrderDetailView } from '../features/order-detail/OrderDetailView'
 
-function renderDetail(matrix: MaTranTuongTac | null): string {
+function renderDetail(matrix: MaTranTuongTac | null, search = '?tab=tham_dinh&yt=4'): string {
   const detail = { ...MOCK_CASE_DETAILS['DEMO-02'], ma_tran_tuong_tac: matrix }
   return renderToStaticMarkup(
-    <TooltipProvider><MemoryRouter initialEntries={['?tab=tham_dinh']}>
+    <TooltipProvider><MemoryRouter initialEntries={[search]}>
       <OrderDetailView detail={detail} aiTrangThai="tat" aiKetQua={null} aiThoiGianMs={null}
         aiCanhBao={[]} sessionFeedbackForCase={{}} onRerunAi={() => {}}
         isFeedbackSubmitting={() => false} getFeedbackError={() => null}
@@ -20,7 +20,7 @@ function renderDetail(matrix: MaTranTuongTac | null): string {
 }
 
 describe('ma trận trong màn hình chi tiết', () => {
-  it('truyền mức và nguồn có cấu trúc vào ma trận', () => {
+  it('truyền mức và nguồn có cấu trúc vào ma trận ở mục Yếu tố 4', () => {
     const html = renderDetail({
       nguon: 'DDInter nguồn kiểm thử', ghi_chu: 'Giới hạn sàng lọc kiểm thử',
       thuoc: ['P1', 'P2'].map((id) => ({
@@ -38,11 +38,15 @@ describe('ma trận trong màn hình chi tiết', () => {
     expect(html).toContain('Thuốc giả lập P2')
   })
 
-  it('giữ cách hiển thị cũ khi ma trận null', () => {
-    const html = renderDetail(null)
-    expect(html).toContain('Meropenem 1 g')
-    expect(html).not.toContain('DDInter nguồn kiểm thử')
-    expect(html).toContain('Yếu tố 4 · Tương tác thuốc')
+  it('giữ cách hiển thị cũ ở Yếu tố 4 khi ma trận null và không hiện phần tương tác ở Tổng quan', () => {
+    const factor4Html = renderDetail(null, '?tab=tham_dinh&yt=4')
+    expect(factor4Html).toContain('Meropenem 1 g')
+    expect(factor4Html).not.toContain('DDInter nguồn kiểm thử')
+    expect(factor4Html).toContain('Yếu tố 4 · Tương tác thuốc')
+
+    const overviewHtml = renderDetail(null, '?tab=tham_dinh')
+    expect(overviewHtml).toContain('Meropenem 1 g')
+    expect(overviewHtml).not.toContain('Yếu tố 4 · Tương tác thuốc')
   })
 })
 

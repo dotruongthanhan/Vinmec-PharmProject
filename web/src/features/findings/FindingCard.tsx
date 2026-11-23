@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
 import { cn } from '@/lib/cn'
 import { formatClinicalText, parseLeadingSymbolLabel } from '@/lib/displayFormat'
+import { factorIndexOf } from '@/lib/orderDetail'
 import {
   ICON_OF_TONE,
   iconOfOrigin,
@@ -31,6 +32,7 @@ export interface FindingCardProps {
   onClearFeedbackError: (caId: string, nhanDinhId: string) => void
   onOpenEvidence: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
   onAskAboutFinding?: (finding: NhanDinh) => void
+  onOpenFactor?: () => void
 }
 
 const STRIP_BG_CLASS: Record<SemanticTone, string> = {
@@ -57,7 +59,9 @@ export function FindingCard({
   onClearFeedbackError,
   onOpenEvidence,
   onAskAboutFinding,
+  onOpenFactor,
 }: FindingCardProps) {
+  const factorIndex = onOpenFactor ? factorIndexOf(finding.yeu_to) : null
   const tone = toneOfFinding({
     ket_luan_ma: finding.ket_luan_ma,
     muc_do_ma: finding.muc_do_ma,
@@ -128,6 +132,11 @@ export function FindingCard({
           >
             {originLabel}
           </Badge>
+          {onOpenFactor && factorIndex !== null ? (
+            <Button variant="ghost" size="sm" onClick={onOpenFactor}>
+              Mở mục {factorIndex}
+            </Button>
+          ) : null}
           {onAskAboutFinding ? (
             <Button
               variant="ghost"

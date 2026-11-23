@@ -28,6 +28,16 @@ DEFAULT_LLM_AI_PER_HOUR = 15
 DEFAULT_LLM_DAILY_CALLS = 600
 
 
+_LUONG_CU_CUNG_ENV = "CDSS_LUONG_CU_CUNG"
+_ENV_FALSE_VALUES = frozenset({"0", "false", "off", "khong"})
+
+
+def luong_cu_cung_tat_qua_env() -> bool:
+    """Biến CDSS_LUONG_CU_CUNG đặt 0/false/off/khong thì tắt luồng cũ cứng (plan 1.9 mục 6.6)."""
+    raw = os.getenv(_LUONG_CU_CUNG_ENV)
+    return raw is not None and raw.strip().casefold() in _ENV_FALSE_VALUES
+
+
 def _read_positive_int_env(name: str, default: int) -> int:
     """Đọc số nguyên dương từ biến môi trường; rỗng trả mặc định, sai ghi cảnh báo."""
     raw = os.getenv(name)
@@ -278,6 +288,7 @@ class PromptSettings(BaseModel):
 
     tong_hop: str
     hoi_them: str
+    tac_tu: str = "config/prompts/tac_tu.v1.md"
 
 
 class OrchestrationSettings(BaseModel):
@@ -286,6 +297,15 @@ class OrchestrationSettings(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
 
     engine: Literal["langgraph", "tuan_tu"]
+
+
+class AskSettings(BaseModel):
+    """Chọn đường chạy hỏi đáp: luồng cứng cũ hoặc agent theo đồ thị (plan 1.9 mục 6.6)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    engine: Literal["co_dinh", "agentic"] = "co_dinh"
+    tool_policy: str = "config/tool_policy.yaml"
 
 
 class AppSettings(BaseModel):
@@ -319,6 +339,7 @@ class Settings(BaseModel):
     vector_store: VectorStoreSettings
     prompts: PromptSettings
     orchestration: OrchestrationSettings = OrchestrationSettings(engine="tuan_tu")
+    ask: AskSettings = AskSettings()
 
 
 def _read_yaml(path: Path) -> dict:

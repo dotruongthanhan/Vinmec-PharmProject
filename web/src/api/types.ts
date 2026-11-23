@@ -479,6 +479,24 @@ export interface DanhSachThuoc {
   trang: number
   so_dong: number
   ket_qua: KetQuaThuoc[]
+  goi_y_sua?: string | null
+}
+
+export type LoaiGoiYThuoc = 'hoat_chat' | 'dong_nghia' | 'biet_duoc'
+export type KieuKhopGoiYThuoc = 'chinh_xac' | 'tien_to' | 'gan_dung'
+
+export interface GoiYThuoc {
+  nhan: string
+  loai: LoaiGoiYThuoc
+  hoat_chat_ids: string[]
+  ten_hoat_chat: string[]
+  gia_tri_gui: string
+  khop: KieuKhopGoiYThuoc
+}
+
+export interface KetQuaGoiYThuoc {
+  ket_qua: GoiYThuoc[]
+  goi_y_sua: string | null
 }
 
 export interface DinhDanhThuoc {

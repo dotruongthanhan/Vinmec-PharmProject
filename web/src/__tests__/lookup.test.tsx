@@ -5,19 +5,25 @@ import { ApiClient, ApiError } from '../api/client'
 import type { FetchLike } from '../api/client'
 import { MockClient } from '../api/mock'
 import { MOCK_FORMULAS, buildMockDrugDetail } from '../api/mockLookup'
-import type { CongThucMuc, DanhSachThuoc, KetQuaCongThuc, KetQuaTraTuongTac } from '../api/types'
+import type { CongThucMuc, DanhSachThuoc, GoiYThuoc, KetQuaCongThuc, KetQuaGoiYThuoc, KetQuaTraTuongTac } from '../api/types'
 import { TooltipProvider } from '../components/ui/tooltip'
 import { DrugDetailView } from '../features/lookup/DrugDetailPage'
+import { DrugNameCombobox } from '../features/lookup/DrugNameCombobox'
 import { DrugResultsTable } from '../features/lookup/DrugSearchPage'
 import { FormulaForm, FormulaListView, FormulaResultView } from '../features/lookup/FormulaPages'
-import { InteractionLookupResult, ResolutionWarnings } from '../features/lookup/InteractionLookupPage'
+import { DrugChipInput, InteractionLookupResult, ResolutionWarnings } from '../features/lookup/InteractionLookupPage'
 import { SidebarNav } from '../features/sidebar/SidebarNav'
 import {
   addDrugName,
+  applyChipSuggestion,
   approvalLabel,
   buildFormulaBody,
+  comboboxInitialActiveIndex,
   groupFormulas,
   initialFormulaValues,
+  resolveComboboxKeyDown,
+  setBoundedCache,
+  splitHighlightSegments,
 } from '../lib/lookup'
 
 const noop = () => {}
@@ -386,5 +392,182 @@ describe('công thức', () => {
       status: 422,
       thong_bao: 'Đơn vị creatinin không hợp lệ.',
     })
+  })
+})
+
+describe('gợi ý tên thuốc khi gõ', () => {
+  const sampleItems: GoiYThuoc[] = [
+    {
+      nhan: 'Paracetamol',
+      loai: 'dong_nghia',
+      hoat_chat_ids: ['acetaminophen'],
+      ten_hoat_chat: ['acetaminophen'],
+      gia_tri_gui: 'Paracetamol',
+      khop: 'tien_to',
+    },
+    {
+      nhan: 'Panadol Extra',
+      loai: 'biet_duoc',
+      hoat_chat_ids: ['acetaminophen', 'caffeine'],
+      ten_hoat_chat: ['acetaminophen', 'caffeine'],
+      gia_tri_gui: 'Panadol Extra',
+      khop: 'tien_to',
+    },
+  ]
+
+  it('ApiClient.suggestDrugs gọi GET /api/thuoc/goi-y đúng tham số và MockClient lọc theo tiền tố', async () => {
+    const calls: { url: string; init?: RequestInit }[] = []
+    const payload: KetQuaGoiYThuoc = { ket_qua: sampleItems, goi_y_sua: null }
+    const client = new ApiClient('/api', jsonFetch(calls, payload))
+    const res = await client.suggestDrugs('parac')
+    expect(calls[0].url).toBe('/api/thuoc/goi-y?q=parac')
+    expect(res.ket_qua).toHaveLength(2)
+
+    const mock = new MockClient({ delayMs: 0 })
+    expect((await mock.suggestDrugs('a')).ket_qua).toEqual([])
+    const amiod = await mock.suggestDrugs('amiod')
+    expect(amiod.ket_qua[0]?.hoat_chat_ids).toEqual(['amiodarone'])
+    expect(amiod.ket_qua[0]?.khop).toBe('tien_to')
+  })
+
+  it('DrugNameCombobox đủ thuộc tính ARIA và không chứa HTML thô khi nhan có ký tự <', () => {
+    const html = renderToStaticMarkup(
+      <DrugNameCombobox
+        value="par"
+        onValueChange={noop}
+        onSelect={noop}
+        initialResult={{ ket_qua: sampleItems, goi_y_sua: null }}
+      />,
+    )
+    expect(html).toContain('role="combobox"')
+    expect(html).toContain('aria-expanded="true"')
+    expect(html).toContain('aria-autocomplete="list"')
+    expect(html).toContain('role="listbox"')
+    expect(html).toContain('role="option"')
+    expect(html).toContain('aria-selected="true"')
+    expect(html).toContain('aria-activedescendant="')
+    expect(html).toContain('Tên khác')
+    expect(html).toContain('Biệt dược')
+    expect(html).toContain('→ acetaminophen + caffeine')
+
+    const xssItem: GoiYThuoc = {
+      nhan: '<script>alert(1)</script>',
+      loai: 'biet_duoc',
+      hoat_chat_ids: ['x'],
+      ten_hoat_chat: ['x'],
+      gia_tri_gui: '<script>alert(1)</script>',
+      khop: 'tien_to',
+    }
+    const xssHtml = renderToStaticMarkup(
+      <DrugNameCombobox
+        value="<sc"
+        onValueChange={noop}
+        onSelect={noop}
+        initialResult={{ ket_qua: [xssItem], goi_y_sua: null }}
+      />,
+    )
+    expect(xssHtml).not.toContain('<script>')
+    expect(xssHtml).toContain('&lt;sc')
+    expect(xssHtml).toContain('ript&gt;alert(1)&lt;/script&gt;')
+    expect(splitHighlightSegments('<script>alert(1)</script>', '<sc')).toEqual([
+      { text: '<sc', match: true },
+      { text: 'ript>alert(1)</script>', match: false },
+    ])
+  })
+
+  it('điều hướng bàn phím: ↓ rồi Enter chọn đúng mục, Esc đóng, chỉ tự sáng khi khớp chính xác/tiền tố', () => {
+    let active = comboboxInitialActiveIndex(sampleItems)
+    expect(active).toBe(0)
+    const down = resolveComboboxKeyDown({ key: 'ArrowDown', open: true, items: sampleItems, activeIndex: active })
+    expect(down).toEqual({ type: 'move', nextIndex: 1, preventDefault: true })
+    if (down.type === 'move') active = down.nextIndex
+
+    const onSelectCalls: GoiYThuoc[] = []
+    const enter = resolveComboboxKeyDown({ key: 'Enter', open: true, items: sampleItems, activeIndex: active })
+    expect(enter).toEqual({ type: 'select', item: sampleItems[1], preventDefault: true })
+    if (enter.type === 'select') onSelectCalls.push(enter.item)
+    expect(onSelectCalls).toEqual([sampleItems[1]])
+
+    expect(resolveComboboxKeyDown({ key: 'Escape', open: true, items: sampleItems, activeIndex: active })).toEqual({
+      type: 'close',
+      preventDefault: true,
+    })
+
+    const fuzzyItems: GoiYThuoc[] = [{ ...sampleItems[0], khop: 'gan_dung' }]
+    expect(comboboxInitialActiveIndex(fuzzyItems)).toBe(-1)
+    expect(resolveComboboxKeyDown({ key: 'Enter', open: true, items: fuzzyItems, activeIndex: -1 })).toEqual({
+      type: 'free_text',
+    })
+  })
+
+  it('bộ nhớ đệm gợi ý giữ tối đa 100 khoá theo LRU', () => {
+    const cache = new Map<string, number>()
+    for (let i = 0; i < 105; i += 1) {
+      setBoundedCache(cache, `k${i}`, i, 100)
+    }
+    expect(cache.size).toBe(100)
+    expect(cache.has('k0')).toBe(false)
+    expect(cache.has('k104')).toBe(true)
+  })
+
+  it('DrugChipInput chọn gợi ý thêm thẻ bằng gia_tri_gui, thẻ tự do có viền nét đứt', () => {
+    const cordarone: GoiYThuoc = {
+      nhan: 'Cordarone',
+      loai: 'biet_duoc',
+      hoat_chat_ids: ['amiodarone'],
+      ten_hoat_chat: ['amiodarone'],
+      gia_tri_gui: 'Cordarone 200mg',
+      khop: 'tien_to',
+    }
+    const added = applyChipSuggestion([], {}, cordarone)
+    expect(added.error).toBeNull()
+    expect(added.list).toEqual(['Cordarone 200mg'])
+
+    const html = renderToStaticMarkup(
+      <DrugChipInput
+        names={['Cordarone 200mg', 'Thuốc tự do']}
+        initialMatched={[cordarone]}
+        onChange={noop}
+        onSubmit={noop}
+      />,
+    )
+    expect(html).toContain('Cordarone')
+    expect(html).toContain('→ amiodarone')
+    expect(html).toContain('Thuốc tự do')
+    expect(html).toContain('border-dashed')
+    expect(html).toContain('title="Chưa đối chiếu danh mục"')
+  })
+
+  it('bảng Tra cứu thuốc hiện dòng gần đúng khi có goi_y_sua', () => {
+    const data: DanhSachThuoc = {
+      tong: 1,
+      trang: 1,
+      so_dong: 30,
+      goi_y_sua: 'Paracetamol',
+      ket_qua: [
+        {
+          hoat_chat_id: 'acetaminophen',
+          ten_inn: 'acetaminophen',
+          ten_viet: 'Paracetamol',
+          ma_atc: ['N02BE01'],
+          so_che_pham: 120,
+          co_nhan_fda: true,
+          so_quy_tac: 4,
+        },
+      ],
+    }
+    const html = renderToStaticMarkup(
+      <DrugResultsTable
+        data={data}
+        loading={false}
+        error={null}
+        query="parecetamo"
+        onOpen={noop}
+        onPageChange={noop}
+        onRetry={noop}
+      />,
+    )
+    expect(html).toContain('Không có kết quả khớp đúng. Đang hiện kết quả gần đúng cho')
+    expect(html).toContain('Paracetamol')
   })
 })

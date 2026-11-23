@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 
+from app.agent.tools.policy import luong_cu_cung_dang_bat
+
 os.environ["PYTHON_DOTENV_DISABLED"] = "1"
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -74,12 +76,17 @@ def _has_data(path: str) -> bool:
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     """Gắn marker can_du_lieu theo bảng trên rồi bỏ qua test nếu thiếu tệp cần."""
+    del config
+    luong_cu_bat = luong_cu_cung_dang_bat()
     for item in items:
         relative = Path(str(item.path)).resolve().relative_to(_ROOT).as_posix()
         original_name = getattr(item, "originalname", None) or item.name
         for file, names, paths in _CAN_DU_LIEU:
             if relative == file and (names is None or item.name in names or original_name in names):
                 item.add_marker(pytest.mark.can_du_lieu(*paths))
+        if not luong_cu_bat and item.get_closest_marker("luong_cu_cung") is not None:
+            reason = "luồng cũ cứng đang tắt (config/tool_policy.yaml hoặc CDSS_LUONG_CU_CUNG=0)"
+            item.add_marker(pytest.mark.skip(reason=reason))
         marker = item.get_closest_marker("can_du_lieu")
         if marker is None:
             continue

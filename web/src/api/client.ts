@@ -12,6 +12,7 @@ import type {
   HealthResponse,
   KetQuaAI,
   KetQuaCongThuc,
+  KetQuaGoiYThuoc,
   KetQuaTraTuongTac,
   MeResponse,
   NguonTomTat,
@@ -60,6 +61,7 @@ export interface ReviewApiClient {
   getSource(caId: string, doanTrichId: string): Promise<DoanNguon>
   /** Tra cứu thuốc (hợp đồng v1.8). `trang` bắt đầu từ 1. */
   searchDrugs(params: { q?: string; trang?: number; soDong?: number }, options?: { signal?: AbortSignal }): Promise<DanhSachThuoc>
+  suggestDrugs(q: string, options?: { signal?: AbortSignal; gioiHan?: number }): Promise<KetQuaGoiYThuoc>
   getDrug(hoatChatId: string, options?: { signal?: AbortSignal }): Promise<ChiTietThuoc>
   checkInteractions(payload: TraTuongTacYeuCau, options?: { signal?: AbortSignal }): Promise<KetQuaTraTuongTac>
   getFormulas(options?: { signal?: AbortSignal }): Promise<DanhMucCongThuc>
@@ -455,6 +457,15 @@ export class ApiClient implements ReviewApiClient {
     query.set('trang', String(params.trang ?? 1))
     query.set('so_dong', String(params.soDong ?? 30))
     return this.request<DanhSachThuoc>(`/thuoc?${query.toString()}`, { signal: options?.signal })
+  }
+
+  suggestDrugs(q: string, options?: { signal?: AbortSignal; gioiHan?: number }): Promise<KetQuaGoiYThuoc> {
+    const query = new URLSearchParams()
+    query.set('q', q)
+    if (options?.gioiHan !== undefined) {
+      query.set('gioi_han', String(options.gioiHan))
+    }
+    return this.request<KetQuaGoiYThuoc>(`/thuoc/goi-y?${query.toString()}`, { signal: options?.signal })
   }
 
   getDrug(hoatChatId: string, options?: { signal?: AbortSignal }): Promise<ChiTietThuoc> {
