@@ -404,6 +404,7 @@ def test_unresolved_name_gets_typo_suggestion_from_real_index() -> None:
     assert "không có tương tác" not in text
 
 
+@needs_index
 def test_suggestion_is_appended_for_all_types_and_failure_is_silent(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

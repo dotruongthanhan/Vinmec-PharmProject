@@ -17,6 +17,7 @@ from app.auth.principal import Principal
 from app.config.settings import AskSettings, load_settings
 from app.core.errors import ConfigError
 from app.domain.models import CaBenh
+from app.llm import setup as llm_setup
 from app.orchestration.ai_review import AiRunResult
 from app.orchestration.ask import AskResult, CaseAsker
 from app.pipeline import KetQuaThamDinh
@@ -69,6 +70,13 @@ class _SpyAgenticAsker(AgenticAsker):
         return AskResult(trang_thai="ok", noi_dung="Trả lời chung.")
 
 
+@pytest.fixture
+def ai_bat_voi_llm_gia(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Bật AI với LLM giả để test không phụ thuộc khoá DeepSeek hay CDSS_AI của môi trường."""
+    monkeypatch.setenv("CDSS_AI", "on")
+    monkeypatch.setattr(llm_setup, "build_llm", lambda container: FakeLLM([]))
+
+
 class _LegacyFakeAsker:
     """Bộ hỏi giả theo chữ ký cũ không nhận vai_tro."""
 
@@ -92,6 +100,7 @@ class _LegacyFakeAsker:
 
 @pytest.mark.luong_cu_cung
 def test_default_co_dinh_uses_case_asker(
+    ai_bat_voi_llm_gia: None,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -126,6 +135,7 @@ def test_injected_legacy_asker_keeps_old_signature(tmp_path: Path) -> None:
 
 
 def test_agentic_engine_uses_agentic_asker_and_passes_principal_role(
+    ai_bat_voi_llm_gia: None,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -172,6 +182,7 @@ def test_agentic_engine_uses_agentic_asker_and_passes_principal_role(
 
 
 def test_co_dinh_with_disabled_luong_cu_cung_raises_config_error(
+    ai_bat_voi_llm_gia: None,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
