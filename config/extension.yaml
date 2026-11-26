@@ -1,0 +1,47 @@
+# Cấu hình công khai cho dịch vụ Chrome Extension độc lập (Zero-Retention, cổng 8001).
+
+server:
+  port: 8001
+  max_json_body_bytes: 524288
+  max_multipart_body_bytes: 8388608
+  session_ttl_seconds: 1800
+  max_sessions: 50
+
+models:
+  schema_classifier:
+    provider: gemini
+    model: gemini-3.5-flash-lite
+    temperature: 0.0
+    max_tokens: 2048
+    timeout_seconds: 20.0
+    max_attempts: 2
+  oh_vision:
+    provider: gemini
+    model: gemini-3.6-flash
+    temperature: 0.0
+    max_tokens: 4096
+    timeout_seconds: 35.0
+    max_attempts: 2
+  emr_extract:
+    provider: gemini
+    model: gemini-3.5-flash-lite
+    temperature: 0.0
+    max_tokens: 4096
+    timeout_seconds: 25.0
+    max_attempts: 2
+  deep_review:
+    provider: deepseek
+    model: deepseek-flash
+
+prompts:
+  ext_schema: config/prompts/ext_schema.v1.md
+  ext_oh_vision: config/prompts/ext_oh_vision.v1.md
+  ext_emr_extract: config/prompts/ext_emr_extract.v1.md
+
+limits:
+  max_extract_workers: 4
+  max_emr_sections: 60
+  max_emr_chars: 120000
+  max_schema_fields: 120
+  max_oh_image_bytes: 8388608
+  max_ask_history_turns: 6

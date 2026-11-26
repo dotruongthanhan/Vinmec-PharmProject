@@ -1,0 +1,31 @@
+# Caddyfile độc lập cho dịch vụ Chrome Extension (trần 8 MB riêng cho upload ảnh OH nguyên nét).
+
+{$EXTENSION_DOMAIN:localhost} {
+	encode gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Cache-Control "no-store"
+	}
+
+	@extractRoute {
+		method POST
+		path /api/extension/extract-and-review
+	}
+	handle @extractRoute {
+		request_body {
+			max_size 8MB
+		}
+		reverse_proxy extension-api:8001
+	}
+
+	handle {
+		request_body {
+			max_size 512KB
+		}
+		reverse_proxy extension-api:8001
+	}
+}

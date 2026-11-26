@@ -1,0 +1,36 @@
+# Triển khai độc lập cho dịch vụ Chrome Extension (cổng 8001, Zero-Retention, chỉ đọc tri_thuc).
+
+services:
+  extension-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["uvicorn", "app.extension_api.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    ports:
+      - "127.0.0.1:8001:8001"
+    env_file:
+      - .env
+    environment:
+      APP_IN_CONTAINER: "1"
+      CDSS_PROFILE: prod
+      AUTH_MODE: required
+      KB_SOURCE: db
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/api/extension/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy-extension:
+    image: caddy:2.8-alpine
+    ports:
+      - "8443:443"
+    volumes:
+      - ./Caddyfile.extension:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - extension-api
+    restart: unless-stopped

@@ -1,0 +1,42 @@
+[
+  {
+    "ten_nhan": "Họ và tên",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "I. Hành chính"
+  },
+  {
+    "ten_nhan": "Ngày sinh",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "I. Hành chính"
+  },
+  {
+    "ten_nhan": "Số thẻ BHYT",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "I. Hành chính"
+  },
+  {
+    "ten_nhan": "Tuổi",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "I. Hành chính"
+  },
+  {
+    "ten_nhan": "Giới tính",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "I. Hành chính"
+  },
+  {
+    "ten_nhan": "Cân nặng",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "I. Hành chính"
+  },
+  {
+    "ten_nhan": "Chẩn đoán chính",
+    "kieu_dom": "dt_dd",
+    "ngu_canh_muc": "II. Chẩn đoán"
+  },
+  {
+    "ten_nhan": "Creatinin máu",
+    "kieu_dom": "table_th",
+    "ngu_canh_muc": "Cận lâm sàng"
+  }
+]
