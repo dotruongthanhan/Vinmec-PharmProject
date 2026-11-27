@@ -90,7 +90,7 @@ def test_api_ai_progress_for_disabled_running_done_and_error(tmp_path: Path) -> 
     release_synth = threading.Event()
 
     class _ControlledRunner:
-        model_name = "deepseek-flash"
+        model_name = "model-test"
 
         def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
             del ca
@@ -110,7 +110,7 @@ def test_api_ai_progress_for_disabled_running_done_and_error(tmp_path: Path) -> 
                     so_lan_goi=1,
                     canh_bao=[],
                     phien_ban_prompt="tong_hop.v1",
-                    mo_hinh="deepseek-flash",
+                    mo_hinh="model-test",
                 ),
                 doan=[],
                 canh_bao=[],
@@ -161,7 +161,7 @@ def test_api_ai_progress_for_disabled_running_done_and_error(tmp_path: Path) -> 
 
     # 3. Trạng thái loi khi runner ném ngoại lệ: cac_buoc vẫn có và không rò message lỗi.
     class _FailingRunner:
-        model_name = "deepseek-flash"
+        model_name = "model-test"
 
         def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
             del ca, ket_qua
@@ -189,7 +189,7 @@ def test_api_parallel_cases_do_not_mix_progress_steps(tmp_path: Path) -> None:
     barrier = threading.Barrier(2)
 
     class _ParallelRunner:
-        model_name = "deepseek-flash"
+        model_name = "model-test"
 
         def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
             barrier.wait(timeout=2.0)
@@ -209,7 +209,7 @@ def test_api_parallel_cases_do_not_mix_progress_steps(tmp_path: Path) -> None:
                     so_lan_goi=1,
                     canh_bao=[],
                     phien_ban_prompt="tong_hop.v1",
-                    mo_hinh="deepseek-flash",
+                    mo_hinh="model-test",
                 ),
                 doan=[],
                 canh_bao=[],
@@ -284,7 +284,7 @@ def test_security_no_patient_drug_prompt_or_exception_leaks_in_cac_buoc(
         case_settings=container.settings.case_context,
         evidence_max_chars=12000,
         max_synthesis_attempts=2,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
     reviewer = AiReviewer(collector, synth, engine="langgraph")
 
@@ -323,7 +323,7 @@ def test_security_no_patient_drug_prompt_or_exception_leaks_in_cac_buoc(
         case_settings=container.settings.case_context,
         evidence_max_chars=12000,
         max_synthesis_attempts=1,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
     leaky_service = CaseService(
         case_dir,

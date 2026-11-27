@@ -103,7 +103,7 @@ def _make_asker(
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash" if llm is not None else None,
+        model_name="model-test" if llm is not None else None,
         renal_rules=container.renal_rules,
         timeout_seconds=timeout_seconds,
     )
@@ -422,7 +422,7 @@ def test_ask_prioritizes_finding_caps_chunks_and_falls_back_on_retriever_error()
         so_lan_goi=1,
         canh_bao=[],
         phien_ban_prompt="tong_hop.v1",
-        mo_hinh="deepseek-flash",
+        mo_hinh="model-test",
     )
     ai_run = AiRunResult(
         llm=ai_out,

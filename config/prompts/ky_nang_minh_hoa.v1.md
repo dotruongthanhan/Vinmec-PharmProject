@@ -2,7 +2,9 @@
 
 Hình chỉ tồn tại trong lượt vừa tạo; lịch sử không có hình. Nếu câu hỏi hiện tại cần hình, hãy vẽ trong lượt này, kể cả khi lịch sử nhắc tới hình. Không nhắc mã `mh-n` hoặc `ds-n` trong chữ trả lời; khi nói tới hình, viết "hình bên dưới". Quy tắc không vẽ lại chỉ áp dụng trong cùng một lượt.
 
-Chỉ gọi `ve_bieu_do` khi hình giúp so sánh nhiều nhóm, xem xu hướng theo thời gian, vị trí so với ngưỡng, nhiều cặp tương tác hoặc câu hỏi “nếu… thì…”. Không vẽ khi chỉ cần một con số, thiếu dữ liệu hoặc chỉ giải thích định nghĩa. Chọn dấu theo câu hỏi: dải cho khoảng, điểm cho vị trí, ô cho ma trận, đường cho xu hướng. Mỗi ý chỉ một hình; vẽ xong thì trả lời ngay.
+Nếu dược sĩ yêu cầu vẽ, biểu đồ, minh hoạ hay hình thì phải lấy dữ liệu cần thiết và gọi `ve_bieu_do`, kể cả khi câu hỏi không thuộc các trường hợp dưới đây. Chỉ bỏ qua khi không có dữ liệu phù hợp, và khi đó nói rõ thiếu gì.
+
+Khi không có yêu cầu vẽ, chỉ gọi `ve_bieu_do` khi hình giúp so sánh nhiều nhóm, xem xu hướng theo thời gian, vị trí so với ngưỡng, nhiều cặp tương tác hoặc câu hỏi “nếu… thì…”. Không vẽ khi chỉ cần một con số, thiếu dữ liệu hoặc chỉ giải thích định nghĩa. Chọn dấu theo câu hỏi: dải cho khoảng, điểm cho vị trí, ô cho ma trận, đường cho xu hướng. Mỗi ý chỉ một hình; vẽ xong thì trả lời ngay.
 
 Dùng đúng mã bộ dữ liệu, cột và mã căn cứ thực tế trong lượt; các mã sau chỉ là ví dụ. Không viết số trong chữ: mọi số hiển thị phải qua tham chiếu ô hoặc khoảng. Trục biểu đồ cột bắt đầu từ không; không phân biệt nhóm chỉ bằng màu; tỉ trọng tối đa sáu phần. Khi sát ngưỡng hoặc hỏi giả định, dùng thanh kéo từ lưới đã tính, mặc định là số của ca, ghi rõ giả định. Không tự tính, suy diễn hoặc tạo dữ liệu. Câu trả lời chữ phải tự đứng được, không thay bằng “xem hình”.
 
@@ -56,3 +58,5 @@ Ví dụ dòng kháng sinh và vi sinh: `ds-1` là đợt kháng sinh, `ds-2` l�
 ```json
 {"phien_ban":"mh-1","tieu_de":"Kháng sinh và vi sinh","lop":[{"dau":"doan","du_lieu":"ds-1","ma_hoa":{"x_tu":{"cot":"bat_dau"},"x_den":{"cot":"ket_thuc"},"y":{"cot":"hoat_chat"},"mau":{"cot":"trang_thai_dong"}}},{"dau":"diem","du_lieu":"ds-2","ma_hoa":{"x":{"cot":"thoi_diem_lay_mau"},"y":{"cot":"hoat_chat"}}}],"nguon":["ca:khang_sinh"]}
 ```
+
+Chỉ nhắc tới hình khi đã gọi `ve_bieu_do` thành công trong lượt. Nếu người dùng yêu cầu vẽ và có `bo_du_lieu` phù hợp, phải gọi `ve_bieu_do`.

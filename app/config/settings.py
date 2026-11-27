@@ -3,6 +3,7 @@
 import io
 import logging
 import os
+import re
 from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
@@ -239,9 +240,37 @@ class LLMSettings(BaseModel):
 
     provider: str
     model: str
+    url: str = ""
+    khoa_env: list[str] = Field(default_factory=list, max_length=8)
+    cho_khoa_toi_da_giay: float = Field(default=0, ge=0, allow_inf_nan=False)
     max_tokens: int = Field(gt=0)
     max_tokens_retry: int = Field(gt=0)
     reasoning: dict[str, str] | None = None
+
+    @model_validator(mode="after")
+    def validate_chat_config(self) -> Self:
+        """Kiểm tra nhà cung cấp, địa chỉ và tên biến khoá."""
+        if self.provider not in ("chat_api", "fake"):
+            raise ValueError(
+                "llm.provider phải là chat_api hoặc fake; cấu hình cũ đổi sang chat_api "
+                "và đặt url, khoa_env"
+            )
+        if self.provider == "chat_api":
+            parsed = urlsplit(self.url)
+            if (
+                parsed.scheme != "https"
+                or not parsed.hostname
+                or parsed.username
+                or parsed.password
+            ):
+                raise ValueError("llm.url phải là địa chỉ https hợp lệ")
+            if not self.khoa_env:
+                raise ValueError("llm.khoa_env cần ít nhất một tên biến")
+        if any(not re.fullmatch(r"[A-Z][A-Z0-9_]{0,63}", name) for name in self.khoa_env):
+            raise ValueError("llm.khoa_env chứa tên biến không hợp lệ")
+        if "GEMINI_API_KEY" in self.khoa_env:
+            raise ValueError("llm.khoa_env không được dùng GEMINI_API_KEY")
+        return self
 
 
 class EmbeddingSettings(BaseModel):

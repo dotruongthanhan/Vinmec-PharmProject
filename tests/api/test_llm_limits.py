@@ -69,7 +69,7 @@ def _sample_chunk(chunk_id: str = "DT-LIMIT-01") -> Chunk:
 class _FakeAiRunner:
     """Bộ chạy AI giả đếm số lần chạy và có thể giữ trạng thái đang chạy bằng Event."""
 
-    model_name = "deepseek-flash"
+    model_name = "model-test"
 
     def __init__(
         self,
@@ -99,7 +99,7 @@ class _FakeAiRunner:
                 so_lan_goi=1,
                 canh_bao=[],
                 phien_ban_prompt="tong_hop.v1",
-                mo_hinh="deepseek-flash",
+                mo_hinh="model-test",
             ),
             doan=[],
             canh_bao=[],

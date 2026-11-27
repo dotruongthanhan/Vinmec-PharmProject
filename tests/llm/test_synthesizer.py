@@ -64,7 +64,7 @@ def _make_synthesizer(llm: FakeLLM | None, *, evidence_max_chars: int = 12000) -
         case_settings=container.settings.case_context,
         evidence_max_chars=evidence_max_chars,
         max_synthesis_attempts=2,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
 
 

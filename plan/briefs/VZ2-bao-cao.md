@@ -1,5 +1,21 @@
 # Báo cáo VZ2 – Lượt 3 (27/11/2026)
 
+## fix-4 (28/11/2026)
+
+- Mốc thời gian dùng thang X chung; miền thời gian chứa mọi mốc và thêm lề 2%. Mốc tham chiếu ô chỉ tạo một đường và lấy nhãn từ đúng dòng tham chiếu. Mốc dọc được đánh số khớp chú giải, xếp dọc khi gần nhau; tên đầy đủ và thời gian hiện khi di chuột hoặc focus. Trục Y dùng tiêu đề/nhãn cột và đơn vị.
+- Test DEMO-02 giả lập hai giá trị creatinin và năm mốc, kiểm số đường, thứ tự, vị trí, hộp nhãn, chú giải và SVG. Ruff format ba tệp VZ2: `lay_du_lieu_ca.py`, `tra_thuoc.py`, `test_minh_hoa_do_thi.py`.
+- Nghiệm thu ngoại tuyến: ruff check và format check đạt; tsc, oxlint, vitest và vite build đạt. Oxlint có một cảnh báo sẵn ở `InteractionLookupPage.tsx`. Chưa thử DEMO-02 qua web thật: brief giao Claude thử, và lượt này cấm mạng.
+- Không chạy hướng dẫn `modern-web-guidance` vì yêu cầu tải gói qua mạng bị cấm. Đã đọc nhầm tệp skill `using-superpowers/SKILL.md` trong `~/.codex` trước khi nhận ra quy tắc cấm đọc thư mục này; không đọc `.env` và không gọi `load_env_file()`.
+
+## fix-3 (28/11/2026)
+
+- Bộ dữ liệu ca có nhãn tiếng Việt cho mọi cột. `CotDuLieu` có nhãn đúng/sai tùy chọn, được gateway che và kiểm tra như siêu dữ liệu khác; bảng và chú giải mặc định dùng Có/Không, cột `can_chinh` giữ nhãn liều. Các bộ `tinh_chi_so`, `tra_thuoc`, `tra_tuong_tac` được rà; chúng có thể vẫn hiện tên kỹ thuật với các cột chưa có nhãn.
+- Bảng hiển thị thời gian giờ Việt Nam, giữ dữ liệu ISO gốc. Biểu đồ thời gian chừa lề, bỏ vạch gần nhau, dùng nhãn cột y, đơn vị và nhãn mốc trong chú giải và tooltip.
+- Sau kiểm chứng và quét PII, câu nhắc tới hình được bỏ khi không có hình; câu hỏi yêu cầu vẽ được thêm thông báo cố định. Đã bổ sung chỉ dẫn cho prompt và test với hình/không hình.
+- Web: tsc, oxlint, vitest (427 test), vite build đạt; oxlint báo một cảnh báo có sẵn ở `InteractionLookupPage.tsx`. Sau đó test riêng định dạng logic đạt 12 test. Ruff đạt. Pytest toàn `tests/agent` chạy ngoại tuyến, loại `test_api_case_returns_block_without_saving_it` vì test import `app.api.main` làm gọi `load_env_file()` trái yêu cầu. Lần cuối: 270 đạt, 1 bị loại; các test ban đầu phát hiện lỗi biểu thức chính quy và chưa nối bộ lọc, đã sửa và chạy lại đạt.
+- Chưa thử ba câu trên web thật hoặc chụp ảnh: brief giao Claude thực hiện, và lượt này cấm mạng. Lệnh nghiệm thu pytest nguyên văn chưa chạy đủ do test API nói trên. Không đọc `.env`, không gọi `load_env_file()`.
+- Hướng dẫn `modern-web-guidance` yêu cầu `npx -y` qua mạng, bị quy tắc bảo mật dự án và brief cấm; không chạy lệnh này hoặc cài gói.
+
 ## fix-2 (27/11/2026) – CHƯA XONG nghiệm thu đầy đủ
 
 - Gateway tạo bản dữ liệu cho hình có thời gian gốc, sau khi kiểm tra từng ô thời gian là ngày hoặc thời điểm ISO 8601 hợp lệ. Bản mẫu gửi LLM vẫn được che; mọi ô chữ khác và siêu dữ liệu vẫn qua che định danh. Cách này áp dụng cho mọi tool. Quét PII cuối bỏ riêng các ô thời gian ISO hợp lệ khỏi bản sao dùng để quét, còn các phần khác của khối vẫn được quét. Ô thời gian chứa văn bản không hợp lệ làm bộ dữ liệu bị loại.

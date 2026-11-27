@@ -614,15 +614,15 @@ export function VeSvg({ moHinh, className = '' }: VeSvgProps) {
                     strokeWidth={active ? 2 : 1.5}
                     strokeDasharray="4 3"
                   />
-                  {pt.nhan ? (
+                  {pt.nhan || pt.soThuTu !== null ? (
                     <text
-                      x={pt.huong === 'doc' ? Math.min(phai - 34, Math.max(trai + 34, pt.x1)) : phai - 4}
-                      y={pt.huong === 'doc' ? Math.max(12, pt.y1 - 8) : pt.y1 - 6}
+                      x={pt.xNhan}
+                      y={pt.yNhan}
                       textAnchor={pt.huong === 'doc' ? 'middle' : 'end'}
                       fontSize="10"
                       fill="var(--color-fg-muted)"
                     >
-                      {pt.nhan}
+                      {pt.soThuTu ?? pt.nhan}
                     </text>
                   ) : null}
                 </g>

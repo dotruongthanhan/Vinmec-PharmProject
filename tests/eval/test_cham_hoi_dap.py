@@ -1122,3 +1122,28 @@ def test_rescore_can_pass_with_relaxed_citation_type(tmp_path: Path) -> None:
     row = json.loads((out / "chi_tiet.jsonl").read_text(encoding="utf-8"))
     assert row["dat"] is True
     assert row["co_ro_pii_goc"] is False
+
+
+def test_global_case_code_and_mask_are_scored_separately() -> None:
+    question = CauHoiDanhGia(
+        id="HD-CH-TEST",
+        che_do="chung",
+        loai="ho_so",
+        cau_hoi="Những ca nào?",
+        ky_vong=KyVong(trang_thai=["ok"]),
+        can_cu_dap_an="Ca giả lập",
+        trang_thai_duyet="cho_duoc_si_duyet",
+    )
+    identifiers = [
+        GiaTriDinhDanh(loai="MA", gia_tri="HS-001"),
+        GiaTriDinhDanh(loai="MA", gia_tri="NB-001"),
+        GiaTriDinhDanh(loai="TEN", gia_tri="Tên Giả Lập"),
+    ]
+    case = score_answer(question, AskResult(trang_thai="ok", noi_dung="HS-001"), identifiers)
+    assert case.ro_pii.dat and case.con_ma_che.dat
+    mask = score_answer(question, AskResult(trang_thai="ok", noi_dung="[MA_1]"), identifiers)
+    assert mask.ro_pii.dat and not mask.con_ma_che.dat and not mask.dat
+    for secret in ("NB-001", "Tên Giả Lập"):
+        assert not score_answer(
+            question, AskResult(trang_thai="ok", noi_dung=secret), identifiers
+        ).ro_pii.dat

@@ -13,6 +13,8 @@ export interface CotDuLieu {
   kieu: KieuCot
   don_vi: string | null
   nhan?: string | null
+  nhan_dung?: string | null
+  nhan_sai?: string | null
 }
 
 export interface BoDuLieu {

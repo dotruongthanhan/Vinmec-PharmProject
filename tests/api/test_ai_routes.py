@@ -48,7 +48,7 @@ def _sample_chunk() -> Chunk:
 class _FakeAiRunner:
     """Bộ chạy AI giả trả kết quả hợp lệ ngay hoặc ngủ theo thời gian cấu hình."""
 
-    model_name = "deepseek-flash"
+    model_name = "model-test"
 
     def __init__(self, delay_seconds: float = 0.0) -> None:
         self.delay_seconds = delay_seconds
@@ -122,7 +122,7 @@ class _FakeAiRunner:
             so_lan_goi=1,
             canh_bao=[],
             phien_ban_prompt="tong_hop.v1",
-            mo_hinh="deepseek-flash",
+            mo_hinh="model-test",
         )
         return AiRunResult(llm=llm_out, doan=[chunk], canh_bao=[], thoi_gian_ms=15.0)
 
@@ -242,7 +242,7 @@ def test_ai_disabled_via_none_env_or_config_error(
         assert client.get("/api/cases/KHONG-CO/ai").status_code == 404
 
     monkeypatch.setenv("CDSS_AI", "off")
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-only-token")
+    monkeypatch.setenv("GEMINI_API_KEY_1", "test-only-token")
     env_off_service = CaseService(
         ROOT / "data/mock/demo",
         ROOT / "data/kb/quy_tac_lieu_than.json",
@@ -278,7 +278,7 @@ def test_ai_disabled_via_none_env_or_config_error(
             case_settings=settings.case_context,
             evidence_max_chars=12000,
             max_synthesis_attempts=1,
-            model_name="deepseek-flash",
+            model_name="model-test",
         ),
     )
     no_llm_service = CaseService(

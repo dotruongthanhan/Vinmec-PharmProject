@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { VeSvg } from '../VeSvg'
 import {
   dinhDangGiaTri,
   dungMoHinh,
@@ -10,6 +13,11 @@ import meropenemJson from '../mau/lieu-meropenem-crcl.json'
 import tuongTacJson from '../mau/ma-tran-tuong-tac.json'
 import thongKeJson from '../mau/thong-ke-thang.json'
 import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
+
+it('định dạng logic mặc định theo nghĩa chung', () => {
+  expect(dinhDangGiaTri(true)).toBe('Có')
+  expect(dinhDangGiaTri(false)).toBe('Không')
+})
 
 it('dựng đoạn đang dùng đến hết miền thời gian và giữ giờ trên trục', () => {
   const sample = doanCases[0]
@@ -256,4 +264,52 @@ describe('dungMoHinh – thống kê tháng giả lập', () => {
     expect(cacCot).toHaveLength(4)
     expect(mh.trucY?.vach[0]?.nhan).toBe('0')
   })
+})
+
+
+it('nhãn thời gian và chú giải của biểu đồ creatinin', () => {
+  const data: BoDuLieu[] = [
+    { ma: 'ds-1', cot: [{ ten: 'thoi_diem', kieu: 'thoi_gian', don_vi: null }, { ten: 'gia_tri', kieu: 'dinh_luong', don_vi: 'µmol/L', nhan: 'Creatinin' }], dong: [
+      { thoi_diem: '2026-11-07T05:30:00+07:00', gia_tri: 150 },
+      { thoi_diem: '2026-11-10T05:30:00+07:00', gia_tri: 212 },
+    ] },
+    { ma: 'ds-2', cot: [{ ten: 'thoi_diem', kieu: 'thoi_gian', don_vi: null }, { ten: 'nhan', kieu: 'danh_muc', don_vi: null }], dong: [{ thoi_diem: '2026-11-06T10:00:00+07:00', nhan: 'Vào viện' }] },
+  ]
+  const spec = { phien_ban: 'mh-1', tieu_de: 'Diễn tiến', nguon: [], lop: [
+    { dau: 'duong', du_lieu: 'ds-1', ma_hoa: { x: { cot: 'thoi_diem' }, y: { cot: 'gia_tri' } } },
+    { dau: 'quy_tac', du_lieu: 'ds-2', ma_hoa: { x: { cot: 'thoi_diem' } } },
+  ] } as DacTaMinhHoa
+  const model = dungMoHinh(spec, data, {})
+  const ticks = model.trucX?.vach ?? []
+  expect(ticks.every((tick, i) => i === 0 || tick.toaDo - ticks[i - 1].toaDo >= 85)).toBe(true)
+  expect(ticks.every((tick) => /^\d{2}\/\d{2} \d{2}:\d{2}$/.test(tick.nhan))).toBe(true)
+  expect(model.chuGiai.map((item) => item.nhan)).toEqual(expect.arrayContaining(['Creatinin', '1. Vào viện']))
+  expect(model.trucY?.tieuDe).toBe('Creatinin (µmol/L)')
+})
+
+
+it('đặt năm mốc tham chiếu đúng thang thời gian và nhãn không giao nhau', () => {
+  const times = ['2026-11-06T10:00:00+07:00', '2026-11-07T05:30:00+07:00', '2026-11-10T05:30:00+07:00', '2026-11-10T05:40:00+07:00', '2026-11-10T05:50:00+07:00']
+  const data: BoDuLieu[] = [
+    { ma: 'ds-1', cot: [{ ten: 'thoi_diem', kieu: 'thoi_gian', don_vi: null }, { ten: 'gia_tri', kieu: 'dinh_luong', don_vi: 'umol/L', nhan: 'Giá trị' }], dong: [{ thoi_diem: times[1], gia_tri: 150 }, { thoi_diem: times[2], gia_tri: 212 }] },
+    { ma: 'ds-2', cot: [{ ten: 'thoi_diem', kieu: 'thoi_gian', don_vi: null }, { ten: 'nhan', kieu: 'danh_muc', don_vi: null }], dong: times.map((thoi_diem, i) => ({ thoi_diem, nhan: `Mốc ${i + 1}` })) },
+  ]
+  const spec = { phien_ban: 'mh-1', tieu_de: 'Diễn tiến', nguon: [], truc: { y: { tieu_de: 'Giá trị' } }, lop: [
+    { dau: 'duong', du_lieu: 'ds-1', ma_hoa: { x: { cot: 'thoi_diem' }, y: { cot: 'gia_tri' } } },
+    ...times.map((_, i) => ({ dau: 'quy_tac', du_lieu: 'ds-2', ma_hoa: { x: { o: { ds: 'ds-2', cot: 'thoi_diem', dong: i } } } })),
+  ] } as DacTaMinhHoa
+  const model = dungMoHinh(spec, data, {})
+  const marks = model.phanTu.filter((p) => p.loai === 'quy_tac')
+  expect(marks).toHaveLength(5)
+  expect(marks.every((p, i) => p.x1 >= model.vungVe.trai && p.x1 <= model.vungVe.phai && (i === 0 || p.x1 > marks[i - 1].x1))).toBe(true)
+  expect(model.trucY?.tieuDe).toBe('Giá trị (umol/L)')
+  const svg = renderToStaticMarkup(createElement(VeSvg, { moHinh: model }))
+  expect(svg).toContain('Giá trị (umol/L)')
+  for (const mark of marks) {
+    expect(svg).toContain(`x1="${mark.x1}" y1="${mark.y1}" x2="${mark.x2}"`)
+  }
+  expect(model.chuGiai.map((x) => x.nhan)).toEqual(expect.arrayContaining(times.map((_, i) => `${i + 1}. Mốc ${i + 1}`)))
+  for (let i = 0; i < marks.length; i++) for (let j = 0; j < i; j++) {
+    expect(Math.abs(marks[i].xNhan - marks[j].xNhan) >= 20 || Math.abs(marks[i].yNhan - marks[j].yNhan) >= 14).toBe(true)
+  }
 })

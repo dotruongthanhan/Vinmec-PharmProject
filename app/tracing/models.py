@@ -51,6 +51,8 @@ KHOA_THUOC_TINH_CHO_PHEP: dict[LoaiSpan, frozenset[str]] = {
             "tong_token",
             "chi_phi_uoc_tinh",
             "so_lan_thu_lai",
+            "khoa_so",
+            "so_khoa_da_thu",
             "ly_do_ket_thuc",
             "so_ky_tu_prompt",
             "bam_prompt",

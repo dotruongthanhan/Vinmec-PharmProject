@@ -62,7 +62,7 @@ def test_dev_container_is_lazy_and_independent_of_cwd(
     assert len(container.rules) == len(default_rules())
     assert [rule.ma_nhom for rule in container.rules] == _EXPECTED_RULE_GROUPS
     for name, block, provider in [
-        ("llm", "llm", "deepseek"),
+        ("llm", "llm", "chat_api"),
         ("embedder", "embedding", "gemini"),
         ("reranker", "rerank", "openrouter"),
         ("vector_store", "vector_store", "pgvector"),

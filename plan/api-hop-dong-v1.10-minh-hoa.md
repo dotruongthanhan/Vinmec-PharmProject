@@ -37,7 +37,7 @@ Ngày 27/11/2026. Bổ sung `api-hop-dong-v1.2-hoi-dap.md`. Ngữ pháp đặc t
 
 ```jsonc
 { "ma": "ds-1",
-  "cot": [ { "ten": "crcl", "kieu": "dinh_luong|thu_tu|danh_muc|thoi_gian|logic", "don_vi": "mL/min" | null, "nhan": "CrCl" | null } ],
+  "cot": [ { "ten": "crcl", "kieu": "dinh_luong|thu_tu|danh_muc|thoi_gian|logic", "don_vi": "mL/min" | null, "nhan": "CrCl" | null, "nhan_dung": "Có" | null, "nhan_sai": "Không" | null } ],
   "dong": [ { "crcl": 16.0, ... } ],     // giá trị: số, chuỗi ≤ 200 ký tự, bool, null
   "can_cu": ["tinh:crcl_cg"] }
 ```

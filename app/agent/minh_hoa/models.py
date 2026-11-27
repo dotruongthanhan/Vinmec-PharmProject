@@ -12,6 +12,8 @@ class CotDuLieu(BaseModel):
     kieu: Literal["dinh_luong", "thu_tu", "danh_muc", "thoi_gian", "logic"]
     don_vi: str | None = None
     nhan: str | None = None
+    nhan_dung: str | None = Field(default=None, max_length=120)
+    nhan_sai: str | None = Field(default=None, max_length=120)
 
 
 class BoDuLieu(BaseModel):

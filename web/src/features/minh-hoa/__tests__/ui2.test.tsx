@@ -21,9 +21,18 @@ describe('UI2', () => {
     expect(html).toContain('đang dùng')
     expect(html).toContain('<svg')
     const table = renderToStaticMarkup(<BangDuLieuGoc boDuLieu={data} />)
-    expect(table).toContain('2026-11-01T08:00:00+07:00')
+    expect(table).toContain('01/11/2026 08:00')
+    expect(data[0].dong[0].bat_dau).toBe('2026-11-01T08:00:00+07:00')
     expect(table).toContain('bat_dau')
     expect(table).toContain('ket_thuc')
+  })
+  it('hiển thị nhãn cột và nhãn logic riêng', () => {
+    const data: BoDuLieu[] = [{ ma: 'ds-1', cot: [
+      { ten: 'ngoai', kieu: 'logic', don_vi: null, nhan: 'Ngoài ngưỡng' },
+      { ten: 'can_chinh', kieu: 'logic', don_vi: null, nhan_dung: 'Cần chỉnh liều', nhan_sai: 'Không cần chỉnh' },
+    ], dong: [{ ngoai: true, can_chinh: false }, { ngoai: false, can_chinh: true }] }]
+    const html = renderToStaticMarkup(<BangDuLieuGoc boDuLieu={data} />)
+    for (const text of ['Ngoài ngưỡng', 'Có', 'Không', 'Cần chỉnh liều', 'Không cần chỉnh']) expect(html).toContain(text)
   })
   it('shared expand button', () => {
     const table = renderToStaticMarkup(<TooltipProvider><ClinicalMarkdown text={'| A |\n| --- |\n| x |'} /></TooltipProvider>)

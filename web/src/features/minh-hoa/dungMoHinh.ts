@@ -166,6 +166,9 @@ export interface PhanTuQuyTac {
   giaTri: number
   giaTriChu: string
   nhan: string | null
+  xNhan: number
+  yNhan: number
+  soThuTu: number | null
   moTa: string
   nguon: readonly string[]
 }
@@ -347,7 +350,7 @@ const BANG_CHUOI: readonly PhongCachChuoi[] = [
 /** Đổi mã danh mục quen thuộc sang nhãn tiếng Việt dễ đọc; giữ nguyên chuỗi chưa biết. */
 export function nhanHienThiGiaTri(value: GiaTriO): string {
   if (value === null || value === undefined) return '—'
-  if (typeof value === 'boolean') return value ? 'Cần chỉnh liều' : 'Không cần chỉnh'
+  if (typeof value === 'boolean') return value ? 'Có' : 'Không'
   if (typeof value === 'number') return dinhDangGiaTri(value)
   return NHAN_MA_DANH_MUC[value] ?? value
 }
@@ -355,7 +358,7 @@ export function nhanHienThiGiaTri(value: GiaTriO): string {
 /** Định dạng giá trị ô theo chuẩn dấu phẩy thập phân tiếng Việt (chỉ làm tròn ở lớp hiển thị). */
 export function dinhDangGiaTri(value: GiaTriO, dinhDang?: DinhDangSo): string {
   if (value === null || value === undefined) return '—'
-  if (typeof value === 'boolean') return value ? 'Cần chỉnh liều' : 'Không cần chỉnh'
+  if (typeof value === 'boolean') return value ? 'Có' : 'Không'
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) return '—'
     if (dinhDang === '0') {
@@ -375,11 +378,23 @@ export function dinhDangGiaTri(value: GiaTriO, dinhDang?: DinhDangSo): string {
   return value
 }
 
-function dinhDangNgayNgan(raw: string): string {
+function dinhDangThoiGian(raw: string, coNam: boolean): string {
   const date = new Date(raw)
-  return Number.isFinite(date.getTime())
-    ? new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(date)
-    : raw
+  if (!Number.isFinite(date.getTime())) return raw
+  const parts = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hour12: false,
+  }).formatToParts(date)
+  const get = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value ?? ''
+  return `${get('day')}/${get('month')}${coNam ? `/${get('year')}` : ''} ${get('hour')}:${get('minute')}`
+}
+
+export function dinhDangNgayDayDu(raw: string): string {
+  return dinhDangThoiGian(raw, true)
+}
+
+function dinhDangNgayNgan(raw: string): string {
+  return dinhDangThoiGian(raw, false)
 }
 
 function chuyenThoiGianMs(raw: GiaTriO): number | null {
@@ -817,8 +832,8 @@ export function dungMoHinh(
   const coTrucY = dacTa.truc?.y !== null && dacTa.lop.some((l) => l.ma_hoa.y !== undefined || l.ma_hoa.y_tu !== undefined)
   const coDai = dacTa.lop.some((l) => l.dau === 'dai')
   const cao = Math.round(kichThuoc.cao ?? (coTrucY ? 268 : coDai ? 196 : 148))
-  const trai = coTrucY ? 52 : 20
-  const phai = rong - 20
+  const trai = coTrucY ? 72 : 55
+  const phai = rong - 55
   const tren = coTrucY ? 20 : 28
   const duoi = cao - (coTrucY ? 46 : 44)
   const daiDuoi = !coTrucY && coDai ? duoi - 30 : duoi
@@ -900,6 +915,9 @@ export function dungMoHinh(
     if (xMin === xMax) {
       xMax = xMin + 86_400_000
     }
+    const pad = (xMax - xMin) * 0.02
+    xMin -= pad
+    xMax += pad
   }
 
   const mapX = (val: GiaTriO): number | null => {
@@ -952,6 +970,7 @@ export function dungMoHinh(
   let daThemChuGiaiDai = false
   const chuGiai: MucChuGiai[] = []
   const nhomDaChuGiai = new Set<string>()
+  const nhanMoc: { x: number; y: number }[] = []
 
   dacTa.lop.forEach((lop, lopIdx) => {
     const ds = timBoDuLieu(boDuLieu, lop.du_lieu)
@@ -1017,15 +1036,16 @@ export function dungMoHinh(
       })
       if (!daThemChuGiaiDai) {
         daThemChuGiaiDai = true
+        const cotMau = lop.ma_hoa.mau ? timCot(ds, lop.ma_hoa.mau.cot) : undefined
         chuGiai.push(
           {
-            nhan: 'Cần chỉnh liều',
+            nhan: cotMau?.nhan_dung ?? (cotMau?.ten === 'can_chinh' ? 'Cần chỉnh liều' : 'Có'),
             mau: 'var(--color-warning-line)',
             mauNen: 'var(--color-warning-bg)',
             coSoc: true,
           },
           {
-            nhan: 'Không cần chỉnh',
+            nhan: cotMau?.nhan_sai ?? (cotMau?.ten === 'can_chinh' ? 'Không cần chỉnh' : 'Không'),
             mau: 'var(--color-success-line)',
             mauNen: 'var(--color-success-bg)',
             coSoc: false,
@@ -1036,18 +1056,27 @@ export function dungMoHinh(
     }
 
     if (lop.dau === 'quy_tac') {
-      rows.forEach((row, rIdx) => {
+      const ref = lop.ma_hoa.x && 'o' in lop.ma_hoa.x ? lop.ma_hoa.x.o : null
+      const refDs = ref ? timBoDuLieu(boDuLieu, ref.ds) : undefined
+      const ruleRows = ref ? (ref.dong !== undefined && refDs?.dong[ref.dong] ? [refDs.dong[ref.dong]] : rows.slice(0, 1)) : rows
+      ruleRows.forEach((row, rIdx) => {
         const nhan =
           lop.ma_hoa.nhan && 'chu' in lop.ma_hoa.nhan
             ? lop.ma_hoa.nhan.chu
             : lop.ma_hoa.nhan && 'cot' in lop.ma_hoa.nhan
               ? String(row[lop.ma_hoa.nhan.cot] ?? '')
-              : null
+              : (typeof row.nhan === 'string' ? row.nhan : null)
         if (lop.ma_hoa.x) {
           const val = docKenhViTri(lop.ma_hoa.x, row, dacTa, boDuLieu, trangThai)
           const px = mapX(val)
           if (px === null || (typeof val !== 'number' && typeof val !== 'string')) return
           const valText = typeof val === 'string' ? dinhDangNgayNgan(val) : dinhDangGiaTri(val, '0.0')
+          const soThuTu = nhanMoc.length + 1
+          const xNhan = Math.min(phai - 10, Math.max(trai + 10, px))
+          let yNhan = tren + 12
+          while (nhanMoc.some((n) => Math.abs(n.x - xNhan) < 20 && Math.abs(n.y - yNhan) < 14)) yNhan += 14
+          nhanMoc.push({ x: xNhan, y: yNhan })
+          chuGiai.push({ nhan: `${soThuTu}. ${nhan || valText}`, mau: 'var(--color-fg-muted)', netDut: '4 3' })
           phanTu.push({
             loai: 'quy_tac',
             ma: `qt-${lopIdx}-${rIdx}`,
@@ -1059,6 +1088,9 @@ export function dungMoHinh(
             giaTri: typeof val === 'number' ? val : (chuyenThoiGianMs(val) ?? 0),
             giaTriChu: valText,
             nhan,
+            xNhan,
+            yNhan,
+            soThuTu,
             moTa: `${nhan ?? 'Ngưỡng'}: ${valText}`,
             nguon: dacTa.nguon,
           })
@@ -1078,6 +1110,9 @@ export function dungMoHinh(
             giaTri: val,
             giaTriChu: valText,
             nhan,
+            xNhan: phai - 4,
+            yNhan: py - 6,
+            soThuTu: null,
             moTa: `${nhan ?? 'Ngưỡng'}: ${valText}`,
             nguon: dacTa.nguon,
           })
@@ -1090,7 +1125,8 @@ export function dungMoHinh(
       const kenhNhom = lop.ma_hoa.nhom ?? lop.ma_hoa.mau
       const nhomMap = new Map<string, { x: number; y: number; rawX: GiaTriO; rawY: number }[]>()
       for (const row of rows) {
-        const nhom = kenhNhom ? String(row[kenhNhom.cot] ?? 'Chuỗi') : 'Chuỗi'
+        const cotY = lop.ma_hoa.y && 'cot' in lop.ma_hoa.y ? timCot(ds, lop.ma_hoa.y.cot) : undefined
+        const nhom = kenhNhom ? String(row[kenhNhom.cot] ?? cotY?.nhan ?? dacTa.tieu_de) : (cotY?.nhan ?? dacTa.tieu_de)
         const xVal = docKenhViTri(lop.ma_hoa.x, row, dacTa, boDuLieu, trangThai)
         const yVal = docKenhViTri(lop.ma_hoa.y, row, dacTa, boDuLieu, trangThai)
         const px = mapX(xVal)
@@ -1313,7 +1349,10 @@ export function dungMoHinh(
         toaDo: mapX(iso) ?? trai,
         nhan: dinhDangNgayNgan(iso),
       }
-    })
+    }).reduce<VachTruc[]>((ticks, tick) => {
+      if (ticks.length === 0 || tick.toaDo - ticks[ticks.length - 1].toaDo >= 85) ticks.push(tick)
+      return ticks
+    }, [])
   } else {
     vachX = xCats.map((cat) => ({
       toaDo: mapX(cat) ?? trai,
@@ -1335,7 +1374,15 @@ export function dungMoHinh(
             nhan: cat,
           }))
     trucY = {
-      tieuDe: dacTa.truc?.y?.tieu_de ?? '',
+      tieuDe: (() => {
+        const lop = dacTa.lop.find((item) => item.ma_hoa.y && 'cot' in item.ma_hoa.y && item.dau !== 'quy_tac')
+        const ds = lop && timBoDuLieu(boDuLieu, lop.du_lieu)
+        const y = lop?.ma_hoa.y
+        const cot = ds && y && 'cot' in y ? timCot(ds, y.cot) : undefined
+        const ten = dacTa.truc?.y?.tieu_de || cot?.nhan || ''
+        const donVi = cot?.don_vi
+        return donVi && !ten.includes(donVi) ? (ten ? `${ten} (${donVi})` : donVi) : ten
+      })(),
       kieu: kieuY,
       vach: vachY,
     }

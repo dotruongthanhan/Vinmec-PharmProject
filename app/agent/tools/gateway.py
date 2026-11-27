@@ -677,7 +677,7 @@ class ToolGateway:
                                 raise ValueError("trung_cot")
                             names.add(col.ten)
                             metadata = {}
-                            for field in ("don_vi", "nhan"):
+                            for field in ("don_vi", "nhan", "nhan_dung", "nhan_sai"):
                                 value = getattr(col, field)
                                 if value is not None:
                                     if len(value) > 200:

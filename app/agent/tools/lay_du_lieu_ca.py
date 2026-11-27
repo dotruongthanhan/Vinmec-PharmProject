@@ -54,8 +54,44 @@ class ThamSoLayDuLieuCa(BaseModel):
         return value
 
 
+_LABELS = {
+    "thoi_diem": "Thời điểm",
+    "ma_xet_nghiem": "Mã xét nghiệm",
+    "ten_xet_nghiem": "Tên xét nghiệm",
+    "gia_tri": "Giá trị",
+    "don_vi": "Đơn vị",
+    "nguong_duoi": "Ngưỡng dưới",
+    "nguong_tren": "Ngưỡng trên",
+    "ngoai_nguong": "Ngoài ngưỡng",
+    "creatinin_tang_nhanh": "Creatinin tăng nhanh (KDIGO)",
+    "loai": "Loại",
+    "thuoc": "Thuốc",
+    "hoat_chat": "Hoạt chất",
+    "lieu": "Liều",
+    "nguon_lich": "Nguồn lịch",
+    "tong_24h_lon_nhat": "Tổng 24 giờ lớn nhất",
+    "cua_so_tu": "Cửa sổ từ",
+    "cua_so_den": "Cửa sổ đến",
+    "lieu_toi_da_ngay": "Liều tối đa ngày",
+    "vuot": "Vượt",
+    "so_che_pham": "Số chế phẩm",
+    "bat_dau": "Bắt đầu",
+    "ket_thuc": "Kết thúc",
+    "dang_dung": "Đang dùng",
+    "chua_bat_dau": "Chưa bắt đầu",
+    "ngay_thu": "Ngày thứ",
+    "trang_thai_dong": "Trạng thái",
+    "thoi_diem_lay_mau": "Thời điểm lấy mẫu",
+    "benh_pham": "Bệnh phẩm",
+    "vi_khuan": "Vi khuẩn",
+    "ket_qua": "Kết quả",
+    "mic": "MIC",
+    "nhan": "Nhãn",
+}
+
+
 def _columns(*items: tuple[str, str]) -> list[CotDuLieu]:
-    return [CotDuLieu(ten=name, kieu=kind) for name, kind in items]  # type: ignore[arg-type]
+    return [CotDuLieu(ten=name, kieu=kind, nhan=_LABELS[name]) for name, kind in items]  # type: ignore[arg-type]
 
 
 def _text(value: str | None, limit: int = 200) -> str | None:

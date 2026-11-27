@@ -190,7 +190,13 @@ def _renal_dataset(data: Mapping[str, Any], ma: str) -> BoDuLieu | None:
                 }
             )
         columns = [
-            CotDuLieu(ten=name, kieu=kind, don_vi=unit)
+            CotDuLieu(
+                ten=name,
+                kieu=kind,
+                don_vi=unit,
+                nhan_dung="Cần chỉnh liều" if name == "can_chinh" else None,
+                nhan_sai="Không cần chỉnh" if name == "can_chinh" else None,
+            )
             for name, kind, unit in (
                 ("crcl_tu", "dinh_luong", "mL/min"),
                 ("crcl_den", "dinh_luong", "mL/min"),

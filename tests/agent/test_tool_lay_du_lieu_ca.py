@@ -645,3 +645,9 @@ def test_agent_graph_verifies_calculated_daily_dose() -> None:
         chinh_sach=_policy(["lay_du_lieu_ca", "ve_bieu_do"]),
     )
     assert rejected.trang_thai != "ok" and not rejected.minh_hoa
+
+
+def test_all_case_columns_have_labels(sample_ca: CaBenh) -> None:
+    result = run(sample_ca, "xet_nghiem", "sinh_hieu", "lich_dung", "khang_sinh", "moc_ca")
+    assert len(result.bo_du_lieu) == 7
+    assert all(column.nhan for dataset in result.bo_du_lieu for column in dataset.cot)

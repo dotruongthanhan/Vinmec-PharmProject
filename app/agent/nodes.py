@@ -139,7 +139,17 @@ def _run_with_deadline(fn: Callable[[], object], deadline: float) -> object:
         raise TimeoutError("Hết thời gian xử lý hỏi đáp")
     executor = ThreadPoolExecutor(max_workers=1)
     ctx_copy = copy_context()
-    future = executor.submit(ctx_copy.run, fn)
+
+    def run_with_context() -> object:
+        from app.providers.http import han_chot_llm
+
+        token = han_chot_llm.set(deadline)
+        try:
+            return fn()
+        finally:
+            han_chot_llm.reset(token)
+
+    future = executor.submit(ctx_copy.run, run_with_context)
     try:
         result = future.result(timeout=remaining)
     except FuturesTimeoutError as exc:
@@ -507,6 +517,21 @@ class TacTu:
                 "luot_tac_tu": luot,
             }
 
+        if (
+            ke_hoach.hanh_dong in ("tra_loi", "khong_du_can_cu")
+            and nguoi_dung_yeu_cau_ve(state["cau_hoi_sach"])
+            and _NHAC_VE not in ket_qua_cong_cu
+            and not (state.get("gateway") and state["gateway"].minh_hoa)
+            and so_vong < self._max_turns
+            and not forced_answer
+        ):
+            return {
+                "ke_hoach": None,
+                "luot_tac_tu": luot,
+                "ket_qua_cong_cu": [*ket_qua_cong_cu, _NHAC_VE],
+                "loi_lan_truoc": _NHAC_VE,
+            }
+
         if ke_hoach.hanh_dong == "tra_loi":
             ghi_buoc("xong", step_ma, chi_tiet="Đủ căn cứ, chuyển kiểm chứng")
             return {
@@ -638,6 +663,37 @@ class GoiCongCu:
         }
 
 
+_NHAC_HINH = re.compile(
+    r"(?:xem\s+(?:hình|biểu đồ|minh hoạ|minh họa)|"
+    r"(?:hình|biểu đồ|minh hoạ|minh họa)\s+(?:ở\s+)?(?:bên\s+)?dưới)",
+    re.IGNORECASE,
+)
+_YEU_CAU_VE = re.compile(
+    r"\b(?:vẽ|biểu đồ|đồ thị|minh hoạ|minh họa|hình(?!\s+(?:thức|ảnh\s+học))|chart|plot)\b",
+    re.IGNORECASE,
+)
+_NHAC_VE = (
+    "Dược sĩ đã yêu cầu hình; hãy gọi ve_bieu_do với bộ dữ liệu đã có hoặc lấy dữ liệu cần thiết."
+)
+
+
+def nguoi_dung_yeu_cau_ve(cau_hoi: str) -> bool:
+    """Nhận diện yêu cầu hình trong câu hỏi."""
+    question = re.sub(r"\bđịnh\s+hình\b", "", cau_hoi, flags=re.IGNORECASE)
+    return bool(_YEU_CAU_VE.search(question))
+
+
+def _filter_missing_figure(text: str, question: str) -> str:
+    """Bỏ câu dẫn tới hình không tồn tại sau kiểm chứng."""
+    kept = text
+    if _NHAC_HINH.search(text):
+        sentences = re.split(r"(?<=[.!?])\s+|\n+", text)
+        kept = " ".join(part for part in sentences if not _NHAC_HINH.search(part)).strip()
+    if nguoi_dung_yeu_cau_ve(question):
+        kept = f"{kept}\nChưa dựng được hình cho câu hỏi này.".strip()
+    return kept
+
+
 class KiemChung:
     """Kiểm chứng câu trả lời của agent bằng hàm dùng chung kiem_chung_tra_loi."""
 
@@ -738,6 +794,13 @@ class KiemChung:
                     blocks.append(block)
             verified = verified.model_copy(update={"minh_hoa": blocks})
 
+        if verified.trang_thai == "ok" and not verified.minh_hoa:
+            verified = verified.model_copy(
+                update={
+                    "noi_dung": _filter_missing_figure(verified.noi_dung, state["cau_hoi_sach"])
+                }
+            )
+
         chi_tiet = "Ngoài phạm vi hỗ trợ" if verified.trang_thai == "ngoai_pham_vi" else "Đạt"
         ghi_buoc("xong", step_ma, chi_tiet=chi_tiet)
         return {
@@ -759,7 +822,8 @@ class DuPhong:
             ghi_buoc("xong", "agent_du_phong", chi_tiet="Gặp lỗi khi xử lý")
             return {"ket_qua": AskResult(trang_thai="loi", noi_dung=ERROR_MESSAGE)}
         ghi_buoc("xong", "agent_du_phong", chi_tiet="Không đủ căn cứ")
-        return {"ket_qua": AskResult(trang_thai="khong_co_nguon", noi_dung=NO_SOURCE_MESSAGE)}
+        content = _filter_missing_figure(NO_SOURCE_MESSAGE, state.get("cau_hoi_sach", ""))
+        return {"ket_qua": AskResult(trang_thai="khong_co_nguon", noi_dung=content)}
 
 
 class HoanTat:

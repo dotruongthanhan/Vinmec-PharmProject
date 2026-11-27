@@ -128,7 +128,7 @@ def test_case_asker_preserves_placeholders_inside_case_note_in_final_prompt() ->
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
 

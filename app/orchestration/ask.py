@@ -1103,7 +1103,17 @@ class CaseAsker:
             raise TimeoutError("Hết thời gian xử lý hỏi đáp")
         executor = ThreadPoolExecutor(max_workers=1)
         ctx_copy = copy_context()
-        future = executor.submit(ctx_copy.run, fn)
+
+        def run_with_context() -> object:
+            from app.providers.http import han_chot_llm
+
+            token = han_chot_llm.set(deadline)
+            try:
+                return fn()
+            finally:
+                han_chot_llm.reset(token)
+
+        future = executor.submit(ctx_copy.run, run_with_context)
         try:
             result = future.result(timeout=remaining)
         except FuturesTimeoutError as exc:
@@ -1736,6 +1746,9 @@ class CaseAsker:
             vet = vet_hien_tai.get()
             if vet is not None:
                 vet.dat_phien_che(session)
+            # Cấp mã ca trước mã khác để mã ca liên tiếp trong cùng phiên.
+            for ca in cases:
+                session.mask_known(ca.ca_id)
             scrubbed_question, scrubbed_history = _scrub_history_and_question(
                 cleaned_question,
                 lich_su or [],
@@ -1928,7 +1941,16 @@ class CaseAsker:
                         )
                     else:
                         dropped_citations += 1
-                restored = restore_text(reply_text, anh_xa)
+                allowed_case_ids = {
+                    ca.ca_id
+                    for ca in cases
+                    if re.fullmatch(r"(?:HS|DEMO)-[A-Za-z0-9]+", ca.ca_id, re.IGNORECASE)
+                }
+                restored = restore_text(
+                    reply_text,
+                    {token: value for token, value in anh_xa.items() if value in allowed_case_ids},
+                )
+                restored = re.sub(r"\[MA_\d+\]", "[đã che]", restored)
                 status: Literal["ok", "ngoai_pham_vi"] = (
                     "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
                 )

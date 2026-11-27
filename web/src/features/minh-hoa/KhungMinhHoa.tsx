@@ -21,6 +21,7 @@ import { cn } from '@/lib/cn'
 import { lopBoCucKhung } from './boCucKhung'
 import {
   dinhDangGiaTri,
+  dinhDangNgayDayDu,
   dungMoHinh,
   layGiaTriThamSoTuyChon,
   nhanHienThiGiaTri,
@@ -111,7 +112,7 @@ export function BangDuLieuGoc({ boDuLieu }: { boDuLieu: readonly BoDuLieu[] }) {
                     col.kieu === 'dinh_luong' ? 'text-right' : 'text-left',
                   )}
                 >
-                  {col.ten}
+                  {col.nhan ?? col.ten}
                   {col.don_vi ? (
                     <span className="ml-1 font-normal text-2xs text-fg-subtle">({col.don_vi})</span>
                   ) : null}
@@ -133,7 +134,7 @@ export function BangDuLieuGoc({ boDuLieu }: { boDuLieu: readonly BoDuLieu[] }) {
                         isNumeric ? 'text-right font-mono tabular-nums whitespace-nowrap' : 'text-left',
                       )}
                     >
-                      {dinhDangGiaTri(val, isNumeric && typeof val === 'number' && !Number.isInteger(val) ? '0.00' : undefined)}
+                      {typeof val === 'boolean' ? (val ? (col.nhan_dung ?? (col.ten === 'can_chinh' ? 'Cần chỉnh liều' : 'Có')) : (col.nhan_sai ?? (col.ten === 'can_chinh' ? 'Không cần chỉnh' : 'Không'))) : col.kieu === 'thoi_gian' && typeof val === 'string' ? dinhDangNgayDayDu(val) : dinhDangGiaTri(val, isNumeric && typeof val === 'number' && !Number.isInteger(val) ? '0.00' : undefined)}
                     </td>
                   )
                 })}

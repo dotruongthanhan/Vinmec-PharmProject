@@ -153,7 +153,7 @@ class _FakeAuthenticator:
 class _FakeAiRunner:
     """Bộ chạy AI giả để mở cờ bật hỏi đáp cho CaseService."""
 
-    model_name = "deepseek-flash"
+    model_name = "model-test"
 
     def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
         raise AssertionError("Không dùng trong kiểm thử hỏi đáp")
@@ -401,7 +401,7 @@ def test_server_history_truncates_at_4000_chars_and_passes_deid_with_real_asker(
         prompt_path=_PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     service = CaseService(

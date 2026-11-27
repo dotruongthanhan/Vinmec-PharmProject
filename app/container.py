@@ -275,7 +275,7 @@ class Container:
         try:
             llm: LLMClient | None = llm_setup.build_llm(self)
         except ConfigError as exc:
-            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+            if self.settings.llm.provider == "chat_api" and str(exc) == "khong_co_khoa_llm":
                 llm = None
             else:
                 raise
@@ -317,7 +317,7 @@ class Container:
         try:
             llm: LLMClient | None = llm_setup.build_llm(self)
         except ConfigError as exc:
-            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+            if self.settings.llm.provider == "chat_api" and str(exc) == "khong_co_khoa_llm":
                 llm = None
             else:
                 raise

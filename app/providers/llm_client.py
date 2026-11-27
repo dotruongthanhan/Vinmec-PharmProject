@@ -1,4 +1,4 @@
-"""Máy khách gọi API DeepSeek trả về đối tượng JSON theo lược đồ."""
+"""Máy khách gọi API chat trả về đối tượng JSON theo lược đồ."""
 
 import json
 import time
@@ -8,7 +8,8 @@ import httpx
 
 from app.core.errors import ProviderError
 from app.core.types import ChatMessage
-from app.providers.http import post_json
+from app.providers.http import post_chat_json
+from app.providers.key_router import KeyRouter
 from app.tracing import (
     chuan_bi_thong_tin_prompt,
     ma_loi_nha_cung_cap_an_toan,
@@ -18,18 +19,17 @@ from app.tracing import (
     vet_hien_tai,
 )
 
-_DEEPSEEK_URL = "https://api.deepseek.com/chat/completions"
 
-
-class DeepSeekLLM:
-    """Cài đặt giao diện LLMClient cho API tương thích OpenAI của DeepSeek."""
+class ChatLLMClient:
+    """Cài đặt giao diện LLMClient cho API chat completions."""
 
     _tu_ghi_vet: bool = True
 
     def __init__(
         self,
         model: str,
-        api_key: str,
+        url: str,
+        keys: list[str],
         client: httpx.Client,
         max_tokens: int,
         max_tokens_retry: int,
@@ -38,13 +38,15 @@ class DeepSeekLLM:
         max_attempts: int = 3,
         sleep: Callable[[float], None] = time.sleep,
         reasoning: dict[str, str] | None = None,
+        cho_khoa_toi_da_giay: float = 0,
     ) -> None:
-        if not api_key or not api_key.strip():
-            raise ValueError("api_key không được rỗng")
         if max_attempts <= 0:
             raise ValueError("max_attempts phải > 0")
         self.model = model
-        self.api_key = api_key
+        self.url = url
+        # CHỈ DÙNG CHO DEV: xoay nhiều khoá miễn phí. Triển khai thật: xoá module này, dùng một khoá trả phí (khoa_env một phần tử).  # noqa: E501
+        self.router = KeyRouter(keys, sleep=sleep)
+        self.cho_khoa_toi_da_giay = cho_khoa_toi_da_giay
         self.client = client
         self.temperature = temperature
         self.max_tokens = max_tokens
@@ -58,7 +60,7 @@ class DeepSeekLLM:
         self.last_retries: int = 0
 
     def complete_json(self, messages: list[ChatMessage], schema: dict) -> dict:
-        """Nối lược đồ vào tin nhắn hệ thống, gọi DeepSeek và đọc JSON đối tượng."""
+        """Nối lược đồ vào tin nhắn hệ thống, gọi API và đọc JSON đối tượng."""
         self.last_usage = None
         self.last_finish_reason = None
         self.last_retries = 0
@@ -93,9 +95,10 @@ class DeepSeekLLM:
 
         retry_counter = [0]
         usages: list[dict[str, int]] = []
+        key_attempts: list[int] = []
         vet = vet_hien_tai.get()
         if vet is None:
-            return self._execute_with_retry(payload, retry_counter, usages)
+            return self._execute_with_retry(payload, retry_counter, usages, key_attempts)
 
         char_count, prompt_hash, prompt_payload = chuan_bi_thong_tin_prompt(messages)
         prompt_version = phien_ban_prompt_hien_tai.get()
@@ -113,7 +116,7 @@ class DeepSeekLLM:
                 llm_span.dat_noi_dung({"prompt": prompt_payload})
             error_code: str | None = None
             try:
-                parsed = self._execute_with_retry(payload, retry_counter, usages)
+                parsed = self._execute_with_retry(payload, retry_counter, usages, key_attempts)
             except Exception as exc:
                 error_code = ma_loi_nha_cung_cap_an_toan(exc)
                 raise
@@ -132,7 +135,10 @@ class DeepSeekLLM:
                     "chi_phi_uoc_tinh": cost,
                     "so_lan_thu_lai": retry_counter[0],
                     "ly_do_ket_thuc": self.last_finish_reason or "loi",
+                    "so_khoa_da_thu": len(set(key_attempts)),
                 }
+                if key_attempts:
+                    attrs["khoa_so"] = key_attempts[-1]
                 if total_reasoning > 0:
                     attrs["token_suy_luan"] = total_reasoning
                 if total_cache > 0:
@@ -152,18 +158,22 @@ class DeepSeekLLM:
         payload: dict,
         retry_counter: list[int],
         usages: list[dict[str, int]],
+        key_attempts: list[int],
     ) -> dict:
         """Gọi API và thử lại đúng một lần với max_tokens_retry khi phản hồi bị cắt."""
         try:
-            return self._request_json(payload, retry_counter=retry_counter, usages=usages)
+            return self._request_json(
+                payload, retry_counter=retry_counter, usages=usages, key_attempts=key_attempts
+            )
         except ProviderError as exc:
             if str(exc) != "het_han_muc_token":
                 self.last_retries = retry_counter[0]
                 raise
-        retry_counter[0] += 1
         payload["max_tokens"] = self.max_tokens_retry
         try:
-            return self._request_json(payload, retry_counter=retry_counter, usages=usages)
+            return self._request_json(
+                payload, retry_counter=retry_counter, usages=usages, key_attempts=key_attempts
+            )
         finally:
             self.last_retries = retry_counter[0]
 
@@ -173,21 +183,23 @@ class DeepSeekLLM:
         *,
         retry_counter: list[int] | None = None,
         usages: list[dict[str, int]] | None = None,
+        key_attempts: list[int] | None = None,
     ) -> dict:
         """Gọi API, lưu số đo và phân biệt phản hồi bị cắt với JSON sai."""
 
-        def _counted_sleep(seconds: float) -> None:
-            if retry_counter is not None:
-                retry_counter[0] += 1
-            self.sleep(seconds)
+        def record_attempt(number: int) -> None:
+            if key_attempts is not None:
+                if key_attempts and retry_counter is not None:
+                    retry_counter[0] += 1
+                key_attempts.append(number)
 
-        data = post_json(
+        data = post_chat_json(
             self.client,
-            _DEEPSEEK_URL,
+            self.url,
             payload,
-            [self.api_key],
-            self.max_attempts,
-            sleep=_counted_sleep,
+            self.router,
+            record_attempt,
+            cho_toi_da_giay=self.cho_khoa_toi_da_giay,
         )
 
         usage = data.get("usage")

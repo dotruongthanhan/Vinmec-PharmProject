@@ -365,6 +365,43 @@ def test_prompt_is_loaded_only_for_allowed_tool() -> None:
     assert "Kỹ năng minh hoạ" in llm.calls[0]["messages"][0].content
 
 
+def test_requested_figure_gets_one_reminder() -> None:
+    from tests.agent.test_tool_ve_bieu_do import DataTool, spec
+
+    reg = DanhMucCongCu()
+    reg.dang_ky(DataTool())
+    reg.dang_ky(VeBieuDo())
+    answer = calls()[-1]
+    data = {"hanh_dong": "goi_cong_cu", "goi": [{"cong_cu": "data_test", "tham_so": {}}]}
+    draw = {
+        "hanh_dong": "goi_cong_cu",
+        "goi": [{"cong_cu": "ve_bieu_do", "tham_so": {"dac_ta": spec()}}],
+    }
+    llm = FakeLLM([data, answer, draw, answer])
+    result, _, _ = _run_graph(
+        llm, "Vẽ biểu đồ", danh_muc=reg, chinh_sach=_policy(["data_test", "ve_bieu_do"])
+    )
+    assert len(result.minh_hoa) == 1
+    assert len(llm.calls) == 4
+
+    llm = FakeLLM([data, answer, answer])
+    result, _, _ = _run_graph(
+        llm, "Vẽ biểu đồ", danh_muc=reg, chinh_sach=_policy(["data_test", "ve_bieu_do"])
+    )
+    assert not result.minh_hoa
+    assert "Chưa dựng được hình cho câu hỏi này." in result.noi_dung
+    assert len(llm.calls) == 3
+
+    llm = FakeLLM([data, answer])
+    _run_graph(
+        llm,
+        "Creatinin của ca này bao nhiêu?",
+        danh_muc=reg,
+        chinh_sach=_policy(["data_test", "ve_bieu_do"]),
+    )
+    assert len(llm.calls) == 2
+
+
 def test_api_case_returns_block_without_saving_it(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -501,3 +538,23 @@ def test_previous_assistant_image_id_is_removed_from_prompt() -> None:
     assert "hình (không còn hiển thị)" in prompt
     assert "mh-2" in prompt
     assert history[0][1] == "Hình mh-1 đã thể hiện kết quả."
+
+
+def test_filter_missing_figure() -> None:
+    from app.agent.nodes import _filter_missing_figure
+
+    assert (
+        _filter_missing_figure("Có kết quả. Mời dược sĩ xem hình bên dưới.", "Vẽ biểu đồ")
+        == "Có kết quả.\nChưa dựng được hình cho câu hỏi này."
+    )
+    assert _filter_missing_figure("Có kết quả. Xem hình.", "Kết quả?") == "Có kết quả."
+
+
+def test_missing_figure_filter_in_verified_answer() -> None:
+    sequence = calls("Creatinin máu là 212 umol/L [1]. Mời xem hình bên dưới.")
+    without_figure = run(sequence[:2] + sequence[-1:])
+    assert without_figure.trang_thai == "ok"
+    assert "xem hình" not in without_figure.noi_dung.lower()
+    with_figure = run(sequence)
+    assert with_figure.minh_hoa
+    assert "xem hình" in with_figure.noi_dung.lower()
