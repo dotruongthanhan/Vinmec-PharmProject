@@ -88,7 +88,7 @@ def _synth(llm: Any) -> Synthesizer:
         case_settings=container.settings.case_context,
         evidence_max_chars=12000,
         max_synthesis_attempts=2,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
 
 
@@ -280,7 +280,7 @@ def test_node_exceptions_give_rule_only_result_same_as_sequential(
             case_settings=container.settings.case_context,
             evidence_max_chars=12000,
             max_synthesis_attempts=2,
-            model_name="deepseek-flash",
+            model_name="model-test",
         )
 
     sequential, graph = _both(case, rule, make_collector, make_synth)
@@ -289,7 +289,7 @@ def test_node_exceptions_give_rule_only_result_same_as_sequential(
     assert graph.canh_bao == [f"Bước AI gặp lỗi không mong muốn ({name})"]
     assert graph.llm.so_lan_goi == 0
     assert graph.llm.phien_ban_prompt == "tong_hop.v1"
-    assert graph.llm.mo_hinh == "deepseek-flash"
+    assert graph.llm.mo_hinh == "model-test"
     assert bool(graph.doan) is expects_chunks
     assert "nhạy cảm" not in " ".join(graph.canh_bao)
     # Không phát hiện nào của bộ luật bị mất hay đổi.
@@ -329,7 +329,7 @@ def test_graph_run_disables_langsmith_tracing(monkeypatch: pytest.MonkeyPatch) -
         case_settings=container.settings.case_context,
         evidence_max_chars=12000,
         max_synthesis_attempts=1,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
     case, rule = build_case_pair()
     AiReviewer(_collector(), synth, engine="langgraph").run(case, rule)

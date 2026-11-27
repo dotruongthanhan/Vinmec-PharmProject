@@ -49,7 +49,7 @@ def _sample_chunk() -> Chunk:
 
 
 class _FakeAiRunner:
-    model_name = "deepseek-flash"
+    model_name = "model-test"
 
     def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
         del ca
@@ -62,7 +62,7 @@ class _FakeAiRunner:
                 so_lan_goi=1,
                 canh_bao=[],
                 phien_ban_prompt="tong_hop.v1",
-                mo_hinh="deepseek-flash",
+                mo_hinh="model-test",
             ),
             doan=[],
             canh_bao=[],
@@ -90,7 +90,7 @@ def _make_asker(llm: FakeLLM, chunk: Chunk | None = None) -> CaseAsker:
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
 
@@ -258,7 +258,7 @@ def test_ask_route_off_via_env_returns_not_ready(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, bad_env: str
 ) -> None:
     monkeypatch.setenv("CDSS_AI", bad_env)
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-only-token")
+    monkeypatch.setenv("GEMINI_API_KEY_1", "test-only-token")
     service = CaseService(
         ROOT / "data/mock/demo",
         ROOT / "data/kb/quy_tac_lieu_than.json",

@@ -4,6 +4,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 
+from app.calc import CONG_THUC_HIEN_THI
 from app.calc.types import CalcResult
 from app.config.settings import CaseContextSettings
 from app.deid.known import IdentifierLookupError, base_identifiers, known_identifiers
@@ -13,6 +14,7 @@ from app.domain.loader import ingredients_of, latest_vital
 from app.domain.models import CaBenh, ChiTietYLenh, SinhHieu
 from app.llm.schema import GoiCanCu, NhanDinhDeXuat
 from app.pipeline import KetQuaThamDinh
+from app.verify.number import extract_numbers
 
 _IDENTIFIER_WARNING = "Không lấy được định danh để che; chỉ che theo mẫu."
 _TEMP_ID = re.compile(r"(?<![A-Za-z0-9_])R\d+(?![A-Za-z0-9_])")
@@ -175,7 +177,9 @@ def _format_calc_line(cs: CalcResult, ids: RecordIdMap) -> str:
         + (f" [{ids.tam(item.ban_ghi_id)}]" if item.ban_ghi_id else "")
         for item in cs.dau_vao
     )
-    return f"- {cs.cong_thuc}: {rounded_display} {cs.don_vi} (đầu vào: {inputs})"
+    formula = CONG_THUC_HIEN_THI.get(cs.cong_thuc)
+    suffix = f" · công thức: {formula}" if formula else ""
+    return f"- {cs.cong_thuc}: {rounded_display} {cs.don_vi} (đầu vào: {inputs}){suffix}"
 
 
 def _format_order_lines(
@@ -403,6 +407,8 @@ def build_case_bundle(
         calc_lines.append("(không có)")
     for cs in ket_qua.chi_so:
         if cs.ket_qua is not None:
+            for number in extract_numbers(CONG_THUC_HIEN_THI.get(cs.cong_thuc, "")):
+                _add_number(allowed, seen_nums, number)
             for digits in (0, 1, 2):
                 _add_number(allowed, seen_nums, round(float(cs.ket_qua), digits))
         for inp in cs.dau_vao:

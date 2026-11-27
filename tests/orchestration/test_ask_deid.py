@@ -83,7 +83,7 @@ def test_ai_blocks_are_remasked_and_use_temp_ids_even_when_ai_text_holds_real_id
             so_lan_goi=1,
             canh_bao=[],
             phien_ban_prompt="tong_hop.v1",
-            mo_hinh="deepseek-flash",
+            mo_hinh="model-test",
         ),
         doan=[_sample_chunk("DT-AI-01", "administer one-half the recommended dose.")],
         canh_bao=[],
@@ -155,7 +155,7 @@ def test_global_question_masks_case_codes_in_summary_and_restores_them_in_reply(
     container = build_container("test")
     cases = [load_case(path) for path in sorted(DEMO_DIR.glob("DEMO-0[1-3].json"))]
     results = {case.ca_id: run_case(case, container.renal_rules) for case in cases}
-    llm = FakeLLM([_answer("Ca [MA_1] cần xem lại liều; BS [TEN_1] quan tâm.")])
+    llm = FakeLLM([_answer("Ca [MA_2] cần xem lại liều; BS [TEN_1] quan tâm.")])
 
     result = _make_asker(llm).ask_global(
         cases, results, "Ca DEMO-02 có gì cần xem? BS Trần Văn Bình hỏi", lich_su=[]
@@ -167,4 +167,36 @@ def test_global_question_masks_case_codes_in_summary_and_restores_them_in_reply(
         assert case.y_lenh_cho_duyet.y_lenh_id not in prompt
     assert "Trần Văn Bình" not in prompt
     assert result.trang_thai == "ok"
-    assert result.noi_dung == "Ca DEMO-02 cần xem lại liều; BS Trần Văn Bình quan tâm."
+    assert result.noi_dung == "Ca DEMO-02 cần xem lại liều; BS [TEN_1] quan tâm."
+
+
+def test_global_restores_two_case_ids_without_restoring_name() -> None:
+    container = build_container("test")
+    cases = [load_case(path) for path in sorted(DEMO_DIR.glob("DEMO-0[1-2].json"))]
+    results = {case.ca_id: run_case(case, container.renal_rules) for case in cases}
+    llm = FakeLLM([_answer("[MA_1], [MA_2], [TEN_1]")])
+    result = _make_asker(llm).ask_global(
+        cases, results, "DEMO-01 DEMO-02 BS Tr\u1ea7n V\u0103n B\u00ecnh?"
+    )
+    assert result.trang_thai == "ok"
+    assert result.noi_dung == "DEMO-01, DEMO-02, [TEN_1]"
+
+
+def test_global_restores_cases_from_summary_without_question_ids() -> None:
+    container = build_container("test")
+    cases = [load_case(path) for path in sorted(DEMO_DIR.glob("DEMO-0[1-2].json"))]
+    results = {case.ca_id: run_case(case, container.renal_rules) for case in cases}
+    llm = FakeLLM(
+        [_answer("Ca liên quan đến warfarin là ca [MA_1] và ca [MA_2]. [TEN_1] [SDT_1] [MA_3]")]
+    )
+    asker = container.agentic_asker
+    asker._llm = llm
+    asker._global_asker = _make_asker(llm)
+    result = asker.ask_global(cases, results, "Những ca nào? Giả Lập Sao, 0900000000, NB-TEST")
+    assert "DEMO-01" in result.noi_dung
+    assert "DEMO-02" in result.noi_dung
+    assert "[MA_" not in result.noi_dung
+    assert "[đã che]" in result.noi_dung
+    assert "Giả Lập Sao" not in result.noi_dung
+    assert "0900000000" not in result.noi_dung
+    assert "NB-TEST" not in result.noi_dung

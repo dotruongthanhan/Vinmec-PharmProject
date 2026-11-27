@@ -32,5 +32,6 @@ Từ 19/11/2026, thư mục `data/` không còn trên git, trừ `data/mock`, `d
 | Đường dùng hợp lệ và liều tối đa `data/kb/{duong_dung_hop_le,lieu_toi_da}.json` (T66, D5) | [lieu-duong-dung.md](lieu-duong-dung.md) | Plan 1.8 đợt D5 (đường dùng, liều tối đa) | ⏳ chờ dược sĩ duyệt, cập nhật 19/11 |
 | Độc tính và kháng sinh quản lý `data/kb/{doc_tinh,khang_sinh_quan_ly}.json` (T70, D6 D7) | [doc-tinh-khang-sinh.md](doc-tinh-khang-sinh.md) | Plan 1.8 đợt D6 (độc thận, QT, nồng độ thuốc, gan) và D7 (QĐ 5631) | ⏳ chờ dược sĩ duyệt, cập nhật 19/11 |
 | Công thức lâm sàng MDCalc (`data/formulas/`, 882 công thức) | [mdcalc.md](mdcalc.md) | Tham chiếu mở rộng `app/calc/` và `config/kb/cong_thuc.yaml` | ✅ 882/882 công thức đã phân loại, cập nhật 19/11 |
+| Bộ câu hỏi đánh giá ô hỏi đáp `data/gold/hoi_dap/cau_hoi_v1.jsonl` (T112, 90 câu) | [bo-cau-hoi-hoi-dap.md](bo-cau-hoi-hoi-dap.md) | Plan 1.9 mục 10, T113 (chấm điểm) | ⏳ chờ dược sĩ duyệt đáp án, cập nhật 26/11 |
 
 Tài liệu cũ `data/kb_sources/README.md` (16–17/11) đã lỗi thời và không còn trên git; nội dung còn đúng được chuyển sang các tệp trên.

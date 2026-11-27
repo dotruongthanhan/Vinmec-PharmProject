@@ -1,0 +1,22 @@
+[
+  {
+    "hop_le": true,
+    "bo_du_lieu": {"ma":"ds-1","cot":[{"ten":"bat_dau","kieu":"thoi_gian"},{"ten":"ket_thuc","kieu":"thoi_gian"},{"ten":"lan","kieu":"danh_muc"}],"dong":[{"bat_dau":"2026-11-01T08:00:00+07:00","ket_thuc":null,"lan":"A"}]},
+    "dac_ta": {"phien_ban":"mh-1","tieu_de":"Thời gian","nguon":["ca:khang_sinh"],"lop":[{"dau":"doan","du_lieu":"ds-1","ma_hoa":{"x_tu":{"cot":"bat_dau"},"x_den":{"cot":"ket_thuc"},"y":{"cot":"lan"}}}]}
+  },
+  {
+    "hop_le": false,
+    "bo_du_lieu": {"ma":"ds-1","cot":[{"ten":"bat_dau","kieu":"thoi_gian"},{"ten":"ket_thuc","kieu":"thoi_gian"},{"ten":"lan","kieu":"danh_muc"}],"dong":[{"bat_dau":"2026-11-01T08:00:00+07:00","ket_thuc":null,"lan":"A"}]},
+    "dac_ta": {"phien_ban":"mh-1","tieu_de":"Thời gian","nguon":["ca:khang_sinh"],"lop":[{"dau":"doan","du_lieu":"ds-1","ma_hoa":{"x_tu":{"cot":"bat_dau"},"x_den":{"cot":"ket_thuc"}}}]}
+  },
+  {
+    "hop_le": false,
+    "bo_du_lieu": {"ma":"ds-1","cot":[{"ten":"bat_dau","kieu":"danh_muc"},{"ten":"ket_thuc","kieu":"thoi_gian"},{"ten":"lan","kieu":"danh_muc"}],"dong":[{"bat_dau":"A","ket_thuc":null,"lan":"A"}]},
+    "dac_ta": {"phien_ban":"mh-1","tieu_de":"Thời gian","nguon":["ca:khang_sinh"],"lop":[{"dau":"doan","du_lieu":"ds-1","ma_hoa":{"x_tu":{"cot":"bat_dau"},"x_den":{"cot":"ket_thuc"},"y":{"cot":"lan"}}}]}
+  },
+  {
+    "hop_le": false,
+    "bo_du_lieu": {"ma":"ds-1","cot":[{"ten":"bat_dau","kieu":"thoi_gian"},{"ten":"ket_thuc","kieu":"thoi_gian"},{"ten":"lan","kieu":"dinh_luong"}],"dong":[{"bat_dau":"2026-11-01T08:00:00+07:00","ket_thuc":null,"lan":1}]},
+    "dac_ta": {"phien_ban":"mh-1","tieu_de":"Thời gian","nguon":["ca:khang_sinh"],"lop":[{"dau":"doan","du_lieu":"ds-1","ma_hoa":{"x_tu":{"cot":"bat_dau"},"x_den":{"cot":"ket_thuc"},"y":{"cot":"lan"}}}]}
+  }
+]

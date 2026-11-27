@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Annotated, ClassVar, Literal
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 from starlette.exceptions import HTTPException
 
+from app.agent.minh_hoa.models import BoDuLieu, CotDuLieu
 from app.agent.tools.base import CanCu, KetQuaCongCu, Tool, ToolContext
 from app.kb.interactions.models import SEVERITIES, PairRecord
 from app.kb.names import normalize_key
@@ -93,13 +94,21 @@ class _KhongCoDuLieu(Exception):
 class _Dong:
     """Một dòng bảng có thể trích dẫn, kèm mức để sắp xếp."""
 
-    __slots__ = ("khoa", "nhan", "noi_dung", "thu_tu")
+    __slots__ = ("khoa", "nhan", "noi_dung", "thu_tu", "du_lieu")
 
-    def __init__(self, khoa: str, nhan: str, noi_dung: str, thu_tu: int) -> None:
+    def __init__(
+        self,
+        khoa: str,
+        nhan: str,
+        noi_dung: str,
+        thu_tu: int,
+        du_lieu: dict[str, str] | None = None,
+    ) -> None:
         self.khoa = khoa
         self.nhan = nhan
         self.noi_dung = noi_dung
         self.thu_tu = thu_tu
+        self.du_lieu = du_lieu
 
 
 class TraTuongTac(Tool):
@@ -192,10 +201,25 @@ class TraTuongTac(Tool):
             CanCu(ma=f"bang:{item.khoa}", loai="bang", nhan=item.nhan, noi_dung=item.noi_dung)
             for item in giu
         ]
+        rows = [item.du_lieu for item in giu if item.du_lieu is not None]
+        datasets = []
+        if rows:
+            datasets.append(
+                BoDuLieu(
+                    ma="",
+                    cot=[
+                        CotDuLieu(ten=name, kieu="danh_muc")
+                        for name in ("thuoc_a", "thuoc_b", "muc_do", "co_che", "ma_can_cu")
+                    ],
+                    dong=rows,
+                    can_cu=[cc.ma for cc in can_cu],
+                )
+            )
         return KetQuaCongCu(
             trang_thai="ok" if giu else "khong_co",
             noi_dung="\n".join(lines),
             can_cu=can_cu,
+            bo_du_lieu=datasets,
             chi_tiet_tien_trinh=tom_tat,
         )
 
@@ -256,9 +280,10 @@ class TraTuongTac(Tool):
             ten_a, ten_b = phan_giai[cap.a].ten_nhap, phan_giai[cap.b].ten_nhap
             records = self._ban_ghi_cap(context, resolved[cap.a], resolved[cap.b])
             for label, record in records:
+                pair_key = _khoa("ddinter_cap", f"{record.ddinter_id_a}-{record.ddinter_id_b}")
                 dong.append(
                     _Dong(
-                        _khoa("ddinter_cap", f"{record.ddinter_id_a}-{record.ddinter_id_b}"),
+                        pair_key,
                         _NHAN_THUOC,
                         (
                             f"{label} · mức: {_MUC_VI[record.muc_do]} (DDInter: {record.muc_do}) · "
@@ -266,6 +291,13 @@ class TraTuongTac(Tool):
                             f"hậu quả: {_cat(record.hau_qua)} · xử trí: {_cat(record.xu_tri)}"
                         ),
                         SEVERITIES.index(record.muc_do),
+                        {
+                            "thuoc_a": label.split(" – ", 1)[0],
+                            "thuoc_b": label.split(" – ", 1)[1],
+                            "muc_do": _MUC_VI[record.muc_do],
+                            "co_che": _cat(", ".join(record.co_che), 200),
+                            "ma_can_cu": f"bang:{pair_key}",
+                        },
                     )
                 )
             if records:

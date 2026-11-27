@@ -57,6 +57,10 @@ class HoiDapState(TypedDict, total=False):
     can_cu: list[CanCu]
     ket_qua_cong_cu: list[str]
     so_vong: int
+    so_vong_ve: int
+    da_nhac_het_luot_ve: bool
+    buoc_tra_loi_chu: bool
+    da_buoc_tra_loi_chu: bool
     luot_tac_tu: int
     so_lan_kiem_chung: int
     so_lan_sai_luoc_do: int

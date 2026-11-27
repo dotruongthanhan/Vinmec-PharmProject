@@ -76,7 +76,7 @@ def _make_asker(llm: FakeLLM) -> CaseAsker:
         prompt_path=ROOT / "config/prompts/hoi_them.v1.md",
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
 

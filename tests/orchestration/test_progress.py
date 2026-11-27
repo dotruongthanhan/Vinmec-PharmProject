@@ -238,7 +238,7 @@ def test_nodes_and_synthesizer_record_steps_and_errors_in_job_manager() -> None:
         case_settings=container.settings.case_context,
         evidence_max_chars=12000,
         max_synthesis_attempts=2,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
     reviewer_retry = AiReviewer(collector, synth_retry, engine="langgraph")
 
@@ -280,7 +280,7 @@ def test_nodes_and_synthesizer_record_steps_and_errors_in_job_manager() -> None:
             case_settings=container.settings.case_context,
             evidence_max_chars=12000,
             max_synthesis_attempts=1,
-            model_name="deepseek-flash",
+            model_name="model-test",
         )
         empty_collector = EvidenceCollector(
             _StaticRetriever([]),
@@ -485,7 +485,7 @@ def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
         prompt_path=ask_prompt,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     res_ok, steps_ok = _run_with_tracker(asker_ok, "Vì sao cần giảm liều meropenem?")
@@ -516,7 +516,7 @@ def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
         prompt_path=ask_prompt,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     res_no_ret, steps_no_ret = _run_with_tracker(asker_no_ret, "Creatinin ca này bao nhiêu?")
@@ -537,7 +537,7 @@ def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
         prompt_path=ask_prompt,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     res_retry, steps_retry = _run_with_tracker(asker_retry, "Liều meropenem thế nào?")
@@ -573,7 +573,7 @@ def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
             prompt_path=ask_prompt,
             case_settings=container.settings.case_context,
             evidence_max_chars=container.settings.evidence.max_chars,
-            model_name="deepseek-flash",
+            model_name="model-test",
             renal_rules=container.renal_rules,
         )
         res_err, steps_err = _run_with_tracker(asker_err, "Câu hỏi kiểm tra lỗi?")
@@ -599,7 +599,7 @@ def test_case_asker_records_steps_for_success_retry_and_errors() -> None:
         prompt_path=ask_prompt,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     res_g, steps_g = _run_with_tracker(asker_global, "Ca nào cần chú ý?", is_global=True)

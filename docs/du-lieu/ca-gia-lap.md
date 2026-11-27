@@ -615,3 +615,23 @@ for table in sorted(batch.tables):
 print('rejected=', len(batch.rejected), 'orphans=', len(batch.orphans()))
 '@ | uv run python -
 ```
+
+## Bổ sung 27/11/2026 – bộ dữ liệu thời gian trong lượt hỏi
+
+`app/agent/tools/lay_du_lieu_ca.py` đọc `CaBenh` hiện tại trong bộ nhớ; không đổi tệp nguồn, không tạo bộ dữ liệu lưu trên đĩa. Gateway đánh mã và che định danh các ô chuỗi. Mỗi bộ có tối đa 2.000 dòng, giữ dòng mới nhất; số dòng gốc và số dòng bị cắt được ghi trong span. Số dòng phụ thuộc ca và bộ lọc, nên không có tổng cố định cho bộ dữ liệu tạm. Kiểm thử `DEMO-02` lọc `creatinin` có 2 dòng.
+
+Các bộ và trường đầu ra:
+
+- Xét nghiệm: `thoi_diem`, `ma_xet_nghiem`, `ten_xet_nghiem`, `gia_tri`, `don_vi`, `nguong_duoi`, `nguong_tren`, `ngoai_nguong`, `creatinin_tang_nhanh`.
+- Sinh hiệu: `thoi_diem`, `loai`, `gia_tri`, `don_vi`.
+- Liều từng lần: `thoi_diem`, `thuoc`, `hoat_chat`, `lieu`, `don_vi`, `nguon_lich`; tổng theo hoạt chất: `hoat_chat`, `tong_24h_lon_nhat`, `cua_so_tu`, `cua_so_den`, `lieu_toi_da_ngay`, `vuot`, `so_che_pham`, `nguon_lich`.
+- Đợt kháng sinh: `thuoc`, `hoat_chat`, `bat_dau`, `ket_thuc`, `dang_dung`, `ngay_thu`, `trang_thai_dong`; vi sinh: `thoi_diem_lay_mau`, `benh_pham`, `vi_khuan`, `hoat_chat`, `ket_qua`, `mic`.
+- Mốc ca: `thoi_diem`, `loai`, `nhan`; không lấy nội dung tự do của diễn biến hoặc chẩn đoán.
+
+Liều có lịch dùng được cộng trên cửa sổ trượt `(cua_so_tu, cua_so_den]`. Khi chỉ có liều mỗi lần và tần suất, tổng được đánh dấu `suy_tu_tan_suat`, không tạo giờ giả; dữ liệu không đủ hoặc không đồng nhất được để trống và nêu trường thiếu. Trần liều lấy qua cấu hình D5, chỉ khi xác định được hoạt chất, đường dùng và đối tượng. Ngày kháng sinh tính theo thời điểm kê y lệnh chờ duyệt của ca. Đây là dữ liệu phục vụ minh hoạ, không phải kết luận điều trị.
+
+Lệnh kiểm bộ dữ liệu tạm: `uv run --offline --no-sync pytest -q -p no:cacheprovider tests/agent/test_tool_lay_du_lieu_ca.py --basetemp %TEMP%/vz2-test` (chọn thư mục tạm mới cho mỗi lần chạy).
+
+### Điều chỉnh 27/11/2026 – fix-2
+
+Không thay đổi tệp nguồn, trường hay số dòng của các bộ dữ liệu tạm. Gateway giữ giá trị ISO 8601 hợp lệ trong cột `thoi_gian` để dựng hình; mẫu gửi LLM vẫn che ngày, các ô chữ khác vẫn che định danh. Căn cứ lịch dùng và tổng 24 giờ đổi thành `tinh:lich_dung`; văn bản căn cứ có tổng và số liều theo từng mức liều thực tế trong cửa sổ tính. Kiểm tra ngoại tuyến: `uv run --offline --no-sync pytest -q -p no:cacheprovider tests/agent/test_tool_lay_du_lieu_ca.py --basetemp %TEMP%/vz2-fix2-case`.

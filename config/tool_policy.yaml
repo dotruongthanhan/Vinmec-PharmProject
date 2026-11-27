@@ -7,11 +7,21 @@ cong_cu:
     bat: true
   tim_doan_nguon:
     bat: true
+  doc_doan_mo_rong:
+    bat: true
+  tra_thuoc:
+    bat: true
+  tinh_chi_so:
+    bat: true
+  lay_du_lieu_ca:
+    bat: true
+  ve_bieu_do:
+    bat: true
 vai_tro:
   duoc_si_ls:
-    cho_phep: [tra_tuong_tac, tim_doan_nguon]
+    cho_phep: [tra_tuong_tac, tim_doan_nguon, doc_doan_mo_rong, tra_thuoc, tinh_chi_so, lay_du_lieu_ca, ve_bieu_do]
   admin:
-    cho_phep: [tra_tuong_tac, tim_doan_nguon]
+    cho_phep: [tra_tuong_tac, tim_doan_nguon, doc_doan_mo_rong, tra_thuoc, tinh_chi_so, lay_du_lieu_ca, ve_bieu_do]
 che_do:
   chung:
-    cam: []
+    cam: [tinh_chi_so, lay_du_lieu_ca, ve_bieu_do]

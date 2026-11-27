@@ -12,6 +12,9 @@ const DrugDetailPage = lazy(() => import('@/features/lookup/DrugDetailPage'))
 const InteractionLookupPage = lazy(() => import('@/features/lookup/InteractionLookupPage'))
 const FormulaListPage = lazy(() => import('@/features/lookup/FormulaPages').then((module) => ({ default: module.FormulaListPage })))
 const FormulaPage = lazy(() => import('@/features/lookup/FormulaPages').then((module) => ({ default: module.FormulaPage })))
+const MauMinhHoaPage = import.meta.env.DEV
+  ? lazy(() => import('@/features/minh-hoa/MauMinhHoaPage'))
+  : null
 
 function PageFallback() {
   return (
@@ -32,6 +35,9 @@ export function AppRoutes() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
+        {import.meta.env.DEV && MauMinhHoaPage ? (
+          <Route path="/app/mau-minh-hoa" element={<MauMinhHoaPage />} />
+        ) : null}
         <Route element={<ProtectedRoute />}>
           <Route path="/app" element={<WorkspacePage />} />
           <Route path="/app/ho-so/*" element={<Navigate to="/app" replace />} />

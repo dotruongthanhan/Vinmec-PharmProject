@@ -123,7 +123,8 @@ describe('bảng hồ sơ cần duyệt 9 cột (nhãn mới, cột mới, bỏ 
       expect(html).not.toContain('Y lệnh (lần cuối)')
 
       const body = /<tbody[^>]*>([\s\S]*?)<\/tbody>/.exec(html)?.[1] ?? ''
-      const cells = [...body.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) =>
+      const wideBody = body.replace(/<div class="ui3-orders-compact[^"]*">[\s\S]*?<\/div>/g, '')
+      const cells = [...wideBody.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) =>
         m[1].replace(/<[^>]*>/g, '').trim(),
       )
       expect(cells).toHaveLength(9)

@@ -1,0 +1,1275 @@
+[
+ {
+  "ma": "mh-1",
+  "phien_ban": "mh-1",
+  "dac_ta": {
+   "phien_ban": "mh-1",
+   "tieu_de": "Liều meropenem theo CrCl",
+   "phu_de": [
+    {
+     "chu": "CrCl của ca: "
+    },
+    {
+     "o": {
+      "ds": "ds-3",
+      "cot": "crcl",
+      "dong": 0
+     }
+    },
+    {
+     "chu": " mL/min — mức liều: "
+    },
+    {
+     "o_theo_khoang": {
+      "ds": "ds-4",
+      "cot": "khuyen_cao",
+      "tu": "bien_ve_tu",
+      "den": "bien_ve_den",
+      "bao_gom_tu": "bao_gom_tu",
+      "bao_gom_den": "bao_gom_den",
+      "gia_tri": {
+       "ds": "ds-2",
+       "cot": "crcl",
+       "theo_tham_so": true
+      }
+     }
+    }
+   ],
+   "lop": [
+    {
+     "dau": "dai",
+     "du_lieu": "ds-4",
+     "ma_hoa": {
+      "x_tu": {
+       "cot": "bien_ve_tu"
+      },
+      "x_den": {
+       "cot": "bien_ve_den"
+      },
+      "nhan": {
+       "cot": "khuyen_cao"
+      }
+     }
+    },
+    {
+     "dau": "diem",
+     "du_lieu": "ds-2",
+     "loc": [
+      {
+       "cot": "creatinin",
+       "bang_tham_so": "cr"
+      },
+      {
+       "cot": "loai_can_nang",
+       "bang_tham_so": "cn"
+      }
+     ],
+     "ma_hoa": {
+      "x": {
+       "cot": "crcl"
+      },
+      "nhan": {
+       "chu": "giả định"
+      }
+     }
+    }
+   ],
+   "tham_so": [
+    {
+     "ma": "cr",
+     "loai": "thanh_keo",
+     "nhan": "Creatinin giả định (µmol/L)",
+     "gia_tri_tu": {
+      "ds": "ds-2",
+      "cot": "creatinin"
+     },
+     "mac_dinh": {
+      "o": {
+       "ds": "ds-3",
+       "cot": "creatinin",
+       "dong": 0
+      }
+     },
+     "nhan_gia_dinh": true
+    },
+    {
+     "ma": "cn",
+     "loai": "chon_mot",
+     "nhan": "Cân nặng",
+     "gia_tri_tu": {
+      "ds": "ds-2",
+      "cot": "loai_can_nang"
+     }
+    },
+    {
+     "loai": "dat_lai",
+     "nhan": "Về số của ca"
+    }
+   ],
+   "so_hien": [
+    {
+     "nhan": "Mức liều",
+     "o_theo_khoang": {
+      "ds": "ds-4",
+      "cot": "khuyen_cao",
+      "tu": "bien_ve_tu",
+      "den": "bien_ve_den",
+      "bao_gom_tu": "bao_gom_tu",
+      "bao_gom_den": "bao_gom_den",
+      "gia_tri": {
+       "ds": "ds-2",
+       "cot": "crcl",
+       "theo_tham_so": true
+      }
+     }
+    }
+   ],
+   "cong_thuc": "cockcroft_gault",
+   "nguon": [
+    "tinh:cockcroft_gault:thuc_te",
+    "bang:quy_tac_lieu_than:meropenem:quy_tac:1"
+   ]
+  },
+  "bo_du_lieu": [
+   {
+    "ma": "ds-3",
+    "cot": [
+     {
+      "ten": "creatinin",
+      "kieu": "dinh_luong",
+      "don_vi": "umol/L",
+      "nhan": null
+     },
+     {
+      "ten": "loai_can_nang",
+      "kieu": "danh_muc",
+      "don_vi": null,
+      "nhan": null
+     },
+     {
+      "ten": "crcl",
+      "kieu": "dinh_luong",
+      "don_vi": "mL/min",
+      "nhan": null
+     }
+    ],
+    "dong": [
+     {
+      "creatinin": 212.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 15.998755241090146
+     }
+    ],
+    "can_cu": [
+     "tinh:cockcroft_gault:thuc_te"
+    ]
+   },
+   {
+    "ma": "ds-4",
+    "cot": [
+     {
+      "ten": "crcl_tu",
+      "kieu": "dinh_luong",
+      "don_vi": "mL/min",
+      "nhan": null
+     },
+     {
+      "ten": "crcl_den",
+      "kieu": "dinh_luong",
+      "don_vi": "mL/min",
+      "nhan": null
+     },
+     {
+      "ten": "bien_ve_tu",
+      "kieu": "dinh_luong",
+      "don_vi": "mL/min",
+      "nhan": null
+     },
+     {
+      "ten": "bien_ve_den",
+      "kieu": "dinh_luong",
+      "don_vi": "mL/min",
+      "nhan": null
+     },
+     {
+      "ten": "bao_gom_tu",
+      "kieu": "logic",
+      "don_vi": null,
+      "nhan": null
+     },
+     {
+      "ten": "bao_gom_den",
+      "kieu": "logic",
+      "don_vi": null,
+      "nhan": null
+     },
+     {
+      "ten": "can_chinh",
+      "kieu": "logic",
+      "don_vi": null,
+      "nhan": null
+     },
+     {
+      "ten": "khuyen_cao",
+      "kieu": "danh_muc",
+      "don_vi": null,
+      "nhan": null
+     }
+    ],
+    "dong": [
+     {
+      "crcl_tu": null,
+      "crcl_den": 10.0,
+      "bien_ve_tu": null,
+      "bien_ve_den": 10.0,
+      "bao_gom_tu": false,
+      "bao_gom_den": false,
+      "can_chinh": true,
+      "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+     },
+     {
+      "crcl_tu": 10.0,
+      "crcl_den": 25.0,
+      "bien_ve_tu": 10.0,
+      "bien_ve_den": 25.0,
+      "bao_gom_tu": true,
+      "bao_gom_den": true,
+      "can_chinh": true,
+      "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+     },
+     {
+      "crcl_tu": 26.0,
+      "crcl_den": 50.0,
+      "bien_ve_tu": 25.0,
+      "bien_ve_den": 50.0,
+      "bao_gom_tu": false,
+      "bao_gom_den": true,
+      "can_chinh": true,
+      "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+     },
+     {
+      "crcl_tu": 50.0,
+      "crcl_den": null,
+      "bien_ve_tu": 50.0,
+      "bien_ve_den": null,
+      "bao_gom_tu": false,
+      "bao_gom_den": false,
+      "can_chinh": false,
+      "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+     }
+    ],
+    "can_cu": [
+     "bang:quy_tac_lieu_than:meropenem:quy_tac:1"
+    ]
+   },
+   {
+    "ma": "ds-2",
+    "cot": [
+     {
+      "ten": "creatinin",
+      "kieu": "dinh_luong",
+      "don_vi": "umol/L",
+      "nhan": null
+     },
+     {
+      "ten": "loai_can_nang",
+      "kieu": "danh_muc",
+      "don_vi": null,
+      "nhan": null
+     },
+     {
+      "ten": "crcl",
+      "kieu": "dinh_luong",
+      "don_vi": "mL/min",
+      "nhan": null
+     }
+    ],
+    "dong": [
+     {
+      "creatinin": 106.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 31.997510482180292
+     },
+     {
+      "creatinin": 106.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 30.62438896936233
+     },
+     {
+      "creatinin": 106.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 31.173637574489515
+     },
+     {
+      "creatinin": 111.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 30.556181181181177
+     },
+     {
+      "creatinin": 111.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 29.244911988760418
+     },
+     {
+      "creatinin": 111.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 29.76941966572872
+     },
+     {
+      "creatinin": 116.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 29.239104406130263
+     },
+     {
+      "creatinin": 116.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 27.984355437520744
+     },
+     {
+      "creatinin": 116.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 28.486255024964553
+     },
+     {
+      "creatinin": 121.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 28.030876951331493
+     },
+     {
+      "creatinin": 121.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 26.82797711365625
+     },
+     {
+      "creatinin": 121.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 27.30913704872635
+     },
+     {
+      "creatinin": 126.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 26.9185405643739
+     },
+     {
+      "creatinin": 126.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 25.763374847241323
+     },
+     {
+      "creatinin": 126.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 26.225441134094353
+     },
+     {
+      "creatinin": 131.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 25.891115351993214
+     },
+     {
+      "creatinin": 131.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 24.780039929407685
+     },
+     {
+      "creatinin": 131.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 25.224470098441895
+     },
+     {
+      "creatinin": 136.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 24.939236111111114
+     },
+     {
+      "creatinin": 136.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 23.86900904965005
+     },
+     {
+      "creatinin": 136.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 24.297099874234476
+     },
+     {
+      "creatinin": 141.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 24.054866036249017
+     },
+     {
+      "creatinin": 141.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 23.022590289024162
+     },
+     {
+      "creatinin": 141.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 23.435500587914103
+     },
+     {
+      "creatinin": 146.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 23.231069254185694
+     },
+     {
+      "creatinin": 146.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 22.234145416112373
+     },
+     {
+      "creatinin": 146.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 22.632914951341704
+     },
+     {
+      "creatinin": 151.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 22.46182855040471
+     },
+     {
+      "creatinin": 151.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 21.4979154354464
+     },
+     {
+      "creatinin": 151.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 21.883480681429724
+     },
+     {
+      "creatinin": 156.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 21.741898148148145
+     },
+     {
+      "creatinin": 156.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 20.808879684310295
+     },
+     {
+      "creatinin": 156.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 21.182087069845437
+     },
+     {
+      "creatinin": 161.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 21.066683919944786
+     },
+     {
+      "creatinin": 161.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 20.162641184797554
+     },
+     {
+      "creatinin": 161.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 20.524258278856447
+     },
+     {
+      "creatinin": 166.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 20.432145247657292
+     },
+     {
+      "creatinin": 166.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 19.555332715375943
+     },
+     {
+      "creatinin": 166.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 19.906057728288484
+     },
+     {
+      "creatinin": 171.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 19.834714100064982
+     },
+     {
+      "creatinin": 171.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 18.98353936112519
+     },
+     {
+      "creatinin": 171.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 19.324009256701107
+     },
+     {
+      "creatinin": 176.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 19.27122790404041
+     },
+     {
+      "creatinin": 176.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 18.444234265638674
+     },
+     {
+      "creatinin": 176.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 18.77503172099937
+     },
+     {
+      "creatinin": 181.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 18.73887354205034
+     },
+     {
+      "creatinin": 181.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 17.93472503178125
+     },
+     {
+      "creatinin": 181.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 18.256384435888886
+     },
+     {
+      "creatinin": 186.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 18.235140382317798
+     },
+     {
+      "creatinin": 186.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 17.452608767486055
+     },
+     {
+      "creatinin": 186.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 17.765621413418753
+     },
+     {
+      "creatinin": 191.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 17.757780686445606
+     },
+     {
+      "creatinin": 191.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 16.995734192420976
+     },
+     {
+      "creatinin": 191.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 17.300552790030828
+     },
+     {
+      "creatinin": 196.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 17.304776077097507
+     },
+     {
+      "creatinin": 196.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 16.562169544655138
+     },
+     {
+      "creatinin": 196.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 16.859212157632086
+     },
+     {
+      "creatinin": 201.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 16.87430901050304
+     },
+     {
+      "creatinin": 201.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 16.150175277375155
+     },
+     {
+      "creatinin": 201.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 16.43982877062631
+     },
+     {
+      "creatinin": 206.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 16.464738403451996
+     },
+     {
+      "creatinin": 206.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 15.7581807318078
+     },
+     {
+      "creatinin": 206.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 16.04080380046548
+     },
+     {
+      "creatinin": 211.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 16.074578725645075
+     },
+     {
+      "creatinin": 211.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 15.384764126788657
+     },
+     {
+      "creatinin": 211.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 15.660689966331224
+     },
+     {
+      "creatinin": 212.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 15.998755241090146
+     },
+     {
+      "creatinin": 212.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 15.312194484681164
+     },
+     {
+      "creatinin": 212.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 15.586818787244757
+     },
+     {
+      "creatinin": 216.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 15.702481995884774
+     },
+     {
+      "creatinin": 216.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 15.028635327557438
+     },
+     {
+      "creatinin": 216.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 15.298173994888375
+     },
+     {
+      "creatinin": 221.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 15.347222222222223
+     },
+     {
+      "creatinin": 221.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 14.6886209536308
+     },
+     {
+      "creatinin": 221.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 14.952061461067366
+     },
+     {
+      "creatinin": 226.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 15.007681907571289
+     },
+     {
+      "creatinin": 226.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 14.363651463506223
+     },
+     {
+      "creatinin": 226.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 14.621263641132249
+     },
+     {
+      "creatinin": 231.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 14.682840307840307
+     },
+     {
+      "creatinin": 231.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 14.052749916677083
+     },
+     {
+      "creatinin": 231.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 14.304786073142372
+     },
+     {
+      "creatinin": 236.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 14.371763182674199
+     },
+     {
+      "creatinin": 236.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 13.75502216420511
+     },
+     {
+      "creatinin": 236.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 14.001718571592747
+     },
+     {
+      "creatinin": 241.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 14.073593822037807
+     },
+     {
+      "creatinin": 241.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 13.46964826038343
+     },
+     {
+      "creatinin": 241.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 13.71122648504518
+     },
+     {
+      "creatinin": 246.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 13.787545167118337
+     },
+     {
+      "creatinin": 246.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 13.19587492175775
+     },
+     {
+      "creatinin": 246.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 13.432543019901985
+     },
+     {
+      "creatinin": 251.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 13.512892872952635
+     },
+     {
+      "creatinin": 251.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 12.933008887459788
+     },
+     {
+      "creatinin": 251.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 13.164962481656927
+     },
+     {
+      "creatinin": 256.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 13.248969184027777
+     },
+     {
+      "creatinin": 256.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 12.680411057626587
+     },
+     {
+      "creatinin": 256.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 12.907834308187063
+     },
+     {
+      "creatinin": 261.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 12.995157513835677
+     },
+     {
+      "creatinin": 261.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 12.437491305564777
+     },
+     {
+      "creatinin": 261.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 12.660557788873136
+     },
+     {
+      "creatinin": 266.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 12.750887635756056
+     },
+     {
+      "creatinin": 266.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 12.203703875009047
+     },
+     {
+      "creatinin": 266.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 12.422577379307851
+     },
+     {
+      "creatinin": 271.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 12.515631406314064
+     },
+     {
+      "creatinin": 271.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 11.978543286909249
+     },
+     {
+      "creatinin": 271.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 12.193378534671174
+     },
+     {
+      "creatinin": 276.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 12.288898953301128
+     },
+     {
+      "creatinin": 276.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 11.761540691131906
+     },
+     {
+      "creatinin": 276.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 11.972483995999596
+     },
+     {
+      "creatinin": 281.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 12.070235270858046
+     },
+     {
+      "creatinin": 281.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 11.552260607659809
+     },
+     {
+      "creatinin": 281.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 11.759450472939104
+     },
+     {
+      "creatinin": 286.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 11.859217171717173
+     },
+     {
+      "creatinin": 286.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 11.350298009623799
+     },
+     {
+      "creatinin": 286.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 11.55386567446115
+     },
+     {
+      "creatinin": 291.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 11.65545055364643
+     },
+     {
+      "creatinin": 291.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 11.155275707052942
+     },
+     {
+      "creatinin": 291.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 11.355345645690338
+     },
+     {
+      "creatinin": 296.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 11.458567942942945
+     },
+     {
+      "creatinin": 296.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 10.966841995785158
+     },
+     {
+      "creatinin": 296.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 11.163532374648272
+     },
+     {
+      "creatinin": 301.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 11.268226282761166
+     },
+     {
+      "creatinin": 301.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 10.784668540705669
+     },
+     {
+      "creatinin": 301.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 10.978091637527868
+     },
+     {
+      "creatinin": 306.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 11.084104938271606
+     },
+     {
+      "creatinin": 306.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 10.608448466511133
+     },
+     {
+      "creatinin": 306.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 10.798711055215323
+     },
+     {
+      "creatinin": 311.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 10.905903894247945
+     },
+     {
+      "creatinin": 311.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 10.437894632644394
+     },
+     {
+      "creatinin": 311.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 10.625098337285815
+     },
+     {
+      "creatinin": 316.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 10.73334212376934
+     },
+     {
+      "creatinin": 316.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 10.272738072001285
+     },
+     {
+      "creatinin": 316.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 10.456979692708508
+     },
+     {
+      "creatinin": 321.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 10.566156109380408
+     },
+     {
+      "creatinin": 321.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 10.112726575552667
+     },
+     {
+      "creatinin": 321.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 10.294098389083764
+     },
+     {
+      "creatinin": 326.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 10.404098500340831
+     },
+     {
+      "creatinin": 326.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.957623407215971
+     },
+     {
+      "creatinin": 326.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 10.136213444465914
+     },
+     {
+      "creatinin": 331.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 10.246936891574354
+     },
+     {
+      "creatinin": 331.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.807206135203645
+     },
+     {
+      "creatinin": 331.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.983098437751929
+     },
+     {
+      "creatinin": 336.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 10.094452711640212
+     },
+     {
+      "creatinin": 336.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.661265567715494
+     },
+     {
+      "creatinin": 336.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.83454042528538
+     },
+     {
+      "creatinin": 341.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.946440208536982
+     },
+     {
+      "creatinin": 341.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.519604782265121
+     },
+     {
+      "creatinin": 341.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.690338952773866
+     },
+     {
+      "creatinin": 346.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.802705523442517
+     },
+     {
+      "creatinin": 346.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.382038239168805
+     },
+     {
+      "creatinin": 346.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.55030515287829
+     },
+     {
+      "creatinin": 351.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.6630658436214
+     },
+     {
+      "creatinin": 351.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.248390970804577
+     },
+     {
+      "creatinin": 351.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.414260919931305
+     },
+     {
+      "creatinin": 356.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.527348626716604
+     },
+     {
+      "creatinin": 356.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 9.118497839192154
+     },
+     {
+      "creatinin": 356.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.282038154201933
+     },
+     {
+      "creatinin": 361.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.395390889504464
+     },
+     {
+      "creatinin": 361.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.992202855269824
+     },
+     {
+      "creatinin": 361.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.15347806896368
+     },
+     {
+      "creatinin": 366.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.267038554948392
+     },
+     {
+      "creatinin": 366.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.869358553968326
+     },
+     {
+      "creatinin": 366.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 9.028430554360352
+     },
+     {
+      "creatinin": 371.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.142145852051515
+     },
+     {
+      "creatinin": 371.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.749825419817808
+     },
+     {
+      "creatinin": 371.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.906753592711292
+     },
+     {
+      "creatinin": 376.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 9.02057476359338
+     },
+     {
+      "creatinin": 376.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.63347135838406
+     },
+     {
+      "creatinin": 376.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.788312720467788
+     },
+     {
+      "creatinin": 381.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.902194517351997
+     },
+     {
+      "creatinin": 381.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.5201712093239
+     },
+     {
+      "creatinin": 381.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.67298053253514
+     },
+     {
+      "creatinin": 386.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.786881116868164
+     },
+     {
+      "creatinin": 386.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.409806297286027
+     },
+     {
+      "creatinin": 386.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.560636225118882
+     },
+     {
+      "creatinin": 391.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.674516908212562
+     },
+     {
+      "creatinin": 391.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.302264017269582
+     },
+     {
+      "creatinin": 391.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.451165173646775
+     },
+     {
+      "creatinin": 396.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.564990179573513
+     },
+     {
+      "creatinin": 396.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.197437451394965
+     },
+     {
+      "creatinin": 396.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.344458542666384
+     },
+     {
+      "creatinin": 401.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.458194790800775
+     },
+     {
+      "creatinin": 401.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 8.095225014345154
+     },
+     {
+      "creatinin": 401.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.240412924927401
+     },
+     {
+      "creatinin": 406.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.354029830322933
+     },
+     {
+      "creatinin": 406.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 7.995530125005927
+     },
+     {
+      "creatinin": 406.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.13893000713273
+     },
+     {
+      "creatinin": 411.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.252399297107328
+     },
+     {
+      "creatinin": 411.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 7.898260902073981
+     },
+     {
+      "creatinin": 411.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 8.039916260087319
+     },
+     {
+      "creatinin": 416.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.153211805555557
+     },
+     {
+      "creatinin": 416.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 7.803329881616363
+     },
+     {
+      "creatinin": 416.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 7.943282651192041
+     },
+     {
+      "creatinin": 421.0,
+      "loai_can_nang": "thuc_te",
+      "crcl": 8.056380311427818
+     },
+     {
+      "creatinin": 421.0,
+      "loai_can_nang": "ly_tuong",
+      "crcl": 7.71065375475631
+     },
+     {
+      "creatinin": 421.0,
+      "loai_can_nang": "hieu_chinh",
+      "crcl": 7.848944377424912
+     }
+    ],
+    "can_cu": [
+     "tinh:cockcroft_gault:thuc_te"
+    ]
+   }
+  ],
+  "cong_thuc_hien_thi": "(140 - tuổi) × cân nặng / (72 × creatinin mg/dL) × hệ số giới (nữ: 0.85; nam: 1); creatinin µmol/L / 88.4 = mg/dL",
+  "nguon": [
+   "tinh:cockcroft_gault:thuc_te",
+   "bang:quy_tac_lieu_than:meropenem:quy_tac:1"
+  ]
+ }
+]

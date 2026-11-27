@@ -7,6 +7,7 @@ import {
   filterTreatmentSheetNotes,
   hasSevereByFactor,
   isTreatmentSheetNote,
+  parseDetailTabParam,
   parseReviewFactorParam,
   stripPendingSourceNote,
   updateReviewFactorParams,
@@ -118,5 +119,11 @@ describe('trạng thái sáu yếu tố thẩm định', () => {
     expect(pOverview.get('tab')).toBe('tham_dinh')
     expect(pOverview.get('yl')).toBe('YL-01')
     expect(pOverview.has('yt')).toBe(false)
+
+    expect(parseDetailTabParam(null)).toBe('y_lenh')
+    expect(parseDetailTabParam('')).toBe('y_lenh')
+    expect(parseDetailTabParam('khong-hop-le')).toBe('y_lenh')
+    expect(parseDetailTabParam('phieu_dieu_tri')).toBe('dien_bien')
+    expect(parseDetailTabParam('tham_dinh')).toBe('tham_dinh')
   })
 })

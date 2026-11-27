@@ -140,6 +140,17 @@ Chỉ dùng ba độ đậm: 400, 500, 600. Không dùng chữ nghiêng cho nộ
 - Thanh trên: nền `surface`, viền dưới `line`. Bên trái: biểu tượng `Pill` + tên "Hỗ trợ thẩm định y lệnh". Giữa: không có gì. Bên phải: nhãn `Dữ liệu giả lập` (kiểu `warning` mềm), nhãn trạng thái AI (`ai` khi bật, `neutral` khi tắt), nút thu gọn hai bên.
 - Dòng nhắc "Kết quả tham khảo. Dược sĩ kiểm chứng và quyết định." đặt ở **chân vùng giữa**, cỡ `text-xs`, màu `fg-subtle`, luôn nhìn thấy; không chiếm một dải lớn trên đầu.
 
+### 4.1. Bố cục co giãn theo cột giữa (chủ kho chốt 27/11/2026)
+
+Bật khung trợ lý thì cột giữa hẹp lại (đo 27/11: khoảng 632 px ở màn 1280, 792 px ở màn 1440). Khi đó chữ phải **xuống dòng**, không được bị đẩy ra ngoài vùng nhìn.
+
+- Bố cục theo **bề rộng cột giữa** (container query trên `.workspace-center`), không theo bề rộng màn hình.
+- Bảng nhiều cột có chế độ gọn: gộp cột phụ thành dòng phụ dưới cột chính. Giá trị bị gộp vẫn phải nhìn thấy ngay trên dòng hoặc trong ngăn chi tiết.
+- Nội dung lâm sàng (tên thuốc, liều, chẩn đoán, diễn giải, căn cứ) không cắt bằng `…`. Chỉ mã ngắn, ngày giờ, huy hiệu mới giữ một dòng.
+- Ngăn mở rộng nằm trong bảng phải rộng bằng vùng nhìn, không rộng theo bảng.
+- Cuộn ngang chỉ là đường lùi khi cột giữa hẹp hơn 480 px.
+- Nghiệm thu: đo ở 1280×800, 1440×900, 1920×1080 khi khung trợ lý mở; trong `main` không phần tử nào có `scrollWidth > clientWidth + 4` và không chữ nào vượt mép phải. Brief đầu tiên áp dụng: `plan/briefs/UI3-bo-cuc-co-gian-khi-mo-tro-ly.md`.
+
 ---
 
 ## 5. Thành phần

@@ -16,6 +16,7 @@ Hệ thống AI agent hỗ trợ dược sĩ lâm sàng (DSLS) thẩm định y 
 - **Plan 1.7 – dữ liệu bệnh án giả lập (60 hồ sơ)** (cấu trúc bệnh án thật, so sánh với `CaBenh`, mô hình mở rộng, chiến lược tạo và kiểm; bản nháp chờ duyệt): `plan/plan-1.7-du-lieu-benh-an-gia-lap.md`.
 - **Plan 1.8 – dữ liệu thật cho thẩm định 7 yếu tố** (từ điển thuốc, bộ phân giải tên → hoạt chất, cào Cục Quản lý Dược / DDInter / RxNav / openFDA, luật từng yếu tố, các đợt D0–D7 có cổng review): `plan/plan-1.8-du-lieu-tham-dinh-7-yeu-to.md`. Làm xong phần này mới sang plan 1.9.
 - **Plan 1.9 – Agentic RAG, công cụ và phân quyền** (trước đây đánh số 1.8): `plan/plan-1.9-agentic-rag-cong-cu-va-phan-quyen.md`.
+- **Plan 1.11 – tracer (nhật ký lượt chạy AI) và minh hoạ tương tác trong chat** (bản nháp 26/11, chờ duyệt; danh sách hình chờ dược sĩ xác nhận): `plan/plan-1.11-tracer-va-visualizer.md`. Số 1.10 đã dùng cho `plan/plan-1.10-tien-trinh-ai-ui.md`.
 - Tệp nguồn tri thức đã tải (50 nhãn openFDA, DDInter) và tình trạng từng nguồn: `data/kb_sources/README.md`.
 - **Hợp đồng API** giữa backend FastAPI (`app/api/`) và bản web React (`web/`): `plan/api-hop-dong-v1.md` và phần bổ sung `plan/api-hop-dong-v1.1-bo-sung.md` (bước AI chạy nền, mở đoạn nguồn). Muốn đổi tên trường thì sửa file này trước. Giới hạn bảo mật (413/401 trước đọc thân, giới hạn trường, 429, lịch sử hỏi đáp do máy chủ dựng): `plan/api-hop-dong-v1.9-gioi-han-bao-mat.md`.
 - Theo dõi tiến độ: `plan/TRACKING.md`

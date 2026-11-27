@@ -271,3 +271,6 @@ data/formulas/*
 !data/formulas/README.md
 data/runtime/
 data/_luu_tru/
+
+# PharmOverlay tạm gác vô thời hạn (26/11/2026) – xem pharm-overlay/TAM-GAC.md
+pharm-overlay/

@@ -107,6 +107,8 @@ def test_interface_field_sets_match_contract() -> None:
         assert f"`{field}`" in v12_doc
     contract_fields["GuiCauHoi"].add("nhan_dinh_id")
     contract_fields["TraLoi"].add("thoi_gian_ms")
+    contract_fields["TraLoi"].add("ma_vet")
+    contract_fields["TraLoi"].add("minh_hoa")
     queue_fields = {"ma_y_lenh", "thoi_diem_ke", "nguoi_benh_tom_tat", "thuoc"}
     for field in queue_fields:
         assert f"`{field}`" in v12_doc

@@ -12,7 +12,12 @@ from typing import TYPE_CHECKING, Any, cast
 
 import psycopg
 
-from app.config.settings import Settings, get_secret, load_settings
+from app.config.settings import (
+    Settings,
+    assert_tracer_settings_allowed,
+    get_secret,
+    load_settings,
+)
 from app.core.errors import ConfigError
 from app.core.interfaces import (
     CaseRepository,
@@ -32,6 +37,7 @@ from app.providers.memory_store import InMemoryVectorStore
 from app.rules.registry import RuleContext, default_rules
 from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 from app.storage.case_repo import JsonCaseRepository
+from app.tracing import Tracer, khoi_tao_tracer, lay_tracer_mac_dinh
 
 if TYPE_CHECKING:
     from app.agent.asker import AgenticAsker
@@ -74,8 +80,23 @@ class Container:
     settings: Settings
 
     def __init__(self, settings: Settings) -> None:
+        assert_tracer_settings_allowed(settings.tracer)
         self.settings = settings
         self._lock = RLock()
+
+    @_LockedCachedProperty
+    def tracer(self) -> Tracer:
+        """Khởi tạo tracer theo cấu hình và gắn mặc định một lần khi tracer.bat=True."""
+        resolved_dir = str(self._resolve_path(self.settings.tracer.thu_muc))
+        tracer_settings = self.settings.tracer.model_copy(update={"thu_muc": resolved_dir})
+        if tracer_settings.bat:
+            current = lay_tracer_mac_dinh()
+            if current is None or not current.bat or current.settings != tracer_settings:
+                return khoi_tao_tracer(
+                    tracer_settings, auto_cleanup=True, app_settings=self.settings
+                )
+            return current
+        return Tracer(tracer_settings, auto_cleanup=False)
 
     def _resolve(self, kind: str, name: str) -> object:
         """Tra bảng đăng ký mà không rẽ nhánh theo tên nhà cung cấp."""
@@ -248,10 +269,13 @@ class Container:
         from app.orchestration.ask import CaseAsker
         from app.retrieval.query_builder import QueryBuilder
 
+        if self.settings.tracer.bat:
+            _ = self.tracer
+
         try:
             llm: LLMClient | None = llm_setup.build_llm(self)
         except ConfigError as exc:
-            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+            if self.settings.llm.provider == "chat_api" and str(exc) == "khong_co_khoa_llm":
                 llm = None
             else:
                 raise
@@ -277,15 +301,23 @@ class Container:
         """Dựng bộ hỏi đáp agent theo đồ thị LangGraph từ cấu hình và chính sách công cụ."""
         from app.agent.asker import AgenticAsker
         from app.agent.tools import ChinhSachCongCu, DanhMucCongCu
+        from app.agent.tools.doc_doan_mo_rong import DocDoanMoRong
+        from app.agent.tools.lay_du_lieu_ca import LayDuLieuCa
         from app.agent.tools.tim_doan_nguon import TimDoanNguon
+        from app.agent.tools.tinh_chi_so import TinhChiSo
+        from app.agent.tools.tra_thuoc import TraThuoc
         from app.agent.tools.tra_tuong_tac import TraTuongTac
+        from app.agent.tools.ve_bieu_do import VeBieuDo
         from app.kb.names import DrugNameIndex
         from app.llm import setup as llm_setup
+
+        if self.settings.tracer.bat:
+            _ = self.tracer
 
         try:
             llm: LLMClient | None = llm_setup.build_llm(self)
         except ConfigError as exc:
-            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+            if self.settings.llm.provider == "chat_api" and str(exc) == "khong_co_khoa_llm":
                 llm = None
             else:
                 raise
@@ -294,7 +326,12 @@ class Container:
         # Công cụ chuyên biệt cắm dần (plan 1.9 mục 5.8): mỗi công cụ một dòng đăng ký.
         danh_muc = DanhMucCongCu()
         danh_muc.dang_ky(TraTuongTac())
+        danh_muc.dang_ky(LayDuLieuCa())
         danh_muc.dang_ky(TimDoanNguon(self.evidence_retriever, DrugNameIndex.load().resolve))
+        danh_muc.dang_ky(DocDoanMoRong(self.evidence_retriever))
+        danh_muc.dang_ky(TraThuoc())
+        danh_muc.dang_ky(TinhChiSo())
+        danh_muc.dang_ky(VeBieuDo())
 
         return AgenticAsker(
             llm=llm,

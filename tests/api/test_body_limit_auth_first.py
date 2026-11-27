@@ -27,7 +27,7 @@ _RENAL_PATH = ROOT / "data/kb/quy_tac_lieu_than.json"
 class _FakeAiRunner:
     """Bộ chạy AI giả để bật hỏi đáp trong CaseService mà không gọi LLM thật."""
 
-    model_name = "deepseek-flash"
+    model_name = "model-test"
 
     def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
         del ca
@@ -40,7 +40,7 @@ class _FakeAiRunner:
                 so_lan_goi=1,
                 canh_bao=[],
                 phien_ban_prompt="tong_hop.v1",
-                mo_hinh="deepseek-flash",
+                mo_hinh="model-test",
             ),
             doan=[],
             canh_bao=[],

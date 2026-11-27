@@ -100,16 +100,18 @@ export function hasSevereByFactor(
 const VALID_DETAIL_TABS: ReadonlySet<string> = new Set<DetailTabId>([
   'ho_so_benh_an',
   'y_lenh',
-  'phieu_dieu_tri',
   'xet_nghiem',
   'vi_sinh',
   'dien_bien',
   'tham_dinh',
 ])
 
-/** Đọc tham số URL ?tab=, vắng hoặc sai giá trị mặc định về 'tham_dinh'. */
+/** Đọc tham số URL ?tab=, vắng hoặc sai giá trị mặc định về 'y_lenh'; tương thích tab cũ 'phieu_dieu_tri'. */
 export function parseDetailTabParam(raw: string | null): DetailTabId {
-  return raw && VALID_DETAIL_TABS.has(raw) ? (raw as DetailTabId) : 'tham_dinh'
+  if (raw === 'phieu_dieu_tri') {
+    return 'dien_bien'
+  }
+  return raw && VALID_DETAIL_TABS.has(raw) ? (raw as DetailTabId) : 'y_lenh'
 }
 
 /** Đọc tham số URL ?yt=: chỉ nhận 'tong_quan' hoặc '1'..'7', vắng hoặc sai về 'tong_quan'. */

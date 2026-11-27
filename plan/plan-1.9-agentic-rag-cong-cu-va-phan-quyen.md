@@ -192,54 +192,54 @@ Mỗi tool là một lớp có: `ten`, `mo_ta` (cho LLM), `LuocDoThamSo` (pydant
 
 ### 5.2. A – Tri thức dạng văn bản (vector, trả đoạn để trích nguyên văn)
 
-| # | Tool | Tham số | Trả về | Nguồn | Chế độ |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| A1 | `tim_doan_nguon` | `cau_hoi`; `hoat_chat?` (danh sách mã đã phân giải); `muc?` (lieu, lieu_than, chong_chi_dinh, tuong_tac…); `nhom_nguon?`; `so_doan?` (≤ 8) | Đoạn kèm mã, nhãn nguồn, tầng tin cậy, mục, điểm | `doan_trich` | ca, chung |
-| A2 | `doc_doan_mo_rong` | `doan_trich_id` (chỉ đoạn đã trả trong lượt này) | Cả mục cha khi đoạn bị cắt giữa chừng, ví dụ bảng liều chia đôi | `doan_trich.muc_cha_id` | ca, chung |
+| # | Tool | Tham số | Trả về | Nguồn | Chế độ | Trạng thái (26/11) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| A1 | `tim_doan_nguon` | `cau_hoi`; `hoat_chat?` (danh sách mã đã phân giải); `muc?` (lieu, lieu_than, chong_chi_dinh, tuong_tac…); `nhom_nguon?`; `so_doan?` (≤ 8) | Đoạn kèm mã, nhãn nguồn, tầng tin cậy, mục, điểm | `doan_trich` | ca, chung | ✅ T107 (22/11) |
+| A2 | `doc_doan_mo_rong` | `doan_trich_id` (chỉ đoạn đã trả trong lượt này) | Cả mục cha khi đoạn bị cắt giữa chừng, ví dụ bảng liều chia đôi | `doan_trich.muc_cha_id` | ca, chung | ✅ T110 + fix-1 (26/11) |
 
 `tra_phac_do` của bản cũ bỏ. Phác đồ, Dược thư, văn bản BYT vào `doan_trich` với `nhom_nguon` riêng.
 
 ### 5.3. B – Tri thức có cấu trúc (SQL, trả dòng bảng)
 
-| # | Tool | Tham số | Trả về | Bảng | Chế độ |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| B1 | `tra_thuoc` | `ten` (thương mại, Việt, INN, viết tắt) | Hoạt chất, INN, ATC, dạng bào chế, sản phẩm Cục QLD, **mức chắc chắn theo bước phân giải** (mục 4.4); mơ hồ thì trả danh sách ứng viên | `tra_cuu_*`, `ten_thuoc` | ca, chung |
-| B2 | `tra_nhom_thuoc` | `hoat_chat` hoặc `nhom` (ATC, tên nhóm) | Hai chiều: hoạt chất → nhóm; nhóm → các hoạt chất. Phần "đồ thị" thay GraphRAG | `tra_cuu_hoat_chat.ma_atc_json`, `nhom_dieu_tri_trung` | ca, chung |
-| B3 | `tra_tuong_tac` | `hoat_chat` (2–10) | Mọi cặp có tương tác: mức độ, cơ chế tóm tắt, hậu quả, xử trí. **Thuốc không có mã DDInter thì báo riêng, không trả "không có tương tác"** | `ddinter_cap`, nối qua `tra_cuu_hoat_chat.ddinter_id` | ca, chung |
-| B4 | `tra_tuong_tac_benh` | `hoat_chat`, `benh` (tên hoặc ICD-10) | Cặp thuốc–bệnh | `tuong_tac_benh`, `anh_xa_benh_icd` | ca, chung |
-| B5 | `tra_tuong_tac_thuc_an` | `hoat_chat` | Thuốc–thức ăn, đồ uống | `ddinter_thuc_an` | ca, chung |
-| B6 | `tra_lieu` | `hoat_chat`, `loai` (toi_da / than / gan), `duong_dung?` | Ngưỡng liều; bậc chỉnh theo CrCl hoặc phân loại gan. **Chỉ trả ngưỡng, không áp vào ca** | `lieu_toi_da*`, `quy_tac_lieu_than_v2`, `quy_tac_gan` | ca, chung |
-| B7 | `tra_di_ung_cheo` | `hoat_chat` hoặc `nhom_di_ung` | Nhóm dị ứng chéo, cơ sở | `nhom_di_ung_cheo`, `nhom_di_ung_anh_xa` | ca, chung |
-| B8 | `tra_khang_sinh_han_che` | `hoat_chat` | Có thuộc danh mục cần duyệt không, nhóm, yêu cầu | `khang_sinh_han_che*` | ca, chung |
-| B9 | `tra_duong_dung` | `hoat_chat`, `duong` | Đường dùng có hợp lệ không, tên chuẩn hoá | `duong_dung_hop_le`, `chuan_hoa_duong_dung` | ca, chung |
-| B10 | `tra_canh_bao_xet_nghiem` | `hoat_chat` | Độc tính cần theo dõi, ngưỡng xét nghiệm | `canh_bao_doc_tinh`, `nguong_xet_nghiem` | ca, chung |
+| # | Tool | Tham số | Trả về | Bảng | Chế độ | Trạng thái (26/11) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| B1 | `tra_thuoc` | `ten` (thương mại, Việt, INN, viết tắt) | Hoạt chất, INN, ATC, dạng bào chế, sản phẩm Cục QLD, **mức chắc chắn theo bước phân giải** (mục 4.4); mơ hồ thì trả danh sách ứng viên | `tra_cuu_*`, `ten_thuoc` | ca, chung | ✅ T108 `tra_thuoc` (26/11) |
+| B2 | `tra_nhom_thuoc` | `hoat_chat` hoặc `nhom` (ATC, tên nhóm) | Hai chiều: hoạt chất → nhóm; nhóm → các hoạt chất. Phần "đồ thị" thay GraphRAG | `tra_cuu_hoat_chat.ma_atc_json`, `nhom_dieu_tri_trung` | ca, chung | ⏸️ Hoãn: chiều hoạt chất → nhóm đã có trong `tra_thuoc`; chiều nhóm → hoạt chất chưa có câu hỏi thật |
+| B3 | `tra_tuong_tac` | `hoat_chat` (2–10) | Mọi cặp có tương tác: mức độ, cơ chế tóm tắt, hậu quả, xử trí. **Thuốc không có mã DDInter thì báo riêng, không trả "không có tương tác"** | `ddinter_cap`, nối qua `tra_cuu_hoat_chat.ddinter_id` | ca, chung | ✅ T106 `tra_tuong_tac` (22/11) |
+| B4 | `tra_tuong_tac_benh` | `hoat_chat`, `benh` (tên hoặc ICD-10) | Cặp thuốc–bệnh | `tuong_tac_benh`, `anh_xa_benh_icd` | ca, chung | ✅ gộp vào `tra_tuong_tac` (T106) |
+| B5 | `tra_tuong_tac_thuc_an` | `hoat_chat` | Thuốc–thức ăn, đồ uống | `ddinter_thuc_an` | ca, chung | ✅ gộp vào `tra_tuong_tac` (T106) |
+| B6 | `tra_lieu` | `hoat_chat`, `loai` (toi_da / than / gan), `duong_dung?` | Ngưỡng liều; bậc chỉnh theo CrCl hoặc phân loại gan. **Chỉ trả ngưỡng, không áp vào ca** | `lieu_toi_da*`, `quy_tac_lieu_than_v2`, `quy_tac_gan` | ca, chung | ✅ gộp vào `tra_thuoc` nhóm `lieu_toi_da`, `lieu_than`, `lieu_gan` (T108) |
+| B7 | `tra_di_ung_cheo` | `hoat_chat` hoặc `nhom_di_ung` | Nhóm dị ứng chéo, cơ sở | `nhom_di_ung_cheo`, `nhom_di_ung_anh_xa` | ca, chung | ✅ chiều hoạt chất → nhóm: `tra_thuoc` nhóm `di_ung_cheo` (T108); chiều nhóm → hoạt chất hoãn cùng B2 |
+| B8 | `tra_khang_sinh_han_che` | `hoat_chat` | Có thuộc danh mục cần duyệt không, nhóm, yêu cầu | `khang_sinh_han_che*` | ca, chung | ✅ gộp vào `tra_thuoc` nhóm `khang_sinh_quan_ly` (T108) |
+| B9 | `tra_duong_dung` | `hoat_chat`, `duong` | Đường dùng có hợp lệ không, tên chuẩn hoá | `duong_dung_hop_le`, `chuan_hoa_duong_dung` | ca, chung | ✅ gộp vào `tra_thuoc` nhóm `duong_dung` (T108) |
+| B10 | `tra_canh_bao_xet_nghiem` | `hoat_chat` | Độc tính cần theo dõi, ngưỡng xét nghiệm | `canh_bao_doc_tinh`, `nguong_xet_nghiem` | ca, chung | ✅ gộp vào `tra_thuoc` nhóm `doc_tinh`, `nguong_xet_nghiem` (T108) |
 
 ### 5.4. C – Ca bệnh (chỉ chế độ ca; `ca_id` lấy từ `ToolContext`, không bao giờ từ LLM)
 
-| # | Tool | Tham số | Trả về | Ghi chú |
-| :--- | :--- | :--- | :--- | :--- |
-| C1 | `doc_ho_so` | `muc`: chan_doan, di_ung, sinh_hieu, xet_nghiem, vi_sinh, dien_bien, phieu_dieu_tri, benh_su, y_lenh_cho_duyet, thuoc_dang_dung, lich_su_y_lenh; `tu_ngay?`, `den_ngay?` | Phần hồ sơ đã che PII, có mã bản ghi `R1…` | Chỉ bật khi gói ca bị cắt vì vượt `case_context.max_chars` (16000). Văn bản tự do qua quét chèn lệnh. **Không bao giờ trả** họ tên, ngày sinh, địa chỉ, BHYT |
-| C2 | `xem_xu_huong_xet_nghiem` | `chi_so` (creatinin, kali, INR…), `so_ngay?` | Chuỗi giá trị theo thời gian; xu hướng do code tính | Gói ca thường chỉ có giá trị mới nhất |
-| C3 | `tinh_chi_so` | `cong_thuc` (CrCl, eGFR, BMI, BSA, QTc…), `gia_dinh?` (cân nặng thực / lý tưởng / hiệu chỉnh) | Kết quả, công thức, đầu vào đã dùng | Cho câu "nếu dùng cân nặng lý tưởng thì sao". **LLM chỉ chọn công thức và giả định từ danh sách cố định, không truyền số.** Đầu vào lấy từ hồ sơ |
-| C4 | `xem_ket_qua_luat` | `yeu_to?` | Phát hiện của luật | Đã có trong prompt; chỉ cần khi gói bị cắt |
+| # | Tool | Tham số | Trả về | Ghi chú | Trạng thái (26/11) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| C1 | `doc_ho_so` | `muc`: chan_doan, di_ung, sinh_hieu, xet_nghiem, vi_sinh, dien_bien, phieu_dieu_tri, benh_su, y_lenh_cho_duyet, thuoc_dang_dung, lich_su_y_lenh; `tu_ngay?`, `den_ngay?` | Phần hồ sơ đã che PII, có mã bản ghi `R1…` | Chỉ bật khi gói ca bị cắt vì vượt `case_context.max_chars` (16000). Văn bản tự do qua quét chèn lệnh. **Không bao giờ trả** họ tên, ngày sinh, địa chỉ, BHYT | ⏸️ Chưa cần: đo 26/11 gói ca dài nhất 8.216 / 16.000 ký tự, 0/66 ca bị cắt |
+| C2 | `xem_xu_huong_xet_nghiem` | `chi_so` (creatinin, kali, INR…), `so_ngay?` | Chuỗi giá trị theo thời gian; xu hướng do code tính | Gói ca thường chỉ có giá trị mới nhất | ⏸️ Chưa cần: đo 26/11 chỉ 1/66 ca có cùng xét nghiệm ≥ 3 lần |
+| C3 | `tinh_chi_so` | `cong_thuc` (CrCl, eGFR, BMI, BSA, QTc…), `gia_dinh?` (cân nặng thực / lý tưởng / hiệu chỉnh) | Kết quả, công thức, đầu vào đã dùng | Cho câu "nếu dùng cân nặng lý tưởng thì sao". **LLM chỉ chọn công thức và giả định từ danh sách cố định, không truyền số.** Đầu vào lấy từ hồ sơ | ✅ T109 + fix-1 (26/11); thu hẹp: bỏ QTc, canxi hiệu chỉnh vì ca chưa có dữ liệu |
+| C4 | `xem_ket_qua_luat` | `yeu_to?` | Phát hiện của luật | Đã có trong prompt; chỉ cần khi gói bị cắt | ⏸️ Chưa cần: như C1, phát hiện luật đã nằm trọn trong gói ca |
 
 ### 5.5. D – Điều khiển luồng
 
-| # | Tool | Tác dụng |
-| :--- | :--- | :--- |
-| D1 | `tra_loi` | Kết thúc vòng, đưa câu trả lời sang bộ kiểm chứng |
-| D2 | `hoi_lai_duoc_si` | Câu hỏi mơ hồ (tên thuốc khớp nhiều hoạt chất, không rõ hỏi thuốc nào): hỏi lại, không đoán |
-| D3 | `bao_khong_du_can_cu` | Tra hết mà không thấy: dừng sớm và báo thiếu, thay vì tra vòng vo đến hết lượt |
+| # | Tool | Tác dụng | Trạng thái (26/11) |
+| :--- | :--- | :--- | :--- |
+| D1 | `tra_loi` | Kết thúc vòng, đưa câu trả lời sang bộ kiểm chứng | ✅ `hanh_dong="tra_loi"` (P1c, 22/11) |
+| D2 | `hoi_lai_duoc_si` | Câu hỏi mơ hồ (tên thuốc khớp nhiều hoạt chất, không rõ hỏi thuốc nào): hỏi lại, không đoán | ✅ `hanh_dong="hoi_lai"` (P1c) |
+| D3 | `bao_khong_du_can_cu` | Tra hết mà không thấy: dừng sớm và báo thiếu, thay vì tra vòng vo đến hết lượt | ✅ `hanh_dong="khong_du_can_cu"` (P1c) |
 
 Tiến trình trên giao diện **không phải tool**: ToolGateway tự gọi `ghi_buoc` cho mỗi lần gọi.
 
 ### 5.6. E – Nguồn ngoài (để sau, mặc định tắt)
 
-| # | Tool | Ghi chú |
-| :--- | :--- | :--- |
-| E1 | `tra_openfda` | Kho hiện chỉ có khoảng 50 nhãn, trong khi phân giải tên phủ 1255 hoạt chất. Tham số chỉ là mã hoạt chất đã phân giải, nên không có đường cho PII đi ra. Kết quả gắn nhãn "nguồn ngoài, chưa nạp kho" |
-| E2 | `tra_cuc_qld` | Tra trực tuyến sản phẩm mới khi `tra_cuu_thuoc` không có |
-| E3 | `tim_web` | Chờ nhóm quyết. Kết quả tầng 3 không bao giờ cho kết luận "đạt" |
+| # | Tool | Ghi chú | Trạng thái (26/11) |
+| :--- | :--- | :--- | :--- |
+| E1 | `tra_openfda` | Kho hiện chỉ có khoảng 50 nhãn, trong khi phân giải tên phủ 1255 hoạt chất. Tham số chỉ là mã hoạt chất đã phân giải, nên không có đường cho PII đi ra. Kết quả gắn nhãn "nguồn ngoài, chưa nạp kho" | ⬜ Chưa làm (P5) |
+| E2 | `tra_cuc_qld` | Tra trực tuyến sản phẩm mới khi `tra_cuu_thuoc` không có | ⬜ Chưa làm (P5) |
+| E3 | `tim_web` | Chờ nhóm quyết. Kết quả tầng 3 không bao giờ cho kết luận "đạt" | ⬜ Chưa làm (P5, chờ nhóm quyết) |
 
 ### 5.7. Cố ý không có
 
@@ -250,16 +250,16 @@ Tiến trình trên giao diện **không phải tool**: ToolGateway tự gọi `
 
 ### 5.8. Bộ rút gọn cho P2: 8 tool đưa cho LLM
 
-| Tool cho LLM | Gộp từ | Chế độ |
-| :--- | :--- | :--- |
-| `tim_doan_nguon` | A1 | ca, chung |
-| `doc_doan_mo_rong` | A2 | ca, chung |
-| `tra_thuoc` | B1 + B9 | ca, chung |
-| `tra_nhom_thuoc` | B2 + B7 | ca, chung |
-| `tra_tuong_tac` | B3 + B4 + B5 (tham số `loai`) | ca, chung |
-| `tra_quy_dinh` | B6 + B8 + B10 (tham số `loai`) | ca, chung |
-| `tinh_chi_so` | C3 | chỉ ca |
-| `hoi_lai_duoc_si` | D2 | ca, chung |
+| Tool cho LLM | Gộp từ | Chế độ | Trạng thái (26/11) |
+| :--- | :--- | :--- | :--- |
+| `tim_doan_nguon` | A1 | ca, chung | ✅ T107 |
+| `doc_doan_mo_rong` | A2 | ca, chung | ✅ T110 |
+| `tra_thuoc` | B1 + B9 | ca, chung | ✅ T108 (gộp thêm B6, B8, B10) |
+| `tra_nhom_thuoc` | B2 + B7 | ca, chung | ⏸️ Hoãn (mục 5.10) |
+| `tra_tuong_tac` | B3 + B4 + B5 (tham số `loai`) | ca, chung | ✅ T106 |
+| `tra_quy_dinh` | B6 + B8 + B10 (tham số `loai`) | ca, chung | ✅ gộp vào `tra_thuoc` (T108) |
+| `tinh_chi_so` | C3 | chỉ ca | ✅ T109 |
+| `hoi_lai_duoc_si` | D2 | ca, chung | ✅ là `hanh_dong="hoi_lai"`, không phải tool |
 
 `tra_loi` và `bao_khong_du_can_cu` nằm trong định dạng đầu ra. C1, C2, C4 bật sau, khi có ca dài thật sự cần.
 
@@ -284,11 +284,11 @@ Người dùng yêu cầu xét từng tool: có cần không, có cách đơn gi
 | :--- | :--- | :--- | :--- |
 | `tra_tuong_tac` | **Giữ, làm đầu tiên (T106)** | ✅ Xong 22/11 (T106), chưa commit. LLM thật 6/6 ok | `lookup_interactions` của trang Tra tương tác đã làm trọn: phân giải tên tự do, DDInter, phân biệt "không có trong DDInter" với "không có tương tác". Tool chỉ là lớp bọc, **không cần `tra_thuoc` gọi trước**. Thuốc–thức ăn, thuốc–bệnh: SQL trên `ddinter_thuc_an`, `tuong_tac_benh` |
 | `tim_doan_nguon` | **Giữ (T107)**, đổi cách tra | ✅ Xong 22/11 (T107), chưa commit. LLM thật 4/4 ok, đủ 3 chế độ | Ba cách theo tham số: **chính xác** (biết hoạt chất và mục: lọc SQL `hoat_chat_ids` + `muc`, không gọi nhúng, nếu tập lọc ≤ `so_doan` trả luôn); **ngữ nghĩa** (không có bộ lọc: vector); **kết hợp** (xếp hạng vector trong tập đã lọc). Bỏ BM25 và rerank theo số đo T64. Đây là tool duy nhất đưa văn bản nhãn vào khung agent: khung 0 tool hiện **không có RAG** |
-| `tra_thuoc` | **Giữ, gộp thêm `tra_quy_dinh` (T108)** | 📝 Có brief T108, sẵn sàng giao | `drug_detail` và `_rules_for` đã gom sẵn mọi bảng luật theo hoạt chất (liều tối đa, thận, gan, ngưỡng xét nghiệm, độc tính, đường dùng, kháng sinh quản lý, dị ứng chéo, nhóm trùng điều trị). Một tool, tham số `phan` chọn phần cần trả. Phân giải tên dùng `DrugSuggestIndex` (T105), mơ hồ thì trả danh sách ứng viên |
+| `tra_thuoc` | **Giữ, gộp thêm `tra_quy_dinh` (T108)** | ✅ Xong 26/11 (T108 + fix-1), chưa commit. LLM thật 3/3 ok | `drug_detail` và `_rules_for` đã gom sẵn mọi bảng luật theo hoạt chất (liều tối đa, thận, gan, ngưỡng xét nghiệm, độc tính, đường dùng, kháng sinh quản lý, dị ứng chéo, nhóm trùng điều trị). Một tool, tham số `phan` chọn phần cần trả. Phân giải tên dùng `DrugSuggestIndex` (T105), mơ hồ thì trả danh sách ứng viên |
 | `tra_quy_dinh` | **Bỏ, gộp vào `tra_thuoc`** | — (gộp vào `tra_thuoc`) | Cùng nguồn `_rules_for`, tách ra chỉ tốn thêm một vòng LLM |
 | `tra_nhom_thuoc` | **Hoãn** | ⏸️ Hoãn | Chiều hoạt chất → nhóm (ATC, nhóm trùng điều trị, nhóm dị ứng chéo) đã có trong `tra_thuoc` phần `quy_tac`. Chiều nhóm → các hoạt chất chưa có câu hỏi thật cần; khi cần thì tra `ma_atc_json` bằng toán tử jsonb của Postgres, không cần tách cột |
-| `tinh_chi_so` | **Giữ, làm sau cùng (T109)** | 📝 Có brief T109, chờ T108 | Chỉ để trả lời "nếu dùng cân nặng lý tưởng thì sao". CrCl, eGFR, BMI, BSA mặc định đã có trong gói ca |
-| `doc_doan_mo_rong` | **Hoãn** | ⏸️ Hoãn, đo lại sau T107 | Chưa có bằng chứng bảng liều bị cắt làm sai câu trả lời. Đo lại sau T107 |
+| `tinh_chi_so` | **Giữ, làm sau cùng (T109)** | ✅ Xong 26/11 (T109), chưa commit. LLM thật 2/2 ok, số khớp tính tay | Chỉ để trả lời "nếu dùng cân nặng lý tưởng thì sao". CrCl, eGFR, BMI, BSA mặc định đã có trong gói ca |
+| `doc_doan_mo_rong` | **Làm (T110)** | ✅ Xong 26/11 (T110 + fix-1), chưa commit. LLM thật: mở đủ bảng liều thận imipenem. Đo 26/11: 51/247 đoạn bảng (21%) và 38 đoạn liều bị cắt 1.200 ký tự; 506 mục cha nhiều đoạn → có brief T110 | Chưa có bằng chứng bảng liều bị cắt làm sai câu trả lời. Đo lại sau T107 |
 | `hoi_lai_duoc_si` | **Bỏ khỏi danh mục tool** | — (đã có sẵn) | Đã là `hanh_dong="hoi_lai"` trong `KeHoachTacTu` |
 
 Còn **4 tool**, làm lần lượt, mỗi tool một task, review xong mới giao tool kế. Cột **Trạng thái** cập nhật sau mỗi lần review; chi tiết bằng chứng ở `plan/TRACKING.md`.
@@ -469,6 +469,8 @@ cong_cu_ra_ngoai:
 
 Mặc định từ chối. Thêm vai trò mới chỉ cần sửa chính sách, không sửa mã tool.
 
+**Thực tế 26/11 (`config/tool_policy.yaml`):** `duoc_si_ls` và `admin` cùng được `tra_tuong_tac`, `tim_doan_nguon`, `tra_thuoc`, `tinh_chi_so`, `doc_doan_mo_rong`; `che_do.chung.cam: [tinh_chi_so]`. **Lệch với khối trên:** `admin` đang có `tinh_chi_so` (tool ca bệnh) theo brief T109; khối trên ghi admin không có tool ca bệnh. **Chủ kho chốt 26/11:** giai đoạn này admin có đủ mọi tool; siết phân quyền khi triển khai thật.
+
 ## 8. Bảo mật
 
 | Rủi ro | Chốt | Kiểm thử chạy được |
@@ -493,7 +495,7 @@ Mặc định từ chối. Thêm vai trò mới chỉ cần sửa chính sách, 
 | P1a – sửa RAG | Chỉ vector trong bộ lọc hoạt chất (đề xuất T64); kiểm log rerank; ngưỡng "không có nguồn"; tìm qua HNSW trên DB thay vì bộ nhớ; khoá OpenRouter `_1`→`_4` | Đo lại bộ 50 câu T64: không kém "chỉ vector" | recall@5, top-1 |
 | P1b – dọn DB | Mục 4.5: danh mục gốc, khoá ngoại, bảng chết, cột ATC | Migration có phiên bản; 66 ca cho kết quả luật giống hệt | Kết quả luật không đổi |
 | P1c – khung agent | ✅ 22/11. Mục 6.6: đồ thị 6.2, lớp tool, Gateway, chính sách, đường lui, marker test (T101, T102, bỏ tool luồng cũ). `ask.engine` mặc định `agentic` | Khung chạy với 0 tool | Toàn bộ test xanh; thử trên trình duyệt |
-| P2 – cắm tool | Lần lượt 8 tool của mục 5.8 theo thứ tự người dùng duyệt; kiểm chứng mở rộng 5.9; tiến trình theo 6.5 | Đối chiếu với luồng cứng trên bộ câu hỏi (mục 10) | Không kém luồng cứng ở mọi chỉ số |
+| P2 – cắm tool | 🔄 26/11: **đã cắm 5 tool** (`tra_tuong_tac` T106, `tim_doan_nguon` T107, `tra_thuoc` T108, `tinh_chi_so` T109, `doc_doan_mo_rong` T110; `hoi_lai` là hành động), `tra_nhom_thuoc` hoãn. **Chưa qua cổng:** chưa có bộ câu hỏi mục 10 để đối chiếu luồng cứng. Lần lượt 8 tool của mục 5.8 theo thứ tự người dùng duyệt; kiểm chứng mở rộng 5.9; tiến trình theo 6.5 | Đối chiếu với luồng cứng trên bộ câu hỏi (mục 10) | Không kém luồng cứng ở mọi chỉ số |
 | P3 – làm dày văn bản | Nạp Dược thư, văn bản BYT, phác đồ được duyệt vào `doan_trich` với `nhom_nguon` riêng; mở rộng openFDA | Độ phủ hoạt chất có văn bản tăng | Có nguồn được Khoa Dược chấp nhận |
 | P4 – tool ca bệnh mở rộng | C1, C2, C4 khi có ca dài; bảng viết tắt nội viện | | Khi có dữ liệu thật |
 | P5 – nguồn ngoài | E1 `tra_openfda`, rồi E2, E3 theo quyết định nhóm; E3 có dược sĩ bấm xác nhận | | Sau P2 |

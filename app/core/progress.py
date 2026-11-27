@@ -9,6 +9,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.tracing.context import bat_dau_buoc_node, ket_thuc_buoc_node
+
 MAX_PROGRESS_STEPS = 40
 MAX_PROGRESS_TEXT_LEN = 160
 MAX_ASK_PROGRESS_ENTRIES = 200
@@ -284,7 +286,20 @@ def ghi_buoc(
     ly_do: str | None = None,
     goi_y: str | None = None,
 ) -> None:
-    """Ghi sự kiện vào bộ tiến trình trong ContextVar nếu có; không có thì bỏ qua."""
+    """Ghi sự kiện vào bộ tiến trình trong ContextVar và span node của tracer nếu có."""
+    if not ma.startswith("cong_cu_"):
+        if hanh_dong == "bat_dau":
+            bat_dau_buoc_node(ma)
+        elif hanh_dong == "xong":
+            ket_thuc_buoc_node(
+                ma,
+                trang_thai="ok",
+                so_nguon=len(nguon) if nguon else None,
+                so_doan=sum(item.so_doan for item in nguon) if nguon else None,
+            )
+        elif hanh_dong == "loi":
+            ket_thuc_buoc_node(ma, trang_thai="loi")
+
     tracker = tien_trinh_hien_tai.get()
     if tracker is None:
         return

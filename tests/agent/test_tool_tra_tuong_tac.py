@@ -112,6 +112,11 @@ def test_pair_with_interaction_returns_citable_row() -> None:
     assert f"[{PAIR_KEY}] {row.noi_dung}" in res.noi_dung
     assert "\n" not in row.ma and len(row.ma) <= 120
     assert res.chi_tiet_tien_trinh == "2 hoạt chất, 1 cặp có tương tác"
+    assert len(res.bo_du_lieu) == 1
+    item = res.bo_du_lieu[0].dong[0]
+    assert {item["thuoc_a"], item["thuoc_b"]} == {"amiodarone", "warfarin"}
+    assert item["ma_can_cu"] == PAIR_KEY
+    assert len(item["co_che"]) <= 200
 
 
 @needs_index

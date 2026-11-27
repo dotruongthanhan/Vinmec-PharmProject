@@ -16,8 +16,8 @@ def test_real_settings_and_deep_overlay(monkeypatch: pytest.MonkeyPatch, tmp_pat
     monkeypatch.delenv("CDSS_PROFILE", raising=False)
     base = load_settings()
     test = load_settings("test")
-    assert base.llm.provider == "deepseek"
-    assert base.llm.model == "deepseek-flash"
+    assert base.llm.provider == "chat_api"
+    assert base.llm.model == "gemini-3.5-flash-lite"
     assert base.vector_store.provider == "pgvector"
     assert base.database.url_env == "DATABASE_URL"
     assert test.app.profile == "test"
@@ -86,3 +86,44 @@ def test_secrets_never_read_real_dotenv(
     assert get_secret("T11_FAKE_SECRET") == "gia-tri-gia-lap"
     assert calls == [False, False]
     assert capsys.readouterr() == ("", "")
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("provider", "deep" + "seek", "chat_api"),
+        ("url", "http://example.invalid", "https"),
+        ("khoa_env", ["GEMINI_API_KEY"], "GEMINI_API_KEY"),
+        ("khoa_env", ["bad-name"], "khoa_env"),
+        ("khoa_env", [], "khoa_env"),
+    ],
+)
+def test_chat_config_invalid(tmp_path: Path, field: str, value: object, message: str) -> None:
+    raw = yaml.safe_load((ROOT / "config/settings.yaml").read_text(encoding="utf-8"))
+    raw["llm"][field] = value
+    (tmp_path / "settings.yaml").write_text(yaml.safe_dump(raw), encoding="utf-8")
+    with pytest.raises(ConfigError, match=message):
+        load_settings("dev", tmp_path)
+
+
+def test_partial_and_missing_keys(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    from app.container import build_container
+    from app.llm.setup import build_llm
+    from app.providers.llm_client import ChatLLMClient
+
+    for i in range(1, 9):
+        if i <= 5:
+            monkeypatch.setenv(f"GEMINI_API_KEY_{i}", f"secret-value-{i}")
+        else:
+            monkeypatch.delenv(f"GEMINI_API_KEY_{i}", raising=False)
+    llm = build_llm(build_container("dev"))
+    assert isinstance(llm, ChatLLMClient)
+    assert len(llm.router) == 5
+    assert all(f"GEMINI_API_KEY_{i}" in caplog.text for i in range(6, 9))
+    assert all(f"secret-value-{i}" not in caplog.text for i in range(1, 6))
+    for i in range(1, 6):
+        monkeypatch.delenv(f"GEMINI_API_KEY_{i}", raising=False)
+    with pytest.raises(ConfigError, match="khong_co_khoa_llm"):
+        build_llm(build_container("dev"))

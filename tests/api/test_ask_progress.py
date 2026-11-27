@@ -341,7 +341,7 @@ def test_ask_progress_security_no_leak_and_no_step_logging(
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     service_ok = _make_service(tmp_path / "ok", case_dir=case_dir, asker=asker_ok)
@@ -375,7 +375,7 @@ def test_ask_progress_security_no_leak_and_no_step_logging(
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     service_err = _make_service(tmp_path / "err", case_dir=case_dir, asker=asker_err)
@@ -421,7 +421,7 @@ def test_ask_progress_rate_limit_429_still_closes_entry(tmp_path: Path) -> None:
         prompt_path=PROMPT_PATH,
         case_settings=container.settings.case_context,
         evidence_max_chars=container.settings.evidence.max_chars,
-        model_name="deepseek-flash",
+        model_name="model-test",
         renal_rules=container.renal_rules,
     )
     limits = LlmRateLimits(ask_per_5min=1, ai_per_hour=10, daily_calls=100)

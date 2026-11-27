@@ -72,7 +72,7 @@ class _SpyAgenticAsker(AgenticAsker):
 
 @pytest.fixture
 def ai_bat_voi_llm_gia(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Bật AI với LLM giả để test không phụ thuộc khoá DeepSeek hay CDSS_AI của môi trường."""
+    """Bật AI với LLM giả để test không phụ thuộc khoá chat API hay CDSS_AI của môi trường."""
     monkeypatch.setenv("CDSS_AI", "on")
     monkeypatch.setattr(llm_setup, "build_llm", lambda container: FakeLLM([]))
 
@@ -129,6 +129,7 @@ def test_injected_legacy_asker_keeps_old_signature(tmp_path: Path) -> None:
         principal = Principal(nguoi_dung_id="u-1", email="u1@example.test", vai_tro="duoc_si_ls")
         reply = service.ask("DEMO-02", s.GuiCauHoi(cau_hoi="Vì sao?"), principal)
         assert reply.trang_thai == "ok"
+        assert reply.minh_hoa == []
         assert legacy.calls == 1
     finally:
         service.shutdown()

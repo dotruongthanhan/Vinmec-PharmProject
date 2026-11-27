@@ -37,6 +37,7 @@ from app.config.settings import (
     load_case_cache_ttl,
     load_case_source,
     load_kb_source,
+    load_settings,
 )
 from app.core.errors import ConfigError
 from app.core.progress import AskProgressRegistry, BuocTienTrinh, TienTrinh, tien_trinh_hien_tai
@@ -71,6 +72,7 @@ from app.storage.review_results import (
     ReviewResultStore,
     compute_rule_version,
 )
+from app.tracing import Tracer, bat_dau_vet
 from app.ui.labels import NHOM_LY_DO
 from app.ui.services import NotReadyAskService, PipelineReviewService, ReviewService
 
@@ -206,6 +208,7 @@ class CaseService:
         runtime_store: FeedbackAndChatStore | None = None,
         review_store: ReviewResultStore | None = None,
         limits: LlmRateLimits | None = None,
+        tracer: Any = _AUTO,
     ) -> None:
         resolved_renal_path = (
             Path(renal_rules_path)
@@ -287,6 +290,16 @@ class CaseService:
             self._asker_impl = asker
         elif self._ai_enabled and self._container is not None:
             self._asker_impl = self._build_default_asker(self._container)
+        self._tracer: Tracer | None = self._build_default_tracer() if tracer is _AUTO else tracer
+
+    def _build_default_tracer(self) -> Tracer:
+        """Khởi tạo tracer của dịch vụ theo cấu hình."""
+        tracer_settings = (
+            self._container.settings.tracer
+            if self._container is not None
+            else load_settings().tracer
+        )
+        return Tracer(tracer_settings, auto_cleanup=True)
 
     def _corpus_mode(self, container: container_mod.Container | None = None) -> str:
         """Trả 'db', 'file' hoặc 'none' cho kho đoạn theo cấu hình và đường dẫn."""
@@ -391,6 +404,8 @@ class CaseService:
             close_asker = getattr(self._asker_impl, "close", None)
             if callable(close_asker):
                 close_asker()
+        if self._tracer is not None:
+            self._tracer.close()
 
     def flush_persist(self, timeout: float | None = None) -> None:
         """Chờ toàn bộ tác vụ ghi nền kết quả thẩm định đang xếp hàng hoàn tất."""
@@ -844,10 +859,27 @@ class CaseService:
                 )
             rule_result = self._review(case)
             runner = self._ai_runner
+
+            def _run_traced_ai() -> AiRunResult:
+                engine_name = str(getattr(runner, "engine", "langgraph"))
+                with bat_dau_vet(
+                    loai="ai_review",
+                    engine=engine_name,
+                    ca_id=case.ca_id,
+                    nguoi_dung_id=principal.nguoi_dung_id if principal is not None else None,
+                    vai_tro=principal.vai_tro if principal is not None else None,
+                    phien_id=principal.phien_id if principal is not None else None,
+                    tracer=self._tracer,
+                ) as vet:
+                    res = runner.run(case, rule_result)
+                    if vet is not None:
+                        vet.dat_trang_thai_cuoi(res.llm.trang_thai)
+                    return res
+
             try:
                 state = self._jobs.start(
                     case_id,
-                    lambda: runner.run(case, rule_result),
+                    _run_traced_ai,
                     restart=effective_restart,
                 )
             except AiQueueFullError:
@@ -994,7 +1026,7 @@ class CaseService:
         self._store.save_chat(
             case_id,
             cau_hoi,
-            response.model_dump(mode="json"),
+            response.model_dump(mode="json", exclude={"minh_hoa"}),
             datetime.now(UTC),
             principal,
         )
@@ -1090,18 +1122,31 @@ class CaseService:
                     "/api/ask",
                     "Bạn đã gửi quá nhiều câu hỏi.",
                 )
-                if isinstance(asker, AgenticAsker):
-                    result = asker.ask_global(
-                        all_cases,
-                        all_results,
-                        request.cau_hoi,
-                        history_pairs,
-                        vai_tro=principal.vai_tro,
-                    )
-                else:
-                    result = asker.ask_global(
-                        all_cases, all_results, request.cau_hoi, history_pairs
-                    )
+                engine_name = "agentic" if isinstance(asker, AgenticAsker) else "co_dinh"
+                with bat_dau_vet(
+                    loai="hoi_dap",
+                    engine=engine_name,
+                    ca_id=None,
+                    nguoi_dung_id=principal.nguoi_dung_id,
+                    vai_tro=principal.vai_tro,
+                    phien_id=principal.phien_id,
+                    tracer=self._tracer,
+                ) as vet:
+                    if isinstance(asker, AgenticAsker):
+                        result = asker.ask_global(
+                            all_cases,
+                            all_results,
+                            request.cau_hoi,
+                            history_pairs,
+                            vai_tro=principal.vai_tro,
+                        )
+                    else:
+                        result = asker.ask_global(
+                            all_cases, all_results, request.cau_hoi, history_pairs
+                        )
+                    if vet is not None:
+                        vet.dat_trang_thai_cuoi(result.trang_thai)
+                    ma_vet = vet.ma_vet if vet is not None else getattr(result, "ma_vet", None)
             else:
                 with self._lock:
                     case = self._get_case(case_id)
@@ -1137,25 +1182,38 @@ class CaseService:
                     "/api/cases/{ca_id}/ask",
                     "Bạn đã gửi quá nhiều câu hỏi.",
                 )
-                if isinstance(asker, AgenticAsker):
-                    result = asker.ask(
-                        case,
-                        request.cau_hoi,
-                        history_pairs,
-                        ket_qua=rule_result,
-                        ai_result=ai_result,
-                        nhan_dinh_id=request.nhan_dinh_id,
-                        vai_tro=principal.vai_tro,
-                    )
-                else:
-                    result = asker.ask(
-                        case,
-                        request.cau_hoi,
-                        history_pairs,
-                        ket_qua=rule_result,
-                        ai_result=ai_result,
-                        nhan_dinh_id=request.nhan_dinh_id,
-                    )
+                engine_name = "agentic" if isinstance(asker, AgenticAsker) else "co_dinh"
+                with bat_dau_vet(
+                    loai="hoi_dap",
+                    engine=engine_name,
+                    ca_id=case_id,
+                    nguoi_dung_id=principal.nguoi_dung_id,
+                    vai_tro=principal.vai_tro,
+                    phien_id=principal.phien_id,
+                    tracer=self._tracer,
+                ) as vet:
+                    if isinstance(asker, AgenticAsker):
+                        result = asker.ask(
+                            case,
+                            request.cau_hoi,
+                            history_pairs,
+                            ket_qua=rule_result,
+                            ai_result=ai_result,
+                            nhan_dinh_id=request.nhan_dinh_id,
+                            vai_tro=principal.vai_tro,
+                        )
+                    else:
+                        result = asker.ask(
+                            case,
+                            request.cau_hoi,
+                            history_pairs,
+                            ket_qua=rule_result,
+                            ai_result=ai_result,
+                            nhan_dinh_id=request.nhan_dinh_id,
+                        )
+                    if vet is not None:
+                        vet.dat_trang_thai_cuoi(result.trang_thai)
+                    ma_vet = vet.ma_vet if vet is not None else getattr(result, "ma_vet", None)
 
             succeeded = result.trang_thai == "ok"
             if result.trang_thai == "ok" and result.doan:
@@ -1187,6 +1245,10 @@ class CaseService:
                 ],
                 cong_cu_da_goi=list(result.cong_cu_da_goi),
                 thoi_gian_ms=result.thoi_gian_ms,
+                ma_vet=ma_vet,
+                minh_hoa=(
+                    result.minh_hoa if case_id != "__global__" and engine_name == "agentic" else []
+                ),
             )
             with self._lock:
                 self._save_chat_log(case_id, request.cau_hoi, response, principal)

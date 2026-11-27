@@ -83,7 +83,7 @@ export function MetricsTable({
           const abnormal = metric.cong_thuc === 'cockcroft_gault' && crclAbnormal && !isMissing
           return (
             <DataTableRow key={metric.cong_thuc}>
-              <DataTableCell className="font-medium whitespace-nowrap">{metric.nhan}</DataTableCell>
+              <DataTableCell className="font-medium break-words">{metric.nhan}</DataTableCell>
               <DataTableCell
                 align="right"
                 className={cn(
@@ -289,7 +289,7 @@ export function NotesTable({ notes }: { notes: readonly DienBienTomTat[] }) {
             <DataTableCell className="whitespace-nowrap tabular-nums">
               {formatClinicalText(note.thoi_diem_text)}
             </DataTableCell>
-            <DataTableCell className="whitespace-nowrap text-fg-muted">{note.loai_nhan}</DataTableCell>
+            <DataTableCell className="break-words text-fg-muted">{note.loai_nhan}</DataTableCell>
             <DataTableCell className="whitespace-pre-wrap leading-relaxed">
               {formatClinicalText(note.noi_dung)}
             </DataTableCell>

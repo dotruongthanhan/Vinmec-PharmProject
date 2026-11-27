@@ -218,6 +218,8 @@ class TimDoanNguon(Tool):
             ]
             if bi_cat:
                 lines.append("(đã cắt bớt; chỉ trích phần hiển thị ở trên)")
+            if bi_cat or chunk.loai_noi_dung in ("bang", "dong_bang"):
+                lines.append("(có thể gọi doc_doan_mo_rong với mã này để xem cả mục)")
             block = "\n".join(lines)
             if len(block) + 2 > con_cho:
                 break

@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { createElement } from 'react'
+import { renderToStaticMarkup as renderMarkup } from 'react-dom/server'
+import { TooltipProvider } from '../components/ui/tooltip'
+import { createElement, type ReactNode } from 'react'
 import { ClinicalMarkdown } from '../components/ui/ClinicalMarkdown.tsx'
 import type { TrichDanTraLoi } from '../api/types.ts'
+
+const renderToStaticMarkup = (node: ReactNode) => renderMarkup(createElement(TooltipProvider, null, node))
 
 describe('ClinicalMarkdown component', () => {
   const sampleCitations: TrichDanTraLoi[] = [
@@ -94,5 +97,43 @@ $$\\frac{A}{B}$$`
     expect(html).toContain('<strong')
     expect(html).toContain('chế độ nền')
     expect(html).toContain('uv run uvicorn app.api.main:app --port 8000')
+  })
+
+  it('hiển thị bảng, căn lề, dấu gạch đứng thoát và điều chỉnh số ô', () => {
+    const html = renderToStaticMarkup(createElement(ClinicalMarkdown, {
+      text: '| A | B | C |\n| :--- | :---: | ---: |\n| x\\|y | **đậm** | [2] | thêm |\n| thiếu |',
+      citations: sampleCitations,
+    }))
+    expect(html).toContain('<table')
+    expect(html).toContain('text-align:left')
+    expect(html).toContain('text-align:center')
+    expect(html).toContain('text-align:right')
+    expect(html).toContain('x|y')
+    expect(html).toContain('<strong')
+    expect(html).toContain('Mở trích dẫn [2]')
+    expect(html).not.toContain('thêm')
+    expect((html.match(/<td/g) ?? []).length).toBe(6)
+  })
+
+  it('giữ đoạn văn khi thiếu dòng phân cách và escape nội dung ô', () => {
+    const plain = renderToStaticMarkup(createElement(ClinicalMarkdown, { text: '| A | B |\n| x | y |' }))
+    expect(plain).not.toContain('<table')
+    expect(plain).toContain('<p')
+    const html = renderToStaticMarkup(createElement(ClinicalMarkdown, {
+      text: '| A | B |\n| --- | --- |\n| <img src=x onerror=alert(1)> | <script>alert(1)</script> |\n| javascript:alert(1) | [link](javascript:alert(1)) |',
+    }))
+    expect(html).toContain('&lt;img')
+    expect(html).toContain('&lt;script&gt;')
+    expect(html).not.toContain('<img')
+    expect(html).not.toContain('<script')
+    expect(html).not.toContain('<a ')
+  })
+
+  it('giới hạn 1000 dòng và ô dài', () => {
+    const text = `| A |\n| --- |\n${Array.from({ length: 1000 }, (_, i) => `| ${i === 0 ? 'x'.repeat(1001) : i} |`).join('\n')}`
+    const html = renderToStaticMarkup(createElement(ClinicalMarkdown, { text }))
+    expect((html.match(/<td/g) ?? []).length).toBe(200)
+    expect(html).toContain('Bảng đã rút gọn: hiện 200/1000 dòng')
+    expect(html).toContain(`${'x'.repeat(1000)}…`)
   })
 })

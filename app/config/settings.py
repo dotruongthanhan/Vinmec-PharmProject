@@ -3,6 +3,7 @@
 import io
 import logging
 import os
+import re
 from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
@@ -239,9 +240,37 @@ class LLMSettings(BaseModel):
 
     provider: str
     model: str
+    url: str = ""
+    khoa_env: list[str] = Field(default_factory=list, max_length=8)
+    cho_khoa_toi_da_giay: float = Field(default=0, ge=0, allow_inf_nan=False)
     max_tokens: int = Field(gt=0)
     max_tokens_retry: int = Field(gt=0)
     reasoning: dict[str, str] | None = None
+
+    @model_validator(mode="after")
+    def validate_chat_config(self) -> Self:
+        """Kiểm tra nhà cung cấp, địa chỉ và tên biến khoá."""
+        if self.provider not in ("chat_api", "fake"):
+            raise ValueError(
+                "llm.provider phải là chat_api hoặc fake; cấu hình cũ đổi sang chat_api "
+                "và đặt url, khoa_env"
+            )
+        if self.provider == "chat_api":
+            parsed = urlsplit(self.url)
+            if (
+                parsed.scheme != "https"
+                or not parsed.hostname
+                or parsed.username
+                or parsed.password
+            ):
+                raise ValueError("llm.url phải là địa chỉ https hợp lệ")
+            if not self.khoa_env:
+                raise ValueError("llm.khoa_env cần ít nhất một tên biến")
+        if any(not re.fullmatch(r"[A-Z][A-Z0-9_]{0,63}", name) for name in self.khoa_env):
+            raise ValueError("llm.khoa_env chứa tên biến không hợp lệ")
+        if "GEMINI_API_KEY" in self.khoa_env:
+            raise ValueError("llm.khoa_env không được dùng GEMINI_API_KEY")
+        return self
 
 
 class EmbeddingSettings(BaseModel):
@@ -271,6 +300,15 @@ class DatabaseSettings(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
 
     url_env: str
+
+
+class ReadDatabaseSettings(BaseModel):
+    """Giới hạn kết nối đọc và thời gian ngắt khi DB không sẵn sàng."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    thoi_han_ket_noi_giay: int = Field(default=3, gt=0)
+    cau_dao_giay: int = Field(default=60, gt=0)
 
 
 class VectorStoreSettings(BaseModel):
@@ -308,6 +346,39 @@ class AskSettings(BaseModel):
     tool_policy: str = "config/tool_policy.yaml"
 
 
+class ModelPriceSettings(BaseModel):
+    """Đơn giá ước tính (USD mỗi 1 triệu token) theo mô hình LLM."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    vao_moi_trieu: float = Field(default=0.0, ge=0.0)
+    ra_moi_trieu: float = Field(default=0.0, ge=0.0)
+
+
+class TracerSettings(BaseModel):
+    """Cấu hình ghi vết lượt chạy AI ra tệp JSONL theo ngày."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    bat: bool = True
+    dich: list[Literal["jsonl", "db"]] = Field(default_factory=lambda: ["jsonl"])
+    muc_noi_dung: Literal["sieu_du_lieu", "noi_dung_da_che", "day_du"] = "sieu_du_lieu"
+    so_ngay_luu: int = Field(default=30, gt=0)
+    thu_muc: str = "data/runtime/vet"
+    hang_doi_toi_da: int = Field(default=1000, gt=0)
+    kich_thuoc_tep_mb: int = Field(default=200, gt=0)
+    bang_gia: dict[str, ModelPriceSettings] = Field(default_factory=dict)
+
+
+def assert_tracer_settings_allowed(tracer: TracerSettings) -> None:
+    """Cấm mức nội dung 'day_du' khi APP_ENV=production để tránh lộ dữ liệu."""
+    app_env = os.getenv("APP_ENV", "").strip().lower()
+    if tracer.muc_noi_dung == "day_du" and app_env == "production":
+        raise ConfigError(
+            "Không được khởi động với tracer.muc_noi_dung='day_du' khi APP_ENV=production"
+        )
+
+
 class AppSettings(BaseModel):
     """Thư mục ca và tên hồ sơ chạy."""
 
@@ -336,10 +407,12 @@ class Settings(BaseModel):
     embedding: EmbeddingSettings
     rerank: RerankSettings
     database: DatabaseSettings
+    db: ReadDatabaseSettings = Field(default_factory=ReadDatabaseSettings)
     vector_store: VectorStoreSettings
     prompts: PromptSettings
     orchestration: OrchestrationSettings = OrchestrationSettings(engine="tuan_tu")
     ask: AskSettings = AskSettings()
+    tracer: TracerSettings = Field(default_factory=TracerSettings)
 
 
 def _read_yaml(path: Path) -> dict:
@@ -377,13 +450,15 @@ def load_settings(profile: str | None = None, config_dir: Path | None = None) ->
         if isinstance(app_raw, dict):
             app_raw["kb_source"] = load_kb_source()
     try:
-        return Settings.model_validate(raw)
+        settings = Settings.model_validate(raw)
     except ValidationError as exc:
         errors = [
             f"{'.'.join(str(part) for part in error['loc'])}: {error['msg']}"
             for error in exc.errors(include_input=False, include_context=False)
         ]
         raise ConfigError("; ".join(errors)) from exc
+    assert_tracer_settings_allowed(settings.tracer)
+    return settings
 
 
 def load_env_file() -> None:
@@ -403,6 +478,11 @@ def get_secret(name: str) -> str:
     if not value:
         raise ConfigError(name)
     return value
+
+
+def get_process_secret(name: str) -> str | None:
+    """Đọc biến môi trường đã nạp mà không mở tệp môi trường."""
+    return os.getenv(name)
 
 
 def loader_database_url(

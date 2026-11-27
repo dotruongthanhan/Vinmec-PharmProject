@@ -1,6 +1,7 @@
 """Chạy một lượt phân tích AI (thu thập đoạn nguồn và tổng hợp LLM có kiểm chứng)."""
 
 import time
+from contextlib import nullcontext
 from typing import Any, Literal
 
 from langsmith import tracing_context
@@ -16,6 +17,7 @@ from app.orchestration.graph import dung_do_thi
 from app.orchestration.graph.nodes import dung_ket_qua_loi
 from app.orchestration.graph.result import AiRunResult
 from app.pipeline import KetQuaThamDinh
+from app.tracing import bat_dau_vet, vet_hien_tai
 
 Engine = Literal["langgraph", "tuan_tu"]
 _ENGINES = ("langgraph", "tuan_tu")
@@ -64,9 +66,35 @@ class AiReviewer:
 
     def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
         """Chạy bước AI cho ca bệnh và bọc mọi ngoại lệ không mong muốn."""
-        if self._graph is not None:
-            return self._run_graph(ca, ket_qua)
-        return self._run_sequential(ca, ket_qua)
+        existing = vet_hien_tai.get()
+        prompt_version = getattr(getattr(self._synthesizer, "prompt_path", None), "stem", "")
+        phien_ban = {
+            key: value
+            for key, value in (
+                ("prompt", prompt_version),
+                ("mo_hinh", self.model_name or ""),
+            )
+            if value
+        }
+        trace_cm = (
+            nullcontext(existing)
+            if existing is not None
+            else bat_dau_vet(
+                loai="ai_review",
+                engine=self._engine,
+                ca_id=ca.ca_id,
+                phien_ban=phien_ban,
+            )
+        )
+        with trace_cm as vet:
+            result = (
+                self._run_graph(ca, ket_qua)
+                if self._graph is not None
+                else self._run_sequential(ca, ket_qua)
+            )
+            if vet is not None:
+                vet.dat_trang_thai_cuoi(result.llm.trang_thai)
+            return result
 
     def _run_graph(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
         """Chạy đồ thị LangGraph; tắt tracing của LangSmith cho lượt chạy này."""
