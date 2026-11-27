@@ -39,28 +39,26 @@ function html(query = '?tab=y_lenh', value = detail): string {
   </MemoryRouter></TooltipProvider>)
 }
 
-describe('bộ chọn y lệnh trong hồ sơ', () => {
-  it('đếm y lệnh thay vì dòng thuốc và mặc định chọn trọng tâm', () => {
+describe('bảng Chi tiết y lệnh hợp nhất trong hồ sơ', () => {
+  it('hiển thị toàn bộ dòng thuốc mọi y lệnh trong một bảng Chi tiết y lệnh và đếm đủ dòng', () => {
     const rendered = html()
     expect(rendered).toContain('Y lệnh (2)')
-    expect(rendered).toContain('Chi tiết y lệnh chờ duyệt')
-    expect(rendered).not.toContain('Thuốc cũ giả lập</td>')
+    expect(rendered).toContain('Chi tiết y lệnh')
+    expect(rendered).toContain('Thuốc cũ giả lập')
+    expect(rendered).toContain('Meropenem 1 g')
+    expect(rendered).not.toContain('Chọn y lệnh')
+    expect(rendered).not.toContain('Thông tin y lệnh')
     expect(selectMedicalOrder(detail.danh_sach_y_lenh!, null)?.y_lenh_id).toBe('YL-TT')
   })
-  it('URL chọn y lệnh cũ hiển thị đúng dòng và lý do ngừng, không mở thẩm định', () => {
+  it('URL ?yl=YL-CU tự động mở rộng ngăn chi tiết của y lệnh cũ kèm khoa kê và lý do ngừng', () => {
     const rendered = html('?tab=y_lenh&yl=YL-CU')
-    expect(rendered).toContain('Thuốc cũ giả lập</td>')
+    expect(rendered).toContain('Thuốc cũ giả lập')
     expect(rendered).toContain('Khoa cũ giả lập')
     expect(rendered).toContain('Đổi y lệnh giả lập')
-    expect(rendered).not.toContain('Chi tiết y lệnh chờ duyệt')
-    expect(rendered).not.toContain('Bấm một dòng thuốc')
-    const drugRow = rendered.match(/<tr[^>]*>\s*<td[^>]*>1<\/td>\s*<td[^>]*>Thuốc cũ giả lập<\/td>/)?.[0]
-    expect(drugRow).toBeDefined()
-    expect(drugRow).not.toContain('cursor-pointer')
-    expect(drugRow).not.toContain('tabindex="0"')
+    expect(rendered).toContain('aria-expanded="true"')
   })
   it('tham số chọn y lệnh giữ URL và mã không hợp lệ về trọng tâm', () => {
-    const params = orderSelectionParams(new URLSearchParams('tab=phieu_dieu_tri&khac=1'), 'YL CU/+')
+    const params = orderSelectionParams(new URLSearchParams('tab=dien_bien&khac=1'), 'YL CU/+')
     expect(params.get('tab')).toBe('y_lenh')
     expect(params.get('yl')).toBe('YL CU/+')
     expect(params.get('khac')).toBe('1')
@@ -86,23 +84,22 @@ describe('bộ chọn y lệnh trong hồ sơ', () => {
     expect(rendered).toContain('Chưa có thẩm định cho y lệnh này')
   })
 
-  it('không tính y lệnh nền giả lập vào nhãn chi tiết', () => {
-    const demo = { ...MOCK_CASE_DETAILS['DEMO-02'],
-      danh_sach_y_lenh: [focus, { ...old, y_lenh_id: 'YL-DEMO-02-NEN' }] }
-    const rendered = html('?tab=y_lenh', demo)
-    expect(rendered).toContain('Y lệnh (1)')
-    expect(rendered).not.toContain('aria-label="Chọn y lệnh"')
+  it('bỏ tab Phiếu điều trị khỏi thanh tab và giữ đếm gộp ở Diễn biến', () => {
+    const rendered = html('?tab=y_lenh')
+    expect(rendered).not.toContain('Phiếu điều trị (')
+    expect(rendered).toContain('Diễn biến (')
+    expect(rendered).toContain('<span>Thẩm định</span>')
   })
 })
 
-describe('phiếu điều trị', () => {
+describe('phiếu điều trị gộp trong tab Diễn biến', () => {
   it('kiểu phiếu không cần metadata nạp tệp', () => {
     expectTypeOf<TreatmentSheet>().not.toHaveProperty('nguon_tep')
     expectTypeOf<TreatmentSheet>().not.toHaveProperty('nap_luc')
   })
 
-  it('hiện chú thích thay cho liên kết đến mã y lệnh không tồn tại', () => {
-    const rendered = html('?tab=phieu_dieu_tri', { ...detail, phieu_dieu_tri: [
+  it('hiện chú thích thay cho liên kết đến mã y lệnh không tồn tại trong tab Diễn biến', () => {
+    const rendered = html('?tab=dien_bien', { ...detail, phieu_dieu_tri: [
       { ...sheet, y_lenh_trong_ngay: ['YL-CU', 'YL-THIEU'] },
     ] })
     expect(rendered).toContain('tab=y_lenh&amp;yl=YL-CU')
@@ -110,27 +107,25 @@ describe('phiếu điều trị', () => {
     expect(rendered).not.toContain('yl=YL-THIEU')
   })
 
-  it('đếm và nhóm theo lần vào viện, đủ nội dung và liên kết chọn y lệnh', () => {
-    const rendered = html('?tab=phieu_dieu_tri')
-    expect(rendered).toContain('Phiếu điều trị (2)')
+  it('gộp Thông tin điều trị, Cập nhật diễn biến và Phiếu điều trị theo lần vào viện', () => {
+    const rendered = html('?tab=dien_bien')
+    expect(rendered).toContain('Thông tin điều trị')
+    expect(rendered).toContain('Cập nhật diễn biến')
+    expect(rendered).toContain('Phiếu điều trị')
     for (const text of ['Lần vào viện 1', 'Lần vào viện 2', 'Ngày điều trị 1', 'Bác sĩ trực',
       'Diễn biến giả lập', 'Đánh giá giả lập', 'Xử trí giả lập', 'Theo dõi giả lập', 'Dặn dò giả lập']) {
       expect(rendered).toContain(text)
     }
     expect(rendered).toContain('tab=y_lenh&amp;yl=YL-CU')
   })
-  it('mảng phiếu rỗng và không có ghi chép tờ điều trị dùng trạng thái rỗng', () => {
+  it('URL ?tab=phieu_dieu_tri cũ tự chuyển về nội dung tab Diễn biến và mảng rỗng hiện trạng thái rỗng ở Diễn biến', () => {
     const bare = { ...detail, phieu_dieu_tri: [], chi_tiet: { ...detail.chi_tiet, dien_bien: [] } }
     const rendered = html('?tab=phieu_dieu_tri', bare)
-    expect(rendered).toContain('Phiếu điều trị (0)')
-    expect(rendered).toContain('Chưa có phiếu điều trị')
+    expect(rendered).toContain('Diễn biến (0)')
+    expect(rendered).toContain('Cập nhật diễn biến')
+    expect(rendered).toContain('Chưa có ghi nhận diễn biến')
     const empty = renderToStaticMarkup(<MemoryRouter><TreatmentSheets detail={bare} /></MemoryRouter>)
     expect(empty).toContain('Chưa có phiếu điều trị')
-  })
-  it('mảng phiếu rỗng quay về ghi chép tờ điều trị trong diễn biến (chế độ đọc tệp)', () => {
-    const rendered = html('?tab=phieu_dieu_tri', { ...detail, phieu_dieu_tri: [] })
-    expect(rendered).not.toContain('Phiếu điều trị (0)')
-    expect(rendered).not.toContain('Chưa có phiếu điều trị')
   })
   it('đổi đơn vị tuổi thô ở lớp hiển thị', () => {
     expect(formatClinicalText('68.0 tuoi')).toBe('68,0 tuổi')

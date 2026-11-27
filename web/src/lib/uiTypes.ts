@@ -9,7 +9,6 @@ export interface EncounterGroup<T> {
 export type DetailTabId =
   | 'ho_so_benh_an'
   | 'y_lenh'
-  | 'phieu_dieu_tri'
   | 'xet_nghiem'
   | 'vi_sinh'
   | 'dien_bien'

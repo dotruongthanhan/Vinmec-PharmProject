@@ -6,7 +6,7 @@ import { MockClient } from '../api/mock'
 import type { ChiTietCa, MedicalOrder, PhanHoiDaGhi } from '../api/types'
 import { OrderDetailView } from '../features/order-detail/OrderDetailView'
 import { OrderChoices, OrderSelector, TreatmentSheets } from '../features/order-detail/MedicalRecordSections'
-import { OrderLinesTable } from '../features/order-detail/DetailSections'
+import { UnifiedOrderLinesTable } from '../features/order-detail/UnifiedOrderLinesTable'
 import { Popover } from '../components/ui/popover'
 import { FeedbackBar } from '../features/findings/FeedbackBar'
 import { FindingCard } from '../features/findings/FindingCard'
@@ -77,9 +77,10 @@ type Element = ReactElement<{
   open?: boolean
   onOpenChange?: (open: boolean) => void
   selected?: MedicalOrder
-  selectedDrug?: string | null
+  expandedLineKey?: string | null
+  lines?: { key: string; yLenhId: string }[]
+  onToggleLine?: (key: string) => void
   onSelect?: (id: string) => void
-  onSelectDrug?: (name: string) => void
   onFollowOrder?: () => void
   feedbackDraft?: FeedbackDraft
   onFeedbackDraftChange?: (draft: FeedbackDraft) => void
@@ -110,11 +111,13 @@ function detailTree(value: ChiTietCa, orderSelectionReady = true) {
 function render(value: ChiTietCa = detail) {
   return hooks.run(() => detailTree(value))
 }
-function selector(tree: ReactNode) { return elements(tree).find((item) => item.type === OrderSelector)! }
+function unifiedTable(tree: ReactNode) {
+  return elements(tree).find((item) => item.type === UnifiedOrderLinesTable)!
+}
 
 beforeEach(() => {
   hooks.reset()
-  navigation.params = new URLSearchParams('tab=y_lenh')
+  navigation.params = new URLSearchParams()
   navigation.options = {}
   vi.stubGlobal('requestAnimationFrame', (fn: () => void) => fn())
 })
@@ -126,67 +129,66 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-describe('vòng đời lựa chọn y lệnh', () => {
-  it('gọi bộ chọn đổi URL và nội dung, tải lại giữ mã đã chọn', () => {
+describe('vòng đời bảng y lệnh hợp nhất & mở rộng 1 thuốc', () => {
+  it('bấm dòng thuốc mở đúng 1 dòng tại một thời điểm, mở dòng khác tự đóng dòng cũ', () => {
     const initial = render()
-    expect(selector(initial).props.selected?.y_lenh_id).toBe('YL-TT')
-    selector(initial).props.onSelect!('YL-CU')
-    expect(navigation.params.toString()).toBe('tab=y_lenh&yl=YL-CU')
-    expect(navigation.options).toEqual({ replace: true, state: navigation.state })
-    expect(selector(render()).props.selected?.y_lenh_id).toBe('YL-CU')
-    hooks.reset()
-    expect(selector(render()).props.selected?.y_lenh_id).toBe('YL-CU')
+    const tbl = unifiedTable(initial)
+    expect(tbl.props.expandedLineKey).toBeNull()
+    const [line1, line2] = tbl.props.lines!
+    tbl.props.onToggleLine!(line1.key)
+    expect(unifiedTable(render()).props.expandedLineKey).toBe(line1.key)
+    unifiedTable(render()).props.onToggleLine!(line2.key)
+    expect(unifiedTable(render()).props.expandedLineKey).toBe(line2.key)
+    unifiedTable(render()).props.onToggleLine!(line2.key)
+    expect(unifiedTable(render()).props.expandedLineKey).toBeNull()
   })
-  it('đổi ca bỏ lựa chọn cũ khi URL đích không có yl và Back giữ yl', () => {
-    const previous = new URLSearchParams('tab=y_lenh&yl=YL-CU')
+  it('đổi ca bỏ dòng đang mở khi URL đích không có yl và quay lại mở đúng yl', () => {
+    const previous = new URLSearchParams('yl=YL-CU')
     navigation.params = previous
-    expect(selector(render()).props.selected?.y_lenh_id).toBe('YL-CU')
+    expect(unifiedTable(render()).props.expandedLineKey).toContain('YL-CU::')
     const next = { ...detail, ca_id: 'CA-MOI', danh_sach_y_lenh: [other, { ...focus, y_lenh_id: 'YL-MOI' }] }
-    navigation.params = new URLSearchParams('tab=y_lenh')
-    expect(selector(render(next)).props.selected?.y_lenh_id).toBe('YL-MOI')
-    expect(navigation.params.get('yl')).toBeNull()
+    navigation.params = new URLSearchParams()
+    expect(unifiedTable(render(next)).props.expandedLineKey).toBeNull()
     navigation.params = previous
-    expect(selector(render()).props.selected?.y_lenh_id).toBe('YL-CU')
-    expect(navigation.params.get('yl')).toBe('YL-CU')
+    expect(unifiedTable(render()).props.expandedLineKey).toContain('YL-CU::')
   })
   it('liên kết sâu sang ca khác giữ yl hợp lệ', () => {
     render()
-    navigation.params = new URLSearchParams('tab=y_lenh&yl=YL-CU')
+    navigation.params = new URLSearchParams('yl=YL-CU')
     const next = { ...detail, ca_id: 'CA-MOI', danh_sach_y_lenh: [other, { ...focus, y_lenh_id: 'YL-MOI' }] }
-    expect(selector(render(next)).props.selected?.y_lenh_id).toBe('YL-CU')
+    expect(unifiedTable(render(next)).props.expandedLineKey).toContain('YL-CU::')
     expect(navigation.params.get('yl')).toBe('YL-CU')
   })
-  it('yl rác về trọng tâm, thay URL, giữ tab và hiện thông báo', () => {
+  it('yl rác xóa yl khỏi URL, giữ tab và hiện thông báo', () => {
     navigation.params = new URLSearchParams('tab=y_lenh&yl=RAC&khac=1')
-    expect(selector(render()).props.selected?.y_lenh_id).toBe('YL-TT')
+    expect(unifiedTable(render()).props.expandedLineKey).toBeNull()
     expect(navigation.params.toString()).toBe('tab=y_lenh&khac=1')
     expect(navigation.options).toEqual({ replace: true, state: navigation.state })
     expect(elements(render()).some((item) => item.props.role === 'status' &&
       String(item.props.children).includes('RAC'))).toBe(true)
   })
-  it('đổi tab giữ nguồn điều hướng và liên kết phiếu xóa lọc thuốc', () => {
+  it('đổi tab giữ nguồn điều hướng và liên kết phiếu điều trị trong Diễn biến trỏ sang y lệnh', () => {
     const withSheets = { ...detail, phieu_dieu_tri: [{
       phieu_dieu_tri_id: 'P-1', dot_dieu_tri_id: 'DT-2', ngay_dieu_tri: 1, thoi_diem_lap: '',
       vai_tro_nguoi_lap: '', dien_bien: '', danh_gia: '', huong_xu_tri: '', che_do_an: '',
       che_do_cham_soc: null, dan_do: null,
       theo_doi: [], y_lenh_trong_ngay: ['YL-TT'],
     }] }
-    const initial = render(withSheets)
-    elements(initial).find((item) => item.type === OrderLinesTable)!.props.onSelectDrug!('Meropenem')
-    expect(elements(render(withSheets)).find((item) => item.type === OrderLinesTable)!.props.selectedDrug).toBe('Meropenem')
-    render(withSheets).props.onValueChange('phieu_dieu_tri')
+    render(withSheets).props.onValueChange('dien_bien')
     expect(navigation.options.state).toEqual(navigation.state)
-    const sheetView = elements(render(withSheets)).find((item) => item.type === TreatmentSheets)!
-    const link = elements(TreatmentSheets({ detail: withSheets, onFollowOrder: sheetView.props.onFollowOrder }))
+    expect(navigation.params.get('tab')).toBe('dien_bien')
+    const link = elements(TreatmentSheets({ detail: withSheets }))
       .find((item) => item.props.children === 'YL-TT' && item.props.onClick)
-    link!.props.onClick!({ button: 0 })
+    expect(link).toBeDefined()
     navigation.params = new URLSearchParams('tab=y_lenh&yl=YL-TT')
-    expect(elements(render(withSheets)).find((item) => item.type === OrderLinesTable)!.props.selectedDrug).toBeNull()
+    expect(unifiedTable(render(withSheets)).props.expandedLineKey).toContain('YL-TT::')
   })
-  it('dòng thuốc trọng tâm giữ hành động chuyển sang thẩm định', () => {
+  it('mặc định mở Y lệnh (xóa ?tab) và chọn tab Thẩm định đặt ?tab=tham_dinh', () => {
     const tree = render()
-    const table = elements(tree).find((item) => item.type === OrderLinesTable)!
-    table.props.onSelectDrug!('Meropenem')
+    expect(tree.props.value).toBe('y_lenh')
+    tree.props.onValueChange('tham_dinh')
+    expect(navigation.params.get('tab')).toBe('tham_dinh')
+    render().props.onValueChange('y_lenh')
     expect(navigation.params.get('tab')).toBeNull()
   })
 })
@@ -260,7 +262,7 @@ describe('làm mới danh sách và ca đang mở', () => {
     await vi.advanceTimersByTimeAsync(0)
     const initial = renderWorkspace()
     expect(initial.list.updatedAt?.toISOString()).toBe('2026-11-18T09:59:34.000Z')
-    expect(selector(initial.tree).props.selected?.y_lenh_id).toBe('YL-CU')
+    expect(unifiedTable(initial.tree).props.expandedLineKey).toContain('YL-CU::')
     await vi.advanceTimersByTimeAsync(60_000)
     expect(getCases).toHaveBeenCalledTimes(2)
     expect(getCase).toHaveBeenCalledTimes(2)
@@ -272,7 +274,7 @@ describe('làm mới danh sách và ca đang mở', () => {
     await vi.advanceTimersByTimeAsync(0)
     const refreshed = renderWorkspace()
     expect(refreshed.current.detail).toBe(fresh)
-    expect(selector(refreshed.tree).props.selected?.y_lenh_id).toBe('YL-CU')
+    expect(unifiedTable(refreshed.tree).props.expandedLineKey).toContain('YL-CU::')
     expect(navigation.params.toString()).toBe('tab=y_lenh&yl=YL-CU')
 
     await vi.advanceTimersByTimeAsync(30_001)
@@ -295,7 +297,7 @@ describe('làm mới danh sách và ca đang mở', () => {
     })
     renderCase(detail.ca_id)
     await vi.advanceTimersByTimeAsync(0)
-    expect(selector(renderCase(detail.ca_id)).props.selected?.y_lenh_id).toBe('YL-TT')
+    expect(unifiedTable(renderCase(detail.ca_id)).props.expandedLineKey).toBeNull()
     renderCase(null)
 
     navigation.params.set('yl', 'YL-VUA-THEM')
@@ -303,7 +305,7 @@ describe('làm mới danh sách và ca đang mở', () => {
     expect(navigation.params.get('yl')).toBe('YL-VUA-THEM')
     resolveDetail({ ...detail, danh_sach_y_lenh: [...detail.danh_sach_y_lenh, { ...other, y_lenh_id: 'YL-VUA-THEM' }] })
     await vi.advanceTimersByTimeAsync(0)
-    expect(selector(renderCase(detail.ca_id)).props.selected?.y_lenh_id).toBe('YL-VUA-THEM')
+    expect(unifiedTable(renderCase(detail.ca_id)).props.expandedLineKey).toContain('YL-VUA-THEM::')
     expect(navigation.params.get('yl')).toBe('YL-VUA-THEM')
   })
 
@@ -349,7 +351,7 @@ describe('làm mới danh sách và ca đang mở', () => {
   })
 
   it('giữ bản nháp khi nhận định rời danh sách cần chú ý', () => {
-    navigation.params = new URLSearchParams()
+    navigation.params = new URLSearchParams('tab=tham_dinh')
     const findingCard = (tree: ReactNode) => elements(tree).find((item) => item.type === FindingCard)
     const draft: FeedbackDraft = { ...EMPTY_FEEDBACK_DRAFT, pendingAction: 'can_sua', note: 'Bản nháp giả lập' }
     findingCard(render())!.props.onFeedbackDraftChange!(draft)
