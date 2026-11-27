@@ -9,6 +9,19 @@ import type { BoDuLieu, DacTaMinhHoa, TepMauMinhHoa } from '../nguPhap'
 import meropenemJson from '../mau/lieu-meropenem-crcl.json'
 import tuongTacJson from '../mau/ma-tran-tuong-tac.json'
 import thongKeJson from '../mau/thong-ke-thang.json'
+import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
+
+it('dựng đoạn đang dùng đến hết miền thời gian và giữ giờ trên trục', () => {
+  const sample = doanCases[0]
+  const model = dungMoHinh(sample.dac_ta as DacTaMinhHoa, [sample.bo_du_lieu as unknown as BoDuLieu], {})
+  const segment = model.phanTu.find((item) => item.loai === 'doan')
+  expect(segment).toBeDefined()
+  if (segment?.loai === 'doan') {
+    expect(segment.dangDung).toBe(true)
+    expect(segment.x2).toBe(model.vungVe.phai)
+  }
+  expect(model.trucX?.vach[0].nhan).toContain('08:00')
+})
 
 const MAU_MEROPENEM = meropenemJson as unknown as TepMauMinhHoa
 const MAU_TUONG_TAC = tuongTacJson as unknown as TepMauMinhHoa

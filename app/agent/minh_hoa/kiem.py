@@ -54,7 +54,7 @@ _FREE_NUMBER = re.compile(r"(?<!\w)\d")
 _UNACCENTED_DIRECTIVE = re.compile(
     r"\bbo\s+qua\s+(?:(?:moi|tat\s+ca|cac)\s+)?(?:huong\s+dan|quy\s+tac|chi\s+thi|lenh)\b", re.I
 )
-_DAU = {"duong", "vung", "cot", "diem", "o", "dai", "quy_tac", "chu"}
+_DAU = {"duong", "vung", "cot", "diem", "o", "dai", "doan", "quy_tac", "chu"}
 _KIEU = {"dinh_luong", "thu_tu", "danh_muc", "thoi_gian"}
 _KENH_VI_TRI = {"x", "y", "x_tu", "x_den", "y_tu", "y_den"}
 
@@ -285,7 +285,16 @@ def _kiem(
                 columns[channel] = c
         if "kich_thuoc" in columns and columns["kich_thuoc"].kieu != "dinh_luong":
             raise _Loi(f"sai_kieu_cot:{path}")
-        if mark == "dai":
+        if mark == "doan":
+            if not {"x_tu", "x_den", "y"}.issubset(enc):
+                raise _Loi(f"thieu_kenh:{path}")
+            if (
+                columns["x_tu"].kieu not in ("dinh_luong", "thoi_gian")
+                or columns["x_den"].kieu != columns["x_tu"].kieu
+                or columns["y"].kieu != "danh_muc"
+            ):
+                raise _Loi(f"sai_kieu_cot:{path}")
+        elif mark == "dai":
             pairs = [("x_tu", "x_den"), ("y_tu", "y_den")]
             if not any(a in enc and b in enc for a, b in pairs):
                 raise _Loi(f"thieu_kenh:{path}")

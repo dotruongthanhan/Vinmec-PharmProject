@@ -12,15 +12,18 @@ const ds = block.bo_du_lieu as BoDuLieu[]
 const spec = block.dac_ta as DacTaMinhHoa
 
 describe('mh-1', () => {
-  it('kiểm ba ví dụ trong kỹ năng minh hoạ', () => {
+  it('kiểm mọi ví dụ trong kỹ năng minh hoạ', () => {
     const prompt = readFileSync(new URL('../../../../../config/prompts/ky_nang_minh_hoa.v1.md', import.meta.url), 'utf8')
     const examples = [...prompt.matchAll(/```json\s*([\s\S]*?)\s*```/g)].map((match) => JSON.parse(match[1]))
-    expect(examples).toHaveLength(3)
+    expect(examples.length).toBeGreaterThanOrEqual(5)
     const columnSets = [
       { 'ds-2': { creatinin: 'dinh_luong', loai_can_nang: 'danh_muc', crcl: 'dinh_luong' }, 'ds-3': { creatinin: 'dinh_luong', loai_can_nang: 'danh_muc', crcl: 'dinh_luong' }, 'ds-4': { bien_ve_tu: 'dinh_luong', bien_ve_den: 'dinh_luong', bao_gom_tu: 'logic', bao_gom_den: 'logic', khuyen_cao: 'danh_muc' } },
       { 'ds-1': { thuoc_a: 'danh_muc', thuoc_b: 'danh_muc', muc_do: 'danh_muc' } },
       { 'ds-1': { thoi_gian: 'thoi_gian', gia_tri: 'dinh_luong' } },
+      { 'ds-1': { thoi_diem: 'thoi_gian', gia_tri: 'dinh_luong', creatinin_tang_nhanh: 'logic' }, 'ds-2': { thoi_diem: 'thoi_gian' } },
+      { 'ds-1': { bat_dau: 'thoi_gian', ket_thuc: 'thoi_gian', hoat_chat: 'danh_muc', trang_thai_dong: 'danh_muc' }, 'ds-2': { thoi_diem_lay_mau: 'thoi_gian', hoat_chat: 'danh_muc' } },
     ]
+    expect(examples).toHaveLength(columnSets.length)
     examples.forEach((example, index) => {
       const datasets = Object.entries(columnSets[index]).map(([ma, columns]) => ({
         ma,

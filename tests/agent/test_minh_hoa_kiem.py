@@ -43,6 +43,16 @@ def _sample() -> tuple[dict, dict[str, BoDuLieu], set[str]]:
 
 
 @pytest.mark.parametrize(
+    "case", json.loads(Path("tests/fixtures/minh_hoa/doan.json").read_text(encoding="utf-8"))
+)
+def test_doan_shared_cases(case: dict) -> None:
+    dataset = BoDuLieu.model_validate(case["bo_du_lieu"])
+    spec = case["dac_ta"]
+    result = kiem_dac_ta(spec, {dataset.ma: dataset}, set(spec["nguon"]))
+    assert isinstance(result, KhoiMinhHoa) is case["hop_le"]
+
+
+@pytest.mark.parametrize(
     "name", ["lieu-meropenem-crcl.json", "ma-tran-tuong-tac.json", "thong-ke-thang.json"]
 )
 def test_vz0_examples(name: str) -> None:

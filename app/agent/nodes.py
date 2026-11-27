@@ -17,7 +17,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from app.agent.state import HoiDapState, KeHoachTacTu, LoiGoiCongCu
-from app.agent.tools.gateway import ToolGateway
+from app.agent.tools.gateway import ToolGateway, _is_iso_time
 from app.agent.tools.policy import ChinhSachCongCu
 from app.agent.tools.registry import DanhMucCongCu
 from app.config.settings import CaseContextSettings
@@ -709,7 +709,17 @@ class KiemChung:
         if verified.trang_thai == "ok" and state.get("gateway") is not None:
             blocks = []
             for block in state["gateway"].minh_hoa:
-                serialized = json.dumps(block.model_dump(mode="json"), ensure_ascii=False)
+                checked = block.model_dump(mode="json")
+                for dataset in checked["bo_du_lieu"]:
+                    time_columns = {
+                        col["ten"] for col in dataset["cot"] if col["kieu"] == "thoi_gian"
+                    }
+                    for row in dataset["dong"]:
+                        for key in time_columns:
+                            value = row.get(key)
+                            if isinstance(value, str) and _is_iso_time(value):
+                                row[key] = None
+                serialized = json.dumps(checked, ensure_ascii=False)
                 session = state["session"]
                 try:
                     masked_tokens = re.sub(TOKEN_PATTERN, "", serialized)

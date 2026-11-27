@@ -12,6 +12,7 @@ from typing import ClassVar
 import pytest
 from pydantic import BaseModel, ConfigDict
 
+from app.agent.minh_hoa.models import BoDuLieu, CotDuLieu
 from app.agent.tools.base import CanCu, KetQuaCongCu, Tool, ToolContext
 from app.agent.tools.gateway import ToolGateway, _protect_evidence_codes
 from app.agent.tools.policy import ChinhSachCongCu
@@ -107,6 +108,46 @@ def _setup(
     registry.dang_ky(tool)
     gateway = ToolGateway(registry, _policy(), so_lan_goi_toi_da=so_lan_goi_toi_da)
     return tool, gateway
+
+
+@pytest.mark.parametrize(
+    "stamp,valid",
+    [
+        ("2026-01-01T05:30:00+07:00", True),
+        ("2026-01-01T05:30:00+07:00 Giả Lập Sao 0900000000", False),
+    ],
+)
+def test_other_tool_time_column_is_validated_and_only_llm_sample_is_masked(
+    stamp: str, valid: bool
+) -> None:
+    def handler(params: _QueryParams, ctx: ToolContext) -> KetQuaCongCu:
+        return KetQuaCongCu(
+            trang_thai="ok",
+            noi_dung="Dữ liệu",
+            bo_du_lieu=[
+                BoDuLieu(
+                    ma="",
+                    cot=[
+                        CotDuLieu(ten="khi", kieu="thoi_gian"),
+                        CotDuLieu(ten="chu", kieu="danh_muc"),
+                    ],
+                    dong=[{"khi": stamp, "chu": "Giả Lập Sao 0900000000"}],
+                )
+            ],
+        )
+
+    _, gw = _setup(handler)
+    from app.deid.known import GiaTriDinhDanh
+
+    session = DeidSession([GiaTriDinhDanh(loai="TEN", gia_tri="Giả Lập Sao")])
+    result = gw.goi("cong_cu_thu", {}, _ctx(session=session))
+    if valid:
+        assert result.bo_du_lieu[0].dong[0]["khi"] == stamp
+        assert "2026-01-01" not in result.noi_dung
+        assert "Giả Lập Sao" not in str(result.bo_du_lieu)
+        assert "0900000000" not in str(result.bo_du_lieu)
+    else:
+        assert result.bo_du_lieu == []
 
 
 def test_unknown_tool_is_rejected_without_calling() -> None:

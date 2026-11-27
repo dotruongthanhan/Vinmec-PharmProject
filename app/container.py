@@ -302,6 +302,7 @@ class Container:
         from app.agent.asker import AgenticAsker
         from app.agent.tools import ChinhSachCongCu, DanhMucCongCu
         from app.agent.tools.doc_doan_mo_rong import DocDoanMoRong
+        from app.agent.tools.lay_du_lieu_ca import LayDuLieuCa
         from app.agent.tools.tim_doan_nguon import TimDoanNguon
         from app.agent.tools.tinh_chi_so import TinhChiSo
         from app.agent.tools.tra_thuoc import TraThuoc
@@ -325,6 +326,7 @@ class Container:
         # Công cụ chuyên biệt cắm dần (plan 1.9 mục 5.8): mỗi công cụ một dòng đăng ký.
         danh_muc = DanhMucCongCu()
         danh_muc.dang_ky(TraTuongTac())
+        danh_muc.dang_ky(LayDuLieuCa())
         danh_muc.dang_ky(TimDoanNguon(self.evidence_retriever, DrugNameIndex.load().resolve))
         danh_muc.dang_ky(DocDoanMoRong(self.evidence_retriever))
         danh_muc.dang_ky(TraThuoc())

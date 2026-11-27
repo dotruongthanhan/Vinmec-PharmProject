@@ -383,10 +383,10 @@ Claude đề xuất (b) vì danh sách kiểu hình giờ đã rộng. Nếu th�
 | TR2 | Bảng `vet_*`, ghi lô, dọn 30 ngày, API admin | Codex terra xhigh | TR1 |
 | VZ1 | `BoDuLieu` trong kết quả tool, tool `ve_bieu_do` + Gateway kiểm đặc tả, bộ dựng, kỹ năng prompt, hợp đồng `minh_hoa`, khung minh hoạ web với 4 kiểu đầu (thang ngưỡng, cột, đường, nhiệt) → V1, V3, V4 | Codex (backend) → Codex/Neon (web) | VZ0, TR1 (chung `ask.py`, `nodes.py`) |
 | VZ2 | `lay_du_lieu_ca`, kiểu dòng thời gian → V2, V5, V6, V8 | Codex | VZ1 |
-| VZ3 | Dữ liệu giả lập một tháng | sub Sonnet | VZ0 (định nghĩa) |
-| VZ4 | `thong_ke` + kiểu tròn, vành, cột chồng → S1–S7 | Codex | VZ1, VZ3 |
+| VZ3 | Dữ liệu giả lập một tháng | sub Sonnet | VZ0 (định nghĩa). **⏸ Hoãn 27/11** (chủ kho: MVP prototype, tạm dùng 67 ca) |
+| VZ4 | `thong_ke` + kiểu tròn, vành, cột chồng → S1–S7 | Codex | VZ1, VZ3. **⏸ Hoãn 27/11** theo VZ3 |
 | TR3 | Trang quản trị vết (dùng chung khung minh hoạ) | Codex/Neon | TR2, VZ1 |
-| VZ5 | 20 câu eval có hình; nhiệm vụ đo với dược sĩ | sub Sonnet + Claude | VZ1–VZ4 |
+| VZ5 | 20 câu eval có hình; nhiệm vụ đo với dược sĩ | sub Sonnet + Claude | VZ1–VZ4. 27/11: làm **bản nhỏ** (15 câu theo ca, 8 nhiệm vụ theo ca, bỏ phần thống kê), agy Neon, song song VZ2 |
 
 Các đợt cùng sửa `ask.py`, `nodes.py`, `schemas.py`, `gateway.py` thì chạy **lần lượt**. Phiên làm tool agent (tài khoản Claude khác) cũng sửa những tệp này, nên **phải báo trước khi giao VZ1**.
 

@@ -42,7 +42,7 @@ def dataset(ma: str, columns: dict[str, str]) -> BoDuLieu:
 
 def test_prompt_examples_pass_checker() -> None:
     specs = examples()
-    assert len(specs) == 3
+    assert len(specs) == 5
     grid = {"creatinin": "dinh_luong", "loai_can_nang": "danh_muc", "crcl": "dinh_luong"}
     renal = {
         "bien_ve_tu": "dinh_luong",
@@ -63,6 +63,29 @@ def test_prompt_examples_pass_checker() -> None:
             )
         },
         {"ds-1": dataset("ds-1", {"thoi_gian": "thoi_gian", "gia_tri": "dinh_luong"})},
+        {
+            "ds-1": dataset(
+                "ds-1",
+                {
+                    "thoi_diem": "thoi_gian",
+                    "gia_tri": "dinh_luong",
+                    "creatinin_tang_nhanh": "logic",
+                },
+            ),
+            "ds-2": dataset("ds-2", {"thoi_diem": "thoi_gian"}),
+        },
+        {
+            "ds-1": dataset(
+                "ds-1",
+                {
+                    "bat_dau": "thoi_gian",
+                    "ket_thuc": "thoi_gian",
+                    "hoat_chat": "danh_muc",
+                    "trang_thai_dong": "danh_muc",
+                },
+            ),
+            "ds-2": dataset("ds-2", {"thoi_diem_lay_mau": "thoi_gian", "hoat_chat": "danh_muc"}),
+        },
     ]
     for spec, ds in zip(specs, datasets, strict=True):
         result = kiem_dac_ta(spec, ds, set(spec["nguon"]))

@@ -581,6 +581,16 @@ export function VeSvg({ moHinh, className = '' }: VeSvgProps) {
               )
             }
 
+            if (pt.loai === 'doan') {
+              return (
+                <g key={pt.ma} role="img" aria-label={pt.moTa}>
+                  <title>{pt.moTa}</title>
+                  <line x1={pt.x1} y1={pt.y} x2={pt.x2} y2={pt.y} stroke="var(--color-primary)" strokeWidth="4" strokeDasharray={pt.dangDung ? '6 3' : undefined} />
+                  {pt.dangDung ? <path d={`M ${pt.x2 - 6} ${pt.y - 5} L ${pt.x2} ${pt.y} L ${pt.x2 - 6} ${pt.y + 5}`} fill="none" stroke="var(--color-primary)" strokeWidth="2" /> : null}
+                </g>
+              )
+            }
+
             if (pt.loai === 'quy_tac') {
               return (
                 <g

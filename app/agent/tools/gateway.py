@@ -11,6 +11,7 @@ from collections.abc import Iterator, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 from contextvars import copy_context
+from datetime import datetime
 from threading import Lock
 from typing import Any
 
@@ -93,6 +94,20 @@ def _scrub_dataset_cell(text: str, session: DeidSession, can_cu: Sequence[CanCu]
         if index < len(tokens):
             masked.append(tokens[index])
     return _sanitize_markers(_restore_evidence_codes("".join(masked), placeholders))
+
+
+def _is_iso_time(value: str) -> bool:
+    """Chỉ chấp nhận ngày hoặc thời điểm ISO đầy đủ trong cột thời gian."""
+    if not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?:Z|[+-]\d{2}:\d{2})?)?",
+        value,
+    ):
+        return False
+    try:
+        datetime.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
 
 
 def _alpha_index(index: int) -> str:
@@ -673,23 +688,35 @@ class ToolGateway:
                                 metadata[field] = value
                             cols.append(col.model_copy(update=metadata))
                         rows: list[dict[str, str | float | bool | None]] = []
+                        masked_rows: list[dict[str, str | float | bool | None]] = []
+                        time_columns = {col.ten for col in cols if col.kieu == "thoi_gian"}
                         for row in dataset.dong:
                             if not set(row).issubset(names):
                                 raise ValueError("cot_khong_ton_tai")
                             clean_row: dict[str, str | float | bool | None] = {}
+                            masked_row: dict[str, str | float | bool | None] = {}
                             for key, value in row.items():
                                 if isinstance(value, str):
                                     if len(value) > 200:
                                         raise ValueError("chuoi_qua_dai")
-                                    value = _scrub_dataset_cell(value, session, can_cu)
+                                    raw_value = value
+                                    value = _scrub_dataset_cell(raw_value, session, can_cu)
                                     if _has_injection_directive(value) or _has_injection_directive(
                                         _ZERO_WIDTH_RE.sub("", value)
                                     ):
                                         raise ValueError("nghi_chen_lenh")
                                     if len(value) > 200:
                                         raise ValueError("chuoi_qua_dai")
+                                    masked_row[key] = value
+                                    if key in time_columns:
+                                        if not _is_iso_time(raw_value):
+                                            raise ValueError("thoi_gian_khong_hop_le")
+                                        value = raw_value
+                                else:
+                                    masked_row[key] = value
                                 clean_row[key] = value
                             rows.append(clean_row)
+                            masked_rows.append(masked_row)
                         with self._lock:
                             ma = f"ds-{len(self._bo_du_lieu) + 1}"
                             codes = {cc.ma for cc in can_cu}
@@ -706,7 +733,7 @@ class ToolGateway:
                         columns = ", ".join(
                             f"{c.ten} ({c.kieu}, {c.don_vi or 'không đơn vị'})" for c in safe.cot
                         )
-                        sample = json.dumps(safe.dong[:5], ensure_ascii=False)
+                        sample = json.dumps(masked_rows[:5], ensure_ascii=False)
                         summaries.append(
                             f"{ma}: {columns}; căn cứ cho nguon: {', '.join(safe.can_cu)}; "
                             f"{len(rows)} dòng; mẫu: {sample}"

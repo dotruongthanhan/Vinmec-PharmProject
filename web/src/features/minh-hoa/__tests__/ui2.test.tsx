@@ -5,11 +5,26 @@ import { ClinicalMarkdown } from '@/components/ui/ClinicalMarkdown'
 import { BangDuLieuGoc, KhungMinhHoa } from '../KhungMinhHoa'
 import type { BoDuLieu } from '../nguPhap'
 import fixture from '../mau/khoi-that-demo02-da-chinh.json'
+import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
 
 const block = fixture[0]
 const datasets = block.bo_du_lieu as BoDuLieu[]
 
 describe('UI2', () => {
+  it('dựng đoạn đang dùng trên trục thời gian và bảng giữ dữ liệu gốc', () => {
+    const example = doanCases[0]
+    const data = [example.bo_du_lieu as unknown as BoDuLieu]
+    const html = renderToStaticMarkup(
+      <TooltipProvider><KhungMinhHoa dacTa={example.dac_ta} boDuLieu={data} /></TooltipProvider>,
+    )
+    expect(html).toContain('aria-label="Xem dạng bảng"')
+    expect(html).toContain('đang dùng')
+    expect(html).toContain('<svg')
+    const table = renderToStaticMarkup(<BangDuLieuGoc boDuLieu={data} />)
+    expect(table).toContain('2026-11-01T08:00:00+07:00')
+    expect(table).toContain('bat_dau')
+    expect(table).toContain('ket_thuc')
+  })
   it('shared expand button', () => {
     const table = renderToStaticMarkup(<TooltipProvider><ClinicalMarkdown text={'| A |\n| --- |\n| x |'} /></TooltipProvider>)
     const figure = renderToStaticMarkup(<TooltipProvider><KhungMinhHoa dacTa={block.dac_ta} boDuLieu={datasets} /></TooltipProvider>)

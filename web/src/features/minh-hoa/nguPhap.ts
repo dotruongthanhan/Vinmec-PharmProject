@@ -2,7 +2,7 @@
 
 export type PhienBanNguPhap = 'mh-0' | 'mh-1'
 export type KieuCot = 'dinh_luong' | 'thu_tu' | 'danh_muc' | 'thoi_gian' | 'logic'
-export type LoaiDau = 'duong' | 'vung' | 'cot' | 'diem' | 'o' | 'dai' | 'quy_tac' | 'chu'
+export type LoaiDau = 'duong' | 'vung' | 'cot' | 'diem' | 'o' | 'dai' | 'doan' | 'quy_tac' | 'chu'
 export type LoaiThamSo = 'thanh_keo' | 'chon_mot' | 'bat_tat' | 'loc' | 'dat_lai'
 export type DinhDangSo = '0' | '0.0' | '0.00'
 export type MienTruc = 'tu_du_lieu' | 'tu_0'
@@ -198,7 +198,7 @@ const KHOA_THAM_SO = new Set(['ma', 'loai', 'nhan', 'gia_tri_tu', 'mac_dinh', 'n
 const KHOA_GIA_TRI_TU = new Set(['ds', 'cot'])
 const KHOA_SO_HIEN = new Set(['nhan', 'o', 'o_theo_khoang'])
 
-const TAP_DAU = new Set<LoaiDau>(['duong', 'vung', 'cot', 'diem', 'o', 'dai', 'quy_tac', 'chu'])
+const TAP_DAU = new Set<LoaiDau>(['duong', 'vung', 'cot', 'diem', 'o', 'dai', 'doan', 'quy_tac', 'chu'])
 const TAP_KIEU_COT = new Set<KieuCot>(['dinh_luong', 'thu_tu', 'danh_muc', 'thoi_gian', 'logic'])
 const TAP_LOAI_THAM_SO = new Set<LoaiThamSo>([
   'thanh_keo',
@@ -694,7 +694,16 @@ export function kiemDacTa(dacTa: unknown, boDuLieu: readonly BoDuLieu[]): KetQua
       }
 
       // Kiểm ràng buộc theo loại dấu
-      if (dau === 'dai') {
+      if (dau === 'doan') {
+        if (mh.x_tu === undefined || mh.x_den === undefined || mh.y === undefined) {
+          lyDo.push(`${viTri} dấu "doan" cần x_tu, x_den và y`)
+        } else if (xTuCot && xDenCot && yCot && (
+          (xTuCot.kieu !== 'dinh_luong' && xTuCot.kieu !== 'thoi_gian') ||
+          xTuCot.kieu !== xDenCot.kieu || yCot.kieu !== 'danh_muc'
+        )) {
+          lyDo.push(`${viTri} dấu "doan" có kiểu cột không hợp lệ`)
+        }
+      } else if (dau === 'dai') {
         const hasXRange = mh.x_tu !== undefined && mh.x_den !== undefined
         const hasYRange = mh.y_tu !== undefined && mh.y_den !== undefined
         if (!hasXRange && !hasYRange) {

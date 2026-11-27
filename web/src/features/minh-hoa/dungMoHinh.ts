@@ -181,6 +181,18 @@ export interface PhanTuChu {
   nguon: readonly string[]
 }
 
+export interface PhanTuDoan {
+  loai: 'doan'
+  ma: string
+  x1: number
+  x2: number
+  y: number
+  dangDung: boolean
+  nhan: string
+  moTa: string
+  nguon: readonly string[]
+}
+
 export type PhanTuVe =
   | PhanTuDai
   | PhanTuDuong
@@ -190,6 +202,7 @@ export type PhanTuVe =
   | PhanTuO
   | PhanTuQuyTac
   | PhanTuChu
+  | PhanTuDoan
 
 export interface MoHinhVe {
   rong: number
@@ -363,11 +376,10 @@ export function dinhDangGiaTri(value: GiaTriO, dinhDang?: DinhDangSo): string {
 }
 
 function dinhDangNgayNgan(raw: string): string {
-  const iso = /^(\d{4})-(\d{2})-(\d{2})/.exec(raw.trim())
-  if (iso) {
-    return `${iso[3]}/${iso[2]}`
-  }
-  return raw
+  const date = new Date(raw)
+  return Number.isFinite(date.getTime())
+    ? new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(date)
+    : raw
 }
 
 function chuyenThoiGianMs(raw: GiaTriO): number | null {
@@ -946,6 +958,20 @@ export function dungMoHinh(
     if (!ds) return
     const rows = locDongTheoThamSo(ds.dong, lop.loc, trangThai)
 
+    if (lop.dau === 'doan') {
+      rows.forEach((row, rIdx) => {
+        const start = docKenhViTri(lop.ma_hoa.x_tu, row, dacTa, boDuLieu, trangThai)
+        const end = docKenhViTri(lop.ma_hoa.x_den, row, dacTa, boDuLieu, trangThai)
+        const lane = docKenhViTri(lop.ma_hoa.y, row, dacTa, boDuLieu, trangThai)
+        const x1 = mapX(start)
+        const x2 = end === null ? phai : mapX(end)
+        if (x1 === null || x2 === null || lane === null) return
+        const nhan = String(lane)
+        phanTu.push({ loai: 'doan', ma: `doan-${lopIdx}-${rIdx}`, x1, x2, y: mapY(lane), dangDung: end === null, nhan, moTa: `${nhan}${end === null ? ' (đang dùng)' : ''}`, nguon: dacTa.nguon })
+      })
+      return
+    }
+
     if (lop.dau === 'dai') {
       rows.forEach((row, rIdx) => {
         const tuVal = docKenhViTri(lop.ma_hoa.x_tu, row, dacTa, boDuLieu, trangThai)
@@ -1020,8 +1046,8 @@ export function dungMoHinh(
         if (lop.ma_hoa.x) {
           const val = docKenhViTri(lop.ma_hoa.x, row, dacTa, boDuLieu, trangThai)
           const px = mapX(val)
-          if (px === null || typeof val !== 'number') return
-          const valText = dinhDangGiaTri(val, '0.0')
+          if (px === null || (typeof val !== 'number' && typeof val !== 'string')) return
+          const valText = typeof val === 'string' ? dinhDangNgayNgan(val) : dinhDangGiaTri(val, '0.0')
           phanTu.push({
             loai: 'quy_tac',
             ma: `qt-${lopIdx}-${rIdx}`,
@@ -1030,7 +1056,7 @@ export function dungMoHinh(
             y1: tren,
             x2: px,
             y2: !coTrucY && coDai ? daiDuoi : duoi,
-            giaTri: val,
+            giaTri: typeof val === 'number' ? val : (chuyenThoiGianMs(val) ?? 0),
             giaTriChu: valText,
             nhan,
             moTa: `${nhan ?? 'Ngưỡng'}: ${valText}`,
@@ -1282,7 +1308,7 @@ export function dungMoHinh(
       chosen.push(last)
     }
     vachX = chosen.map((ms) => {
-      const iso = new Date(ms).toISOString().slice(0, 10)
+      const iso = new Date(ms).toISOString()
       return {
         toaDo: mapX(iso) ?? trai,
         nhan: dinhDangNgayNgan(iso),

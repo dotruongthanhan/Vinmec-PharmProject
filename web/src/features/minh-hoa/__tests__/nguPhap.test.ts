@@ -4,6 +4,7 @@ import type { BoDuLieu, DacTaMinhHoa, TepMauMinhHoa } from '../nguPhap'
 import meropenemJson from '../mau/lieu-meropenem-crcl.json'
 import tuongTacJson from '../mau/ma-tran-tuong-tac.json'
 import thongKeJson from '../mau/thong-ke-thang.json'
+import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
 
 const MAU_MEROPENEM = meropenemJson as unknown as TepMauMinhHoa
 const MAU_TUONG_TAC = tuongTacJson as unknown as TepMauMinhHoa
@@ -18,6 +19,12 @@ function saoChep<T>(value: T): T {
 }
 
 describe('kiemDacTa – kiểm định ngữ pháp mh-0', () => {
+  it('kiểm dấu đoạn giống máy chủ trên tập dữ liệu chung', () => {
+    for (const test of doanCases) {
+      const result = kiemDacTa(test.dac_ta, [test.bo_du_lieu as unknown as BoDuLieu])
+      expect(result.hopLe).toBe(test.hop_le)
+    }
+  })
   it('chấp nhận cả 3 tệp mẫu hợp lệ (gồm 2 đặc tả trong thống kê tháng)', () => {
     const kq1 = kiemDacTa(MAU_MEROPENEM.dac_ta, MAU_MEROPENEM.bo_du_lieu)
     expect(kq1.hopLe, kq1.hopLe ? '' : kq1.lyDo.join('; ')).toBe(true)

@@ -13,13 +13,15 @@ cong_cu:
     bat: true
   tinh_chi_so:
     bat: true
+  lay_du_lieu_ca:
+    bat: true
   ve_bieu_do:
     bat: true
 vai_tro:
   duoc_si_ls:
-    cho_phep: [tra_tuong_tac, tim_doan_nguon, doc_doan_mo_rong, tra_thuoc, tinh_chi_so, ve_bieu_do]
+    cho_phep: [tra_tuong_tac, tim_doan_nguon, doc_doan_mo_rong, tra_thuoc, tinh_chi_so, lay_du_lieu_ca, ve_bieu_do]
   admin:
-    cho_phep: [tra_tuong_tac, tim_doan_nguon, doc_doan_mo_rong, tra_thuoc, tinh_chi_so, ve_bieu_do]
+    cho_phep: [tra_tuong_tac, tim_doan_nguon, doc_doan_mo_rong, tra_thuoc, tinh_chi_so, lay_du_lieu_ca, ve_bieu_do]
 che_do:
   chung:
-    cam: [tinh_chi_so, ve_bieu_do]
+    cam: [tinh_chi_so, lay_du_lieu_ca, ve_bieu_do]
