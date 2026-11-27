@@ -307,3 +307,52 @@
     block-size: auto;
   }
 }
+@container (min-width: 0px) {
+  .ui3-lines-compact, .ui3-labs-compact, .ui3-orders-compact { display: none; }
+  .ui3-lines-heading-compact { display: none; }
+  .ui3-detail-medium, .ui3-detail-narrow { display: none; }
+  .ui3-expanded { position: sticky; left: 0; width: min(100%, calc(100cqw - 50px)); box-sizing: border-box; }
+  .ui3-panel dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ui3-panel dl > div { min-width: 0; overflow-wrap: break-word; }
+}
+@container (max-width: 999px) {
+  .ui3-lines-table { table-layout: fixed; }
+  .ui3-lines-wide { display: none; }
+  .ui3-lines-compact { display: block; }
+  .ui3-lines-heading-wide { display: none; }
+  .ui3-lines-heading-compact { display: inline; }
+  .ui3-detail-wide { display: none; }
+  .ui3-detail-medium { display: table-cell; }
+  .ui3-lines-table th, .ui3-lines-table td { white-space: normal; overflow-wrap: break-word; padding: 8px 5px; }
+  .ui3-lines-table .ui3-drug-column { width: 38%; }
+  .ui3-code { overflow-wrap: anywhere; }
+  .ui3-schedule-content { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+}
+@container (max-width: 639px) {
+  .ui3-schedule { display: none; }
+  .ui3-detail-medium { display: none; }
+  .ui3-detail-narrow { display: table-cell; }
+  .ui3-panel dl { grid-template-columns: minmax(0, 1fr); }
+  .ui3-panel dl > div { grid-column: auto; }
+}
+@container (max-width: 759px) {
+  .ui3-labs-table { table-layout: fixed; }
+  .ui3-labs-table th, .ui3-labs-table td { white-space: normal; overflow-wrap: break-word; padding: 8px 4px; }
+  .ui3-labs-wide { display: none; }
+  .ui3-labs-compact { display: inline; }
+  div.ui3-labs-compact { display: block; }
+}
+@container (max-width: 899px) {
+  .orders-table .ui3-orders-wide, .orders-table .order-patient-id, .orders-table .order-dob, .orders-table .order-dept { display: none; }
+  .orders-table .ui3-orders-compact { display: block; }
+  .orders-table th, .orders-table td { white-space: normal; overflow-wrap: break-word; padding: 8px 4px; }
+  .orders-table .order-priority { width: 13%; }
+  .orders-table .order-time { width: 15%; }
+  .orders-table .order-patient { width: 22%; }
+  .orders-table .order-diagnosis { width: 25%; }
+  .orders-table .order-status { width: 15%; }
+  .orders-table .order-ai-warn { width: 10%; }
+}
+@container (max-width: 479px) {
+  .orders-table, .ui3-lines-table, .ui3-labs-table { min-width: 480px; }
+}

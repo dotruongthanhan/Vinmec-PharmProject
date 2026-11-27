@@ -69,14 +69,14 @@ export function LabsTabContent({ labs, orderTimeText }: LabsTabContentProps) {
           aside="Bấm vào một hàng để xem đồ thị diễn biến chỉ số"
         />
 
-        <DataTable>
+        <DataTable className="ui3-labs-table">
           <DataTableHeader>
             <tr>
               <DataTableHead className="w-10">STT</DataTableHead>
               <DataTableHead>Chỉ số xét nghiệm</DataTableHead>
-              <DataTableHead>Đơn vị</DataTableHead>
+              <DataTableHead className="ui3-labs-wide">Đơn vị</DataTableHead>
               <DataTableHead align="right">Kết quả</DataTableHead>
-              <DataTableHead>Khoảng tham chiếu</DataTableHead>
+              <DataTableHead className="ui3-labs-wide">Khoảng tham chiếu</DataTableHead>
               <DataTableHead>Thời gian đo</DataTableHead>
               <DataTableHead>Đánh giá</DataTableHead>
             </tr>
@@ -112,13 +112,13 @@ export function LabsTabContent({ labs, orderTimeText }: LabsTabContentProps) {
                   <DataTableCell className={cn('font-medium', isSelected && 'font-bold')}>
                     {lab.ten}
                   </DataTableCell>
-                  <DataTableCell className={cn('text-fg-subtle whitespace-nowrap', isSelected && 'font-bold text-fg')}>
+                  <DataTableCell className={cn('ui3-labs-wide text-fg-subtle', isSelected && 'font-bold text-fg')}>
                     {formatClinicalText(lab.don_vi || '—')}
                   </DataTableCell>
                   <DataTableCell
                     align="right"
                     className={cn(
-                      'whitespace-nowrap',
+                      'break-words',
                       lab.ngoai_nguong && 'bg-danger-bg/60 font-semibold text-danger-fg',
                       isSelected && 'font-bold',
                     )}
@@ -127,13 +127,14 @@ export function LabsTabContent({ labs, orderTimeText }: LabsTabContentProps) {
                       {lab.ngoai_nguong && Arrow ? (
                         <Arrow className="size-3.5" strokeWidth={2} aria-hidden="true" />
                       ) : null}
-                      {formatClinicalText(parsedValue.text)}
+                      {formatClinicalText(parsedValue.text)} <span className="ui3-labs-compact">{formatClinicalText(lab.don_vi || '—')}</span>
                     </span>
+                    <div className="ui3-labs-compact text-xs text-fg-muted">{formatClinicalText(lab.khoang_tham_chieu || '—')}</div>
                   </DataTableCell>
-                  <DataTableCell className={cn('text-fg-muted whitespace-nowrap tabular-nums', isSelected && 'font-bold text-fg')}>
+                  <DataTableCell className={cn('ui3-labs-wide text-fg-muted tabular-nums', isSelected && 'font-bold text-fg')}>
                     {formatClinicalText(lab.khoang_tham_chieu || '—')}
                   </DataTableCell>
-                  <DataTableCell className={cn('whitespace-nowrap tabular-nums', isSelected && 'font-bold')}>
+                  <DataTableCell className={cn('break-words tabular-nums', isSelected && 'font-bold')}>
                     {formatReadableDateTime(lab.thoi_diem_text)}
                   </DataTableCell>
                   <DataTableCell className={cn('whitespace-nowrap', isSelected && 'font-bold')}>

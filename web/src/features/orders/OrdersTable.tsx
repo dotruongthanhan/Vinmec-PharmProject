@@ -603,7 +603,7 @@ export function OrdersTable({
             className="relative w-full overflow-x-auto rounded-md border border-line bg-surface shadow-xs"
           >
             <table
-              className="orders-table w-full min-w-[920px] table-fixed border-collapse text-left text-sm"
+              className="orders-table w-full table-fixed border-collapse text-left text-sm"
               aria-label="Danh sách hồ sơ cần duyệt"
             >
               <colgroup>
@@ -742,7 +742,7 @@ export function OrdersTable({
                   </th>
 
                   {/* 3. Mã BN */}
-                  <th scope="col" aria-sort={getAriaSort('ma_bn')}>
+                  <th className="ui3-orders-wide" scope="col" aria-sort={getAriaSort('ma_bn')}>
                     <Popover>
                       <PopoverTrigger asChild>
                         <button
@@ -798,7 +798,7 @@ export function OrdersTable({
                   </th>
 
                   {/* 5. Ngày sinh */}
-                  <th scope="col" aria-sort={getAriaSort('ngay_sinh')}>
+                  <th className="ui3-orders-wide" scope="col" aria-sort={getAriaSort('ngay_sinh')}>
                     <Popover>
                       <PopoverTrigger asChild>
                         <button
@@ -826,7 +826,7 @@ export function OrdersTable({
                   </th>
 
                   {/* 6. Khoa */}
-                  <th scope="col" aria-sort={getAriaSort('khoa')}>
+                  <th className="ui3-orders-wide" scope="col" aria-sort={getAriaSort('khoa')}>
                     <ColumnFilterMenu
                       label="Khoa" field="khoa"
                       sortField={sortField} sortDirection={sortDirection}
@@ -938,7 +938,7 @@ export function OrdersTable({
                               )}
                               aria-hidden="true"
                             />
-                            <span className="truncate">{priorityLabel}</span>
+                            <span>{priorityLabel}</span>
                           </span>
                         </td>
 
@@ -965,7 +965,7 @@ export function OrdersTable({
 
                         {/* 3. Mã BN */}
                         <td
-                          className="break-words font-mono text-xs whitespace-nowrap"
+                          className="ui3-orders-wide break-words font-mono text-xs whitespace-nowrap"
                           title={patientCode || undefined}
                         >
                           <button
@@ -997,12 +997,15 @@ export function OrdersTable({
                           <span className={hoTen ? 'block text-xs text-fg-muted' : patientSummary ? 'block' : 'block text-fg-subtle'}>
                             {patientSummary || 'Chưa ghi nhận'}
                           </span>
+                          <div className="ui3-orders-compact text-xs text-fg-muted">
+                            <button type="button" aria-label={`Mở hồ sơ ${patientCode || item.ca_id}`} onClick={(event) => { event.stopPropagation(); onOpenOrder(item.ca_id) }} className="ui3-code cursor-pointer text-primary underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{patientCode || '—'}</button>{' · '}{dobText}
+                          </div>
                         </td>
 
                         {/* 5. Ngày sinh */}
                         <td
                           className={cn(
-                            'break-words text-sm tabular-nums',
+                            'ui3-orders-wide break-words text-sm tabular-nums',
                             dobText === 'Chưa ghi nhận' ? 'text-fg-subtle' : 'text-fg-muted',
                           )}
                         >
@@ -1010,7 +1013,7 @@ export function OrdersTable({
                         </td>
 
                         {/* 6. Khoa */}
-                        <td className="break-words text-sm text-fg-muted" title={department || undefined}>
+                        <td className="ui3-orders-wide break-words text-sm text-fg-muted" title={department || undefined}>
                           {department || '—'}
                         </td>
 
@@ -1023,6 +1026,7 @@ export function OrdersTable({
                           title={diagnosis || undefined}
                         >
                           {diagnosis || 'Chưa ghi nhận'}
+                          <div className="ui3-orders-compact text-xs text-fg-muted">{department || '—'}</div>
                         </td>
 
                         {/* 8. Trạng thái */}

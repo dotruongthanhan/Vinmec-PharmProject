@@ -86,18 +86,18 @@ export function UnifiedOrderLinesTable({
   }
 
   return (
-    <DataTable>
+    <DataTable className="ui3-lines-table" wrapperClassName="ui3-lines-wrapper">
       <DataTableHeader>
         <tr>
-          <DataTableHead>Mã y lệnh</DataTableHead>
-          <DataTableHead>Tên thuốc</DataTableHead>
-          <DataTableHead>Liều</DataTableHead>
-          <DataTableHead>Tần suất</DataTableHead>
-          <DataTableHead>Đường dùng</DataTableHead>
-          <DataTableHead>Ngày kê</DataTableHead>
+          <DataTableHead className="ui3-lines-wide">Mã y lệnh</DataTableHead>
+          <DataTableHead className="ui3-drug-column"><span className="ui3-lines-heading-wide">Tên thuốc</span><span className="ui3-lines-heading-compact">Thuốc</span></DataTableHead>
+          <DataTableHead className="ui3-lines-wide">Liều</DataTableHead>
+          <DataTableHead className="ui3-lines-wide">Tần suất</DataTableHead>
+          <DataTableHead className="ui3-lines-wide">Đường dùng</DataTableHead>
+          <DataTableHead className="ui3-lines-wide">Ngày kê</DataTableHead>
           <DataTableHead>Trạng thái</DataTableHead>
           <DataTableHead>Bắt đầu, kết thúc</DataTableHead>
-          <DataTableHead>Lịch dùng</DataTableHead>
+          <DataTableHead className="ui3-schedule">Lịch dùng</DataTableHead>
         </tr>
       </DataTableHeader>
       <DataTableBody>
@@ -128,31 +128,33 @@ export function UnifiedOrderLinesTable({
                   isExpanded && 'ring-1 ring-inset ring-primary/40',
                 )}
               >
-                <DataTableCell className="whitespace-nowrap font-mono text-xs text-fg-muted">
+                <DataTableCell className="ui3-lines-wide whitespace-nowrap font-mono text-xs text-fg-muted">
                   {line.yLenhId}
                 </DataTableCell>
-                <DataTableCell className="min-w-40 font-semibold text-fg">
+                <DataTableCell className="ui3-drug-column break-words font-semibold text-fg">
                   <span className="inline-flex items-center gap-1.5">
                     {isExpanded ? (
                       <ChevronDown className="size-3.5 shrink-0 text-fg-muted" strokeWidth={2} aria-hidden="true" />
                     ) : (
                       <ChevronRight className="size-3.5 shrink-0 text-fg-muted" strokeWidth={2} aria-hidden="true" />
                     )}
-                    <span>{line.tenThuoc}</span>
+                    <span className="break-words">{line.tenThuoc}</span>
                   </span>
+                  <div className="ui3-lines-compact text-xs font-normal text-fg-muted">{[line.lieu, line.tanSuat, line.duongDung].join(' · ')}<br /><span className="ui3-code font-mono">{line.yLenhId}</span></div>
                 </DataTableCell>
-                <DataTableCell className="whitespace-nowrap">{line.lieu}</DataTableCell>
-                <DataTableCell className="whitespace-nowrap">{line.tanSuat}</DataTableCell>
-                <DataTableCell className="whitespace-nowrap">{line.duongDung}</DataTableCell>
-                <DataTableCell className="whitespace-nowrap text-xs tabular-nums">
+                <DataTableCell className="ui3-lines-wide break-words">{line.lieu}</DataTableCell>
+                <DataTableCell className="ui3-lines-wide break-words">{line.tanSuat}</DataTableCell>
+                <DataTableCell className="ui3-lines-wide break-words">{line.duongDung}</DataTableCell>
+                <DataTableCell className="ui3-lines-wide whitespace-nowrap text-xs tabular-nums">
                   {line.ngayKe}
                 </DataTableCell>
                 <DataTableCell className="whitespace-nowrap">
                   <Badge tone={STATUS_BADGE_TONE[line.trangThaiCode]} variant="soft">
                     {line.trangThaiLabel}
                   </Badge>
+                  <div className="ui3-lines-compact text-xs text-fg-muted">{line.ngayKe}</div>
                 </DataTableCell>
-                <DataTableCell className="whitespace-nowrap tabular-nums">
+                <DataTableCell className="break-words tabular-nums">
                   {line.batDauText || line.ketThucText ? (
                     <div className="flex flex-col text-xs leading-5">
                       <span>
@@ -168,9 +170,9 @@ export function UnifiedOrderLinesTable({
                     '—'
                   )}
                 </DataTableCell>
-                <DataTableCell className="min-w-36">
+                <DataTableCell className="ui3-schedule break-words">
                   {days.length > 0 ? (
-                    <div className="flex flex-col gap-1">
+                    <div className="ui3-schedule-content flex flex-col gap-1">
                       {days.map((day) => (
                         <div key={day.date} className="flex flex-wrap items-center gap-1 tabular-nums">
                           <span className="w-12 shrink-0 text-xs text-fg-subtle">
@@ -189,7 +191,7 @@ export function UnifiedOrderLinesTable({
                       ))}
                     </div>
                   ) : (
-                    <span className="text-xs text-fg-muted">
+                    <span className="ui3-schedule-content text-xs text-fg-muted">
                       {formatClinicalText(line.lichDungRaw || '—')}
                     </span>
                   )}
@@ -198,7 +200,8 @@ export function UnifiedOrderLinesTable({
 
               {isExpanded ? (
                 <tr className="border-b border-line bg-surface-muted/40">
-                  <td colSpan={9} className="p-4">
+                  {([['wide', 9], ['medium', 4], ['narrow', 3]] as const).map(([mode, span]) => <td key={mode} colSpan={span} className={`ui3-detail-${mode} p-0`}>
+                    <div className="ui3-expanded p-4">
                     <OrderLineExpandedPanel
                       caId={caId}
                       line={line}
@@ -216,7 +219,8 @@ export function UnifiedOrderLinesTable({
                       onAskAboutFinding={onAskAboutFinding}
                       onOpenFactorInReviewTab={onOpenFactorInReviewTab}
                     />
-                  </td>
+                    </div>
+                  </td>)}
                 </tr>
               ) : null}
             </Fragment>

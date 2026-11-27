@@ -85,6 +85,8 @@ export function OrderLineExpandedPanel({
     { label: 'Người kê', value: line.nguoiKe || MISSING },
   ]
 
+  metadataItems.push({ label: 'Lịch dùng', value: line.lichDungRaw || MISSING, wide: true })
+
   if (line.cachDung) {
     metadataItems.push({ label: 'Cách dùng', value: line.cachDung, wide: true })
   }
@@ -102,7 +104,7 @@ export function OrderLineExpandedPanel({
   }
 
   return (
-    <div className="flex flex-col gap-4 rounded-md border border-line bg-surface p-4 shadow-xs">
+    <div className="ui3-panel min-w-0 break-words flex flex-col gap-4 rounded-md border border-line bg-surface p-4 shadow-xs">
       <InfoRows items={metadataItems} />
 
       <div className="flex flex-col gap-2.5">
