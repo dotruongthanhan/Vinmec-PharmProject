@@ -43,7 +43,10 @@ def _sample() -> tuple[dict, dict[str, BoDuLieu], set[str]]:
 
 
 @pytest.mark.parametrize(
-    "case", json.loads(Path("tests/fixtures/minh_hoa/doan.json").read_text(encoding="utf-8"))
+    "case",
+    json.loads(
+        Path("web/src/features/minh-hoa/__tests__/fixtures/doan.json").read_text(encoding="utf-8")
+    ),
 )
 def test_doan_shared_cases(case: dict) -> None:
     dataset = BoDuLieu.model_validate(case["bo_du_lieu"])

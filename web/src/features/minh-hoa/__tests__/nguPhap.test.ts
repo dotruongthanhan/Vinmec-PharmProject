@@ -4,7 +4,7 @@ import type { BoDuLieu, DacTaMinhHoa, TepMauMinhHoa } from '../nguPhap'
 import meropenemJson from '../mau/lieu-meropenem-crcl.json'
 import tuongTacJson from '../mau/ma-tran-tuong-tac.json'
 import thongKeJson from '../mau/thong-ke-thang.json'
-import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
+import doanCases from './fixtures/doan.json'
 
 const MAU_MEROPENEM = meropenemJson as unknown as TepMauMinhHoa
 const MAU_TUONG_TAC = tuongTacJson as unknown as TepMauMinhHoa

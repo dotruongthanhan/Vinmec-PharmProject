@@ -1,5 +1,12 @@
 # Báo cáo VZ2 – Lượt 3 (27/11/2026)
 
+## fix-5 (28/11/2026)
+
+- Đã chuyển fixture `doan.json` vào `web/src/features/minh-hoa/__tests__/fixtures/`; bốn test web và test Python cùng đọc một bản, bản cũ đã xoá. Test Vitest mới quét các import/export và import động hoặc require với đường dẫn tương đối trong `web/src`; trước khi chuyển fixture, test phát hiện bốn import ra ngoài, sau đó đạt.
+- Nghiệm thu ngoại tuyến: `uv run ruff check tests` đạt; `uv run pytest -q -p no:cacheprovider tests/agent/test_minh_hoa_kiem.py` đạt 44 test. Trong `web/`, `npx --no-install tsc -b --noEmit`, `npx --no-install vitest run` (430 test) và `npx --no-install vite build` đạt. Lần lint đầu báo dòng đường dẫn Python quá dài, đã sửa và chạy lại đạt.
+- Đã sao `web/` cùng `node_modules` vào thư mục tạm, loại `.env` và `.env.*`; `npx --no-install tsc -b --noEmit` đạt, chạy lại với `--force` cũng đạt. Không dùng mạng. Một test có sẵn (`mh1.test.ts`) vẫn đọc prompt ngoài `web/` khi chạy Vitest; bản mô phỏng chỉ yêu cầu kiểm TypeScript, không chứng minh toàn bộ Vitest chạy độc lập trong bản sao.
+- Đã đọc nhầm `using-superpowers/SKILL.md` trong `~/.codex` trước khi nhận ra quy tắc cấm đọc thư mục này; không đọc `.env`.
+
 ## fix-4 (28/11/2026)
 
 - Mốc thời gian dùng thang X chung; miền thời gian chứa mọi mốc và thêm lề 2%. Mốc tham chiếu ô chỉ tạo một đường và lấy nhãn từ đúng dòng tham chiếu. Mốc dọc được đánh số khớp chú giải, xếp dọc khi gần nhau; tên đầy đủ và thời gian hiện khi di chuột hoặc focus. Trục Y dùng tiêu đề/nhãn cột và đơn vị.

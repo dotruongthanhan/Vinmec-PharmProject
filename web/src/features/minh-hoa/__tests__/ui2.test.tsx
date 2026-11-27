@@ -5,7 +5,7 @@ import { ClinicalMarkdown } from '@/components/ui/ClinicalMarkdown'
 import { BangDuLieuGoc, KhungMinhHoa } from '../KhungMinhHoa'
 import type { BoDuLieu } from '../nguPhap'
 import fixture from '../mau/khoi-that-demo02-da-chinh.json'
-import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
+import doanCases from './fixtures/doan.json'
 
 const block = fixture[0]
 const datasets = block.bo_du_lieu as BoDuLieu[]

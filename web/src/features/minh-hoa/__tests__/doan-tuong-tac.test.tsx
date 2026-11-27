@@ -1,7 +1,7 @@
 import { isValidElement } from 'react'
 import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import doanCases from '../../../../../tests/fixtures/minh_hoa/doan.json'
+import doanCases from './fixtures/doan.json'
 import type { BoDuLieu } from '../nguPhap'
 
 const hooks = vi.hoisted(() => {
