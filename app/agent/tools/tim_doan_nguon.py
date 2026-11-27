@@ -193,7 +193,9 @@ class TimDoanNguon(Tool):
     def _khong_co(ghi_chu: list[str]) -> KetQuaCongCu:
         return KetQuaCongCu(
             trang_thai="khong_co",
-            noi_dung="\n".join(ghi_chu[:_MAX_GHI_CHU]),
+            noi_dung="\n".join(
+                [*ghi_chu[:_MAX_GHI_CHU], "Có thể thử hoạt chất hoặc mục tài liệu khác."]
+            ),
             chi_tiet_tien_trinh="Không có đoạn nguồn",
         )
 

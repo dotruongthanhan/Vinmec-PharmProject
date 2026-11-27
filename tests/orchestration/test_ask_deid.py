@@ -121,9 +121,7 @@ def test_case_with_record_id_citation_in_prose_is_restored_to_real_id() -> None:
 
 def test_real_record_id_from_llm_is_rejected_because_only_temp_ids_were_sent() -> None:
     case = load_case(DEMO_DIR / "DEMO-02.json")
-    llm = FakeLLM(
-        [_answer("Creatinin 212 umol/L [1].", LAB), _answer("Creatinin 212 umol/L [1].", LAB)]
-    )
+    llm = FakeLLM([_answer("Creatinin 212 umol/L [1].", LAB)] * 3)
 
     result = _make_asker(llm).ask(case, "Creatinin của ca này?")
 

@@ -74,6 +74,10 @@ ERROR_MESSAGE = (
 NOT_READY_MESSAGE = (
     "Chức năng hỏi thêm chưa được nối với hệ thống. Bảng nhận định bên trái vẫn dùng được."
 )
+HONEST_FALLBACK_MESSAGE = (
+    "Mình chưa tìm thấy dữ liệu đủ chắc để trả lời câu này. "
+    "Dược sĩ có thể nói rõ hơn cần xem gì không?"
+)
 
 _ROOT = Path(__file__).resolve().parents[2]
 _MAX_SOURCE_GROUPS = 8
@@ -1052,6 +1056,168 @@ def _kiem_chung_tra_loi_noi_bo(
     )
 
 
+def tra_loi_trung_thuc(
+    *,
+    llm: LLMClient,
+    cau_hoi_che: str,
+    tom_tat_tool: str,
+    cong_cu_da_goi: list[str],
+    ma_ly_do: str,
+    kiem_chung_fn: Callable[[AskLLMOutput], AskResult],
+    han_chot: float,
+    chay_co_han: Callable[[Callable[[], object], float], object],
+    session: DeidSession,
+    trang_thai: Literal["khong_co_nguon", "ngoai_pham_vi"] = "khong_co_nguon",
+    con_luot: bool = True,
+) -> AskResult:
+    """Gọi tối đa một lượt, kiểm chứng và chỉ giữ câu an toàn."""
+
+    def scrub_preserving_tokens(text: str) -> str:
+        parts: list[str] = []
+        pos = 0
+        for match in _DEID_TOKEN_RE.finditer(text):
+            parts.append(session.scrub(text[pos : match.start()]))
+            parts.append(match.group())
+            pos = match.end()
+        parts.append(session.scrub(text[pos:]))
+        return "".join(parts)
+
+    ghi_buoc("bat_dau", "tra_loi_than_trong", ten="Trả lời thận trọng")
+    with span("node", "tra_loi_trung_thuc") as honest_span:
+
+        def fallback(so_cau_bi_loc: int = 0) -> AskResult:
+            honest_span.dat_thuoc_tinh(
+                ket_qua_tra_loi_trung_thuc="du_phong", so_cau_bi_loc=so_cau_bi_loc
+            )
+            ghi_buoc("xong", "tra_loi_than_trong", chi_tiet="dùng câu dự phòng")
+            return AskResult(
+                trang_thai=trang_thai,
+                noi_dung=HONEST_FALLBACK_MESSAGE,
+                cong_cu_da_goi=cong_cu_da_goi,
+            )
+
+        if not con_luot or time.monotonic() >= han_chot:
+            return fallback()
+        try:
+            version, prompt = load_prompt(_ROOT / "config/prompts/tra_loi_trung_thuc.v1.md")
+
+            def clean_input(value: str) -> str:
+                cleaned = _ZERO_WIDTH_RE.sub("", _sanitize_markers(scrub_preserving_tokens(value)))
+                return re.sub(r"<<<[^\n]*?(?:>>>|$)|[A-Z_]+>>>", "[đã bỏ ký hiệu]", cleaned)
+
+            safe_question = clean_input(cau_hoi_che)
+            safe_tools = clean_input(tom_tat_tool)
+            safe_names = ", ".join(re.sub(r"[^a-zA-Z0-9_]", "", x) for x in cong_cu_da_goi)
+            safe_reason = re.sub(r"[^a-z_]", "", ma_ly_do.lower())[:80]
+            messages = [
+                ChatMessage(role="system", content=prompt),
+                ChatMessage(
+                    role="user",
+                    content=f"Câu hỏi: {safe_question}\nCông cụ: {safe_names}\n"
+                    f"Kết quả: {safe_tools}\nMã lý do: {safe_reason}",
+                ),
+            ]
+
+            def call() -> object:
+                vet = vet_hien_tai.get()
+                old_level = vet.muc_noi_dung if vet is not None else None
+                if vet is not None:
+                    vet.muc_noi_dung = "sieu_du_lieu"
+                try:
+                    return goi_llm_co_vet(
+                        llm, messages, AskLLMOutput.model_json_schema(), phien_ban_prompt=version
+                    )
+                finally:
+                    if vet is not None and old_level is not None:
+                        vet.muc_noi_dung = old_level
+
+            raw = chay_co_han(call, han_chot)
+            output = AskLLMOutput.model_validate(raw)
+        except TimeoutError:
+            result = fallback()
+            ghi_buoc(
+                "loi", "tra_loi_than_trong", ly_do="Hết thời gian xử lý", goi_y=_ASK_RETRY_HINT
+            )
+            return result
+        except (ValidationError, DeidError):
+            return fallback()
+        except Exception:
+            honest_span.dat_trang_thai("loi")
+            ghi_buoc(
+                "loi",
+                "tra_loi_than_trong",
+                ly_do="Không soạn được câu trả lời",
+                goi_y=_ASK_RETRY_HINT,
+            )
+            return AskResult(
+                trang_thai="loi", noi_dung=ERROR_MESSAGE, cong_cu_da_goi=cong_cu_da_goi
+            )
+
+        # Kiểm cả nội dung từ chối bằng nhánh kiểm chứng thông thường.
+        output = output.model_copy(update={"pham_vi": "trong"})
+
+        def verify_candidate(candidate: AskLLMOutput) -> AskResult:
+            verified = kiem_chung_fn(candidate)
+            citation_ids = {citation.so for citation in candidate.trich_dan}
+            parts = re.split(r"(?<!\d)\.(?!\d)|(?<=\d)\.(?!\d)|\n+", candidate.tra_loi)
+            for part in parts:
+                if numbers_in_text(mask_citation_markers(part, citation_ids)) and not any(
+                    int(match.group(1)) in citation_ids for match in _CITATION_REF_RE.finditer(part)
+                ):
+                    raise AskVerificationError("so_khong_co_nguon")
+            return verified
+
+        try:
+            result = verify_candidate(output)
+            if (
+                result.noi_dung in (NO_SOURCE_MESSAGE, OUT_OF_SCOPE_MESSAGE)
+                or not output.tra_loi.strip()
+            ):
+                return fallback()
+            count = 0
+        except AskVerificationError as exc:
+            if "so_khong_co_nguon" not in str(exc):
+                return fallback()
+            parts = re.split(r"(?<!\d)\.(?!\d)|(?<=\d)\.(?!\d)|\n+", output.tra_loi)
+            kept: list[str] = []
+            count = 0
+            for part in parts:
+                if not part.strip():
+                    continue
+                try:
+                    candidate = output.model_copy(update={"tra_loi": part.strip()})
+                    verify_candidate(candidate)
+                    kept.append(part.strip())
+                except AskVerificationError as part_exc:
+                    if "so_khong_co_nguon" not in str(part_exc):
+                        return fallback()
+                    count += 1
+            if not kept:
+                return fallback(count)
+            try:
+                result = verify_candidate(output.model_copy(update={"tra_loi": ". ".join(kept)}))
+            except AskVerificationError:
+                return fallback()
+        try:
+            content = scrub_preserving_tokens(result.noi_dung)
+            content = _DEID_TOKEN_RE.sub("[đã che]", content)
+        except DeidError:
+            return fallback()
+        if count:
+            content += "\n(Đã lọc phần chưa kiểm chứng được.)"
+        honest_span.dat_thuoc_tinh(
+            ket_qua_tra_loi_trung_thuc="loc" if count else "dat", so_cau_bi_loc=count
+        )
+        ghi_buoc(
+            "xong",
+            "tra_loi_than_trong",
+            chi_tiet=f"đã lược {count} câu chưa kiểm chứng được" if count else None,
+        )
+        return result.model_copy(
+            update={"trang_thai": trang_thai, "noi_dung": content, "cong_cu_da_goi": cong_cu_da_goi}
+        )
+
+
 class CaseAsker:
     """Xử lý câu hỏi của dược sĩ về ca bệnh đang mở qua che định danh, RAG và kiểm chứng."""
 
@@ -1338,6 +1504,15 @@ class CaseAsker:
         def _elapsed() -> int:
             return int((time.perf_counter() - perf_start) * 1000.0)
 
+        if _has_injection_directive(cleaned_question):
+            with span("chan_dau_vao", "kiem_tra_chen_lenh", nguon_kiem_tra="cau_hoi") as guard:
+                guard.dat_trang_thai("tu_choi")
+                guard.dat_thuoc_tinh(bi_chan=True)
+                ghi_su_kien_bao_mat("chen_lenh_dau_vao", nguon="chan_dau_vao")
+            return AskResult(
+                trang_thai="ngoai_pham_vi", noi_dung=OUT_OF_SCOPE_MESSAGE, thoi_gian_ms=_elapsed()
+            )
+
         ghi_buoc("bat_dau", "chuan_bi", ten="Đọc hồ sơ ca và chạy bộ luật")
         with span("che_pii", "che_dinh_danh") as pii_span:
             try:
@@ -1454,6 +1629,39 @@ class CaseAsker:
             previous_error = "Không có."
             llm = self._llm
             assert llm is not None
+
+            def honest(
+                reason: str, status: Literal["khong_co_nguon", "ngoai_pham_vi"] = "khong_co_nguon"
+            ) -> AskResult:
+                def verify(output: AskLLMOutput) -> AskResult:
+                    return self._verify_and_build_reply(
+                        ca=ca,
+                        ket_qua=active_result,
+                        cleaned_question=cleaned_question,
+                        output=output,
+                        allowed_record_ids=allowed_record_ids,
+                        allowed_calc_ids=allowed_calc_ids,
+                        allowed_numbers=allowed_numbers,
+                        chunk_by_id=chunk_by_id,
+                        anh_xa=anh_xa,
+                        ids=ids,
+                        tools_called=tools_called,
+                        perf_start=perf_start,
+                    )
+
+                return tra_loi_trung_thuc(
+                    llm=llm,
+                    cau_hoi_che=scrubbed_question,
+                    tom_tat_tool=van_ban_ca + "\n" + doan_nguon_text,
+                    cong_cu_da_goi=tools_called,
+                    ma_ly_do=reason,
+                    kiem_chung_fn=verify,
+                    han_chot=deadline,
+                    chay_co_han=self._run_with_deadline,
+                    session=session,
+                    trang_thai=status,
+                )
+
             for attempt in range(2):
                 llm_step = "goi_mo_hinh" if attempt == 0 else f"goi_mo_hinh_{attempt + 1}"
                 verify_step = "kiem_chung" if attempt == 0 else f"kiem_chung_{attempt + 1}"
@@ -1533,13 +1741,14 @@ class CaseAsker:
                     )
                 except _AskVerificationError as exc:
                     if attempt == 1:
-                        ghi_buoc("xong", verify_step, chi_tiet="Không đủ căn cứ")
-                        return AskResult(
-                            trang_thai="khong_co_nguon",
-                            noi_dung=NO_SOURCE_MESSAGE,
-                            cong_cu_da_goi=tools_called,
-                            thoi_gian_ms=_elapsed(),
+                        ghi_buoc(
+                            "xong",
+                            verify_step,
+                            chi_tiet=(
+                                "Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng"
+                            ),
                         )
+                        return honest("truot_kiem_chung")
                     ghi_buoc("xong", verify_step, chi_tiet="Không đạt, thử lại")
                     previous_error = (
                         "Câu trả lời trước không qua kiểm chứng: "
@@ -1548,6 +1757,32 @@ class CaseAsker:
                         "Không chỉ xoá riêng câu hay trích dẫn hỏng; không bịa mã hoặc con số."
                     )
                 else:
+                    if verified.trang_thai in ("khong_co_nguon", "ngoai_pham_vi"):
+                        if _output_attempts_override(parsed_output.tra_loi, active_result):
+                            ghi_buoc("xong", verify_step, chi_tiet="Ngoài phạm vi hỗ trợ")
+                            return verified
+                        ghi_buoc(
+                            "xong",
+                            verify_step,
+                            chi_tiet=(
+                                "Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng"
+                            ),
+                        )
+                        return honest(
+                            "ngoai_pham_vi"
+                            if verified.trang_thai == "ngoai_pham_vi"
+                            else "khong_co_nguon",
+                            verified.trang_thai,
+                        )
+                    if used_retrieval and not selected_chunks and not parsed_output.trich_dan:
+                        ghi_buoc(
+                            "xong",
+                            verify_step,
+                            chi_tiet=(
+                                "Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng"
+                            ),
+                        )
+                        return honest("khong_co_nguon")
                     if verified.trang_thai == "ok":
                         ghi_buoc("xong", verify_step, chi_tiet="Đạt")
                     elif verified.trang_thai == "ngoai_pham_vi":
@@ -1787,7 +2022,9 @@ class CaseAsker:
 
         selected_chunks: list[Chunk] = []
         kb_ids = self._extract_question_drugs(scrubbed_question)
+        searched = False
         if self._retriever is not None and kb_ids:
+            searched = True
             base_q = _DEID_TOKEN_RE.sub(" ", scrubbed_question).strip()
             retrieval_query = RetrievalQuery(
                 van_ban=[base_q or " ".join(kb_ids)],
@@ -1858,6 +2095,93 @@ class CaseAsker:
             ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình", ten="Soạn câu trả lời")
             llm = self._llm
             assert llm is not None
+
+            def verify_honest_global(output: AskLLMOutput) -> AskResult:
+                if not output.tra_loi.strip():
+                    raise AskVerificationError("empty_answer")
+                if _has_injection_directive(output.tra_loi) or any(
+                    pattern.search(output.tra_loi) for pattern in _OVERRIDE_OUTPUT_PATTERNS
+                ):
+                    raise AskVerificationError("output_directive")
+                citations: list[AskCitation] = []
+                cited_chunks: list[Chunk] = []
+                seen: set[int] = set()
+                allowed: list[float] = []
+                for item in output.trich_dan:
+                    if item.so <= 0 or item.so in seen:
+                        raise AskVerificationError("invalid_citation_number")
+                    seen.add(item.so)
+                    if item.loai == "tai_lieu":
+                        chunk = chunk_by_id.get(item.ma)
+                        if (
+                            chunk is None
+                            or not item.trich_nguyen_van
+                            or not quote_matches_source(item.trich_nguyen_van, chunk.noi_dung_goc)
+                        ):
+                            raise AskVerificationError("invalid_source")
+                        cited_chunks.append(chunk)
+                        allowed.extend(
+                            numbers_in_text(
+                                chunk.noi_dung_goc, include_en_thousands=chunk.ngon_ngu == "en"
+                            )
+                        )
+                        citations.append(
+                            AskCitation(
+                                so=item.so,
+                                loai_ma="tai_lieu",
+                                nhan=_source_label(chunk.nguon),
+                                doan_trich_id=chunk.doan_trich_id,
+                                trich_nguyen_van=item.trich_nguyen_van,
+                            )
+                        )
+                    elif (
+                        item.loai == "du_lieu_ca"
+                        and item.ma in anh_xa
+                        and any(item.ma in line for line in van_ban_ca.splitlines())
+                    ):
+                        for line in van_ban_ca.splitlines():
+                            if item.ma in line:
+                                allowed.extend(numbers_in_text(line))
+                        citations.append(
+                            AskCitation(
+                                so=item.so,
+                                loai_ma="du_lieu",
+                                nhan="Dữ liệu tổng quan",
+                                ban_ghi_id=item.ma,
+                            )
+                        )
+                    else:
+                        raise AskVerificationError("invalid_source")
+                refs = {int(match.group(1)) for match in _CITATION_REF_RE.finditer(output.tra_loi)}
+                if not refs.issubset(seen):
+                    raise AskVerificationError("unknown_markers")
+                errors = unverified_numbers([mask_citation_markers(output.tra_loi, seen)], allowed)
+                if errors:
+                    raise AskVerificationError("; ".join(errors))
+                return AskResult(
+                    trang_thai="ok",
+                    noi_dung=output.tra_loi,
+                    trich_dan=citations,
+                    doan=cited_chunks,
+                    cong_cu_da_goi=tools_called,
+                )
+
+            def honest_global(
+                reason: str, status: Literal["khong_co_nguon", "ngoai_pham_vi"] = "khong_co_nguon"
+            ) -> AskResult:
+                return tra_loi_trung_thuc(
+                    llm=llm,
+                    cau_hoi_che=scrubbed_question,
+                    tom_tat_tool=van_ban_ca + "\n" + doan_nguon_text,
+                    cong_cu_da_goi=tools_called,
+                    ma_ly_do=reason,
+                    kiem_chung_fn=verify_honest_global,
+                    han_chot=deadline,
+                    chay_co_han=self._run_with_deadline,
+                    session=session,
+                    trang_thai=status,
+                )
+
             raw = self._run_with_deadline(
                 lambda msgs=messages, pv=prompt_version: goi_llm_co_vet(
                     llm,
@@ -1873,6 +2197,15 @@ class CaseAsker:
             ghi_buoc("bat_dau", "kiem_chung", ten="Kiểm chứng trích dẫn và số liệu")
             with span("kiem_chung", "kiem_chung_tra_loi_chung") as kc_span:
                 reply_text = parsed.tra_loi.strip()
+                if parsed.pham_vi == "ngoai":
+                    ghi_buoc(
+                        "xong",
+                        "kiem_chung",
+                        chi_tiet=(
+                            "Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng"
+                        ),
+                    )
+                    return honest_global("ngoai_pham_vi", "ngoai_pham_vi")
                 if not reply_text:
                     kc_span.dat_trang_thai("tu_choi")
                     kc_span.dat_thuoc_tinh(
@@ -1885,13 +2218,23 @@ class CaseAsker:
                     vet = vet_hien_tai.get()
                     if vet is not None:
                         vet.tang_so_bi_chan()
-                    ghi_buoc("xong", "kiem_chung", chi_tiet="Không đủ căn cứ")
-                    return AskResult(
-                        trang_thai="khong_co_nguon",
-                        noi_dung=NO_SOURCE_MESSAGE,
-                        cong_cu_da_goi=tools_called,
-                        thoi_gian_ms=_elapsed(),
+                    ghi_buoc(
+                        "xong",
+                        "kiem_chung",
+                        chi_tiet=(
+                            "Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng"
+                        ),
                     )
+                    return honest_global("empty_answer")
+                if searched and not selected_chunks and not parsed.trich_dan:
+                    ghi_buoc(
+                        "xong",
+                        "kiem_chung",
+                        chi_tiet=(
+                            "Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng"
+                        ),
+                    )
+                    return honest_global("khong_co_nguon")
                 citations: list[AskCitation] = []
                 cited_chunks: list[Chunk] = []
                 seen_so: set[int] = set()

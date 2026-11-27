@@ -467,7 +467,7 @@ def _milestone_rows(ca: CaBenh) -> list[Dong]:
 
 def _summary(part: str, rows: list[Dong]) -> str:
     if not rows:
-        return f"{part}: thiếu dữ liệu."
+        return f"Đã xem {part}: ca chưa có dữ liệu này; có thể xem phần dữ liệu khác của ca."
     if part in {"xet_nghiem", "sinh_hieu"}:
         key = "ma_xet_nghiem" if part == "xet_nghiem" else "loai"
         grouped: dict[str, list[Dong]] = defaultdict(list)

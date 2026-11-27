@@ -774,7 +774,10 @@ class TraThuoc(Tool):
         if trang_thai_pg == "khong_thay":
             return KetQuaCongCu(
                 trang_thai="khong_co",
-                noi_dung="Không tìm thấy trong danh mục.",
+                noi_dung=(
+                    f"Đã tra tên thuốc {_cat(tham_so.ten, 100)} nhưng không tìm thấy trong "
+                    "danh mục; có thể thử tên hoạt chất hoặc tên thuốc khác."
+                ),
                 chi_tiet_tien_trinh="0 hoạt chất",
             )
         if trang_thai_pg == "mo_ho":

@@ -409,7 +409,7 @@ export class MockClient implements ReviewApiClient {
 
     return {
       trang_thai: 'khong_co_nguon',
-      noi_dung: 'Không tìm thấy căn cứ trong kho nguồn hiện có cho câu hỏi này trên ca đang mở.',
+      noi_dung: 'Mình đã xem dữ liệu ca và tra cứu kho nguồn, nhưng chưa tìm được thông tin đủ để kết luận. Dược sĩ có thể nói rõ hơn nội dung cần xem không?',
       trich_dan: [],
       cong_cu_da_goi: ['du_lieu_ca', 'truy_xuat'],
       thoi_gian_ms: elapsed || 1500,

@@ -17,9 +17,8 @@ from app.llm.schema import KetQuaLLM, NhanDinhCuoi, NhanDinhDeXuat, TrichDanNguo
 from app.orchestration.ai_review import AiRunResult
 from app.orchestration.ask import (
     ERROR_MESSAGE,
-    NO_SOURCE_MESSAGE,
+    HONEST_FALLBACK_MESSAGE,
     NOT_READY_MESSAGE,
-    OUT_OF_SCOPE_MESSAGE,
     CaseAsker,
     _has_injection_directive,
 )
@@ -37,7 +36,12 @@ def test_ask_logs_rejection_without_question_or_identifiers(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     case = load_case(ROOT / "data/mock/demo/DEMO-02.json")
-    llm = FakeLLM([{"pham_vi": "trong", "tra_loi": "", "trich_dan": []}])
+    llm = FakeLLM(
+        [
+            {"pham_vi": "trong", "tra_loi": "", "trich_dan": []},
+            {"pham_vi": "trong", "tra_loi": "Chưa xác nhận được liều.", "trich_dan": []},
+        ]
+    )
     with caplog.at_level("INFO", logger="app.orchestration.ask"):
         result = _make_asker(llm).ask(case, "SĐT 0912 345 678 hỏi về liều thuốc?")
     assert result.trang_thai == "khong_co_nguon"
@@ -190,11 +194,11 @@ def test_ask_rejects_unknown_chunk_id_non_substring_quote_and_fabricated_number(
                 ],
             }
         ]
-        * 2
+        * 3
     )
     res_unknown = _make_asker(unknown_chunk, retriever).ask(case, "Liều thế nào?")
     assert res_unknown.trang_thai == "khong_co_nguon"
-    assert res_unknown.noi_dung == NO_SOURCE_MESSAGE
+    assert res_unknown.noi_dung == HONEST_FALLBACK_MESSAGE
     assert res_unknown.trich_dan == []
 
     bad_quote = FakeLLM(
@@ -212,11 +216,11 @@ def test_ask_rejects_unknown_chunk_id_non_substring_quote_and_fabricated_number(
                 ],
             }
         ]
-        * 2
+        * 3
     )
     res_bad_quote = _make_asker(bad_quote, retriever).ask(case, "Liều thế nào?")
     assert res_bad_quote.trang_thai == "khong_co_nguon"
-    assert res_bad_quote.noi_dung == NO_SOURCE_MESSAGE
+    assert res_bad_quote.noi_dung == HONEST_FALLBACK_MESSAGE
 
     fabricated_number = FakeLLM(
         [
@@ -235,13 +239,18 @@ def test_ask_rejects_unknown_chunk_id_non_substring_quote_and_fabricated_number(
                 ],
             }
         ]
-        * 2
+        * 3
     )
     res_number = _make_asker(fabricated_number, retriever).ask(case, "Liều bao nhiêu?")
     assert res_number.trang_thai == "khong_co_nguon"
-    assert res_number.noi_dung == NO_SOURCE_MESSAGE
+    assert res_number.noi_dung == HONEST_FALLBACK_MESSAGE
 
-    no_citation = FakeLLM([{"pham_vi": "trong", "tra_loi": "Cần chỉnh liều.", "trich_dan": []}])
+    no_citation = FakeLLM(
+        [
+            {"pham_vi": "trong", "tra_loi": "Cần chỉnh liều.", "trich_dan": []},
+            {"pham_vi": "trong", "tra_loi": "Chưa xác nhận được liều.", "trich_dan": []},
+        ]
+    )
     assert _make_asker(no_citation, retriever).ask(case, "Liều?").trang_thai == "khong_co_nguon"
 
 
@@ -251,10 +260,15 @@ def test_ask_handles_out_of_scope_and_prompt_injection_without_changing_findings
     rule_result = run_case(case, container.renal_rules)
     before_dump = rule_result.model_dump()
 
-    out_llm = FakeLLM([{"pham_vi": "ngoai", "tra_loi": "", "trich_dan": []}])
+    out_llm = FakeLLM(
+        [
+            {"pham_vi": "ngoai", "tra_loi": "", "trich_dan": []},
+            {"pham_vi": "trong", "tra_loi": "Tôi có thể hỗ trợ xem y lệnh.", "trich_dan": []},
+        ]
+    )
     res_out = _make_asker(out_llm).ask(case, "Thời tiết hôm nay thế nào?", ket_qua=rule_result)
     assert res_out.trang_thai == "ngoai_pham_vi"
-    assert res_out.noi_dung == OUT_OF_SCOPE_MESSAGE
+    assert res_out.noi_dung == "Tôi có thể hỗ trợ xem y lệnh."
 
     hijacked_llm = FakeLLM(
         [
@@ -518,7 +532,12 @@ def test_ask_distinguishes_missing_clinical_evidence_from_scope(
     question: str, expected: str
 ) -> None:
     case = load_case(ROOT / "data/mock/demo/DEMO-02.json")
-    llm = FakeLLM([{"pham_vi": "ngoai", "tra_loi": "", "trich_dan": []}])
+    llm = FakeLLM(
+        [
+            {"pham_vi": "ngoai", "tra_loi": "", "trich_dan": []},
+            {"pham_vi": "trong", "tra_loi": "Tôi có thể hỗ trợ xem y lệnh.", "trich_dan": []},
+        ]
+    )
     result = _make_asker(llm).ask(case, question)
     assert result.trang_thai == expected
     assert result.trich_dan == []
@@ -559,15 +578,15 @@ def test_ask_retries_entire_answer_once_with_specific_verification_error(
     with caplog.at_level("INFO", logger="app.orchestration.ask"):
         result = _make_asker(llm, retriever).ask(case, "Vì sao cần xem lại liều meropenem?")
     assert result.trang_thai == ("ok" if repair else "khong_co_nguon")
-    assert len(llm.calls) == 2
+    assert len(llm.calls) == (2 if repair else 3)
     assert error in llm.calls[1]["messages"][1].content
     assert error in caplog.text
     if repair:
         assert len(result.trich_dan) == 2
         assert result.noi_dung == good["tra_loi"]
     else:
-        assert result.trich_dan == []
-        assert result.noi_dung == NO_SOURCE_MESSAGE
+        assert len(result.trich_dan) == 2
+        assert result.noi_dung == good["tra_loi"]
 
 
 def test_ask_retries_unknown_deid_token_id_without_deid_error() -> None:

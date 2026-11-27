@@ -1,8 +1,15 @@
 """Kiểm thử tách và đối chiếu con số ở app/verify/number.py."""
 
+import pytest
+
 from app.core.types import Chunk
 from app.llm.schema import GoiCanCu, NhanDinhDeXuat, TrichDanNguon
-from app.verify.number import check_numbers, extract_numbers
+from app.verify.number import (
+    check_numbers,
+    extract_numbers,
+    mask_citation_markers,
+    unverified_numbers,
+)
 
 
 def _chunk(chunk_id: str, text: str) -> Chunk:
@@ -51,6 +58,30 @@ def test_extract_numbers_handles_thousand_grouping_only_with_counting_unit() -> 
         1000000.0,
     ]
     assert extract_numbers("Giá trị 1.000 và CrCl 15.999 mL/phút") == [1.0, 15.999]
+
+
+@pytest.mark.parametrize(
+    "unit",
+    [
+        "/1,73 m²",
+        "/1.73 m²",
+        "/1,73m²",
+        "/1.73m2",
+        "/1.73 m^2",
+        "mL/phút/1,73 m²",
+        "mL/min / 1.73 m^2",
+    ],
+)
+def test_normalized_surface_area_unit_does_not_require_source(unit: str) -> None:
+    reply = mask_citation_markers(f"eGFR 45 {unit} [1]", {1})
+    assert unverified_numbers([reply], [45.0]) == []
+    assert unverified_numbers([reply], []) == ["so_khong_co_nguon:45"]
+
+
+def test_surface_area_without_slash_still_requires_source() -> None:
+    assert unverified_numbers(["BSA 1,73 m²"], []) == ["so_khong_co_nguon:1.73"]
+    assert unverified_numbers(["/1,74 m²"], []) == ["so_khong_co_nguon:1.74"]
+    assert unverified_numbers(["/1,73 mg"], []) == ["so_khong_co_nguon:1.73"]
 
 
 def test_check_numbers_allows_case_and_cited_chunk_and_flags_fabricated() -> None:

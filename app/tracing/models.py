@@ -38,6 +38,8 @@ KHOA_THUOC_TINH_CHO_PHEP: dict[LoaiSpan, frozenset[str]] = {
             "ly_do_du_phong",
             "loai_ngoai_le",
             "buoc_tra_loi_chu",
+            "ket_qua_tra_loi_trung_thuc",
+            "so_cau_bi_loc",
         }
     ),
     "llm": frozenset(
