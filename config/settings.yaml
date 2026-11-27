@@ -83,6 +83,7 @@ ask:
   tool_policy: "config/tool_policy.yaml"
 
 tracer:
+  dich: ["jsonl", "db"]             # bảng nghiep_vu.vet_* đã tạo trên RDS 27/11 (TR2a)
   bat: true
   muc_noi_dung: "sieu_du_lieu"      # sieu_du_lieu | noi_dung_da_che | day_du (cấm day_du ở production)
   so_ngay_luu: 30                   # ngày lưu vết JSONL theo giờ Việt Nam

@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from threading import Event, Lock, Thread
+from typing import Protocol
 
 from app.db.timezone import VN_TZ
 from app.tracing.models import MAX_TRACE_BYTES, VetChay
@@ -22,6 +23,16 @@ _TRACE_FILENAME_RE = re.compile(r"vet-(\d{4}-\d{2}-\d{2})\.jsonl", re.ASCII)
 DEFAULT_QUEUE_SIZE = 1000
 DEFAULT_MAX_FILE_BYTES = 200 * 1024 * 1024
 DEFAULT_TRACE_DIR = _ROOT / "data/runtime/vet"
+
+
+class TraceSink(Protocol):
+    """Giao diện chung cho đích ghi vết."""
+
+    def gui(self, vet: VetChay) -> bool: ...
+
+    def flush(self, timeout: float = 2.0) -> bool: ...
+
+    def close(self, timeout: float = 2.0) -> None: ...
 
 
 def vn_now() -> datetime:

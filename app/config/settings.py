@@ -332,6 +332,7 @@ class TracerSettings(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
 
     bat: bool = True
+    dich: list[Literal["jsonl", "db"]] = Field(default_factory=lambda: ["jsonl"])
     muc_noi_dung: Literal["sieu_du_lieu", "noi_dung_da_che", "day_du"] = "sieu_du_lieu"
     so_ngay_luu: int = Field(default=30, gt=0)
     thu_muc: str = "data/runtime/vet"

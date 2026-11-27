@@ -197,3 +197,15 @@ CREATE POLICY bvienx_app_them ON nghiep_vu.ket_qua_nhan_dinh
 -- Bước tiếp theo trong psql (chủ kho tự nhập mật khẩu, không lưu vào git):
 --   \password bvienx_app
 --   \password bvienx_loader
+
+-- Chỉ cấp quyền ghi vết sau khi chủ kho đã tạo từng bảng.
+DO $$
+BEGIN
+    IF to_regclass('nghiep_vu.vet_chay') IS NOT NULL THEN
+        GRANT INSERT, SELECT, DELETE ON TABLE nghiep_vu.vet_chay TO bvienx_app;
+    END IF;
+    IF to_regclass('nghiep_vu.vet_buoc') IS NOT NULL THEN
+        GRANT INSERT, SELECT, DELETE ON TABLE nghiep_vu.vet_buoc TO bvienx_app;
+    END IF;
+END
+$$;

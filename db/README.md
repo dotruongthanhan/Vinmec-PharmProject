@@ -165,3 +165,8 @@ cosine; cột `tu_khoa` sinh từ nguyên văn bằng cấu hình `simple`, có 
 Chênh lệch với ERD, lựa chọn theo nguồn và kết quả nghiệm thu thực tế nằm
 trong [báo cáo T14](bao-cao-T14.md).
 
+
+## Bảng vết (TR2a)
+
+Chủ kho tự chạy `psql -f db/vet.sql`, sau đó chạy lại `db/roles.sql`
+để cấp quyền cho ứng dụng. Agent không chạy các lệnh này.

@@ -92,7 +92,9 @@ class Container:
         if tracer_settings.bat:
             current = lay_tracer_mac_dinh()
             if current is None or not current.bat or current.settings != tracer_settings:
-                return khoi_tao_tracer(tracer_settings, auto_cleanup=True)
+                return khoi_tao_tracer(
+                    tracer_settings, auto_cleanup=True, app_settings=self.settings
+                )
             return current
         return Tracer(tracer_settings, auto_cleanup=False)
 

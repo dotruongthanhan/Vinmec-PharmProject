@@ -7,16 +7,22 @@ import copy
 import logging
 import time
 import uuid
+import weakref
 from collections.abc import Callable, Mapping
 from contextvars import ContextVar, Token
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from threading import Lock, RLock
+from threading import Event, Lock, RLock, Thread
 from types import TracebackType
 from typing import Any, Literal
 
-from app.config.settings import TracerSettings, assert_tracer_settings_allowed
+from app.config.settings import (
+    Settings,
+    TracerSettings,
+    assert_tracer_settings_allowed,
+    load_settings,
+)
 from app.deid.session import DeidSession
 from app.tracing.models import (
     MAX_SPAN_NAME_CHARS,
@@ -35,7 +41,8 @@ from app.tracing.sanitize import (
     loc_thuoc_tinh,
     tinh_chi_phi_uoc_tinh,
 )
-from app.tracing.sink import JsonlTraceSink, don_vet_qua_han, vn_now
+from app.tracing.sink import JsonlTraceSink, TraceSink, don_vet_qua_han, vn_now
+from app.tracing.sink_db import PostgresTraceSink
 
 _LOGGER = logging.getLogger(__name__)
 _ROOT = Path(__file__).resolve().parents[2]
@@ -48,6 +55,49 @@ _DEFAULT_LOCK = Lock()
 _DEFAULT_TRACER: Tracer | None = None
 _CLEANED_DIRS: set[Path] = set()
 _UNSET = object()
+_CLEANUP_LOCK = Lock()
+_CLEANUP_WAKE = Event()
+_CLEANUP_JOBS: weakref.WeakKeyDictionary[Tracer, float] = weakref.WeakKeyDictionary()
+_CLEANUP_THREAD: Thread | None = None
+
+
+def _cleanup_worker() -> None:
+    """Một bộ hẹn giờ dùng chung cho các tracer trong tiến trình."""
+    global _CLEANUP_THREAD
+    while True:
+        with _CLEANUP_LOCK:
+            if not _CLEANUP_JOBS:
+                _CLEANUP_THREAD = None
+                return
+            now = time.monotonic()
+            due = [tracer for tracer, when in _CLEANUP_JOBS.items() if when <= now]
+            for tracer in due:
+                _CLEANUP_JOBS[tracer] = now + 24 * 60 * 60
+            wait = max(0.0, min(_CLEANUP_JOBS.values()) - now)
+            _CLEANUP_WAKE.clear()
+        for tracer in due:
+            tracer._cleanup_once()
+        if due:
+            del tracer
+        del due
+        _CLEANUP_WAKE.wait(wait)
+
+
+def _register_cleanup(tracer: Tracer) -> None:
+    global _CLEANUP_THREAD
+    with _CLEANUP_LOCK:
+        _CLEANUP_JOBS[tracer] = 0.0
+        if _CLEANUP_THREAD is None:
+            _CLEANUP_THREAD = Thread(target=_cleanup_worker, name="tracer-cleanup", daemon=True)
+            _CLEANUP_THREAD.start()
+        _CLEANUP_WAKE.set()
+
+
+def _unregister_cleanup(tracer: Tracer) -> Thread | None:
+    with _CLEANUP_LOCK:
+        _CLEANUP_JOBS.pop(tracer, None)
+        _CLEANUP_WAKE.set()
+        return _CLEANUP_THREAD if not _CLEANUP_JOBS else None
 
 
 def _resolve_dir(raw_path: str) -> Path:
@@ -561,6 +611,7 @@ class Tracer:
         sink: JsonlTraceSink | None = None,
         dong_ho: Callable[[], datetime] = vn_now,
         auto_cleanup: bool = False,
+        app_settings: Settings | None = None,
     ) -> None:
         resolved = settings if settings is not None else TracerSettings()
         assert_tracer_settings_allowed(resolved)
@@ -568,20 +619,49 @@ class Tracer:
         self._dong_ho = dong_ho
         self._lock = Lock()
         self._so_khoa_la_bi_bo = 0
-        self._sink: JsonlTraceSink | None
+        self._sink: JsonlTraceSink | None = None
+        self._db_sink: PostgresTraceSink | None = None
+        self._sinks: list[TraceSink] = []
+        self._auto_cleanup = auto_cleanup and resolved.bat
         if sink is not None:
             self._sink = sink
+            self._sinks.append(sink)
         elif resolved.bat:
-            self._sink = JsonlTraceSink(
-                _resolve_dir(resolved.thu_muc),
-                hang_doi_toi_da=resolved.hang_doi_toi_da,
-                kich_thuoc_tep_toi_da=resolved.kich_thuoc_tep_mb * 1024 * 1024,
-                dong_ho=dong_ho,
+            if "jsonl" in resolved.dich:
+                self._sink = JsonlTraceSink(
+                    _resolve_dir(resolved.thu_muc),
+                    hang_doi_toi_da=resolved.hang_doi_toi_da,
+                    kich_thuoc_tep_toi_da=resolved.kich_thuoc_tep_mb * 1024 * 1024,
+                    dong_ho=dong_ho,
+                )
+                self._sinks.append(self._sink)
+            if "db" in resolved.dich:
+                config = app_settings or load_settings()
+                self._db_sink = PostgresTraceSink(
+                    url_env=config.database.url_env,
+                    hang_doi_toi_da=resolved.hang_doi_toi_da,
+                    thoi_han_ket_noi_giay=config.db.thoi_han_ket_noi_giay,
+                    cau_dao_giay=config.db.cau_dao_giay,
+                )
+                self._sinks.append(self._db_sink)
+        if self._auto_cleanup:
+            _register_cleanup(self)
+
+    def _cleanup_once(self) -> None:
+        """Dọn cả hai đích mà không làm lỗi lượt chạy."""
+        try:
+            don_vet_qua_han(
+                self._settings.so_ngay_luu,
+                thu_muc=_resolve_dir(self._settings.thu_muc),
+                dong_ho=self._dong_ho,
             )
-        else:
-            self._sink = None
-        if auto_cleanup and resolved.bat:
-            self.don_qua_han_mot_lan()
+        except Exception as exc:
+            _LOGGER.warning("Không dọn được vết JSONL (%s).", type(exc).__name__)
+        if self._db_sink is not None:
+            try:
+                self._db_sink.don_qua_han(self._settings.so_ngay_luu, dong_ho=self._dong_ho)
+            except Exception as exc:
+                _LOGGER.warning("Không dọn được vết DB (%s).", type(exc).__name__)
 
     @property
     def settings(self) -> TracerSettings:
@@ -591,7 +671,7 @@ class Tracer:
     @property
     def bat(self) -> bool:
         """Cờ bật/tắt ghi vết."""
-        return self._settings.bat and self._sink is not None
+        return self._settings.bat and bool(self._sinks)
 
     @property
     def dong_ho(self) -> Callable[[], datetime]:
@@ -620,9 +700,8 @@ class Tracer:
 
     def gui_vet(self, vet: VetChay) -> bool:
         """Đưa bản ghi vết vào đích ghi JSONL."""
-        if self._sink is None:
-            return False
-        return self._sink.gui(vet)
+        results = [sink.gui(vet) for sink in self._sinks]
+        return any(results)
 
     def don_qua_han_mot_lan(self) -> int:
         """Dọn tệp vết quá hạn đúng một lần cho mỗi thư mục trong tiến trình."""
@@ -664,14 +743,20 @@ class Tracer:
 
     def flush(self, timeout: float = 2.0) -> bool:
         """Chờ luồng nền ghi xong mọi vết đang trong hàng đợi."""
-        if self._sink is None:
-            return True
-        return self._sink.flush(timeout=timeout)
+        deadline = time.monotonic() + timeout
+        results = [
+            sink.flush(timeout=max(0.0, deadline - time.monotonic())) for sink in self._sinks
+        ]
+        return all(results)
 
-    def close(self, timeout: float = 2.0) -> None:
-        """Xả hàng đợi và dừng luồng nền của đích ghi."""
-        if self._sink is not None:
-            self._sink.close(timeout=timeout)
+    def close(self, timeout: float = 3.0) -> None:
+        """Dừng bộ dọn và xả các đích trong thời gian giới hạn."""
+        deadline = time.monotonic() + min(timeout, 3.0)
+        cleanup_thread = _unregister_cleanup(self) if self._auto_cleanup else None
+        for sink in self._sinks:
+            sink.close(timeout=max(0.0, deadline - time.monotonic()))
+        if cleanup_thread is not None:
+            cleanup_thread.join(timeout=max(0.0, deadline - time.monotonic()))
 
 
 def lay_tracer_mac_dinh() -> Tracer | None:
@@ -695,9 +780,12 @@ def khoi_tao_tracer(
     sink: JsonlTraceSink | None = None,
     dong_ho: Callable[[], datetime] = vn_now,
     auto_cleanup: bool = True,
+    app_settings: Settings | None = None,
 ) -> Tracer:
     """Khởi tạo và gắn tracer mặc định cho tiến trình (dọn vết quá hạn một lần nếu bật)."""
-    tracer = Tracer(settings, sink=sink, dong_ho=dong_ho, auto_cleanup=auto_cleanup)
+    tracer = Tracer(
+        settings, sink=sink, dong_ho=dong_ho, auto_cleanup=auto_cleanup, app_settings=app_settings
+    )
     previous = dat_tracer_mac_dinh(tracer)
     if previous is not None and previous is not tracer:
         previous.close(timeout=1.0)
