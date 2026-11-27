@@ -197,9 +197,9 @@ def test_co_dinh_with_disabled_luong_cu_cung_raises_config_error(
         )
 
 
-def test_production_config_defaults_to_co_dinh_engine() -> None:
-    """Demo chạy luồng cũ ổn định (CaseAsker); agent chỉ bật bằng cờ ask.engine=agentic."""
-    assert load_settings("dev").ask.engine == "co_dinh"
+def test_production_config_defaults_to_agentic_engine() -> None:
+    """Cấu hình triển khai dùng engine đã chọn."""
+    assert load_settings("dev").ask.engine == "agentic"
     assert load_settings("test").ask.engine == "co_dinh"
 
 

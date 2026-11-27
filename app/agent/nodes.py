@@ -30,7 +30,6 @@ from app.llm.case_context import open_deid_session
 from app.llm.prompt_loader import load_prompt
 from app.orchestration.ask import (
     ERROR_MESSAGE,
-    NO_SOURCE_MESSAGE,
     OUT_OF_SCOPE_MESSAGE,
     AskResult,
     AskVerificationError,
@@ -41,6 +40,7 @@ from app.orchestration.ask import (
     _scrub_history_and_question,
     chuan_bi_ngu_canh_ca,
     kiem_chung_tra_loi,
+    tra_loi_trung_thuc,
 )
 from app.rules import RenalRuleBook
 from app.tracing import (
@@ -179,7 +179,7 @@ def an_toan(
                     tracker.loi(
                         step_id,
                         ly_do="Bước xử lý gặp lỗi",
-                        goi_y="Chuyển sang luồng dự phòng",
+                        goi_y="Bấm Thử lại sau ít phút",
                     )
             return {"can_du_phong": True, "ly_do_du_phong": "loi"}
 
@@ -397,7 +397,7 @@ class TacTu:
         try:
             raw = _run_with_deadline(_call_llm, ctx.han_chot)
         except TimeoutError:
-            ghi_buoc("loi", step_ma, ly_do="Hết thời gian xử lý")
+            ghi_buoc("loi", step_ma, ly_do="Hết thời gian xử lý", goi_y="Bấm Thử lại sau ít phút")
             return {
                 "luot_tac_tu": luot,
                 "can_du_phong": True,
@@ -409,7 +409,7 @@ class TacTu:
                 "loi",
                 step_ma,
                 ly_do=_safe_step_error_message(reason),
-                goi_y="Chuyển sang luồng dự phòng",
+                goi_y="Bấm Thử lại sau ít phút",
             )
             return {
                 "luot_tac_tu": luot,
@@ -747,7 +747,11 @@ class KiemChung:
                         "Không chỉ xoá riêng câu hay trích dẫn hỏng; không bịa mã hoặc con số."
                     ),
                 }
-            ghi_buoc("xong", step_ma, chi_tiet="Chuyển luồng dự phòng")
+            ghi_buoc(
+                "xong",
+                step_ma,
+                chi_tiet="Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng",
+            )
             return {
                 "so_lan_kiem_chung": attempt,
                 "can_du_phong": True,
@@ -755,7 +759,42 @@ class KiemChung:
             }
 
         if verified.trang_thai == "khong_co_nguon":
-            ghi_buoc("xong", step_ma, chi_tiet="Không đủ căn cứ, chuyển luồng dự phòng")
+            ghi_buoc(
+                "xong",
+                step_ma,
+                chi_tiet="Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng",
+            )
+            return {
+                "so_lan_kiem_chung": attempt,
+                "can_du_phong": True,
+                "ly_do_du_phong": "khong_du_can_cu",
+            }
+
+        if verified.trang_thai == "ngoai_pham_vi" and not _output_attempts_override(
+            ke_hoach.tra_loi.tra_loi, ngu_canh.active_result
+        ):
+            ghi_buoc(
+                "xong",
+                step_ma,
+                chi_tiet="Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng",
+            )
+            return {
+                "so_lan_kiem_chung": attempt,
+                "can_du_phong": True,
+                "ly_do_du_phong": "ngoai_pham_vi",
+            }
+
+        if (
+            verified.trang_thai == "ok"
+            and state.get("cong_cu_da_goi")
+            and not state.get("can_cu")
+            and not ke_hoach.tra_loi.trich_dan
+        ):
+            ghi_buoc(
+                "xong",
+                step_ma,
+                chi_tiet="Chưa đủ căn cứ cho câu trả lời đầu, chuyển sang trả lời thận trọng",
+            )
             return {
                 "so_lan_kiem_chung": attempt,
                 "can_du_phong": True,
@@ -816,14 +855,76 @@ class DuPhong:
     (người dùng chốt 22/11/2026, plan 1.9 mục 6.6).
     """
 
+    def __init__(self, llm: LLMClient, max_turns: int) -> None:
+        self._llm = llm
+        self._max_turns = max_turns
+
     def __call__(self, state: HoiDapState) -> dict[str, Any]:
         ghi_buoc("bat_dau", "agent_du_phong", ten="Kết thúc an toàn")
         if state.get("ly_do_du_phong") == "loi":
             ghi_buoc("xong", "agent_du_phong", chi_tiet="Gặp lỗi khi xử lý")
             return {"ket_qua": AskResult(trang_thai="loi", noi_dung=ERROR_MESSAGE)}
-        ghi_buoc("xong", "agent_du_phong", chi_tiet="Không đủ căn cứ")
-        content = _filter_missing_figure(NO_SOURCE_MESSAGE, state.get("cau_hoi_sach", ""))
-        return {"ket_qua": AskResult(trang_thai="khong_co_nguon", noi_dung=content)}
+        ghi_buoc(
+            "xong",
+            "agent_du_phong",
+            chi_tiet="Ngoài phạm vi"
+            if state.get("ly_do_du_phong") == "ngoai_pham_vi"
+            else "Chưa đủ nguồn để kết luận",
+        )
+        ctx = state["ctx"]
+        ngu_canh = state["ngu_canh"]
+        assert ctx.ca is not None
+        chunk_by_id = {
+            cc.doan.doan_trich_id: cc.doan
+            for cc in state.get("can_cu", [])
+            if cc.loai == "doan" and cc.doan is not None
+        }
+        bang_by_ma = {
+            cc.ma: (cc.nhan, cc.noi_dung)
+            for cc in state.get("can_cu", [])
+            if cc.loai in ("bang", "tinh") and cc.noi_dung
+        }
+
+        def verify(output: Any) -> AskResult:
+            return kiem_chung_tra_loi(
+                ca=ctx.ca,
+                ket_qua=ngu_canh.active_result,
+                cleaned_question=state["cau_hoi_sach"],
+                output=output,
+                allowed_record_ids=ngu_canh.allowed_record_ids,
+                allowed_calc_ids=ngu_canh.allowed_calc_ids,
+                allowed_numbers=ngu_canh.allowed_numbers,
+                chunk_by_id=chunk_by_id,
+                anh_xa=ngu_canh.anh_xa,
+                ids=ngu_canh.ids,
+                tools_called=list(state.get("cong_cu_da_goi", [])),
+                perf_start=state.get("thoi_gian_bat_dau", time.perf_counter()),
+                bang_by_ma=bang_by_ma,
+            )
+
+        reason = state.get("ly_do_du_phong", "khong_du_can_cu")
+        result = tra_loi_trung_thuc(
+            llm=self._llm,
+            cau_hoi_che=state["cau_hoi_che"],
+            tom_tat_tool=ngu_canh.van_ban_ca + "\n" + "\n".join(state.get("ket_qua_cong_cu", [])),
+            cong_cu_da_goi=list(state.get("cong_cu_da_goi", [])),
+            ma_ly_do=reason,
+            kiem_chung_fn=verify,
+            han_chot=ctx.han_chot,
+            chay_co_han=_run_with_deadline,
+            session=state["session"],
+            trang_thai="ngoai_pham_vi" if reason == "ngoai_pham_vi" else "khong_co_nguon",
+            con_luot=state.get("luot_tac_tu", 0) < self._max_turns,
+        )
+        return {
+            "ket_qua": result.model_copy(
+                update={
+                    "noi_dung": _filter_missing_figure(
+                        result.noi_dung, state.get("cau_hoi_sach", "")
+                    )
+                }
+            )
+        }
 
 
 class HoanTat:

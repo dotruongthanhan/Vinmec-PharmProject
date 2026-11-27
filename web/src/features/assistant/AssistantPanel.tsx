@@ -580,13 +580,13 @@ export function AssistantPanel({
                             {status === 'khong_co_nguon' ? (
                               <div>
                                 <Badge tone="neutral" variant="outline">
-                                  Không có nguồn phù hợp
+                                  Chưa đủ nguồn để kết luận
                                 </Badge>
                               </div>
                             ) : status === 'ngoai_pham_vi' ? (
                               <div>
                                 <Badge tone="neutral" variant="outline">
-                                  Ngoài phạm vi
+                                  Câu hỏi ngoài phạm vi hỗ trợ
                                 </Badge>
                               </div>
                             ) : status === 'loi' ? (

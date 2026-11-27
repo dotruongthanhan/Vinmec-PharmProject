@@ -123,7 +123,10 @@ class TinhChiSo(Tool):
         if result.thieu_dau_vao:
             return KetQuaCongCu(
                 trang_thai="khong_co",
-                noi_dung=f"Thiếu đầu vào: {', '.join(result.thieu_dau_vao)}.",
+                noi_dung=(
+                    f"Chưa tính được {tham_so.cong_thuc}: thiếu đầu vào "
+                    f"{', '.join(result.thieu_dau_vao)}. Có thể xem dữ liệu ca để bổ sung."
+                ),
                 chi_tiet_tien_trinh="Thiếu đầu vào",
             )
 

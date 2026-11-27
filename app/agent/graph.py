@@ -134,7 +134,7 @@ def dung_do_thi_hoi_dap(
     builder.add_node(TAC_TU, TacTu(llm, danh_muc, chinh_sach, prompt_path, max_turns))
     builder.add_node(GOI_CONG_CU, GoiCongCu(danh_muc, chinh_sach, max_turns))
     builder.add_node(KIEM_CHUNG, KiemChung())
-    builder.add_node(DU_PHONG, DuPhong())
+    builder.add_node(DU_PHONG, DuPhong(llm, max_turns))
     builder.add_node(HOAN_TAT, HoanTat())
 
     builder.add_edge(START, CHE_PII)

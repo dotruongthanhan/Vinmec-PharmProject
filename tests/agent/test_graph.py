@@ -22,7 +22,12 @@ from app.core.progress import TienTrinh, tien_trinh_hien_tai
 from app.domain.loader import load_case
 from app.domain.models import CaBenh
 from app.orchestration.ai_review import AiRunResult
-from app.orchestration.ask import ERROR_MESSAGE, NO_SOURCE_MESSAGE, OUT_OF_SCOPE_MESSAGE, AskResult
+from app.orchestration.ask import (
+    ERROR_MESSAGE,
+    HONEST_FALLBACK_MESSAGE,
+    OUT_OF_SCOPE_MESSAGE,
+    AskResult,
+)
 from app.pipeline import KetQuaThamDinh
 from app.providers.fakes import FakeLLM
 from tests.deid_support import temp_id
@@ -271,7 +276,7 @@ def test_tool_loop_stops_after_max_turns_and_falls_back() -> None:
     )
     assert len(tool.calls) == 2
     assert result.trang_thai == "khong_co_nguon"
-    assert result.noi_dung == NO_SOURCE_MESSAGE
+    assert result.noi_dung == HONEST_FALLBACK_MESSAGE
 
 
 def test_tool_output_with_injection_is_blocked_before_reaching_llm() -> None:
@@ -344,10 +349,16 @@ def test_two_verification_failures_end_with_khong_co_nguon() -> None:
             ],
         },
     }
-    llm = FakeLLM([bad_answer, bad_answer])
+    llm = FakeLLM(
+        [
+            bad_answer,
+            bad_answer,
+            {"pham_vi": "trong", "tra_loi": "Chưa xác nhận được liều.", "trich_dan": []},
+        ]
+    )
     result, steps, _ = _run_graph(llm, "Liều bao nhiêu?")
     assert result.trang_thai == "khong_co_nguon"
-    assert result.noi_dung == NO_SOURCE_MESSAGE
+    assert result.noi_dung == "Chưa xác nhận được liều."
     assert "agent_kiem_chung_1" in steps
     assert "agent_kiem_chung_2" in steps
     assert "agent_du_phong" in steps
@@ -355,7 +366,10 @@ def test_two_verification_failures_end_with_khong_co_nguon() -> None:
 
 def test_hoi_lai_with_unverified_number_is_rejected_and_valid_hoi_lai_restores_pii() -> None:
     bad_llm = FakeLLM(
-        [{"hanh_dong": "hoi_lai", "cau_hoi_lai": "Bạn muốn hỏi liều 999 mg hay thuốc nào?"}]
+        [
+            {"hanh_dong": "hoi_lai", "cau_hoi_lai": "Bạn muốn hỏi liều 999 mg hay thuốc nào?"},
+            {"pham_vi": "trong", "tra_loi": "Dược sĩ muốn hỏi về thuốc nào?", "trich_dan": []},
+        ]
     )
     bad_res, _, _ = _run_graph(bad_llm, "Hỏi về liều thuốc")
     assert bad_res.trang_thai == "khong_co_nguon"
