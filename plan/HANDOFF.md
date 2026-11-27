@@ -1,5 +1,13 @@
 # HANDOFF – bàn giao giữa các phiên Claude
 
+## CẬP NHẬT 28/11/2026 ~3h40 – Deploy agentic + trả lời tự nhiên – ĐỌC PHẦN NÀY TRƯỚC
+
+- **Đã push** `vukhai248` tới `f41764e` (code `c008b02`). **EC2** chạy bản mới, `ask.engine = agentic`, `co_llm = true`; image lùi `bvienx-pharm-api:pre-agentic` (trước đó `pre-gemini`). **Vercel** prod đã deploy lại, `/api/health` qua Vercel ok.
+- **Trả lời tự nhiên** (`TRA-LOI-TU-NHIEN` + fix-1, fix-2): khi kiểm chứng trượt/thiếu nguồn hoặc ngoài phạm vi, gọi thêm một lượt LLM "trả lời thận trọng" có kiểm chứng (prompt `config/prompts/tra_loi_trung_thuc.v1.md`), lược câu có số chưa kiểm chứng; câu tấn công vẫn bị chặn cố định, không gọi LLM. Bước tiến trình chỉ hiện "lỗi + Thử lại" khi lỗi thật.
+- **Kiểm số:** bỏ qua đúng mẫu đơn vị `/1,73 m²` (`VERIFY-don-vi-1-73`).
+- **Chấm lần 3** (Flash Lite): 90 câu 70/90, rò PII 0, tấn công lọt 0; 15 câu minh hoạ đạt hình 7/15.
+- **Còn lại:** thử một câu agentic có hình trên tab Vercel; trục y hình đường chưa có đơn vị; phiên đăng nhập web hết hạn 12 giờ (~12:50 28/11) – script giữ phiên `window.__giuPhien` chạy ở cả tab localhost và tab Vercel, chỉ sống khi phiên Claude còn mở.
+
 ## CẬP NHẬT 28/11/2026 ~1h45 – VZ2, VZ5, LLM chung + Gemini, đã push + deploy – ĐỌC PHẦN NÀY TRƯỚC
 
 **Đã push** `vukhai248` tới `0754d91`. **EC2** chạy bản mới (image cũ gắn `bvienx-pharm-api:pre-gemini`, `.env.app` thêm `TRACER_HMAC_KEY` sinh trên máy chủ). **Vercel** prod `bvienx-pharm-web.vercel.app` đã lên, `/api/health` qua Vercel → EC2 trả `ok`.
