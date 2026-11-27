@@ -1,5 +1,20 @@
 # HANDOFF – bàn giao giữa các phiên Claude
 
+## CẬP NHẬT 28/11/2026 ~1h45 – VZ2, VZ5, LLM chung + Gemini, đã push + deploy – ĐỌC PHẦN NÀY TRƯỚC
+
+**Đã push** `vukhai248` tới `0754d91`. **EC2** chạy bản mới (image cũ gắn `bvienx-pharm-api:pre-gemini`, `.env.app` thêm `TRACER_HMAC_KEY` sinh trên máy chủ). **Vercel** prod `bvienx-pharm-web.vercel.app` đã lên, `/api/health` qua Vercel → EC2 trả `ok`.
+
+- **VZ2:** tool `lay_du_lieu_ca`, dấu `doan`, sửa hiển thị (fix-1…5). **VZ5 bản nhỏ:** chấm hình trong eval, 15 câu, phiếu 8 nhiệm vụ dược sĩ. VZ3/VZ4 hoãn (MVP 67 ca).
+- **LLM:** `ChatLLMClient` (`provider: chat_api`, url/model/`khoa_env` trong `config/settings.yaml`), mã không còn tên nhà cung cấp. Đang dùng `gemini-3.5-flash-lite` + `KeyRouter` xoay `GEMINI_API_KEY_1…8` (**chỉ dev**, có ghi chú xoá khi triển khai). DeepSeek hết số dư (402).
+- **Quy tắc vẽ (chủ kho chốt 28/11):** giữ tiêu chí tự vẽ; dược sĩ bảo vẽ thì phải vẽ (máy chủ thêm đúng một vòng).
+- **Chấm lần 2 (Gemini Flash Lite):** 90 câu 70/90, rò PII 0, tấn công lọt 0; 15 câu minh hoạ 5/15 (Flash Lite yếu phần vẽ). Báo cáo `plan/reports/danh-gia-hoi-dap/2026-11-28-*-lan2`.
+
+**Việc chờ chủ kho:**
+1. **AI trên EC2 đang tắt** (`co_llm: false`) vì `.env.app` không có `GEMINI_API_KEY_1…8`. Chủ kho hỏi "cách 1": thêm quyền đọc `/bvienx/llm/*` cho vai trò `vinmec-pharm-ec2-ssm` (chính sách hiện chỉ đọc `/vinmec/db/app_password`), Claude đẩy 8 khoá vào Parameter Store dạng SecureString, EC2 tự đọc và ghi `.env.app`, rồi khởi động lại `api`. **Cần chủ kho trả lời "đồng ý" rõ ràng** trước khi Claude sửa IAM.
+2. Đăng nhập lại web 5173 nếu phiên 12 giờ hết hạn (khoảng trưa 28/11). Script giữ phiên chạy trong trang (`window.__giuPhien`, 7 phút/lần, nhật ký `localStorage.__giuPhienLog`); Claude kiểm mỗi giờ phút 13.
+3. Trục y hình đường chưa có đơn vị (việc nhỏ, chưa giao).
+4. Kiểm 8 khoá Gemini có thuộc các dự án Google khác nhau không (cùng dự án thì chung hạn mức).
+
 ## CẬP NHẬT 27/11/2026 tối – UI1 + VZ1 (minh hoạ trong chat) XONG, chưa commit – ĐỌC PHẦN NÀY TRƯỚC
 
 Chủ kho chuyển tài khoản. **Không có agent hay máy chủ nào đang chạy.** Chưa commit gì từ `a044a23` (nhánh `vukhai248`). UI2 (nút mở rộng icon ở góc cho hình, dùng chung với bảng; tab dữ liệu có tên dễ hiểu) đã xong 27/11 tối.
