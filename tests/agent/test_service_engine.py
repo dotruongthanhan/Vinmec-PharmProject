@@ -129,6 +129,7 @@ def test_injected_legacy_asker_keeps_old_signature(tmp_path: Path) -> None:
         principal = Principal(nguoi_dung_id="u-1", email="u1@example.test", vai_tro="duoc_si_ls")
         reply = service.ask("DEMO-02", s.GuiCauHoi(cau_hoi="Vì sao?"), principal)
         assert reply.trang_thai == "ok"
+        assert reply.minh_hoa == []
         assert legacy.calls == 1
     finally:
         service.shutdown()

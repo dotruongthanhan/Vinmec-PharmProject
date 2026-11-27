@@ -63,6 +63,10 @@ rerank:
 database:
   url_env: "DATABASE_URL"           # chuỗi kết nối nằm trong .env
 
+db:
+  thoi_han_ket_noi_giay: 3
+  cau_dao_giay: 60
+
 vector_store:
   provider: "pgvector"             # pgvector | memory
 
@@ -77,3 +81,12 @@ orchestration:
 ask:
   engine: "co_dinh"                 # co_dinh | agentic (luồng cũ ổn định cho demo; bật agent bằng agentic, plan 1.9 mục 6.6)
   tool_policy: "config/tool_policy.yaml"
+
+tracer:
+  bat: true
+  muc_noi_dung: "sieu_du_lieu"      # sieu_du_lieu | noi_dung_da_che | day_du (cấm day_du ở production)
+  so_ngay_luu: 30                   # ngày lưu vết JSONL theo giờ Việt Nam
+  thu_muc: "data/runtime/vet"
+  hang_doi_toi_da: 1000
+  kich_thuoc_tep_mb: 200
+  bang_gia: {}

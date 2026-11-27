@@ -150,6 +150,56 @@ def select_renal_tier(crcl: float, rule: RenalDrugRule) -> RenalDoseTier:
     raise ValueError(f"Không tìm thấy mức CrCl phù hợp cho {rule.ten_quoc_te} (CrCl={crcl})")
 
 
+def _sort_tier_key(tier: RenalDoseTier) -> tuple[float, float]:
+    """Sắp xếp mức CrCl tăng dần từ thấp đến cao."""
+    low = -1.0 if tier.crcl_tu is None else float(tier.crcl_tu)
+    high = float("inf") if tier.crcl_den is None else float(tier.crcl_den)
+    return (low, high)
+
+
+def derive_draw_bounds(
+    rule: RenalDrugRule,
+) -> list[tuple[RenalDoseTier, float | None, float | None]]:
+    """Suy ra biên vẽ liên tục theo đúng ngữ nghĩa select_renal_tier, không để khe hở."""
+    sorted_tiers = sorted(rule.muc, key=_sort_tier_key)
+    bounds: list[list[float | None]] = [
+        [
+            float(tier.crcl_tu) if tier.crcl_tu is not None else None,
+            float(tier.crcl_den) if tier.crcl_den is not None else None,
+        ]
+        for tier in sorted_tiers
+    ]
+    for idx in range(len(sorted_tiers) - 1):
+        lower_tier = sorted_tiers[idx]
+        upper_tier = sorted_tiers[idx + 1]
+        gap_lo = bounds[idx][1]
+        gap_hi = bounds[idx + 1][0]
+        if gap_lo is None or gap_hi is None or gap_lo >= gap_hi:
+            continue
+        eps = (gap_hi - gap_lo) * 1e-6
+        try:
+            chosen_lo = select_renal_tier(gap_lo + eps, rule)
+            chosen_hi = select_renal_tier(gap_hi - eps, rule)
+        except ValueError:
+            continue
+        if chosen_lo == upper_tier and chosen_hi == upper_tier:
+            bounds[idx + 1][0] = gap_lo
+        elif chosen_lo == lower_tier and chosen_hi == lower_tier:
+            bounds[idx][1] = gap_hi
+        elif chosen_lo == lower_tier and chosen_hi == upper_tier:
+            lo_b, hi_b = gap_lo, gap_hi
+            for _ in range(40):
+                mid = (lo_b + hi_b) / 2.0
+                if select_renal_tier(mid, rule) == lower_tier:
+                    lo_b = mid
+                else:
+                    hi_b = mid
+            split = round((lo_b + hi_b) / 2.0, 6)
+            bounds[idx][1] = split
+            bounds[idx + 1][0] = split
+    return [(tier, pair[0], pair[1]) for tier, pair in zip(sorted_tiers, bounds, strict=True)]
+
+
 def _extract_resolved_ids(result: KetQuaPhanGiai) -> set[str]:
     """Lấy tập mã hoạt chất trên trục từ kết quả phân giải đã hoặc một phần nhận diện."""
     if result.trang_thai not in {"da_phan_giai", "mot_phan"}:

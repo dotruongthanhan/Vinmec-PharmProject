@@ -8,6 +8,7 @@ import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
+from contextvars import copy_context
 from dataclasses import replace
 from functools import wraps
 from pathlib import Path
@@ -23,7 +24,7 @@ from app.config.settings import CaseContextSettings
 from app.core.interfaces import LLMClient
 from app.core.progress import ghi_buoc, tien_trinh_hien_tai
 from app.core.types import ChatMessage
-from app.deid.scrubber import DeidError, restore_text
+from app.deid.scrubber import TOKEN_PATTERN, DeidError, restore_text
 from app.deid.session import DeidSession
 from app.llm.case_context import open_deid_session
 from app.llm.prompt_loader import load_prompt
@@ -42,6 +43,14 @@ from app.orchestration.ask import (
     kiem_chung_tra_loi,
 )
 from app.rules import RenalRuleBook
+from app.tracing import (
+    che_chu_so_ma_ly_do,
+    dong_buoc_node_dang_chay,
+    ghi_su_kien_bao_mat,
+    goi_llm_co_vet,
+    span,
+    vet_hien_tai,
+)
 from app.verify.number import unverified_numbers
 
 __all__ = [
@@ -129,7 +138,8 @@ def _run_with_deadline(fn: Callable[[], object], deadline: float) -> object:
     if remaining <= 0:
         raise TimeoutError("Hết thời gian xử lý hỏi đáp")
     executor = ThreadPoolExecutor(max_workers=1)
-    future = executor.submit(fn)
+    ctx_copy = copy_context()
+    future = executor.submit(ctx_copy.run, fn)
     try:
         result = future.result(timeout=remaining)
     except FuturesTimeoutError as exc:
@@ -150,7 +160,8 @@ def an_toan(
     def wrapper(self: Any, state: HoiDapState) -> dict[str, Any]:
         try:
             return fn(self, state)
-        except Exception:
+        except Exception as exc:
+            dong_buoc_node_dang_chay(loai_ngoai_le=type(exc).__name__)
             tracker = tien_trinh_hien_tai.get()
             if tracker is not None:
                 step_id = tracker.dang_chay_ma()
@@ -173,27 +184,39 @@ class ChePii:
         ghi_buoc("bat_dau", "agent_che_pii", ten="Che thông tin định danh")
         ctx = state["ctx"]
         cau_hoi_sach = state["cau_hoi_sach"]
-        try:
-            session = open_deid_session(ctx.ca, []) if ctx.ca is not None else DeidSession()
-            cau_hoi_che, lich_su_che = _scrub_history_and_question(
-                cau_hoi_sach,
-                ctx.lich_su_goc,
-                session,
+        with span("che_pii", "che_dinh_danh") as pii_span:
+            try:
+                session = open_deid_session(ctx.ca, []) if ctx.ca is not None else DeidSession()
+                vet = vet_hien_tai.get()
+                if vet is not None:
+                    vet.dat_phien_che(session)
+                cau_hoi_che, lich_su_che = _scrub_history_and_question(
+                    cau_hoi_sach,
+                    ctx.lich_su_goc,
+                    session,
+                )
+                cau_hoi_che = _sanitize_agent_markers(cau_hoi_che)
+                lich_su_che = [
+                    (role, _sanitize_agent_markers(content)) for role, content in lich_su_che
+                ]
+            except DeidError:
+                pii_span.dat_trang_thai("loi")
+                pii_span.dat_thuoc_tinh(thanh_cong=False, loai_ngoai_le="DeidError")
+                ghi_buoc(
+                    "loi",
+                    "agent_che_pii",
+                    ly_do="Không che được định danh",
+                    goi_y="Bấm Thử lại sau ít phút",
+                )
+                return {
+                    "ket_qua": AskResult(trang_thai="loi", noi_dung=ERROR_MESSAGE),
+                }
+            kinds = sorted({key.strip("[]").rsplit("_", 1)[0] for key in session.anh_xa})
+            pii_span.dat_thuoc_tinh(
+                so_ma_tam=len(session.anh_xa),
+                loai_dinh_danh=kinds,
+                thanh_cong=True,
             )
-            cau_hoi_che = _sanitize_agent_markers(cau_hoi_che)
-            lich_su_che = [
-                (role, _sanitize_agent_markers(content)) for role, content in lich_su_che
-            ]
-        except DeidError:
-            ghi_buoc(
-                "loi",
-                "agent_che_pii",
-                ly_do="Không che được định danh",
-                goi_y="Bấm Thử lại sau ít phút",
-            )
-            return {
-                "ket_qua": AskResult(trang_thai="loi", noi_dung=ERROR_MESSAGE),
-            }
         ghi_buoc("xong", "agent_che_pii")
         return {
             "session": session,
@@ -211,14 +234,22 @@ class ChanDauVao:
         ghi_buoc("bat_dau", "agent_chan_dau_vao", ten="Kiểm tra câu hỏi")
         cau_hoi_sach = state["cau_hoi_sach"]
         no_zw = _ZERO_WIDTH_RE.sub("", cau_hoi_sach)
-        if _has_injection_directive(cau_hoi_sach) or _has_injection_directive(no_zw):
-            ghi_buoc("xong", "agent_chan_dau_vao", chi_tiet="Ngoài phạm vi hỗ trợ")
-            return {
-                "ket_qua": AskResult(
-                    trang_thai="ngoai_pham_vi",
-                    noi_dung=OUT_OF_SCOPE_MESSAGE,
-                ),
-            }
+        with span("chan_dau_vao", "kiem_tra_chen_lenh", nguon_kiem_tra="cau_hoi") as guard_span:
+            if _has_injection_directive(cau_hoi_sach) or _has_injection_directive(no_zw):
+                guard_span.dat_trang_thai("tu_choi")
+                guard_span.dat_thuoc_tinh(bi_chan=True)
+                ghi_su_kien_bao_mat("chen_lenh_dau_vao", nguon="chan_dau_vao")
+                vet = vet_hien_tai.get()
+                if vet is not None:
+                    vet.tang_so_bi_chan()
+                ghi_buoc("xong", "agent_chan_dau_vao", chi_tiet="Ngoài phạm vi hỗ trợ")
+                return {
+                    "ket_qua": AskResult(
+                        trang_thai="ngoai_pham_vi",
+                        noi_dung=OUT_OF_SCOPE_MESSAGE,
+                    ),
+                }
+            guard_span.dat_thuoc_tinh(bi_chan=False)
         ghi_buoc("xong", "agent_chan_dau_vao")
         return {}
 
@@ -294,6 +325,9 @@ class TacTu:
             ctx.che_do,
             self._danh_muc,
         )
+        forced_answer = state.get("buoc_tra_loi_chu", False)
+        if forced_answer:
+            allowed_names = []
         tool_specs = self._danh_muc.mo_ta_cho_llm(allowed_names)
         danh_sach_cong_cu = json.dumps(tool_specs, ensure_ascii=False, indent=2)
         ket_qua_cong_cu = state.get("ket_qua_cong_cu", [])
@@ -301,14 +335,23 @@ class TacTu:
         lich_su_che = state.get("lich_su_che", [])
         lich_su_text = (
             "\n".join(
-                f"- {_ROLE_LABELS.get(role, role)}: {content}" for role, content in lich_su_che
+                f"- {_ROLE_LABELS.get(role, role)}: "
+                + (
+                    re.sub(r"mh-\d+", "hình (không còn hiển thị)", content)
+                    if role == "he_thong"
+                    else content
+                )
+                for role, content in lich_su_che
             )
             if lich_su_che
             else "(không có)"
         )
         so_vong = state.get("so_vong", 0)
         so_vong_con_lai = str(max(0, self._max_turns - so_vong))
-        _, template = load_prompt(self._prompt_path)
+        prompt_version, template = load_prompt(self._prompt_path)
+        if "ve_bieu_do" in allowed_names:
+            _, skill = load_prompt(self._prompt_path.parent / "ky_nang_minh_hoa.v1.md")
+            template = template.replace(_DATA_SPLIT_MARKER, "\n\n" + skill + _DATA_SPLIT_MARKER, 1)
         messages = _build_agent_messages(
             template,
             van_ban_ca=ngu_canh.van_ban_ca,
@@ -320,12 +363,29 @@ class TacTu:
             so_vong_con_lai=so_vong_con_lai,
         )
         schema = KeHoachTacTu.model_json_schema()
+        if forced_answer:
+            schema["properties"]["hanh_dong"]["enum"] = ["tra_loi", "hoi_lai"]
+            with span("node", "buoc_tra_loi_chu", buoc_tra_loi_chu=True):
+                pass
+
+        def _call_llm() -> object:
+            vet = vet_hien_tai.get()
+            has_drawing_hint = any(
+                "mã căn cứ hợp lệ:" in result or "bộ dữ liệu và cột hiện có:" in result
+                for result in ket_qua_cong_cu
+            )
+            if vet is None or not has_drawing_hint:
+                return goi_llm_co_vet(self._llm, messages, schema, phien_ban_prompt=prompt_version)
+            # Không ghi lại danh sách gợi ý trong prompt hay phản hồi của LLM.
+            previous_level = vet.muc_noi_dung
+            vet.muc_noi_dung = "sieu_du_lieu"
+            try:
+                return goi_llm_co_vet(self._llm, messages, schema, phien_ban_prompt=prompt_version)
+            finally:
+                vet.muc_noi_dung = previous_level
 
         try:
-            raw = _run_with_deadline(
-                lambda msgs=messages: self._llm.complete_json(msgs, schema),
-                ctx.han_chot,
-            )
+            raw = _run_with_deadline(_call_llm, ctx.han_chot)
         except TimeoutError:
             ghi_buoc("loi", step_ma, ly_do="Hết thời gian xử lý")
             return {
@@ -356,6 +416,13 @@ class TacTu:
             )
             sai_count = state.get("so_lan_sai_luoc_do", 0) + 1
             next_round = so_vong + 1
+            if forced_answer and sai_count < 2:
+                return {
+                    "luot_tac_tu": luot,
+                    "so_lan_sai_luoc_do": sai_count,
+                    "can_du_phong": True,
+                    "ly_do_du_phong": "khong_du_can_cu",
+                }
             if sai_count >= 2 or next_round >= self._max_turns:
                 ghi_buoc("loi", step_ma, ly_do="Đầu ra sai định dạng")
                 return {
@@ -378,6 +445,14 @@ class TacTu:
                 ),
             }
 
+        if forced_answer and ke_hoach.hanh_dong not in ("tra_loi", "hoi_lai"):
+            return {
+                "ke_hoach": None,
+                "luot_tac_tu": luot,
+                "can_du_phong": True,
+                "ly_do_du_phong": "khong_du_can_cu",
+            }
+
         if ke_hoach.hanh_dong == "goi_cong_cu":
             if time.monotonic() >= ctx.han_chot:
                 ghi_buoc("xong", step_ma, chi_tiet="Hết thời gian xử lý")
@@ -388,7 +463,35 @@ class TacTu:
                     "can_du_phong": True,
                     "ly_do_du_phong": "het_gio",
                 }
-            if so_vong >= self._max_turns:
+            chi_ve = bool(ke_hoach.goi) and all(
+                call.cong_cu == "ve_bieu_do" for call in ke_hoach.goi
+            )
+            if chi_ve and state.get("so_vong_ve", 0) >= 3:
+                if state.get("da_nhac_het_luot_ve", False):
+                    if state.get("da_buoc_tra_loi_chu", False):
+                        return {
+                            "ke_hoach": None,
+                            "luot_tac_tu": luot,
+                            "can_du_phong": True,
+                            "ly_do_du_phong": "khong_du_can_cu",
+                        }
+                    return {
+                        "ke_hoach": None,
+                        "luot_tac_tu": luot,
+                        "buoc_tra_loi_chu": True,
+                        "da_buoc_tra_loi_chu": True,
+                        "loi_lan_truoc": (
+                            "het_luot_ve: không còn công cụ; chỉ được trả lời bằng chữ "
+                            "hoặc hỏi lại, không gọi công cụ."
+                        ),
+                    }
+                return {
+                    "ke_hoach": None,
+                    "luot_tac_tu": luot,
+                    "da_nhac_het_luot_ve": True,
+                    "loi_lan_truoc": "het_luot_ve: không vẽ thêm, hãy trả lời bằng chữ",
+                }
+            if not chi_ve and so_vong >= self._max_turns:
                 ghi_buoc("xong", step_ma, chi_tiet="Hết lượt gọi công cụ")
                 return {
                     "ke_hoach": ke_hoach,
@@ -408,15 +511,36 @@ class TacTu:
             ghi_buoc("xong", step_ma, chi_tiet="Đủ căn cứ, chuyển kiểm chứng")
             return {
                 "ke_hoach": ke_hoach,
+                "buoc_tra_loi_chu": False,
                 "so_lan_sai_luoc_do": 0,
                 "luot_tac_tu": luot,
             }
 
         if ke_hoach.hanh_dong == "hoi_lai":
             cau_hoi_lai = (ke_hoach.cau_hoi_lai or "").strip()
-            has_bad_nums = bool(unverified_numbers([cau_hoi_lai], ngu_canh.allowed_numbers))
+            bad_nums = unverified_numbers([cau_hoi_lai], ngu_canh.allowed_numbers)
             is_override = _output_attempts_override(cau_hoi_lai, ngu_canh.active_result)
-            if not cau_hoi_lai or has_bad_nums or is_override:
+            if not cau_hoi_lai or bad_nums or is_override:
+                reasons = [che_chu_so_ma_ly_do(item) for item in bad_nums]
+                if not cau_hoi_lai:
+                    reasons.append("empty_followup")
+                if is_override:
+                    reasons.append("output_attempts_override")
+                with span(
+                    "kiem_chung",
+                    "kiem_chung_hoi_lai",
+                    so_bi_chan=1,
+                    so_dat=0,
+                    tong_so=1,
+                    ma_ly_do=reasons,
+                    trang_thai_ket_qua="tu_choi",
+                ) as kc_span:
+                    kc_span.dat_trang_thai("tu_choi")
+                if is_override:
+                    ghi_su_kien_bao_mat("chen_lenh_dau_ra", nguon="tac_tu")
+                vet = vet_hien_tai.get()
+                if vet is not None:
+                    vet.tang_so_bi_chan()
                 ghi_buoc("xong", step_ma, chi_tiet="Câu hỏi lại không đạt kiểm chứng")
                 return {
                     "ke_hoach": ke_hoach,
@@ -475,30 +599,42 @@ class GoiCongCu:
         can_cu = list(state.get("can_cu", []))
         ket_qua_cong_cu = list(state.get("ket_qua_cong_cu", []))
         cong_cu_da_goi = list(state.get("cong_cu_da_goi", []))
+        chi_ve = bool(ke_hoach.goi) and all(call.cong_cu == "ve_bieu_do" for call in ke_hoach.goi)
+        vong = state.get("so_vong", 0) + (not chi_ve)
+        vong_ve = state.get("so_vong_ve", 0) + chi_ve
 
-        for call in ke_hoach.goi[:3]:
-            res = gateway.goi(call.cong_cu, call.tham_so, ctx)
-            if res.trang_thai == "tu_choi":
-                ket_qua_cong_cu.append(
-                    f"<<<KET_QUA_CONG_CU ten={call.cong_cu} tu_choi=true>>>\n"
-                    f"Bị từ chối ({res.ma_loi}): {res.noi_dung}\n"
-                    "KET_QUA_CONG_CU>>>"
-                )
-                continue
+        with span("node", f"agent_goi_cong_cu_{vong}", so_vong=vong):
+            for call in ke_hoach.goi[:3]:
+                res = gateway.goi(call.cong_cu, call.tham_so, ctx)
+                if res.trang_thai == "tu_choi":
+                    ket_qua_cong_cu.append(
+                        f"<<<KET_QUA_CONG_CU ten={call.cong_cu} tu_choi=true>>>\n"
+                        f"Bị từ chối ({res.ma_loi}): {res.noi_dung}\n"
+                        "KET_QUA_CONG_CU>>>"
+                    )
+                    continue
 
-            if res.noi_dung:
-                ket_qua_cong_cu.append(res.noi_dung)
-            if res.can_cu:
-                can_cu.extend(res.can_cu)
-            if call.cong_cu not in cong_cu_da_goi:
-                cong_cu_da_goi.append(call.cong_cu)
+                if res.noi_dung:
+                    ket_qua_cong_cu.append(res.noi_dung)
+                if res.can_cu:
+                    can_cu.extend(res.can_cu)
+                if call.cong_cu not in cong_cu_da_goi:
+                    cong_cu_da_goi.append(call.cong_cu)
+
+        if chi_ve and vong_ve == 3:
+            ket_qua_cong_cu.append(
+                "<<<KET_QUA_CONG_CU ten=ve_bieu_do tu_choi=true>>>\n"
+                "het_luot_ve: không vẽ thêm, hãy trả lời bằng chữ\n"
+                "KET_QUA_CONG_CU>>>"
+            )
 
         return {
             "gateway": gateway,
             "can_cu": can_cu,
             "ket_qua_cong_cu": ket_qua_cong_cu,
             "cong_cu_da_goi": cong_cu_da_goi,
-            "so_vong": state.get("so_vong", 0) + 1,
+            "so_vong": vong,
+            "so_vong_ve": vong_ve,
         }
 
 
@@ -525,7 +661,7 @@ class KiemChung:
         bang_by_ma = {
             cc.ma: (cc.nhan, cc.noi_dung)
             for cc in state.get("can_cu", [])
-            if cc.loai == "bang" and cc.noi_dung
+            if cc.loai in ("bang", "tinh") and cc.noi_dung
         }
         try:
             verified = kiem_chung_tra_loi(
@@ -570,6 +706,28 @@ class KiemChung:
                 "ly_do_du_phong": "khong_du_can_cu",
             }
 
+        if verified.trang_thai == "ok" and state.get("gateway") is not None:
+            blocks = []
+            for block in state["gateway"].minh_hoa:
+                serialized = json.dumps(block.model_dump(mode="json"), ensure_ascii=False)
+                session = state["session"]
+                try:
+                    masked_tokens = re.sub(TOKEN_PATTERN, "", serialized)
+                    has_pii = (
+                        session.mask_known(serialized) != serialized
+                        or session.scrub(masked_tokens) != masked_tokens
+                    )
+                except DeidError:
+                    has_pii = True
+                if has_pii:
+                    with span(
+                        "tool", "kiem_pii_minh_hoa", ly_do_tu_choi="pii_trong_khoi"
+                    ) as pii_span:
+                        pii_span.dat_trang_thai("tu_choi")
+                else:
+                    blocks.append(block)
+            verified = verified.model_copy(update={"minh_hoa": blocks})
+
         chi_tiet = "Ngoài phạm vi hỗ trợ" if verified.trang_thai == "ngoai_pham_vi" else "Đạt"
         ghi_buoc("xong", step_ma, chi_tiet=chi_tiet)
         return {
@@ -607,9 +765,17 @@ class HoanTat:
             merged_tools = list(
                 dict.fromkeys([*ket_qua.cong_cu_da_goi, *state.get("cong_cu_da_goi", [])])
             )
+            vet = vet_hien_tai.get()
+            ma_vet = vet.ma_vet if vet is not None else ket_qua.ma_vet
+            if vet is not None:
+                vet.dat_trang_thai_cuoi(ket_qua.trang_thai)
             return {
                 "ket_qua": ket_qua.model_copy(
-                    update={"cong_cu_da_goi": merged_tools, "thoi_gian_ms": elapsed_ms}
+                    update={
+                        "cong_cu_da_goi": merged_tools,
+                        "thoi_gian_ms": elapsed_ms,
+                        "ma_vet": ma_vet,
+                    }
                 )
             }
         except Exception:

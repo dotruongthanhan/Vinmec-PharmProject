@@ -113,9 +113,14 @@ def get_global_ask_progress(
 
 
 @router.post("/ask", response_model=s.TraLoi)
-def ask_global(body: s.GuiCauHoi, request: Request, principal: Writer) -> s.TraLoi:
+def ask_global(
+    body: s.GuiCauHoi, request: Request, response: Response, principal: Writer
+) -> s.TraLoi:
     """Trả lời câu hỏi chung trên toàn bộ danh sách y lệnh và kho tài liệu."""
-    return _service(request).ask("__global__", body, principal)
+    result = _service(request).ask("__global__", body, principal)
+    if result.ma_vet:
+        response.headers["X-Ma-Vet"] = result.ma_vet
+    return result
 
 
 @router.get("/cases/{ca_id}/ask/tien-trinh", response_model=s.TienTrinhHoiDap)
@@ -131,9 +136,18 @@ def get_case_ask_progress(
 
 
 @router.post("/cases/{ca_id}/ask", response_model=s.TraLoi)
-def ask(ca_id: str, body: s.GuiCauHoi, request: Request, principal: Writer) -> s.TraLoi:
+def ask(
+    ca_id: str,
+    body: s.GuiCauHoi,
+    request: Request,
+    response: Response,
+    principal: Writer,
+) -> s.TraLoi:
     """Trả lời câu hỏi theo ca bệnh đang mở dựa trên hồ sơ và tài liệu."""
-    return _service(request).ask(ca_id, body, principal)
+    result = _service(request).ask(ca_id, body, principal)
+    if result.ma_vet:
+        response.headers["X-Ma-Vet"] = result.ma_vet
+    return result
 
 
 @router.post("/cases/{ca_id}/ai", response_model=s.KetQuaAI)

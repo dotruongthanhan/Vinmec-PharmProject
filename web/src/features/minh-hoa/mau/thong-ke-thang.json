@@ -1,0 +1,897 @@
+{
+  "gia_lap": true,
+  "dac_ta": [
+    {
+      "phien_ban": "mh-0",
+      "tieu_de": "Y lệnh cần thẩm định theo ngày",
+      "phu_de": [
+        {
+          "chu": "Dữ liệu giả lập để xem mẫu · "
+        },
+        {
+          "o": {
+            "ds": "ds-3",
+            "cot": "so_ngay",
+            "dong": 0
+          }
+        },
+        {
+          "chu": " ngày"
+        }
+      ],
+      "lop": [
+        {
+          "dau": "duong",
+          "du_lieu": "ds-1",
+          "loc": [
+            {
+              "cot": "khoa",
+              "trong_tham_so": "chon_khoa"
+            }
+          ],
+          "ma_hoa": {
+            "x": {
+              "cot": "ngay",
+              "kieu": "thoi_gian"
+            },
+            "y": {
+              "cot": "so_y_lenh",
+              "kieu": "dinh_luong"
+            },
+            "mau": {
+              "cot": "khoa"
+            },
+            "nhom": {
+              "cot": "khoa"
+            }
+          }
+        },
+        {
+          "dau": "diem",
+          "du_lieu": "ds-1",
+          "loc": [
+            {
+              "cot": "khoa",
+              "trong_tham_so": "chon_khoa"
+            }
+          ],
+          "ma_hoa": {
+            "x": {
+              "cot": "ngay",
+              "kieu": "thoi_gian"
+            },
+            "y": {
+              "cot": "so_y_lenh",
+              "kieu": "dinh_luong"
+            },
+            "mau": {
+              "cot": "khoa"
+            },
+            "nhom": {
+              "cot": "khoa"
+            }
+          }
+        }
+      ],
+      "truc": {
+        "x": {
+          "tieu_de": "Ngày",
+          "mien": "tu_du_lieu"
+        },
+        "y": {
+          "tieu_de": "Số y lệnh",
+          "mien": "tu_0"
+        }
+      },
+      "tham_so": [
+        {
+          "ma": "chon_khoa",
+          "loai": "bat_tat",
+          "nhan": "Khoa hiển thị",
+          "gia_tri_tu": {
+            "ds": "ds-1",
+            "cot": "khoa"
+          }
+        },
+        {
+          "loai": "dat_lai",
+          "nhan": "Bật tất cả khoa"
+        }
+      ],
+      "so_hien": [
+        {
+          "nhan": "Tổng y lệnh",
+          "o": {
+            "ds": "ds-3",
+            "cot": "tong_tat_ca",
+            "dong": 0
+          }
+        },
+        {
+          "nhan": "Khoa cao nhất",
+          "o": {
+            "ds": "ds-3",
+            "cot": "khoa_cao_nhat",
+            "dong": 0
+          }
+        }
+      ],
+      "nguon": [
+        "gia_lap:thong_ke_thang"
+      ]
+    },
+    {
+      "phien_ban": "mh-0",
+      "tieu_de": "Tổng y lệnh cần thẩm định theo khoa",
+      "phu_de": [
+        {
+          "chu": "Dữ liệu giả lập để xem mẫu"
+        }
+      ],
+      "lop": [
+        {
+          "dau": "cot",
+          "du_lieu": "ds-2",
+          "loc": [
+            {
+              "cot": "khoa",
+              "trong_tham_so": "chon_khoa"
+            }
+          ],
+          "ma_hoa": {
+            "x": {
+              "cot": "khoa",
+              "kieu": "danh_muc"
+            },
+            "y": {
+              "cot": "tong_y_lenh",
+              "kieu": "dinh_luong"
+            },
+            "mau": {
+              "cot": "khoa"
+            }
+          }
+        }
+      ],
+      "truc": {
+        "x": {
+          "tieu_de": "Khoa",
+          "mien": "tu_du_lieu"
+        },
+        "y": {
+          "tieu_de": "Tổng số y lệnh",
+          "mien": "tu_0"
+        }
+      },
+      "tham_so": [
+        {
+          "ma": "chon_khoa",
+          "loai": "bat_tat",
+          "nhan": "Khoa hiển thị",
+          "gia_tri_tu": {
+            "ds": "ds-2",
+            "cot": "khoa"
+          }
+        },
+        {
+          "loai": "dat_lai",
+          "nhan": "Bật tất cả khoa"
+        }
+      ],
+      "so_hien": [
+        {
+          "nhan": "Tổng y lệnh",
+          "o": {
+            "ds": "ds-3",
+            "cot": "tong_tat_ca",
+            "dong": 0
+          }
+        },
+        {
+          "nhan": "Khoa cao nhất",
+          "o": {
+            "ds": "ds-3",
+            "cot": "khoa_cao_nhat",
+            "dong": 0
+          }
+        }
+      ],
+      "nguon": [
+        "gia_lap:thong_ke_thang"
+      ]
+    }
+  ],
+  "bo_du_lieu": [
+    {
+      "ma": "ds-1",
+      "cot": [
+        {
+          "ten": "ngay",
+          "kieu": "thoi_gian",
+          "don_vi": null
+        },
+        {
+          "ten": "khoa",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "so_y_lenh",
+          "kieu": "dinh_luong",
+          "don_vi": "y lệnh"
+        }
+      ],
+      "dong": [
+        {
+          "ngay": "2026-10-28",
+          "khoa": "Khoa A",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-10-28",
+          "khoa": "Khoa B",
+          "so_y_lenh": 21
+        },
+        {
+          "ngay": "2026-10-28",
+          "khoa": "Khoa C",
+          "so_y_lenh": 17
+        },
+        {
+          "ngay": "2026-10-28",
+          "khoa": "Khoa D",
+          "so_y_lenh": 5
+        },
+        {
+          "ngay": "2026-10-29",
+          "khoa": "Khoa A",
+          "so_y_lenh": 22
+        },
+        {
+          "ngay": "2026-10-29",
+          "khoa": "Khoa B",
+          "so_y_lenh": 26
+        },
+        {
+          "ngay": "2026-10-29",
+          "khoa": "Khoa C",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-10-29",
+          "khoa": "Khoa D",
+          "so_y_lenh": 10
+        },
+        {
+          "ngay": "2026-10-30",
+          "khoa": "Khoa A",
+          "so_y_lenh": 33
+        },
+        {
+          "ngay": "2026-10-30",
+          "khoa": "Khoa B",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-10-30",
+          "khoa": "Khoa C",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-10-30",
+          "khoa": "Khoa D",
+          "so_y_lenh": 12
+        },
+        {
+          "ngay": "2026-10-31",
+          "khoa": "Khoa A",
+          "so_y_lenh": 18
+        },
+        {
+          "ngay": "2026-10-31",
+          "khoa": "Khoa B",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-10-31",
+          "khoa": "Khoa C",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-10-31",
+          "khoa": "Khoa D",
+          "so_y_lenh": 8
+        },
+        {
+          "ngay": "2026-11-01",
+          "khoa": "Khoa A",
+          "so_y_lenh": 26
+        },
+        {
+          "ngay": "2026-11-01",
+          "khoa": "Khoa B",
+          "so_y_lenh": 10
+        },
+        {
+          "ngay": "2026-11-01",
+          "khoa": "Khoa C",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-11-01",
+          "khoa": "Khoa D",
+          "so_y_lenh": 9
+        },
+        {
+          "ngay": "2026-11-02",
+          "khoa": "Khoa A",
+          "so_y_lenh": 23
+        },
+        {
+          "ngay": "2026-11-02",
+          "khoa": "Khoa B",
+          "so_y_lenh": 24
+        },
+        {
+          "ngay": "2026-11-02",
+          "khoa": "Khoa C",
+          "so_y_lenh": 10
+        },
+        {
+          "ngay": "2026-11-02",
+          "khoa": "Khoa D",
+          "so_y_lenh": 13
+        },
+        {
+          "ngay": "2026-11-03",
+          "khoa": "Khoa A",
+          "so_y_lenh": 27
+        },
+        {
+          "ngay": "2026-11-03",
+          "khoa": "Khoa B",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-11-03",
+          "khoa": "Khoa C",
+          "so_y_lenh": 17
+        },
+        {
+          "ngay": "2026-11-03",
+          "khoa": "Khoa D",
+          "so_y_lenh": 10
+        },
+        {
+          "ngay": "2026-11-04",
+          "khoa": "Khoa A",
+          "so_y_lenh": 27
+        },
+        {
+          "ngay": "2026-11-04",
+          "khoa": "Khoa B",
+          "so_y_lenh": 18
+        },
+        {
+          "ngay": "2026-11-04",
+          "khoa": "Khoa C",
+          "so_y_lenh": 13
+        },
+        {
+          "ngay": "2026-11-04",
+          "khoa": "Khoa D",
+          "so_y_lenh": 13
+        },
+        {
+          "ngay": "2026-11-05",
+          "khoa": "Khoa A",
+          "so_y_lenh": 28
+        },
+        {
+          "ngay": "2026-11-05",
+          "khoa": "Khoa B",
+          "so_y_lenh": 20
+        },
+        {
+          "ngay": "2026-11-05",
+          "khoa": "Khoa C",
+          "so_y_lenh": 14
+        },
+        {
+          "ngay": "2026-11-05",
+          "khoa": "Khoa D",
+          "so_y_lenh": 5
+        },
+        {
+          "ngay": "2026-11-06",
+          "khoa": "Khoa A",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-06",
+          "khoa": "Khoa B",
+          "so_y_lenh": 24
+        },
+        {
+          "ngay": "2026-11-06",
+          "khoa": "Khoa C",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-06",
+          "khoa": "Khoa D",
+          "so_y_lenh": 6
+        },
+        {
+          "ngay": "2026-11-07",
+          "khoa": "Khoa A",
+          "so_y_lenh": 26
+        },
+        {
+          "ngay": "2026-11-07",
+          "khoa": "Khoa B",
+          "so_y_lenh": 17
+        },
+        {
+          "ngay": "2026-11-07",
+          "khoa": "Khoa C",
+          "so_y_lenh": 4
+        },
+        {
+          "ngay": "2026-11-07",
+          "khoa": "Khoa D",
+          "so_y_lenh": 8
+        },
+        {
+          "ngay": "2026-11-08",
+          "khoa": "Khoa A",
+          "so_y_lenh": 18
+        },
+        {
+          "ngay": "2026-11-08",
+          "khoa": "Khoa B",
+          "so_y_lenh": 20
+        },
+        {
+          "ngay": "2026-11-08",
+          "khoa": "Khoa C",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-08",
+          "khoa": "Khoa D",
+          "so_y_lenh": 7
+        },
+        {
+          "ngay": "2026-11-09",
+          "khoa": "Khoa A",
+          "so_y_lenh": 32
+        },
+        {
+          "ngay": "2026-11-09",
+          "khoa": "Khoa B",
+          "so_y_lenh": 22
+        },
+        {
+          "ngay": "2026-11-09",
+          "khoa": "Khoa C",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-11-09",
+          "khoa": "Khoa D",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-11-10",
+          "khoa": "Khoa A",
+          "so_y_lenh": 24
+        },
+        {
+          "ngay": "2026-11-10",
+          "khoa": "Khoa B",
+          "so_y_lenh": 23
+        },
+        {
+          "ngay": "2026-11-10",
+          "khoa": "Khoa C",
+          "so_y_lenh": 17
+        },
+        {
+          "ngay": "2026-11-10",
+          "khoa": "Khoa D",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-11",
+          "khoa": "Khoa A",
+          "so_y_lenh": 20
+        },
+        {
+          "ngay": "2026-11-11",
+          "khoa": "Khoa B",
+          "so_y_lenh": 18
+        },
+        {
+          "ngay": "2026-11-11",
+          "khoa": "Khoa C",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-11-11",
+          "khoa": "Khoa D",
+          "so_y_lenh": 14
+        },
+        {
+          "ngay": "2026-11-12",
+          "khoa": "Khoa A",
+          "so_y_lenh": 29
+        },
+        {
+          "ngay": "2026-11-12",
+          "khoa": "Khoa B",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-12",
+          "khoa": "Khoa C",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-11-12",
+          "khoa": "Khoa D",
+          "so_y_lenh": 13
+        },
+        {
+          "ngay": "2026-11-13",
+          "khoa": "Khoa A",
+          "so_y_lenh": 20
+        },
+        {
+          "ngay": "2026-11-13",
+          "khoa": "Khoa B",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-13",
+          "khoa": "Khoa C",
+          "so_y_lenh": 14
+        },
+        {
+          "ngay": "2026-11-13",
+          "khoa": "Khoa D",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-14",
+          "khoa": "Khoa A",
+          "so_y_lenh": 25
+        },
+        {
+          "ngay": "2026-11-14",
+          "khoa": "Khoa B",
+          "so_y_lenh": 12
+        },
+        {
+          "ngay": "2026-11-14",
+          "khoa": "Khoa C",
+          "so_y_lenh": 9
+        },
+        {
+          "ngay": "2026-11-14",
+          "khoa": "Khoa D",
+          "so_y_lenh": 2
+        },
+        {
+          "ngay": "2026-11-15",
+          "khoa": "Khoa A",
+          "so_y_lenh": 14
+        },
+        {
+          "ngay": "2026-11-15",
+          "khoa": "Khoa B",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-11-15",
+          "khoa": "Khoa C",
+          "so_y_lenh": 10
+        },
+        {
+          "ngay": "2026-11-15",
+          "khoa": "Khoa D",
+          "so_y_lenh": 3
+        },
+        {
+          "ngay": "2026-11-16",
+          "khoa": "Khoa A",
+          "so_y_lenh": 31
+        },
+        {
+          "ngay": "2026-11-16",
+          "khoa": "Khoa B",
+          "so_y_lenh": 25
+        },
+        {
+          "ngay": "2026-11-16",
+          "khoa": "Khoa C",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-16",
+          "khoa": "Khoa D",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-17",
+          "khoa": "Khoa A",
+          "so_y_lenh": 29
+        },
+        {
+          "ngay": "2026-11-17",
+          "khoa": "Khoa B",
+          "so_y_lenh": 17
+        },
+        {
+          "ngay": "2026-11-17",
+          "khoa": "Khoa C",
+          "so_y_lenh": 14
+        },
+        {
+          "ngay": "2026-11-17",
+          "khoa": "Khoa D",
+          "so_y_lenh": 12
+        },
+        {
+          "ngay": "2026-11-18",
+          "khoa": "Khoa A",
+          "so_y_lenh": 25
+        },
+        {
+          "ngay": "2026-11-18",
+          "khoa": "Khoa B",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-18",
+          "khoa": "Khoa C",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-11-18",
+          "khoa": "Khoa D",
+          "so_y_lenh": 8
+        },
+        {
+          "ngay": "2026-11-19",
+          "khoa": "Khoa A",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-19",
+          "khoa": "Khoa B",
+          "so_y_lenh": 26
+        },
+        {
+          "ngay": "2026-11-19",
+          "khoa": "Khoa C",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-19",
+          "khoa": "Khoa D",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-20",
+          "khoa": "Khoa A",
+          "so_y_lenh": 30
+        },
+        {
+          "ngay": "2026-11-20",
+          "khoa": "Khoa B",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-20",
+          "khoa": "Khoa C",
+          "so_y_lenh": 9
+        },
+        {
+          "ngay": "2026-11-20",
+          "khoa": "Khoa D",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-11-21",
+          "khoa": "Khoa A",
+          "so_y_lenh": 24
+        },
+        {
+          "ngay": "2026-11-21",
+          "khoa": "Khoa B",
+          "so_y_lenh": 20
+        },
+        {
+          "ngay": "2026-11-21",
+          "khoa": "Khoa C",
+          "so_y_lenh": 16
+        },
+        {
+          "ngay": "2026-11-21",
+          "khoa": "Khoa D",
+          "so_y_lenh": 9
+        },
+        {
+          "ngay": "2026-11-22",
+          "khoa": "Khoa A",
+          "so_y_lenh": 15
+        },
+        {
+          "ngay": "2026-11-22",
+          "khoa": "Khoa B",
+          "so_y_lenh": 10
+        },
+        {
+          "ngay": "2026-11-22",
+          "khoa": "Khoa C",
+          "so_y_lenh": 12
+        },
+        {
+          "ngay": "2026-11-22",
+          "khoa": "Khoa D",
+          "so_y_lenh": 5
+        },
+        {
+          "ngay": "2026-11-23",
+          "khoa": "Khoa A",
+          "so_y_lenh": 30
+        },
+        {
+          "ngay": "2026-11-23",
+          "khoa": "Khoa B",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-23",
+          "khoa": "Khoa C",
+          "so_y_lenh": 8
+        },
+        {
+          "ngay": "2026-11-23",
+          "khoa": "Khoa D",
+          "so_y_lenh": 7
+        },
+        {
+          "ngay": "2026-11-24",
+          "khoa": "Khoa A",
+          "so_y_lenh": 33
+        },
+        {
+          "ngay": "2026-11-24",
+          "khoa": "Khoa B",
+          "so_y_lenh": 25
+        },
+        {
+          "ngay": "2026-11-24",
+          "khoa": "Khoa C",
+          "so_y_lenh": 18
+        },
+        {
+          "ngay": "2026-11-24",
+          "khoa": "Khoa D",
+          "so_y_lenh": 12
+        },
+        {
+          "ngay": "2026-11-25",
+          "khoa": "Khoa A",
+          "so_y_lenh": 23
+        },
+        {
+          "ngay": "2026-11-25",
+          "khoa": "Khoa B",
+          "so_y_lenh": 21
+        },
+        {
+          "ngay": "2026-11-25",
+          "khoa": "Khoa C",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-25",
+          "khoa": "Khoa D",
+          "so_y_lenh": 11
+        },
+        {
+          "ngay": "2026-11-26",
+          "khoa": "Khoa A",
+          "so_y_lenh": 27
+        },
+        {
+          "ngay": "2026-11-26",
+          "khoa": "Khoa B",
+          "so_y_lenh": 18
+        },
+        {
+          "ngay": "2026-11-26",
+          "khoa": "Khoa C",
+          "so_y_lenh": 19
+        },
+        {
+          "ngay": "2026-11-26",
+          "khoa": "Khoa D",
+          "so_y_lenh": 10
+        }
+      ]
+    },
+    {
+      "ma": "ds-2",
+      "cot": [
+        {
+          "ten": "khoa",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "tong_y_lenh",
+          "kieu": "dinh_luong",
+          "don_vi": "y lệnh"
+        },
+        {
+          "ten": "trung_binh_ngay",
+          "kieu": "dinh_luong",
+          "don_vi": "y lệnh/ngày"
+        }
+      ],
+      "dong": [
+        {
+          "khoa": "Khoa A",
+          "tong_y_lenh": 736,
+          "trung_binh_ngay": 24.533333333333335
+        },
+        {
+          "khoa": "Khoa B",
+          "tong_y_lenh": 562,
+          "trung_binh_ngay": 18.733333333333334
+        },
+        {
+          "khoa": "Khoa C",
+          "tong_y_lenh": 420,
+          "trung_binh_ngay": 14.0
+        },
+        {
+          "khoa": "Khoa D",
+          "tong_y_lenh": 294,
+          "trung_binh_ngay": 9.8
+        }
+      ]
+    },
+    {
+      "ma": "ds-3",
+      "cot": [
+        {
+          "ten": "so_ngay",
+          "kieu": "dinh_luong",
+          "don_vi": "ngày"
+        },
+        {
+          "ten": "tong_tat_ca",
+          "kieu": "dinh_luong",
+          "don_vi": "y lệnh"
+        },
+        {
+          "ten": "khoa_cao_nhat",
+          "kieu": "danh_muc",
+          "don_vi": null
+        }
+      ],
+      "dong": [
+        {
+          "so_ngay": 30,
+          "tong_tat_ca": 2012,
+          "khoa_cao_nhat": "Khoa A"
+        }
+      ]
+    }
+  ]
+}

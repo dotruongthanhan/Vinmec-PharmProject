@@ -16,6 +16,7 @@ from app.calc.hepatic import (
     child_pugh,
     child_pugh_class,
 )
+from app.calc.hien_thi import CONG_THUC_HIEN_THI
 from app.calc.renal import cockcroft_gault, egfr_ckd_epi_2021
 from app.calc.types import CalcInput, CalcResult, Sex, WeightType
 from app.calc.units import (
@@ -29,6 +30,7 @@ from app.calc.units import (
 
 __all__ = [
     "AscitesGrade",
+    "CONG_THUC_HIEN_THI",
     "CalcInput",
     "CalcResult",
     "ChildPughClass",

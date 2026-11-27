@@ -1,0 +1,218 @@
+{
+  "dac_ta": {
+    "phien_ban": "mh-0",
+    "tieu_de": "Ma trận tương tác thuốc",
+    "phu_de": [
+      {
+        "o": {
+          "ds": "ds-2",
+          "cot": "nguon_ca",
+          "dong": 0
+        }
+      },
+      {
+        "chu": " · "
+      },
+      {
+        "o": {
+          "ds": "ds-2",
+          "cot": "so_thuoc",
+          "dong": 0
+        }
+      },
+      {
+        "chu": " hoạt chất · "
+      },
+      {
+        "o": {
+          "ds": "ds-2",
+          "cot": "so_cap",
+          "dong": 0
+        }
+      },
+      {
+        "chu": " cặp"
+      }
+    ],
+    "lop": [
+      {
+        "dau": "o",
+        "du_lieu": "ds-1",
+        "loc": [
+          {
+            "cot": "muc_do",
+            "trong_tham_so": "loc_muc"
+          }
+        ],
+        "ma_hoa": {
+          "x": {
+            "cot": "thuoc_a",
+            "kieu": "danh_muc"
+          },
+          "y": {
+            "cot": "thuoc_b",
+            "kieu": "danh_muc"
+          },
+          "mau": {
+            "cot": "muc_do"
+          },
+          "nhan": {
+            "cot": "co_che"
+          },
+          "can_cu": {
+            "cot": "ma_can_cu"
+          }
+        }
+      }
+    ],
+    "truc": {
+      "x": {
+        "tieu_de": "Thuốc A",
+        "mien": "tu_du_lieu"
+      },
+      "y": {
+        "tieu_de": "Thuốc B",
+        "mien": "tu_du_lieu"
+      }
+    },
+    "tham_so": [
+      {
+        "ma": "loc_muc",
+        "loai": "loc",
+        "nhan": "Lọc theo mức độ",
+        "gia_tri_tu": {
+          "ds": "ds-1",
+          "cot": "muc_do"
+        }
+      },
+      {
+        "loai": "dat_lai",
+        "nhan": "Hiện tất cả"
+      }
+    ],
+    "so_hien": [
+      {
+        "nhan": "Tổng số cặp",
+        "o": {
+          "ds": "ds-2",
+          "cot": "so_cap",
+          "dong": 0
+        }
+      },
+      {
+        "nhan": "Nghiêm trọng",
+        "o": {
+          "ds": "ds-2",
+          "cot": "so_nghiem_trong",
+          "dong": 0
+        }
+      },
+      {
+        "nhan": "Cần lưu ý",
+        "o": {
+          "ds": "ds-2",
+          "cot": "so_can_luu_y",
+          "dong": 0
+        }
+      }
+    ],
+    "nguon": [
+      "ddinter:2.0",
+      "tra_cuu:hoat_chat"
+    ]
+  },
+  "bo_du_lieu": [
+    {
+      "ma": "ds-1",
+      "cot": [
+        {
+          "ten": "thuoc_a",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "thuoc_b",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "muc_do",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "co_che",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "ma_can_cu",
+          "kieu": "danh_muc",
+          "don_vi": null
+        }
+      ],
+      "dong": [
+        {
+          "thuoc_a": "fluconazole",
+          "thuoc_b": "phenytoin",
+          "muc_do": "nghiem_trong",
+          "co_che": "fluconazole × phenytoin: tương tác mức nặng (DDInter: Major, cơ chế Metabolism)",
+          "ma_can_cu": "ddinter:fluconazole_phenytoin"
+        },
+        {
+          "thuoc_a": "fluconazole",
+          "thuoc_b": "paracetamol",
+          "muc_do": "thieu_du_lieu",
+          "co_che": "fluconazole × paracetamol: chưa đủ dữ liệu tương tác: mức chưa rõ (DDInter: Unknown)",
+          "ma_can_cu": "ddinter:fluconazole_paracetamol"
+        },
+        {
+          "thuoc_a": "phenytoin",
+          "thuoc_b": "paracetamol",
+          "muc_do": "can_luu_y",
+          "co_che": "phenytoin × paracetamol: tương tác mức trung bình (DDInter: Moderate, cơ chế Metabolism)",
+          "ma_can_cu": "ddinter:phenytoin_paracetamol"
+        }
+      ]
+    },
+    {
+      "ma": "ds-2",
+      "cot": [
+        {
+          "ten": "nguon_ca",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "so_thuoc",
+          "kieu": "dinh_luong",
+          "don_vi": "hoạt chất"
+        },
+        {
+          "ten": "so_cap",
+          "kieu": "dinh_luong",
+          "don_vi": "cặp"
+        },
+        {
+          "ten": "so_nghiem_trong",
+          "kieu": "dinh_luong",
+          "don_vi": "cặp"
+        },
+        {
+          "ten": "so_can_luu_y",
+          "kieu": "dinh_luong",
+          "don_vi": "cặp"
+        }
+      ],
+      "dong": [
+        {
+          "nguon_ca": "HS-025",
+          "so_thuoc": 3,
+          "so_cap": 3,
+          "so_nghiem_trong": 1,
+          "so_can_luu_y": 1
+        }
+      ]
+    }
+  ]
+}

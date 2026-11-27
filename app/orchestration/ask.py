@@ -10,12 +10,15 @@ from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
+from contextlib import nullcontext
+from contextvars import copy_context
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal, NoReturn
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from app.agent.minh_hoa.models import KhoiMinhHoa
 from app.config.settings import CaseContextSettings
 from app.core.errors import ProviderError
 from app.core.interfaces import LLMClient, Retriever
@@ -37,6 +40,15 @@ from app.orchestration.evidence import LazyRetrieverFactory
 from app.pipeline import KetQuaThamDinh, run_case
 from app.retrieval.query_builder import QueryBuilder
 from app.rules import RenalRuleBook, load_renal_rules
+from app.tracing import (
+    bat_dau_vet,
+    che_chu_so_ma_ly_do,
+    dong_buoc_node_dang_chay,
+    ghi_su_kien_bao_mat,
+    goi_llm_co_vet,
+    span,
+    vet_hien_tai,
+)
 from app.ui import labels
 from app.ui import view_model as vm
 from app.verify.citation import quote_matches_source
@@ -87,6 +99,7 @@ _BLOCK_MARKERS = (
     "CAU_HOI>>>",
 )
 _DEID_TOKEN_RE = re.compile(TOKEN_PATTERN)
+_ZERO_WIDTH_RE = re.compile(r"[\u200b-\u200f\u202a-\u202e\ufeff]")
 _SCRUB_FALLBACK = "[không đưa được vào vì lỗi che định danh]"
 _CITATION_REF_RE = re.compile(r"\[(\d+)\]")
 _CLINICAL_QUESTION_RE = re.compile(
@@ -101,7 +114,12 @@ _INJECTION_PATTERNS: tuple[re.Pattern[str], ...] = (
         r"\bbỏ\s+qua\s+(?:mọi|tất\s+cả|các)?\s*(?:hướng\s+dẫn|quy\s+tắc|chỉ\s+thị|lệnh)\b",
         re.IGNORECASE,
     ),
-    re.compile(r"\bignore\s+(?:all\s+|previous\s+)?instructions\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:ignore|disregard|forget)\s+"
+        r"(?:(?:all|any|the|previous|prior|above|earlier|your|these|those)\s+){0,4}"
+        r"(?:instructions|rules|directions)\b",
+        re.IGNORECASE,
+    ),
     re.compile(
         r"\b(?:ghi|báo|kết\s+luận|xác\s+nhận)\s+(?:là\s+|đơn\s+(?:này\s+)?)?đạt\b",
         re.IGNORECASE,
@@ -157,7 +175,12 @@ def _log_rejection(step: str, reason: str, chunks: int = 0) -> str:
         safe_reason = scrub_text(_DEID_TOKEN_RE.sub("[đã che định danh]", reason)).van_ban
     except DeidError:
         safe_reason = "diagnostic_redacted"
-    _LOGGER.info("ask rejected step=%s reason=%s chunks=%s", step, safe_reason, chunks)
+    log_reason = che_chu_so_ma_ly_do(reason)
+    try:
+        log_reason = scrub_text(_DEID_TOKEN_RE.sub("[đã che định danh]", log_reason)).van_ban
+    except DeidError:
+        log_reason = "diagnostic_redacted"
+    _LOGGER.info("ask rejected step=%s reason=%s chunks=%s", step, log_reason, chunks)
     return safe_reason
 
 
@@ -199,6 +222,7 @@ def _safe_step_error_message(reason: str) -> str:
 
 def _mark_running_step_error(fallback_step: str, reason: str) -> None:
     """Đánh dấu bước đang chạy là lỗi với lý do và gợi ý an toàn."""
+    dong_buoc_node_dang_chay(loai_ngoai_le=reason)
     tracker = tien_trinh_hien_tai.get()
     if tracker is None:
         return
@@ -255,6 +279,8 @@ class AskResult(BaseModel):
     cong_cu_da_goi: list[str] = Field(default_factory=list)
     thoi_gian_ms: int = 0
     doan: list[Chunk] = Field(default_factory=list)
+    ma_vet: str | None = None
+    minh_hoa: list[KhoiMinhHoa] = Field(default_factory=list, max_length=3)
 
 
 def _source_label(nguon: str) -> str:
@@ -295,7 +321,10 @@ def _normalize_resolved(raw: Sequence[str] | str | None) -> list[str]:
 
 def _has_injection_directive(text: str) -> bool:
     """Phát hiện câu hỏi chứa chỉ thị vượt quyền hoặc ép duyệt đơn."""
-    return any(pattern.search(text) for pattern in _INJECTION_PATTERNS)
+    if any(pattern.search(text) for pattern in _INJECTION_PATTERNS):
+        return True
+    stripped = _ZERO_WIDTH_RE.sub("", text)
+    return stripped != text and any(pattern.search(stripped) for pattern in _INJECTION_PATTERNS)
 
 
 def _output_attempts_override(reply_text: str, ket_qua: KetQuaThamDinh) -> bool:
@@ -705,6 +734,62 @@ def kiem_chung_tra_loi(
     allowed_record_ids là mã tạm; mã thật chỉ xuất hiện ở kết quả trả về giao diện.
     bang_by_ma: mã dòng bảng do công cụ trả về -> (nhãn nguồn, nội dung dòng); None là không có.
     """
+    with span("kiem_chung", "kiem_chung_tra_loi") as kc_span:
+        return _kiem_chung_tra_loi_noi_bo(
+            ca=ca,
+            ket_qua=ket_qua,
+            cleaned_question=cleaned_question,
+            output=output,
+            allowed_record_ids=allowed_record_ids,
+            allowed_calc_ids=allowed_calc_ids,
+            allowed_numbers=allowed_numbers,
+            chunk_by_id=chunk_by_id,
+            anh_xa=anh_xa,
+            ids=ids,
+            tools_called=tools_called,
+            perf_start=perf_start,
+            bang_by_ma=bang_by_ma,
+            kc_span=kc_span,
+        )
+
+
+def _kiem_chung_tra_loi_noi_bo(
+    *,
+    ca: CaBenh,
+    ket_qua: KetQuaThamDinh,
+    cleaned_question: str,
+    output: AskLLMOutput,
+    allowed_record_ids: set[str],
+    allowed_calc_ids: set[str],
+    allowed_numbers: list[float],
+    chunk_by_id: dict[str, Chunk],
+    anh_xa: dict[str, str],
+    ids: RecordIdMap,
+    tools_called: list[str],
+    perf_start: float,
+    bang_by_ma: Mapping[str, tuple[str, str]] | None,
+    kc_span: object,
+) -> AskResult:
+    """Thực thi kiểm chứng bên trong span kiem_chung và ghi lý do đã che chữ số dài."""
+    vet = vet_hien_tai.get()
+
+    def _set_kc_attrs(
+        *,
+        so_bi_chan: int,
+        so_dat: int,
+        ma_ly_do: Sequence[str],
+        trang_thai_ket_qua: str,
+    ) -> None:
+        masked = [che_chu_so_ma_ly_do(item) for item in ma_ly_do]
+        kc_span.dat_thuoc_tinh(  # type: ignore[attr-defined]
+            tong_so=1,
+            so_dat=so_dat,
+            so_bi_chan=so_bi_chan,
+            ma_ly_do=masked,
+            trang_thai_ket_qua=trang_thai_ket_qua,
+        )
+        if so_bi_chan > 0 and vet is not None:
+            vet.tang_so_bi_chan(so_bi_chan)
 
     def _restore(text: str) -> str:
         return ids.doi_van_ban_sang_that(restore_text(text, anh_xa))
@@ -714,6 +799,14 @@ def kiem_chung_tra_loi(
 
     if _has_injection_directive(cleaned_question):
         _log_rejection("scope", "input_directive", len(chunk_by_id))
+        ghi_su_kien_bao_mat("chen_lenh_dau_vao", nguon="kiem_chung")
+        kc_span.dat_trang_thai("tu_choi")  # type: ignore[attr-defined]
+        _set_kc_attrs(
+            so_bi_chan=1,
+            so_dat=0,
+            ma_ly_do=["input_directive"],
+            trang_thai_ket_qua="ngoai_pham_vi",
+        )
         return AskResult(
             trang_thai="ngoai_pham_vi",
             noi_dung=OUT_OF_SCOPE_MESSAGE,
@@ -738,8 +831,17 @@ def kiem_chung_tra_loi(
             natural_msg = _restore(reply_text)
         else:
             natural_msg = NO_SOURCE_MESSAGE if clinical else OUT_OF_SCOPE_MESSAGE
+        status_ngoai: Literal["khong_co_nguon", "ngoai_pham_vi"] = (
+            "khong_co_nguon" if clinical else "ngoai_pham_vi"
+        )
+        _set_kc_attrs(
+            so_bi_chan=0,
+            so_dat=1,
+            ma_ly_do=["llm_pham_vi=ngoai"],
+            trang_thai_ket_qua=status_ngoai,
+        )
         return AskResult(
-            trang_thai="khong_co_nguon" if clinical else "ngoai_pham_vi",
+            trang_thai=status_ngoai,
             noi_dung=natural_msg,
             cong_cu_da_goi=tools_called,
             thoi_gian_ms=_elapsed(),
@@ -747,6 +849,14 @@ def kiem_chung_tra_loi(
 
     if _output_attempts_override(reply_text, ket_qua):
         _log_rejection("scope", "output_attempts_override", len(chunk_by_id))
+        ghi_su_kien_bao_mat("chen_lenh_dau_ra", nguon="kiem_chung")
+        kc_span.dat_trang_thai("tu_choi")  # type: ignore[attr-defined]
+        _set_kc_attrs(
+            so_bi_chan=1,
+            so_dat=0,
+            ma_ly_do=["output_attempts_override"],
+            trang_thai_ket_qua="ngoai_pham_vi",
+        )
         return AskResult(
             trang_thai="ngoai_pham_vi",
             noi_dung=OUT_OF_SCOPE_MESSAGE,
@@ -758,6 +868,13 @@ def kiem_chung_tra_loi(
 
     if not reply_text:
         _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
+        kc_span.dat_trang_thai("tu_choi")  # type: ignore[attr-defined]
+        _set_kc_attrs(
+            so_bi_chan=1,
+            so_dat=0,
+            ma_ly_do=["empty_answer_or_citations"],
+            trang_thai_ket_qua="khong_co_nguon",
+        )
         return AskResult(
             trang_thai="khong_co_nguon",
             noi_dung=NO_SOURCE_MESSAGE,
@@ -771,11 +888,24 @@ def kiem_chung_tra_loi(
         _log_rejection("verification", "empty_answer_or_citations", len(chunk_by_id))
         number_errors = unverified_numbers([reply_text], list(allowed_numbers))
         if number_errors:
+            _set_kc_attrs(
+                so_bi_chan=1,
+                so_dat=0,
+                ma_ly_do=number_errors,
+                trang_thai_ket_qua="tu_choi",
+            )
             safe_reason = _log_rejection("verification", "; ".join(number_errors), len(chunk_by_id))
             raise AskVerificationError(safe_reason)
         clinical = bool(_CLINICAL_QUESTION_RE.search(cleaned_question))
+        status_no_cite: Literal["khong_co_nguon", "ok"] = "khong_co_nguon" if clinical else "ok"
+        _set_kc_attrs(
+            so_bi_chan=1 if clinical else 0,
+            so_dat=0 if clinical else 1,
+            ma_ly_do=["empty_answer_or_citations"] if clinical else [],
+            trang_thai_ket_qua=status_no_cite,
+        )
         return AskResult(
-            trang_thai="khong_co_nguon" if clinical else "ok",
+            trang_thai=status_no_cite,
             noi_dung=_restore(reply_text),
             trich_dan=[],
             cong_cu_da_goi=tools_called,
@@ -790,6 +920,13 @@ def kiem_chung_tra_loi(
     effective_numbers = list(allowed_numbers)
 
     def _reject(reason: str) -> NoReturn:
+        reasons = [part.strip() for part in reason.split(";") if part.strip()]
+        _set_kc_attrs(
+            so_bi_chan=1,
+            so_dat=0,
+            ma_ly_do=reasons,
+            trang_thai_ket_qua="tu_choi",
+        )
         safe_reason = _log_rejection("verification", reason, len(chunk_by_id))
         raise AskVerificationError(safe_reason)
 
@@ -817,17 +954,35 @@ def kiem_chung_tra_loi(
                 )
             )
         elif item.loai == "tinh_toan":
-            if item.ma not in allowed_calc_ids:
-                _reject(f"unknown_calc_id:{item.ma}")
-            calc_label = labels.NHAN_CONG_THUC.get(item.ma, item.ma.replace("_", " "))
-            citations.append(
-                AskCitation(
-                    so=item.so,
-                    loai_ma="tinh_toan",
-                    nhan=calc_label,
-                    ban_ghi_id=item.ma,
+            ma_tinh = item.ma.strip().strip("[]").strip()
+            if ma_tinh.startswith("tinh:"):
+                row = (bang_by_ma or {}).get(ma_tinh)
+                if row is None:
+                    _reject(f"unknown_calc_row:{item.ma}")
+                row_label, row_text = row
+                effective_numbers.extend(numbers_in_text(row_text, include_en_thousands=True))
+                citations.append(
+                    AskCitation(
+                        so=item.so,
+                        loai_ma="tai_lieu",
+                        nhan=row_label,
+                        ban_ghi_id=None,
+                        doan_trich_id=None,
+                        trich_nguyen_van=None,
+                    )
                 )
-            )
+            else:
+                if item.ma not in allowed_calc_ids:
+                    _reject(f"unknown_calc_id:{item.ma}")
+                calc_label = labels.NHAN_CONG_THUC.get(item.ma, item.ma.replace("_", " "))
+                citations.append(
+                    AskCitation(
+                        so=item.so,
+                        loai_ma="tinh_toan",
+                        nhan=calc_label,
+                        ban_ghi_id=item.ma,
+                    )
+                )
         elif item.loai == "bang":
             table = bang_by_ma or {}
             ma_bang = item.ma.strip().strip("[]").strip()
@@ -885,6 +1040,7 @@ def kiem_chung_tra_loi(
     if number_errors:
         _reject("; ".join(number_errors))
 
+    _set_kc_attrs(so_bi_chan=0, so_dat=1, ma_ly_do=[], trang_thai_ket_qua="ok")
     restored_reply = _restore(reply_text)
     return AskResult(
         trang_thai="ok",
@@ -946,7 +1102,8 @@ class CaseAsker:
         if remaining <= 0:
             raise TimeoutError("Hết thời gian xử lý hỏi đáp")
         executor = ThreadPoolExecutor(max_workers=1)
-        future = executor.submit(fn)
+        ctx_copy = copy_context()
+        future = executor.submit(ctx_copy.run, fn)
         try:
             result = future.result(timeout=remaining)
         except FuturesTimeoutError as exc:
@@ -1119,29 +1276,93 @@ class CaseAsker:
                 doan=[],
             )
 
-        ghi_buoc("bat_dau", "chuan_bi", ten="Đọc hồ sơ ca và chạy bộ luật")
-        try:
-            session = open_deid_session(ca, [])
-            scrubbed_question, scrubbed_history = _scrub_history_and_question(
+        existing_vet = vet_hien_tai.get()
+        phien_ban = {
+            key: value
+            for key, value in (
+                ("prompt", self._prompt_path.stem),
+                ("mo_hinh", self._model_name or ""),
+            )
+            if value
+        }
+        trace_cm = (
+            nullcontext(existing_vet)
+            if existing_vet is not None
+            else bat_dau_vet(
+                loai="hoi_dap",
+                engine="co_dinh",
+                ca_id=ca.ca_id,
+                phien_ban=phien_ban,
+            )
+        )
+        with trace_cm as vet:
+            res = self._ask_traced(
+                ca,
                 cleaned_question,
-                lich_su or [],
-                session,
+                lich_su,
+                ket_qua=ket_qua,
+                ai_result=ai_result,
+                nhan_dinh_id=nhan_dinh_id,
+                perf_start=perf_start,
+                deadline=deadline,
             )
-        except Exception:
-            _log_rejection("deid", "scrub_failed")
-            ghi_buoc(
-                "loi",
-                "chuan_bi",
-                ly_do="Không soạn được câu trả lời",
-                goi_y=_ASK_RETRY_HINT,
-            )
-            return AskResult(
-                trang_thai="loi",
-                noi_dung=ERROR_MESSAGE,
-                trich_dan=[],
-                cong_cu_da_goi=[],
-                thoi_gian_ms=_elapsed(),
-                doan=[],
+            if vet is not None:
+                vet.dat_trang_thai_cuoi(res.trang_thai)
+                return res.model_copy(update={"ma_vet": vet.ma_vet})
+            return res
+
+    def _ask_traced(
+        self,
+        ca: CaBenh,
+        cleaned_question: str,
+        lich_su: list[tuple[str, str]] | None,
+        *,
+        ket_qua: KetQuaThamDinh | None,
+        ai_result: AiRunResult | None,
+        nhan_dinh_id: str | None,
+        perf_start: float,
+        deadline: float,
+    ) -> AskResult:
+        """Thân thực thi ask nằm trong phạm vi vết hiện hành."""
+
+        def _elapsed() -> int:
+            return int((time.perf_counter() - perf_start) * 1000.0)
+
+        ghi_buoc("bat_dau", "chuan_bi", ten="Đọc hồ sơ ca và chạy bộ luật")
+        with span("che_pii", "che_dinh_danh") as pii_span:
+            try:
+                session = open_deid_session(ca, [])
+                vet = vet_hien_tai.get()
+                if vet is not None:
+                    vet.dat_phien_che(session)
+                scrubbed_question, scrubbed_history = _scrub_history_and_question(
+                    cleaned_question,
+                    lich_su or [],
+                    session,
+                )
+            except Exception as exc:
+                pii_span.dat_trang_thai("loi")
+                pii_span.dat_thuoc_tinh(thanh_cong=False, loai_ngoai_le=type(exc).__name__)
+                _log_rejection("deid", "scrub_failed")
+                ghi_buoc(
+                    "loi",
+                    "chuan_bi",
+                    ly_do="Không soạn được câu trả lời",
+                    goi_y=_ASK_RETRY_HINT,
+                )
+                return AskResult(
+                    trang_thai="loi",
+                    noi_dung=ERROR_MESSAGE,
+                    trich_dan=[],
+                    cong_cu_da_goi=[],
+                    thoi_gian_ms=_elapsed(),
+                    doan=[],
+                )
+            kinds = sorted({key.strip("[]").rsplit("_", 1)[0] for key in session.anh_xa})
+            pii_span.dat_thuoc_tinh(
+                so_ma_tam=len(session.anh_xa),
+                loai_dinh_danh=kinds,
+                thanh_cong=True,
             )
 
         tools_called = ["du_lieu_ca", "bo_luat"]
@@ -1210,7 +1431,7 @@ class CaseAsker:
             chunk_by_id = {chunk.doan_trich_id: chunk for chunk in selected_chunks}
 
             step = "prompt"
-            _, template = load_prompt(self._prompt_path)
+            prompt_version, template = load_prompt(self._prompt_path)
             lich_su_text = (
                 "\n".join(
                     f"- {_ROLE_LABELS.get(role, role)}: {content}"
@@ -1244,7 +1465,13 @@ class CaseAsker:
                 )
                 step = "llm"
                 raw = self._run_with_deadline(
-                    lambda msgs=messages: llm.complete_json(msgs, schema),
+                    lambda msgs=messages, pv=prompt_version: goi_llm_co_vet(
+                        llm,
+                        msgs,
+                        schema,
+                        phien_ban_prompt=pv,
+                        mo_hinh=self._model_name,
+                    ),
                     deadline,
                 )
                 try:
@@ -1431,14 +1658,70 @@ class CaseAsker:
                 thoi_gian_ms=_elapsed(),
             )
 
-        if _has_injection_directive(cleaned_question):
-            ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
-            ghi_buoc("xong", "chuan_bi", chi_tiet="Ngoài phạm vi hỗ trợ")
-            return AskResult(
-                trang_thai="ngoai_pham_vi",
-                noi_dung=OUT_OF_SCOPE_MESSAGE,
-                thoi_gian_ms=_elapsed(),
+        existing_vet = vet_hien_tai.get()
+        phien_ban = {
+            key: value
+            for key, value in (
+                ("prompt", self._prompt_path.stem),
+                ("mo_hinh", self._model_name or ""),
             )
+            if value
+        }
+        trace_cm = (
+            nullcontext(existing_vet)
+            if existing_vet is not None
+            else bat_dau_vet(
+                loai="hoi_dap",
+                engine="co_dinh",
+                ca_id=None,
+                phien_ban=phien_ban,
+            )
+        )
+        with trace_cm as vet:
+            res = self._ask_global_traced(
+                cases,
+                results,
+                cleaned_question,
+                lich_su,
+                perf_start=perf_start,
+                deadline=deadline,
+            )
+            if vet is not None:
+                vet.dat_trang_thai_cuoi(res.trang_thai)
+                return res.model_copy(update={"ma_vet": vet.ma_vet})
+            return res
+
+    def _ask_global_traced(
+        self,
+        cases: Sequence[CaBenh],
+        results: dict[str, KetQuaThamDinh],
+        cleaned_question: str,
+        lich_su: list[tuple[str, str]] | None,
+        *,
+        perf_start: float,
+        deadline: float,
+    ) -> AskResult:
+        """Thân thực thi ask_global nằm trong phạm vi vết hiện hành."""
+
+        def _elapsed() -> int:
+            return int((time.perf_counter() - perf_start) * 1000.0)
+
+        with span("chan_dau_vao", "kiem_tra_chen_lenh", nguon_kiem_tra="cau_hoi") as guard_span:
+            if _has_injection_directive(cleaned_question):
+                guard_span.dat_trang_thai("tu_choi")
+                guard_span.dat_thuoc_tinh(bi_chan=True)
+                ghi_su_kien_bao_mat("chen_lenh_dau_vao", nguon="chan_dau_vao")
+                vet = vet_hien_tai.get()
+                if vet is not None:
+                    vet.tang_so_bi_chan()
+                ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
+                ghi_buoc("xong", "chuan_bi", chi_tiet="Ngoài phạm vi hỗ trợ")
+                return AskResult(
+                    trang_thai="ngoai_pham_vi",
+                    noi_dung=OUT_OF_SCOPE_MESSAGE,
+                    thoi_gian_ms=_elapsed(),
+                )
+            guard_span.dat_thuoc_tinh(bi_chan=False)
 
         ghi_buoc("bat_dau", "chuan_bi", ten="Tổng hợp danh sách y lệnh")
         # Câu hỏi chung: không có người bệnh đang mở nên chỉ che theo mẫu (lớp 2);
@@ -1450,6 +1733,9 @@ class CaseAsker:
                 for code in (ca.ca_id, ca.y_lenh_cho_duyet.y_lenh_id)
                 if code
             )
+            vet = vet_hien_tai.get()
+            if vet is not None:
+                vet.dat_phien_che(session)
             scrubbed_question, scrubbed_history = _scrub_history_and_question(
                 cleaned_question,
                 lich_su or [],
@@ -1538,7 +1824,7 @@ class CaseAsker:
 
         chunk_by_id = {c.doan_trich_id: c for c in selected_chunks}
         try:
-            _, template = load_prompt(self._prompt_path)
+            prompt_version, template = load_prompt(self._prompt_path)
             lich_su_text = (
                 "\n".join(
                     f"- {_ROLE_LABELS.get(role, role)}: {content}"
@@ -1557,71 +1843,103 @@ class CaseAsker:
                 loi_lan_truoc="Không có.",
             )
             ghi_buoc("bat_dau", "goi_mo_hinh", chi_tiet="Đang gọi mô hình", ten="Soạn câu trả lời")
+            llm = self._llm
+            assert llm is not None
             raw = self._run_with_deadline(
-                lambda msgs=messages: self._llm.complete_json(msgs, schema),  # type: ignore[union-attr]
+                lambda msgs=messages, pv=prompt_version: goi_llm_co_vet(
+                    llm,
+                    msgs,
+                    schema,
+                    phien_ban_prompt=pv,
+                    mo_hinh=self._model_name,
+                ),
                 deadline,
             )
             parsed = AskLLMOutput.model_validate(raw)
             ghi_buoc("xong", "goi_mo_hinh")
             ghi_buoc("bat_dau", "kiem_chung", ten="Kiểm chứng trích dẫn và số liệu")
-            reply_text = parsed.tra_loi.strip()
-            if not reply_text:
-                ghi_buoc("xong", "kiem_chung", chi_tiet="Không đủ căn cứ")
-                return AskResult(
-                    trang_thai="khong_co_nguon",
-                    noi_dung=NO_SOURCE_MESSAGE,
-                    cong_cu_da_goi=tools_called,
-                    thoi_gian_ms=_elapsed(),
+            with span("kiem_chung", "kiem_chung_tra_loi_chung") as kc_span:
+                reply_text = parsed.tra_loi.strip()
+                if not reply_text:
+                    kc_span.dat_trang_thai("tu_choi")
+                    kc_span.dat_thuoc_tinh(
+                        tong_so=1,
+                        so_dat=0,
+                        so_bi_chan=1,
+                        ma_ly_do=["empty_answer"],
+                        trang_thai_ket_qua="khong_co_nguon",
+                    )
+                    vet = vet_hien_tai.get()
+                    if vet is not None:
+                        vet.tang_so_bi_chan()
+                    ghi_buoc("xong", "kiem_chung", chi_tiet="Không đủ căn cứ")
+                    return AskResult(
+                        trang_thai="khong_co_nguon",
+                        noi_dung=NO_SOURCE_MESSAGE,
+                        cong_cu_da_goi=tools_called,
+                        thoi_gian_ms=_elapsed(),
+                    )
+                citations: list[AskCitation] = []
+                cited_chunks: list[Chunk] = []
+                seen_so: set[int] = set()
+                dropped_citations = 0
+                for item in parsed.trich_dan:
+                    if item.so <= 0 or item.so in seen_so:
+                        dropped_citations += 1
+                        continue
+                    if item.loai == "tai_lieu" and item.ma in chunk_by_id:
+                        ch = chunk_by_id[item.ma]
+                        seen_so.add(item.so)
+                        if ch not in cited_chunks:
+                            cited_chunks.append(ch)
+                        citations.append(
+                            AskCitation(
+                                so=item.so,
+                                loai_ma="tai_lieu",
+                                nhan=f"{_source_label(ch.nguon)} · {ch.duong_dan_muc}",
+                                ban_ghi_id=None,
+                                doan_trich_id=ch.doan_trich_id,
+                                trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
+                            )
+                        )
+                    elif item.loai == "du_lieu_ca":
+                        seen_so.add(item.so)
+                        citations.append(
+                            AskCitation(
+                                so=item.so,
+                                loai_ma="du_lieu",
+                                nhan=f"Bản ghi ca ({item.ma})",
+                                ban_ghi_id=item.ma,
+                                doan_trich_id=None,
+                                trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
+                            )
+                        )
+                    elif item.loai == "tinh_toan":
+                        seen_so.add(item.so)
+                        citations.append(
+                            AskCitation(
+                                so=item.so,
+                                loai_ma="tinh_toan",
+                                nhan=f"Chỉ số {item.ma}",
+                                ban_ghi_id=item.ma,
+                                doan_trich_id=None,
+                                trich_nguyen_van=None,
+                            )
+                        )
+                    else:
+                        dropped_citations += 1
+                restored = restore_text(reply_text, anh_xa)
+                status: Literal["ok", "ngoai_pham_vi"] = (
+                    "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
                 )
-            citations: list[AskCitation] = []
-            cited_chunks: list[Chunk] = []
-            seen_so: set[int] = set()
-            for item in parsed.trich_dan:
-                if item.so <= 0 or item.so in seen_so:
-                    continue
-                if item.loai == "tai_lieu" and item.ma in chunk_by_id:
-                    ch = chunk_by_id[item.ma]
-                    seen_so.add(item.so)
-                    if ch not in cited_chunks:
-                        cited_chunks.append(ch)
-                    citations.append(
-                        AskCitation(
-                            so=item.so,
-                            loai_ma="tai_lieu",
-                            nhan=f"{_source_label(ch.nguon)} · {ch.duong_dan_muc}",
-                            ban_ghi_id=None,
-                            doan_trich_id=ch.doan_trich_id,
-                            trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
-                        )
-                    )
-                elif item.loai == "du_lieu_ca":
-                    seen_so.add(item.so)
-                    citations.append(
-                        AskCitation(
-                            so=item.so,
-                            loai_ma="du_lieu",
-                            nhan=f"Bản ghi ca ({item.ma})",
-                            ban_ghi_id=item.ma,
-                            doan_trich_id=None,
-                            trich_nguyen_van=(item.trich_nguyen_van or "").strip() or None,
-                        )
-                    )
-                elif item.loai == "tinh_toan":
-                    seen_so.add(item.so)
-                    citations.append(
-                        AskCitation(
-                            so=item.so,
-                            loai_ma="tinh_toan",
-                            nhan=f"Chỉ số {item.ma}",
-                            ban_ghi_id=item.ma,
-                            doan_trich_id=None,
-                            trich_nguyen_van=None,
-                        )
-                    )
-            restored = restore_text(reply_text, anh_xa)
-            status: Literal["ok", "ngoai_pham_vi"] = (
-                "ngoai_pham_vi" if parsed.pham_vi == "ngoai" else "ok"
-            )
+                kc_span.dat_thuoc_tinh(
+                    tong_so=1,
+                    so_dat=1,
+                    so_bi_chan=0,
+                    ma_ly_do=[],
+                    so_trich_dan_bi_loai=dropped_citations,
+                    trang_thai_ket_qua=status,
+                )
             ghi_buoc(
                 "xong",
                 "kiem_chung",

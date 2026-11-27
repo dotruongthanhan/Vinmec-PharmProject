@@ -1,5 +1,118 @@
 # HANDOFF – bàn giao giữa các phiên Claude
 
+## CẬP NHẬT 27/11/2026 tối – UI1 + VZ1 (minh hoạ trong chat) XONG, chưa commit – ĐỌC PHẦN NÀY TRƯỚC
+
+Chủ kho chuyển tài khoản. **Không có agent hay máy chủ nào đang chạy.** Chưa commit gì từ `a044a23` (nhánh `vukhai248`). UI2 (nút mở rộng icon ở góc cho hình, dùng chung với bảng; tab dữ liệu có tên dễ hiểu) đã xong 27/11 tối.
+
+### 1. Trạng thái (chi tiết: `plan/TRACKING.md`, dòng UI1 → VZ1-fix-2)
+| Mã | Việc | Trạng thái |
+| :--- | :--- | :--- |
+| T106–T114 | Tool agent plan 1.9 + bộ chấm hỏi đáp | ✅ (T108–T114 chưa commit). Chấm lần 2: `co_dinh` 16/20, `agentic` 19/20 |
+| UI1 (+fix-1) | Bảng Markdown thật trong chat, nút "Mở rộng bảng", cột chat không nở | ✅ đo thật trên 5173 |
+| VZ0, TR1 (+fix-1) | Trang mẫu minh hoạ, tracer lõi (vết JSONL 30 ngày) | ✅ |
+| VZ1a-2 → VZ1a-5 | Máy chủ: tool `ve_bieu_do`, bộ kiểm `app/agent/minh_hoa/kiem.py`, gắn `minh_hoa` sau kiểm chứng, kỹ năng `config/prompts/ky_nang_minh_hoa.v1.md`, ngân sách vẽ riêng, giữ hình qua lần viết lại, chặn vẽ trùng | ✅ |
+| VZ1b | Web: khối minh hoạ trong chat (tải lười, chunk 16,4 KB gzip) | ✅ |
+| VZ1-fix-1 | Không trộn số của ca với giá trị giả định (máy chủ + web), bố cục khung hẹp | ✅ e2e đạt |
+| VZ1-fix-2 | Lịch sử nhắc hình cũ → LLM không vẽ lại | ✅ DeepSeek 2 lượt liên tiếp đều có hình |
+| UI2 | Nút mở rộng icon ở góc cho hình (dùng chung với bảng), tab dữ liệu bỏ mã `ds-n` | ✅ vitest 409/409, kiểm trình duyệt đạt |
+
+Kiểm gần nhất (27/11 tối): ruff sạch; pytest agent 231, orchestration 84, api 218/2 bỏ qua; web tsc sạch, vitest 409/409, build OK. DeepSeek thật DEMO-02: hình có thanh kéo creatinin, 11 dòng lưới Cockcroft-Gault Claude tự tính khớp < 0,01, 0 định danh trong khối.
+
+Phạm vi đã chốt: **VZ1 chỉ làm hỏi đáp theo ca** (chế độ chung đi qua `app/agent/asker.py`, luồng cũ, chưa có hình).
+
+### 2. Việc còn lại (theo thứ tự)
+1. **Chủ kho quyết định commit** đợt T108–T114 + UI1 + TR1 + VZ0/VZ1. Không commit lẫn: `gia lap/`, `docs/nghien-cuu/`, `data/formulas/`, `tools/scrape_mdcalc.py`, `plan/brainstorm-huong-moi-2026-11-23.md`, các `docs/*.md` đang ` M`, `.playwright-mcp/`, `config/settings.e2e.yaml` (hồ sơ thử, xem dưới).
+2. **Đo kéo thanh khi giảm CPU 6×** bằng Chrome DevTools thật (công cụ trình duyệt của Claude không giả lập được). Mục tiêu: dựng hình < 100 ms, kéo không giật.
+3. Việc nhỏ theo dõi:
+   - Không có bước lọc mã `mh-n`/`ds-n` khỏi chữ trả lời; hiện chỉ dựa vào prompt.
+   - Câu chữ LLM đôi khi nói "chưa có bảng chia đủ mức CrCl" dù tool đã trả 4 mức (chất lượng diễn giải).
+   - HD-CA-015: tên giả DEMO-03 có "63" bị bộ kiểm chứng chặn; chủ kho chốt có đổi tên giả không.
+   - 17 câu đáp án T112 chờ dược sĩ duyệt (`plan/reports/T112.md`).
+4. Các đợt tiếp của plan 1.11: TR2–TR3 (màn xem vết cho admin/dev), VZ2+ (thêm loại hình, chế độ chung).
+
+### 3. Cách chạy e2e minh hoạ
+- `preview_start cdss-api-agentic` (hồ sơ `config/settings.e2e.yaml` bật `ask.engine: agentic`, `CASE_SOURCE=file KB_SOURCE=file AUTH_MODE=off`) và `preview_start cdss-web-demo`.
+- Mở `/dang-nhap`, bấm "Vào bản demo", chọn ca DEMO-02 qua giao diện. Gõ URL thẳng sẽ mất phiên demo.
+- Câu thử: "Meropenem cho ca này có cần chỉnh liều theo thận không, CrCl có sát ngưỡng không? Vẽ hình giúp tôi xem nếu creatinin thay đổi thì mức liều đổi thế nào." Hình về sau khoảng 15–30 giây. Nếu lịch sử cũ gây nhiễu thì bấm "Xoá" trong khung trợ lý.
+- Gọi thẳng không qua API: `load_source_cases` → `build_container().agentic_asker.ask(ca, câu, lich_su)` (lịch sử dạng `("nguoi_dung", …)`, `("he_thong", …)`). Cách này không có `ma_vet`.
+
+### 4. Lưu ý vận hành (bài học 27/11)
+- **Gọi Codex chạy nền luôn thêm `< /dev/null`**, không ghép chung lệnh với heredoc (có lần treo 2 giờ ở "Reading additional input from stdin..."). Kiểm log khoảng 1 phút sau khi giao.
+- Brief lớn thì Codex dừng sớm → tách nhỏ (VZ1a gốc → VZ1a-2/3/4/5).
+- Chỉ chạy 1 agent mỗi lúc; pytest từng thư mục một (máy hết RAM).
+- `ruff format --check tests` panic vì 25 thư mục `tests/tracing/.tmp-*` bị khoá quyền → chỉ định thư mục con, hoặc chủ kho xoá bằng quyền admin.
+- Ghi `plan/TRACKING.md` đôi khi gặp `OSError 22` → thử lại sau vài giây.
+
+## CẬP NHẬT 26/11/2026 tối – Agent tool (plan 1.9) và đánh giá hỏi đáp – ĐỌC PHẦN NÀY TRƯỚC
+
+Chủ kho chuyển việc tool agent sang tài khoản Claude khác. Song song, phiên Claude cũ đang viết **plan 1.11 (tracer + visualizer trong chat)**, tệp `plan/plan-1.11-tracer-va-visualizer.md`. **Không sửa tệp đó.** Phiên cũ cũng đang giao **UI1** (bảng Markdown thành bảng thật và nút mở rộng toàn màn trong khung chat; brief `plan/briefs/UI1-bang-trong-chat-mo-rong.md`, Codex). UI1 sửa `web/src/components/ui/ClinicalMarkdown.tsx`, `dialog.tsx`, `web/src/features/assistant/HistoryDialog.tsx` và test web, nên đừng sửa các tệp này khi UI1 chưa xong. Mã `UI*`/`VZ*`/`TR*` thuộc phiên cũ; phiên tool dùng `T1xx`. Đợt VZ1 của plan 1.11 sẽ sửa `app/orchestration/ask.py`, `app/agent/nodes.py`, `gateway.py`, `schemas.py`: phải báo nhau trước khi giao.
+
+### Thứ tự đọc
+1. Khối này.
+2. `CLAUDE.md`, `AGENTS.md`.
+3. `plan/plan-1.9-agentic-rag-cong-cu-va-phan-quyen.md` (mục 5.2–5.10, 7.1, 9, 10).
+4. `plan/TRACKING.md`, các dòng T103 → T114.
+
+### 1. Hiện trạng (nhánh `vukhai248`, PR dotruongthanhan/Vinmec-PharmProject#6 đang mở, **chưa commit đợt này**)
+| Mã | Việc | Trạng thái |
+| :--- | :--- | :--- |
+| T106 | Tool `tra_tuong_tac` | xong 22/11 (đã commit `682fe38`) |
+| T107 | Tool `tim_doan_nguon` | xong 22/11 (đã commit) |
+| T108 (+fix-1) | Tool `tra_thuoc` (gộp `tra_quy_dinh`) | xong 26/11, chưa commit |
+| T109 (+fix-1) | Tool `tinh_chi_so` (CrCl theo IBW/AdjBW, IBW, AdjBW, BSA DuBois) | xong 26/11, chưa commit |
+| T110 (+fix-1) | Tool `doc_doan_mo_rong`. Kèm sửa bộ che PII che nhầm 79 mã đoạn, và mẫu chèn lệnh lọt | xong 26/11, chưa commit |
+| T111 | Rà danh mục tool: đã cắm 5 tool + `hoi_lai`; C1, C2, C4, B2 hoãn có số đo | xong |
+| T112 (+fix-1) | Bộ 90 câu hỏi `data/gold/hoi_dap/cau_hoi_v1.jsonl` (đáp án hiệu chỉnh, không đổi số) | xong, chưa commit. 17 câu chưa chắc chờ dược sĩ duyệt (`plan/reports/T112.md`) |
+| T113 (+fix-1) | Công cụ chấm `app/eval/hoi_dap.py` + `tools/cham_hoi_dap.py` | xong, chưa commit |
+| T113-lan1 | Chấm thật 20 câu: `co_dinh` 11/20, `agentic` 12/20, rò PII 0, tấn công lọt 0 | `plan/reports/danh-gia-hoi-dap/2026-11-26-lan1/` |
+| **T113-fix-2** | Lưu trích dẫn vào `chi_tiet.jsonl` + chế độ `--cham_lai` (chấm lại không gọi LLM) | **⏸️ dừng 13:38, máy hết RAM khi chạy 2 agy song song; chưa ghi tệp nào.** Brief: `plan/briefs/T113-fix-2.md` |
+| T114 | Hằng số công thức vào gói ca và `tinh_chi_so` (`app/calc/hien_thi.py`) | xong 17:06, chưa commit |
+
+Kiểm gần nhất, 26/11 13:0x, do Claude phiên cũ chạy:
+- `uv run pytest tests/agent tests/orchestration -q`: 231 qua.
+- `ruff check app`: sạch.
+- Toàn kho sau T114: 1864 qua / 4 bỏ qua. Test độ trễ `test_suggest_index_build_and_query_latency` trượt khi máy tải nặng, chạy riêng thì qua.
+- `ruff check .` toàn kho từng báo lỗi trong `pharm-overlay/`. Thư mục này **đã gác và đã vào `.gitignore`**; bỏ qua, không sửa.
+
+Tệp chưa commit thuộc đợt này:
+- **Sửa:** `app/agent/{nodes.py,tools/__init__.py,tools/base.py,tools/gateway.py,tools/tim_doan_nguon.py}`, `app/api/lookup.py`, `app/calc/__init__.py`, `app/container.py`, `app/llm/case_context.py`, `app/orchestration/ask.py`, `config/prompts/tac_tu.v1.md`, `config/tool_policy.yaml`, `plan/TRACKING.md`, `plan/plan-1.9-…md`, `tests/agent/test_gateway.py`, `tests/orchestration/test_ask.py`.
+- **Mới:** `app/agent/tools/{doc_doan_mo_rong,tinh_chi_so,tra_thuoc}.py`, `app/calc/hien_thi.py`, `app/eval/`, `tools/cham_hoi_dap.py`, `tests/agent/test_tool_*.py`, `tests/calc/test_hien_thi.py`, `tests/eval/`, `data/gold/hoi_dap/`, `docs/du-lieu/bo-cau-hoi-hoi-dap.md`, `plan/briefs/T108…T114*`, `plan/reports/T112*.md`, `plan/reports/danh-gia-hoi-dap/`.
+- **Không thuộc đợt này, đừng commit lẫn:** `gia lap/`, `docs/nghien-cuu/`, `data/formulas/`, `tools/scrape_mdcalc.py`, `plan/brainstorm-huong-moi-2026-11-23.md`, các `docs/*.md` đang ` M` (một số đang xung đột hợp nhất, chủ kho tự xử lý), `.streamlit/config.toml` bị xoá.
+
+### 2. Việc tiếp theo (theo thứ tự)
+1. **Giao lại T113-fix-2** (brief có sẵn). **Chỉ chạy 1 agent mỗi lúc** để tránh hết RAM.
+2. **Chấm lại** bằng đáp án đã hiệu chỉnh:
+   ```
+   uv run python tools/cham_hoi_dap.py --engine ca_hai --gioi_han 20 --ra plan/reports/danh-gia-hoi-dap/2026-11-26-lan2
+   ```
+   Gọi DeepSeek thật. Nếu đường hầm RDS chưa mở thì đặt `KB_SOURCE=file`. Mặc định trần 20 câu; dùng `--tat_ca` cho đủ 90 câu khi chủ kho đồng ý chi phí.
+
+   So với lần 1: câu trượt do đáp án hay do hệ thống. Ghi vào TRACKING.
+3. **Theo dõi:** `HD-CA-045` agent lần đầu bị chặn `so_khong_co_nguon:7184/425/725` (LLM viết hằng Du Bois kiểu khác, nghi do dấu phẩy thập phân). Nếu lặp lại thì viết brief cho bộ kiểm chứng số nhận cả `0,007184` và `0.007184`.
+4. **Việc dữ liệu (giao sub Sonnet):** thêm cột thứ tự đoạn `thu_tu` cho `tri_thuc.doan_trich`. T110 hiện lấy thứ tự từ `chunks.jsonl`.
+5. 17 câu đáp án chưa chắc: gửi dược sĩ duyệt (danh sách ở `plan/reports/T112.md`).
+6. **Commit đợt T108–T114** khi chủ kho bảo. Không push nếu chưa được bảo.
+
+### 3. Quy tắc bắt buộc (tóm tắt; đủ ở `CLAUDE.md`)
+- **Claude không viết code.** Claude chỉ:
+  - viết brief, giao agent;
+  - review: `uv run ruff check app tests tools`, `uv run ruff format --check …`, `uv run pytest -q -p no:cacheprovider`, rồi kiểm độc lập (tự tính lại vài giá trị, chạy qua API hoặc tool thật);
+  - ghi `plan/TRACKING.md`.
+- **Chọn agent** (chủ kho chốt 26/11):
+  - Codex `gpt-6.1-terra`, effort high → xhigh → max:
+    `codex exec -m gpt-6.1-terra -c model_reasoning_effort=high -s workspace-write -C <kho> -o <báo cáo> "Đọc AGENTS.md và plan/briefs/Txx.md rồi thực hiện đúng brief đó."`
+  - Codex làm không đạt thì chuyển agy Neon:
+    `agy --model gemini-4-neon-xhigh --mode accept-edits --print-timeout 3600s -p "… KHÔNG gọi shell …"`
+    agy không chạy được lệnh, nên Claude tự chạy `ruff format` và test.
+  - Neon hết hạn mức thì dùng sub Claude Sonnet medium.
+  - **Việc dữ liệu chỉ giao sub Sonnet.**
+  - Chạy nền bằng `run_in_background`, **không** dùng `&` (dùng `&` thì không nhận được thông báo khi xong).
+- **Bảo mật** (`CLAUDE.md` mục 6a): brief nào cũng có tiêu chí bảo mật chạy được bằng lệnh. Agent không tự cài gói. MCP Supabase chỉ đọc. Quy tắc 3 lượt: 3 lượt sửa không tiến thì dừng, báo chủ kho.
+- **Không commit / push** nếu chủ kho chưa bảo ngay trong lượt đó.
+- **Không đụng** `pharm-overlay/` (đã gác) và `gia lap/`.
+
+---
+
 ## CẬP NHẬT 19/11/2026 tối – D4 + D5 đã giao (đọc trước khối 15:00)
 
 - Claude đã kiểm dữ liệu D4/D5: **103/103 trích nguyên văn khớp tệp nhãn**; 6/17 quy tắc thận chồng khoảng CrCl ở ranh giới → sửa bằng trường mới `bao_gom_can_tren`.

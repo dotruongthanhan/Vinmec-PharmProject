@@ -1,0 +1,1820 @@
+{
+  "dac_ta": {
+    "phien_ban": "mh-0",
+    "tieu_de": "Liều meropenem theo CrCl",
+    "phu_de": [
+      {
+        "o": {
+          "ds": "ds-3",
+          "cot": "ca_id",
+          "dong": 0
+        }
+      },
+      {
+        "chu": " · CrCl "
+      },
+      {
+        "o": {
+          "ds": "ds-2",
+          "cot": "crcl",
+          "theo_tham_so": true,
+          "dinh_dang": "0.0"
+        }
+      },
+      {
+        "chu": " mL/phút"
+      }
+    ],
+    "lop": [
+      {
+        "dau": "dai",
+        "du_lieu": "ds-1",
+        "ma_hoa": {
+          "x_tu": {
+            "cot": "bien_ve_tu"
+          },
+          "x_den": {
+            "cot": "bien_ve_den"
+          },
+          "nhan": {
+            "cot": "khuyen_cao"
+          },
+          "mau": {
+            "cot": "can_chinh"
+          }
+        }
+      },
+      {
+        "dau": "quy_tac",
+        "du_lieu": "ds-3",
+        "ma_hoa": {
+          "x": {
+            "cot": "crcl",
+            "kieu": "dinh_luong"
+          },
+          "nhan": {
+            "chu": "Mốc của ca"
+          }
+        }
+      },
+      {
+        "dau": "diem",
+        "du_lieu": "ds-2",
+        "loc": [
+          {
+            "cot": "creatinin",
+            "bang_tham_so": "cr"
+          },
+          {
+            "cot": "loai_can_nang",
+            "bang_tham_so": "cn"
+          }
+        ],
+        "ma_hoa": {
+          "x": {
+            "cot": "crcl",
+            "kieu": "dinh_luong"
+          },
+          "nhan": {
+            "chu": "giả định"
+          }
+        }
+      }
+    ],
+    "truc": {
+      "x": {
+        "tieu_de": "CrCl (mL/phút)",
+        "mien": "tu_0"
+      },
+      "y": null
+    },
+    "tham_so": [
+      {
+        "ma": "cr",
+        "loai": "thanh_keo",
+        "nhan": "Creatinin (µmol/L)",
+        "gia_tri_tu": {
+          "ds": "ds-2",
+          "cot": "creatinin"
+        },
+        "mac_dinh": {
+          "o": {
+            "ds": "ds-3",
+            "cot": "creatinin",
+            "dong": 0
+          }
+        },
+        "nhan_gia_dinh": true
+      },
+      {
+        "ma": "cn",
+        "loai": "chon_mot",
+        "nhan": "Cân nặng",
+        "gia_tri_tu": {
+          "ds": "ds-2",
+          "cot": "loai_can_nang"
+        },
+        "mac_dinh": {
+          "o": {
+            "ds": "ds-3",
+            "cot": "loai_can_nang",
+            "dong": 0
+          }
+        }
+      },
+      {
+        "loai": "dat_lai",
+        "nhan": "Về số của ca"
+      }
+    ],
+    "so_hien": [
+      {
+        "nhan": "CrCl (mL/phút)",
+        "o": {
+          "ds": "ds-2",
+          "cot": "crcl",
+          "theo_tham_so": true,
+          "dinh_dang": "0.0"
+        }
+      },
+      {
+        "nhan": "Mức liều",
+        "o": {
+          "ds": "ds-2",
+          "cot": "khuyen_cao",
+          "theo_tham_so": true
+        }
+      }
+    ],
+    "cong_thuc": "cockcroft_gault",
+    "nguon": [
+      "tinh:crcl_cg",
+      "bang:meropenem",
+      "XN-DEMO02-01",
+      "SH-DEMO02-01"
+    ]
+  },
+  "cong_thuc_hien_thi": {
+    "cockcroft_gault": "(140 - tuổi) × cân nặng / (72 × creatinin mg/dL) × hệ số giới (nữ: 0.85; nam: 1); creatinin µmol/L / 88.4 = mg/dL"
+  },
+  "bo_du_lieu": [
+    {
+      "ma": "ds-1",
+      "cot": [
+        {
+          "ten": "crcl_tu",
+          "kieu": "dinh_luong",
+          "don_vi": "mL/min"
+        },
+        {
+          "ten": "crcl_den",
+          "kieu": "dinh_luong",
+          "don_vi": "mL/min"
+        },
+        {
+          "ten": "bien_ve_tu",
+          "kieu": "dinh_luong",
+          "don_vi": "mL/min"
+        },
+        {
+          "ten": "bien_ve_den",
+          "kieu": "dinh_luong",
+          "don_vi": "mL/min"
+        },
+        {
+          "ten": "can_chinh",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "khuyen_cao",
+          "kieu": "danh_muc",
+          "don_vi": null
+        }
+      ],
+      "dong": [
+        {
+          "crcl_tu": null,
+          "crcl_den": 10.0,
+          "bien_ve_tu": null,
+          "bien_ve_den": 10.0,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "crcl_tu": 10.0,
+          "crcl_den": 25.0,
+          "bien_ve_tu": 10.0,
+          "bien_ve_den": 25.0,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "crcl_tu": 26.0,
+          "crcl_den": 50.0,
+          "bien_ve_tu": 25.0,
+          "bien_ve_den": 50.0,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "crcl_tu": 50.0,
+          "crcl_den": null,
+          "bien_ve_tu": 50.0,
+          "bien_ve_den": null,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        }
+      ]
+    },
+    {
+      "ma": "ds-2",
+      "cot": [
+        {
+          "ten": "creatinin",
+          "kieu": "dinh_luong",
+          "don_vi": "µmol/L"
+        },
+        {
+          "ten": "loai_can_nang",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "crcl",
+          "kieu": "dinh_luong",
+          "don_vi": "mL/min"
+        },
+        {
+          "ten": "can_chinh",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "khuyen_cao",
+          "kieu": "danh_muc",
+          "don_vi": null
+        }
+      ],
+      "dong": [
+        {
+          "creatinin": 50.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 67.83472222222223,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 50.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 64.92370461504814,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 50.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 66.08811165791776,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 55.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 61.667929292929294,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 55.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 59.02154965004375,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 55.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 60.08010150719797,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 60.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 56.52893518518518,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 60.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 54.103087179206774,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 60.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 55.07342638159814,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 65.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 52.18055555555556,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 65.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 49.94131124234472,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 65.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 50.83700896762905,
+          "can_chinh": false,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 8 giờ"
+        },
+        {
+          "creatinin": 70.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 48.45337301587302,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 70.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 46.374074725034376,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 70.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 47.205794041369835,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 75.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 45.223148148148155,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 75.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 43.28246974336542,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 75.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 44.058741105278514,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 80.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 42.39670138888889,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 80.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 40.57731538440508,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 80.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 41.3050697861986,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 85.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 39.90277777777778,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 85.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 38.19041447944008,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 85.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 38.87535979877516,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 90.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 37.68595679012346,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 90.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 36.06872478613785,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 90.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 36.71561758773209,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 95.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 35.70248538011696,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 95.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 34.170370850025336,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 95.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 34.78321666206198,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 100.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 33.91736111111111,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 100.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 32.46185230752407,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 100.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 33.04405582895888,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 105.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 32.30224867724868,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 105.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 30.91604981668959,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 105.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 31.470529360913222,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 110.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 30.833964646464647,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 110.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 29.510774825021876,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 110.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 30.040050753598987,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 115.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 29.493357487922708,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 115.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 28.22769765871658,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 115.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 28.733961590399026,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 120.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 28.26446759259259,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 120.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 27.051543589603387,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 120.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 27.53671319079907,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 125.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 27.13388888888889,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 125.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 25.96948184601925,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 125.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 26.435244663167108,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 130.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 26.09027777777778,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 130.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 24.97065562117236,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 130.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 25.418504483814527,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 135.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 25.12397119341564,
+          "can_chinh": true,
+          "khuyen_cao": "Liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 135.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 24.0458165240919,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 135.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 24.477078391821394,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 140.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 24.22668650793651,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 140.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 23.187037362517188,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 140.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 23.602897020684917,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 145.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 23.391283524904217,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 145.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 22.387484350016596,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 145.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 22.789004019971642,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 150.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 22.611574074074078,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 150.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 21.64123487168271,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 150.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 22.029370552639257,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 155.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 21.88216845878136,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 155.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 20.943130520983267,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 155.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 21.318745696102507,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 160.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 21.198350694444446,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 160.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 20.28865769220254,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 160.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 20.6525348930993,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 165.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 20.555976430976433,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 165.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 19.673849883347916,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 165.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 20.026700502399322,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 170.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 19.95138888888889,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 170.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 19.09520723972004,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 170.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 19.43767989938758,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 175.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 19.381349206349206,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 175.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 18.54962989001375,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 175.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 18.882317616547933,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 180.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 18.84297839506173,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 180.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 18.034362393068925,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 180.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 18.357808793866045,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 185.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 18.33370870870871,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 185.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 17.54694719325625,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 185.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 17.861651799437237,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 190.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 17.85124269005848,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 190.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 17.085185425012668,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 190.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 17.39160833103099,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 195.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 17.39351851851852,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 195.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 16.647103747448238,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 195.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 16.94566965587635,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 200.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 16.958680555555556,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 200.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 16.230926153762034,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 200.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 16.52202791447944,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 205.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 16.545054200542005,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 205.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 15.835049906109301,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 205.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 16.11905162388238,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 210.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 16.15112433862434,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 210.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 15.458024908344795,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 210.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 15.735264680456611,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 212.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 15.998755241090146,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 212.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 15.312194484681164,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 212.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 15.586818787244757,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 215.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 15.775516795865633,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 215.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 15.098535956987938,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 215.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 15.369328292539016,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 220.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 15.416982323232324,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 220.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 14.755387412510938,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 220.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 15.020025376799493,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 225.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 15.074382716049383,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 225.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 14.42748991445514,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 225.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 14.686247035092837,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 230.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 14.746678743961354,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 230.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 14.11384882935829,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 230.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 14.366980795199513,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 235.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 14.43291962174941,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 235.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 13.813554173414497,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 235.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 14.06130035274846,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 240.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 14.132233796296296,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 240.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 13.525771794801694,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 240.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 13.768356595399535,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 245.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 13.843820861678006,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 245.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 13.249735635724107,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 245.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 13.487369726105667,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 250.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 13.566944444444445,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 250.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 12.984740923009625,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 250.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 13.217622331583554,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 255.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 13.300925925925926,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 255.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 12.73013815981336,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 255.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 12.958453266258386,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 260.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 13.04513888888889,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 260.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 12.48532781058618,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 260.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 12.709252241907263,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 265.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 12.799004192872118,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 265.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 12.24975558774493,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 265.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 12.469455029795805,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 270.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 12.56198559670782,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 270.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 12.02290826204595,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 270.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 12.238539195910697,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 275.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 12.333585858585858,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 275.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 11.80430993000875,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 275.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 12.016020301439594,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 280.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 12.113343253968255,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 280.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 11.593518681258594,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 280.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 11.801448510342459,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 285.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 11.900828460038985,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 285.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 11.39012361667511,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 285.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 11.59440555402066,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 290.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 11.695641762452109,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 290.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 11.193742175008298,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 290.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 11.394502009985821,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 295.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 11.49741054613936,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 295.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 11.004017731364089,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 295.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 11.201374857274198,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 300.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 11.305787037037039,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 300.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 10.820617435841354,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 300.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 11.014685276319629,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 305.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 11.12044626593807,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 305.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 10.643230264761987,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 305.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 10.83411666523242,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 310.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 10.94108422939068,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 310.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 10.471565260491634,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 310.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 10.659372848051254,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 315.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 10.76741622574956,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 315.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 10.305349938896528,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 315.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 10.49017645363774,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 320.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 10.599175347222223,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 320.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 10.14432884610127,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 320.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 10.32626744654965,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 325.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 10.436111111111112,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 325.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.988262248468944,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 325.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 10.16740179352581,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 330.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 10.277988215488216,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 330.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.836924941673958,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 330.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 10.013350251199661,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 335.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 10.124585406301824,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        },
+        {
+          "creatinin": 335.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.690105166425095,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 335.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.863897262375787,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 340.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.975694444444445,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 340.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.54760361986002,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 340.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.71883994969379,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 345.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.831119162640903,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 345.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.409232552905527,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 345.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.577987196799677,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 350.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.690674603174603,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 350.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.274814945006876,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 350.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.441158808273967,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 355.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.554186228482003,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 355.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.144183748598328,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 355.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.308184740551798,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 360.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.421489197530866,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 360.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 9.017181196534462,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 360.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.178904396933023,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 365.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.292427701674278,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 365.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.893658166444949,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 365.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 9.053165980536681,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 370.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.166854354354355,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 370.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.773473596628126,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 370.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.930825899718618,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 375.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 9.044629629629629,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 375.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.656493948673084,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 375.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.811748221055703,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 380.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 8.92562134502924,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 380.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.542592712506334,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 380.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.695804165515495,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 385.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 8.809704184704186,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 385.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.431649950006252,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 385.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.582871643885424,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 390.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 8.69675925925926,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 390.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.323551873724119,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 390.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.472834827938176,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 395.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 8.58667369901547,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 395.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.218190457601027,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 395.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.365583754166805,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 400.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 8.479340277777778,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 400.0,
+          "loai_can_nang": "ly_tuong",
+          "crcl": 8.115463076881017,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        },
+        {
+          "creatinin": 400.0,
+          "loai_can_nang": "hieu_chinh",
+          "crcl": 8.26101395723972,
+          "can_chinh": true,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 24 giờ"
+        }
+      ]
+    },
+    {
+      "ma": "ds-3",
+      "cot": [
+        {
+          "ten": "ca_id",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "creatinin",
+          "kieu": "dinh_luong",
+          "don_vi": "µmol/L"
+        },
+        {
+          "ten": "can_nang",
+          "kieu": "dinh_luong",
+          "don_vi": "kg"
+        },
+        {
+          "ten": "loai_can_nang",
+          "kieu": "danh_muc",
+          "don_vi": null
+        },
+        {
+          "ten": "crcl",
+          "kieu": "dinh_luong",
+          "don_vi": "mL/min"
+        },
+        {
+          "ten": "khuyen_cao",
+          "kieu": "danh_muc",
+          "don_vi": null
+        }
+      ],
+      "dong": [
+        {
+          "ca_id": "DEMO-02",
+          "creatinin": 212.0,
+          "can_nang": 50.0,
+          "loai_can_nang": "thuc_te",
+          "crcl": 15.998755241090146,
+          "khuyen_cao": "Một nửa liều khuyến cáo, mỗi 12 giờ"
+        }
+      ]
+    }
+  ]
+}

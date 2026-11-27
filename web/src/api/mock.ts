@@ -362,12 +362,26 @@ export class MockClient implements ReviewApiClient {
       }
     }
 
+    const coHinh = /minh hoạ|minh họa|meropenem/i.test(payload.cau_hoi)
+    if (caId !== 'DEMO-02' && coHinh) {
+      const minhHoa = (await import('@/features/minh-hoa/mau/khoi-that-demo02-da-chinh.json')).default
+      return {
+        trang_thai: 'ok',
+        noi_dung: 'Đây là hình minh hoạ từ dữ liệu giả lập DEMO-02.',
+        minh_hoa: minhHoa as TraLoi['minh_hoa'],
+        trich_dan: [],
+        cong_cu_da_goi: [],
+        thoi_gian_ms: elapsed || 1500,
+      }
+    }
     if (caId === 'DEMO-02') {
+      const minhHoa = coHinh ? (await import('@/features/minh-hoa/mau/khoi-that-demo02-da-chinh.json')).default : []
       const focusNote = payload.nhan_dinh_id
         ? ' Đối với nhận định đang chọn về hiệu chỉnh liều theo chức năng thận,'
         : ''
       return {
         trang_thai: 'ok',
+        minh_hoa: minhHoa as TraLoi['minh_hoa'],
         noi_dung: `${focusNote ? `${focusNote.trim()} ` : ''}Hồ sơ xét nghiệm ghi nhận creatinin máu tăng lên 212,0 µmol/L lúc 05:30 · 10/11/2026 [1], tương ứng CrCl ước tính theo Cockcroft-Gault là 16,0 mL/phút. Theo nhãn thuốc FDA MERREM IV, người bệnh suy giảm chức năng thận cần được xem xét hiệu chỉnh liều dùng [2].`,
         trich_dan: [
           {

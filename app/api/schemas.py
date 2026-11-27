@@ -5,6 +5,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.agent.minh_hoa.models import KhoiMinhHoa
 from app.kb.interactions.models import MaTranTuongTac as MaTranTuongTac
 
 MucDoMa = Literal["nghiem_trong", "can_luu_y"] | None
@@ -447,6 +448,8 @@ class TraLoi(ApiModel):
     trich_dan: list[Citation]
     cong_cu_da_goi: list[str]
     thoi_gian_ms: int = 0
+    ma_vet: str | None = None
+    minh_hoa: list[KhoiMinhHoa] = Field(default_factory=list, max_length=3)
 
 
 class AiFindings(ApiModel):

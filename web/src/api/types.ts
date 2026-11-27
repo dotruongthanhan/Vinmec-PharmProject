@@ -442,12 +442,22 @@ export interface TrichDanTraLoi {
   trich_nguyen_van?: string | null
 }
 
+export interface KhoiMinhHoa {
+  ma: string
+  phien_ban: 'mh-0' | 'mh-1'
+  dac_ta: import('@/features/minh-hoa/nguPhap').DacTaMinhHoa
+  bo_du_lieu: import('@/features/minh-hoa/nguPhap').BoDuLieu[]
+  cong_thuc_hien_thi: string | null
+  nguon: string[]
+}
+
 export interface TraLoi {
   trang_thai: TrangThaiTraLoi
   noi_dung: string
   trich_dan: TrichDanTraLoi[]
   cong_cu_da_goi: string[]
   thoi_gian_ms?: number
+  minh_hoa?: KhoiMinhHoa[]
 }
 
 export interface HealthResponse {

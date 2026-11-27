@@ -9,6 +9,7 @@ from typing import ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.agent.minh_hoa.models import BoDuLieu
 from app.core.types import Chunk
 from app.deid.session import DeidSession
 from app.domain.models import CaBenh
@@ -38,6 +39,7 @@ class KetQuaCongCu(BaseModel):
     trang_thai: Literal["ok", "khong_co", "loi", "tu_choi"]
     noi_dung: str = ""
     can_cu: list[CanCu] = Field(default_factory=list)
+    bo_du_lieu: list[BoDuLieu] = Field(default_factory=list)
     chi_tiet_tien_trinh: str | None = None
     ma_loi: str | None = None
 
@@ -71,7 +73,10 @@ class Tool(ABC):
     goi_ra_ngoai: ClassVar[bool] = False
     thoi_gian_toi_da: ClassVar[float] = 20.0
     so_can_cu_toi_da: ClassVar[int] = 20
+    chi_doan_da_tra: ClassVar[bool] = False
 
     @abstractmethod
-    def chay(self, tham_so: BaseModel, ctx: ToolContext) -> KetQuaCongCu:
+    def chay(
+        self, tham_so: BaseModel, ctx: ToolContext, *, doan_goc: Chunk | None = None
+    ) -> KetQuaCongCu:
         """Thực thi công cụ với tham số đã kiểm chứng và ngữ cảnh bất biến."""

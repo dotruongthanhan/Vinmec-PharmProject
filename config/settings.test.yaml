@@ -12,3 +12,5 @@ vector_store:
   provider: "memory"
 ask:
   engine: "co_dinh"                 # test giữ luồng cũ để test API dùng bộ hỏi tiêm như trước
+tracer:
+  bat: false                        # test mặc định tắt ghi tệp thật; tests/tracing tự bật vào tmp_path

@@ -566,13 +566,14 @@ def search_drugs(q: str | None, page: int, page_size: int) -> s.DanhSachThuoc:
     )
 
 
-def _products(identifier: str, total: int) -> s.DanhSachChePham:
+def _products(identifier: str, total: int, *, limit: int = _MAX_PRODUCTS) -> s.DanhSachChePham:
+    bounded = max(1, min(_MAX_PRODUCTS, limit))
     rows = _query(
         "tra_cuu",
         "SELECT t.ten_thuoc, t.so_dang_ky, t.dang_bao_che, p.ham_luong, p.don_vi "
         "FROM {tp} p JOIN {th} t ON t.thuoc_id = p.thuoc_id WHERE p.hoat_chat_id = %s "
         "ORDER BY t.ten_thuoc, t.thuoc_id LIMIT %s",
-        (identifier, _MAX_PRODUCTS),
+        (identifier, bounded),
     )
     return s.DanhSachChePham(
         nguon=_SOURCE_PRODUCTS,
@@ -693,6 +694,48 @@ def _interaction_summary(row: dict[str, Any]) -> s.TuongTacTomTat:
     )
 
 
+def _build_identity(row: dict[str, Any], codes: list[str]) -> s.DinhDanhThuoc:
+    return s.DinhDanhThuoc(
+        hoat_chat_id=row["hoat_chat_id"],
+        ten_inn=row["ten_inn"],
+        ten_viet=row["ten_viet"],
+        rxcui=row["rxcui"],
+        ma_atc=codes,
+        ddinter_id=row["ddinter_id"],
+        loai=row["loai"],
+        nguon=_SOURCE_TRA_CUU,
+        trang_thai=None,
+    )
+
+
+def drug_identity(identifier: str) -> s.DinhDanhThuoc | None:
+    """Định danh một hoạt chất từ danh mục tra cứu; trả None nếu không có."""
+    row = _catalog().get(identifier)
+    if row is None:
+        return None
+    return _build_identity(row, _atc(row["ma_atc_json"]))
+
+
+def drug_rules(identifier: str, atc_codes: list[str] | None = None) -> list[s.QuyTacDong]:
+    """Mọi dòng bảng luật của một hoạt chất (không truy vấn nhãn FDA hay chế phẩm)."""
+    if atc_codes is None:
+        row = _catalog().get(identifier)
+        if row is None:
+            return []
+        codes = _atc(row["ma_atc_json"])
+    else:
+        codes = atc_codes
+    return _rules_for(identifier, codes)
+
+
+def drug_products(identifier: str, limit: int = _MAX_PRODUCTS) -> s.DanhSachChePham | None:
+    """Danh sách chế phẩm Cục QLD giới hạn theo limit kèm tổng số; None nếu không có."""
+    row = _catalog().get(identifier)
+    if row is None:
+        return None
+    return _products(identifier, int(row["so_che_pham"]), limit=limit)
+
+
 def drug_detail(identifier: str) -> s.ChiTietThuoc:
     """Toàn bộ thông tin một hoạt chất; mỗi phần ghi nguồn, không suy diễn."""
     row = _catalog().get(identifier)
@@ -704,17 +747,7 @@ def drug_detail(identifier: str) -> s.ChiTietThuoc:
     label = _POOL.submit(_label, identifier)
     summary = _POOL.submit(_interaction_summary, row)
     return s.ChiTietThuoc(
-        dinh_danh=s.DinhDanhThuoc(
-            hoat_chat_id=row["hoat_chat_id"],
-            ten_inn=row["ten_inn"],
-            ten_viet=row["ten_viet"],
-            rxcui=row["rxcui"],
-            ma_atc=codes,
-            ddinter_id=row["ddinter_id"],
-            loai=row["loai"],
-            nguon=_SOURCE_TRA_CUU,
-            trang_thai=None,
-        ),
+        dinh_danh=_build_identity(row, codes),
         che_pham=products.result(),
         nhan_fda=label.result(),
         quy_tac=_rules_for(identifier, codes),

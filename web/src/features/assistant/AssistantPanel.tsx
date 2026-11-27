@@ -15,6 +15,7 @@
   X,
 } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { MinhHoaChat } from './MinhHoaChat'
 import type { KeyboardEvent } from 'react'
 import type { ReviewApiClient } from '@/api/client'
 import type {
@@ -502,8 +503,8 @@ export function AssistantPanel({
           value="hoi_dap"
           className="hidden data-[state=active]:flex flex-1 min-h-0 flex-col"
         >
-          <ScrollArea className="flex-1 min-h-0" viewportClassName="p-4">
-            <div className="flex flex-col gap-3">
+          <ScrollArea className="flex-1 min-h-0" viewportClassName="p-4 [&>div]:!block">
+            <div className="flex min-w-0 max-w-full flex-col gap-3">
               <>
                 {inputState.lockMessage ? (
                   <InlineAlert tone="neutral" role="status">
@@ -547,8 +548,8 @@ export function AssistantPanel({
                 ) : null}
 
                   {messages.length > 0 ? (
-                    <div className="flex flex-col gap-4">
-                      {messages.map((msg) => {
+                    <div className="flex min-w-0 max-w-full flex-col gap-4">
+                      {messages.map((msg, messageIndex) => {
                         if (msg.vai === 'nguoi_dung') {
                           return (
                             <div
@@ -569,7 +570,7 @@ export function AssistantPanel({
                         return (
                           <div
                             key={msg.id}
-                            className="flex flex-col gap-2.5 border-b border-line pb-3.5 last:border-b-0 last:pb-0 text-sm text-fg"
+                            className="flex min-w-0 max-w-full flex-col gap-2.5 border-b border-line pb-3.5 last:border-b-0 last:pb-0 text-sm text-fg"
                           >
                             {/* Quá trình xử lý nằm trên câu trả lời (giữa tin nhắn người dùng và tin nhắn AI), thu gọn sẵn. */}
                             {msgSteps.length > 0 ? (
@@ -681,6 +682,10 @@ export function AssistantPanel({
                                 </CollapsibleContent>
                               </Collapsible>
                             ) : null}
+
+                            {(msg.tra_loi.minh_hoa ?? []).map((khoi) => (
+                              <MinhHoaChat key={khoi.ma} khoi={khoi} cu={messages.slice(messageIndex + 1).filter((item) => item.vai !== 'nguoi_dung').length >= 2} />
+                            ))}
 
                             {msg.tra_loi.cong_cu_da_goi.length > 0 ? (
                               <Collapsible className="pt-1">
