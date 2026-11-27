@@ -14,6 +14,7 @@ export interface ChartPoint {
   timestampMs: number
   timestampLabel: string
   ngoaiNguong: boolean
+  isSelected?: boolean
 }
 
 export interface LabTrendChartModel {
@@ -301,4 +302,157 @@ export function buildLabTrendCharts(
   }
 
   return models
+}
+
+/**
+ * Dựng mô hình toạ độ SVG cho ĐÚNG MỘT chỉ số xét nghiệm (hỗ trợ cả khi chỉ có 1 lần đo),
+ * đồng thời đánh dấu điểm đang được chọn từ bảng phẳng.
+ */
+export function buildSingleLabTrendChart(
+  labs: readonly ChiTietXetNghiemDong[],
+  metricName: string,
+  orderTimeText?: string | null,
+  dimensions: { width?: number; height?: number } = {},
+  selectedMatch?: { thoiDiemText: string; giaTriText: string } | null,
+): LabTrendChartModel | null {
+  const matching = labs.filter((row) => row.ten === metricName)
+  if (matching.length === 0) {
+    return null
+  }
+
+  const width = dimensions.width ?? 560
+  const height = dimensions.height ?? 208
+  const plotLeft = 52
+  const plotRight = width - 24
+  const plotTop = 22
+  const plotBottom = height - 30
+  const plotWidth = Math.max(1, plotRight - plotLeft)
+  const plotHeight = Math.max(1, plotBottom - plotTop)
+
+  const parsedRows = matching
+    .map((row) => {
+      const value = parseVietnameseNumber(row.gia_tri_text)
+      const timestampMs = parseChartTimestamp(row.thoi_diem_text)
+      if (value === null || timestampMs === null) {
+        return null
+      }
+      return { row, value, timestampMs }
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .sort((a, b) => a.timestampMs - b.timestampMs)
+
+  if (parsedRows.length === 0) {
+    return null
+  }
+
+  const orderTimeMs = parseChartTimestamp(orderTimeText)
+  const latestRow = parsedRows[parsedRows.length - 1].row
+  const donVi = latestRow.don_vi.replace(/\bumol\/[lL]\b/g, 'µmol/L')
+  const range = parseReferenceRange(latestRow.khoang_tham_chieu)
+
+  const yValues = parsedRows.map((p) => p.value)
+  if (range?.min !== null && range?.min !== undefined) yValues.push(range.min)
+  if (range?.max !== null && range?.max !== undefined) yValues.push(range.max)
+
+  const rawYMin = Math.min(...yValues)
+  const rawYMax = Math.max(...yValues)
+  const ySpanRaw = rawYMax - rawYMin
+  const yPad = ySpanRaw === 0 ? Math.max(Math.abs(rawYMin) * 0.15, 1) : ySpanRaw * 0.14
+  const yMin = rawYMin - yPad
+  const yMax = rawYMax + yPad
+  const ySpan = yMax - yMin
+
+  const xValues = parsedRows.map((p) => p.timestampMs)
+  if (orderTimeMs !== null) xValues.push(orderTimeMs)
+  const rawXMin = Math.min(...xValues)
+  const rawXMax = Math.max(...xValues)
+  const xSpanRaw = rawXMax - rawXMin
+  const xPad = xSpanRaw === 0 ? 60 * 60 * 1000 : xSpanRaw * 0.08
+  const xMin = rawXMin - xPad
+  const xMax = rawXMax + xPad
+  const xSpan = xMax - xMin
+
+  const mapX = (ms: number): number => plotLeft + ((ms - xMin) / xSpan) * plotWidth
+  const mapY = (val: number): number => plotBottom - ((val - yMin) / ySpan) * plotHeight
+
+  let matchedOnce = false
+  const points: ChartPoint[] = parsedRows.map(({ row, value, timestampMs }) => {
+    const isHit =
+      !matchedOnce &&
+      Boolean(selectedMatch) &&
+      row.thoi_diem_text === selectedMatch!.thoiDiemText &&
+      row.gia_tri_text === selectedMatch!.giaTriText
+    if (isHit) {
+      matchedOnce = true
+    }
+    return {
+      x: Number(mapX(timestampMs).toFixed(2)),
+      y: Number(mapY(value).toFixed(2)),
+      value,
+      valueText: formatChartNumber(value),
+      timestampMs,
+      timestampLabel: formatShortChartTime(timestampMs),
+      ngoaiNguong: isOutsideReferenceRange(value, range, row.ngoai_nguong),
+      isSelected: isHit,
+    }
+  })
+
+  const polylinePoints = points.length >= 2 ? points.map((pt) => `${pt.x},${pt.y}`).join(' ') : ''
+  const yMid = (yMin + yMax) / 2
+  const yTicks = [yMin, yMid, yMax].map((val) => ({
+    y: Number(mapY(val).toFixed(2)),
+    label: formatChartNumber(val),
+  }))
+
+  const firstPt = points[0]
+  const lastPt = points[points.length - 1]
+  const xTicks =
+    firstPt.timestampMs === lastPt.timestampMs
+      ? [{ x: firstPt.x, label: firstPt.timestampLabel }]
+      : [
+          { x: firstPt.x, label: firstPt.timestampLabel },
+          { x: lastPt.x, label: lastPt.timestampLabel },
+        ]
+
+  let referenceBand: LabTrendChartModel['referenceBand'] = null
+  if (range) {
+    const bandTopVal = range.max ?? yMax
+    const bandBottomVal = range.min ?? yMin
+    const yTop = Number(Math.max(plotTop, mapY(bandTopVal)).toFixed(2))
+    const yBottom = Number(Math.min(plotBottom, mapY(bandBottomVal)).toFixed(2))
+    if (yBottom > yTop) {
+      referenceBand = { yTop, yBottom, label: range.label }
+    }
+  }
+
+  const orderMarker =
+    orderTimeMs !== null
+      ? {
+          x: Number(mapX(orderTimeMs).toFixed(2)),
+          label: `Kê y lệnh (${formatShortChartTime(orderTimeMs)})`,
+        }
+      : null
+
+  const outCount = points.filter((p) => p.ngoaiNguong).length
+  const summaryText = `Biểu đồ ${metricName} gồm ${points.length} kết quả: từ ${firstPt.valueText} ${donVi} (${firstPt.timestampLabel}) đến ${lastPt.valueText} ${donVi} (${lastPt.timestampLabel})${outCount > 0 ? `, có ${outCount} điểm ngoài ngưỡng` : ''}.`
+
+  return {
+    ten: metricName,
+    donVi,
+    width,
+    height,
+    plotLeft,
+    plotRight,
+    plotTop,
+    plotBottom,
+    yMin,
+    yMax,
+    yTicks,
+    xTicks,
+    points,
+    polylinePoints,
+    referenceBand,
+    orderMarker,
+    summaryText,
+  }
 }

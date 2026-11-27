@@ -277,9 +277,18 @@ export interface DoanNguon {
   noi_dung: string
 }
 
+export interface OrderLineMeta {
+  chi_tiet_y_lenh_id: string
+  trang_thai_dong?: string | null
+  bat_dau?: string | null
+  ket_thuc?: string | null
+  cach_dung?: string | null
+}
+
 export interface BangYLenh {
   cot: string[]
   dong: Record<string, string>[]
+  dong_meta?: OrderLineMeta[]
 }
 
 export interface ChiTietXetNghiemDong {
@@ -322,6 +331,7 @@ export interface MedicalOrder {
   la_trong_tam: boolean
   cot: string[]
   dong: Record<string, string>[]
+  dong_meta?: OrderLineMeta[]
 }
 
 export interface TreatmentSheet {

@@ -269,7 +269,7 @@ describe('useReviewFindings và OrderDetailView theo ?yt=', () => {
 
   it('OrderDetailView với ?yt=6 chỉ hiện yếu tố 6, bỏ SixFactorStrip và không hiện Mở mục', () => {
     const detail = MOCK_CASE_DETAILS['DEMO-02']
-    const html = renderOrderView(detail, '?yt=6')
+    const html = renderOrderView(detail, '?tab=tham_dinh&yt=6')
 
     expect(html).toContain('6. Cơ địa và xét nghiệm')
     expect(html).toContain('Meropenem 1 g')
@@ -281,13 +281,13 @@ describe('useReviewFindings và OrderDetailView theo ?yt=', () => {
 
   it('OrderDetailView với ?yt=4 hiện phần tương tác và không chứa "Đạt"; ?yt=3 không chứa "Đạt"', () => {
     const detail = MOCK_CASE_DETAILS['DEMO-02']
-    const yt4Html = renderOrderView(detail, '?yt=4')
+    const yt4Html = renderOrderView(detail, '?tab=tham_dinh&yt=4')
     expect(yt4Html).toContain('4. Tương tác thuốc')
     expect(yt4Html).toContain('Chưa có luật cho yếu tố này')
     expect(yt4Html).toContain('Yếu tố 4 · Tương tác thuốc')
     expect(yt4Html).not.toContain('Đạt')
 
-    const yt3Html = renderOrderView(detail, '?yt=3')
+    const yt3Html = renderOrderView(detail, '?tab=tham_dinh&yt=3')
     expect(yt3Html).toContain('3. Chỉ định, liều, đường dùng')
     expect(yt3Html).toContain('Chưa có luật cho yếu tố này')
     expect(yt3Html).not.toContain('Đạt')
@@ -296,7 +296,7 @@ describe('useReviewFindings và OrderDetailView theo ?yt=', () => {
 
   it('OrderDetailView với ?yt=1 mở sẵn PassedList khi yếu tố không có mục cần chú ý', () => {
     const detail = MOCK_CASE_DETAILS['DEMO-02']
-    const html = renderOrderView(detail, '?yt=1')
+    const html = renderOrderView(detail, '?tab=tham_dinh&yt=1')
 
     expect(html).toContain('1. Dị ứng, quá mẫn')
     expect(html).toContain('Không có mục cần chú ý ở yếu tố 1 (Dị ứng, quá mẫn)')
@@ -308,7 +308,7 @@ describe('useReviewFindings và OrderDetailView theo ?yt=', () => {
 
   it('OrderDetailView với ?yt=abc hoặc ?yt=tong_quan quay về Tổng quan có nút Mở mục N và không có SixFactorStrip', () => {
     const detail = MOCK_CASE_DETAILS['DEMO-02']
-    for (const query of ['?yt=abc', '?yt=tong_quan']) {
+    for (const query of ['?tab=tham_dinh&yt=abc', '?tab=tham_dinh&yt=tong_quan']) {
       const html = renderOrderView(detail, query)
       expect(html).toContain('Nhận định')
       expect(html).toContain('1 mục cần chú ý')
