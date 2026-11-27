@@ -10,7 +10,7 @@
 - **Chấm lần 2 (Gemini Flash Lite):** 90 câu 70/90, rò PII 0, tấn công lọt 0; 15 câu minh hoạ 5/15 (Flash Lite yếu phần vẽ). Báo cáo `plan/reports/danh-gia-hoi-dap/2026-11-28-*-lan2`.
 
 **Việc chờ chủ kho:**
-1. **AI trên EC2 đang tắt** (`co_llm: false`) vì `.env.app` không có `GEMINI_API_KEY_1…8`. Chủ kho hỏi "cách 1": thêm quyền đọc `/bvienx/llm/*` cho vai trò `vinmec-pharm-ec2-ssm` (chính sách hiện chỉ đọc `/vinmec/db/app_password`), Claude đẩy 8 khoá vào Parameter Store dạng SecureString, EC2 tự đọc và ghi `.env.app`, rồi khởi động lại `api`. **Cần chủ kho trả lời "đồng ý" rõ ràng** trước khi Claude sửa IAM.
+1. ~~AI trên EC2 đang tắt~~ **Đã bật 28/11 ~2h** (chủ kho đồng ý cách 1): 8 khoá ở Parameter Store `/bvienx/llm/gemini_api_key_1…8` (SecureString, khoá KMS mặc định `aws/ssm`); vai trò `vinmec-pharm-ec2-ssm` thêm chính sách riêng `bvienx-read-llm-keys` (chỉ `ssm:GetParameter(s)` trên `/bvienx/llm/*`); EC2 tự đọc, ghi `.env.app` (bản lưu `/home/ubuntu/.env.app.bak-pre-gemini-keys`), `up -d --force-recreate api`. `/api/health` `co_llm=true`; gọi thử LLM trong container trả JSON đúng 0,5 s. **Gỡ:** `aws iam delete-role-policy --role-name vinmec-pharm-ec2-ssm --policy-name bvienx-read-llm-keys`, xoá 8 tham số, xoá 8 dòng trong `.env.app`. Khi triển khai thật bỏ KeyRouter, dùng một khoá trả phí.
 2. Đăng nhập lại web 5173 nếu phiên 12 giờ hết hạn (khoảng trưa 28/11). Script giữ phiên chạy trong trang (`window.__giuPhien`, 7 phút/lần, nhật ký `localStorage.__giuPhienLog`); Claude kiểm mỗi giờ phút 13.
 3. Trục y hình đường chưa có đơn vị (việc nhỏ, chưa giao).
 4. Kiểm 8 khoá Gemini có thuộc các dự án Google khác nhau không (cùng dự án thì chung hạn mức).
