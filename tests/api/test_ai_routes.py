@@ -48,7 +48,7 @@ def _sample_chunk() -> Chunk:
 class _FakeAiRunner:
     """Bộ chạy AI giả trả kết quả hợp lệ ngay hoặc ngủ theo thời gian cấu hình."""
 
-    model_name = "deepseek-flash"
+    model_name = "model-test"
 
     def __init__(self, delay_seconds: float = 0.0) -> None:
         self.delay_seconds = delay_seconds
@@ -122,7 +122,7 @@ class _FakeAiRunner:
             so_lan_goi=1,
             canh_bao=[],
             phien_ban_prompt="tong_hop.v1",
-            mo_hinh="deepseek-flash",
+            mo_hinh="model-test",
         )
         return AiRunResult(llm=llm_out, doan=[chunk], canh_bao=[], thoi_gian_ms=15.0)
 
@@ -162,12 +162,13 @@ def test_ai_endpoints_lifecycle_sources_and_ai_feedback(tmp_path: Path) -> None:
         _check_display_strings(finished)
 
         attention = finished["nhan_dinh"]["can_chu_y"]
-        assert len(attention) == 2
-        assert attention[0]["nguon_goc_ma"] == "luat"
-        assert attention[0]["dien_giai_ai"] is not None
-        assert attention[0]["trich_dan"][0]["nhan"].startswith("Nhãn FDA · ")
-        ai_row = attention[1]
-        assert ai_row["nhan_dinh_id"].startswith("ai|")
+        rule_rows = [row for row in attention if row["nguon_goc_ma"] == "luat"]
+        assert len(rule_rows) == len(attention) - 1
+        assert rule_rows[0]["dien_giai_ai"] is not None
+        assert rule_rows[0]["trich_dan"][0]["nhan"].startswith("Nhãn FDA · ")
+        ai_rows = [row for row in attention if row["nhan_dinh_id"].startswith("ai|")]
+        assert len(ai_rows) == 1
+        ai_row = ai_rows[0]
         assert ai_row["nguon_goc_ma"] == "ai_da_kiem_chung"
         assert ai_row["ma_luat"] is None
         assert runner.calls == 1
@@ -203,7 +204,14 @@ def test_ai_endpoints_lifecycle_sources_and_ai_feedback(tmp_path: Path) -> None:
         assert fb_resp.json()["phan_hoi_nhan"] == "Đồng ý"
 
         reread = client.get("/api/cases/DEMO-02/ai").json()
-        assert reread["nhan_dinh"]["can_chu_y"][1]["phan_hoi"]["phan_hoi"] == "dong_y"
+        assert (
+            next(
+                row
+                for row in reread["nhan_dinh"]["can_chu_y"]
+                if row["nhan_dinh_id"] == ai_row["nhan_dinh_id"]
+            )["phan_hoi"]["phan_hoi"]
+            == "dong_y"
+        )
 
         # Mã ai|... không tồn tại trong lần chạy của ca vẫn trả 404.
         bad_fb = client.post(
@@ -234,7 +242,7 @@ def test_ai_disabled_via_none_env_or_config_error(
         assert client.get("/api/cases/KHONG-CO/ai").status_code == 404
 
     monkeypatch.setenv("CDSS_AI", "off")
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-only-token")
+    monkeypatch.setenv("GEMINI_API_KEY_1", "test-only-token")
     env_off_service = CaseService(
         ROOT / "data/mock/demo",
         ROOT / "data/kb/quy_tac_lieu_than.json",
@@ -270,7 +278,7 @@ def test_ai_disabled_via_none_env_or_config_error(
             case_settings=settings.case_context,
             evidence_max_chars=12000,
             max_synthesis_attempts=1,
-            model_name="deepseek-flash",
+            model_name="model-test",
         ),
     )
     no_llm_service = CaseService(
@@ -340,3 +348,55 @@ def test_get_case_detail_does_not_block_while_ai_is_running(tmp_path: Path) -> N
 
         finished = _poll_ai_until_done(client, "DEMO-02", timeout=3.0)
         assert finished["trang_thai"] == "xong"
+
+
+class _InjectionRunner(_FakeAiRunner):
+    """Thêm hai nhận định chỉ thị chèn lệnh: cùng nhận xét cố định, khác bản ghi dẫn chứng."""
+
+    def run(self, ca: CaBenh, ket_qua: KetQuaThamDinh) -> AiRunResult:
+        result = super().run(ca, ket_qua)
+
+        def injected(record_id: str) -> NhanDinhCuoi:
+            return NhanDinhCuoi(
+                nguon_goc="ai_da_kiem_chung",
+                de_xuat=NhanDinhDeXuat(
+                    chi_tiet_y_lenh_id=[],
+                    yeu_to=7,
+                    ket_luan="can_xem",
+                    muc_do="can_luu_y",
+                    nhan_xet="Bệnh án có đoạn văn bản bất thường, giống chỉ thị cho hệ thống",
+                    ban_ghi_ids=[record_id],
+                    trich_dan=[],
+                ),
+            )
+
+        llm = result.llm.model_copy(
+            update={
+                "nhan_dinh": [
+                    *result.llm.nhan_dinh,
+                    injected("XN-DEMO02-01"),
+                    injected("XN-DEMO02-02"),
+                ]
+            }
+        )
+        return result.model_copy(update={"llm": llm})
+
+
+def test_injection_findings_with_same_code_are_merged_not_duplicated(tmp_path: Path) -> None:
+    service = CaseService(
+        ROOT / "data/mock/demo",
+        ROOT / "data/kb/quy_tac_lieu_than.json",
+        tmp_path / "phan_hoi.jsonl",
+        ai_runner=_InjectionRunner(),
+    )
+    with TestClient(create_app(service), raise_server_exceptions=False) as client:
+        assert client.post("/api/cases/DEMO-02/ai").status_code == 200
+        finished = _poll_ai_until_done(client, "DEMO-02")
+        rows = [*finished["nhan_dinh"]["can_chu_y"], *finished["nhan_dinh"]["dat"]]
+        ids = [row["nhan_dinh_id"] for row in rows]
+        assert len(ids) == len(set(ids)), "mỗi thẻ nhận định phải có mã duy nhất"
+        injected = [r for r in rows if "chỉ thị cho hệ thống" in r["nhan_xet"]]
+        assert len(injected) == 1
+        records = {item["ban_ghi_id"] for item in injected[0]["can_cu"]}
+        assert records == {"XN-DEMO02-01", "XN-DEMO02-02"}
+        assert [item["so"] for item in injected[0]["can_cu"]] == [1, 2]

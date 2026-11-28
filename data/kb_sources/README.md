@@ -1,3 +1,5 @@
+> **LỖI THỜI từ 19/11/2026.** Tệp này viết ngày 16–17/11. Mô tả hiện hành của từng nguồn ở `docs/du-lieu/` (DDInter: `docs/du-lieu/ddinter.md`, Cục Quản lý Dược: `dav.md`, openFDA: `openfda-rag.md`…). Thư mục `data/kb_sources/` không còn trên git, chỉ giữ tệp README này. CSV DDInter cũ đã chuyển sang `data/_luu_tru/ddinter_csv_2026-11-16/`.
+
 # data/kb_sources – tệp nguồn tri thức thuốc
 
 Tệp gốc tải từ nguồn chính thống, **chưa qua xử lý**. Mọi tệp có dòng trong `manifest.json` (nguồn, tầng tin cậy, giấy phép, phiên bản, đường dẫn gốc, mã băm SHA-256). Kho tri thức dựng lại từ thư mục này bằng `python -m app.kb.build` (plan 1.1 mục 5–6, task T04a).

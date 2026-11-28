@@ -45,7 +45,7 @@ debugpy==1.8.22
 executing==2.3.0
     # via stack-data
 fastapi==0.163.1
-    # via vinmec-pharm-cdss
+    # via bvienx-pharm-cdss
 fastjsonschema==2.22.3
     # via nbformat
 h11==0.16.0
@@ -57,7 +57,7 @@ httpcore==1.0.9
 httptools==0.9.0
     # via uvicorn
 httpx==0.28.1
-    # via vinmec-pharm-cdss
+    # via bvienx-pharm-cdss
 idna==3.20
     # via
     #   anyio
@@ -109,13 +109,13 @@ numpy==2.4.6 ; python_full_version < '3.12'
     #   pandas
     #   pydeck
     #   streamlit
-    #   vinmec-pharm-cdss
+    #   bvienx-pharm-cdss
 numpy==2.5.5 ; python_full_version >= '3.12'
     # via
     #   pandas
     #   pydeck
     #   streamlit
-    #   vinmec-pharm-cdss
+    #   bvienx-pharm-cdss
 opentelemetry-api==1.45.2
     # via fastapi
 packaging==26.3
@@ -153,7 +153,7 @@ pycparser==3.12 ; implementation_name == 'pypy'
 pydantic==2.14.3
     # via
     #   fastapi
-    #   vinmec-pharm-cdss
+    #   bvienx-pharm-cdss
 pydantic-core==2.50.4
     # via pydantic
 pydeck==0.9.3
@@ -171,13 +171,13 @@ python-dateutil==4.0.0
 python-dotenv==1.2.4
     # via
     #   uvicorn
-    #   vinmec-pharm-cdss
+    #   bvienx-pharm-cdss
 python-multipart==0.0.33
     # via streamlit
 pyyaml==6.0.3
     # via
     #   uvicorn
-    #   vinmec-pharm-cdss
+    #   bvienx-pharm-cdss
 pyzmq==27.3.0
     # via
     #   ipykernel
@@ -200,7 +200,7 @@ starlette==1.10.0
     #   fastapi
     #   streamlit
 streamlit==1.67.0
-    # via vinmec-pharm-cdss
+    # via bvienx-pharm-cdss
 tornado==6.6.1
     # via
     #   ipykernel
@@ -240,7 +240,7 @@ urllib3==2.8.0
 uvicorn==0.54.0
     # via
     #   streamlit
-    #   vinmec-pharm-cdss
+    #   bvienx-pharm-cdss
 uvloop==0.23.0 ; platform_python_implementation != 'PyPy' and sys_platform != 'cygwin' and sys_platform != 'win32'
     # via uvicorn
 watchdog==7.1.0 ; sys_platform != 'darwin'

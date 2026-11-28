@@ -1,0 +1,159 @@
+{
+  "ho_so_id": "HS-036",
+  "kich_ban_id": "HS-036",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {"nguoi_benh_id": "NB-HS-036", "tuoi": 70, "gioi_tinh": "nam"},
+  "tinh_trang_di_ung": {"trang_thai": "khong_di_ung_da_hoi", "nguon": "EMR", "thoi_diem": "2026-11-12T09:00:00+07:00"},
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {"hoat_chat_id": "HC-INSULIN_GLARGINE", "ten_hoat_chat": "Insulin glargine", "ten_quoc_te": "insulin glargine", "ma_atc": "A10AE04", "nhom_duoc_ly": "insulin tác dụng kéo dài"},
+    {"hoat_chat_id": "HC-METFORMIN", "ten_hoat_chat": "Metformin", "ten_quoc_te": "metformin", "ma_atc": "A10BA02", "nhom_duoc_ly": "biguanid"}
+  ],
+  "danh_muc_thuoc": [
+    {"thuoc_id": "T-INSULIN-GLARGIN-100", "ten_thuoc": "Insulin glargin 100 UI/mL", "ham_luong": "100 UI/mL", "duong_dung": "tiêm dưới da", "thanh_phan": [{"hoat_chat_id": "HC-INSULIN_GLARGINE", "ham_luong_thanh_phan": 100.0, "don_vi": "UI"}], "la_thuoc_nguy_co_cao": true, "la_khang_sinh": false},
+    {"thuoc_id": "T-METFORMIN-500MG", "ten_thuoc": "Metformin 500 mg", "ham_luong": "500 mg", "duong_dung": "uống", "thanh_phan": [{"hoat_chat_id": "HC-METFORMIN", "ham_luong_thanh_phan": 500.0, "don_vi": "mg"}], "la_thuoc_nguy_co_cao": false, "la_khang_sinh": false}
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-036-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-04-10T08:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-04-17T10:00:00+07:00",
+      "so_ngay_dieu_tri": 7,
+      "lich_su_khoa": [{"khoa": "Nội tiết", "tu": "2026-04-10T08:00:00+07:00", "den": "2026-04-17T10:00:00+07:00"}],
+      "ly_do_vao_vien": "Đái tháo đường típ 2, đường huyết cao, khởi trị insulin",
+      "benh_su": "BN nam 70t, ĐTĐ típ 2 đã biết nhiều năm, điều trị metformin uống nhưng đường huyết đói vẫn cao. Vào viện khởi trị insulin.",
+      "tien_su": {"ban_than": "ĐTĐ típ 2. Chưa ghi nhận bệnh tim mạch.", "gia_dinh": "Chưa ghi nhận", "thuoc_truoc_vao_vien": "Metformin 500 mg uống sáng và tối"},
+      "kham_benh": "BN tỉnh, tiếp xúc tốt. Tim phổi chưa ghi nhận bất thường. Bàn chân chưa ghi nhận loét.",
+      "tom_tat": "BN nam 70t ĐTĐ típ 2 E11.9, khởi trị insulin glargin 20 đơn vị (UI) buổi tối. Đường huyết đói giảm dần sau 1 tuần. Ra viện ổn định.",
+      "chan_doan": [{"chan_doan_id": "CD-HS036-01", "ma_icd10": "E11.9", "noi_dung": "Đái tháo đường típ 2 không biến chứng", "loai": "chinh"}],
+      "co_dia": [],
+      "sinh_hieu": [
+        {"sinh_hieu_id": "SH-HS036-01", "loai": "can_nang", "gia_tri": 74.0, "don_vi": "kg", "thoi_diem_do": "2026-04-10T08:30:00+07:00"}
+      ],
+      "xet_nghiem": [
+        {"xet_nghiem_id": "XN-HS036-01", "ma_xet_nghiem": "glucose", "ten_xet_nghiem": "Glucose máu đói", "gia_tri_so": 14.2, "gia_tri_text": null, "don_vi": "mmol/L", "nguong_duoi": 3.9, "nguong_tren": 6.1, "thoi_diem_ket_qua": "2026-04-10T06:30:00+07:00"},
+        {"xet_nghiem_id": "XN-HS036-02", "ma_xet_nghiem": "glucose", "ten_xet_nghiem": "Glucose máu đói", "gia_tri_so": 7.8, "gia_tri_text": null, "don_vi": "mmol/L", "nguong_duoi": 3.9, "nguong_tren": 6.1, "thoi_diem_ket_qua": "2026-04-16T06:30:00+07:00"}
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {"dien_bien_id": "DB-HS036-01", "loai_ho_so": "Phiếu khám", "noi_dung": "BN vào viện vì đường huyết đói cao, mệt nhiều, tiểu nhiều. Tỉnh, không khó thở. Đường huyết đói 14,2 mmol/L. Chỉ định khởi trị insulin glargin 20 đơn vị (UI) tiêm dưới da buổi tối.", "thoi_diem_ghi": "2026-04-10T09:00:00+07:00"},
+        {"dien_bien_id": "DB-HS036-02", "loai_ho_so": "Tờ điều trị", "noi_dung": "Ngày 6 điều trị. Đường huyết đói 7,8 mmol/L, không hạ đường huyết. Ăn uống được. Tiếp tục insulin glargin 20 đơn vị (UI) buổi tối, theo dõi đường huyết mao mạch.", "thoi_diem_ghi": "2026-04-16T08:00:00+07:00"}
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-036-01",
+          "thoi_diem_ke": "2026-04-10T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {"chi_tiet_y_lenh_id": "CT-HS-036-01-01", "thuoc_id": "T-INSULIN-GLARGIN-100", "ten_tu_do": null, "loai_san_pham": "thuoc", "lieu_moi_lan": 20.0, "don_vi_lieu": "UI", "tan_suat": "1 lần/ngày", "so_lan_moi_ngay": 1, "khoang_cach_gio": 24.0, "duong_dung": "tiêm dưới da", "cach_dung": "Tiêm dưới da 20 UI buổi tối", "bat_dau": "2026-04-10T20:00:00+07:00", "ket_thuc": "2026-04-17T08:00:00+07:00", "nguon_thuoc": "Kho nội trú", "trang_thai_dong": "completed", "lich_dung": [{"thoi_diem_du_kien": "2026-04-10T20:00:00+07:00", "lieu": 20.0, "don_vi": "UI"}]}
+          ]
+        }
+      ],
+      "tong_ket": "Ra viện ổn định, đường huyết đói 7,8 mmol/L. Tiếp tục insulin glargin 20 UI tiêm dưới da buổi tối tại nhà, tái khám sau 1 tháng."
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-036-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [{"khoa": "Nội tiết", "tu": "2026-11-12T09:00:00+07:00", "den": null}],
+      "ly_do_vao_vien": "Đường huyết đói cao, mệt nhiều",
+      "benh_su": "BN nam 70t, ĐTĐ típ 2 đã điều trị insulin glargin 20 đơn vị (UI) buổi tối tại nhà sau lần nhập viện tháng 4/2026. Đến khám vì đường huyết đói cao, mệt, ăn kém hơn trước.",
+      "tien_su": {"ban_than": "ĐTĐ típ 2, nhập viện khởi trị insulin lần 1 (tháng 4/2026). Chưa ghi nhận bệnh tim mạch.", "gia_dinh": "Chưa ghi nhận", "thuoc_truoc_vao_vien": "Insulin glargin 20 đơn vị (UI) tiêm dưới da buổi tối tại nhà. Metformin 500 mg uống sáng và tối."},
+      "kham_benh": "BN tỉnh, tiếp xúc tốt. Tim phổi chưa ghi nhận bất thường. Bàn chân chưa ghi nhận loét. Không phù.",
+      "tom_tat": "BN nam 70t, ĐTĐ típ 2 E11.9, đang insulin glargin 20 UI tại nhà. Đường huyết đói 12,4 mmol/L lúc vào viện, cn 72 kg. Chưa ghi nhận hạ đường huyết. Điều chỉnh điều trị theo đường huyết.",
+      "chan_doan": [{"chan_doan_id": "CD-HS036-02", "ma_icd10": "E11.9", "noi_dung": "Đái tháo đường típ 2 không biến chứng", "loai": "chinh"}],
+      "co_dia": [],
+      "sinh_hieu": [
+        {"sinh_hieu_id": "SH-HS036-02", "loai": "can_nang", "gia_tri": 72.0, "don_vi": "kg", "thoi_diem_do": "2026-11-12T09:10:00+07:00"},
+        {"sinh_hieu_id": "SH-HS036-03", "loai": "can_nang", "gia_tri": 72.0, "don_vi": "kg", "thoi_diem_do": "2026-11-15T06:00:00+07:00"},
+        {"sinh_hieu_id": "SH-HS036-04", "loai": "huyet_ap_tam_thu", "gia_tri": 128.0, "don_vi": "mmHg", "thoi_diem_do": "2026-11-15T06:00:00+07:00"},
+        {"sinh_hieu_id": "SH-HS036-05", "loai": "huyet_ap_tam_truong", "gia_tri": 80.0, "don_vi": "mmHg", "thoi_diem_do": "2026-11-15T06:00:00+07:00"},
+        {"sinh_hieu_id": "SH-HS036-06", "loai": "mach", "gia_tri": 78.0, "don_vi": "lần/phút", "thoi_diem_do": "2026-11-15T06:00:00+07:00"},
+        {"sinh_hieu_id": "SH-HS036-07", "loai": "nhiet_do", "gia_tri": 36.9, "don_vi": "°C", "thoi_diem_do": "2026-11-15T06:00:00+07:00"},
+        {"sinh_hieu_id": "SH-HS036-08", "loai": "spo2", "gia_tri": 97.0, "don_vi": "%", "thoi_diem_do": "2026-11-15T06:00:00+07:00"}
+      ],
+      "xet_nghiem": [
+        {"xet_nghiem_id": "XN-HS036-03", "ma_xet_nghiem": "glucose", "ten_xet_nghiem": "Glucose máu đói", "gia_tri_so": 12.4, "gia_tri_text": null, "don_vi": "mmol/L", "nguong_duoi": 3.9, "nguong_tren": 6.1, "thoi_diem_ket_qua": "2026-11-12T06:30:00+07:00"},
+        {"xet_nghiem_id": "XN-HS036-04", "ma_xet_nghiem": "glucose", "ten_xet_nghiem": "Glucose máu đói", "gia_tri_so": 8.6, "gia_tri_text": null, "don_vi": "mmol/L", "nguong_duoi": 3.9, "nguong_tren": 6.1, "thoi_diem_ket_qua": "2026-11-15T06:00:00+07:00"},
+        {"xet_nghiem_id": "XN-HS036-05", "ma_xet_nghiem": "creatinin", "ten_xet_nghiem": "Creatinin máu", "gia_tri_so": 92.0, "gia_tri_text": null, "don_vi": "umol/L", "nguong_duoi": 62, "nguong_tren": 106, "thoi_diem_ket_qua": "2026-11-15T06:00:00+07:00"}
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {"dien_bien_id": "DB-HS036-03", "loai_ho_so": "Phiếu khám", "noi_dung": "BN vào viện vì đường huyết đói cao, mệt, ăn kém. Tỉnh, không sốt. HA 126/78. Đường huyết đói 12,4 mmol/L.", "thoi_diem_ghi": "2026-11-12T09:30:00+07:00"},
+        {"dien_bien_id": "DB-HS036-04", "loai_ho_so": "Tờ điều trị", "noi_dung": "Ngày 2. Đường huyết mao mạch 9–11 mmol/L trong ngày, chưa hạ đường huyết. Ăn uống được hơn. Theo dõi đường huyết mao mạch trước bữa và trước ngủ.", "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"},
+        {"dien_bien_id": "DB-HS036-05", "loai_ho_so": "Tờ điều trị", "noi_dung": "Ngày 3. BN tỉnh, đỡ mệt. Mạch 80, HA 124/76. Đường huyết mao mạch sáng nay 9,4 mmol/L. Tiếp tục theo dõi.", "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"},
+        {"dien_bien_id": "DB-HS036-06", "loai_ho_so": "Tờ điều trị", "noi_dung": "Ngày 4. Đường huyết đói 8,6 mmol/L. Cn 72 kg, creatinin 92 umol/L. Mạch 78, HA 128/80, T 36,9, SpO2 97%. Chưa đạt mục tiêu đường huyết, cần điều chỉnh liều insulin nền.", "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"}
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-036-02",
+          "thoi_diem_ke": "2026-11-12T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {"chi_tiet_y_lenh_id": "CT-HS-036-02-01", "thuoc_id": "T-METFORMIN-500MG", "ten_tu_do": null, "loai_san_pham": "thuoc", "lieu_moi_lan": 500.0, "don_vi_lieu": "mg", "tan_suat": "2 lần/ngày", "so_lan_moi_ngay": 2, "khoang_cach_gio": 12.0, "duong_dung": "uống", "cach_dung": "Uống 500 mg sau ăn sáng và sau ăn tối", "bat_dau": "2026-11-12T19:00:00+07:00", "ket_thuc": null, "nguon_thuoc": "Kho nội trú", "trang_thai_dong": "active", "lich_dung": [{"thoi_diem_du_kien": "2026-11-12T19:00:00+07:00", "lieu": 500.0, "don_vi": "mg"}, {"thoi_diem_du_kien": "2026-11-13T07:00:00+07:00", "lieu": 500.0, "don_vi": "mg"}]}
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-036-03",
+          "thoi_diem_ke": "2026-11-12T10:15:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {"chi_tiet_y_lenh_id": "CT-HS-036-03-01", "thuoc_id": null, "ten_tu_do": "Đo đường huyết mao mạch trước bữa và trước ngủ", "loai_san_pham": "khac", "lieu_moi_lan": null, "don_vi_lieu": null, "tan_suat": "4 lần/ngày", "so_lan_moi_ngay": 4, "khoang_cach_gio": null, "duong_dung": null, "cach_dung": "Đo đường huyết mao mạch và báo bác sĩ nếu dưới 4 hoặc trên 15 mmol/L", "bat_dau": "2026-11-12T10:15:00+07:00", "ket_thuc": null, "nguon_thuoc": null, "trang_thai_dong": "active", "lich_dung": []}
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-036-04",
+          "thoi_diem_ke": "2026-11-15T10:00:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {"chi_tiet_y_lenh_id": "CT-HS-036-04-01", "thuoc_id": "T-INSULIN-GLARGIN-100", "ten_tu_do": null, "loai_san_pham": "thuoc", "lieu_moi_lan": 30.0, "don_vi_lieu": "mg", "tan_suat": "1 lần/ngày", "so_lan_moi_ngay": 1, "khoang_cach_gio": 24.0, "duong_dung": "tiêm dưới da", "cach_dung": "Tiêm dưới da buổi tối", "bat_dau": "2026-11-15T20:00:00+07:00", "ket_thuc": null, "nguon_thuoc": "Kho nội trú", "trang_thai_dong": "pending", "lich_dung": [{"thoi_diem_du_kien": "2026-11-15T20:00:00+07:00", "lieu": 30.0, "don_vi": "mg"}, {"thoi_diem_du_kien": "2026-11-16T20:00:00+07:00", "lieu": 30.0, "don_vi": "mg"}]}
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-036-04"
+}

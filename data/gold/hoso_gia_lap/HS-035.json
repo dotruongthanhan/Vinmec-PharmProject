@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-035",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 7,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-035-04-01"],
+      "mo_ta": "Enoxaparin 40 mg lúc 20:00 trùng thuốc, giờ và người bệnh với y lệnh enoxaparin 40 mg lúc 20:00 đang thực hiện từ bác sĩ khác: nguy cơ tiêm hai lần."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

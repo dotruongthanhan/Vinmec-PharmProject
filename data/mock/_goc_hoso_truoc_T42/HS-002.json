@@ -1,0 +1,189 @@
+{
+  "ho_so_id": "HS-002",
+  "kich_ban_id": "HS-002",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-002",
+    "tuoi": 34,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T08:20:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-AMOXICILLIN",
+      "ten_hoat_chat": "Amoxicilin",
+      "ten_quoc_te": "amoxicillin",
+      "ma_atc": "J01CA04",
+      "nhom_duoc_ly": "penicillin phổ rộng"
+    },
+    {
+      "hoat_chat_id": "HC-CLAVULANIC_ACID",
+      "ten_hoat_chat": "Acid clavulanic",
+      "ten_quoc_te": "clavulanic acid",
+      "ma_atc": null,
+      "nhom_duoc_ly": "chất ức chế beta-lactamase"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-AMOXI-CLAV-875",
+      "ten_thuoc": "Amoxicilin + acid clavulanic 875 mg/125 mg",
+      "ham_luong": "875 mg/125 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-AMOXICILLIN",
+          "ham_luong_thanh_phan": 875.0,
+          "don_vi": "mg"
+        },
+        {
+          "hoat_chat_id": "HC-CLAVULANIC_ACID",
+          "ham_luong_thanh_phan": 125.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-002-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T08:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2026-11-12T08:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Ho, sốt 2 ngày",
+      "benh_su": "BN nữ 34T, ho đờm vàng, sốt 2 ngày, đau ngực kiểu màng phổi bên phải khi thở sâu. Không khó thở nhiều. Chưa dùng kháng sinh.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa ghi nhận thuốc đang dùng."
+      },
+      "kham_benh": "T 38,2, M 96, SpO2 97% khí phòng. Ran nổ đáy phổi phải. Không tím.",
+      "tom_tat": "BN nữ 34T viêm phổi cộng đồng nhẹ, ngoại trú. T 38,2, SpO2 97%. Creatinin 68 umol/L. Kê amoxicilin + acid clavulanic 875/125 mg uống 2 lần/ngày, 7 ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS002-1-01",
+          "ma_icd10": "J18.9",
+          "noi_dung": "Viêm phổi cộng đồng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [
+        {
+          "loai": "mang_thai",
+          "trang_thai": "khong",
+          "gia_tri": null,
+          "thoi_diem": "2026-11-12T08:35:00+07:00",
+          "nguon": "EMR"
+        }
+      ],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS002-1-01",
+          "loai": "nhiet_do",
+          "gia_tri": 38.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS002-1-02",
+          "loai": "mach",
+          "gia_tri": 96.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS002-1-03",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-12T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS002-1-04",
+          "loai": "can_nang",
+          "gia_tri": 58.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T08:45:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS002-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 68.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-12T08:50:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-002-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 34T, viêm phổi cộng đồng nhẹ, khám ngoại trú. Đã hỏi, không mang thai. Creatinin 68 umol/L. Kê amoxicilin + acid clavulanic 875/125 mg uống 2 lần/ngày x 7 ngày, tái khám nếu sốt không giảm sau 48 giờ.",
+          "thoi_diem_ghi": "2026-11-12T09:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-002-01",
+          "thoi_diem_ke": "2026-11-12T09:15:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-002-01-01",
+              "thuoc_id": "T-AMOXI-CLAV-875",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 875.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày sau ăn, trong 7 ngày",
+              "bat_dau": "2026-11-12T09:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-002-01"
+}

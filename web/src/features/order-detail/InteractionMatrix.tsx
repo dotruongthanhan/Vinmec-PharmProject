@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
-import type { BangYLenh, NhanDinh } from '@/api/types'
+import { ChevronRight } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
+import type { BangYLenh, CapChiTiet, MaTranTuongTac, NhanDinh } from '@/api/types'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/cn'
-import { INTERACTION_LEVEL_META, buildInteractionMatrix } from '@/lib/detailTables'
+import { INTERACTION_LEVEL_META, buildInteractionMatrix, summarizeInteraction } from '@/lib/detailTables'
 import type { InteractionLevel, InteractionPair } from '@/lib/detailTables'
 
 const LEVEL_ORDER: readonly InteractionLevel[] = [
@@ -9,6 +11,7 @@ const LEVEL_ORDER: readonly InteractionLevel[] = [
   'can_luu_y',
   'thieu_du_lieu',
   'khong_phat_hien',
+  'khong_ap_dung',
   'chua_kiem',
 ]
 
@@ -17,6 +20,7 @@ const LEVEL_CHIP: Record<InteractionLevel, string> = {
   can_luu_y: 'bg-warning-solid text-on-primary',
   thieu_du_lieu: 'bg-missing-solid text-on-primary',
   khong_phat_hien: 'bg-success-solid text-on-primary',
+  khong_ap_dung: 'border border-line-strong bg-surface-muted text-fg-muted',
   chua_kiem: 'border border-dashed border-line-strong bg-surface-muted text-fg-subtle',
 }
 
@@ -35,6 +39,53 @@ function LevelChip({ level, className }: { level: InteractionLevel; className?: 
   )
 }
 
+/** Biến chuỗi có URL thành liên kết an toàn; phần còn lại giữ nguyên văn. */
+function LinkifiedText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(https?:\/\/[^\s)]+)/g).map((part, index) =>
+        /^https?:\/\//.test(part) ? (
+          <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="break-all text-primary underline">
+            {part}
+          </a>
+        ) : (
+          <span key={index}>{part}</span>
+        ),
+      )}
+    </>
+  )
+}
+
+/** Thẻ chi tiết một cặp: mô tả, căn cứ DDInter nguyên văn và thông tin còn thiếu. */
+function PairDetailCard({ detail, defaultOpen }: { detail: CapChiTiet; defaultOpen: boolean }) {
+  return (
+    <details open={defaultOpen} className="mt-1.5 rounded-sm border border-line bg-surface-muted/50 px-3 py-2 text-sm">
+      <summary className="cursor-pointer text-xs font-semibold text-fg-muted">Chi tiết cặp và căn cứ</summary>
+      <div className="mt-2 flex flex-col gap-2">
+        {detail.mo_ta ? <p className="text-fg">{detail.mo_ta}</p> : null}
+        {detail.can_cu.length > 0 ? (
+          <div>
+            <p className="text-2xs font-semibold tracking-wide text-fg-subtle">CĂN CỨ</p>
+            <ul className="mt-1 flex list-disc flex-col gap-1 pl-4 text-fg-muted">
+              {detail.can_cu.map((line, index) => (
+                <li key={index}><LinkifiedText text={line} /></li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {detail.thong_tin_con_thieu.length > 0 ? (
+          <div>
+            <p className="text-2xs font-semibold tracking-wide text-missing-fg">THÔNG TIN CÒN THIẾU</p>
+            <ul className="mt-1 flex list-disc flex-col gap-1 pl-4 text-fg-muted">
+              {detail.thong_tin_con_thieu.map((line, index) => <li key={index}>{line}</li>)}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+    </details>
+  )
+}
+
 export interface InteractionMatrixProps {
   choDuyet: BangYLenh
   dangDung: BangYLenh | null
@@ -44,6 +95,15 @@ export interface InteractionMatrixProps {
     yeu_to_chua_kiem: readonly string[]
   }
   onOpenFinding: (findingId: string) => void
+  maTranTuongTac?: MaTranTuongTac | null
+  /** Trang tra tương tác thủ công: đổi nhãn cột trái, bỏ nhãn "Y lệnh chờ duyệt". */
+  manual?: boolean
+  /** Chi tiết từng cặp (`chi_tiet[]` của POST /api/tuong-tac); khớp cặp theo chi_tiet_y_lenh_id. */
+  pairDetails?: readonly CapChiTiet[]
+  /** Mở sẵn thẻ chi tiết cặp (tra tay); mặc định thu gọn. */
+  detailsOpen?: boolean
+  /** Có nút thu gọn/mở riêng cho lưới ma trận (chú giải, thẻ cặp luôn hiện) (tab Thẩm định). Bỏ qua = luôn mở. */
+  matrixToggle?: { open: boolean; onOpenChange: (open: boolean) => void }
 }
 
 /**
@@ -55,10 +115,16 @@ export function InteractionMatrix({
   dangDung,
   nhanDinh,
   onOpenFinding,
+  maTranTuongTac,
+  manual = false,
+  pairDetails = [],
+  detailsOpen = false,
+  matrixToggle,
 }: InteractionMatrixProps) {
+  const matrixPanelId = useId()
   const data = useMemo(
-    () => buildInteractionMatrix(choDuyet, dangDung, nhanDinh),
-    [choDuyet, dangDung, nhanDinh],
+    () => buildInteractionMatrix(choDuyet, dangDung, nhanDinh, maTranTuongTac),
+    [choDuyet, dangDung, nhanDinh, maTranTuongTac],
   )
   const [focus, setFocus] = useState<number | null>(null)
   const activeFocus = focus !== null && focus < data.drugs.length ? focus : null
@@ -68,25 +134,28 @@ export function InteractionMatrix({
       (pair) => (pair.a === row && pair.b === col) || (pair.a === col && pair.b === row),
     )
 
-  const flagged = data.pairs.filter(
-    (pair) =>
-      pair.finding !== null &&
-      (activeFocus === null || pair.a === activeFocus || pair.b === activeFocus),
+  const visiblePairs = data.pairs.filter(
+    (pair) => activeFocus === null || pair.a === activeFocus || pair.b === activeFocus,
   )
+  const flagged = visiblePairs.filter(
+    (pair) => pair.findingId !== null || ['nghiem_trong', 'can_luu_y', 'thieu_du_lieu'].includes(pair.level),
+  )
+  const allNotApplicable = visiblePairs.length > 0 && visiblePairs.every((pair) => pair.level === 'khong_ap_dung')
   const hasMatrix = data.drugs.length >= 2
 
   return (
+    <TooltipProvider>
     <div className="grid grid-cols-1 overflow-hidden rounded-md border border-line bg-surface @3xl:grid-cols-[minmax(200px,260px)_minmax(0,1fr)]">
       {/* Cột trái: danh sách thuốc */}
       <div className="flex flex-col border-b border-line bg-surface-muted/60 @3xl:border-b-0 @3xl:border-r">
         <div className="border-b border-line px-4 py-2.5 text-xs font-semibold tracking-wide text-fg-muted">
-          THUỐC TRONG Y LỆNH ({data.drugs.length})
+          {manual ? 'THUỐC ĐÃ NHẬP' : 'THUỐC TRONG Y LỆNH'} ({data.drugs.length})
         </div>
         <ul className="flex flex-col">
           {data.drugs.map((drug, idx) => {
             const selected = activeFocus === idx
             return (
-              <li key={drug.name} className="border-b border-line last:border-b-0">
+              <li key={drug.key} className="border-b border-line last:border-b-0">
                 <button
                   type="button"
                   aria-pressed={selected}
@@ -103,9 +172,11 @@ export function InteractionMatrix({
                     <span className={cn('block font-medium', selected ? 'text-primary' : 'text-fg')}>
                       {drug.name}
                     </span>
-                    <span className="block text-2xs text-fg-subtle">
-                      {drug.group === 'cho_duyet' ? 'Y lệnh chờ duyệt' : 'Thuốc đang dùng'}
-                    </span>
+                    {manual ? null : (
+                      <span className="block text-2xs text-fg-subtle">
+                        {drug.group === 'cho_duyet' ? 'Y lệnh chờ duyệt' : 'Thuốc đang dùng'}
+                      </span>
+                    )}
                   </span>
                 </button>
               </li>
@@ -135,8 +206,33 @@ export function InteractionMatrix({
           ))}
         </ul>
 
+        {matrixToggle && hasMatrix ? (
+          <button
+            type="button"
+            aria-expanded={matrixToggle.open}
+            aria-controls={matrixPanelId}
+            onClick={() => matrixToggle.onOpenChange(!matrixToggle.open)}
+            className="flex w-full cursor-pointer items-center gap-2 rounded-sm text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <ChevronRight
+              className={cn('size-4 shrink-0 text-fg-muted transition-transform duration-120', matrixToggle.open && 'rotate-90')}
+              strokeWidth={1.75}
+              aria-hidden="true"
+            />
+            <span className="flex min-w-0 flex-1 flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+              <span className="text-sm font-semibold text-fg">Ma trận tương tác</span>
+              <span className="text-xs text-fg-subtle tabular-nums">
+                {matrixToggle.open ? 'Lưới các cặp thuốc' : summarizeInteraction(data)}
+              </span>
+            </span>
+          </button>
+        ) : null}
         {hasMatrix ? (
-          <div className="overflow-x-auto">
+          <div
+            id={matrixPanelId}
+            hidden={matrixToggle ? !matrixToggle.open : false}
+            className="overflow-x-auto"
+          >
             <table className="border-separate border-spacing-1 text-sm">
               <thead>
                 <tr>
@@ -145,7 +241,7 @@ export function InteractionMatrix({
                   </th>
                   {data.drugs.map((drug, idx) => (
                     <th
-                      key={drug.name}
+                      key={drug.key}
                       scope="col"
                       title={drug.name}
                       className={cn(
@@ -160,7 +256,7 @@ export function InteractionMatrix({
               </thead>
               <tbody>
                 {data.drugs.map((rowDrug, row) => (
-                  <tr key={rowDrug.name}>
+                  <tr key={rowDrug.key}>
                     <th
                       scope="row"
                       className={cn(
@@ -174,30 +270,38 @@ export function InteractionMatrix({
                     {data.drugs.map((colDrug, col) => {
                       if (row === col) {
                         return (
-                          <td key={colDrug.name} className="rounded-sm bg-surface-muted" aria-hidden="true" />
+                          <td key={colDrug.key} className="rounded-sm bg-surface-muted" aria-hidden="true" />
                         )
                       }
                       const pair = pairAt(row, col)
                       const level = pair?.level ?? 'chua_kiem'
                       const dimmed = activeFocus !== null && activeFocus !== row && activeFocus !== col
-                      const label = `${rowDrug.name} và ${colDrug.name}: ${INTERACTION_LEVEL_META[level].label}`
+                      const label = [
+                        `${rowDrug.name} và ${colDrug.name}: ${INTERACTION_LEVEL_META[level].label}`,
+                        pair?.reason, pair?.summary,
+                      ].filter(Boolean).join('. ')
                       return (
-                        <td key={colDrug.name} className={cn('text-center', dimmed && 'opacity-30')}>
-                          {pair?.finding ? (
+                        <td key={colDrug.key} className={cn('text-center', dimmed && 'opacity-30')}>
+                          <Tooltip>
+                          <TooltipTrigger asChild>
+                          {pair?.findingId ? (
                             <button
                               type="button"
                               title={label}
                               aria-label={label}
-                              onClick={() => onOpenFinding(pair.finding!.nhan_dinh_id)}
+                              onClick={() => onOpenFinding(pair.findingId!)}
                               className="cursor-pointer rounded-sm"
                             >
                               <LevelChip level={level} className="size-10 text-base" />
                             </button>
                           ) : (
-                            <span title={label} role="img" aria-label={label}>
+                            <span title={label} role="img" aria-label={label} tabIndex={0} className="inline-flex rounded-sm">
                               <LevelChip level={level} className="size-10 text-base" />
                             </span>
                           )}
+                          </TooltipTrigger>
+                          <TooltipContent>{label}</TooltipContent>
+                          </Tooltip>
                         </td>
                       )
                     })}
@@ -219,6 +323,10 @@ export function InteractionMatrix({
             <span className="font-semibold text-fg">Chưa kiểm</span> không có nghĩa là không có
             tương tác.
           </p>
+        ) : allNotApplicable ? (
+          <p className="rounded-sm border border-line bg-surface-muted px-4 py-3 text-center text-sm text-fg-muted">
+            Không có cặp áp dụng để sàng lọc tương tác. Xem lý do tại từng ô.
+          </p>
         ) : flagged.length === 0 ? (
           <p className="rounded-sm border border-success-line bg-success-bg/50 px-4 py-3 text-center text-sm font-semibold text-success-fg">
             Không ghi nhận tương tác ở mức cần lưu ý trở lên
@@ -228,29 +336,59 @@ export function InteractionMatrix({
           <ul className="flex flex-col divide-y divide-line rounded-sm border border-line">
             {flagged.map((pair) => (
               <li key={`${pair.a}-${pair.b}`}>
-                <button
-                  type="button"
-                  onClick={() => onOpenFinding(pair.finding!.nhan_dinh_id)}
-                  className="flex w-full cursor-pointer items-start gap-3 px-3 py-2.5 text-left transition-colors duration-120 hover:bg-surface-hover"
+                <div
+                  className="flex w-full items-start gap-3 px-3 py-2.5 text-left"
                 >
                   <LevelChip level={pair.level} />
                   <span className="min-w-0">
                     <span className="block text-sm font-semibold text-fg">
                       {data.drugs[pair.a].name} + {data.drugs[pair.b].name}
                     </span>
-                    <span className="block text-sm text-fg-muted">{pair.finding!.nhan_xet}</span>
+                    <span className="block text-sm text-fg-muted">{pair.finding?.nhan_xet ?? pair.summary ?? pair.reason}</span>
+                    {(() => {
+                      const keyA = data.drugs[pair.a].key
+                      const keyB = data.drugs[pair.b].key
+                      const detail = pairDetails.find((item) => (item.a === keyA && item.b === keyB) || (item.a === keyB && item.b === keyA))
+                      return detail ? <PairDetailCard detail={detail} defaultOpen={detailsOpen} /> : null
+                    })()}
+                    {pair.findingId ? (
+                      <button type="button" className="mt-1 cursor-pointer text-sm text-primary underline"
+                        onClick={() => onOpenFinding(pair.findingId!)}>Mở nhận định</button>
+                    ) : null}
                   </span>
-                </button>
+                </div>
               </li>
             ))}
           </ul>
         )}
 
+        {data.foods.length > 0 ? (
+          <div className="text-sm text-fg-muted">
+            <p className="font-semibold text-fg">Tương tác thuốc – thức ăn</p>
+            <ul className="mt-1 flex flex-col gap-1">
+              {data.foods.map((food, index) => (
+                <li key={`${food.chi_tiet_y_lenh_id}-${food.hoat_chat}-${food.thuc_an}-${index}`}>
+                  <details>
+                    <summary className="cursor-pointer">
+                      {food.hoat_chat} × {food.thuc_an} — {
+                        food.muc === 'thong_tin' ? 'Thông tin' : food.muc === 'chua_ro' ? 'Chưa rõ' : INTERACTION_LEVEL_META[food.muc].label
+                      }
+                    </summary>
+                    {food.mo_ta ? <p className="mt-1">{food.mo_ta}</p> : null}
+                    {food.xu_tri ? <p className="mt-1">{food.xu_tri}</p> : null}
+                  </details>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {data.source ? <p className="text-2xs leading-relaxed text-fg-subtle">{data.source} · {data.note}</p> : null}
         <p className="text-2xs leading-relaxed text-fg-subtle">
           Kết quả sàng lọc tham khảo. Quyết định dùng thuốc dựa trên đánh giá độc lập của dược sĩ và
           thông tin sản phẩm hiện hành.
         </p>
       </div>
     </div>
+    </TooltipProvider>
   )
 }

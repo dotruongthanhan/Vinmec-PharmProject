@@ -1,4 +1,6 @@
 app:
+  tra_cuu: "data/kb_curated/tra_cuu/tra_cuu.sqlite"
+  tuong_tac: "data/kb_curated/tuong_tac/ddinter.sqlite"
   case_dir: "data/mock/demo"
   profile: "dev"                    # dev | test | demo
 
@@ -40,18 +42,25 @@ agent:
   max_synthesis_attempts: 2         # số lần tổng hợp lại khi kiểm chứng trượt
 
 llm:
-  provider: "deepseek"
-  model: "deepseek-flash"           # mã còn lại trên tài khoản: deepseek-v4-pro
+  provider: "chat_api"
+  url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+  model: "gemini-3.5-flash-lite"
+  # CHỈ DÙNG CHO DEV: xoay nhiều khoá miễn phí. Triển khai thật dùng một khoá trả phí.
+  cho_khoa_toi_da_giay: 70
+  khoa_env: [GEMINI_API_KEY_1, GEMINI_API_KEY_2, GEMINI_API_KEY_3, GEMINI_API_KEY_4, GEMINI_API_KEY_5, GEMINI_API_KEY_6, GEMINI_API_KEY_7, GEMINI_API_KEY_8]
+  # Cấu hình cũ: url: "https://api.deepseek.com/chat/completions"
+  # model: "deepseek-flash"
+  # khoa_env: [DEEPSEEK_API_KEY]
   max_tokens: 16000
   max_tokens_retry: 32000
   reasoning:
     reasoning_effort: "low"
 
 embedding:
-  provider: "openrouter"
-  active: "nvidia/nemotron-3.5-embed-1b:free"
+  provider: "gemini"
+  active: "gemini-embedding-2"
   dimensions: 2048
-  batch_size: 16
+  batch_size: 100
   cache_path: "data/cache/embeddings.sqlite"
 
 rerank:
@@ -61,9 +70,34 @@ rerank:
 database:
   url_env: "DATABASE_URL"           # chuỗi kết nối nằm trong .env
 
+db:
+  thoi_han_ket_noi_giay: 3
+  cau_dao_giay: 60
+
 vector_store:
   provider: "pgvector"             # pgvector | memory
 
 prompts:
   tong_hop: "config/prompts/tong_hop.v1.md"
   hoi_them: "config/prompts/hoi_them.v1.md"
+  tac_tu: "config/prompts/tac_tu.v1.md"
+
+orchestration:
+  engine: "langgraph"               # langgraph | tuan_tu (đồ thị LangGraph hoặc hàm tuần tự cũ)
+
+ask:
+  engine: "agentic"                 # co_dinh | agentic; chủ kho chuyển sang agentic 28/11 (tool + minh hoạ như local)
+  tool_policy: "config/tool_policy.yaml"
+
+tracer:
+  dich: ["jsonl", "db"]             # bảng nghiep_vu.vet_* đã tạo trên RDS 27/11 (TR2a)
+  bat: true
+  muc_noi_dung: "sieu_du_lieu"      # sieu_du_lieu | noi_dung_da_che | day_du (cấm day_du ở production)
+  so_ngay_luu: 30                   # ngày lưu vết JSONL theo giờ Việt Nam
+  thu_muc: "data/runtime/vet"
+  hang_doi_toi_da: 1000
+  kich_thuoc_tep_mb: 200
+  bang_gia:
+    gemini-3.5-flash-lite:
+      vao_moi_trieu: 0.0
+      ra_moi_trieu: 0.0

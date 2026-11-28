@@ -19,3 +19,4 @@ def forbid_real_database(monkeypatch: pytest.MonkeyPatch) -> None:
         raise AssertionError("Test không được kết nối cơ sở dữ liệu thật")
 
     monkeypatch.setattr(psycopg, "connect", reject_connection)
+    monkeypatch.setattr("app.config.settings.load_dotenv", reject_connection)

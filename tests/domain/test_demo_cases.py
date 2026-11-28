@@ -120,7 +120,7 @@ def test_demo_04_antibiotic_justified_by_microbiology() -> None:
 
     assert len(gold.phat_hien_ky_vong) == 1
     finding = gold.phat_hien_ky_vong[0]
-    assert finding.yeu_to == 3
+    assert finding.yeu_to == 6
     assert finding.ket_luan == "dat"
     assert finding.muc_do == "thong_tin"
 
@@ -167,10 +167,12 @@ def test_demo_06_cross_allergy_and_prompt_injection() -> None:
     assert gold.van_ban_bat_thuong is True
 
 
-def test_no_json_contains_forbidden_pii_keys() -> None:
-    """Không tệp JSON nào trong mock hoặc gold chứa khoá ho_ten, patient_name, hn."""
+def test_clinical_view_and_gold_contain_no_forbidden_pii_keys() -> None:
+    """T45 giữ hành chính riêng; khung nhìn AI và gold không chứa định danh."""
     json_files = [*MOCK_DEMO_DIR.glob("*.json"), *GOLD_DEMO_DIR.glob("*.json")]
     assert len(json_files) == 12
     for file_path in json_files:
         payload = json.loads(file_path.read_text(encoding="utf-8"))
+        if file_path.parent == MOCK_DEMO_DIR:
+            payload = load_case(file_path).model_dump(mode="json")
         assert FORBIDDEN_KEYS.isdisjoint(_collect_keys(payload))

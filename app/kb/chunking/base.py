@@ -70,7 +70,7 @@ _PARA_BREAK_RE = re.compile(r"\n\s*\n+")
 def make_parent_id(tai_lieu_id: str, duong_dan_muc: str) -> str:
     """Tao ma muc_cha_id on dinh bang SHA-1 16 ky tu."""
     raw = f"{tai_lieu_id}|{duong_dan_muc}".encode()
-    return hashlib.sha1(raw).hexdigest()[:16]
+    return hashlib.sha1(raw, usedforsecurity=False).hexdigest()[:16]
 
 
 def make_chunk_id(
@@ -81,7 +81,7 @@ def make_chunk_id(
 ) -> str:
     """Tao ma doan_trich_id on dinh theo tai lieu, duong dan, thu tu va noi dung."""
     raw = f"{tai_lieu_id}|{duong_dan_muc}|{thu_tu}|{noi_dung_goc}".encode()
-    return "DT-" + hashlib.sha1(raw).hexdigest()[:12]
+    return "DT-" + hashlib.sha1(raw, usedforsecurity=False).hexdigest()[:12]
 
 
 def build_embedding_text(

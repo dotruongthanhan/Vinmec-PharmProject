@@ -370,6 +370,20 @@ Luồng thẩm định không có quyết định nào cần LLM đưa ra: ca n�
 
 LangGraph thêm một phụ thuộc và giao diện lập trình của nó thay đổi giữa các phiên bản. Chặn bằng: khoá phiên bản trong `uv.lock`; brief yêu cầu agent đọc tài liệu của đúng phiên bản đã cài, không viết theo trí nhớ; nút mỏng nên nếu đồ thị trục trặc trước demo thì gọi các dịch vụ theo thứ tự trong `app/pipeline.py` là xong.
 
+### 7.5. Bản đã cài của bước AI (T49, 18/11/2026)
+
+Bước AI chạy thực tế (`AiReviewer.run`) hiện có hai đường, chọn bằng `orchestration.engine` trong `config/settings.yaml`: `langgraph` (đồ thị luồng thẳng, mặc định) và `tuan_tu` (hàm tuần tự cũ, giữ làm đường lui). Mã nằm ở `app/orchestration/graph/` (`state.py`, `nodes.py`, `builder.py`, `result.py`).
+
+```mermaid
+flowchart LR
+    S(["START"]) --> A["thu_thap_nguon"] --> B["tong_hop"] --> C["hoan_tat"] --> E(["END"])
+```
+
+- Ba nút mỏng: `thu_thap_nguon` gọi `EvidenceCollector.collect`; `tong_hop` gọi `Synthesizer.run` (vòng thử lại kiểm chứng vẫn nằm trong Synthesizer); `hoan_tat` gộp cảnh báo, tính thời gian, dựng `AiRunResult`.
+- Lỗi không mong muốn ở bất kỳ nút nào được bọc thành cờ `loi`; các nút sau bỏ qua và `hoan_tat` dựng kết quả chỉ-luật (`trang_thai="loi_llm"`), y hệt nhánh `except` của đường tuần tự.
+- Đồ thị biên dịch một lần khi khởi tạo `AiReviewer`, không có checkpointer (không lưu trạng thái chứa dữ liệu ca) và mỗi lượt chạy nằm trong `tracing_context(enabled=False)` (không gửi vết ra LangSmith).
+- Muốn thêm nút (tra openFDA, tìm web, dược sĩ xác nhận): xem docstring đầu `app/orchestration/graph/builder.py`; chỉ cần viết lớp nút và thêm một dòng vào `dung_danh_sach_nut`.
+
 ---
 
 ## 8. Cấu hình

@@ -1,0 +1,496 @@
+{
+  "ho_so_id": "HS-037",
+  "kich_ban_id": "HS-037",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-037",
+    "tuoi": 61,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-11T14:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-MORPHINE",
+      "ten_hoat_chat": "Morphin",
+      "ten_quoc_te": "morphine",
+      "ma_atc": "N02AA01",
+      "nhom_duoc_ly": "opioid"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giảm đau, hạ sốt"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-MORPHIN-10MG",
+      "ten_thuoc": "Morphin 10 mg/mL ống tiêm",
+      "ham_luong": "10 mg/mL",
+      "duong_dung": "tiêm dưới da, tiêm tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-MORPHINE",
+          "ham_luong_thanh_phan": 10.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500MG",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-037-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Ung bướu",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-11T14:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ung bướu",
+          "tu": "2026-11-11T14:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau ngực lan lưng do ung thư phổi, cần kiểm soát đau",
+      "benh_su": "BN nữ 61t, ung thư phổi đã biết đang theo dõi điều trị ngoại trú. Đau vùng ngực lan lưng tăng dần 2 tuần nay, đau nhiều về đêm, ảnh hưởng giấc ngủ. Vào viện để kiểm soát đau.",
+      "tien_su": {
+        "ban_than": "Ung thư phổi đã biết. Chưa ghi nhận bệnh tim mạch, thận.",
+        "gia_dinh": "Chưa ghi nhận",
+        "thuoc_truoc_vao_vien": "Paracetamol khi đau"
+      },
+      "kham_benh": "BN tỉnh, tiếp xúc tốt, gầy. Phổi giảm rì rào phế nang vùng đáy phổi phải. Bụng mềm. Chưa ghi nhận phù.",
+      "tom_tat": "BN nữ 61t, ung thư phổi C34.9, đau do ung thư G89.3, nằm điều trị ngày thứ 5. Đau VAS 7/10 vùng ngực lan lưng, cn 52 kg, creatinin 74 umol/L. Mạch 90, HA 116/72, SpO2 96%. Tiếp tục kiểm soát đau.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS037-01",
+          "ma_icd10": "C34.9",
+          "noi_dung": "Ung thư phổi, chưa rõ vị trí cụ thể",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS037-02",
+          "ma_icd10": "G89.3",
+          "noi_dung": "Đau do ung thư",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS037-01",
+          "loai": "can_nang",
+          "gia_tri": 52.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-02",
+          "loai": "chieu_cao",
+          "gia_tri": 158.0,
+          "don_vi": "cm",
+          "thoi_diem_do": "2026-11-11T14:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-03",
+          "loai": "can_nang",
+          "gia_tri": 52.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-04",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 116.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-05",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 72.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-06",
+          "loai": "mach",
+          "gia_tri": 90.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-07",
+          "loai": "nhiet_do",
+          "gia_tri": 37.0,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS037-08",
+          "loai": "spo2",
+          "gia_tri": 96.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-15T06:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS037-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 71.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-11T16:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS037-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 74.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-15T06:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS037-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN vào viện vì đau ngực lan lưng do ung thư phổi, VAS 7/10, đau nhiều về đêm. Tỉnh, T 36,8, mạch 88, HA 118/74. Cn 52 kg.",
+          "thoi_diem_ghi": "2026-11-11T15:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS037-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 1 nằm viện. Đau vùng ngực còn nhiều, khó ngủ. Ăn kém, buồn nôn nhẹ sau uống thuốc. Chưa khó thở.",
+          "thoi_diem_ghi": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS037-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 2. Buồn nôn giảm. Đau VAS 6/10. Mạch 86, HA 118/72. Tiếp tục theo dõi đau và tác dụng phụ thuốc.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS037-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 3. Đau VAS 6–7/10 vùng ngực lan lưng, mệt nhiều. Mạch 90, HA 116/72, T 37,0. Ngủ được vài giờ.",
+          "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS037-05",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 4 nằm viện. Đau VAS 7/10 vùng ngực lan lưng, không khó thở, SpO2 96%. Cn 52 kg, creatinin 74 umol/L. Cần điều chỉnh thuốc giảm đau.",
+          "thoi_diem_ghi": "2026-11-15T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-037-01",
+          "thoi_diem_ke": "2026-11-11T15:30:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-037-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL truyền tĩnh mạch",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "truyền liên tục",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": null,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL trong 8 giờ",
+              "bat_dau": "2026-11-11T16:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-037-02",
+          "thoi_diem_ke": "2026-11-12T09:30:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-037-02-01",
+              "thuoc_id": "T-PARACETAMOL-500MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "4 lần/ngày",
+              "so_lan_moi_ngay": 4,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 g mỗi 6 giờ (2 viên 500 mg)",
+              "bat_dau": "2026-11-12T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T10:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-12T16:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-12T22:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-037-03",
+          "thoi_diem_ke": "2026-11-13T09:00:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-037-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Ondansetron 4 mg tiêm tĩnh mạch",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 4.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "tiêm tĩnh mạch",
+              "cach_dung": "Tiêm tĩnh mạch 4 mg mỗi 8 giờ",
+              "bat_dau": "2026-11-13T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-13T09:00:00+07:00",
+                  "lieu": 4.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T17:00:00+07:00",
+                  "lieu": 4.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-037-04",
+          "thoi_diem_ke": "2026-11-15T14:30:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-037-04-01",
+              "thuoc_id": "T-MORPHIN-10MG",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 10.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi cần",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "tiêm dưới da",
+              "cach_dung": "Tiêm dưới da khi cần",
+              "bat_dau": "2026-11-15T14:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-037-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-11T16:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 61 tuổi, ung thư phổi đã biết đang theo dõi ngoại trú, vào viện vì đau ngực lan lưng tăng dần 2 tuần, đau nhiều về đêm. Tỉnh, gầy, cân nặng 52 kg, chiều cao 158 cm. Phổi giảm rì rào phế nang đáy phổi phải, bụng mềm, chưa ghi nhận phù. Creatinin 71 umol/L.",
+          "danh_gia": "Đau do ung thư phổi, mức đau nặng ảnh hưởng giấc ngủ, cần kiểm soát đau tích cực. Chức năng thận trong giới hạn bình thường.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL trong 8 giờ theo y lệnh. Đánh giá đau và tác dụng phụ của thuốc giảm đau trong ngày kế.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-037-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, chia nhỏ bữa, đủ đạm, uống đủ nước.",
+          "theo_doi": [
+            "Mức đau theo thang điểm",
+            "Giấc ngủ và buồn nôn",
+            "Cân nặng hằng tuần"
+          ],
+          "dan_do": "Báo điều dưỡng khi đau tăng hoặc khó thở."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-037-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-12T10:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau vùng ngực còn nhiều, khó ngủ. Ăn kém, buồn nôn nhẹ sau khi uống thuốc. Chưa khó thở. BN được hướng dẫn tư thế nằm nghiêng và thở chậm để giảm đau. Điều dưỡng ghi nhận BN đã ăn được vài thìa cháo.",
+          "danh_gia": "Đau do ung thư chưa kiểm soát đủ, có tác dụng phụ tiêu hóa nhẹ. Cần đánh giá lại phác đồ giảm đau trong các ngày tới. Đau vẫn là vấn đề chính, cần đánh giá lại theo thang điểm mỗi ngày.",
+          "huong_xu_tri": "Paracetamol 1 g uống mỗi 6 giờ theo y lệnh, theo dõi buồn nôn và mức đau. Tiếp tục dịch truyền. Điều dưỡng theo dõi buồn nôn sau mỗi lần dùng thuốc uống.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-037-01",
+            "YL-HS-037-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, chia nhỏ bữa, đủ đạm, uống đủ nước.",
+          "theo_doi": [
+            "Mức đau theo thang điểm",
+            "Buồn nôn và nôn",
+            "Giấc ngủ"
+          ],
+          "dan_do": "Uống thuốc sau bữa ăn nhẹ để giảm buồn nôn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-037-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-13T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Buồn nôn đã giảm sau khi dùng thuốc chống nôn tiêm tĩnh mạch. Đau vùng ngực lan lưng còn mức vừa đến nặng, VAS 6/10. Mạch 86, HA 118/72 mmHg, BN còn mệt. Điều dưỡng ghi nhận BN tự xoay trở trên giường và uống nước đều hơn.",
+          "danh_gia": "Buồn nôn đáp ứng tốt với ondansetron. Đau còn mức vừa đến nặng, chưa đủ kiểm soát. Tác dụng phụ tiêu hóa đang được kiểm soát tốt hơn so với các ngày đầu.",
+          "huong_xu_tri": "Tiếp tục paracetamol 1 g mỗi 6 giờ và ondansetron 4 mg tiêm tĩnh mạch mỗi 8 giờ. Đánh giá đau và giấc ngủ vào ngày kế. Điều dưỡng ghi nhận mức đau trước và sau mỗi lần dùng thuốc giảm đau.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-037-01",
+            "YL-HS-037-02",
+            "YL-HS-037-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, chia nhỏ bữa, đủ đạm, uống đủ nước.",
+          "theo_doi": [
+            "Mức đau theo thang điểm",
+            "Buồn nôn và nôn",
+            "Mạch và huyết áp"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-037-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-14T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau vùng ngực lan lưng VAS 6–7/10, mệt nhiều. Ngủ được vài giờ mỗi đêm. Mạch 90, HA 116/72 mmHg, T 37,0. Buồn nôn đã kiểm soát. Điều dưỡng ghi nhận BN than đau nhiều hơn vào ban đêm và cần thuốc giảm đau thêm.",
+          "danh_gia": "Đau còn nhiều ảnh hưởng sinh hoạt và giấc ngủ, cần điều chỉnh thuốc giảm đau. Buồn nôn đã kiểm soát tốt. Cần xem xét phương án giảm đau bổ sung trong ngày.",
+          "huong_xu_tri": "Chờ điều chỉnh thuốc giảm đau trong ngày, tiếp tục paracetamol và ondansetron theo y lệnh. Theo dõi tác dụng phụ của thuốc. Thông báo kế hoạch điều chỉnh thuốc cho người bệnh và người nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-037-01",
+            "YL-HS-037-02",
+            "YL-HS-037-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, chia nhỏ bữa, đủ đạm, uống đủ nước.",
+          "theo_doi": [
+            "Mức đau theo thang điểm",
+            "Giấc ngủ",
+            "Buồn nôn"
+          ],
+          "dan_do": null
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-037-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-11-15T14:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đau vùng ngực lan lưng VAS 7/10, không khó thở, SpO2 96%. Mạch 90, HA 116/72 mmHg, T 37,0. Cân nặng 52 kg, creatinin 74 umol/L sáng nay. Cần điều chỉnh thuốc giảm đau. Điều dưỡng ghi nhận BN đau nhiều về chiều và đêm.",
+          "danh_gia": "Đau do ung thư phổi chưa kiểm soát đủ bằng paracetamol đơn thuần, cần thêm thuốc giảm đau nhóm opioid. Chức năng thận còn trong giới hạn, cân nặng ổn định.",
+          "huong_xu_tri": "Đề nghị morphin 10 mg tiêm dưới da khi cần, chỉ định chờ duyệt. Tiếp tục paracetamol và ondansetron theo y lệnh, theo dõi an thần và nhịp thở sau khi dùng thuốc.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-037-01",
+            "YL-HS-037-02",
+            "YL-HS-037-03",
+            "YL-HS-037-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn mềm, chia nhỏ bữa, đủ đạm, uống đủ nước.",
+          "theo_doi": [
+            "Mức đau theo thang điểm",
+            "An thần và nhịp thở sau khi dùng thuốc giảm đau",
+            "Cân nặng hằng tuần"
+          ],
+          "dan_do": "Báo điều dưỡng khi đau tăng, khó thở hoặc quá buồn ngủ."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-037-04"
+}

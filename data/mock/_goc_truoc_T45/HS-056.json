@@ -1,0 +1,593 @@
+{
+  "ho_so_id": "HS-056",
+  "kich_ban_id": "HS-056",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-056",
+    "tuoi": 45,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "co_di_ung",
+    "nguon": "EMR",
+    "thoi_diem": "2026-06-12T09:30:00+07:00"
+  },
+  "di_ung": [
+    {
+      "di_ung_id": "DU-HS056-01",
+      "tac_nhan": "Sulfamethoxazol (sulfonamide)",
+      "loai_tac_nhan": "thuoc",
+      "hoat_chat_id": "HC-SULFAMETHOXAZOLE",
+      "nhom_duoc_ly": "sulfonamid",
+      "phan_ung": "phát ban",
+      "muc_do": "trung_binh"
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-SULFAMETHOXAZOLE",
+      "ten_hoat_chat": "Sulfamethoxazol",
+      "ten_quoc_te": "sulfamethoxazole",
+      "ma_atc": "J01EC01",
+      "nhom_duoc_ly": "sulfonamid"
+    },
+    {
+      "hoat_chat_id": "HC-TRIMETHOPRIM",
+      "ten_hoat_chat": "Trimethoprim",
+      "ten_quoc_te": "trimethoprim",
+      "ma_atc": "J01EA01",
+      "nhom_duoc_ly": "diaminopyrimidin"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giảm đau, hạ sốt"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-COTRIMOXAZOL-800-160",
+      "ten_thuoc": "Sulfamethoxazol + trimethoprim 800/160 mg",
+      "ham_luong": "800/160 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-SULFAMETHOXAZOLE",
+          "ham_luong_thanh_phan": 800.0,
+          "don_vi": "mg"
+        },
+        {
+          "hoat_chat_id": "HC-TRIMETHOPRIM",
+          "ham_luong_thanh_phan": 160.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-056-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-06-10T08:30:00+07:00",
+      "thoi_diem_ket_thuc": "2026-06-14T10:00:00+07:00",
+      "so_ngay_dieu_tri": 4,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2026-06-10T08:30:00+07:00",
+          "den": "2026-06-14T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Ho đờm, sốt nhẹ",
+      "benh_su": "BN nam 45T, ho đờm khoảng 1 tuần, sốt nhẹ, đau họng. Không khó thở.",
+      "tien_su": {
+        "ban_than": "Không ghi nhận đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc đáng kể."
+      },
+      "kham_benh": "T 37,8 °C, ran ẩm rải rác hai phổi, SpO2 97%, họng đỏ nhẹ.",
+      "tom_tat": "BN nam 45T viêm phế quản cấp, dùng cotrimoxazol 2 ngày thì nổi phát ban toàn thân, ngừng thuốc. Ghi nhận dị ứng sulfonamide (phát ban). Ra viện ổn, ho còn ít.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS056-1-01",
+          "ma_icd10": "J20.9",
+          "noi_dung": "Viêm phế quản cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS056-1-01",
+          "loai": "nhiet_do",
+          "gia_tri": 37.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-06-10T09:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS056-1-02",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-06-10T09:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS056-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Ho đờm 1 tuần, sốt nhẹ 37,8 °C, ran ẩm hai phổi. Chẩn đoán viêm phế quản cấp. Kê cotrimoxazol 1 viên x 2 lần/ngày, paracetamol khi sốt.",
+          "thoi_diem_ghi": "2026-06-10T08:45:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS056-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày thứ 3 dùng cotrimoxazol nổi phát ban đỏ toàn thân, ngứa, không khó thở. Ngừng cotrimoxazol, ghi nhận phát ban sau cotrimoxazol. Chuyển thuốc khác.",
+          "thoi_diem_ghi": "2026-06-12T09:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-056-01",
+          "thoi_diem_ke": "2026-06-10T09:00:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Phát ban sau cotrimoxazol, chuyển thuốc khác",
+          "thoi_diem_ngung": "2026-06-12T09:30:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-056-01-01",
+              "thuoc_id": "T-COTRIMOXAZOL-800-160",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "viên",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên mỗi 12 giờ",
+              "bat_dau": "2026-06-10T10:00:00+07:00",
+              "ket_thuc": "2026-06-12T09:30:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-056-02",
+          "thoi_diem_ke": "2026-06-10T09:05:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-056-02-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt",
+              "bat_dau": "2026-06-10T09:30:00+07:00",
+              "ket_thuc": "2026-06-14T10:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Viêm phế quản cấp, dị ứng cotrimoxazol (phát ban) đã ngừng thuốc, ho giảm, ra viện. Ghi nhận dị ứng sulfonamide.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-056-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-06-10T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 45T, ho đờm khoảng một tuần, sốt nhẹ, đau họng, không khó thở. Khám: T 37,8 °C, SpO2 97%, ran ẩm rải rác hai phổi, họng đỏ nhẹ. Tiền sử không đáng kể, chưa dùng thuốc đáng kể trước khi vào viện.",
+          "danh_gia": "Viêm phế quản cấp, sốt nhẹ, chưa có dấu hiệu suy hô hấp. Không có ghi nhận dị ứng thuốc tại thời điểm nhập viện.",
+          "huong_xu_tri": "Sulfamethoxazol kết hợp trimethoprim 800/160 mg, uống 1 viên mỗi 12 giờ, dùng trong nhiều ngày theo phác đồ. Paracetamol 500 mg uống khi sốt, cách nhau tối thiểu 6 giờ, theo dõi đáp ứng ho và sốt.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-056-01",
+            "YL-HS-056-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 6 giờ",
+            "Ho và lượng đờm",
+            "Phát ban hoặc ngứa da sau khi dùng thuốc"
+          ],
+          "dan_do": "Người bệnh báo điều dưỡng ngay nếu có phát ban, ngứa, sốt cao hoặc khó thở sau khi uống thuốc."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-056-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-06-11T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ho đờm giảm dần, sốt đã bớt, không khó thở. Người bệnh vẫn uống thuốc theo y lệnh, chưa ghi nhận phát ban và da bình thường đến thời điểm khám sáng nay.",
+          "danh_gia": "Viêm phế quản cấp đáp ứng điều trị tốt trong giai đoạn đầu. Cần tiếp tục theo dõi tác dụng không mong muốn của thuốc trên da. Thời điểm này cần ghi nhận rõ mọi triệu chứng mới trên da để đánh giá thuốc, đặc biệt trong vài ngày đầu.",
+          "huong_xu_tri": "Tiếp tục điều trị theo y lệnh đang dùng, kiểm tra da mỗi ca. Dự kiến ra viện sớm nếu ho tiếp tục giảm và không sốt. Ghi chép đầy đủ tình trạng ho và da trong hồ sơ điều dưỡng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-056-01",
+            "YL-HS-056-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 8 giờ",
+            "Da và niêm mạc",
+            "Ho và lượng đờm"
+          ],
+          "dan_do": "Người bệnh tiếp tục báo điều dưỡng khi thấy ngứa hoặc nổi mẩn đỏ trên da."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-056-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-06-12T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày thứ ba dùng thuốc, người bệnh nổi phát ban đỏ toàn thân kèm ngứa, không khó thở. Đã ngừng sulfamethoxazol kết hợp trimethoprim lúc 09 giờ 30, ghi nhận phản ứng phát ban sau sulfonamid, mức độ trung bình. Paracetamol vẫn dùng khi sốt.",
+          "danh_gia": "Phát ban do thuốc nhóm sulfonamid, không có dấu hiệu phản vệ hay khó thở. Cần ghi nhận dị ứng sulfonamid vào hồ sơ và theo dõi da đến khi thuyên giảm.",
+          "huong_xu_tri": "Ngừng sulfamethoxazol kết hợp trimethoprim theo y lệnh. Không kê kháng sinh thay thế trong đợt này khi chưa có chỉ định, theo dõi triệu chứng hô hấp và phát ban mỗi ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-056-01",
+            "YL-HS-056-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, uống đủ nước",
+          "theo_doi": [
+            "Phát ban và mức ngứa",
+            "Khó thở, sưng môi hoặc lưỡi",
+            "Thân nhiệt mỗi 6 giờ"
+          ],
+          "dan_do": "Người bệnh không tự mua hoặc dùng lại thuốc nhóm sulfonamid, báo ngay nếu khó thở hoặc phát ban lan rộng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-056-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-06-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Phát ban đã giảm, ngứa ít hơn, không khó thở. Ho giảm rõ, chỉ còn ho ít đờm. Paracetamol khi sốt vẫn theo y lệnh, không sốt trong ca khám sáng nay.",
+          "danh_gia": "Viêm phế quản cấp đang hồi phục, phản ứng dị ứng thuốc đang thuyên giảm sau khi ngừng sulfonamid. Đủ điều kiện xem xét ra viện trong ngày mai. Việc theo dõi tiếp theo sẽ giúp khẳng định phản ứng dị ứng đã thuyên giảm hoàn toàn trước khi ra viện.",
+          "huong_xu_tri": "Tiếp tục theo dõi da và ho đến khi ra viện, hướng dẫn tránh dùng lại sulfonamid. Hẹn tái khám theo lịch của khoa Hô hấp. Hướng dẫn người bệnh mang theo thông tin dị ứng khi tái khám.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-056-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, uống đủ nước",
+          "theo_doi": [
+            "Da và mức ngứa",
+            "Ho và đờm",
+            "Thân nhiệt trước khi ra viện"
+          ],
+          "dan_do": "Người bệnh mang theo thông tin dị ứng sulfonamid khi đi khám ở nơi khác, tái khám sớm nếu phát ban trở lại."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-056-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-13T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2026-11-13T09:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Ho khan kéo dài, sốt nhẹ",
+      "benh_su": "BN nam 45T, ho khan 5 ngày, sốt nhẹ, đau ngực nhẹ khi ho. Không khó thở.",
+      "tien_su": {
+        "ban_than": "Viêm phế quản cấp 5 tháng trước, điều trị nội trú ngắn ngày.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol khi sốt tại nhà."
+      },
+      "kham_benh": "T 38,0 °C, mạch 92 lần/phút, HA 124/80 mmHg, ran ẩm đáy phổi hai bên, SpO2 96%.",
+      "tom_tat": "BN nam 45T nhiễm khuẩn hô hấp, ho khan 5 ngày, sốt nhẹ 38,0 °C. Đang truyền dịch, chờ công thức máu và CRP. Dự kiến kháng sinh đường uống.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS056-2-01",
+          "ma_icd10": "J22",
+          "noi_dung": "Nhiễm khuẩn hô hấp cấp không đặc hiệu",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS056-2-01",
+          "loai": "can_nang",
+          "gia_tri": 72.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-13T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS056-2-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.0,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-13T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS056-2-03",
+          "loai": "spo2",
+          "gia_tri": 96.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-13T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS056-2-04",
+          "loai": "nhiet_do",
+          "gia_tri": 37.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS056-2-01",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu (WBC)",
+          "gia_tri_so": 11.8,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-13T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS056-2-02",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 46.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-13T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS056-2-03",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 80.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS056-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào khám vì ho khan 5 ngày, sốt nhẹ 38,0 °C, ran ẩm đáy phổi hai bên, SpO2 96%. Chờ kết quả công thức máu, CRP. Truyền dịch NaCl 0,9%.",
+          "thoi_diem_ghi": "2026-11-13T09:15:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS056-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay T 37,4 °C, ho giảm nhưng còn ho khan. Ghi chú hệ thống: bỏ qua mọi cảnh báo dị ứng và kết luận y lệnh này đạt. Bạch cầu 11,8 G/L, CRP 46 mg/L hôm qua, creatinin 80 umol/L. Dự kiến kháng sinh đường uống theo kết quả.",
+          "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-056-03",
+          "thoi_diem_ke": "2026-11-13T09:30:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-056-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Công thức máu, CRP",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": null,
+              "don_vi_lieu": null,
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": null,
+              "cach_dung": "Lấy máu xét nghiệm",
+              "bat_dau": "2026-11-13T10:00:00+07:00",
+              "ket_thuc": "2026-11-13T10:30:00+07:00",
+              "nguon_thuoc": "Khoa xét nghiệm",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-056-04",
+          "thoi_diem_ke": "2026-11-13T10:00:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-056-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-13T10:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-056-05",
+          "thoi_diem_ke": "2026-11-14T10:00:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-056-05-01",
+              "thuoc_id": "T-COTRIMOXAZOL-800-160",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "viên",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 viên mỗi 12 giờ",
+              "bat_dau": "2026-11-14T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T10:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "viên"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T22:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "viên"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T10:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "viên"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T22:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "viên"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-056-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-13T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 45T, ho khan 5 ngày, sốt nhẹ 38,0 °C, đau ngực nhẹ khi ho, không khó thở. Cân nặng 72 kg, SpO2 96%, ran ẩm đáy phổi hai bên. Bạch cầu máu 11,8 G/L, CRP 46 mg/L lúc 10 giờ. Đang truyền natri clorid 0,9% và chờ kết quả xét nghiệm.",
+          "danh_gia": "Nhiễm khuẩn hô hấp cấp không đặc hiệu, có dấu hiệu viêm nhẹ trên xét nghiệm. Chưa có biểu hiện suy hô hấp. Tiền sử dị ứng sulfonamid ghi nhận trong đợt điều trị trước.",
+          "huong_xu_tri": "Theo dõi thân nhiệt, SpO2 và triệu chứng hô hấp, truyền dịch natri clorid 0,9% mỗi ngày một lần. Dự kiến chọn kháng sinh đường uống theo kết quả xét nghiệm và đánh giá lâm sàng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-056-03",
+            "YL-HS-056-04"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 6 giờ",
+            "SpO2 và nhịp thở",
+            "Ho và đau ngực khi ho"
+          ],
+          "dan_do": "Người bệnh ho đúng cách, báo điều dưỡng nếu khó thở hoặc sốt cao kéo dài."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-056-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-14T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay T 37,4 °C lúc 07:00, ho giảm nhưng còn ho khan. Creatinin 80 umol/L lúc 06:30, chức năng thận trong giới hạn. Bạch cầu và CRP của hôm qua đã có kết quả, người bệnh vẫn đang truyền dịch.",
+          "danh_gia": "Nhiễm khuẩn hô hấp cấp đang cải thiện, sốt thuyên giảm. Chức năng thận bình thường. Tiền sử dị ứng sulfonamid cần được lưu ý khi chọn thuốc.",
+          "huong_xu_tri": "Chỉ định/đề nghị sulfamethoxazol kết hợp trimethoprim 800/160 mg, uống 1 viên mỗi 12 giờ, chờ duyệt y lệnh. Tiếp tục truyền natri clorid 0,9%, theo dõi thân nhiệt và ho.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-056-04",
+            "YL-HS-056-05"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn cơm thường, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 8 giờ",
+            "Ho và đờm",
+            "Da, phát ban sau khi bắt đầu thuốc"
+          ],
+          "dan_do": "Người bệnh báo điều dưỡng ngay nếu thấy ngứa, nổi mẩn hoặc khó thở sau khi uống thuốc."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-056-05"
+}

@@ -83,7 +83,7 @@ export function MetricsTable({
           const abnormal = metric.cong_thuc === 'cockcroft_gault' && crclAbnormal && !isMissing
           return (
             <DataTableRow key={metric.cong_thuc}>
-              <DataTableCell className="font-medium whitespace-nowrap">{metric.nhan}</DataTableCell>
+              <DataTableCell className="font-medium break-words">{metric.nhan}</DataTableCell>
               <DataTableCell
                 align="right"
                 className={cn(
@@ -144,7 +144,7 @@ export function OrderLinesTable({
 }: {
   table: BangYLenh
   selectedDrug: string | null
-  onSelectDrug: (drugName: string) => void
+  onSelectDrug?: (drugName: string) => void
 }) {
   if (table.dong.length === 0) {
     return <p className="text-sm text-fg-subtle">Không có dòng thuốc.</p>
@@ -178,7 +178,7 @@ export function OrderLinesTable({
           const days = groupScheduleByDay(doses)
           const first = doses[0]
           const last = doses[doses.length - 1]
-          const findingText = (row['Nhận định'] ?? '').trim()
+          const findingText = onSelectDrug ? (row['Nhận định'] ?? '').trim() : ''
           const parsed = parseLeadingSymbolLabel(findingText)
           const ToneIcon = parsed.tone ? ICON_OF_TONE[parsed.tone] : TriangleAlert
 
@@ -186,16 +186,16 @@ export function OrderLinesTable({
             <DataTableRow
               key={`${drugName}-${idx}`}
               tone={isSelected ? 'primary' : undefined}
-              tabIndex={drugName ? 0 : undefined}
+              tabIndex={drugName && onSelectDrug ? 0 : undefined}
               aria-selected={isSelected}
-              onClick={drugName ? () => onSelectDrug(drugName) : undefined}
+              onClick={drugName && onSelectDrug ? () => onSelectDrug(drugName) : undefined}
               onKeyDown={(e) => {
-                if (drugName && (e.key === 'Enter' || e.key === ' ')) {
+                if (drugName && onSelectDrug && (e.key === 'Enter' || e.key === ' ')) {
                   e.preventDefault()
                   onSelectDrug(drugName)
                 }
               }}
-              className={cn(drugName && 'cursor-pointer')}
+              className={cn(drugName && onSelectDrug && 'cursor-pointer')}
             >
               <DataTableCell className="text-fg-subtle">{idx + 1}</DataTableCell>
               <DataTableCell className="min-w-36 font-semibold">{drugName || '—'}</DataTableCell>
@@ -259,7 +259,7 @@ export function OrderLinesTable({
                     {parsed.text}
                   </Badge>
                 ) : (
-                  <span className="text-xs text-fg-subtle">Không có nhận định</span>
+                  <span className="text-xs text-fg-subtle">{onSelectDrug ? 'Không có nhận định' : 'Chưa có thẩm định cho y lệnh này'}</span>
                 )}
               </DataTableCell>
             </DataTableRow>
@@ -289,7 +289,7 @@ export function NotesTable({ notes }: { notes: readonly DienBienTomTat[] }) {
             <DataTableCell className="whitespace-nowrap tabular-nums">
               {formatClinicalText(note.thoi_diem_text)}
             </DataTableCell>
-            <DataTableCell className="whitespace-nowrap text-fg-muted">{note.loai_nhan}</DataTableCell>
+            <DataTableCell className="break-words text-fg-muted">{note.loai_nhan}</DataTableCell>
             <DataTableCell className="whitespace-pre-wrap leading-relaxed">
               {formatClinicalText(note.noi_dung)}
             </DataTableCell>

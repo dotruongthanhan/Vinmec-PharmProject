@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-047",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-047-06-01"],
+      "mo_ta": "Vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ nhưng lịch dùng ghi liều lúc 08:00 và 12:00, cách nhau 4 giờ."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

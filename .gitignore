@@ -151,6 +151,8 @@ activemq-data/
 
 # Environments
 .env
+.env.app
+.env.loader
 .envrc
 .venv
 env/
@@ -229,3 +231,46 @@ tests/**/.tmp/
 data/runtime/
 data/cache/*.sqlite
 web/qa/artifacts/
+
+# Khoa SSH va chung chi may chu (khong duoc commit)
+*.pem
+*.ppk
+certs/
+
+# File khoa AWS va tai lieu nhay cam tai may (khong duoc commit)
+important/
+
+# Dữ liệu tham khảo ngoài (ODbL, tải lại được; xem data/tham_khao/README.md)
+data/tham_khao/*
+!data/tham_khao/README.md
+
+# thư mục tạm của pytest
+.pytest-*/
+.pytest_tmp*/
+.pytest_chk*/
+
+# nhật ký chạy agent
+.t*.log
+
+# tệp tạm của pytest
+.pytest_*
+
+# Dữ liệu: không đưa lên git (nhóm tự quản lý riêng, xem docs/du-lieu/README.md).
+# Chỉ giữ README mô tả trong từng thư mục dữ liệu.
+data/kb_curated/*
+!data/kb_curated/README.md
+data/kb_reports/*
+!data/kb_reports/README.md
+data/kb_sources/*
+!data/kb_sources/README.md
+data/kb_staging/*
+!data/kb_staging/README.md
+data/cache/*
+!data/cache/README.md
+data/formulas/*
+!data/formulas/README.md
+data/runtime/
+data/_luu_tru/
+
+# PharmOverlay tạm gác vô thời hạn (26/11/2026) – xem pharm-overlay/TAM-GAC.md
+pharm-overlay/

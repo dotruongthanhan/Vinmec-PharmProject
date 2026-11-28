@@ -1,57 +1,81 @@
 ﻿import {
+  ArrowLeftRight,
+  Calculator,
   ChevronsUpDown,
   CircleHelp,
+  FileCheck,
   LogIn,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
+  Pill,
   Settings,
 } from 'lucide-react'
 import { useState } from 'react'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { Link } from 'react-router-dom'
+import type { ChiTietCa } from '@/api/types'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { VinmecLogo } from '@/components/VinmecLogo'
+import { AppLogo } from '@/components/AppLogo'
+import type { AuthRole } from '@/features/auth/authClient'
 import { cn } from '@/lib/cn'
-import type {
-  OrderGroupCounts,
-  OrderSelectionFilter,
-} from '@/lib/orders'
+import type { EvidenceTarget } from '@/lib/uiTypes'
+import { PatientCollapsedButton, PatientSidebarCard } from './PatientSidebarCard'
+import { ReviewFactorNav } from './ReviewFactorNav'
+import type { ReviewFactorNavProps } from './ReviewFactorNav'
+export type SidebarSection = 'orders' | 'thuoc' | 'tuong_tac' | 'cong_thuc'
+export type SidebarReviewNav = Omit<ReviewFactorNavProps, 'collapsed'>
 
 export interface SidebarNavProps {
-  counts: OrderGroupCounts
-  activeFilter: OrderSelectionFilter
   collapsed: boolean
   inDrawer?: boolean
+  activeSection: SidebarSection
+  onNavigate: () => void
   userEmail: string | null
+  vaiTro?: AuthRole | null
   isDemoMode: boolean
-  onSelectFilter: (filter: OrderSelectionFilter) => void
   onToggleCollapse: () => void
   onOpenSettings: () => void
   onSignIn: () => void
-  onSignOut: () => void
+  onSignOut: (options?: { scope?: 'local' | 'global' }) => void
+  patient?: ChiTietCa | null
+  reviewNav?: SidebarReviewNav | null
+  onOpenEvidence?: (target: EvidenceTarget, trigger: HTMLButtonElement) => void
 }
 
-/** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px); phần lọc giữa để trống vì đã lọc theo cột. */
+/** Thanh bên điều hướng nền tối (248 px, thu gọn còn 56 px). */
 export function SidebarNav({
   collapsed,
   inDrawer = false,
+  activeSection,
+  onNavigate,
   userEmail,
+  vaiTro,
   isDemoMode,
   onToggleCollapse,
   onOpenSettings,
   onSignIn,
   onSignOut,
+  patient = null,
+  reviewNav = null,
+  onOpenEvidence,
 }: SidebarNavProps) {
   const effectiveCollapsed = collapsed && !inDrawer
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
 
-  const accountLabel = isDemoMode ? 'Chế độ demo · chưa đăng nhập' : (userEmail ?? 'Tài khoản dược sĩ')
+  const accountLabel = isDemoMode ? 'Chế độ demo · chưa đăng nhập' : (userEmail ?? 'Tài khoản')
   const shortAccountName = isDemoMode
     ? 'demo'
-    : (userEmail?.split('@')[0]?.trim() || 'dược sĩ')
+    : (userEmail?.split('@')[0]?.trim() || 'Tài khoản')
   const accountInitial = shortAccountName.slice(0, 1).toUpperCase() || 'D'
-  const accountTierLabel = isDemoMode ? 'Demo' : 'Dược sĩ'
+  const accountTierLabel = isDemoMode
+    ? 'Demo'
+    : vaiTro === 'admin'
+      ? 'Quản trị'
+      : vaiTro === 'duoc_si_ls'
+        ? 'Dược sĩ lâm sàng'
+        : 'Chưa cấp quyền'
 
   const handleAccountMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     const items = Array.from(
@@ -91,7 +115,7 @@ export function SidebarNav({
       >
         {!effectiveCollapsed ? (
           <span className="flex min-w-0 items-center gap-2">
-            <VinmecLogo alwaysOnDark imageClassName="h-9" />
+            <AppLogo alwaysOnDark imageClassName="h-9" />
             <span className="truncate text-sm font-semibold tracking-tight text-ink-fg">
               Thẩm định y lệnh
             </span>
@@ -121,8 +145,79 @@ export function SidebarNav({
         ) : null}
       </div>
 
-      {/* 2. Vùng giữa tạm để trống (bộ lọc đã nằm trong cột bảng; hội thoại gần đây chuyển sang thẻ Lịch sử của Trợ lý) */}
-      <div className="flex-1 min-h-0" aria-hidden="true" />
+      {/* 2. Mục điều hướng chính: hồ sơ cần duyệt, rồi 3 mục tra cứu (thuốc, tương tác, công thức). */}
+      <div className="flex shrink-0 flex-col gap-1 p-2">
+        {([
+          { section: 'orders', to: '/app', label: 'Hồ sơ cần duyệt', icon: FileCheck },
+          { section: 'thuoc', to: '/app/thuoc', label: 'Tra cứu thuốc', icon: Pill },
+          { section: 'tuong_tac', to: '/app/tuong-tac', label: 'Tra tương tác', icon: ArrowLeftRight },
+          { section: 'cong_thuc', to: '/app/cong-thuc', label: 'Tính toán', icon: Calculator },
+        ] as const).map(({ section, to, label, icon: Icon }) => {
+          const link = (
+            <Link
+              to={to}
+              aria-label={label}
+              aria-current={activeSection === section ? 'page' : undefined}
+              onClick={onNavigate}
+              className={cn(
+                'flex h-9 min-w-0 items-center gap-2 rounded-sm text-sm transition-colors duration-120 hover:bg-ink-soft hover:text-ink-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+                effectiveCollapsed ? 'justify-center' : 'px-3',
+                activeSection === section ? 'bg-ink-soft font-semibold text-ink-fg' : 'text-ink-muted',
+              )}
+            >
+              <Icon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+              {!effectiveCollapsed ? <span>{label}</span> : null}
+            </Link>
+          )
+          return effectiveCollapsed ? (
+            <Tooltip key={section}>
+              <TooltipTrigger asChild>{link}</TooltipTrigger>
+              <TooltipContent side="right">{label}</TooltipContent>
+            </Tooltip>
+          ) : <div key={section}>{link}</div>
+        })}
+      </div>
+
+      {/* 3. Nửa dưới: điều hướng 8 mục khi mở ca ở tab Thẩm định; tab khác giữ thẻ người bệnh */}
+      {reviewNav ? (
+        <div
+          className={cn(
+            'flex-1 min-h-0 overflow-y-auto overscroll-contain border-t border-ink-line',
+            effectiveCollapsed ? 'p-1.5' : 'p-2',
+          )}
+        >
+          <ReviewFactorNav
+            {...reviewNav}
+            collapsed={effectiveCollapsed}
+            onSelect={(target) => {
+              reviewNav.onSelect(target)
+              onNavigate()
+            }}
+          />
+        </div>
+      ) : patient ? (
+        effectiveCollapsed ? (
+          <>
+            <div className="shrink-0 border-t border-ink-line p-2">
+              <PatientCollapsedButton detail={patient} onExpand={onToggleCollapse} />
+            </div>
+            <div className="flex-1 min-h-0" aria-hidden="true" />
+          </>
+        ) : (
+          <section
+            aria-label="Thông tin người bệnh"
+            className="flex-1 min-h-0 overflow-y-auto overscroll-contain border-t border-ink-line p-2"
+          >
+            <PatientSidebarCard
+              key={patient.ca_id}
+              detail={patient}
+              onOpenEvidence={onOpenEvidence}
+            />
+          </section>
+        )
+      ) : (
+        <div className="flex-1 min-h-0" aria-hidden="true" />
+      )}
 
       {/* 4. Đáy: thanh hồ sơ gọn và nút Cài đặt kiểu Claude Desktop */}
       <div
@@ -245,18 +340,32 @@ export function SidebarNav({
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    setAccountMenuOpen(false)
-                    onSignOut()
-                  }}
-                  className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
-                >
-                  <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
-                  <span className="flex-1">Đăng xuất</span>
-                </button>
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountMenuOpen(false)
+                      onSignOut({ scope: 'local' })
+                    }}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                  >
+                    <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="flex-1">Đăng xuất</span>
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountMenuOpen(false)
+                      onSignOut({ scope: 'global' })
+                    }}
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-sm px-2.5 py-2 text-left text-sm text-fg transition-colors duration-120 hover:bg-surface-hover focus-visible:bg-surface-hover"
+                  >
+                    <LogOut className="size-4 shrink-0 text-fg-muted" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="flex-1">Đăng xuất mọi thiết bị</span>
+                  </button>
+                </>
               )}
             </div>
           </PopoverContent>

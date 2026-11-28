@@ -72,7 +72,7 @@ export function PassedList({ passed, open, onOpenChange }: PassedListProps) {
                       <DataTableCell className="whitespace-pre-wrap">
                         {formatClinicalText(item.nhan_xet)}
                       </DataTableCell>
-                      <DataTableCell className="whitespace-nowrap">
+                      <DataTableCell className="break-words">
                         <span className="inline-flex items-center gap-1.5 font-medium text-success-fg">
                           <CircleCheck
                             className="size-3.5 shrink-0 text-success-fg"
@@ -82,7 +82,7 @@ export function PassedList({ passed, open, onOpenChange }: PassedListProps) {
                           <span>{ketLuanClean}</span>
                         </span>
                       </DataTableCell>
-                      <DataTableCell className="whitespace-nowrap text-fg-muted">
+                      <DataTableCell className="break-words text-fg-muted">
                         {item.nguon_goc_nhan}
                       </DataTableCell>
                     </DataTableRow>

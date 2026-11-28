@@ -10,6 +10,8 @@ const dialogContentVariants = cva(
   {
     variants: {
       variant: {
+        fullscreen:
+          'inset-4 overflow-hidden rounded-lg border border-line',
         record:
           'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-32px)] max-w-[640px] overflow-hidden rounded-lg border border-line scale-100 starting:opacity-0 starting:scale-[0.98]',
         source:

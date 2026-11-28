@@ -2,10 +2,11 @@ import { LoaderCircle } from 'lucide-react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { evaluateProtectedRoute } from '@/lib/routeGuard'
 import { useAuth } from './useAuth'
+import { ForbiddenPage } from './ForbiddenPage'
 
 /** Bảo vệ các tuyến /app/*: chuyển hướng sang /dang-nhap và giữ đường dẫn quay lại khi chưa đăng nhập. */
 export function ProtectedRoute() {
-  const { isAuthenticated, isDemoMode, isLoading } = useAuth()
+  const { session, vaiTro, isForbidden, isAuthenticated, isDemoMode, isLoading, signOutReason } = useAuth()
   const location = useLocation()
 
   const currentPath = `${location.pathname}${location.search}`
@@ -14,6 +15,7 @@ export function ProtectedRoute() {
     isDemoMode,
     isLoading,
     currentPath,
+    vaiTro: isForbidden ? null : vaiTro,
   })
 
   if (decision.action === 'loading') {
@@ -36,10 +38,12 @@ export function ProtectedRoute() {
       <Navigate
         to={decision.to}
         replace
-        state={decision.returnTo ? { from: decision.returnTo } : undefined}
+        state={{ ...(decision.returnTo ? { from: decision.returnTo } : {}), ...(signOutReason ? { reason: signOutReason } : {}) }}
       />
     )
   }
 
-  return <Outlet />
+  if (decision.action === 'forbidden') return <ForbiddenPage />
+
+  return <Outlet key={session ? `${session.user.id}:${session.phienId}` : 'demo'} />
 }

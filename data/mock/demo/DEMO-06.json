@@ -26,7 +26,17 @@
     "dot_dieu_tri_id": "DT-DEMO-06",
     "khoa_dieu_tri": "Hô hấp",
     "loai_dieu_tri": "ngoai_tru",
-    "thoi_diem_bat_dau": "2026-11-10T07:30:00+07:00"
+    "thoi_diem_bat_dau": "2026-11-10T07:30:00+07:00",
+    "quan_ly": {
+      "noi_gioi_thieu": "tu_den",
+      "tuyen_chuyen_den": null,
+      "vao_khoa_luc": "2026-11-10T07:30:00+07:00",
+      "so_giuong": null,
+      "so_luu_tru": "LT-2026-06601",
+      "ma_yt": "YT-2026-066-01",
+      "ra_vien": null,
+      "bac_si_dieu_tri": "Bác sĩ điều trị"
+    }
   },
   "chan_doan": [
     {
@@ -151,5 +161,33 @@
       "ma_atc": "J01CA04",
       "nhom_duoc_ly": "penicillin"
     }
-  ]
+  ],
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 66",
+    "ngay_sinh": "1986-11-10",
+    "dan_toc": "Nùng",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9066",
+      "thon_pho": "Phố Trưng Trắc",
+      "xa_phuong": "Quang Trung",
+      "huyen": "Hưng Yên",
+      "tinh_thanh": "Hưng Yên"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000066",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 66",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 066"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 160.0,
+    "can_nang_kg": 58.0,
+    "nhom_mau": null
+  }
 }

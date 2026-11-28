@@ -1,6 +1,6 @@
 import { Search, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { apiClient } from '@/api/index'
 import type { NhanDinh, PhanHoiDaGhi } from '@/api/types'
 import { AppShell } from '@/app/AppShell'
@@ -8,15 +8,24 @@ import { AssistantPanel } from '@/features/assistant/AssistantPanel'
 import type { FocusedFindingContext } from '@/features/assistant/AssistantPanel'
 import type { AssistantHistoryEntry } from '@/features/assistant/HistoryDialog'
 import { useAuth } from '@/features/auth/useAuth'
+import type { SignOutOptions } from '@/features/auth/useAuth'
 import { EvidenceDialog } from '@/features/findings/EvidenceDialog'
 import { OrderDetailView } from '@/features/order-detail/OrderDetailView'
+import { useReviewFindings } from '@/features/order-detail/useReviewFindings'
 import { OrdersTable } from '@/features/orders/OrdersTable'
 import { SettingsDialog } from '@/features/settings/SettingsDialog'
 import { SidebarNav } from '@/features/sidebar/SidebarNav'
+import type { SidebarReviewNav } from '@/features/sidebar/SidebarNav'
 import { DetailSkeleton, ErrorState } from '@/features/states/StateViews'
-import { mergeFindingsFeedback, selectFindingsSource } from '@/lib/aiReview'
+import { mergeFindingsFeedback } from '@/lib/aiReview'
 import { extractOrderCode } from '@/lib/displayFormat'
-import { extractShortDrugName } from '@/lib/orderDetail'
+import {
+  extractShortDrugName,
+  parseDetailTabParam,
+  parseReviewFactorParam,
+  updateReviewFactorParams,
+} from '@/lib/orderDetail'
+import type { ReviewSectionId } from '@/lib/orderDetail'
 import {
   countOrderGroups,
   filterOrders,
@@ -24,6 +33,7 @@ import {
   sortOrders,
 } from '@/lib/orders'
 import type {
+  OrderColumnFilters,
   OrderSelectionFilter,
   OrderSortDirection,
   OrderSortField,
@@ -34,7 +44,7 @@ import {
   saveChatCollapsed,
   saveQueueCollapsed,
 } from '@/lib/prefs'
-import { sortAttentionFindings } from '@/lib/presentation'
+import { parsePageParam, updatePageInSearchParams } from '@/lib/pagination'
 import type { EvidenceTarget } from '@/lib/uiTypes'
 import { useAiReview } from '@/state/useAiReview'
 import { useCaseDetail } from '@/state/useCaseDetail'
@@ -48,14 +58,20 @@ interface DialogState {
   triggerEl: HTMLElement | null
 }
 
-/** Bàn làm việc ba cột cho tuyến /app (danh sách y lệnh) và /app/y-lenh/:caId (chi tiết y lệnh). */
+const ALL_ORDERS: OrderSelectionFilter = { type: 'group', group: 'tat_ca' }
+const EMPTY_CASE_FEEDBACK: Readonly<Record<string, PhanHoiDaGhi>> = {}
+
+/** Bàn làm việc ba cột cho danh sách y lệnh, hồ sơ và chi tiết ca. */
 export function WorkspacePage() {
   const { caId: routeCaId } = useParams<{ caId?: string }>()
   const navigate = useNavigate()
-  const { userEmail, isDemoMode, signOut } = useAuth()
+  const location = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { userEmail, isDemoMode, vaiTro, signOut } = useAuth()
 
   const activeCaseId = routeCaId ?? null
   const isListRoute = activeCaseId === null
+  const currentPage = isListRoute ? parsePageParam(searchParams.get('trang')) : 1
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
     () => loadUiPrefs().queueCollapsed,
@@ -70,10 +86,7 @@ export function WorkspacePage() {
   const [drawerAssistantOpen, setDrawerAssistantOpen] = useState<boolean>(false)
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
 
-  const [activeFilter, setActiveFilter] = useState<OrderSelectionFilter>({
-    type: 'group',
-    group: 'tat_ca',
-  })
+  const [columnFilters, setColumnFilters] = useState<OrderColumnFilters>({})
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortField, setSortField] = useState<OrderSortField>('ket_qua')
   const [sortDirection, setSortDirection] = useState<OrderSortDirection>('desc')
@@ -99,6 +112,8 @@ export function WorkspacePage() {
     loading: casesLoading,
     error: casesError,
     reload: reloadCases,
+    refresh: refreshCases,
+    updatedAt: casesUpdatedAt,
     markAllResponded,
   } = useCases(apiClient)
 
@@ -107,6 +122,7 @@ export function WorkspacePage() {
     loading: detailLoading,
     error: detailError,
     retry: retryDetail,
+    orderSelectionReady,
     applyFeedbackToCase,
   } = useCaseDetail(apiClient, activeCaseId)
 
@@ -152,20 +168,13 @@ export function WorkspacePage() {
   const counts = useMemo(() => countOrderGroups(allCases), [allCases])
 
   const filteredOrders = useMemo(
-    () => filterOrders(allCases, activeFilter, searchQuery),
-    [allCases, activeFilter, searchQuery],
+    () => filterOrders(allCases, ALL_ORDERS, searchQuery),
+    [allCases, searchQuery],
   )
   const sortedOrders = useMemo(
     () => sortOrders(filteredOrders, sortField, sortDirection),
     [filteredOrders, sortField, sortDirection],
   )
-
-  const recentCases = useMemo(() => {
-    const map = new Map(allCases.map((c) => [c.ca_id, c]))
-    return chat.askedCaseIds
-      .map((id) => map.get(id))
-      .filter((item): item is NonNullable<typeof item> => item !== undefined)
-  }, [allCases, chat.askedCaseIds])
 
   const assistantHistory = useMemo<AssistantHistoryEntry[]>(() => {
     const byId = new Map(allCases.map((c) => [c.ca_id, c]))
@@ -197,23 +206,55 @@ export function WorkspacePage() {
     [navigate],
   )
 
-  const displayedFindings = useMemo(() => {
-    if (!detail) {
-      return null
-    }
-    const raw = selectFindingsSource(detail.nhan_dinh, ai.trangThai, ai.ketQua)
-    const fallbackSources =
-      raw === detail.nhan_dinh
-        ? ai.ketQua?.nhan_dinh
-          ? [ai.ketQua.nhan_dinh]
-          : []
-        : [detail.nhan_dinh]
-    return mergeFindingsFeedback(raw, sessionFeedback[detail.ca_id] ?? {}, fallbackSources)
-  }, [detail, ai.trangThai, ai.ketQua, sessionFeedback])
+  const activePatient = detail && detail.ca_id === activeCaseId ? detail : null
+  const activeDetailTab = parseDetailTabParam(searchParams.get('tab'))
+  const activeReviewSection = parseReviewFactorParam(searchParams.get('yt'))
+  const sessionFeedbackForActiveCase = activePatient
+    ? (sessionFeedback[activePatient.ca_id] ?? EMPTY_CASE_FEEDBACK)
+    : EMPTY_CASE_FEEDBACK
 
-  const attentionFindings = useMemo(
-    () => (displayedFindings ? sortAttentionFindings(displayedFindings.can_chu_y) : []),
-    [displayedFindings],
+  const reviewFindings = useReviewFindings({
+    detail: activePatient,
+    aiTrangThai: ai.trangThai,
+    aiKetQua: ai.ketQua,
+    sessionFeedbackForCase: sessionFeedbackForActiveCase,
+  })
+
+  const handleSelectReviewSection = useCallback(
+    (target: ReviewSectionId) => {
+      setSearchParams(
+        (previous) => updateReviewFactorParams(previous, target),
+        { replace: true, state: location.state },
+      )
+    },
+    [location.state, setSearchParams],
+  )
+
+  const reviewNav = useMemo<SidebarReviewNav | null>(
+    () =>
+      activePatient && activeDetailTab === 'tham_dinh'
+        ? {
+            selected: activeReviewSection,
+            factors: reviewFindings.sixFactors,
+            attentionCountByFactor: reviewFindings.attentionCountByFactor,
+            severeByFactor: reviewFindings.severeByFactor,
+            totalAttention: reviewFindings.totalAttention,
+            hasAnySevere: reviewFindings.hasAnySevere,
+            soLuatDaChay: activePatient.nhan_dinh.so_luat_da_chay,
+            onSelect: handleSelectReviewSection,
+          }
+        : null,
+    [
+      activePatient,
+      activeDetailTab,
+      activeReviewSection,
+      reviewFindings.sixFactors,
+      reviewFindings.attentionCountByFactor,
+      reviewFindings.severeByFactor,
+      reviewFindings.totalAttention,
+      reviewFindings.hasAnySevere,
+      handleSelectReviewSection,
+    ],
   )
 
   const handleFocusSearch = useCallback(() => {
@@ -262,23 +303,38 @@ export function WorkspacePage() {
     saveAssistantWidth(nextWidth)
   }, [])
 
-  const handleSelectFilter = useCallback(
-    (nextFilter: OrderSelectionFilter) => {
-      setActiveFilter(nextFilter)
-      setDrawerSidebarOpen(false)
-      if (!isListRoute) {
-        navigate('/app')
-      }
-    },
-    [isListRoute, navigate],
-  )
-
   const handleOpenCase = useCallback(
     (caId: string) => {
       setDrawerSidebarOpen(false)
-      navigate(`/app/y-lenh/${encodeURIComponent(caId)}`)
+      const target = `/app/y-lenh/${encodeURIComponent(caId)}`
+      if (currentPage > 1) {
+        navigate(target, { state: { returnTo: `/app?trang=${currentPage}` } })
+        return
+      }
+      navigate(target)
     },
-    [navigate],
+    [currentPage, navigate],
+  )
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchQuery(value)
+      if (isListRoute && searchParams.has('trang')) {
+        setSearchParams((prev) => updatePageInSearchParams(prev, 1), { replace: true })
+      }
+    },
+    [isListRoute, searchParams, setSearchParams],
+  )
+
+  const handlePageChange = useCallback(
+    (nextPage: number) => {
+      const normalized = Math.max(1, Math.floor(nextPage))
+      if (normalized === currentPage && (normalized > 1 || !searchParams.has('trang'))) {
+        return
+      }
+      setSearchParams((prev) => updatePageInSearchParams(prev, normalized))
+    },
+    [currentPage, searchParams, setSearchParams],
   )
 
   const handleToggleSort = useCallback(
@@ -302,7 +358,6 @@ export function WorkspacePage() {
   )
 
   const handleResetFilters = useCallback(() => {
-    setActiveFilter({ type: 'group', group: 'tat_ca' })
     setSearchQuery('')
   }, [])
 
@@ -338,16 +393,12 @@ export function WorkspacePage() {
 
   const handleSignIn = useCallback(() => {
     setDrawerSidebarOpen(false)
-    void signOut().then(() => {
-      navigate('/dang-nhap')
-    })
-  }, [signOut, navigate])
+    void signOut()
+  }, [signOut])
 
-  const handleSignOut = useCallback(() => {
-    void signOut().then(() => {
-      navigate('/dang-nhap', { replace: true })
-    })
-  }, [signOut, navigate])
+  const handleSignOut = useCallback((options?: SignOutOptions) => {
+    void signOut(options)
+  }, [signOut])
 
   const activeOrderCode = activeCaseId
     ? detail && detail.ca_id === activeCaseId
@@ -357,21 +408,34 @@ export function WorkspacePage() {
 
   const activeMode = detail?.che_do ?? casesData?.che_do ?? null
 
+  const rawLocationState: unknown = location.state
+  const rawReturnTo =
+    typeof rawLocationState === 'object' &&
+    rawLocationState !== null &&
+    'returnTo' in rawLocationState &&
+    typeof (rawLocationState as { returnTo?: unknown }).returnTo === 'string'
+      ? (rawLocationState as { returnTo: string }).returnTo
+      : null
+  const safeReturnTo =
+    rawReturnTo && rawReturnTo.startsWith('/app') && !rawReturnTo.startsWith('//')
+      ? rawReturnTo
+      : null
+  const breadcrumbLabel = 'Hồ sơ cần duyệt'
+  const backTo = safeReturnTo ?? '/app'
+
   const sidebarCommonProps = {
-    counts,
-    activeFilter,
-    isListRoute,
-    activeCaseId,
-    recentCases,
+    activeSection: 'orders' as const,
+    onNavigate: () => setDrawerSidebarOpen(false),
     userEmail,
     isDemoMode,
-    onSelectFilter: handleSelectFilter,
-    onOpenCase: handleOpenCase,
-    onFocusSearch: handleFocusSearch,
+    vaiTro,
     onToggleCollapse: handleToggleSidebar,
     onOpenSettings: handleOpenSettings,
     onSignIn: handleSignIn,
     onSignOut: handleSignOut,
+    patient: activePatient,
+    reviewNav,
+    onOpenEvidence: handleOpenEvidence,
   }
 
   return (
@@ -379,6 +443,8 @@ export function WorkspacePage() {
       <AppShell
         cheDo={activeMode}
         activeOrderCode={activeOrderCode}
+        breadcrumbLabel={breadcrumbLabel}
+        backTo={backTo}
         searchQuery={searchQuery}
         searchInputRef={searchInputRef}
         isDemoMode={isDemoMode}
@@ -392,7 +458,7 @@ export function WorkspacePage() {
         onToggleSidebar={handleToggleSidebar}
         onToggleAssistant={handleToggleAssistant}
         onAssistantWidthChange={handleAssistantWidthChange}
-        onSearchChange={setSearchQuery}
+        onSearchChange={handleSearchChange}
         onSearchFocusOrSubmit={() => {
           if (!isListRoute) {
             navigate('/app')
@@ -409,9 +475,10 @@ export function WorkspacePage() {
             globalHoiThemEnabled={Boolean(casesData?.che_do.hoi_them ?? true)}
             history={assistantHistory}
             onOpenHistory={handleOpenHistory}
-            attentionFindings={attentionFindings}
+            attentionFindings={reviewFindings.allAttention}
             messages={chat.getMessages(currentChatId)}
             sending={chat.isSending(currentChatId)}
+            askProgress={chat.getProgress(currentChatId)}
             lastStatus={chat.getLastStatus(currentChatId)}
             focusedFinding={focusedFinding}
             onClearFocusedFinding={() => setFocusedFinding(null)}
@@ -442,16 +509,16 @@ export function WorkspacePage() {
               <input
                 type="search"
                 value={searchQuery}
-                aria-label="Tìm kiếm y lệnh trên điện thoại"
-                placeholder="Tìm y lệnh, thuốc, khoa…"
-                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Tìm kiếm hồ sơ trên điện thoại"
+                placeholder="Tìm hồ sơ, thuốc, khoa…"
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="h-9 w-full rounded-sm border border-line-strong bg-surface pl-8 pr-8 text-sm text-fg placeholder:text-fg-subtle"
               />
               {searchQuery ? (
                 <button
                   type="button"
                   aria-label="Xoá tìm kiếm"
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => handleSearchChange('')}
                   className="absolute right-2 inline-flex size-5 items-center justify-center rounded-sm text-fg-subtle"
                 >
                   <X className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
@@ -460,7 +527,7 @@ export function WorkspacePage() {
             </div>
 
             <OrdersTable
-              filterTitle={getOrderFilterTitle(activeFilter)}
+              filterTitle={getOrderFilterTitle(ALL_ORDERS)}
               orders={sortedOrders}
               totalCount={allCases.length}
               loiNap={casesData?.loi_nap ?? []}
@@ -469,21 +536,32 @@ export function WorkspacePage() {
               searchQuery={searchQuery}
               sortField={sortField}
               sortDirection={sortDirection}
+              columnFilters={columnFilters}
+              onColumnFiltersChange={setColumnFilters}
               departments={counts.departments.map((d) => d.khoa)}
+              updatedAt={casesUpdatedAt}
+              page={currentPage}
+              onPageChange={handlePageChange}
               onToggleSort={handleToggleSort}
               onSelectSort={handleSelectSort}
               onOpenOrder={handleOpenCase}
               onResetFilters={handleResetFilters}
               onRetry={reloadCases}
+              onRefresh={refreshCases}
             />
           </div>
         ) : detail && detail.ca_id === activeCaseId ? (
           <OrderDetailView
+            key={detail.ca_id}
             detail={detail}
+            orderSelectionReady={orderSelectionReady}
             aiTrangThai={ai.trangThai}
             aiKetQua={ai.ketQua}
             aiThoiGianMs={ai.thoiGianMs}
             aiCanhBao={ai.canhBao}
+            aiCacBuoc={ai.cacBuoc}
+            aiDaChayMs={ai.daChayMs}
+            aiThuongLeMs={ai.thuongLeMs}
             sessionFeedbackForCase={sessionFeedback[detail.ca_id] ?? {}}
             onRerunAi={ai.chayLai}
             isFeedbackSubmitting={feedback.isSubmitting}

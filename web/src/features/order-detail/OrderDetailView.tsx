@@ -1,7 +1,8 @@
-import { ArrowDown, ArrowUp, ClipboardList, FileText, Pill, X } from 'lucide-react'
-import { useCallback, useMemo, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { ArrowDown, ArrowUp, FileText, MinusCircle, Pill, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import type {
+  BuocAI,
   ChiTietCa,
   GuiPhanHoi,
   KetQuaAI,
@@ -10,6 +11,7 @@ import type {
   TrangThaiAI,
 } from '@/api/types'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
   DataTable,
@@ -22,12 +24,11 @@ import {
 import { EmptyState } from '@/components/ui/empty-state'
 import { InlineAlert } from '@/components/ui/inline-alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { LabTrendChart } from '@/features/charts/LabTrendChart'
 import { AiStatusBar } from '@/features/findings/AiStatusBar'
 import { FindingCard } from '@/features/findings/FindingCard'
 import { PassedList } from '@/features/findings/PassedList'
-import { countAiSummary, mergeFindingsFeedback, selectFindingsSource } from '@/lib/aiReview'
-import { parseInfoPairs } from '@/lib/detailTables'
+import { FactorStatusIcon } from '@/features/sidebar/ReviewFactorNav'
+import { countAiSummary } from '@/lib/aiReview'
 import {
   extractOrderTimeText,
   formatClinicalText,
@@ -35,45 +36,50 @@ import {
   parseTrendValue,
 } from '@/lib/displayFormat'
 import {
-  computeSixFactorsStatus,
+  factorIndexOf,
   filterFindingsByDrug,
-  filterTreatmentSheetNotes,
+  parseDetailTabParam,
+  parseReviewFactorParam,
+  updateReviewFactorParams,
 } from '@/lib/orderDetail'
-import type { SixFactorItem } from '@/lib/orderDetail'
-import { sortAttentionFindings } from '@/lib/presentation'
-import type { DetailTabId, EvidenceTarget } from '@/lib/uiTypes'
-import {
-  InfoRows,
-  LabPivotTable,
-  MetricsTable,
-  NotesTable,
-  OrderLinesTable,
-  SectionHeading,
-} from './DetailSections'
-import type { InfoItem } from './DetailSections'
-import { InteractionMatrix } from './InteractionMatrix'
-import { SixFactorStrip } from './SixFactorStrip'
+import type { FactorIndex, SixFactorStatus } from '@/lib/orderDetail'
+import type { SemanticTone } from '@/lib/severity'
+import { EMPTY_FEEDBACK_DRAFT } from '@/lib/uiTypes'
+import type { DetailTabId, EvidenceTarget, FeedbackDraft } from '@/lib/uiTypes'
+import { flattenOrderLines, partitionFindingsByLine } from '@/lib/unifiedOrderLines'
+import { AdministrativeSections } from './AdministrativeSections'
+import { InfoRows, MetricsTable, NotesTable, SectionHeading } from './DetailSections'
+import { InteractionSection } from './InteractionSection'
+import { LabsTabContent } from './LabsTabContent'
+import { ProgressTabContent } from './ProgressTabContent'
+import { UnifiedOrderLinesTable } from './UnifiedOrderLinesTable'
+import { useReviewFindings } from './useReviewFindings'
 
 export type OrderDetailTab = DetailTabId
 
-const ORDERED_TABS: readonly OrderDetailTab[] = [
-  'ho_so_benh_an',
-  'y_lenh',
-  'phieu_dieu_tri',
-  'xet_nghiem',
-  'vi_sinh',
-  'dien_bien',
-  'tham_dinh',
-]
-
-const VALID_TABS = new Set<OrderDetailTab>(ORDERED_TABS)
+function factorStatusTone(status: SixFactorStatus, hasSevere: boolean): SemanticTone {
+  switch (status) {
+    case 'co_van_de':
+      return hasSevere ? 'danger' : 'warning'
+    case 'thieu_du_lieu':
+      return 'missing'
+    case 'dat':
+      return 'success'
+    case 'chua_co_luat':
+      return 'neutral'
+  }
+}
 
 export interface OrderDetailViewProps {
   detail: ChiTietCa
+  orderSelectionReady?: boolean
   aiTrangThai: TrangThaiAI
   aiKetQua: KetQuaAI | null
   aiThoiGianMs: number | null
   aiCanhBao: readonly string[]
+  aiCacBuoc?: readonly BuocAI[]
+  aiDaChayMs?: number | null
+  aiThuongLeMs?: number | null
   sessionFeedbackForCase: Readonly<Record<string, PhanHoiDaGhi>>
   onRerunAi: () => void
   isFeedbackSubmitting: (caId: string, id: string) => boolean
@@ -110,25 +116,6 @@ function primaryDiagnosis(detail: ChiTietCa): string {
     .join('; ')
 }
 
-function patientInfoItems(detail: ChiTietCa): InfoItem[] {
-  const { dinh_danh, tom_tat } = detail
-  return [
-    { label: 'Mã ca', value: detail.ca_id },
-    { label: 'Người bệnh', value: `${dinh_danh.gioi_tuoi} · ${dinh_danh.can_nang}` },
-    { label: 'Khoa, loại hồ sơ', value: dinh_danh.khoa_loai },
-    {
-      label: 'Vào viện',
-      value: tom_tat.vao_vien_text ? formatClinicalText(tom_tat.vao_vien_text) : 'Chưa ghi nhận',
-    },
-    {
-      label: 'Thời gian nằm viện',
-      value: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : 'Không áp dụng',
-    },
-    { label: 'Dị ứng', value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text },
-    { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
-  ]
-}
-
 function MedicalRecordTabContent({
   detail,
   onOpenEvidence,
@@ -138,15 +125,19 @@ function MedicalRecordTabContent({
 }) {
   const { dinh_danh, tom_tat, chi_so } = detail
 
-  return (
-    <div className="flex flex-col gap-7">
-      <section aria-label="Thông tin hành chính" className="flex flex-col gap-2.5">
-        <SectionHeading title="Hành chính và tiếp nhận" />
-        <InfoRows items={patientInfoItems(detail)} />
-      </section>
-
-      <section aria-label="Cơ địa" className="flex flex-col gap-2.5">
-        <SectionHeading title="Cơ địa đặc biệt" />
+  const diagnosisSection = (
+    <div className="flex flex-col gap-4">
+      <InfoRows
+        items={[
+          { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
+          {
+            label: 'Dị ứng',
+            value: parseLeadingSymbolLabel(dinh_danh.di_ung_text).text || 'Chưa ghi nhận',
+          },
+        ]}
+      />
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-medium text-fg-subtle">Cơ địa đặc biệt</span>
         {tom_tat.co_dia.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {tom_tat.co_dia.map((item) => (
@@ -158,7 +149,31 @@ function MedicalRecordTabContent({
         ) : (
           <p className="text-sm text-fg-subtle">Không ghi nhận cơ địa đặc biệt.</p>
         )}
-      </section>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-3">
+        <AdministrativeSections
+          identity={detail.dinh_danh_day_du}
+          management={detail.quan_ly_nguoi_benh}
+          history={detail.lich_su_vao_vien}
+          diagnosisSection={diagnosisSection}
+          legacy={
+            detail.dinh_danh_day_du
+              ? undefined
+              : {
+                  gioi_tuoi: dinh_danh.gioi_tuoi,
+                  can_nang: dinh_danh.can_nang,
+                  vao_vien: formatClinicalText(tom_tat.vao_vien_text),
+                  nam_vien: tom_tat.nam_vien_text ? formatClinicalText(tom_tat.nam_vien_text) : null,
+                  khoa: dinh_danh.khoa_loai,
+                }
+          }
+        />
+      </div>
 
       <section aria-label="Chỉ số lâm sàng" className="flex flex-col gap-2.5">
         <SectionHeading
@@ -235,13 +250,17 @@ function MedicalRecordTabContent({
   )
 }
 
-/** Màn hình chi tiết một y lệnh: thanh 7 thẻ dính trên cùng, nội dung gọn phẳng bên dưới. */
+/** Màn hình chi tiết hồ sơ y lệnh: thanh 6 thẻ dính trên cùng, mặc định mở ở tab Y lệnh. */
 export function OrderDetailView({
   detail,
+  orderSelectionReady = true,
   aiTrangThai,
   aiKetQua,
   aiThoiGianMs,
   aiCanhBao,
+  aiCacBuoc,
+  aiDaChayMs,
+  aiThuongLeMs,
   sessionFeedbackForCase,
   onRerunAi,
   isFeedbackSubmitting,
@@ -252,37 +271,97 @@ export function OrderDetailView({
   onAskAboutFinding,
 }: OrderDetailViewProps) {
   const [searchParams, setSearchParams] = useSearchParams()
+  const { state: locationState } = useLocation()
   const [selectedDrug, setSelectedDrug] = useState<string | null>(null)
-  const [passedOpen, setPassedOpen] = useState<boolean>(false)
+  const [passedOpenByScope, setPassedOpenByScope] = useState<Record<string, boolean>>({})
+  const [interactionOpen, setInteractionOpen] = useState<boolean>(false)
   const [prevCaId, setPrevCaId] = useState<string>(detail.ca_id)
+  const [rejectedOrderId, setRejectedOrderId] = useState<string | null>(null)
+  const [feedbackDrafts, setFeedbackDrafts] = useState<Record<string, FeedbackDraft>>({})
+  const [pendingScrollTarget, setPendingScrollTarget] = useState<{
+    id: string
+    factor: FactorIndex | null
+  } | null>(null)
   const tabTriggerRefs = useRef<Partial<Record<OrderDetailTab, HTMLButtonElement | null>>>({})
+  const requestedOrderId = searchParams.get('yl')
+
+  const unifiedLines = useMemo(() => flattenOrderLines(detail), [detail])
+  const matchedLineForUrl = requestedOrderId
+    ? unifiedLines.find((line) => line.yLenhId === requestedOrderId) ?? null
+    : null
+  const [expandedSelection, setExpandedSelection] = useState<{
+    caId: string
+    requestedOrderId: string | null
+    key: string | null
+  } | null>(null)
+  const expandedLineKey =
+    expandedSelection &&
+    expandedSelection.caId === detail.ca_id &&
+    expandedSelection.requestedOrderId === requestedOrderId
+      ? expandedSelection.key
+      : (matchedLineForUrl?.key ?? null)
+
+  const unmatchedOrderId =
+    requestedOrderId !== null && matchedLineForUrl === null ? requestedOrderId : null
+  const invalidOrderId = orderSelectionReady ? unmatchedOrderId : null
+  const noticeOrderId = invalidOrderId ?? (requestedOrderId === null ? rejectedOrderId : null)
+
+  useEffect(() => {
+    if (invalidOrderId === null) return
+    setSearchParams((previous) => {
+      const next = new URLSearchParams(previous)
+      next.delete('yl')
+      return next
+    }, { replace: true, state: locationState })
+  }, [invalidOrderId, locationState, setSearchParams])
+
+  const clearSelectedDrug = () => setSelectedDrug(null)
 
   if (prevCaId !== detail.ca_id) {
     setPrevCaId(detail.ca_id)
     setSelectedDrug(null)
-    setPassedOpen(false)
+    setExpandedSelection(null)
+    setPassedOpenByScope({})
+    setRejectedOrderId(invalidOrderId)
+    setFeedbackDrafts({})
+    setPendingScrollTarget(null)
+  } else {
+    if (invalidOrderId !== null && invalidOrderId !== rejectedOrderId) {
+      setRejectedOrderId(invalidOrderId)
+    } else if (invalidOrderId === null && requestedOrderId !== null && rejectedOrderId !== null) {
+      setRejectedOrderId(null)
+    }
   }
 
-  const rawTab = searchParams.get('tab') as OrderDetailTab | null
-  const activeTab: OrderDetailTab =
-    rawTab && VALID_TABS.has(rawTab) ? rawTab : 'tham_dinh'
+  const activeTab = parseDetailTabParam(searchParams.get('tab'))
+  const activeFactor = parseReviewFactorParam(searchParams.get('yt'))
+
+  const updateFeedbackDraft = (id: string, draft: FeedbackDraft) => {
+    setFeedbackDrafts((previous) => {
+      if (draft.isEditing || draft.pendingAction !== null || draft.reasonGroup || draft.note) {
+        return { ...previous, [id]: draft }
+      }
+      if (!(id in previous)) return previous
+      const next = { ...previous }
+      delete next[id]
+      return next
+    })
+  }
 
   const handleTabChange = useCallback(
     (nextTab: string) => {
-      const validTab: OrderDetailTab = VALID_TABS.has(nextTab as OrderDetailTab)
-        ? (nextTab as OrderDetailTab)
-        : 'tham_dinh'
+      const validTab = parseDetailTabParam(nextTab)
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev)
-          if (validTab === 'tham_dinh') {
+          if (validTab === 'y_lenh') {
             next.delete('tab')
           } else {
             next.set('tab', validTab)
           }
           return next
         },
-        { replace: true },
+        { replace: true, state: locationState },
       )
       requestAnimationFrame(() => {
         tabTriggerRefs.current[validTab]?.scrollIntoView({
@@ -291,56 +370,96 @@ export function OrderDetailView({
         })
       })
     },
-    [setSearchParams],
+    [locationState, setSearchParams],
   )
 
-  const displayedFindings = useMemo(() => {
-    const raw = selectFindingsSource(detail.nhan_dinh, aiTrangThai, aiKetQua)
-    const fallbackSources =
-      raw === detail.nhan_dinh
-        ? aiKetQua?.nhan_dinh
-          ? [aiKetQua.nhan_dinh]
-          : []
-        : [detail.nhan_dinh]
-    return mergeFindingsFeedback(raw, sessionFeedbackForCase, fallbackSources)
-  }, [detail, aiTrangThai, aiKetQua, sessionFeedbackForCase])
-
-  const allAttention = useMemo(
-    () => sortAttentionFindings(displayedFindings.can_chu_y),
-    [displayedFindings],
+  const handleSelectReviewFactor = useCallback(
+    (target: 'tong_quan' | FactorIndex) => {
+      setSearchParams(
+        (prev) => updateReviewFactorParams(prev, target),
+        { replace: true, state: locationState },
+      )
+    },
+    [locationState, setSearchParams],
   )
-  const allPassed = displayedFindings.dat
+
+  const { allAttention, allPassed, sixFactors } = useReviewFindings({
+    detail,
+    aiTrangThai,
+    aiKetQua,
+    sessionFeedbackForCase,
+  })
+
+  const partitionedFindings = useMemo(
+    () => partitionFindingsByLine(unifiedLines, allAttention, allPassed),
+    [unifiedLines, allAttention, allPassed],
+  )
+
+  const handleToggleLine = useCallback(
+    (lineKey: string) => {
+      setExpandedSelection({
+        caId: detail.ca_id,
+        requestedOrderId,
+        key: expandedLineKey === lineKey ? null : lineKey,
+      })
+    },
+    [detail.ca_id, expandedLineKey, requestedOrderId],
+  )
+
+  const handleOpenFactorInReviewTab = useCallback(
+    (factor: FactorIndex) => {
+      setSearchParams(
+        (prev) => {
+          const next = updateReviewFactorParams(prev, factor)
+          next.set('tab', 'tham_dinh')
+          return next
+        },
+        { replace: true, state: locationState },
+      )
+    },
+    [locationState, setSearchParams],
+  )
+
+  const currentFactor =
+    activeFactor === 'tong_quan'
+      ? null
+      : (sixFactors.find((factor) => factor.index === activeFactor) ?? null)
+
+  const factorAttention = useMemo(
+    () =>
+      activeFactor === 'tong_quan'
+        ? allAttention
+        : allAttention.filter((item) => factorIndexOf(item.yeu_to) === activeFactor),
+    [activeFactor, allAttention],
+  )
+  const factorPassed = useMemo(
+    () =>
+      activeFactor === 'tong_quan'
+        ? allPassed
+        : allPassed.filter((item) => factorIndexOf(item.yeu_to) === activeFactor),
+    [activeFactor, allPassed],
+  )
 
   const filteredAttention = useMemo(
-    () => filterFindingsByDrug(allAttention, selectedDrug),
-    [allAttention, selectedDrug],
+    () => filterFindingsByDrug(factorAttention, selectedDrug),
+    [factorAttention, selectedDrug],
   )
   const filteredPassed = useMemo(
-    () => filterFindingsByDrug(allPassed, selectedDrug),
-    [allPassed, selectedDrug],
+    () => filterFindingsByDrug(factorPassed, selectedDrug),
+    [factorPassed, selectedDrug],
   )
 
-  const sixFactors = useMemo(
-    () =>
-      computeSixFactorsStatus({
-        can_chu_y: allAttention,
-        dat: allPassed,
-        yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
-      }),
-    [allAttention, allPassed, detail.nhan_dinh.yeu_to_chua_kiem],
+  const passedScopeKey = String(activeFactor)
+  const defaultPassedOpen = activeFactor !== 'tong_quan' && factorAttention.length === 0
+  const passedOpen = passedOpenByScope[passedScopeKey] ?? defaultPassedOpen
+  const handlePassedOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      setPassedOpenByScope((prev) => ({ ...prev, [passedScopeKey]: nextOpen }))
+    },
+    [passedScopeKey],
   )
 
-  const treatmentSheetNotes = useMemo(
-    () => filterTreatmentSheetNotes(detail.chi_tiet.dien_bien),
-    [detail.chi_tiet.dien_bien],
-  )
-
-  const orderDrugCount = useMemo(
-    () =>
-      detail.chi_tiet.y_lenh.cho_duyet.dong.length +
-      (detail.chi_tiet.y_lenh.dang_dung?.dong.length ?? 0),
-    [detail.chi_tiet.y_lenh],
-  )
+  const progressTotalCount = detail.chi_tiet.dien_bien.length + (detail.phieu_dieu_tri?.length ?? 0)
 
   const aiSummary = useMemo(() => countAiSummary(aiKetQua), [aiKetQua])
   const orderTimeText = useMemo(
@@ -348,78 +467,139 @@ export function OrderDetailView({
     [detail.chi_tiet.y_lenh.thong_tin_text],
   )
 
-  const handleSelectDrugForReview = useCallback(
-    (drugName: string) => {
-      setSelectedDrug((prev) =>
-        prev && prev.toLowerCase() === drugName.toLowerCase() ? null : drugName,
-      )
-      handleTabChange('tham_dinh')
-    },
-    [handleTabChange],
-  )
-
-  const orderInfoItems = useMemo<InfoItem[]>(() => {
-    const pairs = parseInfoPairs(formatClinicalText(detail.chi_tiet.y_lenh.thong_tin_text))
-    const items: InfoItem[] = pairs
-      .filter((pair) => pair.label)
-      .map((pair) => ({ label: pair.label, value: pair.value }))
-    items.push(
-      {
-        label: 'Người bệnh',
-        value: `${detail.dinh_danh.gioi_tuoi} · ${detail.dinh_danh.can_nang}`,
-      },
-      { label: 'Dị ứng', value: parseLeadingSymbolLabel(detail.dinh_danh.di_ung_text).text },
-      {
-        label: 'Kết quả thẩm định',
-        value:
-          allAttention.length > 0
-            ? `${allAttention.length} mục cần chú ý`
-            : 'Không có mục cần chú ý trong các luật đã chạy',
-      },
-      { label: 'Chẩn đoán', value: primaryDiagnosis(detail), wide: true },
-    )
-    return items
-  }, [detail, allAttention.length])
-
-  const handleOpenFinding = useCallback((findingId: string) => {
-    setSelectedDrug(null)
-    requestAnimationFrame(() => {
-      document
-        .getElementById(`finding-${findingId}`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    })
-  }, [])
-
-  const handleSelectFactor = useCallback((factor: SixFactorItem) => {
-    if (factor.index === 4 && !factor.firstFindingId) {
-      document
-        .getElementById('interaction-section')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      return
-    }
-    if (!factor.firstFindingId) {
-      return
-    }
-    setSelectedDrug(null)
-    if (factor.inPassedOnly) {
-      setPassedOpen(true)
-    }
-    requestAnimationFrame(() => {
-      const targetEl = document.getElementById(`finding-${factor.firstFindingId}`)
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      } else if (factor.inPassedOnly) {
-        document.getElementById('passed-findings-section')?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
+  const handleOpenFindingInOrderTab = useCallback(
+    (findingId: string) => {
+      const targetLine = unifiedLines.find((line) => {
+        const bucket = partitionedFindings.byLineKey[line.key]
+        return (
+          bucket?.attention.some((item) => item.nhan_dinh_id === findingId) ||
+          bucket?.passed.some((item) => item.nhan_dinh_id === findingId)
+        )
+      })
+      if (targetLine) {
+        setExpandedSelection({
+          caId: detail.ca_id,
+          requestedOrderId,
+          key: targetLine.key,
         })
       }
+      setPendingScrollTarget({ id: findingId, factor: null })
+    },
+    [detail.ca_id, partitionedFindings.byLineKey, requestedOrderId, unifiedLines],
+  )
+
+  const handleOpenFinding = useCallback(
+    (findingId: string) => {
+      setSelectedDrug(null)
+      const inPassed = allPassed.find((item) => item.nhan_dinh_id === findingId)
+      const targetFinding =
+        allAttention.find((item) => item.nhan_dinh_id === findingId) ?? inPassed ?? null
+      const targetFactor = targetFinding ? factorIndexOf(targetFinding.yeu_to) : null
+
+      if (inPassed) {
+        const scopeKey =
+          activeFactor === 'tong_quan'
+            ? 'tong_quan'
+            : String(targetFactor ?? activeFactor)
+        setPassedOpenByScope((prev) => ({ ...prev, [scopeKey]: true }))
+      }
+
+      if (
+        targetFactor !== null &&
+        activeFactor !== 'tong_quan' &&
+        activeFactor !== targetFactor
+      ) {
+        setSearchParams(
+          (prev) => updateReviewFactorParams(prev, targetFactor),
+          { replace: true, state: locationState },
+        )
+        setPendingScrollTarget({ id: findingId, factor: targetFactor })
+        return
+      }
+
+      setPendingScrollTarget({ id: findingId, factor: null })
+    },
+    [activeFactor, allAttention, allPassed, locationState, setSearchParams],
+  )
+
+  useEffect(() => {
+    if (!pendingScrollTarget) {
+      return
+    }
+    if (
+      pendingScrollTarget.factor !== null &&
+      activeFactor !== 'tong_quan' &&
+      activeFactor !== pendingScrollTarget.factor
+    ) {
+      return
+    }
+    const targetId = pendingScrollTarget.id
+    let cancelled = false
+    const raf = requestAnimationFrame(() => {
+      if (cancelled) {
+        return
+      }
+      document
+        .getElementById(`finding-${targetId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      setPendingScrollTarget(null)
     })
-  }, [])
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+    }
+  }, [pendingScrollTarget, activeFactor, passedOpenByScope])
+
+  const selectedDrugFilterChip = selectedDrug ? (
+    <div className="inline-flex items-center gap-1.5 rounded-sm border border-primary-line bg-primary-soft px-2.5 py-1 text-xs text-primary">
+      <span>Đang lọc: {selectedDrug}</span>
+      <button
+        type="button"
+        onClick={() => setSelectedDrug(null)}
+        aria-label="Bỏ lọc theo thuốc"
+        className="inline-flex cursor-pointer items-center gap-0.5 rounded-sm px-1 hover:bg-surface/60"
+      >
+        <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
+        <span>Bỏ lọc</span>
+      </button>
+    </div>
+  ) : null
+
+  const renderFindingCards = (includeOpenFactor: boolean) => (
+    <div className="flex flex-col gap-3">
+      {filteredAttention.map((finding) => {
+        const factorIdx = includeOpenFactor ? factorIndexOf(finding.yeu_to) : null
+        return (
+          <FindingCard
+            key={`${detail.ca_id}::${finding.nhan_dinh_id}`}
+            caId={detail.ca_id}
+            finding={finding}
+            chiSo={detail.chi_so}
+            nhomLyDo={detail.nhom_ly_do}
+            submitting={isFeedbackSubmitting(detail.ca_id, finding.nhan_dinh_id)}
+            feedbackError={getFeedbackError(detail.ca_id, finding.nhan_dinh_id)}
+            feedbackDraft={feedbackDrafts[finding.nhan_dinh_id] ?? EMPTY_FEEDBACK_DRAFT}
+            onFeedbackDraftChange={(draft) => updateFeedbackDraft(finding.nhan_dinh_id, draft)}
+            onSubmitFeedback={onSubmitFeedback}
+            onClearFeedbackError={onClearFeedbackError}
+            onOpenEvidence={onOpenEvidence}
+            onAskAboutFinding={onAskAboutFinding}
+            onOpenFactor={
+              factorIdx !== null ? () => handleSelectReviewFactor(factorIdx) : undefined
+            }
+          />
+        )
+      })}
+    </div>
+  )
+
+  const hasSevereInFactor = factorAttention.some(
+    (item) => item.muc_do_ma === 'nghiem_trong',
+  )
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="detail-sticky-host flex flex-col">
-      {/* 1. Thanh 7 thẻ dính ở mép trên cùng khi cuộn */}
+      {/* 1. Thanh 6 thẻ dính ở mép trên cùng khi cuộn */}
       <div className="detail-sticky-bar">
         <div className="detail-sticky-inner">
           <div className="mx-auto w-full max-w-[1200px] px-5">
@@ -441,15 +621,7 @@ export function OrderDetailView({
                   tabTriggerRefs.current.y_lenh = el
                 }}
               >
-                Y lệnh ({orderDrugCount})
-              </TabsTrigger>
-              <TabsTrigger
-                value="phieu_dieu_tri"
-                ref={(el) => {
-                  tabTriggerRefs.current.phieu_dieu_tri = el
-                }}
-              >
-                Phiếu điều trị ({treatmentSheetNotes.length})
+                Y lệnh ({unifiedLines.length})
               </TabsTrigger>
               <TabsTrigger
                 value="xet_nghiem"
@@ -473,7 +645,7 @@ export function OrderDetailView({
                   tabTriggerRefs.current.dien_bien = el
                 }}
               >
-                Diễn biến ({detail.chi_tiet.dien_bien.length})
+                Diễn biến ({progressTotalCount})
               </TabsTrigger>
               <TabsTrigger
                 value="tham_dinh"
@@ -495,91 +667,127 @@ export function OrderDetailView({
 
       {/* 2. Nội dung từng thẻ đặt thẳng trên canvas rộng thoáng, không lồng khung dư thừa */}
       <div className="mx-auto w-full max-w-[1200px] px-5 py-5 flex flex-col gap-5">
+        {!orderSelectionReady && unmatchedOrderId !== null ? (
+          <p role="status" className="text-xs text-fg-muted">Đang đối chiếu y lệnh trong liên kết…</p>
+        ) : noticeOrderId !== null ? (
+          <p role="status" className="text-xs text-fg-muted">
+            {noticeOrderId ? `Y lệnh ${noticeOrderId} không có trong danh sách.` : 'Mã y lệnh trong liên kết bị trống.'}
+          </p>
+        ) : null}
         <TabsContent value="ho_so_benh_an">
           <MedicalRecordTabContent detail={detail} onOpenEvidence={onOpenEvidence} />
         </TabsContent>
 
-        <TabsContent value="y_lenh" className="flex flex-col gap-7">
-          <section aria-label="Thông tin y lệnh" className="flex flex-col gap-2.5">
-            <SectionHeading title="Thông tin y lệnh" />
-            <InfoRows items={orderInfoItems} />
-          </section>
+        <TabsContent value="y_lenh" className="flex flex-col gap-6">
+          <AiStatusBar
+            trangThai={aiTrangThai}
+            thoiGianMs={aiThoiGianMs}
+            coDienGiai={aiSummary.coDienGiai}
+            doAiThem={aiSummary.doAiThem}
+            canhBao={aiCanhBao}
+            onRerun={onRerunAi}
+            cacBuoc={aiCacBuoc}
+            daChayMs={aiDaChayMs}
+            thuongLeMs={aiThuongLeMs}
+          />
 
-          <section aria-label="Y lệnh chờ duyệt" className="flex flex-col gap-2.5">
-            <SectionHeading
-              title="Chi tiết y lệnh chờ duyệt"
-              aside={`${detail.chi_tiet.y_lenh.cho_duyet.dong.length} dòng thuốc`}
-            />
-            <OrderLinesTable
-              table={detail.chi_tiet.y_lenh.cho_duyet}
-              selectedDrug={selectedDrug}
-              onSelectDrug={handleSelectDrugForReview}
-            />
-            <p className="text-xs text-fg-subtle">
-              Bấm một dòng thuốc để chuyển sang thẻ Thẩm định và lọc nhận định của thuốc đó. Rê chuột
-              vào từng giờ trong lịch dùng để xem liều.
-            </p>
-          </section>
-
-          {detail.chi_tiet.y_lenh.dang_dung ? (
-            <section aria-label="Thuốc đang dùng và đã ngừng" className="flex flex-col gap-2.5">
-              <SectionHeading
-                title="Thuốc đang dùng và đã ngừng"
-                aside={`${detail.chi_tiet.y_lenh.dang_dung.dong.length} dòng thuốc`}
-              />
-              <OrderLinesTable
-                table={detail.chi_tiet.y_lenh.dang_dung}
-                selectedDrug={selectedDrug}
-                onSelectDrug={handleSelectDrugForReview}
-              />
+          {partitionedFindings.caseWideAttention.length > 0 ? (
+            <section aria-label="Nhận định chung toàn hồ sơ" className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-base font-semibold tracking-tight text-fg">
+                  Nhận định chung toàn hồ sơ
+                </h2>
+                <Badge tone="neutral" variant="soft" className="border-transparent tabular-nums">
+                  {partitionedFindings.caseWideAttention.length} mục cần chú ý
+                </Badge>
+              </div>
+              <div className="flex flex-col gap-3">
+                {partitionedFindings.caseWideAttention.map((finding) => {
+                  const factorIdx = factorIndexOf(finding.yeu_to)
+                  return (
+                    <FindingCard
+                      key={`${detail.ca_id}::case-wide::${finding.nhan_dinh_id}`}
+                      caId={detail.ca_id}
+                      finding={finding}
+                      chiSo={detail.chi_so}
+                      nhomLyDo={detail.nhom_ly_do}
+                      submitting={isFeedbackSubmitting(detail.ca_id, finding.nhan_dinh_id)}
+                      feedbackError={getFeedbackError(detail.ca_id, finding.nhan_dinh_id)}
+                      feedbackDraft={feedbackDrafts[finding.nhan_dinh_id] ?? EMPTY_FEEDBACK_DRAFT}
+                      onFeedbackDraftChange={(draft) =>
+                        updateFeedbackDraft(finding.nhan_dinh_id, draft)
+                      }
+                      onSubmitFeedback={onSubmitFeedback}
+                      onClearFeedbackError={onClearFeedbackError}
+                      onOpenEvidence={onOpenEvidence}
+                      onAskAboutFinding={onAskAboutFinding}
+                      onOpenFactor={
+                        factorIdx !== null
+                          ? () => handleOpenFactorInReviewTab(factorIdx)
+                          : undefined
+                      }
+                    />
+                  )
+                })}
+              </div>
             </section>
           ) : null}
-        </TabsContent>
 
-        <TabsContent value="phieu_dieu_tri" className="flex flex-col gap-7">
-          <section aria-label="Thông tin người bệnh" className="flex flex-col gap-2.5">
-            <SectionHeading title="Thông tin điều trị" />
-            <InfoRows items={patientInfoItems(detail)} />
-          </section>
-          <section aria-label="Phiếu điều trị" className="flex flex-col gap-2.5">
-            <SectionHeading title="Phiếu điều trị" aside={`${treatmentSheetNotes.length} lần ghi`} />
-            {treatmentSheetNotes.length > 0 ? (
-              <NotesTable notes={treatmentSheetNotes} />
-            ) : (
-              <EmptyBox
-                icon={ClipboardList}
-                title="Chưa có phiếu điều trị"
-                description="Hồ sơ ngoại trú hoặc ca bệnh này chưa có bản ghi phiếu điều trị."
-              />
-            )}
-          </section>
-        </TabsContent>
-
-        <TabsContent value="xet_nghiem" className="flex flex-col gap-7">
-          {detail.chi_tiet.xet_nghiem.length > 0 ? (
-            <>
-              <section aria-label="Bảng xét nghiệm" className="flex flex-col gap-2.5">
-                <SectionHeading
-                  title="Kết quả xét nghiệm"
-                  aside="Ô nền đỏ: ngoài khoảng tham chiếu"
-                />
-                <LabPivotTable labs={detail.chi_tiet.xet_nghiem} />
-              </section>
-              <section aria-label="Diễn tiến xét nghiệm" className="flex flex-col gap-2.5">
-                <SectionHeading title="Diễn tiến theo thời gian" />
-                <LabTrendChart
-                  xetNghiem={detail.chi_tiet.xet_nghiem}
-                  orderTimeText={orderTimeText}
-                />
-              </section>
-            </>
-          ) : (
-            <EmptyBox
-              icon={FileText}
-              title="Chưa có kết quả xét nghiệm"
-              description="Ca bệnh này chưa ghi nhận dữ liệu xét nghiệm cận lâm sàng."
+          <section
+            id="order-interaction-section"
+            aria-label="Ma trận tương tác thuốc"
+            className="flex flex-col gap-2.5"
+          >
+            <InteractionSection
+              open={interactionOpen}
+              onOpenChange={setInteractionOpen}
+              choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
+              dangDung={detail.chi_tiet.y_lenh.dang_dung}
+              maTranTuongTac={detail.ma_tran_tuong_tac}
+              nhanDinh={{
+                can_chu_y: allAttention,
+                dat: allPassed,
+                yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
+              }}
+              onOpenFinding={handleOpenFindingInOrderTab}
             />
-          )}
+          </section>
+
+          <section aria-label="Chi tiết y lệnh" className="flex flex-col gap-2.5">
+            <SectionHeading
+              title="Chi tiết y lệnh"
+              aside={`${unifiedLines.length} dòng thuốc`}
+            />
+            <UnifiedOrderLinesTable
+              caId={detail.ca_id}
+              lines={unifiedLines}
+              partitioned={partitionedFindings}
+              expandedLineKey={expandedLineKey}
+              onToggleLine={handleToggleLine}
+              chiSo={detail.chi_so}
+              nhomLyDo={detail.nhom_ly_do}
+              feedbackDrafts={feedbackDrafts}
+              onFeedbackDraftChange={updateFeedbackDraft}
+              isFeedbackSubmitting={isFeedbackSubmitting}
+              getFeedbackError={getFeedbackError}
+              onSubmitFeedback={onSubmitFeedback}
+              onClearFeedbackError={onClearFeedbackError}
+              onOpenEvidence={onOpenEvidence}
+              onAskAboutFinding={onAskAboutFinding}
+              onOpenFactorInReviewTab={handleOpenFactorInReviewTab}
+            />
+            <p className="text-xs text-fg-subtle">
+              Bấm một dòng thuốc để mở thông tin chi tiết và toàn bộ nhận định của thuốc đó.
+            </p>
+          </section>
+        </TabsContent>
+
+        <TabsContent value="xet_nghiem">
+          <LabsTabContent
+            key={detail.ca_id}
+            labs={detail.chi_tiet.xet_nghiem}
+            orderTimeText={orderTimeText}
+          />
         </TabsContent>
 
         <TabsContent value="vi_sinh">
@@ -665,118 +873,153 @@ export function OrderDetailView({
         </TabsContent>
 
         <TabsContent value="dien_bien">
-          {detail.chi_tiet.dien_bien.length > 0 ? (
-            <NotesTable notes={detail.chi_tiet.dien_bien} />
-          ) : (
-            <EmptyBox
-              icon={FileText}
-              title="Chưa có ghi nhận diễn biến"
-              description="Ca bệnh này chưa có ghi chép diễn biến lâm sàng."
-            />
-          )}
+          <ProgressTabContent detail={detail} onFollowOrder={clearSelectedDrug} />
         </TabsContent>
 
         <TabsContent value="tham_dinh" className="flex flex-col gap-5">
-          {/* 1. Dải bảy yếu tố thẩm định */}
-          <section aria-label="Tổng quan bảy yếu tố" className="flex flex-col gap-2.5">
-            <SectionHeading
-              title="Bảy yếu tố thẩm định"
-              aside={`${detail.nhan_dinh.so_luat_da_chay} luật đã chạy`}
-            />
-            <SixFactorStrip factors={sixFactors} onSelectFactor={handleSelectFactor} />
-          </section>
-
-          {/* 2. Dải trạng thái AI + Danh sách nhận định + Mục đạt */}
-          <section aria-label="Nhận định thẩm định" className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-base font-semibold tracking-tight text-fg">Nhận định</h2>
-                <Badge
-                  tone={filteredAttention.length > 0 ? 'neutral' : 'success'}
-                  variant="soft"
-                  className="border-transparent tabular-nums"
-                >
-                  {filteredAttention.length} mục cần chú ý
-                </Badge>
-              </div>
-
-              {selectedDrug ? (
-                <div className="inline-flex items-center gap-1.5 rounded-sm border border-primary-line bg-primary-soft px-2.5 py-1 text-xs text-primary">
-                  <span>Đang lọc: {selectedDrug}</span>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDrug(null)}
-                    aria-label="Bỏ lọc theo thuốc"
-                    className="inline-flex cursor-pointer items-center gap-0.5 rounded-sm px-1 hover:bg-surface/60"
+          {!currentFactor ? (
+            <section aria-label="Nhận định thẩm định" className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-base font-semibold tracking-tight text-fg">Nhận định</h2>
+                  <Badge
+                    tone={filteredAttention.length > 0 ? 'neutral' : 'success'}
+                    variant="soft"
+                    className="border-transparent tabular-nums"
                   >
-                    <X className="size-3" strokeWidth={1.75} aria-hidden="true" />
-                    <span>Bỏ lọc</span>
-                  </button>
+                    {filteredAttention.length} mục cần chú ý
+                  </Badge>
                 </div>
-              ) : null}
-            </div>
 
-            <AiStatusBar
-              trangThai={aiTrangThai}
-              thoiGianMs={aiThoiGianMs}
-              coDienGiai={aiSummary.coDienGiai}
-              doAiThem={aiSummary.doAiThem}
-              canhBao={aiCanhBao}
-              onRerun={onRerunAi}
-            />
-
-            {filteredAttention.length === 0 ? (
-              <InlineAlert tone="success">
-                {selectedDrug
-                  ? `Không có nhận định cần chú ý cho ${selectedDrug}.`
-                  : `Không có mục cần chú ý trong phạm vi ${detail.nhan_dinh.so_luat_da_chay} luật đã chạy.`}
-              </InlineAlert>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {filteredAttention.map((finding) => (
-                  <FindingCard
-                    key={`${detail.ca_id}::${finding.nhan_dinh_id}`}
-                    caId={detail.ca_id}
-                    finding={finding}
-                    chiSo={detail.chi_so}
-                    nhomLyDo={detail.nhom_ly_do}
-                    submitting={isFeedbackSubmitting(detail.ca_id, finding.nhan_dinh_id)}
-                    feedbackError={getFeedbackError(detail.ca_id, finding.nhan_dinh_id)}
-                    onSubmitFeedback={onSubmitFeedback}
-                    onClearFeedbackError={onClearFeedbackError}
-                    onOpenEvidence={onOpenEvidence}
-                    onAskAboutFinding={onAskAboutFinding}
-                  />
-                ))}
+                {selectedDrugFilterChip}
               </div>
-            )}
 
-            <PassedList
-              key={`passed-${detail.ca_id}`}
-              passed={filteredPassed}
-              open={passedOpen}
-              onOpenChange={setPassedOpen}
-            />
-          </section>
+              <AiStatusBar
+                trangThai={aiTrangThai}
+                thoiGianMs={aiThoiGianMs}
+                coDienGiai={aiSummary.coDienGiai}
+                doAiThem={aiSummary.doAiThem}
+                canhBao={aiCanhBao}
+                onRerun={onRerunAi}
+                cacBuoc={aiCacBuoc}
+                daChayMs={aiDaChayMs}
+                thuongLeMs={aiThuongLeMs}
+              />
 
-          {/* 3. Tương tác thuốc theo từng cặp */}
-          <section
-            id="interaction-section"
-            aria-label="Tương tác thuốc"
-            className="flex flex-col gap-2.5"
-          >
-            <SectionHeading title="Yếu tố 4 · Tương tác thuốc" aside="Đối chiếu từng cặp thuốc" />
-            <InteractionMatrix
-              choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
-              dangDung={detail.chi_tiet.y_lenh.dang_dung}
-              nhanDinh={{
-                can_chu_y: allAttention,
-                dat: allPassed,
-                yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
-              }}
-              onOpenFinding={handleOpenFinding}
-            />
-          </section>
+              {Object.entries(feedbackDrafts).filter(([id]) =>
+                !allAttention.some((finding) => finding.nhan_dinh_id === id),
+              ).map(([id, draft]) => (
+                <InlineAlert key={id} tone="neutral" title="Bản nháp phản hồi">
+                  <div className="flex flex-col gap-1.5">
+                    <p>Nhận định đã thay đổi. Bản nháp của bạn vẫn còn.</p>
+                    {draft.reasonGroup ? <p>{draft.reasonGroup}</p> : null}
+                    {draft.note ? <p className="whitespace-pre-wrap break-words">{draft.note}</p> : null}
+                    <Button variant="ghost" size="sm" className="self-start"
+                      onClick={() => updateFeedbackDraft(id, EMPTY_FEEDBACK_DRAFT)}>Xóa bản nháp</Button>
+                  </div>
+                </InlineAlert>
+              ))}
+
+              {filteredAttention.length === 0 ? (
+                <InlineAlert tone="success">
+                  {selectedDrug
+                    ? `Không có nhận định cần chú ý cho ${selectedDrug}.`
+                    : `Không có mục cần chú ý trong phạm vi ${detail.nhan_dinh.so_luat_da_chay} luật đã chạy.`}
+                </InlineAlert>
+              ) : (
+                renderFindingCards(true)
+              )}
+
+              <PassedList
+                key={`passed-${detail.ca_id}-tong_quan`}
+                passed={filteredPassed}
+                open={passedOpen}
+                onOpenChange={handlePassedOpenChange}
+              />
+            </section>
+          ) : (
+            <>
+              <section
+                aria-label={`${currentFactor.index}. ${currentFactor.title}`}
+                className="flex flex-col gap-3"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-base font-semibold tracking-tight text-fg">
+                      {currentFactor.index}. {currentFactor.title}
+                    </h2>
+                    <Badge
+                      tone={factorStatusTone(currentFactor.status, hasSevereInFactor)}
+                      variant="soft"
+                      icon={<FactorStatusIcon status={currentFactor.status} />}
+                    >
+                      {currentFactor.statusLabel}
+                    </Badge>
+                    {filteredAttention.length > 0 ? (
+                      <Badge
+                        tone="neutral"
+                        variant="soft"
+                        className="border-transparent tabular-nums"
+                      >
+                        {filteredAttention.length} mục cần chú ý
+                      </Badge>
+                    ) : null}
+                  </div>
+
+                  {selectedDrugFilterChip}
+                </div>
+
+                {currentFactor.status === 'chua_co_luat' ? (
+                  <EmptyBox
+                    icon={MinusCircle}
+                    title="Chưa có luật cho yếu tố này"
+                    description="Hệ thống chưa có quy tắc kiểm tra tự động cho yếu tố này."
+                  />
+                ) : (
+                  <>
+                    {filteredAttention.length === 0 ? (
+                      <InlineAlert tone="success">
+                        {selectedDrug
+                          ? `Không có nhận định cần chú ý cho ${selectedDrug} ở yếu tố ${currentFactor.index} (${currentFactor.title}).`
+                          : `Không có mục cần chú ý ở yếu tố ${currentFactor.index} (${currentFactor.title}) trong phạm vi ${detail.nhan_dinh.so_luat_da_chay} luật đã chạy.`}
+                      </InlineAlert>
+                    ) : (
+                      renderFindingCards(false)
+                    )}
+
+                    <PassedList
+                      key={`passed-${detail.ca_id}-${currentFactor.index}`}
+                      passed={filteredPassed}
+                      open={passedOpen}
+                      onOpenChange={handlePassedOpenChange}
+                    />
+                  </>
+                )}
+              </section>
+
+              {currentFactor.index === 4 ? (
+                <section
+                  id="interaction-section"
+                  aria-label="Tương tác thuốc"
+                  className="flex flex-col gap-2.5"
+                >
+                  <InteractionSection
+                    open={interactionOpen}
+                    onOpenChange={setInteractionOpen}
+                    choDuyet={detail.chi_tiet.y_lenh.cho_duyet}
+                    dangDung={detail.chi_tiet.y_lenh.dang_dung}
+                    maTranTuongTac={detail.ma_tran_tuong_tac}
+                    nhanDinh={{
+                      can_chu_y: allAttention,
+                      dat: allPassed,
+                      yeu_to_chua_kiem: detail.nhan_dinh.yeu_to_chua_kiem,
+                    }}
+                    onOpenFinding={handleOpenFinding}
+                  />
+                </section>
+              ) : null}
+            </>
+          )}
         </TabsContent>
       </div>
     </Tabs>

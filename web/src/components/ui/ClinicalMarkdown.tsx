@@ -1,4 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
+import { ExpandButton } from './expand-button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './dialog.tsx'
 import type { TrichDanTraLoi } from '../../api/types.ts'
 import { formatClinicalText } from '../../lib/displayFormat.ts'
 
@@ -244,17 +247,36 @@ function renderInlineTokens(
 }
 
 interface BlockItem {
-  type: 'paragraph' | 'ordered-list' | 'unordered-list' | 'heading' | 'code-block' | 'quote'
+  type: 'paragraph' | 'ordered-list' | 'unordered-list' | 'heading' | 'code-block' | 'quote' | 'table'
+  table?: { headers: string[]; align: ('left' | 'center' | 'right')[]; rows: string[][]; total: number; title: string; truncated: boolean }
   items?: { prefix?: string; content: string }[]
   content?: string
   level?: number
 }
 
 /** Phân tích các khối văn bản (Paragraphs, Lists, Headings, Code blocks) */
+function splitTableRow(line: string): string[] {
+  const cells: string[] = []
+  let cell = ''
+  const value = line.trim().replace(/^\|/, '').replace(/(?<!\\)\|$/, '')
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] === '\\' && value[i + 1] === '|') { cell += '|'; i++ }
+    else if (value[i] === '|') { cells.push(cell.trim()); cell = '' }
+    else cell += value[i]
+  }
+  cells.push(cell.trim())
+  return cells
+}
+
+function limitCell(cell: string): string {
+  return cell.length > 1000 ? `${cell.slice(0, 1000)}…` : cell
+}
+
 function parseBlocks(rawText: string): BlockItem[] {
   const lines = rawText.split('\n')
   const blocks: BlockItem[] = []
 
+  let currentHeading = ''
   let currentList: { type: 'ordered-list' | 'unordered-list'; items: { prefix?: string; content: string }[] } | null = null
 
   const flushList = () => {
@@ -271,6 +293,37 @@ function parseBlocks(rawText: string): BlockItem[] {
     if (!trimmed) {
       flushList()
       continue
+    }
+
+    if (trimmed.startsWith('|') && i + 1 < lines.length && lines[i + 1].trim().startsWith('|')) {
+      const headers = splitTableRow(trimmed)
+      const separators = splitTableRow(lines[i + 1])
+      if (headers.length === separators.length && separators.every((cell) => /^:?-{3,}:?$/.test(cell))) {
+        flushList()
+        const count = Math.min(headers.length, 20)
+        const align = separators.slice(0, count).map((cell): 'left' | 'center' | 'right' =>
+          cell.startsWith(':') && cell.endsWith(':') ? 'center' : cell.endsWith(':') ? 'right' : 'left',
+        )
+        const rows: string[][] = []
+        let total = 0
+        let longCell = headers.some((cell) => cell.length > 1000)
+        i += 2
+        while (i < lines.length && lines[i].trim().startsWith('|')) {
+          total++
+          if (rows.length < 200) {
+            const cells = splitTableRow(lines[i])
+            longCell ||= cells.some((cell) => cell.length > 1000)
+            rows.push(Array.from({ length: count }, (_, index) => limitCell(cells[index] ?? '')))
+          }
+          i++
+        }
+        i--
+        let previousLine = i - total - 2
+        while (previousLine >= 0 && !lines[previousLine].trim()) previousLine--
+        const boldTitle = /^\*\*(.+?)\*\*$/.exec(lines[previousLine]?.trim() ?? '')
+        blocks.push({ type: 'table', table: { headers: headers.slice(0, count).map(limitCell), align, rows, total, title: currentHeading || boldTitle?.[1] || 'Bảng', truncated: headers.length > 20 || total > 200 || longCell } })
+        continue
+      }
     }
 
     // Danh sách có thứ tự: 1) hoặc 1.
@@ -305,6 +358,7 @@ function parseBlocks(rawText: string): BlockItem[] {
     const headingMatch = /^(#{1,3})\s+(.*)$/.exec(trimmed)
     if (headingMatch) {
       flushList()
+      currentHeading = headingMatch[2]
       blocks.push({
         type: 'heading',
         level: headingMatch[1].length,
@@ -336,6 +390,43 @@ function parseBlocks(rawText: string): BlockItem[] {
   return blocks
 }
 
+function MarkdownTable({ table, citationsMap, onCitationClick }: {
+  table: NonNullable<BlockItem['table']>
+  citationsMap: Map<number, TrichDanTraLoi>
+  onCitationClick?: ClinicalMarkdownProps['onCitationClick']
+}) {
+  const [open, setOpen] = useState(false)
+  function handleCitation(citation: TrichDanTraLoi, target: HTMLButtonElement) {
+    flushSync(() => setOpen(false))
+    onCitationClick?.(citation, target)
+  }
+  const renderTable = (expanded: boolean) => (
+    <div className={expanded ? 'min-h-0 min-w-0 max-w-full flex-1 overflow-auto' : 'max-h-80 max-w-full overflow-x-auto overflow-y-auto'}>
+      <table className="w-full min-w-full border-collapse text-sm">
+        <thead className="sticky top-0 z-10 bg-surface-muted"><tr>
+          {table.headers.map((cell, index) => <th scope="col" key={index} style={{ textAlign: table.align[index] }} className={`min-w-[8rem] break-words border border-line px-3 py-2 font-semibold ${expanded ? '' : 'max-w-[28rem]'}`}>{renderInlineTokens(cell, citationsMap, expanded ? handleCitation : onCitationClick)}</th>)}
+        </tr></thead>
+        <tbody>{table.rows.map((row, rowIndex) => <tr key={rowIndex} className="even:bg-surface-muted/50">
+          {row.map((cell, index) => <td key={index} style={{ textAlign: table.align[index] }} className={`min-w-[8rem] break-words border border-line px-3 py-2 ${expanded ? '' : 'max-w-[28rem]'}`}>{renderInlineTokens(cell, citationsMap, expanded ? handleCitation : onCitationClick)}</td>)}
+        </tr>)}</tbody>
+      </table>
+      {table.truncated ? <p className="p-2 text-xs text-fg-muted">Bảng đã rút gọn: hiện {table.rows.length}/{table.total} dòng</p> : null}
+    </div>
+  )
+  return <div className="min-w-0 max-w-full rounded-md border border-line">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <div className="flex justify-end border-b border-line p-1">
+        <DialogTrigger asChild><ExpandButton label="Mở rộng bảng" /></DialogTrigger>
+      </div>
+      {renderTable(false)}
+      <DialogContent variant="fullscreen" aria-describedby={undefined}>
+        <DialogHeader><DialogTitle>{table.title}</DialogTitle></DialogHeader>
+        {renderTable(true)}
+      </DialogContent>
+    </Dialog>
+  </div>
+}
+
 /**
  * Component hiển thị câu trả lời lâm sàng phong phú (Clinical Markdown):
  * - Hỗ trợ Markdown: ngắt dòng, danh sách gạch đầu dòng, danh sách thứ tự, in đậm, in nghiêng.
@@ -362,8 +453,9 @@ export function ClinicalMarkdown({
   if (!text) return null
 
   return (
-    <div className={`flex flex-col gap-2.5 leading-relaxed text-fg break-words ${className}`}>
+    <div className={`flex min-w-0 max-w-full flex-col gap-2.5 leading-relaxed text-fg break-words ${className}`}>
       {blocks.map((block, bIdx) => {
+        if (block.type === 'table' && block.table) return <MarkdownTable key={`b-${bIdx}`} table={block.table} citationsMap={citationsMap} onCitationClick={onCitationClick} />
         if (block.type === 'paragraph' && block.content) {
           return (
             <p key={`b-${bIdx}`} className="text-sm leading-relaxed text-fg m-0">

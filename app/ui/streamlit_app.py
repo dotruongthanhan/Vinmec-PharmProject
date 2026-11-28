@@ -43,14 +43,13 @@ if TYPE_CHECKING:
 
 _ROOT_DIR = Path(__file__).resolve().parents[2]
 _DEFAULT_CASE_DIR = _ROOT_DIR / "data" / "mock" / "demo"
-_RENAL_RULES_PATH = _ROOT_DIR / "data" / "kb" / "quy_tac_lieu_than.json"
 
 
 @st.cache_resource
 def _get_services(case_dir_str: str) -> tuple[ReviewService, AskService]:
     """Khởi tạo dịch vụ thẩm định và hỏi đáp một lần theo thư mục ca bệnh."""
     return (
-        PipelineReviewService(Path(case_dir_str), _RENAL_RULES_PATH),
+        PipelineReviewService(Path(case_dir_str)),
         NotReadyAskService(),
     )
 

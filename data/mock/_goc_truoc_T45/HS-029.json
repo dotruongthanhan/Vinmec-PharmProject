@@ -1,0 +1,929 @@
+{
+  "ho_so_id": "HS-029",
+  "kich_ban_id": "HS-029",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-029",
+    "tuoi": 62,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-14T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-LEVETIRACETAM",
+      "ten_hoat_chat": "Levetiracetam",
+      "ten_quoc_te": "levetiracetam",
+      "ma_atc": "N03AX14",
+      "nhom_duoc_ly": "thuoc chong dong kinh"
+    },
+    {
+      "hoat_chat_id": "HC-VALPROIC_ACID",
+      "ten_hoat_chat": "Acid valproic",
+      "ten_quoc_te": "valproic acid",
+      "ma_atc": "N03AG01",
+      "nhom_duoc_ly": "thuoc chong dong kinh"
+    },
+    {
+      "hoat_chat_id": "HC-OMEPRAZOLE",
+      "ten_hoat_chat": "Omeprazol",
+      "ten_quoc_te": "omeprazole",
+      "ma_atc": "A02BC01",
+      "nhom_duoc_ly": "thuoc uc che bom proton"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-LEVETIRACETAM-500",
+      "ten_thuoc": "Levetiracetam 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-LEVETIRACETAM",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-VALPROAT-500",
+      "ten_thuoc": "Acid valproic 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-VALPROIC_ACID",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-OMEPRAZOL-40",
+      "ten_thuoc": "Omeprazol 40 mg",
+      "ham_luong": "40 mg",
+      "duong_dung": "tiem tinh mach",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-OMEPRAZOLE",
+          "ham_luong_thanh_phan": 40.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-029-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Thần kinh",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2025-03-05T10:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-03-09T09:00:00+07:00",
+      "so_ngay_dieu_tri": 4,
+      "lich_su_khoa": [
+        {
+          "khoa": "Thần kinh",
+          "tu": "2025-03-05T10:00:00+07:00",
+          "den": "2025-03-09T09:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Co giật toàn thân lần đầu",
+      "benh_su": "BN nam 60T, co giật toàn thân lần đầu, sau đó tỉnh, không sốt. Khởi trị levetiracetam.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không ghi nhận."
+      },
+      "kham_benh": "T 37,0, tỉnh, không dấu thần kinh khu trú.",
+      "tom_tat": "BN nam co giật lần đầu, khởi trị levetiracetam, không tái phát trong viện. Ra viện ổn.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS029-1-01",
+          "ma_icd10": "G40.9",
+          "noi_dung": "Động kinh",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS029-1-01",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 28.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2025-03-06T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-029-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì co giật toàn thân lần đầu, sau đó tỉnh. Không sốt. Nhập khoa Thần kinh, khởi trị levetiracetam 500 mg x2.",
+          "thoi_diem_ghi": "2025-03-05T10:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-029-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Không co giật lại. Dung nạp thuốc tốt. ALT 28 U/L. Ra viện theo dõi ngoại trú.",
+          "thoi_diem_ghi": "2025-03-08T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-029-01",
+          "thoi_diem_ke": "2025-03-05T10:30:00+07:00",
+          "khoa_ke_don": "Thần kinh",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-029-01-01",
+              "thuoc_id": "T-LEVETIRACETAM-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 2 lần/ngày",
+              "bat_dau": "2025-03-05T11:00:00+07:00",
+              "ket_thuc": "2025-03-09T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Động kinh lần đầu, khởi trị levetiracetam. Không tái phát trong viện, ra viện ổn định.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-03-05T11:20:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam vào viện cấp cứu vì co giật toàn thân lần đầu, sau đó tỉnh, không sốt. Khám: T 37,0 °C, tỉnh, không có dấu thần kinh khu trú. Người bệnh tiếp xúc tốt, không nhớ rõ diễn biến cơn co giật. Nhập khoa Thần kinh để theo dõi.",
+          "danh_gia": "Động kinh (G40.9) lần đầu, không có dấu hiệu nhiễm trùng hay sốt. Chưa có cơn tái phát trong viện; cần theo dõi và bắt đầu điều trị chống động kinh ngay từ đầu, kèm đánh giá chức năng gan trước khi dùng thuốc dài ngày.",
+          "huong_xu_tri": "Khởi trị levetiracetam 500 mg uống 2 lần mỗi ngày. Theo dõi tri giác và dấu hiệu co giật tái phát. Xét nghiệm men gan sáng mai để làm căn cứ theo dõi thuốc trong quá trình điều trị.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Nhiệt độ mỗi 8 giờ",
+            "Men gan theo chỉ định"
+          ],
+          "dan_do": "Không lái xe và không leo trèo cao khi chưa có ý kiến bác sĩ. Có người thân ở bên khi đi lại."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2025-03-06T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Không co giật lại trong đêm. Người bệnh tỉnh táo, ăn uống được, không than đau đầu. Xét nghiệm ALT 28 U/L lấy lúc 07:00 sáng nay, chưa ghi nhận triệu chứng bất thường về tiêu hóa.",
+          "danh_gia": "Động kinh đang kiểm soát bằng levetiracetam. Chức năng gan trong giới hạn bình thường với ALT 28 U/L, chưa ghi nhận tác dụng phụ rõ trên lâm sàng.",
+          "huong_xu_tri": "Tiếp tục levetiracetam 500 mg uống 2 lần mỗi ngày. Theo dõi thêm dấu hiệu co giật và các tác dụng phụ như buồn ngủ, chóng mặt. Hẹn xét nghiệm men gan theo lịch điều trị.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Buồn ngủ, chóng mặt"
+          ],
+          "dan_do": "Uống thuốc đúng giờ, không tự ý ngừng thuốc chống động kinh khi chưa có chỉ định."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2025-03-07T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Không co giật, dung nạp thuốc tốt. Người bệnh tỉnh táo, không chóng mặt nhiều khi đi lại trong khoa. Ăn uống bình thường, giấc ngủ tốt hơn so với hôm đầu nhập viện.",
+          "danh_gia": "Động kinh ổn định trong viện, chưa tái phát. Người bệnh đáp ứng với levetiracetam và dung nạp thuốc tốt về lâm sàng, không có biểu hiện bất thường thần kinh mới.",
+          "huong_xu_tri": "Tiếp tục levetiracetam 500 mg hai lần mỗi ngày. Chuẩn bị hướng dẫn xuất viện, hẹn tái khám thần kinh để đánh giá đáp ứng và liều thuốc.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Buồn ngủ"
+          ],
+          "dan_do": "Ghi lại các cơn nếu có, mang theo khi tái khám. Không tự ý thay đổi liều thuốc."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2025-03-08T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Dung nạp thuốc tốt, không co giật lại trong đợt nằm viện. Ăn uống bình thường, sinh hoạt được và tự đi lại trong khoa. Người bệnh và người nhà hiểu cách uống thuốc.",
+          "danh_gia": "Động kinh ổn định, đủ điều kiện ra viện theo dõi ngoại trú. Không có tác dụng phụ đáng kể ghi nhận được trong đợt điều trị.",
+          "huong_xu_tri": "Dự kiến ra viện sáng 09/03. Tiếp tục levetiracetam 500 mg hai lần mỗi ngày theo đơn ngoại trú, hẹn tái khám thần kinh và làm lại xét nghiệm men gan theo lịch.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-01"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật tại nhà"
+          ],
+          "dan_do": "Uống thuốc đều mỗi ngày. Đến khám ngay nếu có cơn co giật hoặc ngất."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-029-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Thần kinh",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-02-10T08:30:00+07:00",
+      "thoi_diem_ket_thuc": "2026-02-16T10:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Thần kinh",
+          "tu": "2026-02-10T08:30:00+07:00",
+          "den": "2026-02-16T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Co giật tái phát 2 lần trong tuần",
+      "benh_su": "BN nam 61T, động kinh đang uống levetiracetam 500 mg x2 từ lần 1. Co giật tái phát 2 lần trong tuần, không sốt. Thử valproat 500 mg x2.",
+      "tien_su": {
+        "ban_than": "Động kinh từ lần 1, levetiracetam 500 mg x2 uống ngoại trú.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Levetiracetam 500 mg x2."
+      },
+      "kham_benh": "T 37,1, M 80, HA 125/80. Tỉnh, không dấu thần kinh khu trú. Gan không to.",
+      "tom_tat": "BN nam động kinh tái phát, thử valproat, men gan tăng sau 4 ngày dùng valproat, đã ngừng và ghi nhận tăng men gan do thuốc. Men gan giảm dần. Ra viện theo dõi.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS029-2-01",
+          "ma_icd10": "G40.9",
+          "noi_dung": "Động kinh tái phát",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS029-2-02",
+          "ma_icd10": "K71.9",
+          "noi_dung": "Tăng men gan do thuốc (valproat), đã ngừng thuốc",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS029-2-01",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 30.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-02-10T08:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS029-2-02",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 160.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-02-14T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-029-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Co giật tái phát 2 lần trong tuần, đang uống levetiracetam. ALT 30 U/L trước khi thử valproat. Bắt đầu acid valproic 500 mg x2 uống.",
+          "thoi_diem_ghi": "2026-02-10T09:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-029-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Nước tiểu hơi sẫm, mệt, chán ăn nhẹ. ALT tăng 160 U/L. Ghi chú tăng men gan do valproat, ngừng valproat.",
+          "thoi_diem_ghi": "2026-02-14T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-029-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sau khi ngừng valproat, men gan giảm dần. Không vàng da. Không co giật. Ra viện theo dõi men gan ngoại trú.",
+          "thoi_diem_ghi": "2026-02-16T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-029-02",
+          "thoi_diem_ke": "2026-02-10T09:00:00+07:00",
+          "khoa_ke_don": "Thần kinh",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "ALT tăng 160 U/L, ngừng valproat, ghi nhận tăng men gan do thuốc",
+          "thoi_diem_ngung": "2026-02-14T09:00:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-029-02-01",
+              "thuoc_id": "T-VALPROAT-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 2 lần/ngày",
+              "bat_dau": "2026-02-10T09:30:00+07:00",
+              "ket_thuc": "2026-02-14T09:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-029-03",
+          "thoi_diem_ke": "2026-02-10T10:00:00+07:00",
+          "khoa_ke_don": "Thần kinh",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-029-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyen tinh mach",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-02-10T10:30:00+07:00",
+              "ket_thuc": "2026-02-16T09:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Động kinh tái phát. Thử valproat, ALT tăng 160 U/L, đã ngừng valproat và ghi nhận tăng men gan do thuốc. Men gan giảm dần, ra viện theo dõi ngoại trú.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-02-10T09:40:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam nền động kinh, co giật tái phát 2 lần trong tuần, không sốt, đang uống levetiracetam 500 mg hai lần mỗi ngày. Khám: T 37,1 °C, mạch 80 lần/phút, HA 125/80 mmHg, tỉnh, không dấu thần kinh khu trú, gan không to. ALT 30 U/L lấy lúc 08:00.",
+          "danh_gia": "Động kinh tái phát (G40.9). ALT 30 U/L trước khi dùng thuốc mới nằm trong giới hạn bình thường, nên có căn cứ để theo dõi men gan trong suốt quá trình điều trị.",
+          "huong_xu_tri": "Bắt đầu acid valproic 500 mg uống 2 lần mỗi ngày để kiểm soát cơn. Truyền natri clorid 0,9% mỗi ngày. Theo dõi men gan, tri giác và các dấu hiệu tác dụng phụ của thuốc mới.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-02",
+            "YL-HS-029-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Vàng da, nước tiểu sẫm, chán ăn",
+            "Men gan theo lịch"
+          ],
+          "dan_do": "Báo ngay nếu vàng da, nước tiểu sẫm hoặc đau tức hạ sườn phải."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-02-11T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Chưa ghi nhận cơn co giật trong ngày. Người bệnh ăn uống được, tỉnh táo, không than mệt nhiều. Chưa có triệu chứng vàng da hay nước tiểu sẫm được ghi nhận trong buổi khám sáng.",
+          "danh_gia": "Động kinh đang theo dõi đáp ứng với acid valproic. Chưa có xét nghiệm men gan mới trong ngày nên chưa đánh giá được chức năng gan; người bệnh cần được theo dõi đều đặn trong các ngày tiếp theo.",
+          "huong_xu_tri": "Tiếp tục acid valproic 500 mg uống 2 lần mỗi ngày và truyền natri clorid 0,9%. Hẹn xét nghiệm men gan ngày 14/02 và tiếp tục quan sát vàng da, nước tiểu hằng ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-02",
+            "YL-HS-029-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Vàng da, nước tiểu sẫm",
+            "Chán ăn"
+          ],
+          "dan_do": "Báo ngay khi thấy vàng da, củng mạc mắt vàng hoặc nước tiểu sẫm màu."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-02-12T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Không co giật, không sốt. Người bệnh tỉnh táo, ăn uống bình thường, đi lại trong khoa được. Không ghi nhận đau bụng vùng hạ sườn phải trong buổi khám.",
+          "danh_gia": "Động kinh chưa tái phát trong viện, đáp ứng bước đầu với acid valproic. Chưa có dấu hiệu bất thường trên lâm sàng trong ngày; sẽ đối chiếu lại với xét nghiệm men gan đã hẹn.",
+          "huong_xu_tri": "Tiếp tục acid valproic 500 mg mỗi 12 giờ và truyền natri clorid 0,9%. Theo dõi men gan theo lịch đã hẹn và tiếp tục quan sát tri giác, vàng da hằng ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-02",
+            "YL-HS-029-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Men gan theo lịch",
+            "Đau tức hạ sườn phải"
+          ],
+          "dan_do": "Uống thuốc đúng giờ, không tự ý ngừng thuốc khi chưa có chỉ định của bác sĩ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-2-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-02-13T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Không co giật. Người bệnh tỉnh táo, ăn uống được, không sốt. Chưa có kết quả men gan mới kể từ ngày 10/02; người bệnh không có triệu chứng mới trong ngày.",
+          "danh_gia": "Động kinh ổn định trong viện. Chưa có xét nghiệm men gan mới, lần gần nhất ngày 10/02, nên cần làm lại theo lịch đã hẹn để theo dõi chức năng gan khi đang dùng thuốc.",
+          "huong_xu_tri": "Tiếp tục acid valproic 500 mg uống 2 lần mỗi ngày. Hẹn xét nghiệm men gan ngày 14/02 và tiếp tục theo dõi vàng da, nước tiểu, chán ăn.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-02",
+            "YL-HS-029-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, hạn chế rượu bia",
+          "theo_doi": [
+            "Tri giác, co giật",
+            "Vàng da, nước tiểu",
+            "Mức ăn uống"
+          ],
+          "dan_do": "Báo điều dưỡng nếu chán ăn, mệt tăng hoặc có vàng da."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-2-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-02-14T09:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Nước tiểu hơi sẫm, mệt, chán ăn nhẹ. ALT 160 U/L lấy lúc 07:00, tăng so với 30 U/L trước khi dùng acid valproic. Chưa có cơn co giật trong viện, chưa thấy vàng da rõ trên khám.",
+          "danh_gia": "Tăng men gan do thuốc (K71.9), chưa có vàng da rõ trên lâm sàng. Động kinh chưa tái phát trong viện, cần cân nhắc phương án chống động kinh khác khi chức năng gan cho phép.",
+          "huong_xu_tri": "Ngừng acid valproic từ 09:00 hôm nay, lý do ALT tăng 160 U/L, ngừng valproat, ghi nhận tăng men gan do thuốc. Theo dõi men gan hằng ngày và vàng da. Cân nhắc thuốc chống động kinh khác sau khi men gan ổn định.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-02",
+            "YL-HS-029-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhẹ, dễ tiêu, hạn chế rượu bia",
+          "theo_doi": [
+            "Men gan (ALT, AST, bilirubin) hằng ngày",
+            "Vàng da, củng mạc mắt",
+            "Co giật, tri giác"
+          ],
+          "dan_do": "Không tự ý uống lại acid valproic. Báo ngay nếu vàng da đậm hơn hoặc đau bụng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-2-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-02-15T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Mệt giảm dần, ăn được nhiều hơn so với hôm ngừng thuốc. Không sốt, không co giật. Nước tiểu bớt sẫm so với hôm trước; người bệnh nhận biết được các dấu hiệu cần báo.",
+          "danh_gia": "Men gan giảm dần sau khi ngừng acid valproic. Chưa có dấu hiệu nặng thêm, người bệnh đáp ứng tốt với theo dõi và nghỉ ngơi. Động kinh chưa tái phát trong viện.",
+          "huong_xu_tri": "Dự kiến ra viện sáng 16/02, theo dõi men gan ngoại trú. Tái khám thần kinh và gan theo hẹn, mang theo kết quả xét nghiệm để đối chiếu với lần trước.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-03"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn nhẹ, dễ tiêu, hạn chế rượu bia",
+          "theo_doi": [
+            "Men gan theo lịch",
+            "Vàng da",
+            "Co giật"
+          ],
+          "dan_do": "Đến khám ngay nếu vàng da đậm hơn, nôn hoặc có cơn co giật."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-029-3",
+      "thu_tu": 3,
+      "khoa_dieu_tri": "Thần kinh",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-11T08:20:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Thần kinh",
+          "tu": "2026-11-11T08:20:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Vàng da, mệt, chán ăn, nước tiểu sẫm 5 ngày",
+      "benh_su": "BN nam 62T, nền động kinh. Vàng da, mệt, chán ăn, nước tiểu sẫm 5 ngày. Đau tức nhẹ hạ sườn phải.",
+      "tien_su": {
+        "ban_than": "Động kinh, đã nhập viện 2 lần.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa ghi nhận thuốc đang dùng trước khi vào viện."
+      },
+      "kham_benh": "T 37,2, M 84, HA 122/78. Củng mạc mắt vàng, da vàng nhẹ. Gan to nhẹ, ấn đau hạ sườn phải. Không cổ trướng.",
+      "tom_tat": "BN nam 62T động kinh, vàng da, men gan tăng cao: ALT 280 U/L, AST 310 U/L, bilirubin 38 umol/L. Chưa co giật trong viện. Theo dõi chức năng gan hằng ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS029-3-01",
+          "ma_icd10": "K71.9",
+          "noi_dung": "Bệnh gan do nhiễm độc (viêm gan do thuốc), đang hoạt động",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS029-3-02",
+          "ma_icd10": "G40.9",
+          "noi_dung": "Động kinh",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS029-3-01",
+          "loai": "nhiet_do",
+          "gia_tri": 37.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-11T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS029-3-02",
+          "loai": "mach",
+          "gia_tri": 84.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-11T08:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS029-3-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 122.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-11T08:35:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS029-3-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 78.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-11T08:35:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS029-3-05",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS029-3-01",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 245.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-11-11T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS029-3-02",
+          "ma_xet_nghiem": "ast",
+          "ten_xet_nghiem": "AST (GOT)",
+          "gia_tri_so": 270.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-11-11T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS029-3-03",
+          "ma_xet_nghiem": "bilirubin",
+          "ten_xet_nghiem": "Bilirubin toàn phần",
+          "gia_tri_so": 30.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 5,
+          "nguong_tren": 21,
+          "thoi_diem_ket_qua": "2026-11-11T09:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS029-3-04",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 280.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS029-3-05",
+          "ma_xet_nghiem": "ast",
+          "ten_xet_nghiem": "AST (GOT)",
+          "gia_tri_so": 310.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 0,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS029-3-06",
+          "ma_xet_nghiem": "bilirubin",
+          "ten_xet_nghiem": "Bilirubin toàn phần",
+          "gia_tri_so": 38.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 5,
+          "nguong_tren": 21,
+          "thoi_diem_ket_qua": "2026-11-14T07:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-029-3-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì vàng da, mệt, chán ăn, nước tiểu sẫm 5 ngày. Nền động kinh. Gan to nhẹ, ấn đau hạ sườn phải. ALT 245, AST 270, bilirubin 30. Nhập khoa Thần kinh, theo dõi chức năng gan.",
+          "thoi_diem_ghi": "2026-11-11T08:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-029-3-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Vàng da còn, mệt, ăn kém. Men gan vẫn cao. Không xuất huyết tiêu hóa. Tiếp tục theo dõi, chờ siêu âm gan.",
+          "thoi_diem_ghi": "2026-11-12T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-029-3-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN còn vàng da, không sốt, không co giật trong ngày. Ăn được ít cháo. Đang truyền natri clorid 0,9%.",
+          "thoi_diem_ghi": "2026-11-13T08:10:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-029-3-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay vàng da đậm hơn, mệt. ALT 280, AST 310 U/L, bilirubin 38 umol/L. Chưa có cơn co giật. Kê thuốc chống động kinh theo y lệnh.",
+          "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-029-04",
+          "thoi_diem_ke": "2026-11-11T09:30:00+07:00",
+          "khoa_ke_don": "Thần kinh",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-029-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyen tinh mach",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-11T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-029-05",
+          "thoi_diem_ke": "2026-11-11T09:40:00+07:00",
+          "khoa_ke_don": "Thần kinh",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-029-05-01",
+              "thuoc_id": "T-OMEPRAZOL-40",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 40.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "tiem tinh mach",
+              "cach_dung": "Tiêm tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-11T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-029-06",
+          "thoi_diem_ke": "2026-11-14T10:00:00+07:00",
+          "khoa_ke_don": "Thần kinh",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-029-06-01",
+              "thuoc_id": "T-VALPROAT-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uong",
+              "cach_dung": "Uống 2 lần/ngày",
+              "bat_dau": "2026-11-14T20:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T20:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T08:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T20:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-3-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-11T10:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam nền động kinh vào viện vì vàng da, mệt, chán ăn, nước tiểu sẫm 5 ngày, đau tức nhẹ hạ sườn phải. Khám: T 37,2 °C, mạch 84 lần/phút, HA 122/78 mmHg, củng mạc mắt và da vàng nhẹ, gan to nhẹ, ấn đau hạ sườn phải, không cổ trướng. ALT 245 U/L, AST 270 U/L, bilirubin 30 umol/L.",
+          "danh_gia": "Bệnh gan do nhiễm độc đang hoạt động (K71.9), nền động kinh (G40.9). Men gan và bilirubin tăng cao, cần theo dõi chức năng gan sát hằng ngày và đánh giá thêm nguyên nhân qua siêu âm gan.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL mỗi ngày và omeprazol 40 mg tiêm tĩnh mạch mỗi ngày. Theo dõi chức năng gan và tri giác. Chờ siêu âm gan. Hiện chưa kê thuốc chống động kinh trong đợt này.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-04",
+            "YL-HS-029-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhẹ, dễ tiêu, chia nhỏ bữa, hạn chế rượu bia",
+          "theo_doi": [
+            "Vàng da, củng mạc mắt",
+            "Men gan, bilirubin theo lịch",
+            "Tri giác, co giật"
+          ],
+          "dan_do": "Báo ngay nếu nôn ra máu, phân đen hoặc lơ mơ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-3-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-12T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vàng da còn, mệt, ăn kém. Không sốt. Không ghi nhận xuất huyết tiêu hóa, không nôn ra máu. Bụng còn đau tức nhẹ vùng hạ sườn phải khi ấn.",
+          "danh_gia": "Vàng da và men gan chưa cải thiện rõ so với ngày vào viện. Chưa có kết quả siêu âm gan để đánh giá thêm nguyên nhân và mức độ tổn thương gan, nên cần tiếp tục theo dõi sát.",
+          "huong_xu_tri": "Tiếp tục truyền natri clorid 0,9% và omeprazol 40 mg. Theo dõi men gan và bilirubin, chờ siêu âm gan để đánh giá thêm. Theo dõi dấu hiệu chảy máu tiêu hóa và tri giác.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-04",
+            "YL-HS-029-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhẹ, dễ tiêu, chia nhỏ bữa, hạn chế rượu bia",
+          "theo_doi": [
+            "Vàng da",
+            "Tri giác",
+            "Dấu hiệu chảy máu tiêu hóa"
+          ],
+          "dan_do": "Ăn đủ bữa, uống đủ nước, báo nếu nôn ra máu hoặc đi ngoài phân đen."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-3-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-13T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vẫn còn vàng da, không sốt, không co giật trong ngày. Ăn được ít cháo, uống nước đều. Người bệnh tỉnh, tiếp xúc tốt, đau hạ sườn phải giảm nhẹ khi nằm nghỉ.",
+          "danh_gia": "Bệnh gan đang điều trị hỗ trợ, chưa thấy nặng thêm rõ rệt trong ngày. Chưa có kết quả men gan mới để đối chiếu với lần trước, nên cần chờ xét nghiệm theo lịch.",
+          "huong_xu_tri": "Tiếp tục truyền natri clorid 0,9% và omeprazol. Chờ siêu âm gan và kết quả men gan ngày 14/11 để quyết định điều chỉnh điều trị. Theo dõi vàng da và tri giác mỗi ca.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-04",
+            "YL-HS-029-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhẹ, dễ tiêu, chia nhỏ bữa, hạn chế rượu bia",
+          "theo_doi": [
+            "Vàng da",
+            "Tri giác, co giật",
+            "Ăn uống"
+          ],
+          "dan_do": "Báo điều dưỡng nếu vàng da đậm lên hoặc không ăn được."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-029-3-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-14T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vàng da đậm hơn, mệt. Cân nặng 70 kg. ALT 280 U/L, AST 310 U/L, bilirubin 38 umol/L. Chưa có cơn co giật trong viện.",
+          "danh_gia": "Bệnh gan do thuốc đang hoạt động, men gan và bilirubin tăng hơn so với ngày vào viện. Nền động kinh chưa tái phát trong viện, cần có phương án chống động kinh phù hợp với chức năng gan hiện tại.",
+          "huong_xu_tri": "Đề nghị acid valproic 500 mg uống 2 lần mỗi ngày để kiểm soát động kinh, y lệnh đang chờ duyệt. Tiếp tục truyền natri clorid 0,9% và omeprazol 40 mg. Theo dõi men gan, bilirubin và tri giác hằng ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-029-04",
+            "YL-HS-029-05",
+            "YL-HS-029-06"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhẹ, dễ tiêu, chia nhỏ bữa, hạn chế rượu bia",
+          "theo_doi": [
+            "Men gan, bilirubin hằng ngày",
+            "Vàng da, tri giác",
+            "Co giật"
+          ],
+          "dan_do": "Báo ngay nếu vàng da đậm hơn, nôn ra máu hoặc co giật."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-029-06"
+}

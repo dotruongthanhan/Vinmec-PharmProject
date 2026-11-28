@@ -1,0 +1,6 @@
+﻿khoa_chuan_hoa,ten_goc_vi_du,so_che_pham,so_luot,ung_vien_1,ung_vien_2,ung_vien_3,ly_do,quyet_dinh,nguoi_duyet,ghi_chu
+fixture mot,Fixture mot,1,1,cefotaxime | 2186 | 0.900000,,,fixture,chon_1,Fixture dược sĩ,Mẫu giả lập
+fixture hai,Fixture hai,1,1,cefotaxime | 2186 | 0.900000,ceftriaxone | 2193 | 0.800000,,fixture,chon_2,Fixture dược sĩ,Mẫu giả lập
+fixture ba,Fixture ba,1,1,,,,fixture,rxcui:6809,Fixture dược sĩ,Mẫu giả lập
+fixture bon,Fixture bon,1,1,,,,fixture,duoc_lieu,Fixture dược sĩ,Mẫu giả lập
+fixture nam,Fixture nam,1,1,,,,fixture,bo_qua,Fixture dược sĩ,Mẫu giả lập

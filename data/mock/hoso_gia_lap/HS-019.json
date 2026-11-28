@@ -1,0 +1,235 @@
+{
+  "ho_so_id": "HS-019",
+  "kich_ban_id": "HS-019",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-019",
+    "tuoi": 55,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-15T07:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-019-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tổng quát",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-15T08:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tổng quát",
+          "tu": "2026-11-15T08:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đau lưng cấp 3 ngày",
+      "benh_su": "BN nữ 55T đau vùng thắt lưng cấp 3 ngày sau mang vác đồ nặng. Đau lan nhẹ xuống mông, không yếu chân, không rối loạn tiểu tiện.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh mạn tính đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc trước khi khám."
+      },
+      "kham_benh": "Đau cột sống thắt lưng khi gập người, không điểm đau chói cạnh sống. Sức cơ chi dưới 5/5, phản xạ gân gót bình thường.",
+      "tom_tat": "BN nữ 55T đau lưng cấp M54.5, chưa có dấu hiệu thần kinh khu trú. Cân nặng 60 kg, ALT 30 U/L. Chỉ định giảm đau hạ sốt bằng paracetamol uống, hẹn tái khám nếu không đỡ.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS019-01",
+          "ma_icd10": "M54.5",
+          "noi_dung": "Đau lưng cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS019-01",
+          "loai": "can_nang",
+          "gia_tri": 60.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS019-02",
+          "loai": "mach",
+          "gia_tri": 78.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T08:40:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS019-01",
+          "ma_xet_nghiem": "alt",
+          "ten_xet_nghiem": "ALT (GPT)",
+          "gia_tri_so": 30.0,
+          "gia_tri_text": null,
+          "don_vi": "U/L",
+          "nguong_duoi": 7,
+          "nguong_tren": 40,
+          "thoi_diem_ket_qua": "2026-11-15T09:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-019-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nữ 55T đau lưng cấp 3 ngày, đau cột sống thắt lưng, không yếu chi dưới, không rối loạn tiểu tiện. Cân nặng 60 kg, ALT 30 U/L. Chỉ định paracetamol 1 g uống mỗi 4 giờ khi đau, hẹn tái khám sau 1 tuần nếu không đỡ.",
+          "thoi_diem_ghi": "2026-11-15T09:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-019-01",
+          "thoi_diem_ke": "2026-11-15T10:00:00+07:00",
+          "khoa_ke_don": "Nội tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-019-01-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1000.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "mỗi 4 giờ",
+              "so_lan_moi_ngay": 6,
+              "khoang_cach_gio": 4.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 viên (1 g) mỗi 4 giờ",
+              "bat_dau": "2026-11-15T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Nhà thuốc bệnh viện",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T10:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T14:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T18:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T22:00:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-019-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-15T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 55 tuổi đau lưng cấp vùng thắt lưng 3 ngày sau khi mang vác đồ nặng. Đau lan nhẹ xuống mông, không yếu chân, không rối loạn tiểu tiện. Khám đau cột sống thắt lưng khi gập người, không có điểm đau chói cạnh sống, sức cơ chi dưới bình thường, phản xạ gân gót bình thường. Cân nặng 60 kg, mạch 78 lần/phút, ALT 30 U/L.",
+          "danh_gia": "Đau lưng cấp do cơ xương, chưa có dấu hiệu thần kinh khu trú. Chức năng gan trong giới hạn bình thường. Chưa dùng thuốc giảm đau trước khi khám.",
+          "huong_xu_tri": "Chỉ định paracetamol 1 g uống mỗi 4 giờ khi đau, chờ duyệt. Hướng dẫn nghỉ ngơi hợp lý, tránh mang vác nặng và vận động nhẹ hằng ngày. Hẹn tái khám sau 1 tuần nếu không đỡ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-019-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn uống bình thường, uống đủ nước",
+          "theo_doi": [
+            "Mức đau và khả năng đi lại",
+            "Tình trạng yếu chân hoặc rối loạn tiểu tiện"
+          ],
+          "dan_do": "Đến khám ngay nếu yếu chân, tê vùng đáy chậu hoặc tiểu không kiểm soát được."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-15T08:30:00+07:00",
+        "so_giuong": null,
+        "so_luu_tru": "LT-2026-01901",
+        "ma_yt": "YT-2026-019-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-019-01",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 19",
+    "ngay_sinh": "1971-11-15",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9019",
+      "thon_pho": "Phố Kim Mã",
+      "xa_phuong": "Kim Mã",
+      "huyen": "Ba Đình",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000019",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 19",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 019"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 60.0,
+    "nhom_mau": null
+  }
+}

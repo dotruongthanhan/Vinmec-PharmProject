@@ -4,14 +4,21 @@ import type { FormEvent } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { InlineAlert } from '@/components/ui/inline-alert'
-import { VinmecLogo } from '@/components/VinmecLogo'
+import { AppLogo } from '@/components/AppLogo'
 import { resolveLoginRedirect } from '@/lib/routeGuard'
+import { isDemoEnabled } from '@/lib/demoSession'
 import { ThemeControl } from '@/features/theme/ThemeControl'
 import { useAuth } from './useAuth'
 
+const signOutMessages: Record<string, string> = {
+  het_han_phien: 'Phiên đã hết hạn. Vui lòng đăng nhập lại.',
+  khong_hoat_dong: 'Bạn đã bị đăng xuất vì không hoạt động.',
+  da_dang_xuat_noi_khac: 'Bạn đã đăng xuất ở một thẻ hoặc thiết bị khác.',
+}
+
 /** Trang đăng nhập hai nửa: giới thiệu nền ink, biểu mẫu nền paper. */
 export function LoginPage() {
-  const { isAuthenticated, isDemoMode, isConfigured, signIn, enterDemoMode } = useAuth()
+  const { isAuthenticated, isDemoMode, isConfigured, isLoading, signIn, enterDemoMode } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -29,8 +36,12 @@ export function LoginPage() {
   const passwordErrorId = useId()
 
   const returnTo = resolveLoginRedirect(location.state)
+  const routeState: unknown = location.state
+  const reason = routeState && typeof routeState === 'object' && 'reason' in routeState && typeof routeState.reason === 'string'
+    ? routeState.reason : null
+  const signOutMessage = reason && Object.hasOwn(signOutMessages, reason) ? signOutMessages[reason] : null
 
-  if (isAuthenticated || isDemoMode) {
+  if ((isAuthenticated && !isLoading) || isDemoMode) {
     return <Navigate to={returnTo} replace />
   }
 
@@ -78,6 +89,7 @@ export function LoginPage() {
   }
 
   const handleEnterDemo = () => {
+    if (!isDemoEnabled()) return
     enterDemoMode()
     navigate(returnTo, { replace: true })
   }
@@ -93,7 +105,7 @@ export function LoginPage() {
             to="/"
             className="inline-flex items-center gap-3 text-sm font-semibold tracking-tight text-ink-fg hover:text-primary-line transition-colors duration-120"
           >
-            <VinmecLogo alwaysOnDark imageClassName="h-12" />
+            <AppLogo alwaysOnDark imageClassName="h-12" />
             <span>Hỗ trợ thẩm định y lệnh</span>
           </Link>
         </div>
@@ -136,15 +148,23 @@ export function LoginPage() {
             </p>
           </div>
 
+          {signOutMessage ? <InlineAlert tone="warning" role="status" className="mb-4">{signOutMessage}</InlineAlert> : null}
+
           {!isConfigured ? (
             <div className="mb-6 flex flex-col gap-3">
               <InlineAlert tone="warning" role="status">
-                Chưa cấu hình xác thực. Đang ở chế độ demo, không kiểm tra tài khoản.
+                {isDemoEnabled() ? 'Chưa cấu hình xác thực. Đang ở chế độ demo, không kiểm tra tài khoản.' : 'Chưa thể đăng nhập. Vui lòng liên hệ quản trị.'}
               </InlineAlert>
-              <Button variant="primary" size="lg" className="w-full" onClick={handleEnterDemo}>
+              {isDemoEnabled() ? <Button variant="primary" size="lg" className="w-full" onClick={handleEnterDemo}>
                 Vào bản demo
-              </Button>
+              </Button> : null}
             </div>
+          ) : null}
+
+          {isConfigured && isDemoEnabled() ? (
+            <Button variant="secondary" className="mb-4 w-full" onClick={handleEnterDemo}>
+              Vào bản demo
+            </Button>
           ) : null}
 
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="flex flex-col gap-4">

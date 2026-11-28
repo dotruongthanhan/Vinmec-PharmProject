@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-026",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 5,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-026-05-01"],
+      "mo_ta": "Gentamicin 320 mg mỗi ngày khi CrCl khoảng 22 mL/phút, liều chưa điều chỉnh theo chức năng thận, nguy cơ độc thận cao."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

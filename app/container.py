@@ -2,12 +2,22 @@
 
 from __future__ import annotations
 
+import logging
+import sqlite3
 from collections.abc import Callable
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from threading import Lock, RLock
+from typing import TYPE_CHECKING, Any, cast
 
-from app.config.settings import Settings, load_settings
+import psycopg
+
+from app.config.settings import (
+    Settings,
+    assert_tracer_settings_allowed,
+    get_secret,
+    load_settings,
+)
 from app.core.errors import ConfigError
 from app.core.interfaces import (
     CaseRepository,
@@ -18,17 +28,50 @@ from app.core.interfaces import (
     Rule,
     VectorStore,
 )
+from app.db.read_pool import read_pool
+from app.kb.interactions import InteractionStore
+from app.kb.resolver import DrugResolver
 from app.providers.bm25_index import Bm25Index
 from app.providers.fakes import FakeLLM, HashEmbedder, NoopReranker
 from app.providers.memory_store import InMemoryVectorStore
-from app.rules.registry import default_rules
+from app.rules.registry import RuleContext, default_rules
 from app.rules.renal_dose import RenalRuleBook, load_renal_rules
 from app.storage.case_repo import JsonCaseRepository
+from app.tracing import Tracer, khoi_tao_tracer, lay_tracer_mac_dinh
 
 if TYPE_CHECKING:
+    from app.agent.asker import AgenticAsker
     from app.orchestration.ask import CaseAsker
+    from app.orchestration.evidence import LazyRetrieverFactory
 
 _ROOT = Path(__file__).resolve().parents[1]
+_RULE_CONTEXT_LOCK = Lock()
+_SHARED_RULE_CONTEXT: RuleContext | None = None
+_NOT_FOUND = object()
+
+
+class _LockedCachedProperty(cached_property):
+    """Biến thể cached_property an toàn luồng dựa trên RLock của thực thể."""
+
+    def __get__(self, instance: Any, owner: type[Any] | None = None) -> Any:
+        if instance is None:
+            return self
+        if self.attrname is None:
+            raise TypeError("Thuộc tính đệm chưa được gắn tên trên lớp.")
+        cache = instance.__dict__
+        val = cache.get(self.attrname, _NOT_FOUND)
+        if val is not _NOT_FOUND:
+            return val
+        lock = getattr(instance, "_lock", None)
+        if lock is None:
+            return super().__get__(instance, owner)
+        with lock:
+            val = cache.get(self.attrname, _NOT_FOUND)
+            if val is not _NOT_FOUND:
+                return val
+            val = self.func(instance)
+            cache[self.attrname] = val
+            return val
 
 
 class Container:
@@ -37,7 +80,23 @@ class Container:
     settings: Settings
 
     def __init__(self, settings: Settings) -> None:
+        assert_tracer_settings_allowed(settings.tracer)
         self.settings = settings
+        self._lock = RLock()
+
+    @_LockedCachedProperty
+    def tracer(self) -> Tracer:
+        """Khởi tạo tracer theo cấu hình và gắn mặc định một lần khi tracer.bat=True."""
+        resolved_dir = str(self._resolve_path(self.settings.tracer.thu_muc))
+        tracer_settings = self.settings.tracer.model_copy(update={"thu_muc": resolved_dir})
+        if tracer_settings.bat:
+            current = lay_tracer_mac_dinh()
+            if current is None or not current.bat or current.settings != tracer_settings:
+                return khoi_tao_tracer(
+                    tracer_settings, auto_cleanup=True, app_settings=self.settings
+                )
+            return current
+        return Tracer(tracer_settings, auto_cleanup=False)
 
     def _resolve(self, kind: str, name: str) -> object:
         """Tra bảng đăng ký mà không rẽ nhánh theo tên nhà cung cấp."""
@@ -46,58 +105,183 @@ class Container:
             raise ConfigError(f"Chưa có cài đặt cho {kind}.provider={name}")
         return factory(self)
 
-    @cached_property
+    @_LockedCachedProperty
     def llm(self) -> LLMClient:
         return cast(LLMClient, self._resolve("llm", self.settings.llm.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def embedder(self) -> Embedder:
         return cast(Embedder, self._resolve("embedding", self.settings.embedding.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def reranker(self) -> Reranker:
         return cast(Reranker, self._resolve("rerank", self.settings.rerank.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def vector_store(self) -> VectorStore:
         return cast(VectorStore, self._resolve("vector_store", self.settings.vector_store.provider))
 
-    @cached_property
+    @_LockedCachedProperty
     def keyword_index(self) -> KeywordIndex:
         return Bm25Index()
 
-    @cached_property
+    @_LockedCachedProperty
     def case_repo(self) -> CaseRepository:
         return JsonCaseRepository(_ROOT / self.settings.app.case_dir)
 
-    @cached_property
+    @_LockedCachedProperty
     def renal_rules(self) -> RenalRuleBook:
-        return load_renal_rules(_ROOT / "data/kb/quy_tac_lieu_than.json")
+        return load_renal_rules()
 
-    @cached_property
+    @_LockedCachedProperty
     def rules(self) -> list[Rule]:
         return default_rules()
 
-    @cached_property
+    def _resolve_path(self, raw_path: str) -> Path:
+        raw = Path(raw_path)
+        return raw if raw.is_absolute() else _ROOT / raw
+
+    def _database_url(self) -> str | None:
+        """Đọc chuỗi kết nối từ môi trường cấu hình, trả None nếu thiếu hoặc rỗng."""
+        try:
+            url = get_secret(self.settings.database.url_env).strip()
+        except ConfigError:
+            return None
+        return url or None
+
+    def _use_db(self, path: Path) -> bool:
+        """Chọn đọc DB hay tệp cho một kho theo app.kb_source."""
+        kb_source = self.settings.app.kb_source
+        if kb_source == "db":
+            return True
+        if kb_source == "file":
+            return False
+        if path.is_file():
+            return False
+        return self._database_url() is not None
+
+    @_LockedCachedProperty
+    def drug_resolver(self) -> DrugResolver | None:
+        """Chỉ mục vắng hoặc hỏng không ngăn các luật khác chạy."""
+        path = self._resolve_path(self.settings.app.tra_cuu)
+        if self._use_db(path):
+            url = self._database_url()
+            if url is None:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được chỉ mục tra cứu từ DB: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                return None
+            try:
+                with read_pool.connection(url) as conn:
+                    return DrugResolver.from_db(conn)
+            except (OSError, psycopg.Error, sqlite3.Error, ValueError, ConfigError) as exc:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được chỉ mục tra cứu từ DB: %s", type(exc).__name__
+                )
+                return None
+        try:
+            return DrugResolver.from_index(path)
+        except (OSError, sqlite3.Error, ValueError) as exc:
+            logging.getLogger(__name__).debug(
+                "Không nạp được chỉ mục tra cứu: %s", type(exc).__name__
+            )
+            return None
+
+    @_LockedCachedProperty
+    def interaction_store(self) -> InteractionStore | None:
+        """Nạp kho chỉ đọc một lần trong vòng đời container."""
+        path = self._resolve_path(self.settings.app.tuong_tac)
+        if self._use_db(path):
+            url = self._database_url()
+            if url is None:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được bảng tương tác từ DB: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                return None
+            try:
+                with read_pool.connection(url) as conn:
+                    return InteractionStore.from_db(conn, db_url=url)
+            except (OSError, psycopg.Error, sqlite3.Error, ValueError, ConfigError) as exc:
+                logging.getLogger(__name__).debug(
+                    "Không nạp được bảng tương tác từ DB: %s", type(exc).__name__
+                )
+                return None
+        try:
+            return InteractionStore.from_path(path)
+        except (OSError, sqlite3.Error, ValueError) as exc:
+            logging.getLogger(__name__).debug(
+                "Không nạp được bảng tương tác: %s", type(exc).__name__
+            )
+            return None
+
+    @_LockedCachedProperty
+    def rule_context(self) -> RuleContext:
+        ctx = RuleContext(self.renal_rules, self.drug_resolver, self.interaction_store)
+        tra_cuu_source = (
+            "tri_thuc.tra_cuu_*"
+            if self._use_db(self._resolve_path(self.settings.app.tra_cuu))
+            else "tra_cuu.sqlite"
+        )
+        tuong_tac_source = (
+            "tri_thuc.ddinter_*"
+            if self._use_db(self._resolve_path(self.settings.app.tuong_tac))
+            else "ddinter.sqlite"
+        )
+        missing = [
+            name
+            for name, dependency in (
+                (tra_cuu_source, ctx.resolver),
+                (tuong_tac_source, ctx.interactions),
+            )
+            if dependency is None
+        ]
+        if missing:
+            logging.getLogger(__name__).warning(
+                "Không chạy yếu tố 4: chỉ mục thiếu hoặc hỏng: %s", ", ".join(missing)
+            )
+        return ctx
+
+    @_LockedCachedProperty
+    def evidence_retriever(self) -> LazyRetrieverFactory | None:
+        """Bộ nạp đoạn nguồn dùng chung cho hỏi đáp và công cụ agent; None nếu chưa có kho."""
+        from app.orchestration.evidence import LazyRetrieverFactory
+
+        corpus_path = _ROOT / "data/kb_curated/chunks.jsonl"
+        if self._use_db(corpus_path):
+            if self._database_url() is None:
+                logging.getLogger(__name__).warning(
+                    "Không nạp được kho đoạn từ tri_thuc.doan_trich: thiếu %s",
+                    self.settings.database.url_env,
+                )
+                return None
+            return LazyRetrieverFactory(self, use_db=True)
+        if corpus_path.is_file():
+            return LazyRetrieverFactory(self, corpus_path, use_db=False)
+        return None
+
+    @_LockedCachedProperty
     def case_asker(self) -> CaseAsker:
         """Dựng bộ hỏi đáp theo ca từ cấu hình, máy khách LLM, bộ truy xuất và prompt."""
         from app.kb.names import DrugNameIndex
         from app.llm import setup as llm_setup
         from app.orchestration.ask import CaseAsker
-        from app.orchestration.evidence import LazyRetrieverFactory
         from app.retrieval.query_builder import QueryBuilder
+
+        if self.settings.tracer.bat:
+            _ = self.tracer
 
         try:
             llm: LLMClient | None = llm_setup.build_llm(self)
         except ConfigError as exc:
-            if self.settings.llm.provider == "deepseek" and str(exc) == "DEEPSEEK_API_KEY":
+            if self.settings.llm.provider == "chat_api" and str(exc) == "khong_co_khoa_llm":
                 llm = None
             else:
                 raise
 
-        corpus_path = _ROOT / "data/kb_curated/chunks.jsonl"
-        retriever = LazyRetrieverFactory(self, corpus_path) if corpus_path.is_file() else None
-        names = DrugNameIndex.load(_ROOT / "data/kb/hoat_chat.json")
+        retriever = self.evidence_retriever
+        names = DrugNameIndex.load()
         raw_prompt = Path(self.settings.prompts.hoi_them)
         prompt_path = raw_prompt if raw_prompt.is_absolute() else _ROOT / raw_prompt
         return CaseAsker(
@@ -110,6 +294,54 @@ class Container:
             evidence_max_chars=self.settings.evidence.max_chars,
             model_name=self.settings.llm.model if llm is not None else None,
             renal_rules=self.renal_rules,
+        )
+
+    @_LockedCachedProperty
+    def agentic_asker(self) -> AgenticAsker:
+        """Dựng bộ hỏi đáp agent theo đồ thị LangGraph từ cấu hình và chính sách công cụ."""
+        from app.agent.asker import AgenticAsker
+        from app.agent.tools import ChinhSachCongCu, DanhMucCongCu
+        from app.agent.tools.doc_doan_mo_rong import DocDoanMoRong
+        from app.agent.tools.lay_du_lieu_ca import LayDuLieuCa
+        from app.agent.tools.tim_doan_nguon import TimDoanNguon
+        from app.agent.tools.tinh_chi_so import TinhChiSo
+        from app.agent.tools.tra_thuoc import TraThuoc
+        from app.agent.tools.tra_tuong_tac import TraTuongTac
+        from app.agent.tools.ve_bieu_do import VeBieuDo
+        from app.kb.names import DrugNameIndex
+        from app.llm import setup as llm_setup
+
+        if self.settings.tracer.bat:
+            _ = self.tracer
+
+        try:
+            llm: LLMClient | None = llm_setup.build_llm(self)
+        except ConfigError as exc:
+            if self.settings.llm.provider == "chat_api" and str(exc) == "khong_co_khoa_llm":
+                llm = None
+            else:
+                raise
+
+        policy = ChinhSachCongCu.tu_tep(self._resolve_path(self.settings.ask.tool_policy))
+        # Công cụ chuyên biệt cắm dần (plan 1.9 mục 5.8): mỗi công cụ một dòng đăng ký.
+        danh_muc = DanhMucCongCu()
+        danh_muc.dang_ky(TraTuongTac())
+        danh_muc.dang_ky(LayDuLieuCa())
+        danh_muc.dang_ky(TimDoanNguon(self.evidence_retriever, DrugNameIndex.load().resolve))
+        danh_muc.dang_ky(DocDoanMoRong(self.evidence_retriever))
+        danh_muc.dang_ky(TraThuoc())
+        danh_muc.dang_ky(TinhChiSo())
+        danh_muc.dang_ky(VeBieuDo())
+
+        return AgenticAsker(
+            llm=llm,
+            danh_muc=danh_muc,
+            chinh_sach=policy,
+            global_asker=self.case_asker,
+            prompt_path=self._resolve_path(self.settings.prompts.tac_tu),
+            case_settings=self.settings.case_context,
+            renal_rules=self.renal_rules,
+            max_turns=self.settings.agent.max_turns,
         )
 
 
@@ -129,3 +361,12 @@ def register_provider(kind: str, name: str, factory: Callable[[Container], objec
 def build_container(profile: str | None = None) -> Container:
     """Nạp cấu hình và tạo nơi lắp ráp chưa khởi tạo các nhà cung cấp."""
     return Container(load_settings(profile))
+
+
+def get_rule_context() -> RuleContext:
+    """Giữ chỉ mục dùng chung cho API, DB và Streamlit trong tiến trình."""
+    global _SHARED_RULE_CONTEXT
+    with _RULE_CONTEXT_LOCK:
+        if _SHARED_RULE_CONTEXT is None:
+            _SHARED_RULE_CONTEXT = build_container().rule_context
+        return _SHARED_RULE_CONTEXT

@@ -1,0 +1,60 @@
+# Chờ dược sĩ duyệt toàn bộ bảng nhóm, mức và ngoại lệ.
+trang_thai: cho_duoc_si_duyet
+nhom:
+  - ma_nhom: ppi
+    ten: PPI
+    tien_to_atc: [A02BC]
+    muc_do: can_luu_y
+    ly_do: Phối hợp hai PPI có nguy cơ trùng tác dụng điều trị.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: khang_h2
+    ten: kháng H2
+    tien_to_atc: [A02BA]
+    muc_do: can_luu_y
+    ly_do: Phối hợp hai thuốc kháng H2 có nguy cơ trùng tác dụng điều trị.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: nsaid
+    ten: NSAID
+    tien_to_atc: [M01A]
+    tien_to_atc_loai_tru: [M01AX]
+    muc_do: nghiem_trong
+    ly_do: Phối hợp hai NSAID có nguy cơ cộng gộp tác dụng không mong muốn.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: chong_dong
+    ten: chống đông
+    tien_to_atc: [B01AA, B01AB, B01AE, B01AF, B01AX05]
+    muc_do: nghiem_trong
+    ly_do: Phối hợp hai thuốc chống đông có nguy cơ cộng gộp tác dụng chống đông.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: uc_che_ras
+    ten: ức chế hệ RAS
+    tien_to_atc: [C09]
+    muc_do: nghiem_trong
+    ly_do: Phối hợp hai thuốc ức chế hệ RAS có nguy cơ cộng gộp tác dụng không mong muốn.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: statin
+    ten: statin
+    tien_to_atc: [C10AA]
+    muc_do: can_luu_y
+    ly_do: Phối hợp hai statin có nguy cơ trùng tác dụng điều trị.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: benzodiazepin
+    ten: benzodiazepin
+    tien_to_atc: [N05BA, N05CD]
+    muc_do: can_luu_y
+    ly_do: Phối hợp hai benzodiazepin có nguy cơ cộng gộp tác dụng không mong muốn.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []
+  - ma_nhom: sulfonylure
+    ten: sulfonylure
+    tien_to_atc: [A10BB]
+    muc_do: can_luu_y
+    ly_do: Phối hợp hai sulfonylure có nguy cơ trùng tác dụng điều trị.
+    nguon: phân loại ATC của WHO; mức do nhóm đề xuất, chờ dược sĩ duyệt
+    ngoai_le: []

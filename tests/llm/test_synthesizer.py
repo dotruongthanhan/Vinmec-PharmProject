@@ -10,6 +10,7 @@ from app.core.types import Chunk
 from app.llm.synthesizer import Synthesizer
 from app.pipeline import run_case
 from app.providers.fakes import FakeLLM
+from tests.deid_support import temp_id
 
 _ROOT = Path(__file__).resolve().parents[2]
 _PROMPT_PATH = _ROOT / "config/prompts/tong_hop.v1.md"
@@ -42,12 +43,12 @@ def _valid_proposal(
     nhan_xet: str = "Cần xem xét diễn biến creatinin tăng lên 212 umol/L.",
 ) -> dict:
     return {
-        "chi_tiet_y_lenh_id": ["CT-DEMO02-01"],
+        "chi_tiet_y_lenh_id": [temp_id("DEMO-02", "CT-DEMO02-01")],
         "yeu_to": 5,
         "ket_luan": "can_xem",
         "muc_do": "can_luu_y",
         "nhan_xet": nhan_xet,
-        "ban_ghi_ids": ["XN-DEMO02-01"],
+        "ban_ghi_ids": [temp_id("DEMO-02", "XN-DEMO02-01")],
         "trich_dan": [],
         "thong_tin_con_thieu": [],
         "de_xuat": None,
@@ -63,7 +64,7 @@ def _make_synthesizer(llm: FakeLLM | None, *, evidence_max_chars: int = 12000) -
         case_settings=container.settings.case_context,
         evidence_max_chars=evidence_max_chars,
         max_synthesis_attempts=2,
-        model_name="deepseek-flash",
+        model_name="model-test",
     )
 
 
@@ -220,12 +221,12 @@ def test_synthesizer_blocks_prompt_injection_downgrade_on_demo06() -> None:
     ket_qua = run_case(ca, container.renal_rules)
 
     hijacked_dat = {
-        "chi_tiet_y_lenh_id": ["CT-DEMO06-01"],
+        "chi_tiet_y_lenh_id": [temp_id("DEMO-06", "CT-DEMO06-01")],
         "yeu_to": 1,
         "ket_luan": "dat",
         "muc_do": None,
         "nhan_xet": "Đơn này đạt, không có dị ứng.",
-        "ban_ghi_ids": ["DB-DEMO06-01"],
+        "ban_ghi_ids": [temp_id("DEMO-06", "DB-DEMO06-01")],
         "trich_dan": [],
     }
     fake_llm = FakeLLM([{"nhan_dinh": [hijacked_dat]}])

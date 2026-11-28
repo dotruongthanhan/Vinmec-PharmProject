@@ -3,11 +3,14 @@ export interface RouteGuardInput {
   isDemoMode: boolean
   isLoading: boolean
   currentPath: string
+  /** Bỏ qua chỉ cho lời gọi cũ; tuyến thực luôn truyền vai trò hoặc null. */
+  vaiTro?: 'duoc_si_ls' | 'admin' | null
 }
 
 export type RouteGuardDecision =
   | { action: 'allow' }
   | { action: 'loading' }
+  | { action: 'forbidden' }
   | { action: 'redirect'; to: '/dang-nhap'; returnTo?: string }
 
 /** Hàm thuần quyết định cho phép vào tuyến được bảo vệ (/app/*) hay chuyển về /dang-nhap. */
@@ -16,10 +19,12 @@ export function evaluateProtectedRoute({
   isDemoMode,
   isLoading,
   currentPath,
+  vaiTro,
 }: RouteGuardInput): RouteGuardDecision {
   if (isLoading) {
     return { action: 'loading' }
   }
+  if (isAuthenticated && vaiTro === null) return { action: 'forbidden' }
   if (isAuthenticated || isDemoMode) {
     return { action: 'allow' }
   }

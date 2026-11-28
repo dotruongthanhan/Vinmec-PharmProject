@@ -1,0 +1,42 @@
+{
+  "ca_id": "CA-GIA-LAP",
+  "mo_ta_ngan": "Ca kiểm thử tổng hợp",
+  "nguoi_benh": {"nguoi_benh_id": "NB-GIA-LAP"},
+  "tinh_trang_di_ung": {"trang_thai": "chua_co_thong_tin"},
+  "dot_dieu_tri": {
+    "dot_dieu_tri_id": "DOT-GIA-LAP",
+    "khoa_dieu_tri": "Khoa mẫu",
+    "loai_dieu_tri": "noi_tru",
+    "thoi_diem_bat_dau": "2026-11-18T08:00:00+07:00"
+  },
+  "sinh_hieu": [],
+  "y_lenh_cho_duyet": {
+    "y_lenh_id": "YL-GIA-LAP",
+    "khoa_ke_don": "Khoa mẫu",
+    "luong_duyet": "truc_tiep",
+    "thoi_diem_ke": "2026-11-18T08:00:00+07:00",
+    "chi_tiet": [
+      {
+        "chi_tiet_y_lenh_id": "CT-GIA-LAP",
+        "thuoc_id": "THUOC-GIA-LAP",
+        "ten_tu_do": "Tên không khớp",
+        "bat_dau": "2026-11-18T08:00:00+07:00",
+        "trang_thai_dong": "pending"
+      }
+    ]
+  },
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "THUOC-GIA-LAP",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "thanh_phan": [
+        {"hoat_chat_id": "HC-MAU", "ham_luong_thanh_phan": 500, "don_vi": "mg"}
+      ]
+    }
+  ],
+  "danh_muc_hoat_chat": [
+    {"hoat_chat_id": "HC-MAU", "ten_hoat_chat": "Paracetamol", "ten_quoc_te": "Acetaminophen"},
+    {"hoat_chat_id": "HC-VIET", "ten_hoat_chat": "Amoxicilin"},
+    {"hoat_chat_id": "HC-MUOI", "ten_hoat_chat": "Metoprolol", "ten_quoc_te": "Metoprolol tartrate"}
+  ]
+}

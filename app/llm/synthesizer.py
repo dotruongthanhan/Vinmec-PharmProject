@@ -7,9 +7,10 @@ from pydantic import ValidationError
 from app.config.settings import CaseContextSettings
 from app.core.errors import ProviderError
 from app.core.interfaces import LLMClient
+from app.core.progress import ghi_buoc, tien_trinh_hien_tai
 from app.core.types import ChatMessage, Chunk
 from app.domain.models import CaBenh
-from app.llm.case_context import build_case_context
+from app.llm.case_context import build_case_bundle
 from app.llm.prompt_loader import load_prompt, render_prompt
 from app.llm.schema import (
     KetQuaLLM,
@@ -108,6 +109,12 @@ class Synthesizer:
         try:
             phien_ban_prompt, template = load_prompt(self.prompt_path)
         except Exception as exc:
+            ghi_buoc(
+                "loi",
+                "tong_hop_1",
+                ly_do="Không đọc được mẫu chỉ thị",
+                goi_y="Bảng luật vẫn đúng; bấm Thử lại sau ít phút",
+            )
             return KetQuaLLM(
                 trang_thai="loi_llm",
                 nhan_dinh=_rule_only_findings(ket_qua.phat_hien),
@@ -130,6 +137,14 @@ class Synthesizer:
         try:
             return self._run_with_llm(ca, ket_qua, doan, phien_ban_prompt, template)
         except Exception as exc:
+            tracker = tien_trinh_hien_tai.get()
+            if tracker is not None:
+                step_id = tracker.dang_chay_ma() or "tong_hop_1"
+                tracker.loi(
+                    step_id,
+                    ly_do="Lỗi tổng hợp không mong muốn",
+                    goi_y="Bảng luật vẫn đúng; bấm Thử lại sau ít phút",
+                )
             return KetQuaLLM(
                 trang_thai="loi_llm",
                 nhan_dinh=_rule_only_findings(ket_qua.phat_hien),
@@ -149,7 +164,8 @@ class Synthesizer:
     ) -> KetQuaLLM:
         """Thực thi vòng gọi LLM, kiểm chứng và ghép kết quả."""
         assert self.llm is not None
-        goi, warnings = build_case_context(ca, ket_qua, self.case_settings)
+        bundle = build_case_bundle(ca, ket_qua, self.case_settings)
+        goi, warnings = bundle.goi, bundle.warnings
         selected_chunks, doan_nguon_text = _select_evidence(doan, self.evidence_max_chars)
         goi = goi.model_copy(update={"doan": selected_chunks})
 
@@ -162,7 +178,14 @@ class Synthesizer:
         so_lan_goi = 0
         schema_failed_last = False
 
-        for _attempt in range(attempts):
+        for attempt_idx in range(attempts):
+            attempt_num = attempt_idx + 1
+            synth_step = f"tong_hop_{attempt_num}"
+            verify_step = f"kiem_chung_{attempt_num}"
+            if attempt_num >= 2:
+                ghi_buoc("them", synth_step, ten=f"Tổng hợp lại, lần {attempt_num}")
+            ghi_buoc("bat_dau", synth_step, chi_tiet="Đang gọi mô hình")
+
             messages = _build_messages(template, goi.van_ban_ca, doan_nguon_text, previous_errors)
             so_lan_goi += 1
             try:
@@ -170,16 +193,24 @@ class Synthesizer:
             except ProviderError as exc:
                 code = str(exc)
                 if code == "het_han_muc_token":
+                    ly_do = "Vượt hạn mức độ dài"
                     warnings.append(
                         "Bước AI bị cắt vì vượt hạn mức độ dài; đang hiển thị kết quả của bộ luật."
                     )
                 else:
+                    ly_do = "Nhà cung cấp mô hình báo lỗi"
                     safe_code = (
                         code if code.isascii() and code.isidentifier() else "loi_nha_cung_cap"
                     )
                     warnings.append(
                         f"Bước AI gặp lỗi ({safe_code}); đang hiển thị kết quả của bộ luật."
                     )
+                ghi_buoc(
+                    "loi",
+                    synth_step,
+                    ly_do=ly_do,
+                    goi_y="Bảng luật vẫn đúng; bấm Thử lại sau ít phút",
+                )
                 merged, merge_warnings = merge(ket_qua.phat_hien, kept_passed)
                 warnings.extend(merge_warnings)
                 return KetQuaLLM(
@@ -191,6 +222,12 @@ class Synthesizer:
                     mo_hinh=self.model_name,
                 )
             except Exception as exc:
+                ghi_buoc(
+                    "loi",
+                    synth_step,
+                    ly_do="Lỗi tổng hợp không mong muốn",
+                    goi_y="Bảng luật vẫn đúng; bấm Thử lại sau ít phút",
+                )
                 warnings.append(f"Lỗi LLM không mong muốn: {type(exc).__name__}")
                 merged, merge_warnings = merge(ket_qua.phat_hien, kept_passed)
                 warnings.extend(merge_warnings)
@@ -206,23 +243,35 @@ class Synthesizer:
             try:
                 tong_hop = KetQuaTongHop.model_validate(raw)
             except ValidationError:
+                ghi_buoc("xong", synth_step, chi_tiet="Đầu ra sai định dạng, thử lại")
                 schema_failed_last = True
                 previous_errors = "Lần trước: sai_luoc_do"
                 continue
 
+            ghi_buoc("xong", synth_step)
             schema_failed_last = False
+            if attempt_num >= 2:
+                ghi_buoc("them", verify_step, ten=f"Kiểm chứng lại, lần {attempt_num}")
+            ghi_buoc("bat_dau", verify_step)
+            # Kiểm chứng chạy trên mã tạm; chỉ sau đó mới đổi về mã thật và khôi phục định danh.
             checked = verify_all(tong_hop, goi)
             current_failed: list[NhanDinhDaKiem] = []
             error_lines: list[str] = []
             for idx, item in enumerate(checked):
+                restored = item.model_copy(
+                    update={"de_xuat": bundle.khoi_phuc_de_xuat(item.de_xuat)}
+                )
                 if item.dat:
                     signature = item.de_xuat.model_dump_json()
                     if signature not in kept_signatures:
                         kept_signatures.add(signature)
-                        kept_passed.append(item)
+                        kept_passed.append(restored)
                 else:
-                    current_failed.append(item)
+                    current_failed.append(restored)
                     error_lines.append(f"Dòng {idx}: {', '.join(item.loi)}")
+
+            passed_count = len(checked) - len(current_failed)
+            ghi_buoc("xong", verify_step, chi_tiet=f"{passed_count}/{len(checked)} dòng đạt")
 
             last_failed = current_failed
             if not current_failed:

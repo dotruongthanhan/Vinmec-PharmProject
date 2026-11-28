@@ -9,7 +9,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field, ValidationError
 
-from app.db.mapping import DDINTER_LEVELS, TABLES
+from app.db.mapping import ADMINISTRATIVE_COLUMNS, DDINTER_LEVELS, TABLES, normalize_ingredient
 
 
 class SourceError(ValueError):
@@ -35,6 +35,8 @@ class Batch:
         self.source_counts: Counter[str] = Counter()
         self.rejected: list[Rejection] = []
         self.tables = set(tables)
+        self.outside_kb: dict[str, set[str]] = {}
+        self.drug_signatures: dict[str, tuple[Any, ...]] = {}
         self._keys: dict[str, dict[tuple[Any, ...], dict[str, Any]]] = {name: {} for name in TABLES}
 
     def reject(self, table: str, source: str, line: str, reason: str) -> None:
@@ -85,24 +87,32 @@ class Batch:
 
     def reject_orphans(self) -> None:
         """Loại dây chuyền dòng con có cha không hợp lệ theo thứ tự khoá ngoại."""
-        for name, mapping in TABLES.items():
-            for reference in mapping.foreign_keys:
-                keys = {
-                    tuple(row[c] for c in reference.target) for row in self.rows[reference.table]
+        changed = True
+        while changed:
+            changed = False
+            for name, mapping in TABLES.items():
+                for reference in mapping.foreign_keys:
+                    keys = {
+                        tuple(row[c] for c in reference.target)
+                        for row in self.rows[reference.table]
+                    }
+                    kept = []
+                    for row in self.rows[name]:
+                        key = tuple(row[c] for c in reference.columns)
+                        if all(v is not None for v in key) and key not in keys:
+                            self.reject(
+                                name,
+                                row["nguon_tep"],
+                                str(tuple(row[c] for c in mapping.primary_key)),
+                                f"thiếu {reference.table}: {key}",
+                            )
+                            changed = True
+                        else:
+                            kept.append(row)
+                    self.rows[name] = kept
+                self._keys[name] = {
+                    tuple(row[c] for c in mapping.primary_key): row for row in self.rows[name]
                 }
-                kept = []
-                for row in self.rows[name]:
-                    key = tuple(row[c] for c in reference.columns)
-                    if all(v is not None for v in key) and key not in keys:
-                        self.reject(
-                            name,
-                            row["nguon_tep"],
-                            str(tuple(row[c] for c in mapping.primary_key)),
-                            f"thiếu {reference.table}: {key}",
-                        )
-                    else:
-                        kept.append(row)
-                self.rows[name] = kept
 
     def finish(self, error_path: Path) -> None:
         """Ghi nhật ký loại và chặn trước giao dịch khi vượt ngưỡng."""
@@ -131,9 +141,16 @@ def source_name(path: Path, root: Path) -> str:
 
 
 def read_cases(root: Path) -> list[tuple[Path, dict[str, Any]]]:
-    paths = sorted((root / "data/mock/demo").glob("*.json"))
-    if not paths:
-        raise SourceError("thiếu data/mock/demo/*.json")
+    paths = []
+    for directory in ("demo", "hoso_gia_lap"):
+        found = sorted(
+            path
+            for path in (root / "data/mock" / directory).glob("*.json")
+            if not path.name.startswith("_")
+        )
+        if not found:
+            raise SourceError(f"thiếu data/mock/{directory}/*.json")
+        paths.extend(found)
     return [(path, read_json(path)) for path in paths]
 
 
@@ -141,13 +158,148 @@ def add_catalog(batch: Batch, root: Path) -> list[dict[str, Any]]:
     path = root / "data/kb/hoat_chat.json"
     catalog = read_json(path)["hoat_chat"]
     valid_catalog = []
+    known = set()
     for row in catalog:
         if batch.add("tri_thuc.hoat_chat", row, source_name(path, root)):
             valid_catalog.append(row)
+            known.add(row["hoat_chat_id"])
     for path, case in read_cases(root):
         for row in case.get("danh_muc_hoat_chat", []):
-            batch.add("tri_thuc.hoat_chat", row, source_name(path, root))
+            code = normalize_ingredient(row["hoat_chat_id"])
+            if code in known:
+                continue
+            batch.outside_kb.setdefault(code, set()).add(row["hoat_chat_id"])
+            # Giữ nguyên tên và thuộc tính nguồn; không suy đoán tri thức.
+            if (code,) not in batch._keys["tri_thuc.hoat_chat"]:
+                batch.add(
+                    "tri_thuc.hoat_chat",
+                    {**row, "hoat_chat_id": code, "can_duyet": True},
+                    source_name(path, root),
+                )
     return valid_catalog
+
+
+def add_drug(batch: Batch, drug: dict[str, Any], source: str) -> None:
+    """Gộp thuốc theo danh tính; loại cả bản sau nếu khác thành phần."""
+    table = "nghiep_vu.thuoc"
+    components = [
+        {**row, "hoat_chat_id": normalize_ingredient(row["hoat_chat_id"])}
+        for row in drug.get("thanh_phan", [])
+    ]
+    signature = (
+        drug.get("ten_thuoc"),
+        drug.get("ham_luong"),
+        json.dumps(sorted(components, key=lambda row: row["hoat_chat_id"]), sort_keys=True),
+    )
+    key = drug.get("thuoc_id")
+    if key in batch.drug_signatures:
+        batch.source_counts[table] += 1
+        if batch.drug_signatures[key] != signature:
+            batch.reject(
+                table,
+                source,
+                json.dumps(drug, ensure_ascii=False),
+                f"trùng khoá khác ten_thuoc/ham_luong/thành phần: {key}; "
+                f"giữ bản đầu từ {batch._keys[table][(key,)]['nguon_tep']}",
+            )
+        return
+    if not batch.add(table, drug, source):
+        return
+    batch.drug_signatures[key] = signature
+    for component in components:
+        batch.add("nghiep_vu.thuoc_hoat_chat", {**component, "thuoc_id": key}, source)
+
+
+def add_order(batch: Batch, order: dict[str, Any], encounter_id: str, source: str) -> None:
+    batch.add("nghiep_vu.y_lenh", {**order, "dot_dieu_tri_id": encounter_id}, source)
+    for row in order.get("chi_tiet", []):
+        batch.add(
+            "nghiep_vu.chi_tiet_y_lenh",
+            {**row, "dot_dieu_tri_id": encounter_id, "y_lenh_id": order.get("y_lenh_id")},
+            source,
+        )
+        for index, schedule in enumerate(row.get("lich_dung", [])):
+            batch.add(
+                "nghiep_vu.lich_dung",
+                {**schedule, "chi_tiet_y_lenh_id": row.get("chi_tiet_y_lenh_id"), "thu_tu": index},
+                source,
+            )
+
+
+def add_encounter(
+    batch: Batch,
+    encounter: dict[str, Any],
+    patient_id: str,
+    source: str,
+    *,
+    new_format: bool,
+) -> None:
+    encounter_id = encounter.get("dot_dieu_tri_id")
+    batch.add(
+        "nghiep_vu.dot_dieu_tri",
+        {**encounter, **encounter.get("quan_ly", {}), "nguoi_benh_id": patient_id},
+        source,
+    )
+    for key, table in (
+        ("chan_doan", "chan_doan"),
+        ("sinh_hieu", "sinh_hieu"),
+        ("xet_nghiem", "ket_qua_xet_nghiem"),
+        ("vi_sinh", "vi_sinh"),
+        ("dien_bien", "dien_bien"),
+    ):
+        for row in encounter.get(key, []):
+            raw = {**row, "dot_dieu_tri_id": encounter_id}
+            if key == "chan_doan" and new_format and raw.get("thoi_diem") is None:
+                raw["thoi_diem"] = encounter.get("thoi_diem_bat_dau")
+            batch.add(f"nghiep_vu.{table}", raw, source)
+            if key == "vi_sinh":
+                for sensitivity in row.get("khang_sinh_do", []):
+                    batch.add(
+                        "nghiep_vu.khang_sinh_do",
+                        {**sensitivity, "vi_sinh_id": row.get("vi_sinh_id")},
+                        source,
+                    )
+    for order in encounter.get("y_lenh", []):
+        add_order(batch, order, encounter_id, source)
+    for sheet in encounter.get("phieu_dieu_tri", []):
+        batch.add("nghiep_vu.phieu_dieu_tri", {**sheet, "dot_dieu_tri_id": encounter_id}, source)
+        for order_id in sheet.get("y_lenh_trong_ngay", []):
+            batch.add(
+                "nghiep_vu.phieu_y_lenh",
+                {
+                    "phieu_dieu_tri_id": sheet.get("phieu_dieu_tri_id"),
+                    "y_lenh_id": order_id,
+                    "dot_dieu_tri_id": encounter_id,
+                },
+                source,
+            )
+
+
+def add_gold(batch: Batch, path: Path, root: Path, order_id: str) -> None:
+    gold = root / "data/gold" / path.parent.name / path.name
+    if not gold.is_file():
+        raise SourceError(f"thiếu {source_name(gold, root)}")
+    answer = read_json(gold)
+    review_id = f"dap_an:{answer.get('ca_id')}"
+    source = source_name(gold, root)
+    batch.add(
+        "nghiep_vu.lan_tham_dinh",
+        {**answer, "tham_dinh_id": review_id, "y_lenh_id": order_id},
+        source,
+    )
+    for index, finding in enumerate(answer.get("phat_hien_ky_vong", [])):
+        finding_id = f"{review_id}:{index}"
+        batch.add(
+            "nghiep_vu.nhan_dinh",
+            {**finding, "nhan_dinh_id": finding_id, "tham_dinh_id": review_id},
+            source,
+        )
+        for line_id in finding.get("chi_tiet_y_lenh_id", []):
+            batch.add(
+                "nghiep_vu.nhan_dinh_thuoc",
+                {"nhan_dinh_id": finding_id, "chi_tiet_y_lenh_id": line_id},
+                source,
+            )
 
 
 def prepare_cases(root: Path) -> Batch:
@@ -156,101 +308,120 @@ def prepare_cases(root: Path) -> Batch:
     for path, case in read_cases(root):
         source = source_name(path, root)
         patient = case.get("nguoi_benh", {})
-        encounter = case.get("dot_dieu_tri", {})
-        order = case.get("y_lenh_cho_duyet", {})
         patient_id = patient.get("nguoi_benh_id")
-        encounter_id = encounter.get("dot_dieu_tri_id")
-        order_id = order.get("y_lenh_id")
         batch.add(
             "nghiep_vu.nguoi_benh",
-            {**patient, "tinh_trang_di_ung": case.get("tinh_trang_di_ung")},
-            source,
-        )
-        batch.add(
-            "nghiep_vu.dot_dieu_tri",
             {
-                **encounter,
-                "nguoi_benh_id": patient_id,
-                "ca_id": case.get("ca_id"),
-                "mo_ta_ngan": case.get("mo_ta_ngan"),
-                "co_dia": case.get("co_dia", []),
+                **patient,
+                **case.get("hanh_chinh", {}),
+                "tinh_trang_di_ung": case.get("tinh_trang_di_ung"),
             },
             source,
         )
         for row in case.get("di_ung", []):
             batch.add("nghiep_vu.di_ung", {**row, "nguoi_benh_id": patient_id}, source)
         for drug in case.get("danh_muc_thuoc", []):
-            batch.add("nghiep_vu.thuoc", drug, source)
-            for component in drug.get("thanh_phan", []):
-                batch.add(
-                    "nghiep_vu.thuoc_hoat_chat",
-                    {**component, "thuoc_id": drug.get("thuoc_id")},
-                    source,
-                )
-        for key, table in (
-            ("chan_doan", "chan_doan"),
-            ("sinh_hieu", "sinh_hieu"),
-            ("xet_nghiem", "ket_qua_xet_nghiem"),
-            ("vi_sinh", "vi_sinh"),
-            ("dien_bien", "dien_bien"),
-        ):
-            for row in case.get(key, []):
-                batch.add(f"nghiep_vu.{table}", {**row, "dot_dieu_tri_id": encounter_id}, source)
-                if key == "vi_sinh":
-                    for sensitivity in row.get("khang_sinh_do", []):
-                        batch.add(
-                            "nghiep_vu.khang_sinh_do",
-                            {**sensitivity, "vi_sinh_id": row.get("vi_sinh_id")},
-                            source,
-                        )
-        batch.add("nghiep_vu.y_lenh", {**order, "dot_dieu_tri_id": encounter_id}, source)
-        for active, lines in (
-            (False, order.get("chi_tiet", [])),
-            (True, case.get("thuoc_dang_dung", [])),
-        ):
-            for row in lines:
-                batch.add(
-                    "nghiep_vu.chi_tiet_y_lenh",
-                    {
-                        **row,
-                        "dot_dieu_tri_id": encounter_id,
-                        "y_lenh_id": None if active else order_id,
-                        "thuoc_dang_dung": active,
-                    },
-                    source,
-                )
-                for index, schedule in enumerate(row.get("lich_dung", [])):
-                    batch.add(
-                        "nghiep_vu.lich_dung",
+            add_drug(batch, drug, source)
+        new_format = "ho_so_id" in case
+        if new_format:
+            encounters = case.get("dot_dieu_tri", [])
+            order_id = case.get("y_lenh_trong_tam")
+            summary = (encounters[-1].get("tom_tat") or "")[:200] if encounters else None
+            encounters = [
+                {
+                    **encounter,
+                    "y_lenh": [
                         {
-                            **schedule,
-                            "chi_tiet_y_lenh_id": row.get("chi_tiet_y_lenh_id"),
-                            "thu_tu": index,
-                        },
-                        source,
-                    )
-        gold = root / "data/gold/demo" / path.name
-        if gold.is_file():
-            answer = read_json(gold)
-            review_id = f"dap_an:{answer.get('ca_id')}"
-            batch.add(
-                "nghiep_vu.lan_tham_dinh",
-                {**answer, "tham_dinh_id": review_id, "y_lenh_id": order_id},
-                source_name(gold, root),
-            )
-            for index, finding in enumerate(answer.get("phat_hien_ky_vong", [])):
-                finding_id = f"{review_id}:{index}"
-                batch.add(
-                    "nghiep_vu.nhan_dinh",
-                    {**finding, "nhan_dinh_id": finding_id, "tham_dinh_id": review_id},
-                    source_name(gold, root),
+                            **order,
+                            "ca_id": case["ho_so_id"]
+                            if order.get("y_lenh_id") == order_id
+                            else None,
+                            "mo_ta_ngan": summary if order.get("y_lenh_id") == order_id else None,
+                        }
+                        for order in encounter.get("y_lenh", [])
+                    ],
+                }
+                for encounter in encounters
+            ]
+        else:
+            order = {
+                **case.get("y_lenh_cho_duyet", {}),
+                "ca_id": case.get("ca_id"),
+                "mo_ta_ngan": case.get("mo_ta_ngan"),
+                "trang_thai": "cho_duyet",
+                "loai": "thuong_quy",
+                "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+            }
+            order_id = order.get("y_lenh_id")
+            orders = [order]
+            active = case.get("thuoc_dang_dung", [])
+            if active:
+                from datetime import datetime
+
+                orders.append(
+                    {
+                        "y_lenh_id": f"YL-{case['ca_id']}-NEN",
+                        "khoa_ke_don": case.get("dot_dieu_tri", {}).get("khoa_dieu_tri"),
+                        "luong_duyet": order.get("luong_duyet"),
+                        "thoi_diem_ke": min(
+                            (row["bat_dau"] for row in active), key=datetime.fromisoformat
+                        ),
+                        "trang_thai": "dang_thuc_hien",
+                        "chi_tiet": active,
+                    }
                 )
-                for line_id in finding.get("chi_tiet_y_lenh_id", []):
-                    batch.add(
-                        "nghiep_vu.nhan_dinh_thuoc",
-                        {"nhan_dinh_id": finding_id, "chi_tiet_y_lenh_id": line_id},
-                        source_name(gold, root),
-                    )
+            encounters = [{**case, **case.get("dot_dieu_tri", {}), "y_lenh": orders}]
+        for encounter in encounters:
+            add_encounter(batch, encounter, patient_id, source, new_format=new_format)
+        add_gold(batch, path, root, order_id)
+    batch.reject_orphans()
+    return batch
+
+
+def prepare_treatment_sheets(root: Path) -> Batch:
+    """Kiểm cả khoá cha từ nguồn, chỉ cho phép nạp hai bảng phiếu."""
+    batch = prepare_cases(root)
+    batch.tables = {"nghiep_vu.phieu_dieu_tri", "nghiep_vu.phieu_y_lenh"}
+    return batch
+
+
+def prepare_administrative(root: Path) -> Batch:
+    """Chỉ chuẩn bị hai bảng hành chính; không đọc tri thức/đáp án."""
+    batch = Batch(tuple(ADMINISTRATIVE_COLUMNS))
+    for path, case in read_cases(root):
+        source = source_name(path, root)
+        patient = case.get("nguoi_benh", {})
+        admin = case.get("hanh_chinh", {})
+        table = "nghiep_vu.nguoi_benh"
+        if not isinstance(admin, dict) or set(ADMINISTRATIVE_COLUMNS[table]) - admin.keys():
+            batch.tables.add(table)
+            batch.source_counts[table] += 1
+            batch.reject(table, source, "", "thiếu trường hanh_chinh")
+        else:
+            batch.add(
+                table,
+                {**patient, **admin, "tinh_trang_di_ung": case.get("tinh_trang_di_ung")},
+                source,
+            )
+        encounters = case.get("dot_dieu_tri", [])
+        if not isinstance(encounters, list):
+            encounters = [{**case, **encounters}]
+        for encounter in encounters:
+            management = encounter.get("quan_ly", {})
+            table = "nghiep_vu.dot_dieu_tri"
+            if (
+                not isinstance(management, dict)
+                or set(ADMINISTRATIVE_COLUMNS[table]) - management.keys()
+            ):
+                batch.tables.add(table)
+                batch.source_counts[table] += 1
+                batch.reject(table, source, "", "thiếu trường quan_ly")
+            else:
+                batch.add(
+                    table,
+                    {**encounter, **management, "nguoi_benh_id": patient.get("nguoi_benh_id")},
+                    source,
+                )
     batch.reject_orphans()
     return batch
 

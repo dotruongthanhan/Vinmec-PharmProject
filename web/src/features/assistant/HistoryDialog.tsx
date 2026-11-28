@@ -1,5 +1,6 @@
 import { ArrowRight, MessagesSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ClinicalMarkdown } from '@/components/ui/ClinicalMarkdown'
 import {
   Dialog,
   DialogBody,
@@ -59,7 +60,7 @@ export function HistoryDialog({
                   : 'Thông tin y lệnh, người bệnh và hội thoại với trợ lý.'}
               </DialogDescription>
             </DialogHeader>
-            <DialogBody className="flex flex-col gap-5">
+            <DialogBody className="flex min-w-0 max-w-full flex-col gap-5">
               {isGlobal ? null : (
                 <section aria-label="Thông tin y lệnh và người bệnh">
                   <h3 className="mb-1 text-sm font-semibold text-fg">Thông tin y lệnh</h3>
@@ -75,15 +76,16 @@ export function HistoryDialog({
                 </section>
               )}
 
-              <section aria-label="Lịch sử trò chuyện" className="flex flex-col gap-2">
+              <section aria-label="Lịch sử trò chuyện" className="flex min-w-0 max-w-full flex-col gap-2">
                 <h3 className="flex items-center gap-1.5 text-sm font-semibold text-fg">
                   <MessagesSquare className="size-4 text-fg-subtle" strokeWidth={1.75} aria-hidden="true" />
                   Trò chuyện với trợ lý
                 </h3>
+                <p className="text-xs text-fg-subtle">Hình minh hoạ không lưu trong lịch sử</p>
                 {entry.messages.length === 0 ? (
                   <p className="text-sm text-fg-muted">Chưa có tin nhắn.</p>
                 ) : (
-                  <ol className="flex flex-col gap-2">
+                  <ol className="flex min-w-0 max-w-full flex-col gap-2">
                     {entry.messages.map((msg) =>
                       msg.vai === 'nguoi_dung' ? (
                         <li
@@ -96,10 +98,10 @@ export function HistoryDialog({
                       ) : (
                         <li
                           key={msg.id}
-                          className="max-w-[92%] self-start rounded-md border border-primary-line bg-primary-soft/40 px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap text-fg"
+                          className="min-w-0 max-w-[92%] self-start rounded-md border border-primary-line bg-primary-soft/40 px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap text-fg"
                         >
                           <span className="mb-0.5 block text-2xs font-semibold text-fg-subtle">Trợ lý</span>
-                          {msg.tra_loi.noi_dung}
+                          <ClinicalMarkdown text={msg.tra_loi.noi_dung} citations={msg.tra_loi.trich_dan} />
                         </li>
                       ),
                     )}

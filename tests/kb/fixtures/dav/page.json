@@ -1,0 +1,34 @@
+{
+  "result": {
+    "totalCount": 3,
+    "items": [
+      {
+        "id": "dav-fixture-1",
+        "tenThuoc": "Ceftriaxon 1 g",
+        "soDangKy": "SDK-FIXTURE-1",
+        "isActive": true,
+        "isHetHan": false,
+        "thongTinThuocCoBan": {
+          "hoatChatChinh": "Ceftriaxon natri",
+          "hamLuong": "1 g",
+          "dangBaoChe": "Bột pha tiêm",
+          "tenDuongDung": "Tiêm"
+        },
+        "thongTinTaiLieu": {"urlNhanVaHDSD": "https://example.invalid/hdsd.pdf"},
+        "thongTinDangKyThuoc": {"ngayHetHanSoDangKy": "2028-01-01"}
+      },
+      {
+        "id": "dav-fixture-2",
+        "tenThuoc": "Điện giải fixture",
+        "soDangKy": "SDK-FIXTURE-2",
+        "thongTinThuocCoBan": {"hoatChatChinh": "Natri clorid 0,9%"}
+      },
+      {
+        "id": "dav-fixture-3",
+        "tenThuoc": "Phối hợp fixture",
+        "soDangKy": "SDK-FIXTURE-3",
+        "thongTinThuocCoBan": {"hoatChatChinh": "Ceftriaxon; Natri clorit"}
+      }
+    ]
+  }
+}

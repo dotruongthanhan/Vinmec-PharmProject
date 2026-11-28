@@ -1,0 +1,475 @@
+{
+  "ho_so_id": "HS-051",
+  "kich_ban_id": "HS-051",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-051",
+    "tuoi": 57,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-15T07:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-LEVOFLOXACIN",
+      "ten_hoat_chat": "Levofloxacin",
+      "ten_quoc_te": "levofloxacin",
+      "ma_atc": "J01MA12",
+      "nhom_duoc_ly": "fluoroquinolon"
+    },
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin_the_he_3"
+    },
+    {
+      "hoat_chat_id": "HC-GENTAMICIN",
+      "ten_hoat_chat": "Gentamicin",
+      "ten_quoc_te": "gentamicin",
+      "ma_atc": "J01GB03",
+      "nhom_duoc_ly": "aminoglycosid"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-LEVOFLOXACIN-500",
+      "ten_thuoc": "Levofloxacin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-LEVOFLOXACIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-051-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Ngoại tiết niệu",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-14T16:30:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ngoại tiết niệu",
+          "tu": "2026-11-14T16:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt, đau hông lưng phải, tiểu buốt",
+      "benh_su": "BN nam 57T, sốt 38,8 °C, đau hông lưng phải và tiểu buốt khoảng 3 ngày. Không tiểu máu rõ.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh nền đáng chú ý.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc kháng sinh trước khi vào viện."
+      },
+      "kham_benh": "T 38,8 °C, HA 124/78 mmHg, mạch 102 lần/phút. Ấn đau hố thắt lưng phải, rung thận phải (+). Bụng mềm.",
+      "tom_tat": "BN nam 57T viêm thận bể thận cấp, sốt, bạch cầu tăng. Cấy nước tiểu có vi khuẩn. Chờ chỉ định kháng sinh điều trị.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS051-1-01",
+          "ma_icd10": "N10",
+          "noi_dung": "Viêm thận bể thận cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS051-1-01",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-14T16:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS051-1-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T16:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS051-1-03",
+          "loai": "mach",
+          "gia_tri": 102.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T16:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS051-1-04",
+          "loai": "nhiet_do",
+          "gia_tri": 38.4,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS051-1-05",
+          "loai": "can_nang",
+          "gia_tri": 70.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-15T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS051-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 92.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T17:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS051-1-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 88.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS051-1-03",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 15.2,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-14T17:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS051-1-04",
+          "ma_xet_nghiem": "crp",
+          "ten_xet_nghiem": "CRP",
+          "gia_tri_so": 96.0,
+          "gia_tri_text": null,
+          "don_vi": "mg/L",
+          "nguong_duoi": null,
+          "nguong_tren": 5.0,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [
+        {
+          "vi_sinh_id": "VS-HS051-01",
+          "benh_pham": "nước tiểu",
+          "vi_khuan": "Klebsiella pneumoniae",
+          "thoi_diem_lay_mau": "2026-11-14T17:00:00+07:00",
+          "khang_sinh_do": [
+            {
+              "hoat_chat_id": "HC-LEVOFLOXACIN",
+              "ket_qua": "R",
+              "mic": null
+            },
+            {
+              "hoat_chat_id": "HC-CEFTRIAXONE",
+              "ket_qua": "S",
+              "mic": null
+            },
+            {
+              "hoat_chat_id": "HC-GENTAMICIN",
+              "ket_qua": "S",
+              "mic": null
+            }
+          ]
+        }
+      ],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS051-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN nam 57T sốt 38,8 °C, đau hông lưng phải, tiểu buốt 3 ngày. Ấn đau hố thắt lưng phải. Lấy máu, cấy nước tiểu. Nhập khoa Ngoại tiết niệu.",
+          "thoi_diem_ghi": "2026-11-14T16:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS051-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay T 38,4 °C, đau hông lưng phải còn, tiểu buốt giảm. Creatinin 88 umol/L. Đã có kết quả cấy nước tiểu, đang xem xét chỉ định kháng sinh.",
+          "thoi_diem_ghi": "2026-11-15T07:30:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS051-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Theo dõi thân nhiệt, cân bằng dịch. Dự kiến chỉ định kháng sinh đường uống.",
+          "thoi_diem_ghi": "2026-11-15T09:10:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-051-01",
+          "thoi_diem_ke": "2026-11-14T17:00:00+07:00",
+          "khoa_ke_don": "Ngoại tiết niệu",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-051-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-14T17:10:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-051-02",
+          "thoi_diem_ke": "2026-11-14T17:05:00+07:00",
+          "khoa_ke_don": "Ngoại tiết niệu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-051-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Xét nghiệm công thức máu, CRP, creatinin máu, cấy nước tiểu",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": null,
+              "don_vi_lieu": null,
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": null,
+              "cach_dung": "Lấy mẫu một lần",
+              "bat_dau": "2026-11-14T17:05:00+07:00",
+              "ket_thuc": "2026-11-14T17:20:00+07:00",
+              "nguon_thuoc": null,
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-051-03",
+          "thoi_diem_ke": "2026-11-14T17:10:00+07:00",
+          "khoa_ke_don": "Ngoại tiết niệu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-051-03-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt hoặc đau, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": 6.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt hoặc đau",
+              "bat_dau": "2026-11-14T17:15:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-051-04",
+          "thoi_diem_ke": "2026-11-15T09:30:00+07:00",
+          "khoa_ke_don": "Ngoại tiết niệu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-051-04-01",
+              "thuoc_id": "T-LEVOFLOXACIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-15T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T10:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T10:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-051-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-14T18:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam 57T, sốt 38,8 °C, đau hông lưng phải và tiểu buốt khoảng 3 ngày trước khi vào viện, không ghi nhận tiểu máu rõ. Khám: T 38,8 °C, HA 124/78 mmHg, mạch 102 lần/phút, ấn đau hố thắt lưng phải, rung thận phải (+), bụng mềm. Cân nặng 70 kg. Bạch cầu máu 15,2 G/L, creatinin 92 umol/L. Đã lấy máu và cấy nước tiểu trước khi bắt đầu kháng sinh, chưa có kết quả cấy.",
+          "danh_gia": "Viêm thận bể thận cấp có hội chứng nhiễm trùng toàn thân, chức năng thận hiện chưa suy. Chưa có kháng sinh đồ nên chưa chọn được kháng sinh đích, tạm theo dõi đáp ứng lâm sàng và thân nhiệt.",
+          "huong_xu_tri": "Truyền natri clorid 0,9% 500 mL mỗi ngày một lần. Paracetamol 500 mg uống khi sốt hoặc đau, cách nhau tối thiểu 6 giờ. Chờ kết quả cấy nước tiểu để chọn kháng sinh điều trị, xem lại công thức máu và creatinin sáng mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-051-01",
+            "YL-HS-051-02",
+            "YL-HS-051-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, mềm, uống nhiều nước, không hạn chế muối trong giai đoạn sốt",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ khi sốt",
+            "Lượng nước tiểu và tính chất nước tiểu",
+            "Đau hông lưng và triệu chứng tiểu buốt"
+          ],
+          "dan_do": "Người bệnh uống đủ nước, báo điều dưỡng khi sốt trên 38,5 °C hoặc có run rét, khó thở, lơ mơ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-051-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-15T09:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay còn sốt, T 38,4 °C lúc 07:00; cân nặng vẫn 70 kg. Đau hông lưng phải giảm nhưng còn, tiểu buốt đỡ hơn so với hôm qua. Creatinin 88 umol/L, CRP 96 mg/L, bạch cầu hôm qua 15,2 G/L. Kết quả cấy nước tiểu mọc Klebsiella pneumoniae, kháng levofloxacin, nhạy ceftriaxon và gentamicin.",
+          "danh_gia": "Viêm thận bể thận cấp do Klebsiella pneumoniae, sau một đêm điều trị triệu chứng vẫn còn sốt và CRP cao. Chức năng thận chưa suy, creatinin trong giới hạn bình thường. Cần chọn kháng sinh theo kháng sinh đồ và theo dõi đáp ứng trong 48 giờ.",
+          "huong_xu_tri": "Chỉ định/đề nghị levofloxacin 500 mg uống 1 lần/ngày, chờ duyệt y lệnh. Tiếp tục theo dõi thân nhiệt, cân bằng dịch, cân nhắc cấy máu nếu sốt kéo dài. Hẹn xem lại CRP và creatinin vào sáng mai.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-051-01",
+            "YL-HS-051-03",
+            "YL-HS-051-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn lỏng, mềm, uống nhiều nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Lượng nước tiểu trong 24 giờ",
+            "Đau hông lưng và tiểu buốt"
+          ],
+          "dan_do": "Tiếp tục uống đủ nước, báo điều dưỡng nếu sốt cao kéo dài hoặc đau hông lưng tăng nhiều."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-14T16:30:00+07:00",
+        "so_giuong": "G-051-01",
+        "so_luu_tru": "LT-2026-05101",
+        "ma_yt": "YT-2026-051-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-051-04",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 51",
+    "ngay_sinh": "1969-11-14",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9051",
+      "thon_pho": "Phố Dịch Vọng",
+      "xa_phuong": "Dịch Vọng",
+      "huyen": "Cầu Giấy",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000051",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 51",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 051"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 170.0,
+    "can_nang_kg": 70.0,
+    "nhom_mau": null
+  }
+}

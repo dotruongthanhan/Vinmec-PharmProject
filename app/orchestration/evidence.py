@@ -1,30 +1,41 @@
 """Thu thập đoạn nguồn theo hoạt chất và dựng lười bộ truy xuất cho từng ca bệnh."""
 
+import logging
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from threading import RLock
 
+import numpy as np
+import psycopg
+
 from app.config.settings import get_secret
 from app.container import Container
-from app.core.errors import ConfigError
+from app.core.errors import ConfigError, RetrievalError
 from app.core.interfaces import Embedder, Reranker, Retriever
 from app.core.types import Chunk, RetrievalQuery, ScoredChunk
+from app.db.read_pool import read_pool
 from app.domain.loader import ingredients_of
 from app.domain.models import CaBenh
 from app.pipeline import KetQuaThamDinh
 from app.providers.bm25_index import Bm25Index
-from app.providers.cached_embedder import CachedEmbedder
+from app.providers.embedder_factory import resolve_rag_providers
 from app.providers.http import create_client
 from app.providers.memory_store import InMemoryVectorStore
-from app.providers.openrouter_embed import OpenRouterEmbedder
-from app.providers.openrouter_rerank import OpenRouterReranker
-from app.retrieval.corpus import index_corpus, load_corpus
+from app.retrieval.corpus import (
+    index_corpus,
+    index_corpus_with_precomputed,
+    load_corpus,
+    load_corpus_for_ingredients_from_db,
+)
 from app.retrieval.hybrid import HybridRetriever
 from app.retrieval.query_builder import QueryBuilder
 
 MAX_EVIDENCE_CHUNKS = 8
+_DB_EMBEDDING_MODEL = "gemini-embedding-2"
 
+_LOGGER = logging.getLogger(__name__)
 _ROOT = Path(__file__).resolve().parents[2]
+_DEFAULT_GET_SECRET = get_secret
 _RETRIEVAL_ERROR_WARNING = "Không lấy được đoạn nguồn, AI chỉ dùng dữ liệu ca"
 
 IngredientResolver = Callable[[str], Sequence[str] | str | None]
@@ -60,23 +71,85 @@ def _query_key(query: RetrievalQuery) -> tuple[object, ...]:
 class LazyRetrieverFactory:
     """Nạp kho đoạn một lần và dựng HybridRetriever riêng cho tập hoạt chất đang xét."""
 
-    def __init__(self, container: Container, corpus_path: Path | None = None) -> None:
+    def __init__(
+        self,
+        container: Container,
+        corpus_path: Path | None = None,
+        *,
+        use_db: bool | None = None,
+        db_embedding_model: str = _DB_EMBEDDING_MODEL,
+    ) -> None:
         self._container = container
+        self._explicit_path = corpus_path is not None
         self._corpus_path = (
             Path(corpus_path) if corpus_path is not None else _ROOT / "data/kb_curated/chunks.jsonl"
         )
+        self._use_db = use_db
+        self._db_embedding_model = db_embedding_model
         self._lock = RLock()
         self._chunks: list[Chunk] | None = None
         self._cache: dict[frozenset[str], HybridRetriever] = {}
+        self._item_cache: dict[frozenset[str], list[tuple[Chunk, list[float] | None]]] = {}
         self._client: object | None = None
         self._embedder: Embedder | None = None
         self._reranker: Reranker | None = None
 
+    def _should_use_db(self) -> bool:
+        """Xác định đọc kho đoạn từ PostgreSQL hay tệp theo cấu hình kb_source."""
+        if self._use_db is not None:
+            return self._use_db
+        kb_source = self._container.settings.app.kb_source
+        if kb_source == "db":
+            return True
+        if kb_source == "file":
+            return False
+        if self._explicit_path or self._corpus_path.is_file():
+            return False
+        try:
+            return bool(get_secret(self._container.settings.database.url_env).strip())
+        except ConfigError:
+            return False
+
     def _get_chunks(self) -> list[Chunk]:
-        """Nạp toàn bộ kho đoạn đúng một lần."""
+        """Nạp toàn bộ kho đoạn từ tệp đúng một lần."""
         if self._chunks is None:
             self._chunks = load_corpus(self._corpus_path)
         return self._chunks
+
+    def _validate_db_embedding_settings(self, embedder: Embedder) -> None:
+        """Kiểm tra mô hình và số chiều cấu hình khớp với vector lưu trên DB."""
+        embedding = self._container.settings.embedding
+        if embedding.active != self._db_embedding_model:
+            raise RetrievalError(
+                f"Mô hình nhúng cấu hình ({embedding.active}) "
+                f"không khớp dữ liệu DB ({self._db_embedding_model})"
+            )
+        if embedder.dimensions != embedding.dimensions:
+            raise RetrievalError(
+                f"Số chiều bộ nhúng ({embedder.dimensions}) lệch cấu hình ({embedding.dimensions})"
+            )
+
+    def _load_db_chunks_for_ingredients(
+        self, ids: frozenset[str]
+    ) -> list[tuple[Chunk, list[float] | None]]:
+        """Truy vấn các đoạn thuộc tập hoạt chất kèm embedding từ PostgreSQL."""
+        dims = self._container.settings.embedding.dimensions
+        try:
+            url = get_secret(self._container.settings.database.url_env).strip()
+            if not url:
+                raise ConfigError(self._container.settings.database.url_env)
+            with read_pool.connection(url) as conn:
+                return load_corpus_for_ingredients_from_db(
+                    conn,
+                    ids,
+                    expected_dimensions=dims,
+                )
+        except RetrievalError as exc:
+            _LOGGER.warning("Không nạp được kho đoạn từ DB (%s)", type(exc).__name__)
+            raise
+        except (ConfigError, OSError, psycopg.Error, ValueError) as exc:
+            _LOGGER.warning("Không nạp được kho đoạn từ DB (%s)", type(exc).__name__)
+            raise RetrievalError("Không đọc được kho đoạn từ cơ sở dữ liệu") from None
 
     def _ensure_providers(self) -> tuple[Embedder, Reranker]:
         """Khởi tạo bộ nhúng và bộ xếp hạng lại dùng chung theo cấu hình."""
@@ -84,56 +157,17 @@ class LazyRetrieverFactory:
             return self._embedder, self._reranker
 
         settings = self._container.settings
-        embedding, rerank = settings.embedding, settings.rerank
-        if embedding.provider not in ("openrouter", "fake"):
-            raise ConfigError("Nhà cung cấp nhúng chưa được hỗ trợ")
-        if rerank.provider not in ("openrouter", "noop"):
-            raise ConfigError("Nhà cung cấp xếp hạng lại chưa được hỗ trợ")
-
-        client = None
-        keys: list[str] = []
-        if "openrouter" in (embedding.provider, rerank.provider):
-            keys.append(get_secret("OPENROUTER_API_KEY"))
-            try:
-                keys.append(get_secret("OPENROUTER_API_KEY_2"))
-            except ConfigError:
-                pass
-            client = create_client()
-
-        try:
-            if embedding.provider == "fake":
-                embedder: Embedder = self._container.embedder
-            else:
-                assert client is not None
-                raw_cache = Path(embedding.cache_path)
-                cache_path = raw_cache if raw_cache.is_absolute() else _ROOT / raw_cache
-                embedder = CachedEmbedder(
-                    OpenRouterEmbedder(
-                        embedding.active,
-                        embedding.dimensions,
-                        embedding.batch_size,
-                        keys,
-                        client,
-                        settings.agent.max_attempts,
-                    ),
-                    cache_path,
-                    model_id=embedding.active,
-                )
-
-            if rerank.provider == "noop":
-                reranker: Reranker = self._container.reranker
-            else:
-                assert client is not None
-                reranker = OpenRouterReranker(
-                    rerank.active,
-                    keys,
-                    client,
-                    settings.agent.max_attempts,
-                )
-        except Exception:
-            if client is not None:
-                client.close()
-            raise
+        raw_cache = Path(settings.embedding.cache_path)
+        cache_path = raw_cache if raw_cache.is_absolute() else _ROOT / raw_cache
+        secret_fn = get_secret if get_secret is not _DEFAULT_GET_SECRET else None
+        embedder, reranker, client = resolve_rag_providers(
+            settings,
+            cache_path=cache_path,
+            get_fake_embedder=lambda: self._container.embedder,
+            get_noop_reranker=lambda: self._container.reranker,
+            create_client_fn=create_client,
+            get_secret_fn=secret_fn,
+        )
 
         self._client = client
         self._embedder = embedder
@@ -148,15 +182,29 @@ class LazyRetrieverFactory:
             if cached is not None:
                 return cached
 
-            chunks = self._get_chunks()
+            settings = self._container.settings
             embedder, reranker = self._ensure_providers()
-            subset = [chunk for chunk in chunks if set(chunk.hoat_chat_ids) & key]
             vector_store = InMemoryVectorStore()
             keyword_index = Bm25Index()
-            if subset:
-                index_corpus(subset, embedder, vector_store, keyword_index)
 
-            settings = self._container.settings
+            if self._should_use_db():
+                self._validate_db_embedding_settings(embedder)
+                if key:
+                    items = self._load_db_chunks_for_ingredients(key)
+                    if items:
+                        index_corpus_with_precomputed(
+                            items,
+                            embedder,
+                            vector_store,
+                            keyword_index,
+                            expected_dimensions=settings.embedding.dimensions,
+                        )
+            else:
+                chunks = self._get_chunks()
+                subset = [chunk for chunk in chunks if set(chunk.hoat_chat_ids) & key]
+                if subset:
+                    index_corpus(subset, embedder, vector_store, keyword_index)
+
             retriever = HybridRetriever(
                 embedder,
                 reranker,
@@ -170,6 +218,54 @@ class LazyRetrieverFactory:
                 retriever.canh_bao.append(warning)
             self._cache[key] = retriever
             return retriever
+
+    def ingredient_items(self, ids: set[str]) -> list[tuple[Chunk, list[float] | None]]:
+        """Đoạn của tập hoạt chất kèm vector có sẵn (None nếu chưa có); không gọi nhúng."""
+        key = frozenset(ids)
+        if not key:
+            return []
+        with self._lock:
+            cached = self._item_cache.get(key)
+            if cached is None:
+                if self._should_use_db():
+                    cached = self._load_db_chunks_for_ingredients(key)
+                else:
+                    cached = [
+                        (chunk, None)
+                        for chunk in self._get_chunks()
+                        if set(chunk.hoat_chat_ids) & key
+                    ]
+                self._item_cache[key] = cached
+            return list(cached)
+
+    def rank_by_vector(
+        self, items: Sequence[tuple[Chunk, list[float] | None]], query: str, k: int
+    ) -> list[Chunk]:
+        """Xếp hạng đoạn theo cosine với vector câu hỏi; chỉ nhúng bù đoạn chưa có vector."""
+        if not items or k <= 0:
+            return []
+        embedder, _ = self._ensure_providers()
+        if self._should_use_db():
+            self._validate_db_embedding_settings(embedder)
+        query_vector = np.asarray(embedder.embed_query(query), dtype=float)
+        vectors: list[list[float] | None] = [vector for _, vector in items]
+        missing = [index for index, vector in enumerate(vectors) if vector is None]
+        if missing:
+            computed = embedder.embed_documents([items[i][0].noi_dung_nhung for i in missing])
+            for index, vector in zip(missing, computed, strict=True):
+                vectors[index] = vector
+        try:
+            matrix = np.asarray(vectors, dtype=float)
+        except (TypeError, ValueError):
+            raise RetrievalError("Số chiều véc-tơ không khớp") from None
+        if matrix.ndim != 2 or matrix.shape[1] != query_vector.size:
+            raise RetrievalError("Số chiều véc-tơ không khớp truy vấn")
+        denominators = np.linalg.norm(matrix, axis=1) * np.linalg.norm(query_vector)
+        scores = np.divide(
+            matrix @ query_vector, denominators, out=np.zeros(len(items)), where=denominators != 0
+        )
+        order = np.argsort(-scores, kind="stable")[:k]
+        return [items[int(i)][0] for i in order]
 
     def close(self) -> None:
         """Đóng máy khách HTTP dùng chung nếu đã khởi tạo."""

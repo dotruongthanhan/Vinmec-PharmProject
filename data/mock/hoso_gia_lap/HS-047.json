@@ -1,0 +1,777 @@
+{
+  "ho_so_id": "HS-047",
+  "kich_ban_id": "HS-047",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-047",
+    "tuoi": 60,
+    "gioi_tinh": "nam"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-13T06:50:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-VANCOMYCIN",
+      "ten_hoat_chat": "Vancomycin",
+      "ten_quoc_te": "vancomycin",
+      "ma_atc": "J01XA01",
+      "nhom_duoc_ly": "khang sinh glycopeptid"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-VANCOMYCIN-1G",
+      "ten_thuoc": "Vancomycin 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-VANCOMYCIN",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-047-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tổng quát",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-05-10T09:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-05-16T10:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tổng quát",
+          "tu": "2026-05-10T09:00:00+07:00",
+          "den": "2026-05-16T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Sưng, nóng, đau chân trái, sốt nhẹ",
+      "benh_su": "BN nam 60T, mụn nhọt vùng cẳng chân trái, viêm mô tế bào lan rộng 3 ngày, sốt 38,2 độ. Cấy mủ ghi nhận tụ cầu kháng methicillin.",
+      "tien_su": {
+        "ban_than": "Không ghi nhận bệnh mạn tính đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng kháng sinh trong 1 tháng nay."
+      },
+      "kham_benh": "T 38,2 độ, chân trái sưng đỏ, nóng, đau, ấn đau. Không dấu hiệu nhiễm khuẩn huyết.",
+      "tom_tat": "BN nam 60T viêm mô tế bào do MRSA chân trái, điều trị vancomycin tĩnh mạch 6 ngày. Vùng sưng giảm, ra viện ổn định, tái khám ngoại trú.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS047-1-01",
+          "ma_icd10": "L08.9",
+          "noi_dung": "Nhiễm khuẩn da và mô dưới da do MRSA",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS047-1-01",
+          "loai": "nhiet_do",
+          "gia_tri": 38.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-05-10T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-1-02",
+          "loai": "can_nang",
+          "gia_tri": 74.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-05-10T09:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-1-03",
+          "loai": "nhiet_do",
+          "gia_tri": 36.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-05-15T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS047-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 96.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-05-10T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS047-1-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 84.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-05-15T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [
+        {
+          "vi_sinh_id": "VS-HS047-1-01",
+          "benh_pham": "Dịch mủ vùng cẳng chân trái",
+          "vi_khuan": "Staphylococcus aureus kháng methicillin (MRSA)",
+          "thoi_diem_lay_mau": "2026-05-10T09:30:00+07:00",
+          "khang_sinh_do": [
+            {
+              "hoat_chat_id": "HC-VANCOMYCIN",
+              "ket_qua": "S",
+              "mic": 1.0
+            }
+          ]
+        }
+      ],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-047-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào khám vì sưng đỏ, đau chân trái, sốt 38,2 độ. Mủ vùng cẳng chân, nghi viêm mô tế bào do tụ cầu. Lấy mủ cấy, nhập điều trị vancomycin truyền tĩnh mạch.",
+          "thoi_diem_ghi": "2026-05-10T09:20:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-047-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Vùng sưng giảm, còn đau nhẹ. T 37 độ. Tiếp tục vancomycin.",
+          "thoi_diem_ghi": "2026-05-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-047-1-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "T 36,8 độ, vùng sưng giảm rõ, không mủ. Creatinin 84 umol/L. Dự kiến ra viện.",
+          "thoi_diem_ghi": "2026-05-15T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-047-01",
+          "thoi_diem_ke": "2026-05-10T10:00:00+07:00",
+          "khoa_ke_don": "Nội tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-047-01-01",
+              "thuoc_id": "T-VANCOMYCIN-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch mỗi 12 giờ",
+              "bat_dau": "2026-05-10T11:00:00+07:00",
+              "ket_thuc": "2026-05-16T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-047-02",
+          "thoi_diem_ke": "2026-05-10T10:30:00+07:00",
+          "khoa_ke_don": "Nội tổng quát",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-047-02-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt",
+              "bat_dau": "2026-05-10T10:30:00+07:00",
+              "ket_thuc": "2026-05-16T10:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Viêm mô tế bào do MRSA chân trái, điều trị vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ trong 6 ngày, đáp ứng tốt. Ra viện, tái khám ngoại trú nếu sưng đỏ trở lại.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-05-10T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nam vào viện vì sưng đỏ, nóng, đau cẳng chân trái 3 ngày, kèm sốt 38,2 °C. Không dùng kháng sinh trong 1 tháng nay. Khám: vùng cẳng chân trái sưng, đỏ, nóng và ấn đau, không có dấu hiệu nhiễm khuẩn huyết. Cân nặng 74 kg. Đã lấy dịch mủ làm cấy, chờ kết quả.",
+          "danh_gia": "Viêm mô tế bào lan rộng nghi do tụ cầu, chưa có bệnh mạn tính đáng kể. Creatinin 96 umol/L lúc 10 giờ, cần theo dõi chức năng thận khi dùng vancomycin. Chưa có kết quả nuôi cấy nên tác nhân còn là giả định.",
+          "huong_xu_tri": "Truyền vancomycin 1 g tĩnh mạch mỗi 12 giờ, chờ kết quả cấy để xác nhận tác nhân. Paracetamol 500 mg uống khi sốt, cách nhau tối thiểu 6 giờ. Đánh giá vùng sưng, sốt và creatinin trong quá trình điều trị.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-01",
+            "YL-HS-047-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, nhiều đạm, uống đủ nước.",
+          "theo_doi": [
+            "Vùng sưng, đỏ, nóng",
+            "Nhiệt độ",
+            "Creatinin trước và sau khi dùng vancomycin"
+          ],
+          "dan_do": "Kê cao chân trái khi nghỉ, không tự nặn mủ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-05-11T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vùng sưng giảm đôi chút, còn đau nhẹ khi đi lại. Kết quả cấy mủ: tụ cầu vàng kháng methicillin (MRSA), nhạy vancomycin. Đang dùng vancomycin đều đặn theo y lệnh. Người bệnh ăn uống được, ngủ được.",
+          "danh_gia": "Viêm mô tế bào do MRSA đáp ứng bước đầu với vancomycin, chưa có dấu hiệu lan rộng hơn. Không sốt cao trong ngày. Cần tiếp tục theo dõi creatinin vì đang dùng thuốc có độc với thận.",
+          "huong_xu_tri": "Tiếp tục vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ. Theo dõi creatinin và vùng sưng, đánh giá lại vào ngày kế tiếp. Nhắc người bệnh báo ngay nếu sưng đỏ lan rộng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-01",
+            "YL-HS-047-02"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, đủ đạm.",
+          "theo_doi": [
+            "Vùng sưng",
+            "Nhiệt độ",
+            "Creatinin"
+          ],
+          "dan_do": "Tránh đi lại nhiều khi chân còn đau."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-05-12T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sưng đỏ tiếp tục giảm, đau ít hơn khi đi lại. Không sốt cao, ăn uống được, ngủ tốt. Không có mủ mới chảy ra từ vết chích cũ. Người bệnh ngủ đủ giấc và không có cơn đau về đêm.",
+          "danh_gia": "Đáp ứng tốt với vancomycin, không có dấu hiệu nhiễm khuẩn huyết. Chức năng thận cần theo dõi thêm trong khi dùng vancomycin, chưa có tín hiệu bất thường được ghi nhận. Không có ù tai hay phát ban đáng kể.",
+          "huong_xu_tri": "Tiếp tục vancomycin đều đặn theo y lệnh. Lấy creatinin sáng mai để đánh giá chức năng thận trong quá trình điều trị. Hướng dẫn người bệnh vận động nhẹ để tránh cứng khớp cổ chân.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-01",
+            "YL-HS-047-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, nhiều đạm.",
+          "theo_doi": [
+            "Vùng sưng và đau",
+            "Creatinin",
+            "Nhiệt độ"
+          ],
+          "dan_do": "Giữ vệ sinh vùng da, thay băng theo khoa."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-05-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vùng sưng giảm, còn đau nhẹ, không sốt. Tiếp tục vancomycin đều theo y lệnh, không ghi nhận phản ứng bất thường như phát ban hay ù tai. Người bệnh đi lại được trong buồng bệnh có người hỗ trợ.",
+          "danh_gia": "Viêm mô tế bào đang đáp ứng đúng hướng, sưng giảm rõ hơn ngày trước. Chưa ghi nhận biến chứng. Vùng da quanh tổn thương đã bớt căng và bớt nóng so với hôm vào viện.",
+          "huong_xu_tri": "Tiếp tục vancomycin đến khi đủ liệu trình. Dự kiến đánh giá ra viện trong vài ngày nếu vùng nhiễm tiếp tục cải thiện. Kiểm tra lại creatinin theo lịch để theo dõi thận.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-01",
+            "YL-HS-047-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường.",
+          "theo_doi": [
+            "Vùng sưng, đỏ",
+            "Nhiệt độ",
+            "Ù tai, phát ban"
+          ],
+          "dan_do": "Nâng cao chân khi nghỉ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-05-14T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Vùng sưng tiếp tục giảm, không có mủ mới, không sốt. Đi lại được hơn so với những ngày đầu. Ăn uống tốt, ngủ được. Người bệnh hỏi về thời điểm ra viện và cách chăm sóc chân tại nhà.",
+          "danh_gia": "Viêm mô tế bào đang lành dần, chưa ghi nhận biến chứng. Tiếp tục theo dõi chức năng thận do vancomycin, đây là điểm cần lưu ý khi ra viện. Creatinin sẽ được lấy lại trước khi ra viện để so sánh.",
+          "huong_xu_tri": "Tiếp tục vancomycin đến liều cuối theo y lệnh. Chuẩn bị hướng dẫn tái khám ngoại trú, đánh giá ra viện vào sáng mai nếu không có thay đổi. Hướng dẫn người bệnh theo dõi vùng sưng tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-01",
+            "YL-HS-047-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường, nhiều đạm.",
+          "theo_doi": [
+            "Vùng sưng",
+            "Nhiệt độ",
+            "Creatinin"
+          ],
+          "dan_do": "Không tự nặn mủ, tái khám khi sưng đỏ trở lại."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-1-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-05-15T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Lúc 7 giờ: nhiệt độ 36,8 °C, vùng sưng giảm rõ, không mủ. Creatinin 84 umol/L lúc 6 giờ 30. Đi lại được, không sốt, không đau nhiều khi nghỉ. Người bệnh ăn uống tốt và không cần thêm thuốc giảm đau.",
+          "danh_gia": "Viêm mô tế bào do MRSA đáp ứng tốt với vancomycin, không sốt, chức năng thận cải thiện so với lúc vào viện. Đủ điều kiện chuyển ra viện sau khi hoàn thành liệu trình. Không có dấu hiệu nhiễm khuẩn huyết trong suốt đợt điều trị.",
+          "huong_xu_tri": "Hoàn thành vancomycin đến liều cuối theo y lệnh, dự kiến ra viện ngày kế tiếp. Dặn tái khám ngoại trú nếu sưng đỏ trở lại, theo dõi nhiệt độ tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-01",
+            "YL-HS-047-02"
+          ],
+          "che_do_cham_soc": "cấp 3",
+          "che_do_an": "Ăn thường.",
+          "theo_doi": [
+            "Vùng sưng, đỏ",
+            "Nhiệt độ tại nhà",
+            "Creatinin khi tái khám"
+          ],
+          "dan_do": "Giữ vùng da khô sạch, tránh chấn thương vùng chân trái."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-05-10T09:00:00+07:00",
+        "so_giuong": "G-047-01",
+        "so_luu_tru": "LT-2026-04701",
+        "ma_yt": "YT-2026-047-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Viêm mô tế bào do MRSA chân trái, điều trị vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ trong 6 ngày, đáp ứng tốt. Ra viện, tái khám ngoại trú nếu sưng đỏ trở lại."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-047-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-13T06:40:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Cấp cứu",
+          "tu": "2026-11-13T06:40:00+07:00",
+          "den": "2026-11-13T09:30:00+07:00"
+        },
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-11-13T09:30:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt cao, lạnh run, HA tụt",
+      "benh_su": "BN nam 60T, tiền sử viêm mô tế bào do MRSA chân trái 6 tháng trước, đã khỏi. Lần này sốt 39,1 độ, lạnh run từ đêm qua, HA tụt, lơ mơ nhẹ. Nghi nhiễm khuẩn huyết do tụ cầu.",
+      "tien_su": {
+        "ban_than": "Viêm mô tế bào chân trái 6 tháng trước, đã khỏi.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không dùng thuốc hạ sốt trước khi vào viện."
+      },
+      "kham_benh": "T 39,1 độ, mạch 118 lần/phút, HA 96/58 mmHg, nhịp thở 26 lần/phút, SpO2 93% thở oxy 2 lít. Lơ mơ nhẹ. Vết chích cũ chân trái đỏ nhẹ, không mủ.",
+      "tom_tat": "BN nam 60T nhiễm khuẩn huyết nghi do tụ cầu, sốt cao, HA thấp nhẹ, đã truyền dịch. Creatinin 88 umol/L. Chờ kết quả cấy máu, theo dõi sát HA và nước tiểu.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS047-2-01",
+          "ma_icd10": "A41.0",
+          "noi_dung": "Nhiễm khuẩn huyết do MRSA",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS047-2-01",
+          "loai": "nhiet_do",
+          "gia_tri": 39.1,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-02",
+          "loai": "mach",
+          "gia_tri": 118.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 96.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 58.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-05",
+          "loai": "spo2",
+          "gia_tri": 93.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-06",
+          "loai": "can_nang",
+          "gia_tri": 75.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-13T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-07",
+          "loai": "nhiet_do",
+          "gia_tri": 38.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-08",
+          "loai": "mach",
+          "gia_tri": 104.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-09",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 108.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-10",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 66.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-14T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS047-2-11",
+          "loai": "spo2",
+          "gia_tri": 96.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-14T06:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS047-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 94.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS047-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 88.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 62,
+          "nguong_tren": 106,
+          "thoi_diem_ket_qua": "2026-11-14T06:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS047-2-03",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu máu",
+          "gia_tri_so": 17.4,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-13T08:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-047-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào cấp cứu vì sốt 39,1 độ, lạnh run, mạch 118 lần/phút, HA 96/58 mmHg. Lơ mơ nhẹ. Đã truyền dịch, lấy cấy máu. Chuyển Hồi sức tích cực.",
+          "thoi_diem_ghi": "2026-11-13T06:50:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-047-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Tỉnh hơn, còn sốt. Thở oxy 2 lít, SpO2 93%. Creatinin 94 umol/L. Đã lấy cấy máu, chờ kết quả để chọn kháng sinh.",
+          "thoi_diem_ghi": "2026-11-13T13:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-047-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sốt 38,2 độ sáng nay, HA 108/66 mmHg, mạch 104 lần/phút, SpO2 96% thở oxy 2 lít. Creatinin 88 umol/L, cân nặng 75 kg. Dự kiến khởi trị vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ.",
+          "thoi_diem_ghi": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-047-04",
+          "thoi_diem_ke": "2026-11-13T07:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-047-04-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 1000 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 1000.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-13T07:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-047-05",
+          "thoi_diem_ke": "2026-11-13T10:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-047-05-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt trên 38,5 độ, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt trên 38,5 độ",
+              "bat_dau": "2026-11-13T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-047-06",
+          "thoi_diem_ke": "2026-11-14T07:45:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-047-06-01",
+              "thuoc_id": "T-VANCOMYCIN-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch mỗi 12 giờ",
+              "bat_dau": "2026-11-14T08:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T08:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-14T12:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T08:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T12:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-13T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nam nhập cấp cứu vì sốt 39,1 °C, lạnh run từ đêm, huyết áp tụt và lơ mơ nhẹ. Tiền sử viêm mô tế bào do MRSA chân trái 6 tháng trước đã khỏi. Khám lúc 7 giờ: mạch 118 lần/phút, HA 96/58 mmHg, SpO2 93% khi thở oxy 2 lít. Cân nặng 75 kg, bạch cầu 17,4 G/L, creatinin 94 umol/L lúc 8 giờ.",
+          "danh_gia": "Nghi nhiễm khuẩn huyết do tụ cầu, HA thấp và mạch nhanh nên cần bù dịch và theo dõi sát. Chưa có kết quả cấy máu trong hồ sơ. Chức năng thận cần theo dõi khi điều trị, nhất là khi có nguy cơ tổn thương thận cấp.",
+          "huong_xu_tri": "Bù dịch natri clorid 0,9% 1000 mL mỗi ngày, paracetamol 500 mg khi sốt trên 38,5 độ. Đã lấy cấy máu, chờ kết quả để chọn kháng sinh. Theo dõi HA, SpO2 và lượng nước tiểu mỗi giờ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-04",
+            "YL-HS-047-05"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Lỏng, cháo loãng khi còn lơ mơ.",
+          "theo_doi": [
+            "Mạch, HA, SpO2 mỗi giờ",
+            "Tri giác",
+            "Lượng nước tiểu"
+          ],
+          "dan_do": "Người nhà theo dõi tỉnh táo, báo ngay nếu lơ mơ hơn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-047-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-14T07:45:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Lúc 6 giờ 30: nhiệt độ 38,2 °C, mạch 104 lần/phút, HA 108/66 mmHg, SpO2 96% khi thở oxy 2 lít. Creatinin 88 umol/L lúc 6 giờ 40. Người bệnh tỉnh hơn so với đêm qua, trả lời được câu hỏi đơn giản.",
+          "danh_gia": "Nhiễm khuẩn huyết nghi do tụ cầu có đáp ứng bước đầu: HA cải thiện, mạch chậm hơn, SpO2 tăng. Chưa có kết quả cấy máu trong hồ sơ nên chưa xác định tác nhân, cần tiếp tục theo dõi tri giác và huyết động.",
+          "huong_xu_tri": "Đề nghị vancomycin 1 g truyền tĩnh mạch mỗi 12 giờ, bắt đầu 8 giờ sáng nay (chỉ định, chờ duyệt). Tiếp tục natri clorid 1000 mL và paracetamol khi sốt trên 38,5 độ. Theo dõi HA, SpO2 và creatinin.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-047-04",
+            "YL-HS-047-05",
+            "YL-HS-047-06"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Cháo loãng, tăng dần thức ăn khi tỉnh táo.",
+          "theo_doi": [
+            "Mạch, HA, SpO2",
+            "Tri giác",
+            "Nhiệt độ"
+          ],
+          "dan_do": "Báo ngay nếu lơ mơ, khó thở hoặc tiểu ít."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-13T06:40:00+07:00",
+        "so_giuong": "G-047-02",
+        "so_luu_tru": "LT-2026-04702",
+        "ma_yt": "YT-2026-047-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-047-06",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 47",
+    "ngay_sinh": "1966-05-10",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9047",
+      "thon_pho": "Phố Ngô Gia Tự",
+      "xa_phuong": "Tiền An",
+      "huyen": "Bắc Ninh",
+      "tinh_thanh": "Bắc Ninh"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000047",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 47",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 047"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 170.0,
+    "can_nang_kg": 75.0,
+    "nhom_mau": null
+  }
+}

@@ -1,0 +1,587 @@
+{
+  "ho_so_id": "HS-041",
+  "kich_ban_id": "HS-041",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-041",
+    "tuoi": 36,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T10:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-LEVOFLOXACIN",
+      "ten_hoat_chat": "Levofloxacin",
+      "ten_quoc_te": "levofloxacin",
+      "ma_atc": "J01MA12",
+      "nhom_duoc_ly": "khang sinh quinolon"
+    },
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxon",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "khang sinh cephalosporin the 3"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-LEVOFLOXACIN-500",
+      "ten_thuoc": "Levofloxacin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-LEVOFLOXACIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-CEFTRIAXONE-1G",
+      "ten_thuoc": "Ceftriaxon 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-041-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2025-11-03T08:30:00+07:00",
+      "thoi_diem_ket_thuc": "2025-11-03T09:30:00+07:00",
+      "so_ngay_dieu_tri": 1,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2025-11-03T08:30:00+07:00",
+          "den": "2025-11-03T09:30:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Ho có đờm, sốt nhẹ 2 ngày",
+      "benh_su": "BN nữ 35T, ho có đờm trắng, đau họng, sốt nhẹ 2 ngày. Không khó thở, không đau ngực.",
+      "tien_su": {
+        "ban_than": "Viêm mũi dị ứng.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Tự dùng paracetamol khi sốt."
+      },
+      "kham_benh": "T 37,8 độ, mạch 92 lần/phút, phổi không ran, họng đỏ.",
+      "tom_tat": "BN nữ 35T viêm phế quản cấp, điều trị ngoại trú. Tái khám khi sốt kéo dài hoặc khó thở.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS041-1-01",
+          "ma_icd10": "J20.9",
+          "noi_dung": "Viêm phế quản cấp",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS041-1-01",
+          "loai": "nhiet_do",
+          "gia_tri": 37.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2025-11-03T08:40:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-1-02",
+          "loai": "mach",
+          "gia_tri": 92.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2025-11-03T08:40:00+07:00"
+        }
+      ],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS041-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Ho có đờm trắng 2 ngày, sốt nhẹ, phổi không ran. Chẩn đoán viêm phế quản cấp, điều trị ngoại trú, hẹn tái khám khi cần.",
+          "thoi_diem_ghi": "2025-11-03T08:45:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-041-01",
+          "thoi_diem_ke": "2025-11-03T09:00:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-041-01-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt",
+              "bat_dau": "2025-11-03T09:00:00+07:00",
+              "ket_thuc": "2025-11-03T09:30:00+07:00",
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Viêm phế quản cấp, điều trị ngoại trú. Tái khám khi sốt kéo dài hoặc khó thở.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-041-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-11-03T09:15:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ vào khám vì ho có đờm trắng, đau họng và sốt nhẹ 2 ngày, không khó thở, không đau ngực. Tiền sử viêm mũi dị ứng, trước đó tự dùng paracetamol khi sốt. Khám: nhiệt độ 37,8 °C, mạch 92 lần/phút, họng đỏ, phổi không ran.",
+          "danh_gia": "Viêm phế quản cấp (J20.9), chưa có dấu hiệu viêm phổi trên lâm sàng và chưa có suy hô hấp. Tình trạng còn nhẹ, phù hợp điều trị ngoại trú. Trong đợt khám này chưa có xét nghiệm.",
+          "huong_xu_tri": "Điều trị triệu chứng ngoại trú: uống paracetamol 500 mg khi sốt, cách nhau tối thiểu 6 giờ. Không kê kháng sinh trong đợt này. Hẹn tái khám nếu sốt kéo dài hoặc khó thở tăng.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-041-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Ăn uống bình thường, uống đủ nước, hạn chế đồ cay nóng.",
+          "theo_doi": [
+            "Nhiệt độ khi sốt",
+            "Tình trạng ho và đờm"
+          ],
+          "dan_do": "Nghỉ ngơi tại nhà, tái khám ngay nếu khó thở hoặc đau ngực tăng."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-041-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Hô hấp",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-12T10:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hô hấp",
+          "tu": "2026-11-12T10:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Ho khạc đờm vàng, sốt cao, khó thở nhẹ 4 ngày",
+      "benh_su": "BN nữ 36T, ho khạc đờm vàng, sốt 38,5 độ, đau ngực kiểu màng phổi bên phải khi ho. Khoảng 1 năm trước có viêm phế quản, điều trị ngoại trú. Kinh nguyệt chưa ghi nhận trong hồ sơ lần này.",
+      "tien_su": {
+        "ban_than": "Viêm phế quản cấp (năm trước), viêm mũi dị ứng.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol khi sốt. Không dùng kháng sinh trong 1 tháng nay."
+      },
+      "kham_benh": "T 38,5 độ, mạch 104 lần/phút, HA 116/74 mmHg, SpO2 95% khí trời. Rale nổ vùng đáy phổi phải, không phù.",
+      "tom_tat": "BN nữ 36T viêm phổi cộng đồng thùy dưới phải, sốt cao, SpO2 95% khí trời. Khởi trị ceftriaxon tĩnh mạch, sốt giảm sau 2 ngày. Chuyển kháng sinh đường uống theo đáp ứng.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS041-2-01",
+          "ma_icd10": "J18.9",
+          "noi_dung": "Viêm phổi cộng đồng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [
+        {
+          "loai": "mang_thai",
+          "trang_thai": "chua_ro",
+          "gia_tri": null,
+          "thoi_diem": "2026-11-12T10:00:00+07:00",
+          "nguon": "EMR"
+        }
+      ],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS041-2-01",
+          "loai": "nhiet_do",
+          "gia_tri": 38.5,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T10:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-02",
+          "loai": "mach",
+          "gia_tri": 104.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T10:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-03",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 116.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T10:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-04",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 74.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T10:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-05",
+          "loai": "spo2",
+          "gia_tri": 95.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-12T10:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-06",
+          "loai": "can_nang",
+          "gia_tri": 55.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T10:20:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-07",
+          "loai": "nhiet_do",
+          "gia_tri": 37.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-08",
+          "loai": "mach",
+          "gia_tri": 88.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-14T07:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS041-2-09",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-14T07:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS041-2-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 70.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-12T10:40:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS041-2-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 66.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-14T07:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS041-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì sốt cao, ho đờm vàng, đau ngực bên phải khi ho. Phổi ran nổ đáy phổi phải. Chụp XQ ngực đông đặc thùy dưới phải. Nhập khoa Hô hấp.",
+          "thoi_diem_ghi": "2026-11-12T10:15:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS041-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "T 38,2 độ, đờm vàng ít dần, đỡ khó thở. Dịch truyền và kháng sinh theo y lệnh, ăn uống được.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS041-2-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "T 37,6 độ, SpO2 97% khí trời, ho ít, đờm ít. Creatinin 66 umol/L. Dự kiến chuyển kháng sinh uống.",
+          "thoi_diem_ghi": "2026-11-14T07:45:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-041-02",
+          "thoi_diem_ke": "2026-11-12T10:40:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-041-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-12T11:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-041-03",
+          "thoi_diem_ke": "2026-11-12T10:45:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-041-03-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt trên 38 độ",
+              "bat_dau": "2026-11-12T11:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-041-04",
+          "thoi_diem_ke": "2026-11-12T11:20:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Chuyển kháng sinh đường uống theo đáp ứng lâm sàng",
+          "thoi_diem_ngung": "2026-11-14T08:20:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-041-04-01",
+              "thuoc_id": "T-CEFTRIAXONE-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-12T11:30:00+07:00",
+              "ket_thuc": "2026-11-14T08:20:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T11:30:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T11:30:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-041-05",
+          "thoi_diem_ke": "2026-11-14T08:30:00+07:00",
+          "khoa_ke_don": "Hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": "YL-HS-041-04",
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-041-05-01",
+              "thuoc_id": "T-LEVOFLOXACIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 1 lần/ngày",
+              "bat_dau": "2026-11-14T09:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-14T09:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-15T09:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-041-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ vào cấp cứu vì ho khạc đờm vàng, sốt cao, khó thở nhẹ 4 ngày, kèm đau ngực kiểu màng phổi bên phải khi ho. Khám lúc vào viện: nhiệt độ 38,5 °C, mạch 104 lần/phút, HA 116/74 mmHg, SpO2 95% khí trời, cân nặng 55 kg. Phổi ran nổ đáy phổi phải, không phù. X-quang ngực đông đặc thùy dưới phải.",
+          "danh_gia": "Viêm phổi cộng đồng thùy dưới phải (J18.9), sốt cao, SpO2 95% khí trời và chưa có suy hô hấp nặng. Creatinin 70 umol/L lúc 10 giờ 40. Hồ sơ ghi tình trạng thai chưa rõ.",
+          "huong_xu_tri": "Khởi trị ceftriaxon 1 g truyền tĩnh mạch 1 lần mỗi ngày, truyền natri clorid 0,9% 500 mL mỗi ngày và paracetamol khi sốt trên 38 độ. Theo dõi SpO2, nhiệt độ và đánh giá đáp ứng sau 48 giờ.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-041-02",
+            "YL-HS-041-03",
+            "YL-HS-041-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm mềm, ít muối, uống đủ nước.",
+          "theo_doi": [
+            "Nhiệt độ mỗi 4 giờ",
+            "SpO2 và mạch hai lần mỗi ngày",
+            "Ho khạc đờm, đau ngực khi ho"
+          ],
+          "dan_do": "Ho khạc đờm đúng cách, báo ngay nếu khó thở tăng hoặc môi tím."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-041-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-13T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sốt còn nhẹ, đờm vàng ít dần, ho giảm và đỡ khó thở so với ngày vào viện. Đau ngực khi ho nhẹ hơn. Ăn uống được, dịch truyền và kháng sinh tĩnh mạch đang thực hiện đúng y lệnh, chưa ghi nhận phản ứng bất thường.",
+          "danh_gia": "Viêm phổi cộng đồng đáp ứng từng bước với ceftriaxon, chưa có dấu hiệu nhiễm khuẩn nặng lên. Hồ sơ chưa có kết quả thử thai, tình trạng thai vẫn ghi là chưa rõ.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 1 g truyền tĩnh mạch 1 lần mỗi ngày và natri clorid 0,9% theo y lệnh. Đánh giá sinh hiệu và SpO2 trước khi quyết định chuyển sang thuốc uống. Không thay đổi y lệnh trong ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-041-02",
+            "YL-HS-041-03",
+            "YL-HS-041-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm mềm, chia nhỏ bữa, uống nhiều nước.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "SpO2 khi nghỉ",
+            "Số lượng và màu đờm"
+          ],
+          "dan_do": "Uống nhiều nước ấm, tập thở sâu mỗi 2 giờ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-041-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-14T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Nhiệt độ 37,6 °C lúc 7 giờ 30, SpO2 97% khí trời, mạch 88 lần/phút. Ho ít, đờm ít, không khó thở khi nghỉ. Creatinin 66 umol/L lúc 7 giờ. Hồ sơ vẫn ghi tình trạng thai chưa rõ.",
+          "danh_gia": "Viêm phổi cộng đồng thùy dưới phải đáp ứng tốt với ceftriaxon: sốt đã hạ, SpO2 cải thiện lên 97% khí trời, creatinin trong giới hạn tham chiếu. Đủ điều kiện chuyển sang kháng sinh đường uống theo đáp ứng lâm sàng.",
+          "huong_xu_tri": "Ngừng ceftriaxon lúc 8 giờ 20 do chuyển kháng sinh đường uống theo đáp ứng. Đề nghị levofloxacin 500 mg uống 1 lần mỗi ngày (chỉ định, chờ duyệt). Tiếp tục natri clorid và paracetamol khi sốt trên 38 độ, theo dõi sau khi bắt đầu thuốc uống.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-041-02",
+            "YL-HS-041-03",
+            "YL-HS-041-04",
+            "YL-HS-041-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, mềm, dễ nhai.",
+          "theo_doi": [
+            "Nhiệt độ",
+            "SpO2 khi nghỉ",
+            "Triệu chứng ho và đờm"
+          ],
+          "dan_do": "Uống thuốc đúng giờ khi có y lệnh; báo ngay nếu tiêu chảy nhiều, đau gân hoặc khó thở."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-041-05"
+}

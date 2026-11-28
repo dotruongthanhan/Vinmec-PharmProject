@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-052",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "can_xem",
+      "muc_do": "can_luu_y",
+      "chi_tiet_y_lenh_id": ["CT-HS-052-06-01"],
+      "mo_ta": "Colistimethat được kê khi cấy đờm lần này không mọc vi khuẩn; lần vào viện trước (đợt 2, 2026-07) có Acinetobacter baumannii đa kháng nhạy colistin nhưng tác nhân lần này chưa được xác định lại (xuyên lần)."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "xuyên lần"
+}

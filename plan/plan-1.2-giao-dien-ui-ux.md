@@ -149,6 +149,16 @@ Bốn thẻ chuyển, chỉ để tra khi cần:
 - **Vi sinh:** bệnh phẩm, vi khuẩn, kháng sinh đồ; kháng sinh đang kê được tô nổi trong kháng sinh đồ (trả lời N3: vì sao kê thuốc này).
 - **Diễn biến:** dòng thời gian các ghi chép, mới nhất trước.
 
+### 3.9. Tab Thẩm định: điều hướng theo 8 mục ở thanh bên (chốt 22/11/2026, T104)
+
+- **Chỉ ở tab Thẩm định**, nửa dưới thanh bên trái (chỗ thẻ thông tin người bệnh) đổi thành **danh sách 8 mục**: Tổng quan, rồi 7 yếu tố. Các tab khác vẫn giữ thẻ người bệnh. Không thêm dải người bệnh thu gọn: dược sĩ xem chỉ số ở tab Hồ sơ hoặc Y lệnh (một cú bấm); tách đôi màn hình là tính năng sau.
+- **Mỗi mục** có số thứ tự, tên, biểu tượng và màu trạng thái (Có vấn đề / Thiếu dữ liệu / Đạt / Chưa có luật), và số nhận định cần chú ý. Mục có nhận định Nghiêm trọng được tô đỏ. Cuối danh sách là "N luật đã chạy".
+- **Mục đang mở nằm trên URL** (`?yt=tong_quan|1..7`, mặc định Tổng quan), nên tải lại hay gửi liên kết vẫn đúng chỗ.
+- **Tổng quan:** dải trạng thái AI, mọi nhận định cần chú ý sắp theo mức độ (mỗi thẻ có nút đi tới mục của nó), bảng các mục đạt.
+- **Từng yếu tố:** chỉ nhận định và mục đạt của yếu tố đó. Yếu tố 4 thêm bảng tương tác ở cuối. Yếu tố chưa có luật hiện "Chưa có luật", không bao giờ ghi "đạt".
+- Bỏ dải 7 ô "Bảy yếu tố thẩm định" trong vùng nội dung, vì thanh bên đã đảm nhận vai trò đó.
+- Thanh bên thu gọn (56 px): danh sách chỉ còn số và biểu tượng, rê chuột thì hiện tên.
+
 ## 4. Các trạng thái phải thiết kế
 
 | Trạng thái | Hiển thị |

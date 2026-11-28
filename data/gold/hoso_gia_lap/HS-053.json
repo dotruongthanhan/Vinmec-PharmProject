@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-053",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 3,
+      "ket_luan": "ngoai_hdsd",
+      "muc_do": null,
+      "chi_tiet_y_lenh_id": ["CT-HS-053-03-01"],
+      "mo_ta": "Gabapentin 300 mg uống 3 lần/ngày không nằm trong bộ tri thức của hệ thống, nên nằm ngoài phạm vi; không kết luận đạt."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "Gabapentin ngoài bộ 50"
+}

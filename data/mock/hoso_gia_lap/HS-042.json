@@ -1,0 +1,627 @@
+{
+  "ho_so_id": "HS-042",
+  "kich_ban_id": "HS-042",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-042",
+    "tuoi": 78,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-10T09:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-WARFARIN",
+      "ten_hoat_chat": "Warfarin",
+      "ten_quoc_te": "warfarin",
+      "ma_atc": "B01AA03",
+      "nhom_duoc_ly": "thuoc chong dong duong uong"
+    },
+    {
+      "hoat_chat_id": "HC-METOPROLOL",
+      "ten_hoat_chat": "Metoprolol",
+      "ten_quoc_te": "metoprolol",
+      "ma_atc": "C07AB02",
+      "nhom_duoc_ly": "chen beta chon loc"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-WARFARIN-5",
+      "ten_thuoc": "Warfarin 5 mg",
+      "ham_luong": "5 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-WARFARIN",
+          "ham_luong_thanh_phan": 5.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": true,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-METOPROLOL-25",
+      "ten_thuoc": "Metoprolol tartrat 25 mg",
+      "ham_luong": "25 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METOPROLOL",
+          "ham_luong_thanh_phan": 25.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-042-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2025-12-02T09:00:00+07:00",
+      "thoi_diem_ket_thuc": "2025-12-06T10:00:00+07:00",
+      "so_ngay_dieu_tri": 4,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2025-12-02T09:00:00+07:00",
+          "den": "2025-12-06T10:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Đánh trống ngực, nhịp nhanh 3 ngày",
+      "benh_su": "BN nữ 77T, đánh trống ngực và mệt 3 ngày, khó thở khi gắng sức. ECG rung nhĩ đáp ứng thất nhanh. Tăng huyết áp đã biết.",
+      "tien_su": {
+        "ban_than": "Tăng huyết áp.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc chống đông."
+      },
+      "kham_benh": "Mạch 118 lần/phút không đều, HA 138/82 mmHg, phổi không ran, không phù.",
+      "tom_tat": "BN nữ 77T rung nhĩ mới khởi phát, nhịp nhanh. Khởi trị warfarin 5 mg buổi tối, kiểm soát nhịp. Ra viện tái khám theo dõi INR.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS042-1-01",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS042-1-01",
+          "loai": "mach",
+          "gia_tri": 118.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2025-12-02T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-1-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 138.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2025-12-02T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-1-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 82.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2025-12-02T09:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-1-04",
+          "loai": "mach",
+          "gia_tri": 88.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2025-12-06T07:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS042-1-01",
+          "ma_xet_nghiem": "inr",
+          "ten_xet_nghiem": "INR",
+          "gia_tri_so": 1.1,
+          "gia_tri_text": null,
+          "don_vi": null,
+          "nguong_duoi": 2.0,
+          "nguong_tren": 3.0,
+          "thoi_diem_ket_qua": "2025-12-02T08:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS042-1-02",
+          "ma_xet_nghiem": "inr",
+          "ten_xet_nghiem": "INR",
+          "gia_tri_so": 2.3,
+          "gia_tri_text": null,
+          "don_vi": null,
+          "nguong_duoi": 2.0,
+          "nguong_tren": 3.0,
+          "thoi_diem_ket_qua": "2025-12-06T07:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS042-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì đánh trống ngực, mạch 118 không đều. ECG rung nhĩ. Nhập khoa Tim mạch, khởi trị warfarin 5 mg uống buổi tối theo INR.",
+          "thoi_diem_ghi": "2025-12-02T09:20:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS042-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Mạch 88 đều hơn, đỡ mệt. INR 2,3. Cho ra viện, dặn tái khám và xét nghiệm INR theo hẹn.",
+          "thoi_diem_ghi": "2025-12-06T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-042-01",
+          "thoi_diem_ke": "2025-12-02T10:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-042-01-01",
+              "thuoc_id": "T-WARFARIN-5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống buổi tối",
+              "bat_dau": "2025-12-02T19:00:00+07:00",
+              "ket_thuc": "2025-12-06T08:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Rung nhĩ mới, nhịp nhanh đã kiểm soát. Warfarin 5 mg buổi tối, tái khám theo dõi INR. Ra viện ổn định.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-042-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2025-12-02T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ vào viện vì đánh trống ngực, mệt và khó thở khi gắng sức 3 ngày. Khám: mạch 118 lần/phút không đều, HA 138/82 mmHg, phổi không ran, không phù. ECG ghi nhận rung nhĩ đáp ứng thất nhanh. INR 1,1 lúc 8 giờ 30, chưa dùng thuốc chống đông trước khi vào viện.",
+          "danh_gia": "Rung nhĩ mới khởi phát (I48) với nhịp nhanh, có tiền sử tăng huyết áp. Chưa có dấu hiệu suy tim mất bù hay thiếu máu cơ tim trên lâm sàng. Cần dự phòng huyết khối bằng thuốc chống đông đường uống, nền INR hiện tại là 1,1 nên chưa có ảnh hưởng của thuốc.",
+          "huong_xu_tri": "Khởi trị warfarin 5 mg uống buổi tối, điều chỉnh liều theo INR trong suốt đợt điều trị. Kiểm soát nhịp và theo dõi mạch, huyết áp hằng ngày. Lấy INR lại trước khi ra viện và giải thích cho người bệnh về lịch xét nghiệm.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-042-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, ít muối, duy trì lượng rau xanh ổn định mỗi ngày.",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Huyết áp hai lần mỗi ngày",
+            "Chảy máu chân răng, bầm tím"
+          ],
+          "dan_do": "Uống warfarin đúng giờ buổi tối, không tự đổi liều. Báo ngay nếu chảy máu hoặc đi phân đen."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-042-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2025-12-03T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Đánh trống ngực giảm dần, mệt đỡ hơn so với ngày vào viện. Không đau ngực, không ngất, không khó thở khi nằm. Đã dùng warfarin buổi tối hôm trước theo y lệnh, chưa ghi nhận chảy máu. Ăn uống được, đi tiểu bình thường, không chóng mặt khi đứng dậy.",
+          "danh_gia": "Rung nhĩ đang kiểm soát nhịp tương đối tốt, nhịp nhanh giảm rõ so với ngày vào viện. Cần theo dõi INR để điều chỉnh liều warfarin, hôm nay chưa có kết quả INR trong hồ sơ. Chưa ghi nhận biến cố thuyên tắc hay chảy máu lớn.",
+          "huong_xu_tri": "Tiếp tục warfarin 5 mg buổi tối và kiểm soát nhịp theo y lệnh. Lấy INR theo lịch của khoa. Theo dõi triệu chứng chảy máu và tình trạng tim mạch. Đánh giá lại sau mỗi lần có kết quả INR.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-042-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, cơm mềm, uống đủ nước.",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Huyết áp hai lần mỗi ngày"
+          ],
+          "dan_do": "Đi lại nhẹ trong buồng bệnh, báo nếu đánh trống ngực tăng trở lại."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-042-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2025-12-04T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Tỉnh, tiếp xúc tốt, đi lại trong buồng bệnh không mệt nhiều. Nhịp tim đều hơn so với các ngày trước, không đánh trống ngực đáng kể. Không ghi nhận xuất huyết dưới da hay chảy máu niêm mạc. Người bệnh ăn uống tốt, không có triệu chứng mới cần xử trí.",
+          "danh_gia": "Rung nhĩ đáp ứng tốt với kiểm soát nhịp, warfarin đang khởi trị. Chưa có INR giữa đợt trong hồ sơ để đánh giá ổn định, cần xét nghiệm để quyết định liều. Tình trạng chung ổn, chưa có biến cố cần thay đổi kế hoạch.",
+          "huong_xu_tri": "Tiếp tục warfarin 5 mg uống buổi tối. Hẹn lấy INR vào sáng ngày kế tiếp để quyết định liều trước khi ra viện. Theo dõi huyết áp và mạch hai lần mỗi ngày. Ghi chép liều warfarin đã dùng vào bệnh án.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-042-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, chia nhiều bữa nhẹ.",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Chảy máu, bầm tím",
+            "Huyết áp"
+          ],
+          "dan_do": "Không tự ý dùng thêm thuốc giảm đau nhóm chống viêm không steroid."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-042-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2025-12-05T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sinh hoạt gần bình thường, không mệt nhiều, không khó thở. Huyết áp và nhịp tim được theo dõi theo y lệnh, không có triệu chứng mới. Người bệnh hiểu cách uống warfarin buổi tối. Người nhà được hướng dẫn nhận biết dấu hiệu chảy máu và khi nào cần quay lại khám.",
+          "danh_gia": "Rung nhĩ kiểm soát nhịp ổn định, tăng huyết áp chưa có biến cố. Dự kiến cho ra viện trong 1 đến 2 ngày nếu INR có kết quả phù hợp. Chưa có kết quả INR giữa đợt để so sánh với lần đầu.",
+          "huong_xu_tri": "Tiếp tục warfarin 5 mg buổi tối đến khi ra viện. Lấy INR sáng ngày mai trước khi ra viện, dặn lịch tái khám và xét nghiệm INR theo hẹn. Ghi rõ ngày tái khám trong giấy ra viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-042-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, đủ đạm, hạn chế rượu bia.",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Huyết áp",
+            "Dấu hiệu chảy máu"
+          ],
+          "dan_do": "Ghi rõ liều warfarin trong giấy ra viện, tái khám và xét nghiệm INR đúng hẹn."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2025-12-02T09:00:00+07:00",
+        "so_giuong": "G-042-01",
+        "so_luu_tru": "LT-2026-04201",
+        "ma_yt": "YT-2026-042-01",
+        "ra_vien": {
+          "hinh_thuc": "ra_vien",
+          "chuyen_vien_den": null,
+          "ly_do": "Rung nhĩ mới, nhịp nhanh đã kiểm soát. Warfarin 5 mg buổi tối, tái khám theo dõi INR. Ra viện ổn định."
+        },
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-042-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Tim mạch",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-10T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Tim mạch",
+          "tu": "2026-11-10T09:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Đánh trống ngực, mệt 2 ngày",
+      "benh_su": "BN nữ 78T, rung nhĩ đang điều trị warfarin ngoại trú. Hai ngày nay đánh trống ngực, mệt, khó thở nhẹ khi đi lại. Không đau ngực, không ngất. Vào viện theo dõi nhịp.",
+      "tien_su": {
+        "ban_than": "Rung nhĩ (từ 11 tháng trước), tăng huyết áp.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Warfarin 5 mg buổi tối, uống đều theo đơn."
+      },
+      "kham_benh": "Mạch 96 lần/phút không đều, HA 128/76 mmHg, SpO2 97% khí trời, phổi không ran, không phù chân.",
+      "tom_tat": "BN nữ 78T rung nhĩ đang dùng warfarin, nhịp nhanh nhẹ khi vào viện. Theo dõi nhịp và HA, nhịp đỡ dần. Tiếp tục điều trị theo y lệnh.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS042-2-01",
+          "ma_icd10": "I48",
+          "noi_dung": "Rung nhĩ",
+          "loai": "chinh"
+        },
+        {
+          "chan_doan_id": "CD-HS042-2-02",
+          "ma_icd10": "I10",
+          "noi_dung": "Tăng huyết áp",
+          "loai": "kem"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS042-2-01",
+          "loai": "mach",
+          "gia_tri": 96.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 128.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 76.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-04",
+          "loai": "spo2",
+          "gia_tri": 97.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-05",
+          "loai": "can_nang",
+          "gia_tri": 56.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-10T09:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-06",
+          "loai": "mach",
+          "gia_tri": 90.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-10T10:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-07",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 126.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T10:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS042-2-08",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 74.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T10:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS042-2-01",
+          "ma_xet_nghiem": "inr",
+          "ten_xet_nghiem": "INR",
+          "gia_tri_so": 2.4,
+          "gia_tri_text": null,
+          "don_vi": null,
+          "nguong_duoi": 2.0,
+          "nguong_tren": 3.0,
+          "thoi_diem_ket_qua": "2026-09-26T08:00:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS042-2-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào viện vì đánh trống ngực 2 ngày, mạch 96 không đều, HA 128/76. Phổi không ran, không phù. Nhập khoa Tim mạch.",
+          "thoi_diem_ghi": "2026-11-10T09:15:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS042-2-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Mạch 90, HA 126/74, đỡ đánh trống ngực. Không đau ngực, không chảy máu. Theo dõi nhịp, dùng thuốc theo y lệnh.",
+          "thoi_diem_ghi": "2026-11-10T10:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-042-02",
+          "thoi_diem_ke": "2026-11-10T09:40:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-042-02-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi đau, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi đau đầu hoặc đau người",
+              "bat_dau": "2026-11-10T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-042-03",
+          "thoi_diem_ke": "2026-11-10T09:45:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-042-03-01",
+              "thuoc_id": "T-METOPROLOL-25",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 25.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống 2 lần/ngày",
+              "bat_dau": "2026-11-10T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-042-04",
+          "thoi_diem_ke": "2026-11-10T11:00:00+07:00",
+          "khoa_ke_don": "Tim mạch",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-042-04-01",
+              "thuoc_id": "T-WARFARIN-5",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 5.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống buổi tối",
+              "bat_dau": "2026-11-10T18:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-10T18:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-11T18:00:00+07:00",
+                  "lieu": 5.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-042-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-10T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ đang điều trị warfarin ngoại trú cho rung nhĩ, vào viện vì đánh trống ngực và mệt 2 ngày, khó thở nhẹ khi đi lại, không đau ngực, không ngất. Lúc 9 giờ 30: mạch 96 lần/phút không đều, HA 128/76 mmHg, SpO2 97% khí trời, cân nặng 56 kg, phổi không ran, không phù chân. Lúc 10 giờ 30: mạch 90, HA 126/74 mmHg, triệu chứng đỡ dần.",
+          "danh_gia": "Rung nhĩ đang nhịp nhanh nhẹ và giảm dần, tăng huyết áp đang kiểm soát tương đối. INR gần nhất 2,4 từ ngày 26 tháng 9, chưa có INR hiện tại nên chưa đủ dữ liệu để đánh giá liều warfarin. Chưa ghi nhận chảy máu.",
+          "huong_xu_tri": "Tiếp tục metoprolol tartrat 25 mg uống 2 lần mỗi ngày để kiểm soát nhịp. Paracetamol 500 mg uống khi đau đầu hoặc đau người, cách nhau tối thiểu 6 giờ. Đề nghị warfarin 5 mg uống buổi tối (chỉ định, chờ duyệt). Lấy INR trong ngày hôm nay hoặc sáng mai để điều chỉnh liều.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-042-02",
+            "YL-HS-042-03",
+            "YL-HS-042-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn nhạt, ít muối, duy trì lượng rau xanh đều đặn.",
+          "theo_doi": [
+            "Mạch và nhịp tim",
+            "Huyết áp hai lần mỗi ngày",
+            "Kết quả INR"
+          ],
+          "dan_do": "Báo ngay nếu đau ngực, ngất, chảy máu hoặc đi phân đen."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-10T09:00:00+07:00",
+        "so_giuong": "G-042-02",
+        "so_luu_tru": "LT-2026-04202",
+        "ma_yt": "YT-2026-042-02",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-042-04",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 42",
+    "ngay_sinh": "1947-12-02",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9042",
+      "thon_pho": "Phố Trưng Trắc",
+      "xa_phuong": "Quang Trung",
+      "huyen": "Hưng Yên",
+      "tinh_thanh": "Hưng Yên"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000042",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 42",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 042"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 56.0,
+    "nhom_mau": null
+  }
+}

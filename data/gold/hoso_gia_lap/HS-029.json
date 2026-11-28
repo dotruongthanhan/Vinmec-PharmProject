@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-029",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 5,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-029-06-01"],
+      "mo_ta": "Acid valproic 500 mg x2 uống khi ALT 280, AST 310 và bilirubin 38 umol/L (bệnh gan đang hoạt động); lần vào viện 2 đã tăng men gan khi dùng valproat, ô dị ứng và thông tin lần này không ghi lại (xuyên lần)."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": "xuyên lần"
+}

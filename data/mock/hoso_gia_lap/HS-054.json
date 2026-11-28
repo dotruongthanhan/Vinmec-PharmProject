@@ -1,0 +1,517 @@
+{
+  "ho_so_id": "HS-054",
+  "kich_ban_id": "HS-054",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-054",
+    "tuoi": 47,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T09:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFOPERAZONE",
+      "ten_hoat_chat": "Cefoperazon",
+      "ten_quoc_te": "cefoperazone",
+      "ma_atc": "J01DD12",
+      "nhom_duoc_ly": "cephalosporin thế hệ 3"
+    },
+    {
+      "hoat_chat_id": "HC-SULBACTAM",
+      "ten_hoat_chat": "Sulbactam",
+      "ten_quoc_te": "sulbactam",
+      "ma_atc": "J01CG01",
+      "nhom_duoc_ly": "chất ức chế beta-lactamase"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giảm đau, hạ sốt"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFOPERAZON-SULBACTAM-2G",
+      "ten_thuoc": "Cefoperazon + sulbactam 2 g",
+      "ham_luong": "2 g (1 g + 1 g)",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFOPERAZONE",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        },
+        {
+          "hoat_chat_id": "HC-SULBACTAM",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-500",
+      "ten_thuoc": "Paracetamol 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-054-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Ung bướu",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-12T09:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Ung bướu",
+          "tu": "2026-11-12T09:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt, bạch cầu trung tính thấp đang hóa trị",
+      "benh_su": "BN nữ 47T, đang hóa trị theo chu kỳ. Sốt từ hôm qua, đau họng nhẹ, không ho, không tiểu buốt. Vào viện đường cấp cứu.",
+      "tien_su": {
+        "ban_than": "Ung thư vú, đang hóa trị theo chu kỳ. Phác đồ không ghi trong hồ sơ này.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Paracetamol khi sốt tại nhà."
+      },
+      "kham_benh": "Sốt 38,8 °C, mạch 96 lần/phút, HA 118/74 mmHg, tim đều, phổi không ran, họng đỏ nhẹ.",
+      "tom_tat": "BN nữ 47T, ung thư vú đang hóa trị, sốt, bạch cầu trung tính thấp. Theo dõi sốt, công thức máu. Dự kiến kháng sinh tĩnh mạch.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS054-1-01",
+          "ma_icd10": "D70",
+          "noi_dung": "Giảm bạch cầu hạt trung tính có sốt",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS054-1-01",
+          "loai": "can_nang",
+          "gia_tri": 54.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T09:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS054-1-02",
+          "loai": "nhiet_do",
+          "gia_tri": 38.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T09:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS054-1-03",
+          "loai": "nhiet_do",
+          "gia_tri": 38.5,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-13T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS054-1-04",
+          "loai": "nhiet_do",
+          "gia_tri": 38.6,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-14T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS054-1-05",
+          "loai": "nhiet_do",
+          "gia_tri": 37.9,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-15T07:00:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS054-1-06",
+          "loai": "mach",
+          "gia_tri": 92.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-15T07:00:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS054-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 70.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-12T10:00:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS054-1-02",
+          "ma_xet_nghiem": "bach_cau_trung_tinh",
+          "ten_xet_nghiem": "Bạch cầu trung tính",
+          "gia_tri_so": 0.6,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 1.8,
+          "nguong_tren": 7.5,
+          "thoi_diem_ket_qua": "2026-11-13T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS054-1-03",
+          "ma_xet_nghiem": "bach_cau",
+          "ten_xet_nghiem": "Bạch cầu (WBC)",
+          "gia_tri_so": 1.6,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 4.0,
+          "nguong_tren": 10.0,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS054-1-04",
+          "ma_xet_nghiem": "bach_cau_trung_tinh",
+          "ten_xet_nghiem": "Bạch cầu trung tính",
+          "gia_tri_so": 0.3,
+          "gia_tri_text": null,
+          "don_vi": "G/L",
+          "nguong_duoi": 1.8,
+          "nguong_tren": 7.5,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS054-1-05",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 68.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-15T06:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS054-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "Vào cấp cứu vì sốt 38,8 °C, đau họng nhẹ, đang hóa trị theo chu kỳ. Lấy máu cấy và công thức máu ngoại vi. Nhập khoa Ung bướu.",
+          "thoi_diem_ghi": "2026-11-12T09:20:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS054-1-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sốt 38,5 °C, còn đau họng nhẹ. Bạch cầu trung tính 0,6 G/L. Tiếp tục theo dõi, truyền dịch.",
+          "thoi_diem_ghi": "2026-11-13T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS054-1-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Chiều hôm qua sốt 38,6 °C, đã uống paracetamol. Cấy máu chưa có kết quả dương tính. Người bệnh tỉnh, ăn uống được.",
+          "thoi_diem_ghi": "2026-11-14T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS054-1-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Sáng nay sốt 37,9 °C, mạch 92 lần/phút. Bạch cầu trung tính 0,3 G/L, WBC 1,6 G/L, creatinin 68 umol/L. Dự kiến kháng sinh phổ rộng tĩnh mạch theo phác đồ sốt giảm bạch cầu hạt.",
+          "thoi_diem_ghi": "2026-11-15T09:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-054-01",
+          "thoi_diem_ke": "2026-11-12T10:00:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-054-01-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Cấy máu, công thức máu ngoại vi",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": null,
+              "don_vi_lieu": null,
+              "tan_suat": "1 lần",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": null,
+              "cach_dung": "Lấy máu xét nghiệm",
+              "bat_dau": "2026-11-12T10:00:00+07:00",
+              "ket_thuc": "2026-11-12T10:30:00+07:00",
+              "nguon_thuoc": "Khoa xét nghiệm",
+              "trang_thai_dong": "completed",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-054-02",
+          "thoi_diem_ke": "2026-11-12T10:05:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-054-02-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 lần/ngày",
+              "bat_dau": "2026-11-12T10:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-054-03",
+          "thoi_diem_ke": "2026-11-12T10:15:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-054-03-01",
+              "thuoc_id": "T-PARACETAMOL-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt trên 38,5 °C, cách nhau tối thiểu 6 giờ",
+              "so_lan_moi_ngay": null,
+              "khoang_cach_gio": null,
+              "duong_dung": "uống",
+              "cach_dung": "Uống khi sốt trên 38,5 °C",
+              "bat_dau": "2026-11-12T10:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": []
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-054-04",
+          "thoi_diem_ke": "2026-11-15T10:00:00+07:00",
+          "khoa_ke_don": "Ung bướu",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-054-04-01",
+              "thuoc_id": "T-CEFOPERAZON-SULBACTAM-2G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch mỗi 12 giờ",
+              "bat_dau": "2026-11-15T12:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-15T12:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T00:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-16T12:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-054-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T11:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 47T đang hóa trị theo chu kỳ, vào cấp cứu vì sốt 38,8 °C từ hôm qua, đau họng nhẹ, không ho, không tiểu buốt. Mạch đều, HA 118/74 mmHg, phổi không ran, họng đỏ nhẹ. Cân nặng 54 kg, creatinin 70 umol/L. Đã lấy máu cấy và công thức máu ngoại vi, chờ kết quả.",
+          "danh_gia": "Sốt có giảm bạch cầu trung tính trên người bệnh đang hóa trị, đây là tình huống cần theo dõi sát về nhiễm trùng. Chức năng thận còn tốt, chưa thấy ổ nhiễm khuẩn rõ trên thăm khám ban đầu.",
+          "huong_xu_tri": "Theo dõi thân nhiệt, công thức máu và cấy máu. Truyền natri clorid 0,9% 500 mL mỗi ngày một lần, paracetamol khi sốt trên 38,5 °C. Cân nhắc kháng sinh tĩnh mạch sớm nếu tình trạng sốt kéo dài.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-054-01",
+            "YL-HS-054-02",
+            "YL-HS-054-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn chín, uống đủ nước, tránh thực phẩm sống và thức ăn tái",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Dấu hiệu nhiễm trùng tại họng và da",
+            "Lượng nước vào ra"
+          ],
+          "dan_do": "Người bệnh rửa tay thường xuyên và đeo khẩu trang, báo điều dưỡng ngay khi sốt trên 38 độ hoặc run rét."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-054-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-13T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay sốt 38,5 °C lúc 07:00, còn đau họng nhẹ. Bạch cầu trung tính 0,6 G/L lúc 06:30, thấp dưới ngưỡng. Người bệnh tỉnh, ăn uống được một phần, đang truyền dịch theo y lệnh.",
+          "danh_gia": "Giảm bạch cầu trung tính có sốt đang trong giai đoạn cần theo dõi nguy cơ nhiễm trùng. Chưa có kết quả cấy máu dương tính. Người bệnh đang trong chu kỳ hóa trị nên cần tránh các yếu tố làm nặng thêm tình trạng giảm bạch cầu.",
+          "huong_xu_tri": "Tiếp tục theo dõi thân nhiệt và công thức máu hằng ngày. Duy trì truyền dịch, paracetamol khi sốt, hạn chế tiếp xúc với nguồn lây nhiễm.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-054-02",
+            "YL-HS-054-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn chín, chia nhỏ bữa, uống đủ nước",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Đau họng và miệng",
+            "Công thức máu hằng ngày"
+          ],
+          "dan_do": "Người bệnh súc miệng nước muối nhẹ, tránh tiếp xúc người đang ho hoặc sốt."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-054-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-14T09:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay sốt 38,6 °C lúc 07:00, chiều hôm qua đã dùng paracetamol. Cấy máu chưa có kết quả dương tính. Người bệnh tỉnh, ăn uống được, đau họng còn nhẹ.",
+          "danh_gia": "Sốt kéo dài ở người bệnh giảm bạch cầu trung tính, cần cân nhắc điều trị kháng sinh theo phác đồ sốt giảm bạch cầu hạt nếu sốt tiếp tục. Chưa có ổ nhiễm khuẩn rõ. Nếu sốt kéo dài thêm, phải xem xét điều trị kháng sinh sớm để giảm nguy cơ nhiễm khuẩn nặng.",
+          "huong_xu_tri": "Tiếp tục theo dõi thân nhiệt và cấy máu, xét nghiệm công thức máu lại vào ngày mai. Duy trì paracetamol khi sốt, theo dõi dấu hiệu nhiễm trùng khác.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-054-02",
+            "YL-HS-054-03"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn chín, chia nhỏ bữa, nhiều đạm",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Kết quả cấy máu",
+            "Đau họng và các vị trí dễ nhiễm khuẩn"
+          ],
+          "dan_do": "Người bệnh không dùng thuốc hạ sốt quá liều, báo điều dưỡng nếu sốt cao hơn hoặc xuất hiện ho, đau bụng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-054-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-11-15T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Sáng nay T 37,9 °C, mạch 92 lần/phút lúc 07:00. Bạch cầu trung tính 0,3 G/L, bạch cầu máu toàn phần 1,6 G/L, creatinin 68 umol/L lúc 06:30. Người bệnh tỉnh, ăn uống được, không ho, không tiểu buốt.",
+          "danh_gia": "Giảm bạch cầu trung tính nặng hơn so với hôm trước, sốt có xu hướng giảm nhưng nguy cơ nhiễm trùng vẫn cao. Cần điều trị kháng sinh tĩnh mạch phổ rộng theo phác đồ, chức năng thận vẫn tốt.",
+          "huong_xu_tri": "Chỉ định/đề nghị cefoperazon kết hợp sulbactam 2 g truyền tĩnh mạch mỗi 12 giờ, chờ duyệt y lệnh. Tiếp tục truyền dịch, theo dõi thân nhiệt và công thức máu hằng ngày.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-054-02",
+            "YL-HS-054-03",
+            "YL-HS-054-04"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn chín, chia nhỏ bữa, nhiều đạm, tránh thực phẩm sống",
+          "theo_doi": [
+            "Thân nhiệt mỗi 4 giờ",
+            "Công thức máu và bạch cầu trung tính",
+            "Creatinin và nước tiểu"
+          ],
+          "dan_do": "Người bệnh báo điều dưỡng ngay khi sốt, ớn lạnh, đau họng nặng hơn hoặc khó nuốt."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-12T09:00:00+07:00",
+        "so_giuong": "G-054-01",
+        "so_luu_tru": "LT-2026-05401",
+        "ma_yt": "YT-2026-054-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-054-04",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 54",
+    "ngay_sinh": "1979-11-12",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9054",
+      "thon_pho": "Phố Trưng Trắc",
+      "xa_phuong": "Quang Trung",
+      "huyen": "Hưng Yên",
+      "tinh_thanh": "Hưng Yên"
+    },
+    "doi_tuong": "thu_phi",
+    "bhyt": null,
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 54",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 054"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 54.0,
+    "nhom_mau": null
+  }
+}

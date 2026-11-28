@@ -16,6 +16,7 @@ _IGNORE_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\bngày\s+\d{1,2}/\d{1,2}\b", re.IGNORECASE),
     re.compile(r"\b(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?\b"),
     re.compile(r"\byếu\s+tố(?:\s+số)?\s+\d+(?:\s*[-–]\s*\d+)?\b", re.IGNORECASE),
+    re.compile(r"/\s*1[.,]73\s*m(?:²|2|\^2)(?![\w])"),
 )
 
 _COUNT_UNIT = (

@@ -1,0 +1,696 @@
+{
+  "ho_so_id": "HS-008",
+  "kich_ban_id": "HS-008",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-008",
+    "tuoi": 72,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T06:30:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-CEFTRIAXONE",
+      "ten_hoat_chat": "Ceftriaxone",
+      "ten_quoc_te": "ceftriaxone",
+      "ma_atc": "J01DD04",
+      "nhom_duoc_ly": "cephalosporin the he 3"
+    },
+    {
+      "hoat_chat_id": "HC-MEROPENEM",
+      "ten_hoat_chat": "Meropenem",
+      "ten_quoc_te": "meropenem",
+      "ma_atc": "J01DH02",
+      "nhom_duoc_ly": "carbapenem"
+    },
+    {
+      "hoat_chat_id": "HC-ACETAMINOPHEN",
+      "ten_hoat_chat": "Paracetamol",
+      "ten_quoc_te": "acetaminophen",
+      "ma_atc": "N02BE01",
+      "nhom_duoc_ly": "giam dau, ha sot khong opioid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-CEFTRIAXONE-2G",
+      "ten_thuoc": "Ceftriaxon 2 g",
+      "ham_luong": "2 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-CEFTRIAXONE",
+          "ham_luong_thanh_phan": 2000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-MEROPENEM-1G",
+      "ten_thuoc": "Meropenem 1 g",
+      "ham_luong": "1 g",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-MEROPENEM",
+          "ham_luong_thanh_phan": 1.0,
+          "don_vi": "g"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": true
+    },
+    {
+      "thuoc_id": "T-PARACETAMOL-1G-100ML",
+      "ten_thuoc": "Paracetamol 1 g/100 mL",
+      "ham_luong": "1 g/100 mL",
+      "duong_dung": "truyền tĩnh mạch",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-ACETAMINOPHEN",
+          "ham_luong_thanh_phan": 1000.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-008-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội hô hấp",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-06-08T10:00:00+07:00",
+      "thoi_diem_ket_thuc": "2026-06-14T11:00:00+07:00",
+      "so_ngay_dieu_tri": 6,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội hô hấp",
+          "tu": "2026-06-08T10:00:00+07:00",
+          "den": "2026-06-14T11:00:00+07:00"
+        }
+      ],
+      "ly_do_vao_vien": "Sốt, ho đờm, khó thở nhẹ",
+      "benh_su": "BN nữ sốt 3 ngày, ho đờm vàng, khó thở khi gắng sức. Khám có ran nổ đáy phổi phải, chụp phim phổi thấy đám mờ thùy dưới phải.",
+      "tien_su": {
+        "ban_than": "Chưa ghi nhận bệnh nền đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Không rõ."
+      },
+      "kham_benh": "Tỉnh, T 38,6 °C, SpO2 96% khí phòng, phổi có ran nổ đáy phổi phải.",
+      "tom_tat": "BN nữ 72T viêm phổi cộng đồng, điều trị ceftriaxone 2 g/ngày tĩnh mạch. Ổn định, ra viện sau 6 ngày.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS008-01",
+          "ma_icd10": "J18.9",
+          "noi_dung": "Viêm phổi cộng đồng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [],
+      "xet_nghiem": [],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-008-01",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN viêm phổi cộng đồng, sốt giảm sau 48 giờ dùng ceftriaxone 2 g tĩnh mạch mỗi ngày. Ăn uống được, SpO2 97% khí phòng. Chuẩn bị ra viện.",
+          "thoi_diem_ghi": "2026-06-09T08:00:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-008-01",
+          "thoi_diem_ke": "2026-06-08T10:30:00+07:00",
+          "khoa_ke_don": "Nội hô hấp",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "hoan_tat",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-008-01-01",
+              "thuoc_id": "T-CEFTRIAXONE-2G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 2 g mỗi 24 giờ",
+              "bat_dau": "2026-06-08T10:30:00+07:00",
+              "ket_thuc": "2026-06-14T10:30:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "completed",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-06-08T10:30:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": "Viêm phổi cộng đồng đáp ứng với ceftriaxone. Ra viện sau 6 ngày điều trị, hẹn tái khám.",
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-06-08T11:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 72T sốt 3 ngày, ho đờm vàng, khó thở khi gắng sức. Khám: tỉnh, nhiệt độ 38,6 °C, SpO2 96% khí phòng, ran nổ đáy phổi phải. Chụp phim phổi thấy đám mờ thùy dưới phải. Chưa rõ thuốc đã dùng trước khi vào viện.",
+          "danh_gia": "Viêm phổi cộng đồng thùy dưới phải, chưa cần thở oxy vì SpO2 còn tốt khi khí phòng. Chưa ghi nhận bệnh nền đáng kể và chưa ghi nhận dị ứng thuốc. Khởi trị ceftriaxon theo kinh nghiệm là phù hợp.",
+          "huong_xu_tri": "Ceftriaxon 2 g truyền tĩnh mạch mỗi 24 giờ, bắt đầu từ hôm nay. Theo dõi sốt, SpO2 và tình trạng khó thở. Làm thêm xét nghiệm máu theo chỉ định nếu sốt không giảm.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cháo, cơm mềm, uống nhiều nước",
+          "theo_doi": [
+            "Nhiệt độ mỗi 6 giờ",
+            "SpO2 khi nghỉ",
+            "Ho khạc đờm và khó thở"
+          ],
+          "dan_do": "Khạc đờm vào ống đựng, ho đúng cách. Báo điều dưỡng khi khó thở tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-1-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-06-09T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 2 sốt giảm dần, BN ăn uống được. SpO2 97% khí phòng, không khó thở khi nghỉ. Vẫn còn ho đờm vàng ít, chưa có triệu chứng mới. BN nói đã đỡ mệt và ngủ được ban đêm.",
+          "danh_gia": "Đáp ứng ban đầu với ceftriaxon, sốt giảm và SpO2 duy trì tốt khi khí phòng. Chưa có vấn đề tồn đọng lớn, chưa cần thay đổi kháng sinh trong thời điểm này.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g mỗi 24 giờ. Theo dõi sốt và ho đờm. Cân nhắc thời điểm xuất viện khi đã hoàn tất đủ kháng sinh đường tĩnh mạch. Ghi nhận chưa có tác dụng không mong muốn từ thuốc.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cơm mềm, chia nhỏ bữa",
+          "theo_doi": [
+            "Nhiệt độ và SpO2",
+            "Ho và tính chất đờm",
+            "Ăn uống"
+          ],
+          "dan_do": "Uống đủ nước, nằm đầu cao khi nghỉ."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-1-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-06-10T08:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 3 BN tỉnh, ăn uống khá hơn, ho đờm giảm. Không sốt cao. Ceftriaxon truyền tĩnh mạch đều theo y lệnh, điều dưỡng ghi nhận không có phản ứng tại chỗ tiêm truyền. BN tự tập ho và khạc đờm theo hướng dẫn.",
+          "danh_gia": "Viêm phổi cộng đồng đang đáp ứng với điều trị. Đáp ứng điều trị được duy trì đều đặn từ ngày thứ hai. Chưa có biến chứng ghi nhận, không có dấu hiệu bội nhiễm mới trên lâm sàng.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g mỗi 24 giờ đến khi kết thúc liệu trình. Theo dõi hô hấp và sốt, hướng dẫn vận động nhẹ trong buồng bệnh. Tiếp tục khuyến khích BN ăn đủ bữa.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn đủ bữa, mềm, nhiều đạm",
+          "theo_doi": [
+            "Nhiệt độ",
+            "Mức độ khó thở khi gắng sức",
+            "Ăn uống và giấc ngủ"
+          ],
+          "dan_do": "Vận động nhẹ trong buồng bệnh, hít thở sâu thường xuyên."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-1-04",
+          "ngay_dieu_tri": 4,
+          "thoi_diem_lap": "2026-06-11T08:15:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 4 BN không sốt, khó thở khi gắng sức đã giảm rõ. SpO2 duy trì khi khí phòng, ăn uống được. Lượng đờm ít hơn trước và không còn đờm mủ đặc. Người nhà hỗ trợ BN vận động nhẹ trong buồng bệnh.",
+          "danh_gia": "Đáp ứng tốt với ceftriaxon, các triệu chứng hô hấp cải thiện đều. Chưa có tồn đọng đáng kể cần xử trí thêm.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g mỗi 24 giờ đến hết liệu trình. Hẹn tái khám và chụp phim phổi kiểm tra sau khi ra viện theo chỉ định. Không có chỉ định thêm thuốc khác trong ngày hôm nay. Theo dõi phản ứng thuốc và tình trạng hô hấp đến khi ra viện.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, mềm",
+          "theo_doi": [
+            "Nhiệt độ",
+            "SpO2 khi nghỉ",
+            "Ho đờm"
+          ],
+          "dan_do": "Tập thở và ho khạc đờm đều đặn mỗi ngày."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-1-05",
+          "ngay_dieu_tri": 5,
+          "thoi_diem_lap": "2026-06-12T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 5 BN ổn định, ăn uống tốt, không khó thở khi nghỉ. Khám phổi còn ran nhẹ rải rác đáy phổi phải, không tím. Ceftriaxon đang dùng đều. Điều dưỡng ghi nhận BN tự đi lại trong khoa được và thở đều.",
+          "danh_gia": "Viêm phổi cộng đồng hồi phục tốt. Tiếng ran đáy phổi phải giảm dần, cần đánh giá thêm trên lâm sàng trước khi ra viện. Người bệnh đã sẵn sàng tiếp tục theo dõi tại nhà sau xuất viện.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon đến hết liệu trình. Chuẩn bị đơn ra viện và lịch hẹn tái khám. Tư vấn người bệnh về việc tái khám và chụp phim kiểm tra.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, nhiều rau xanh",
+          "theo_doi": [
+            "Nhiệt độ mỗi ngày",
+            "SpO2 khi nghỉ và khi đi lại",
+            "Ho đờm"
+          ],
+          "dan_do": "Chuẩn bị tinh thần ra viện. Mang theo phim chụp và đơn thuốc khi về nhà."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-1-06",
+          "ngay_dieu_tri": 6,
+          "thoi_diem_lap": "2026-06-13T08:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày cuối trước xuất viện, BN ổn định, không sốt, ăn uống được, ho đờm ít. Ceftriaxon 2 g truyền tĩnh mạch đủ liều theo y lệnh, không ghi nhận phản ứng bất thường. BN tự đánh giá đã khỏe hơn nhiều so với lúc vào viện.",
+          "danh_gia": "Viêm phổi cộng đồng đáp ứng tốt với ceftriaxon. Không còn vấn đề tồn đọng cần xử trí thêm. Đánh giá cuối đợt điều trị cho thấy không có dấu hiệu tiến triển xấu.",
+          "huong_xu_tri": "Dự kiến xuất viện sáng mai sau khi hoàn tất liều ceftriaxon. Hẹn tái khám theo lịch và hướng dẫn tiếp tục theo dõi tại nhà.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-01"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Ăn thường, đủ nước",
+          "theo_doi": [
+            "Sốt tái phát",
+            "Khó thở",
+            "Ho đờm"
+          ],
+          "dan_do": "Báo bác sĩ nếu sốt lại, khó thở tăng hoặc ho ra máu."
+        }
+      ]
+    },
+    {
+      "dot_dieu_tri_id": "DT-HS-008-2",
+      "thu_tu": 2,
+      "khoa_dieu_tri": "Hồi sức tích cực",
+      "loai_dieu_tri": "noi_tru",
+      "hinh_thuc_vao": "cap_cuu",
+      "thoi_diem_bat_dau": "2026-11-10T16:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Hồi sức tích cực",
+          "tu": "2026-11-10T16:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Sốt, khó thở, nghi viêm phổi bệnh viện",
+      "benh_su": "BN nữ 72T chuyển vào HSTC từ khoa khác do sốt 38,8 độ C, khó thở, ho đờm. Lần vào viện trước (06/2026): viêm phổi cộng đồng, điều trị ceftriaxone, ra viện.",
+      "tien_su": {
+        "ban_than": "Viêm phổi cộng đồng 06/2026, đã ra viện. Chưa ghi nhận bệnh nền đáng kể.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Ceftriaxone 2 g/ngày tĩnh mạch đợt 06/2026, đã ngưng khi ra viện."
+      },
+      "kham_benh": "Tỉnh, T 38,8 °C, HA 104/62 mmHg, mạch 110 lần/phút, SpO2 91% khí phòng. Ran ẩm đáy phổi phải.",
+      "tom_tat": "BN nữ 72T viêm phổi bệnh viện, nhập HSTC do sốt và suy hô hấp nhẹ. Ceftriaxone 2 g/ngày từ 10/11. Cân nặng 60 kg, creatinin 80 umol/L.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS008-02",
+          "ma_icd10": "J15.9",
+          "noi_dung": "Viêm phổi bệnh viện",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS008-01",
+          "loai": "mach",
+          "gia_tri": 110.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-10T16:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 104.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T16:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 62.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-10T16:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-04",
+          "loai": "spo2",
+          "gia_tri": 91.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-10T16:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-05",
+          "loai": "nhiet_do",
+          "gia_tri": 38.8,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-10T16:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-06",
+          "loai": "can_nang",
+          "gia_tri": 60.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-07",
+          "loai": "mach",
+          "gia_tri": 92.0,
+          "don_vi": "lần/phút",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-08",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 118.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-09",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 72.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-10",
+          "loai": "spo2",
+          "gia_tri": 96.0,
+          "don_vi": "%",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS008-11",
+          "loai": "nhiet_do",
+          "gia_tri": 37.2,
+          "don_vi": "°C",
+          "thoi_diem_do": "2026-11-12T06:30:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS008-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 74.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-10T17:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS008-02",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 80.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-12T06:45:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-008-02",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "BN nữ 72T vào HSTC, viêm phổi bệnh viện, sốt 38,8 độ C, khó thở, SpO2 91% khí phòng, mạch 110 lần/phút, HA 104/62 mmHg. Thở oxy qua mũi 3 L/phút. Ceftriaxone 2 g truyền tĩnh mạch 1 lần/ngày.",
+          "thoi_diem_ghi": "2026-11-10T17:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-008-03",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 2, T 37,9 °C, mạch 98 lần/phút, SpO2 94% thở oxy 2 L/phút, ho đờm vàng giảm. Còn khó thở khi nằm.",
+          "thoi_diem_ghi": "2026-11-11T08:00:00+07:00"
+        },
+        {
+          "dien_bien_id": "DB-HS-008-04",
+          "loai_ho_so": "Tờ điều trị",
+          "noi_dung": "Ngày 3, T 37,2 °C, mạch 92 lần/phút, HA 118/72 mmHg, SpO2 96% thở oxy 1 L/phút. Creatinin 80 umol/L, cân nặng 60 kg. Chưa cải thiện hoàn toàn. Ghi y lệnh đổi kháng sinh theo phác đồ viêm phổi bệnh viện.",
+          "thoi_diem_ghi": "2026-11-12T07:30:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-008-02",
+          "thoi_diem_ke": "2026-11-10T16:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "ngung",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": "Đổi kháng sinh theo phác đồ viêm phổi bệnh viện",
+          "thoi_diem_ngung": "2026-11-12T09:00:00+07:00",
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-008-02-01",
+              "thuoc_id": "T-CEFTRIAXONE-2G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 2.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 2 g mỗi 24 giờ",
+              "bat_dau": "2026-11-10T17:00:00+07:00",
+              "ket_thuc": "2026-11-12T09:00:00+07:00",
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "discontinued",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-10T17:00:00+07:00",
+                  "lieu": 2.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-008-03",
+          "thoi_diem_ke": "2026-11-10T17:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_truc",
+          "loai": "cap_cuu",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-008-03-01",
+              "thuoc_id": null,
+              "ten_tu_do": "Natri clorid 0,9% 500 mL",
+              "loai_san_pham": "khac",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mL",
+              "tan_suat": "1 lần/ngày",
+              "so_lan_moi_ngay": 1,
+              "khoang_cach_gio": 24.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 500 mL mỗi ngày để duy trì đường truyền",
+              "bat_dau": "2026-11-10T18:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-10T18:00:00+07:00",
+                  "lieu": 500.0,
+                  "don_vi": "mL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-008-04",
+          "thoi_diem_ke": "2026-11-11T08:00:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "khi_can",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "dang_thuc_hien",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-008-04-01",
+              "thuoc_id": "T-PARACETAMOL-1G-100ML",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1000.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "khi sốt trên 38,5 °C, tối đa 3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 g khi sốt trên 38,5 °C, tối đa 3 lần/ngày, mỗi lần cách nhau 8 giờ",
+              "bat_dau": "2026-11-11T08:30:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "active",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-11T08:30:00+07:00",
+                  "lieu": 1000.0,
+                  "don_vi": "mg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "y_lenh_id": "YL-HS-008-05",
+          "thoi_diem_ke": "2026-11-12T09:30:00+07:00",
+          "khoa_ke_don": "Hồi sức tích cực",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": "YL-HS-008-02",
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-008-05-01",
+              "thuoc_id": "T-MEROPENEM-1G",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 1.0,
+              "don_vi_lieu": "g",
+              "tan_suat": "3 lần/ngày",
+              "so_lan_moi_ngay": 3,
+              "khoang_cach_gio": 8.0,
+              "duong_dung": "truyền tĩnh mạch",
+              "cach_dung": "Truyền tĩnh mạch 1 g mỗi 8 giờ",
+              "bat_dau": "2026-11-12T10:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Kho nội trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": [
+                {
+                  "thoi_diem_du_kien": "2026-11-12T10:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-12T18:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                },
+                {
+                  "thoi_diem_du_kien": "2026-11-13T02:00:00+07:00",
+                  "lieu": 1.0,
+                  "don_vi": "g"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-2-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-10T18:15:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_truc",
+          "dien_bien": "BN nữ 72T chuyển vào HSTC từ khoa khác do sốt 38,8 °C, khó thở, ho đờm vàng. Khi vào viện: mạch 110 lần/phút, HA 104/62 mmHg, SpO2 91% khí phòng, nhiệt độ 38,8 °C, ran ẩm đáy phổi phải, tỉnh. Creatinin 74 umol/L lúc 17:30.",
+          "danh_gia": "Viêm phổi bệnh viện nghi ngờ, có suy hô hấp nhẹ với SpO2 91% khí phòng và HA 104/62 mmHg cần theo dõi sát. Creatinin trong khoảng tham chiếu.",
+          "huong_xu_tri": "Thở oxy qua mũi 3 L/phút, theo dõi SpO2 liên tục. Ceftriaxon 2 g truyền tĩnh mạch mỗi 24 giờ. Truyền natri clorid 0,9% 500 mL mỗi ngày để duy trì đường truyền. Làm thêm xét nghiệm theo chỉ định của khoa.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-02",
+            "YL-HS-008-03"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Ăn lỏng, chia nhỏ bữa, tránh sặc",
+          "theo_doi": [
+            "SpO2 và nhịp thở liên tục",
+            "Mạch và huyết áp mỗi 4 giờ",
+            "Nhiệt độ mỗi 4 giờ"
+          ],
+          "dan_do": "Giữ tư thế nửa nằm nửa ngồi, không tự tháo ống thở oxy. Báo ngay khi khó thở tăng."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-2-02",
+          "ngay_dieu_tri": 2,
+          "thoi_diem_lap": "2026-11-11T10:00:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 2 BN còn sốt nhẹ, nhiệt độ 37,9 °C, mạch 98 lần/phút, SpO2 94% khi thở oxy 2 L/phút. Ho đờm vàng giảm nhưng còn khó thở khi nằm. Tiếp tục ceftriaxon và truyền dịch theo y lệnh.",
+          "danh_gia": "Viêm phổi bệnh viện cải thiện chậm: SpO2 tăng từ 91% lên 94% khi thở oxy 2 L/phút, khó thở khi nằm còn. Đáp ứng chưa hoàn toàn, cần tiếp tục kháng sinh và đánh giá thêm.",
+          "huong_xu_tri": "Tiếp tục ceftriaxon 2 g truyền tĩnh mạch mỗi 24 giờ, thở oxy điều chỉnh theo SpO2. Paracetamol 1 g truyền tĩnh mạch khi sốt trên 38,5 °C, tối đa 3 lần mỗi ngày. Đánh giá lại ngay nếu SpO2 tụt xuống dưới mức hiện tại.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-02",
+            "YL-HS-008-03",
+            "YL-HS-008-04"
+          ],
+          "che_do_cham_soc": "cấp 1",
+          "che_do_an": "Cháo loãng, uống nhiều nước",
+          "theo_doi": [
+            "SpO2 và thở oxy",
+            "Nhiệt độ mỗi 4 giờ",
+            "Khó thở khi nằm"
+          ],
+          "dan_do": "Nằm đầu cao, không tự tháo ống thở oxy. Báo điều dưỡng khi thấy môi tím hoặc thở nhanh hơn."
+        },
+        {
+          "phieu_dieu_tri_id": "PDT-HS-008-2-03",
+          "ngay_dieu_tri": 3,
+          "thoi_diem_lap": "2026-11-12T09:30:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "Ngày 3 BN nhiệt độ 37,2 °C, mạch 92 lần/phút, HA 118/72 mmHg, SpO2 96% khi thở oxy 1 L/phút. Cân nặng 60 kg, creatinin 80 umol/L lúc 06:45. Ceftriaxon đã được ngưng lúc 09:00 để đổi kháng sinh theo phác đồ viêm phổi bệnh viện. Chưa cải thiện hoàn toàn.",
+          "danh_gia": "Viêm phổi bệnh viện chưa cải thiện hoàn toàn nhưng nhu cầu oxy đã giảm xuống 1 L/phút và huyết động ổn hơn. Creatinin 80 umol/L ở giới hạn trên của khoảng tham chiếu, cần theo dõi khi dùng kháng sinh mới.",
+          "huong_xu_tri": "Đề nghị meropenem 1 g truyền tĩnh mạch mỗi 8 giờ, thay thế ceftriaxon theo phác đồ viêm phổi bệnh viện. Tiếp tục natri clorid 0,9% truyền mỗi ngày và paracetamol khi sốt. Theo dõi SpO2 và đánh giá lại sau 48 giờ dùng kháng sinh mới.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-008-02",
+            "YL-HS-008-03",
+            "YL-HS-008-04",
+            "YL-HS-008-05"
+          ],
+          "che_do_cham_soc": "cấp 2",
+          "che_do_an": "Cháo, cơm mềm, ăn chia nhỏ",
+          "theo_doi": [
+            "SpO2 khi thở oxy",
+            "Nhiệt độ, mạch, huyết áp",
+            "Dấu hiệu dị ứng hoặc đau tại chỗ truyền sau khi đổi kháng sinh"
+          ],
+          "dan_do": "Báo ngay khi khó thở tăng hoặc nổi mẩn sau khi bắt đầu thuốc mới."
+        }
+      ]
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-008-05"
+}

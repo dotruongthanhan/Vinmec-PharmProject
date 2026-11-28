@@ -16,7 +16,17 @@
     "dot_dieu_tri_id": "DT-DEMO-05",
     "khoa_dieu_tri": "Tim mạch",
     "loai_dieu_tri": "noi_tru",
-    "thoi_diem_bat_dau": "2026-11-09T10:00:00+07:00"
+    "thoi_diem_bat_dau": "2026-11-09T10:00:00+07:00",
+    "quan_ly": {
+      "noi_gioi_thieu": "tu_den",
+      "tuyen_chuyen_den": null,
+      "vao_khoa_luc": "2026-11-09T10:00:00+07:00",
+      "so_giuong": "G-065-01",
+      "so_luu_tru": "LT-2026-06501",
+      "ma_yt": "YT-2026-065-01",
+      "ra_vien": null,
+      "bac_si_dieu_tri": "Bác sĩ điều trị"
+    }
   },
   "chan_doan": [
     {
@@ -129,5 +139,33 @@
       "ma_atc": "C07AB02",
       "nhom_duoc_ly": "chen_beta_chon_loc"
     }
-  ]
+  ],
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Văn 65",
+    "ngay_sinh": "1971-11-09",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Lao động tự do",
+    "dia_chi": {
+      "so_nha": "9065",
+      "thon_pho": "Phố Ngô Gia Tự",
+      "xa_phuong": "Tiền An",
+      "huyen": "Bắc Ninh",
+      "tinh_thanh": "Bắc Ninh"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000065",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 65",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 065"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 168.0,
+    "can_nang_kg": 72.0,
+    "nhom_mau": null
+  }
 }

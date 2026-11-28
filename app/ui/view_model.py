@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+from collections import Counter
 from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -165,14 +168,70 @@ def lab_rows(ca: CaBenh) -> list[dict[str, object]]:
     return rows
 
 
+def finding_base_id(finding: PhatHien) -> str:
+    """Tạo mã nhận định gốc từ mã luật và danh sách dòng y lệnh đã sắp xếp."""
+    return finding.ma_luat + "|" + ",".join(sorted(finding.chi_tiet_y_lenh_id))
+
+
+def _finding_content_digest(finding: PhatHien) -> str:
+    """Băm ngắn toàn bộ nội dung phân biệt khi mô tả của hai phát hiện trùng nhau."""
+    payload = {
+        "yeu_to": finding.yeu_to,
+        "ket_luan": finding.ket_luan,
+        "muc_do": finding.muc_do,
+        "mo_ta": finding.mo_ta,
+        "thong_tin_con_thieu": list(finding.thong_tin_con_thieu),
+        "can_cu": [(item.loai, item.ban_ghi_id, item.mo_ta) for item in finding.can_cu],
+    }
+    encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()[:8]
+
+
+def finding_ids(phat_hien: Sequence[PhatHien]) -> list[str]:
+    """Sinh mã nhận định duy nhất trong ca và ổn định (không phụ thuộc thứ tự).
+
+    Nhận định không trùng (ma_luat, chi_tiet_y_lenh_id) giữ nguyên dạng gốc để tương thích
+    phản hồi cũ; khi trùng, gắn hậu tố băm ngắn từ mo_ta (hoặc nội dung đầy đủ nếu cần).
+    """
+    bases = [finding_base_id(item) for item in phat_hien]
+    base_counts = Counter(bases)
+    mo_ta_hashes = [
+        hashlib.sha256(item.mo_ta.encode("utf-8")).hexdigest()[:8] for item in phat_hien
+    ]
+    mo_ta_counts: Counter[tuple[str, str]] = Counter(zip(bases, mo_ta_hashes, strict=True))
+
+    candidates: list[str] = []
+    for item, base, mo_ta_hash in zip(phat_hien, bases, mo_ta_hashes, strict=True):
+        if base_counts[base] == 1:
+            candidates.append(base)
+        elif mo_ta_counts[(base, mo_ta_hash)] == 1:
+            candidates.append(f"{base}|{mo_ta_hash}")
+        else:
+            candidates.append(f"{base}|{_finding_content_digest(item)}")
+
+    candidate_counts = Counter(candidates)
+    seen_occurrences: Counter[str] = Counter()
+    unique_ids: list[str] = []
+    for candidate in candidates:
+        if candidate_counts[candidate] == 1:
+            unique_ids.append(candidate)
+            continue
+        seen_occurrences[candidate] += 1
+        occ = seen_occurrences[candidate]
+        unique_ids.append(candidate if occ == 1 else f"{candidate}~{occ}")
+    return unique_ids
+
+
 def finding_rows(ca: CaBenh, phat_hien: Sequence[PhatHien]) -> list[dict[str, object]]:
     """Chuyển danh sách PhatHien thành các dòng hiển thị có nhãn thuốc và yếu tố tiếng Việt."""
+    nids = finding_ids(phat_hien)
     rows: list[dict[str, object]] = []
-    for item in phat_hien:
+    for item, nid in zip(phat_hien, nids, strict=True):
         drug_text = " + ".join(drug_label(ca, line_id) for line_id in item.chi_tiet_y_lenh_id)
         factor_name = TEN_YEU_TO.get(item.yeu_to, str(item.yeu_to))
         rows.append(
             {
+                "nhan_dinh_id": nid,
                 "thuoc": drug_text,
                 "yeu_to": f"{item.yeu_to}. {factor_name}",
                 "nhan_xet": item.mo_ta,
@@ -571,17 +630,29 @@ def feedback_status(
     row: Mapping[str, object],
     feedbacks: Sequence[PhanHoi],
 ) -> PhanHoi | None:
-    """Tìm phản hồi mới nhất khớp ca_id, ma_luat và đúng tập chi_tiet_y_lenh_id."""
+    """Tìm phản hồi mới nhất khớp ca_id, nhận định (hoặc ma_luat cũ) và đúng tập dòng y lệnh."""
     ma_luat = str(row.get("ma_luat", ""))
+    raw_nid = row.get("nhan_dinh_id")
+    nhan_dinh_id = str(raw_nid) if raw_nid is not None and str(raw_nid) != "" else None
     raw_ids = row.get("chi_tiet_y_lenh_id", [])
     if isinstance(raw_ids, list | tuple | set):
         target_ids = {str(item) for item in raw_ids}
     else:
         target_ids = set()
 
+    base_id = ma_luat + "|" + ",".join(sorted(target_ids))
+    is_disambiguated = (
+        nhan_dinh_id is not None and not nhan_dinh_id.startswith("ai|") and nhan_dinh_id != base_id
+    )
+
     latest: PhanHoi | None = None
     for fb in feedbacks:
-        if fb.ca_id != ca_id or fb.ma_luat != ma_luat:
+        if fb.ca_id != ca_id:
+            continue
+        if is_disambiguated:
+            if fb.ma_luat != nhan_dinh_id:
+                continue
+        elif fb.ma_luat != ma_luat and (nhan_dinh_id is None or fb.ma_luat != nhan_dinh_id):
             continue
         if set(fb.chi_tiet_y_lenh_id) != target_ids:
             continue

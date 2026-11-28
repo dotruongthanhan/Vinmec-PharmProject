@@ -67,12 +67,13 @@ def test_job_manager_dedupes_concurrent_starts_and_supports_restart() -> None:
         manager.shutdown()
 
 
-def test_job_manager_restart_ignores_stale_previous_run() -> None:
+def test_job_manager_restart_while_running_keeps_current_job() -> None:
     manager = AiJobManager(max_workers=2)
     try:
         unblock_first = threading.Event()
         first_started = threading.Event()
         first_finished = threading.Event()
+        new_calls = 0
 
         def slow_first() -> str:
             first_started.set()
@@ -82,18 +83,33 @@ def test_job_manager_restart_ignores_stale_previous_run() -> None:
             finally:
                 first_finished.set()
 
+        def second_job() -> str:
+            nonlocal new_calls
+            new_calls += 1
+            return "moi"
+
         manager.start("DEMO-02", slow_first)
         assert first_started.wait(timeout=2.0)
 
-        manager.start("DEMO-02", lambda: "moi", restart=True)
-        assert _wait_until_done(manager, "DEMO-02") == "xong"
-        assert manager.get("DEMO-02").ket_qua == "moi"
+        kept = manager.start("DEMO-02", second_job, restart=True)
+        assert kept.trang_thai == "dang_chay"
+        assert new_calls == 0
 
         unblock_first.set()
         assert first_finished.wait(timeout=2.0)
-        # Chờ nhẹ để đảm bảo nhánh cập nhật của job cũ đã chạy qua.
-        time.sleep(0.02)
-        assert manager.get("DEMO-02").ket_qua == "moi"
+        assert _wait_until_done(manager, "DEMO-02") == "xong"
+        assert new_calls == 0
+        first_state = manager.get("DEMO-02")
+        assert first_state is not None
+        assert first_state.ket_qua == "cu"
+
+        restarted = manager.start("DEMO-02", second_job, restart=True)
+        assert restarted.trang_thai == "dang_chay"
+        assert _wait_until_done(manager, "DEMO-02") == "xong"
+        assert new_calls == 1
+        final_state = manager.get("DEMO-02")
+        assert final_state is not None
+        assert final_state.ket_qua == "moi"
     finally:
         manager.shutdown()
 

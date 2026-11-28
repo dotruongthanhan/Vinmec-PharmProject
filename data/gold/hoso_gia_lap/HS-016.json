@@ -1,0 +1,14 @@
+{
+  "ca_id": "HS-016",
+  "phat_hien_ky_vong": [
+    {
+      "yeu_to": 2,
+      "ket_luan": "can_xem",
+      "muc_do": "nghiem_trong",
+      "chi_tiet_y_lenh_id": ["CT-HS-016-03-01"],
+      "mo_ta": "Enoxaparin 40 mg tiêm dưới da được kê khi rivaroxaban 20 mg/ngày đang dùng (active): trùng hai thuốc chống đông, cần xem lại."
+    }
+  ],
+  "van_ban_bat_thuong": false,
+  "ghi_chu": null
+}

@@ -1,0 +1,244 @@
+{
+  "ho_so_id": "HS-004",
+  "kich_ban_id": "HS-004",
+  "la_gia_lap": true,
+  "phien_ban_sinh": "0.1-haiku",
+  "nguoi_benh": {
+    "nguoi_benh_id": "NB-HS-004",
+    "tuoi": 62,
+    "gioi_tinh": "nu"
+  },
+  "tinh_trang_di_ung": {
+    "trang_thai": "khong_di_ung_da_hoi",
+    "nguon": "EMR",
+    "thoi_diem": "2026-11-12T08:00:00+07:00"
+  },
+  "di_ung": [],
+  "danh_muc_hoat_chat": [
+    {
+      "hoat_chat_id": "HC-METFORMIN",
+      "ten_hoat_chat": "Metformin",
+      "ten_quoc_te": "metformin",
+      "ma_atc": "A10BA02",
+      "nhom_duoc_ly": "biguanid"
+    }
+  ],
+  "danh_muc_thuoc": [
+    {
+      "thuoc_id": "T-METFORMIN-500",
+      "ten_thuoc": "Metformin 500 mg",
+      "ham_luong": "500 mg",
+      "duong_dung": "uống",
+      "thanh_phan": [
+        {
+          "hoat_chat_id": "HC-METFORMIN",
+          "ham_luong_thanh_phan": 500.0,
+          "don_vi": "mg"
+        }
+      ],
+      "la_thuoc_nguy_co_cao": false,
+      "la_khang_sinh": false
+    }
+  ],
+  "dot_dieu_tri": [
+    {
+      "dot_dieu_tri_id": "DT-HS-004-1",
+      "thu_tu": 1,
+      "khoa_dieu_tri": "Nội tiết",
+      "loai_dieu_tri": "ngoai_tru",
+      "hinh_thuc_vao": "kham_benh",
+      "thoi_diem_bat_dau": "2026-11-12T08:00:00+07:00",
+      "thoi_diem_ket_thuc": null,
+      "so_ngay_dieu_tri": null,
+      "lich_su_khoa": [
+        {
+          "khoa": "Nội tiết",
+          "tu": "2026-11-12T08:00:00+07:00",
+          "den": null
+        }
+      ],
+      "ly_do_vao_vien": "Tái khám đái tháo đường típ 2",
+      "benh_su": "BN nữ 62T, phát hiện đường huyết cao cách đây vài tháng, chế độ ăn và vận động chưa đạt. Không triệu chứng hạ đường huyết, không sụt cân.",
+      "tien_su": {
+        "ban_than": "Đái tháo đường típ 2 mới phát hiện. Chưa ghi nhận bệnh mạn tính khác.",
+        "gia_dinh": "Không ghi nhận.",
+        "thuoc_truoc_vao_vien": "Chưa dùng thuốc hạ đường huyết."
+      },
+      "kham_benh": "T 36,8. HA 124/78 mmHg. Cân nặng 64 kg. Tỉnh, không phù.",
+      "tom_tat": "BN nữ 62T, đái tháo đường típ 2 chưa dùng thuốc. HbA1c 7,8%. Creatinin 72 umol/L, eGFR 78. Kê metformin 500 mg, tái khám 3 tháng.",
+      "chan_doan": [
+        {
+          "chan_doan_id": "CD-HS004-1-01",
+          "ma_icd10": "E11.9",
+          "noi_dung": "Đái tháo đường típ 2 không biến chứng",
+          "loai": "chinh"
+        }
+      ],
+      "co_dia": [],
+      "sinh_hieu": [
+        {
+          "sinh_hieu_id": "SH-HS004-1-01",
+          "loai": "can_nang",
+          "gia_tri": 64.0,
+          "don_vi": "kg",
+          "thoi_diem_do": "2026-11-12T08:10:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS004-1-02",
+          "loai": "huyet_ap_tam_thu",
+          "gia_tri": 124.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        },
+        {
+          "sinh_hieu_id": "SH-HS004-1-03",
+          "loai": "huyet_ap_tam_truong",
+          "gia_tri": 78.0,
+          "don_vi": "mmHg",
+          "thoi_diem_do": "2026-11-12T08:15:00+07:00"
+        }
+      ],
+      "xet_nghiem": [
+        {
+          "xet_nghiem_id": "XN-HS004-1-01",
+          "ma_xet_nghiem": "creatinin",
+          "ten_xet_nghiem": "Creatinin máu",
+          "gia_tri_so": 72.0,
+          "gia_tri_text": null,
+          "don_vi": "umol/L",
+          "nguong_duoi": 44,
+          "nguong_tren": 80,
+          "thoi_diem_ket_qua": "2026-11-12T09:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS004-1-02",
+          "ma_xet_nghiem": "egfr",
+          "ten_xet_nghiem": "eGFR",
+          "gia_tri_so": 78.0,
+          "gia_tri_text": null,
+          "don_vi": "mL/phút/1,73m2",
+          "nguong_duoi": 60,
+          "nguong_tren": null,
+          "thoi_diem_ket_qua": "2026-11-12T09:30:00+07:00"
+        },
+        {
+          "xet_nghiem_id": "XN-HS004-1-03",
+          "ma_xet_nghiem": "hba1c",
+          "ten_xet_nghiem": "HbA1c",
+          "gia_tri_so": 7.8,
+          "gia_tri_text": null,
+          "don_vi": "%",
+          "nguong_duoi": null,
+          "nguong_tren": 5.7,
+          "thoi_diem_ket_qua": "2026-11-12T09:30:00+07:00"
+        }
+      ],
+      "vi_sinh": [],
+      "dien_bien": [
+        {
+          "dien_bien_id": "DB-HS-004-1-01",
+          "loai_ho_so": "Phiếu khám",
+          "noi_dung": "BN tái khám đái tháo đường típ 2, chưa dùng thuốc. HbA1c 7,8%, creatinin 72 umol/L, eGFR 78. Kê metformin 500 mg uống 2 lần/ngày sau ăn, tái khám sau 3 tháng.",
+          "thoi_diem_ghi": "2026-11-12T09:40:00+07:00"
+        }
+      ],
+      "y_lenh": [
+        {
+          "y_lenh_id": "YL-HS-004-01",
+          "thoi_diem_ke": "2026-11-12T09:40:00+07:00",
+          "khoa_ke_don": "Nội tiết",
+          "vai_tro_nguoi_ke": "bac_si_dieu_tri",
+          "loai": "thuong_quy",
+          "luong_duyet": "truc_tiep",
+          "muc_uu_tien": null,
+          "trang_thai": "cho_duyet",
+          "thay_the_y_lenh_id": null,
+          "ly_do_ngung": null,
+          "thoi_diem_ngung": null,
+          "chi_tiet": [
+            {
+              "chi_tiet_y_lenh_id": "CT-HS-004-01-01",
+              "thuoc_id": "T-METFORMIN-500",
+              "ten_tu_do": null,
+              "loai_san_pham": "thuoc",
+              "lieu_moi_lan": 500.0,
+              "don_vi_lieu": "mg",
+              "tan_suat": "2 lần/ngày",
+              "so_lan_moi_ngay": 2,
+              "khoang_cach_gio": 12.0,
+              "duong_dung": "uống",
+              "cach_dung": "Uống sau ăn sáng và sau ăn tối",
+              "bat_dau": "2026-11-12T11:00:00+07:00",
+              "ket_thuc": null,
+              "nguon_thuoc": "Đơn ngoại trú",
+              "trang_thai_dong": "pending",
+              "lich_dung": []
+            }
+          ]
+        }
+      ],
+      "tong_ket": null,
+      "phieu_dieu_tri": [
+        {
+          "phieu_dieu_tri_id": "PDT-HS-004-1-01",
+          "ngay_dieu_tri": 1,
+          "thoi_diem_lap": "2026-11-12T09:50:00+07:00",
+          "vai_tro_nguoi_lap": "bac_si_dieu_tri",
+          "dien_bien": "BN nữ 62T tái khám đái tháo đường típ 2 mới phát hiện, chưa dùng thuốc hạ đường huyết. Không có triệu chứng hạ đường huyết, không sụt cân. Cân nặng 64 kg, HA 124/78 mmHg, tỉnh, không phù. HbA1c 7,8% và creatinin 72 umol/L, eGFR 78 mL/phút/1,73m2.",
+          "danh_gia": "Đái tháo đường típ 2 chưa kiểm soát tốt, HbA1c 7,8%, chưa ghi nhận biến chứng. Chức năng thận còn tốt với eGFR 78, không có lý do để tránh metformin. Cần phối hợp điều chỉnh chế độ ăn và tăng vận động cùng với thuốc.",
+          "huong_xu_tri": "Đề nghị metformin 500 mg uống 2 lần/ngày, uống sau ăn sáng và sau ăn tối. Hướng dẫn giảm tinh bột tinh chế và đường đơn, đi bộ đều mỗi ngày. Tái khám sau 3 tháng với HbA1c và creatinin.",
+          "y_lenh_trong_ngay": [
+            "YL-HS-004-01"
+          ],
+          "che_do_cham_soc": null,
+          "che_do_an": "Chế độ ăn đái tháo đường, giảm tinh bột và đường đơn",
+          "theo_doi": [
+            "Đường huyết mao mạch lúc đói tại nhà",
+            "Triệu chứng tiêu hóa sau khi bắt đầu metformin",
+            "HbA1c sau 3 tháng"
+          ],
+          "dan_do": "Uống thuốc cùng bữa ăn để giảm khó chịu dạ dày. Báo bác sĩ nếu nôn nhiều, tiêu chảy kéo dài hoặc sụt cân nhanh."
+        }
+      ],
+      "quan_ly": {
+        "noi_gioi_thieu": "tu_den",
+        "tuyen_chuyen_den": null,
+        "vao_khoa_luc": "2026-11-12T08:00:00+07:00",
+        "so_giuong": null,
+        "so_luu_tru": "LT-2026-00401",
+        "ma_yt": "YT-2026-004-01",
+        "ra_vien": null,
+        "bac_si_dieu_tri": "Bác sĩ điều trị"
+      }
+    }
+  ],
+  "y_lenh_trong_tam": "YL-HS-004-01",
+  "hanh_chinh": {
+    "ho_ten": "Nguyễn Thị 4",
+    "ngay_sinh": "1964-11-12",
+    "dan_toc": "Kinh",
+    "ngoai_kieu": null,
+    "nghe_nghiep": "Hưu trí",
+    "dia_chi": {
+      "so_nha": "9004",
+      "thon_pho": "Thôn Đoài",
+      "xa_phuong": "Việt Hùng",
+      "huyen": "Đông Anh",
+      "tinh_thanh": "Hà Nội"
+    },
+    "doi_tuong": "bhyt",
+    "bhyt": {
+      "so_the": "GD4010000000004",
+      "gia_tri_den": "2030-12-31"
+    },
+    "nguoi_bao_tin": {
+      "ho_ten": "Nguyễn Thị 4",
+      "quan_he": "Người thân",
+      "dien_thoai": "0900 000 004"
+    },
+    "bo_me": null,
+    "chieu_cao_cm": 158.0,
+    "can_nang_kg": 64.0,
+    "nhom_mau": null
+  }
+}
