@@ -124,8 +124,9 @@ def test_actual_matches_pipeline(ca: CaBenh, monkeypatch: pytest.MonkeyPatch) ->
     actual = next(x for x in run_case(ca, None).chi_so if x.cong_thuc == "cockcroft_gault")  # type: ignore[arg-type]
     result = _run(ca, "cockcroft_gault")
     assert actual.ket_qua is not None
-    assert f"kết quả: {actual.ket_qua:.2f} {actual.don_vi}" in result.noi_dung
-    assert "can_nang_kg: 80.0 kg" in result.noi_dung
+    displayed = f"{actual.ket_qua:.2f}".rstrip("0").rstrip(".").replace(".", ",")
+    assert f"kết quả: {displayed} {actual.don_vi}" in result.noi_dung
+    assert "can_nang_kg: 80 kg" in result.noi_dung
 
 
 def test_tool_does_not_access_file_network_or_database(
@@ -145,7 +146,7 @@ def test_tool_does_not_access_file_network_or_database(
 
 def test_input_precision_is_preserved(ca: CaBenh) -> None:
     ca.sinh_hieu[1].gia_tri = 80.123456789
-    assert "80.123456789 kg" in _run(ca, "bmi").noi_dung
+    assert "80,123456789 kg" in _run(ca, "bmi").noi_dung
 
 
 def test_citation_labels_match_weight_assumption(ca: CaBenh) -> None:
@@ -167,7 +168,7 @@ def test_ideal_and_scope_are_based_only_on_active_case(ca: CaBenh) -> None:
         ThamSoTinhChiSo(cong_thuc="cockcroft_gault", can_nang="ly_tuong"),
         _ctx(ca, cases=(ca, other)),
     )
-    assert f"kết quả: {expected.ket_qua:.2f}" in result.noi_dung
+    assert f"kết quả: {expected.ket_qua:.2f}".replace(".", ",") in result.noi_dung
     assert result.noi_dung != _run(ca, "cockcroft_gault").noi_dung
     assert "125" not in result.noi_dung
 

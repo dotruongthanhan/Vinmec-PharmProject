@@ -206,19 +206,40 @@ def test_timeout_does_not_store_late_result(monkeypatch: pytest.MonkeyPatch) -> 
     assert gateway.minh_hoa == []
 
 
-def test_duplicate_title_and_key_order_do_not_spend_rejections() -> None:
+def test_duplicate_key_order_does_not_spend_rejections() -> None:
     gateway, ctx = setup_gateway()
     original = spec()
     result = gateway.goi("ve_bieu_do", {"dac_ta": original}, ctx)
     assert "Đã có hình mh-1. Không cần vẽ lại; hãy trả lời bằng chữ." in result.noi_dung
     duplicate = dict(reversed(list(spec().items())))
-    duplicate["tieu_de"] = "Tên khác"
-    duplicate["phu_de"] = []
     for _ in range(3):
         result = gateway.goi("ve_bieu_do", {"dac_ta": duplicate}, ctx)
-        assert result.ma_loi == "trung_hinh"
-        assert result.noi_dung == "trung_hinh:mh-1"
+        assert result.trang_thai == "ok"
+        assert result.noi_dung == "Đã vẽ ở mh-1, không vẽ lại."
     other = spec()
     other["lop"][0]["dau"] = "chu"
     assert gateway.goi("ve_bieu_do", {"dac_ta": other}, ctx).trang_thai == "ok"
     assert len(gateway.minh_hoa) == 2
+
+
+def test_different_title_is_a_different_specification() -> None:
+    gateway, ctx = setup_gateway()
+    assert gateway.goi("ve_bieu_do", {"dac_ta": spec()}, ctx).trang_thai == "ok"
+    other = spec()
+    other["tieu_de"] = "Tên khác"
+    assert gateway.goi("ve_bieu_do", {"dac_ta": other}, ctx).trang_thai == "ok"
+    assert len(gateway.minh_hoa) == 2
+
+
+def test_duplicate_datasets_with_different_ids_are_same_figure() -> None:
+    gateway, ctx = setup_gateway()
+    first = spec()
+    assert gateway.goi("ve_bieu_do", {"dac_ta": first}, ctx).trang_thai == "ok"
+    with gateway._lock:
+        gateway._bo_du_lieu["ds-2"] = gateway._bo_du_lieu["ds-1"].model_copy(update={"ma": "ds-2"})
+    second = spec()
+    second["lop"][0]["du_lieu"] = "ds-2"
+    result = gateway.goi("ve_bieu_do", {"dac_ta": second}, ctx)
+    assert result.trang_thai == "ok"
+    assert "mh-1" in result.noi_dung
+    assert len(gateway.minh_hoa) == 1

@@ -274,7 +274,7 @@ def test_tool_loop_stops_after_max_turns_and_falls_back() -> None:
         chinh_sach=pol,
         max_turns=2,
     )
-    assert len(tool.calls) == 2
+    assert len(tool.calls) == 1
     assert result.trang_thai == "khong_co_nguon"
     assert result.noi_dung == HONEST_FALLBACK_MESSAGE
 

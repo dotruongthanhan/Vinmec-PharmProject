@@ -658,7 +658,7 @@ def _format_global_order_line(line: ChiTietYLenh) -> str:
     name = line.ten_tu_do or line.thuoc_id or line.chi_tiet_y_lenh_id
     unit = (line.don_vi_lieu or "").strip()
     if line.lieu_moi_lan is not None:
-        dose_num = f"{line.lieu_moi_lan:g}"
+        dose_num = f"{line.lieu_moi_lan:g}".replace(".", ",")
         dose_part = f"{dose_num} {unit}" if unit else f"{dose_num} (đơn vị chưa ghi)"
     elif unit:
         dose_part = f"liều chưa ghi ({unit})"
@@ -1069,6 +1069,7 @@ def tra_loi_trung_thuc(
     session: DeidSession,
     trang_thai: Literal["khong_co_nguon", "ngoai_pham_vi"] = "khong_co_nguon",
     con_luot: bool = True,
+    loi_neu_that_bai: bool = False,
 ) -> AskResult:
     """Gọi tối đa một lượt, kiểm chứng và chỉ giữ câu an toàn."""
 
@@ -1091,8 +1092,8 @@ def tra_loi_trung_thuc(
             )
             ghi_buoc("xong", "tra_loi_than_trong", chi_tiet="dùng câu dự phòng")
             return AskResult(
-                trang_thai=trang_thai,
-                noi_dung=HONEST_FALLBACK_MESSAGE,
+                trang_thai="loi" if loi_neu_that_bai else trang_thai,
+                noi_dung=ERROR_MESSAGE if loi_neu_that_bai else HONEST_FALLBACK_MESSAGE,
                 cong_cu_da_goi=cong_cu_da_goi,
             )
 
@@ -1214,7 +1215,11 @@ def tra_loi_trung_thuc(
             chi_tiet=f"đã lược {count} câu chưa kiểm chứng được" if count else None,
         )
         return result.model_copy(
-            update={"trang_thai": trang_thai, "noi_dung": content, "cong_cu_da_goi": cong_cu_da_goi}
+            update={
+                "trang_thai": result.trang_thai if loi_neu_that_bai else trang_thai,
+                "noi_dung": content,
+                "cong_cu_da_goi": cong_cu_da_goi,
+            }
         )
 
 
@@ -1859,7 +1864,8 @@ class CaseAsker:
                 _format_global_order_line(line) for line in ca.y_lenh_cho_duyet.chi_tiet
             )
             metrics_str = ", ".join(
-                f"{cs.cong_thuc}={cs.ket_qua:.1f} {cs.don_vi}"
+                f"{cs.cong_thuc}={f'{cs.ket_qua:.1f}'.rstrip('0').rstrip('.').replace('.', ',')} "
+                f"{cs.don_vi}"
                 for cs in kq.chi_so
                 if cs.ket_qua is not None
             )

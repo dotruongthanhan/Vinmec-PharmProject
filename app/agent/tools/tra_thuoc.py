@@ -232,7 +232,7 @@ def _fmt_num(value: Any) -> str:
     if isinstance(value, int):
         return str(value)
     if isinstance(value, float):
-        return str(int(value)) if value.is_integer() else f"{value:g}"
+        return (str(int(value)) if value.is_integer() else str(value)).replace(".", ",")
     return str(value)
 
 

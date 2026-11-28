@@ -519,7 +519,7 @@ def test_container_service_asker_use_db_without_local_kb_files(
         )
         assert asker._get_renal_rules() == container.renal_rules
 
-        service = CaseService(ROOT / "data/mock/demo", None, tmp_path / "fb.jsonl")
+        service = CaseService(ROOT / "data/mock/demo", None, tmp_path / "fb.jsonl", tracer=None)
         try:
             assert service.list_cases().cases
         finally:

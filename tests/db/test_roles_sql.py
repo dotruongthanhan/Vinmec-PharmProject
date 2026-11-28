@@ -25,6 +25,7 @@ API_PATH_MODULES: tuple[str, ...] = (
     "app/retrieval/corpus.py",
     "app/orchestration/evidence.py",
     "app/container.py",
+    "app/tracing/sink_db.py",
 )
 
 _WRITE_OPS = {"INSERT", "UPDATE", "DELETE", "TRUNCATE"}
@@ -220,8 +221,9 @@ def test_roles_sql_has_rls_policies_matching_grants() -> None:
     app_write_grants = {
         (op, target) for target, privs in grants.items() for op in privs if op in _WRITE_OPS
     }
-    assert app_write_grants == _extract_api_writes()
-    assert set(direct_policies) == app_write_grants
+    # Quyền DELETE vet_buoc hỗ trợ bảo trì; sink xoá vet_chay theo CASCADE.
+    assert app_write_grants == _extract_api_writes() | {("DELETE", "nghiep_vu.vet_buoc")}
+    assert {pair for pair in direct_policies if pair[0] != "SELECT"} == app_write_grants
 
     for (op, table), (policy_name, roles_raw, clause) in direct_policies.items():
         assert roles_raw == "bvienx_app"
@@ -230,8 +232,21 @@ def test_roles_sql_has_rls_policies_matching_grants() -> None:
             assert clause == "with check (true)", f"{table}: {clause}"
         elif op == "UPDATE":
             assert clause == "using (true) with check (true)", f"{table}: {clause}"
-        elif op == "DELETE":
+        elif op in {"DELETE", "SELECT"}:
             assert clause == "using (true)", f"{table}: {clause}"
+
+    # Bảng bật RLS và được cấp SELECT phải có policy đọc trực tiếp cho app.
+    rls_tables = set(
+        re.findall(
+            r"ALTER\s+TABLE\s+([a-z0-9_]+\.[a-z0-9_]+)\s+ENABLE\s+ROW\s+LEVEL\s+SECURITY",
+            sql_clean.lower(),
+            re.I,
+        )
+    )
+    for table in rls_tables:
+        schema = table.split(".", 1)[0]
+        if "SELECT" in grants.get(table, set()) or "SELECT" in grants.get(schema, set()):
+            assert ("SELECT", table) in direct_policies, f"Thiếu policy SELECT cho {table}"
 
     # Kiểm khối DO $$ duyệt pg_tables tạo SELECT cho bvienx_app và FOR ALL cho bvienx_loader.
     normalized = " ".join(sql_clean.split())

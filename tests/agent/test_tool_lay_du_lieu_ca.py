@@ -651,3 +651,50 @@ def test_all_case_columns_have_labels(sample_ca: CaBenh) -> None:
     result = run(sample_ca, "xet_nghiem", "sinh_hieu", "lich_dung", "khang_sinh", "moc_ca")
     assert len(result.bo_du_lieu) == 7
     assert all(column.nhan for dataset in result.bo_du_lieu for column in dataset.cot)
+
+
+def test_repeat_read_and_draw_uses_one_dataset_and_figure(sample_ca: CaBenh) -> None:
+    gw, ctx = gateway(), context(sample_ca)
+    params = {"phan": ["xet_nghiem"], "ma_xet_nghiem": ["creatinin"]}
+    first = gw.goi("lay_du_lieu_ca", params, ctx)
+    for _ in range(2):
+        again = gw.goi("lay_du_lieu_ca", dict(reversed(list(params.items()))), ctx)
+        assert again.bo_du_lieu == first.bo_du_lieu
+        assert "Kết quả đã có ở lần gọi trước" in again.noi_dung
+    assert list(gw.bo_du_lieu) == ["ds-1"]
+    spec = {
+        "phien_ban": "mh-1",
+        "tieu_de": "Mẫu",
+        "nguon": ["ca:xet_nghiem"],
+        "lop": [
+            {
+                "dau": "duong",
+                "du_lieu": "ds-1",
+                "ma_hoa": {"x": {"cot": "thoi_diem"}, "y": {"cot": "gia_tri"}},
+            }
+        ],
+    }
+    for _ in range(2):
+        assert gw.goi("ve_bieu_do", {"dac_ta": spec}, ctx).trang_thai == "ok"
+    assert len(gw.minh_hoa) == 1
+
+
+def test_series_units_and_vietnamese_numbers(sample_ca: CaBenh) -> None:
+    from app.verify.number import unverified_numbers
+
+    sample_ca.xet_nghiem[0].gia_tri_so = 2.5
+    result = run(sample_ca, "xet_nghiem")
+    data = result.bo_du_lieu[0]
+    assert next(c.don_vi for c in data.cot if c.ten == "gia_tri") == "mg/dL"
+    assert data.dong[0]["gia_tri"] == 2.5
+    assert "2,5 mg/dL" in result.noi_dung
+    assert unverified_numbers(["2,5 mg/dL", "2.5 mg/dL", "16 mg/dL"], [2.5, 16.0]) == []
+    sample_ca.xet_nghiem[0].gia_tri_so = 16.0
+    assert "16 mg/dL" in run(sample_ca, "xet_nghiem").noi_dung
+    mixed = sample_ca.xet_nghiem[0].model_copy(deep=True)
+    mixed.don_vi = "umol/L"
+    sample_ca.xet_nghiem.append(mixed)
+    assert (
+        next(c.don_vi for c in run(sample_ca, "xet_nghiem").bo_du_lieu[0].cot if c.ten == "gia_tri")
+        is None
+    )

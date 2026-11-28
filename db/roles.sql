@@ -203,9 +203,23 @@ DO $$
 BEGIN
     IF to_regclass('nghiep_vu.vet_chay') IS NOT NULL THEN
         GRANT INSERT, SELECT, DELETE ON TABLE nghiep_vu.vet_chay TO bvienx_app;
+        ALTER TABLE nghiep_vu.vet_chay ENABLE ROW LEVEL SECURITY;
+        DROP POLICY IF EXISTS bvienx_app_doc ON nghiep_vu.vet_chay;
+        CREATE POLICY bvienx_app_doc ON nghiep_vu.vet_chay FOR SELECT TO bvienx_app USING (true);
+        DROP POLICY IF EXISTS bvienx_app_them ON nghiep_vu.vet_chay;
+        CREATE POLICY bvienx_app_them ON nghiep_vu.vet_chay FOR INSERT TO bvienx_app WITH CHECK (true);
+        DROP POLICY IF EXISTS bvienx_app_xoa ON nghiep_vu.vet_chay;
+        CREATE POLICY bvienx_app_xoa ON nghiep_vu.vet_chay FOR DELETE TO bvienx_app USING (true);
     END IF;
     IF to_regclass('nghiep_vu.vet_buoc') IS NOT NULL THEN
         GRANT INSERT, SELECT, DELETE ON TABLE nghiep_vu.vet_buoc TO bvienx_app;
+        ALTER TABLE nghiep_vu.vet_buoc ENABLE ROW LEVEL SECURITY;
+        DROP POLICY IF EXISTS bvienx_app_doc ON nghiep_vu.vet_buoc;
+        CREATE POLICY bvienx_app_doc ON nghiep_vu.vet_buoc FOR SELECT TO bvienx_app USING (true);
+        DROP POLICY IF EXISTS bvienx_app_them ON nghiep_vu.vet_buoc;
+        CREATE POLICY bvienx_app_them ON nghiep_vu.vet_buoc FOR INSERT TO bvienx_app WITH CHECK (true);
+        DROP POLICY IF EXISTS bvienx_app_xoa ON nghiep_vu.vet_buoc;
+        CREATE POLICY bvienx_app_xoa ON nghiep_vu.vet_buoc FOR DELETE TO bvienx_app USING (true);
     END IF;
 END
 $$;
