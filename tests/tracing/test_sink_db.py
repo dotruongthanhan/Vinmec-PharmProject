@@ -193,6 +193,9 @@ def test_cleanup_batches(monkeypatch) -> None:
     assert len(calls) == 3
     assert all(params == (now - timedelta(days=30),) for _, params in calls)
     assert all("LIMIT 5000" in sql for sql, _ in calls)
+    # DELETE lọc theo cột và truy vấn con cần policy SELECT khi RLS được bật.
+    assert all("WHERE bat_dau < %s" in sql for sql, _ in calls)
+    assert all("WHERE ma_vet IN" in sql for sql, _ in calls)
 
 
 def test_canary_reaches_no_database_parameters(tmp_path, monkeypatch) -> None:

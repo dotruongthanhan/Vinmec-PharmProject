@@ -138,6 +138,8 @@ def test_format_global_order_line_handles_none_and_present_fields() -> None:
         trang_thai_dong="pending",
     )
     assert _format_global_order_line(line_full) == "Meropenem 1 g (mỗi 8 giờ, IV)"
+    line_full.lieu_moi_lan = 2.5
+    assert _format_global_order_line(line_full) == "Meropenem 2,5 g (mỗi 8 giờ, IV)"
 
 
 def test_ask_global_with_none_dose_does_not_fail() -> None:

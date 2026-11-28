@@ -60,11 +60,26 @@ _SAFE_STEP_REASONS: dict[str, str] = {
 }
 
 
-def _normalize_illustration(spec: dict[str, Any]) -> str | None:
-    """Chuẩn hoá đặc tả để so hình, bỏ tiêu đề và phụ đề."""
+def _normalize_illustration(spec: dict[str, Any], datasets: Mapping[str, BoDuLieu]) -> str | None:
+    """So đặc tả và nội dung bộ dữ liệu, không phụ thuộc mã ds."""
+
+    def replace_ids(value: Any) -> Any:
+        if isinstance(value, dict):
+            return {
+                key: (
+                    datasets[item].model_dump(exclude={"ma"}, mode="json")
+                    if key in {"ds", "du_lieu"} and isinstance(item, str) and item in datasets
+                    else replace_ids(item)
+                )
+                for key, item in value.items()
+            }
+        if isinstance(value, list):
+            return [replace_ids(item) for item in value]
+        return value
+
     try:
         return json.dumps(
-            {k: v for k, v in spec.items() if k not in ("tieu_de", "phu_de")},
+            replace_ids(spec),
             sort_keys=True,
             ensure_ascii=False,
             separators=(",", ":"),
@@ -262,6 +277,7 @@ class ToolGateway:
         self._bo_du_lieu: dict[str, BoDuLieu] = {}
         self._minh_hoa: list[KhoiMinhHoa] = []
         self._ma_can_cu: set[str] = set()
+        self._ket_qua_da_goi: dict[tuple[Any, ...], KetQuaCongCu] = {}
 
     @property
     def bo_du_lieu(self) -> dict[str, BoDuLieu]:
@@ -468,18 +484,56 @@ class ToolGateway:
 
             ghi_buoc("bat_dau", ma_buoc, ten=tool.ten_hien_thi)
 
+            cache_key = None
+            if not isinstance(tool, VeBieuDo):
+                try:
+                    params_key = json.dumps(
+                        tham_so.model_dump(mode="json"),
+                        sort_keys=True,
+                        ensure_ascii=False,
+                        allow_nan=False,
+                    )
+                    cache_key = (
+                        ten,
+                        params_key,
+                        ctx.vai_tro,
+                        ctx.che_do,
+                        id(ctx.ca),
+                        id(ctx.ket_qua_luat),
+                        id(ctx.ai_result),
+                        id(ctx.deid_session),
+                        ctx.nhan_dinh_id,
+                        ctx.cau_hoi_goc,
+                        ctx.lich_su_goc,
+                        tuple(id(case) for case in ctx.cac_ca),
+                        tuple(sorted((key, id(value)) for key, value in ctx.cac_ket_qua.items())),
+                    )
+                except (TypeError, ValueError):
+                    pass
+                with self._lock:
+                    cached = self._ket_qua_da_goi.get(cache_key) if cache_key else None
+                if cached is not None:
+                    ghi_buoc("xong", ma_buoc, chi_tiet="Dùng kết quả đã có")
+                    tool_span.dat_trang_thai("ok")
+                    self._audit(ten, ctx, "cho_phep", len(cached.can_cu), _elapsed_ms())
+                    return cached.model_copy(
+                        deep=True,
+                        update={"noi_dung": cached.noi_dung + "\nKết quả đã có ở lần gọi trước."},
+                    )
+
             if isinstance(tool, VeBieuDo) and isinstance(tham_so, ThamSoVeBieuDo):
                 with self._lock:
                     full = len(self._minh_hoa) >= 3
                     datasets_snapshot = dict(self._bo_du_lieu)
                     evidence_snapshot = set(self._ma_can_cu)
-                    normalized = _normalize_illustration(tham_so.dac_ta)
+                    normalized = _normalize_illustration(tham_so.dac_ta, datasets_snapshot)
                     duplicate = next(
                         (
                             block.ma
                             for block in self._minh_hoa
                             if normalized is not None
-                            and _normalize_illustration(block.dac_ta) == normalized
+                            and _normalize_illustration(block.dac_ta, datasets_snapshot)
+                            == normalized
                         ),
                         None,
                     )
@@ -488,7 +542,12 @@ class ToolGateway:
                         duplicate_count = self._so_lan_trung_hinh
                 if duplicate is not None:
                     tool_span.dat_thuoc_tinh(so_lan_trung_hinh=duplicate_count)
-                    return _reject("trung_hinh", f"trung_hinh:{duplicate}")
+                    ghi_buoc("xong", ma_buoc, chi_tiet="Hình đã có")
+                    tool_span.dat_trang_thai("ok")
+                    self._audit(ten, ctx, "cho_phep", 0, _elapsed_ms())
+                    return KetQuaCongCu(
+                        trang_thai="ok", noi_dung=f"Đã vẽ ở {duplicate}, không vẽ lại."
+                    )
                 try:
                     outcome: KhoiMinhHoa | LoiDacTa = (
                         LoiDacTa(ly_do="qua_3_khoi")
@@ -512,7 +571,8 @@ class ToolGateway:
                                 block.ma
                                 for block in self._minh_hoa
                                 if normalized is not None
-                                and _normalize_illustration(block.dac_ta) == normalized
+                                and _normalize_illustration(block.dac_ta, datasets_snapshot)
+                                == normalized
                             ),
                             None,
                         )
@@ -526,7 +586,12 @@ class ToolGateway:
                             self._minh_hoa.append(outcome)
                     if duplicate is not None:
                         tool_span.dat_thuoc_tinh(so_lan_trung_hinh=duplicate_count)
-                        return _reject("trung_hinh", f"trung_hinh:{duplicate}")
+                        ghi_buoc("xong", ma_buoc, chi_tiet="Hình đã có")
+                        tool_span.dat_trang_thai("ok")
+                        self._audit(ten, ctx, "cho_phep", 0, _elapsed_ms())
+                        return KetQuaCongCu(
+                            trang_thai="ok", noi_dung=f"Đã vẽ ở {duplicate}, không vẽ lại."
+                        )
                 if isinstance(outcome, LoiDacTa):
                     reason = outcome.ly_do
                     with self._lock:
@@ -733,7 +798,17 @@ class ToolGateway:
                         columns = ", ".join(
                             f"{c.ten} ({c.kieu}, {c.don_vi or 'không đơn vị'})" for c in safe.cot
                         )
-                        sample = json.dumps(masked_rows[:5], ensure_ascii=False)
+
+                        def display_cell(value: str | float | bool | None) -> str:
+                            if isinstance(value, float):
+                                number = str(int(value)) if value.is_integer() else str(value)
+                                return number.replace(".", ",")
+                            return json.dumps(value, ensure_ascii=False)
+
+                        sample = " | ".join(
+                            "; ".join(f"{key}: {display_cell(value)}" for key, value in row.items())
+                            for row in masked_rows[:5]
+                        )
                         summaries.append(
                             f"{ma}: {columns}; căn cứ cho nguon: {', '.join(safe.can_cu)}; "
                             f"{len(rows)} dòng; mẫu: {sample}"
@@ -780,7 +855,7 @@ class ToolGateway:
             # 9. Ghi nhật ký kiểm toán.
             self._audit(ten, ctx, audit_status, len(can_cu), _elapsed_ms())
 
-            return KetQuaCongCu(
+            result = KetQuaCongCu(
                 trang_thai=trang_thai,
                 noi_dung=wrapped,
                 can_cu=can_cu,
@@ -788,3 +863,7 @@ class ToolGateway:
                 chi_tiet_tien_trinh=raw_result.chi_tiet_tien_trinh,
                 ma_loi=ma_loi,
             )
+            if cache_key is not None and trang_thai in ("ok", "khong_co"):
+                with self._lock:
+                    self._ket_qua_da_goi[cache_key] = result.model_copy(deep=True)
+            return result

@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict
 
 from app.agent.minh_hoa.models import BoDuLieu, CotDuLieu
 from app.agent.tools.base import CanCu, KetQuaCongCu, Tool, ToolContext
+from app.agent.tools.lay_du_lieu_ca import _format_number
 from app.calc import (
     CONG_THUC_HIEN_THI,
     adjusted_body_weight,
@@ -141,19 +142,19 @@ class TinhChiSo(Tool):
             inputs.append(f"gioi_tinh: {gioi_tinh} (giới tính)")
         for item in result.dau_vao:
             unit = item.don_vi.strip().lower() if item.ten == "creatinin" else item.don_vi
-            inputs.append(f"{item.ten}: {item.gia_tri} {unit}")
+            inputs.append(f"{item.ten}: {_format_number(item.gia_tri)} {unit}")
         notes = list(result.ghi_chu)
         if tham_so.cong_thuc == "cockcroft_gault" and notes:
             # Hàm tính trả cân nặng chưa làm tròn trong ghi chú; chỉ định dạng khi hiển thị.
             prefix, _, weight_text = notes[0].partition(": ")
             value, _, _ = weight_text.partition(" kg")
-            notes[0] = f"{prefix}: {float(value):.2f} kg"
+            notes[0] = f"{prefix}: {_format_number(round(float(value), 2))} kg"
         ma = f"tinh:{tham_so.cong_thuc}:{tham_so.can_nang}"
         nhan = _TEN[tham_so.cong_thuc]
         if tham_so.cong_thuc == "cockcroft_gault":
             nhan += f" · cân nặng {_CAN_NANG[tham_so.can_nang]}"
         noi_dung = (
-            f"[{ma}] {nhan}; kết quả: {result.ket_qua:.2f} {result.don_vi} "
+            f"[{ma}] {nhan}; kết quả: {_format_number(round(result.ket_qua, 2))} {result.don_vi} "
             f"(làm tròn 2 chữ số thập phân); đầu vào: {'; '.join(inputs)}; "
             f"công thức: {CONG_THUC_HIEN_THI[result.cong_thuc]}; "
             f"ghi chú: {'; '.join(notes) if notes else 'không có'}; "

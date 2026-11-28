@@ -426,22 +426,19 @@ class TacTu:
             )
             sai_count = state.get("so_lan_sai_luoc_do", 0) + 1
             next_round = so_vong + 1
-            if forced_answer and sai_count < 2:
-                return {
-                    "luot_tac_tu": luot,
-                    "so_lan_sai_luoc_do": sai_count,
-                    "can_du_phong": True,
-                    "ly_do_du_phong": "khong_du_can_cu",
-                }
-            if sai_count >= 2 or next_round >= self._max_turns:
-                ghi_buoc("loi", step_ma, ly_do="Đầu ra sai định dạng")
+            if sai_count >= 2 or next_round >= self._max_turns or forced_answer:
+                ghi_buoc(
+                    "xong",
+                    step_ma,
+                    chi_tiet="Đầu ra sai định dạng, chuyển sang trả lời thận trọng",
+                )
                 return {
                     "ke_hoach": None,
                     "so_vong": next_round,
                     "so_lan_sai_luoc_do": sai_count,
                     "luot_tac_tu": luot,
                     "can_du_phong": True,
-                    "ly_do_du_phong": "loi",
+                    "ly_do_du_phong": "sai_luoc_do",
                 }
             ghi_buoc("xong", step_ma, chi_tiet="Đầu ra sai định dạng, thử lại")
             return {
@@ -694,6 +691,38 @@ def _filter_missing_figure(text: str, question: str) -> str:
     return kept
 
 
+def _attach_verified_illustrations(verified: AskResult, state: HoiDapState) -> AskResult:
+    """Chỉ gắn các hình đã kiểm tra định danh."""
+    if verified.trang_thai == "ok" and state.get("gateway") is not None:
+        blocks = []
+        for block in state["gateway"].minh_hoa:
+            checked = block.model_dump(mode="json")
+            for dataset in checked["bo_du_lieu"]:
+                time_columns = {col["ten"] for col in dataset["cot"] if col["kieu"] == "thoi_gian"}
+                for row in dataset["dong"]:
+                    for key in time_columns:
+                        value = row.get(key)
+                        if isinstance(value, str) and _is_iso_time(value):
+                            row[key] = None
+            serialized = json.dumps(checked, ensure_ascii=False)
+            session = state["session"]
+            try:
+                masked_tokens = re.sub(TOKEN_PATTERN, "", serialized)
+                has_pii = (
+                    session.mask_known(serialized) != serialized
+                    or session.scrub(masked_tokens) != masked_tokens
+                )
+            except DeidError:
+                has_pii = True
+            if has_pii:
+                with span("tool", "kiem_pii_minh_hoa", ly_do_tu_choi="pii_trong_khoi") as pii_span:
+                    pii_span.dat_trang_thai("tu_choi")
+            else:
+                blocks.append(block)
+        verified = verified.model_copy(update={"minh_hoa": blocks})
+    return verified
+
+
 class KiemChung:
     """Kiểm chứng câu trả lời của agent bằng hàm dùng chung kiem_chung_tra_loi."""
 
@@ -801,37 +830,7 @@ class KiemChung:
                 "ly_do_du_phong": "khong_du_can_cu",
             }
 
-        if verified.trang_thai == "ok" and state.get("gateway") is not None:
-            blocks = []
-            for block in state["gateway"].minh_hoa:
-                checked = block.model_dump(mode="json")
-                for dataset in checked["bo_du_lieu"]:
-                    time_columns = {
-                        col["ten"] for col in dataset["cot"] if col["kieu"] == "thoi_gian"
-                    }
-                    for row in dataset["dong"]:
-                        for key in time_columns:
-                            value = row.get(key)
-                            if isinstance(value, str) and _is_iso_time(value):
-                                row[key] = None
-                serialized = json.dumps(checked, ensure_ascii=False)
-                session = state["session"]
-                try:
-                    masked_tokens = re.sub(TOKEN_PATTERN, "", serialized)
-                    has_pii = (
-                        session.mask_known(serialized) != serialized
-                        or session.scrub(masked_tokens) != masked_tokens
-                    )
-                except DeidError:
-                    has_pii = True
-                if has_pii:
-                    with span(
-                        "tool", "kiem_pii_minh_hoa", ly_do_tu_choi="pii_trong_khoi"
-                    ) as pii_span:
-                        pii_span.dat_trang_thai("tu_choi")
-                else:
-                    blocks.append(block)
-            verified = verified.model_copy(update={"minh_hoa": blocks})
+        verified = _attach_verified_illustrations(verified, state)
 
         if verified.trang_thai == "ok" and not verified.minh_hoa:
             verified = verified.model_copy(
@@ -914,8 +913,13 @@ class DuPhong:
             chay_co_han=_run_with_deadline,
             session=state["session"],
             trang_thai="ngoai_pham_vi" if reason == "ngoai_pham_vi" else "khong_co_nguon",
-            con_luot=state.get("luot_tac_tu", 0) < self._max_turns,
+            con_luot=reason == "sai_luoc_do" or state.get("luot_tac_tu", 0) < self._max_turns,
+            loi_neu_that_bai=reason == "sai_luoc_do",
         )
+        if reason == "sai_luoc_do":
+            result = _attach_verified_illustrations(result, state)
+            if result.minh_hoa or result.trang_thai != "ok":
+                return {"ket_qua": result}
         return {
             "ket_qua": result.model_copy(
                 update={

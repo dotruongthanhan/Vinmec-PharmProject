@@ -465,6 +465,12 @@ def _milestone_rows(ca: CaBenh) -> list[Dong]:
     return [row for _, row in sorted(events, key=lambda item: item[0])]
 
 
+def _format_number(value: object) -> str:
+    if isinstance(value, float):
+        return (str(int(value)) if value.is_integer() else str(value)).replace(".", ",")
+    return str(value)
+
+
 def _summary(part: str, rows: list[Dong]) -> str:
     if not rows:
         return f"Đã xem {part}: ca chưa có dữ liệu này; có thể xem phần dữ liệu khác của ca."
@@ -479,8 +485,8 @@ def _summary(part: str, rows: list[Dong]) -> str:
             if numeric:
                 first, last = numeric[0], numeric[-1]
                 details.append(
-                    f"{name}: {len(values)} lần, {first['gia_tri']} "
-                    f"{first.get('don_vi') or 'thiếu đơn vị'} → {last['gia_tri']} "
+                    f"{name}: {len(values)} lần, {_format_number(first['gia_tri'])} "
+                    f"{first.get('don_vi') or 'thiếu đơn vị'} → {_format_number(last['gia_tri'])} "
                     f"{last.get('don_vi') or ''}"
                 )
             else:
@@ -491,8 +497,8 @@ def _summary(part: str, rows: list[Dong]) -> str:
         for row in rows[:10]:
             total = row["tong_24h_lon_nhat"]
             limit = row["lieu_toi_da_ngay"]
-            total_text = total if total is not None else "thiếu"
-            limit_text = limit if limit is not None else "thiếu"
+            total_text = _format_number(total) if total is not None else "thiếu"
+            limit_text = _format_number(limit) if limit is not None else "thiếu"
             details.append(
                 f"{row['hoat_chat']}: tổng 24 giờ {total_text} mg, tối đa {limit_text} mg"
             )
@@ -531,6 +537,15 @@ class LayDuLieuCa(Tool):
 
             def add(part: str, name: str, columns: list[CotDuLieu], rows: list[Dong]) -> None:
                 nonlocal cut
+                if part in {"xet_nghiem", "sinh_hieu"} and rows:
+                    units = {row.get("don_vi") for row in rows}
+                    if len(units) == 1 and None not in units and "" not in units:
+                        columns = [
+                            col.model_copy(update={"don_vi": next(iter(units))})
+                            if col.ten == "gia_tri"
+                            else col
+                            for col in columns
+                        ]
                 counts[name] = len(rows)
                 cut += max(0, len(rows) - _MAX_DONG)
                 datasets.append(

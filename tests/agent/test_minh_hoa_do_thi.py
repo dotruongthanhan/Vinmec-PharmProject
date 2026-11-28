@@ -143,6 +143,35 @@ def calls(answer: str = "Creatinin máu là 212 umol/L [1].") -> list[dict]:
     ]
 
 
+@pytest.fixture(autouse=True)
+def stub_drug_dataset(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Bộ khoảng giả lập, không phụ thuộc chỉ mục tra thuốc ngoài Git."""
+    from app.agent.tools.base import CanCu, KetQuaCongCu
+
+    def fake_lookup(self, tham_so, ctx):
+        del self, tham_so, ctx
+        data = dataset(
+            "",
+            {
+                "bien_ve_tu": "dinh_luong",
+                "bien_ve_den": "dinh_luong",
+                "bao_gom_tu": "logic",
+                "bao_gom_den": "logic",
+                "khuyen_cao": "danh_muc",
+            },
+        )
+        data.dong[0].update({"bien_ve_tu": 0.0, "bien_ve_den": 100.0})
+        data.can_cu = ["bang:mau"]
+        return KetQuaCongCu(
+            trang_thai="ok",
+            noi_dung="Dữ liệu giả lập",
+            can_cu=[CanCu(ma="bang:mau", loai="bang", nhan="Mẫu")],
+            bo_du_lieu=[data],
+        )
+
+    monkeypatch.setattr(TraThuoc, "chay", fake_lookup)
+
+
 def registry() -> DanhMucCongCu:
     result = DanhMucCongCu()
     for tool in (TinhChiSo(), TraThuoc(), VeBieuDo()):
@@ -230,7 +259,7 @@ def test_duplicate_drawing_then_different_layer() -> None:
     )
     assert result.trang_thai == "ok"
     assert [block.ma for block in result.minh_hoa] == ["mh-1", "mh-2"]
-    assert "trung_hinh:mh-1" in llm.calls[4]["messages"][1].content
+    assert "Đã vẽ ở mh-1, không vẽ lại" in llm.calls[4]["messages"][1].content
 
 
 def test_five_normal_rounds_keep_existing_limit() -> None:
@@ -467,7 +496,7 @@ def test_duplicate_drawing_and_forced_answer_are_traced(tmp_path: Path) -> None:
     tracer.close()
     assert result.trang_thai == "ok"
     assert len(result.minh_hoa) == 1
-    assert "trung_hinh:mh-1" in llm.calls[4]["messages"][1].content
+    assert "Đã vẽ ở mh-1, không vẽ lại" in llm.calls[4]["messages"][1].content
     assert "<<<DANH_SACH_CONG_CU\n[]\nDANH_SACH_CONG_CU>>>" in llm.calls[-1]["messages"][1].content
     assert llm.calls[-1]["schema"]["properties"]["hanh_dong"]["enum"] == ["tra_loi", "hoi_lai"]
     assert any(s.thuoc_tinh.get("so_lan_trung_hinh") == 2 for s in record.cac_buoc)
@@ -558,3 +587,40 @@ def test_missing_figure_filter_in_verified_answer() -> None:
     with_figure = run(sequence)
     assert with_figure.minh_hoa
     assert "xem hình" in with_figure.noi_dung.lower()
+
+
+def test_schema_failure_recovers_verified_answer_with_figure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.core.progress import TienTrinh
+    from tests.agent import test_graph
+
+    tracker = TienTrinh()
+    monkeypatch.setattr(test_graph, "TienTrinh", lambda: tracker)
+    sequence = calls()
+    honest = sequence[-1]["tra_loi"]
+    result, steps, _ = _run_graph(
+        FakeLLM(sequence[:3] + [{"sai": True}, {"sai": True}, honest]),
+        "Creatinin của ca này bao nhiêu?",
+        danh_muc=registry(),
+        chinh_sach=_policy(["tinh_chi_so", "tra_thuoc", "ve_bieu_do"]),
+    )
+    assert result.trang_thai == "ok"
+    assert "212" in result.noi_dung
+    assert len(result.minh_hoa) == 1
+    assert "agent_du_phong" in steps
+    assert any(
+        step.trang_thai == "xong"
+        and step.chi_tiet == "Đầu ra sai định dạng, chuyển sang trả lời thận trọng"
+        for step in tracker.chup()
+    )
+
+
+def test_schema_failure_and_invalid_honest_answer_returns_error() -> None:
+    from app.orchestration.ask import ERROR_MESSAGE
+
+    sequence = calls()
+    result = run(sequence[:3] + [{"sai": True}, {"sai": True}, {"sai": True}])
+    assert result.trang_thai == "loi"
+    assert result.noi_dung == ERROR_MESSAGE
+    assert not result.minh_hoa

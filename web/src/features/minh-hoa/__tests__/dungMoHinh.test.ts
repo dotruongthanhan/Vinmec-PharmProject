@@ -303,6 +303,7 @@ it('đặt năm mốc tham chiếu đúng thang thời gian và nhãn không gia
   expect(marks).toHaveLength(5)
   expect(marks.every((p, i) => p.x1 >= model.vungVe.trai && p.x1 <= model.vungVe.phai && (i === 0 || p.x1 > marks[i - 1].x1))).toBe(true)
   expect(model.trucY?.tieuDe).toBe('Giá trị (umol/L)')
+  expect(model.trucY?.tieuDe).not.toBe('Giá trị')
   const svg = renderToStaticMarkup(createElement(VeSvg, { moHinh: model }))
   expect(svg).toContain('Giá trị (umol/L)')
   for (const mark of marks) {

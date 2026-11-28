@@ -507,9 +507,9 @@ def test_all_real_chunk_codes_survive_gateway_scrubbing() -> None:
     tool.so_can_cu_toi_da = batch_size  # type: ignore[misc]
     ctx = _ctx()
 
-    for batch in batches:
+    for index, batch in enumerate(batches):
         current_batch = batch
-        res = gateway.goi("cong_cu_thu", {}, ctx)
+        res = gateway.goi("cong_cu_thu", {"cau_truy_van": f"batch-{index}"}, ctx)
         assert res.trang_thai == "ok"
         for ma in batch:
             assert f"[doan_trich_id: {ma}]" in res.noi_dung
@@ -626,7 +626,8 @@ def test_dataset_summary_survives_long_tool_output() -> None:
     _, gateway = _setup(handler)
     result = gateway.goi("cong_cu_thu", {}, _ctx())
     assert "ds-1: gia_tri" in result.noi_dung
-    assert '"gia_tri": 7.0' in result.noi_dung
+    assert "gia_tri: 7" in result.noi_dung
+    assert result.bo_du_lieu[0].dong[0]["gia_tri"] == 7.0
 
 
 @pytest.mark.parametrize("limit", ["cot", "dong"])
